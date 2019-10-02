@@ -1,0 +1,50 @@
+# @here/olp-sdk-fetch
+
+## Overview
+
+This module adds a subset of the [fetch](https://fetch.spec.whatwg.org/) API for [Node.js](https://nodejs.org/). This allows code written for the browser to also execute in `Node.js`.
+
+The main goal of this module is to provide enough compatibility to allow running unit tests in `Node.js`. It is not 100% feature and behavior compatible with `fetch`.
+
+The feature set is that of [node-fetch](https://www.npmjs.com/package/node-fetch) with the addition of a dummy `AbortController`.
+
+## Usage
+
+Import the module for its side-effects:
+
+```JavaScript
+import "@here/olp-sdk-fetch"
+```
+
+This adds `fetch` to the global `Node.js` namespace.
+
+## Behavior in Browser Context
+
+When this module is used in a browser context, it does not perform any actions, nor adds any code.
+
+## Usage of Bundle functionality:
+
+If you want to have a compiled project, you can use bundle commands. After running each of the following commands in the `dist/@here/olp-sdk-fetch/bundle` folder from the root folder, you get the js bundled files.
+
+To have the bundled files with source map, run:
+
+```sh
+npm run bundle
+```
+
+To get a minified version for production, run:
+
+```sh
+npm run bundle:prod
+```
+
+To get a bundled and minified js files, run:
+```sh
+npm run prepublish-bundle
+```
+
+## LICENSE
+
+Copyright (C) 2019 HERE Europe B.V.
+
+For license details, see the [LICENSE](LICENSE) file in the root of this project.

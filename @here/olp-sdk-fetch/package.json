@@ -1,0 +1,87 @@
+{
+  "name": "@here/olp-sdk-fetch",
+  "version": "0.9.0",
+  "description": "Adds a subset of the fetch API for Node.js",
+  "main": "index.js",
+  "browser": "index.web.js",
+  "typings": "index.web",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build": "tsc && npm run copy-tests-resourses",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "test": "mocha > xunit.xml",
+    "coverage": "nyc mocha > xunit.xml",
+    "copy-tests-resourses": "cp -r test/resources ../../dist/@here/olp-sdk-fetch/test",
+    "prepare": "tsc --sourceMap false",
+    "bundle": "webpack --env.NODE_ENV=development",
+    "bundle:prod": "webpack --env.NODE_ENV=production",
+    "prepublish-bundle": "npm run bundle && npm run bundle:prod"
+  },
+  "nyc": {
+    "include": [
+      "index.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text",
+      "html"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:heremaps/here-olp-sdk-typescript.git",
+    "directory": "@here/olp-sdk-fetch"
+  },
+  "author": {
+    "name": "HERE Europe B.V.",
+    "url": "https://here.com"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "node-fetch": "2.2.0"
+  },
+  "devDependencies": {
+    "@types/chai": "4.2.3",
+    "@types/mocha": "5.2.7",
+    "@types/node": "12.7.5",
+    "@types/sinon": "7.0.13",
+    "@types/sinon-chai":"3.2.3",
+    "chai": "4.2.0",
+    "sinon-chai": "3.3.0",
+    "glob": "7.1.4",
+    "mocha": "6.2.0",
+    "nyc": "14.1.1",
+    "prettier": "1.18.2",
+    "husky": "3.0.5",
+    "sinon": "7.4.2",
+    "source-map-support": "0.5.13",
+    "stream": "0.0.2",
+    "typescript": "3.5.3",
+    "tslint": "5.20.0",
+    "zlib": "1.0.5",
+    "tslint-config-prettier": "1.18.0",
+    "ts-node": "8.4.1",
+    "lint-staged": "9.2.5",
+    "typedoc": "0.15.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts}": [
+      "prettier --write",
+      "git add"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es6",
+        "lib": ["es2017", "dom"],
+        "sourceMap": true,
+        "declaration": true,
+        "baseUrl": ".",
+        "rootDir": ".",
+        "strict": true,
+        "resolveJsonModule": true,
+        "downlevelIteration": true,
+        "newLine": "LF",
+        "noImplicitReturns": true
+    },
+    "exclude": ["node_modules", "@here/*/node_modules", "dist"]
+}

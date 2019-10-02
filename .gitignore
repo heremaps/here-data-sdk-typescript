@@ -1,0 +1,12 @@
+node_modules/
+dist/
+doc/
+docs/src/
+.vscode
+coverage
+.nyc_output
+xunit.xml
+*.js
+*.d.ts
+*.js.map
+app.ts

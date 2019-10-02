@@ -1,0 +1,84 @@
+{
+  "name": "@here/olp-sdk-dataservice-api",
+  "version": "0.9.0",
+  "description": "Generated from the OpenAPI specification of the HERE Open Location Platform Data API",
+  "main": "index.js",
+  "typings": "index",
+  "directories": {
+    "test": "test",
+    "lib": "dist"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "test": "mocha > xunit.xml",
+    "coverage": "nyc mocha > xunit.xml",
+    "prepare": "tsc --sourceMap false",
+    "bundle": "webpack --env.NODE_ENV=development",
+    "bundle:prod": "webpack --env.NODE_ENV=production",
+    "prepublish-bundle": "npm run bundle && npm run bundle:prod"
+  },
+  "nyc": {
+    "include": [
+      "lib/**/*.ts"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text",
+      "html"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:heremaps/here-olp-sdk-typescript.git",
+    "directory": "@here/olp-sdk-dataservice-api"
+  },
+  "author": {
+    "name": "HERE Europe B.V.",
+    "url": "https://here.com"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/chai": "4.2.3",
+    "@types/mocha": "5.2.7",
+    "@types/sinon-chai":"3.2.3",
+    "awesome-typescript-loader": "5.2.1",
+    "chai": "4.0.2",
+    "husky": "3.0.5",
+    "lint-staged": "9.2.5",
+    "mocha": "6.2.0",
+    "sinon-chai": "3.3.0",
+    "nyc": "14.1.1",
+    "prettier": "1.18.2",
+    "ts-node": "8.4.1",
+    "source-map-support": "0.5.13",
+    "tslint": "5.20.0",
+    "tslint-config-prettier": "1.18.0",
+    "typescript": "3.5.3",
+    "webpack": "4.40.2",
+    "webpack-cli": "3.3.9",
+    "typedoc": "0.15.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts}": [
+      "prettier --write",
+      "git add"
+    ]
+  }
+}
