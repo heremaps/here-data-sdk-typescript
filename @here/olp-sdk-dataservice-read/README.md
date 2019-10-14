@@ -77,16 +77,14 @@ Add minified js files to your `html` and create an object of userAuth and catalo
 </head>
 <body>
     <script>
-    let userauth = new UserAuth({
-    credentials: {
-        accessKeyId: "your-app-key",
-        accessKeySecret: "your-app-secret"
-    }
+    const userauth = new UserAuth({
+        credentials: {
+            accessKeyId: "your-app-key",
+            accessKeySecret: "your-app-secret"
+        }
     });
-    let token = userauth.getToken();
-    const getBearerToken = () => Promise.resolve(token);
     const dataStoreClient = new DataStoreClient({
-        getBearerToken: getBearerToken,
+        getBearerToken: () => userAuth.getToken(),
         hrn: HRN.fromString("hrn:here:data:::here-optimized-map-for-location-library-2")
     });
 
