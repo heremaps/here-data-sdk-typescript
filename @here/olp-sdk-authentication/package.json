@@ -2,9 +2,9 @@
   "name": "@here/olp-sdk-authentication",
   "version": "0.9.0",
   "description": "Wrapper around the HERE Authentication and Authorization REST API obtaining short-lived access tokens that are used to authenticate requests to HERE services.",
-  "main": "index.js",
-  "browser": "index.web.js",
-  "typings": "index.web",
+  "main": "dist/@here/olp-sdk-authentication/index.js",
+  "browser": "dist/@here/olp-sdk-authentication/index.web.js",
+  "typings": "dist/@here/olp-sdk-authentication/index.web",
   "directories": {
     "test": "test",
     "lib": "lib"
