@@ -22,7 +22,7 @@ Create an instance of UserAuth class before instantiating any data sources:
 
 ```typescript
 const userAuth = new UserAuth({
-    env: "here",    
+    env: "here",
     credentials: {
         accessKeyId: "replace-with-your-access-key-id",
         accessKeySecret: "replace-with-your-access-key-secret"
@@ -93,7 +93,7 @@ Add minified JavaScript file to your `html` and create an object of userAuth:
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="olp-sdk-authentication.0.3.0.min.js"></script>
+    <script src="dist/bundle/olp-sdk-authentification.0.9.0.min.js"></script>
 </head>
 <body>
     <script>
