@@ -12,7 +12,7 @@ module.exports = env => {
     },
     entry: "./index.ts",
     output: {
-      filename: `olp-sdk-fetch.${packageInfo.version}${isProd ? '.min' : '.dev'}.js`,
+      filename: `olp-sdk-dataservice-api.${packageInfo.version}${isProd ? '.min' : '.dev'}.js`,
       path: path.resolve(__dirname, `./dist`),
       libraryTarget: "umd",
       globalObject: 'this'
