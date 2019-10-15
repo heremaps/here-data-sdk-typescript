@@ -16,18 +16,3 @@
  * SPDX-License-Identifier: Apache-2.0
  * License-Filename: LICENSE
  */
-
-export * from "./lib/DataStoreClient";
-export * from "./lib/CatalogClient";
-export * from "./lib/HRN";
-export * from "./lib/HypeDataProvider";
-export * from "./lib/CatalogClientCommon";
-export * from "./lib/error/NotFoundError";
-export * from "./lib/partitioning/QuadKey";
-export * from "./lib/partitioning/QuadKeyUtils";
-export * from "./lib/DownloadManager";
-export * from "./lib/DataStoreContext";
-export * from "./lib/VersionLayerClient";
-export * from "./lib/VolatileLayerClient";
-export * from "./lib/DataStoreDownloadManager";
-export * from "./lib/CatalogLayer";
