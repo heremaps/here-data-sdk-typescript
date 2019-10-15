@@ -35,9 +35,9 @@ Add minified JavaScript files to your `html`:
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="olp-sdk-dataservice-api.0.3.0.min.js"></script>
+    <script src="dist/bundle/olp-sdk-dataservice-api.0.9.0.min.js"></script>
 </head>
-    <body>    
+    <body>
     </body>
 </html>
 ```

@@ -71,9 +71,7 @@ Add minified JavaScript files to your `html` and create an object of userAuth an
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="olp-sdk-authentication.0.3.0.min.js"></script>
-    <script src="olp-sdk-dataservice-api.0.3.0.min.js"></script>
-    <script src="olp-sdk-dataservice-read.0.3.0.min.js"></script>
+    <script src="dist/bundle/olp-sdk-dataservice-read.0.9.0.min.js"></script>
 </head>
 <body>
     <script>
