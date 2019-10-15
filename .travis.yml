@@ -1,0 +1,14 @@
+os: linux
+dist: xenial
+language: node_js
+node_js:
+  - lts/*
+cache: yarn
+env:
+  global:
+  - WORKSPACE=$TRAVIS_BUILD_DIR
+name: Linux Xenial Build and Test
+script: $WORKSPACE/scripts/linux/psv/travis_build_test_psv.sh
+branches:
+  only:
+  - master
