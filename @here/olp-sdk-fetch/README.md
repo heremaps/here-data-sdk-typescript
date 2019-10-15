@@ -24,7 +24,7 @@ When this module is used in a browser context, it does not perform any actions, 
 
 ## Usage of Bundle functionality:
 
-If you want to have a compiled project, you can use bundle commands. After running each of the following commands in the `dist/@here/olp-sdk-fetch/bundle` folder from the root folder, you get the js bundled files.
+If you want to have a compiled project, you can use bundle commands. After running each of the following commands in the `@here/olp-sdk-fetch/dist/bundle` folder from the root folder, you get the JavaScript bundled files.
 
 To have the bundled files with source map, run:
 
@@ -38,7 +38,7 @@ To get a minified version for production, run:
 npm run bundle:prod
 ```
 
-To get a bundled and minified js files, run:
+To get a bundled and minified JavaScript files, run:
 ```sh
 npm run prepublish-bundle
 ```
@@ -47,4 +47,4 @@ npm run prepublish-bundle
 
 Copyright (C) 2019 HERE Europe B.V.
 
-For license details, see the [LICENSE](LICENSE) file in the root of this project.
+For license details, see the [LICENSE](LICENSE).
