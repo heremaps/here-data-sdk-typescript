@@ -1,0 +1,17 @@
+{
+  "name": "html5-js-exampe-app",
+  "version": "1.0.0",
+  "description": "An example html5 app how to use js bundles of here-olp-sdk-typescript",
+  "main": "index.js",
+  "scripts": {
+    "start": "lite-server"
+  },
+  "author": {
+    "name": "HERE Europe B.V.",
+    "url": "https://here.com"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "lite-server": "2.5.4"
+  }
+}
