@@ -93,6 +93,7 @@ If you want to have a compiled project, you can use bundle commands. After runni
 @here/olp-sdk-authentication/dist/bundle
 @here/olp-sdk-dataservice-read/dist/bundle
 @here/olp-sdk-dataservice-api/dist/bundle
+@here/olp-sdk-fetch/dist/bundle
 ```
 
 To get bundled js files for all modules, run:
