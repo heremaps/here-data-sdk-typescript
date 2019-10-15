@@ -90,9 +90,9 @@ npm run docs
 If you want to have a compiled project, you can use bundle commands. After running each of the following commands, get the js bundled files from the root folder for each package:
 
 ```sh
-dist/@here/olp-sdk-authentication/bundle
-dist/@here/olp-sdk-dataservice-read/bundle
-dist/@here/olp-sdk-dataservice-api/bundle
+@here/olp-sdk-authentication/dist/bundle
+@here/olp-sdk-dataservice-read/dist/bundle
+@here/olp-sdk-dataservice-api/dist/bundle
 ```
 
 To get bundled js files for all modules, run:

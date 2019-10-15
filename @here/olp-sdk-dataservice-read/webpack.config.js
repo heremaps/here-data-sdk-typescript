@@ -12,8 +12,8 @@ module.exports = env => {
     },
     entry: "./index.ts",
     output: {
-      filename: `olp-sdk-dataservice-read.${packageInfo.version}${isProd ? '.min' : '.dev'}.js`,
-      path: path.resolve(__dirname, `../../dist/${packageInfo.name}/bundle`),
+      filename: `olp-sdk-dataservice-read.${isProd ? '.min' : '.dev'}.js`,
+      path: path.resolve(__dirname, `dist/bundle`),
       libraryTarget: "umd",
       globalObject: 'this'
     },
