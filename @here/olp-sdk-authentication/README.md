@@ -22,7 +22,7 @@ Create an instance of UserAuth class before instantiating any data sources:
 
 ```typescript
 const userAuth = new UserAuth({
-    env: "here",    
+    env: "here",
     credentials: {
         accessKeyId: "replace-with-your-access-key-id",
         accessKeySecret: "replace-with-your-access-key-secret"
@@ -38,7 +38,7 @@ const token: string = await userAuth.fetchToken();
  ```
 
 ## Usage with import credentials from file
-Download your credentials.properties file from [OLP portal](https://developer.here.com/olp/documentation/access-control/user-guide/topics/get-credentials.html).
+Download your credentials.properties file from [OLP website](https://developer.here.com/olp/documentation/access-control/user-guide/topics/get-credentials.html).
 Create an instance of UserAuth class and set the path to the file with credentials:
 
 ```typescript
@@ -65,7 +65,7 @@ const token: string = await userAuth.getToken();
 
 ## Usage of Bundle functionality:
 
-If you want to have a compiled project, you can use bundle commands. After running each of the following commands in the `dist/@here/olp-sdk-authentication/bundle` folder from the root folder, you get the js bundled files.
+If you want to have a compiled project, you can use bundle commands. After running each of the following commands in the `@here/olp-sdk-authentication/dist/bundle` folder from the root folder, you get the JavaScript bundled files.
 
 To get bundled files with a source map, run:
 
@@ -79,7 +79,7 @@ To get minified version for production, run:
 npm run bundle:prod
 ```
 
-To get bundled and minified js files, run:
+To get bundled and minified JavaScript files, run:
 
 ```sh
 npm run prepublish-bundle
@@ -87,13 +87,13 @@ npm run prepublish-bundle
 
 ## Simple bundle
 
-Add minified js file to your `html` and create an object of userAuth:
+Add minified JavaScript file to your `html` and create an object of userAuth:
 
 ```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="olp-sdk-authentication.0.3.0.min.js"></script>
+    <script src="dist/bundle/olp-sdk-authentification.0.9.0.min.js"></script>
 </head>
 <body>
     <script>
@@ -120,4 +120,4 @@ Add minified js file to your `html` and create an object of userAuth:
 
 Copyright (C) 2019 HERE Europe B.V.
 
-For license details, see the [LICENSE](LICENSE) file in the root of this project.
+For license details, see the [LICENSE](LICENSE).

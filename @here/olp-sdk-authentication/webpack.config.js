@@ -1,6 +1,7 @@
 const path = require("path");
 const packageInfo = require('./package.json');
 
+
 module.exports = env => {
   const isProd = env.NODE_ENV === "production";
 
@@ -10,10 +11,10 @@ module.exports = env => {
     resolve: {
       extensions: [".ts", ".js"]
     },
-    entry: "./index.ts",
+    entry: "./index.web.ts",
     output: {
-      filename: `olp-sdk-fetch.${packageInfo.version}${isProd ? '.min' : '.dev'}.js`,
-      path: path.resolve(__dirname, `./dist/bundle`),
+      filename: `olp-sdk-authentification.${packageInfo.version}${isProd ? '.min' : '.dev'}.js`,
+      path: path.resolve(__dirname, `dist/bundle`),
       libraryTarget: "umd",
       globalObject: 'this'
     },

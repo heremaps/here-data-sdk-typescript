@@ -43,7 +43,7 @@ npm run test
 
 ## Usage of Bundle functionality
 
-If you want to have a compiled project, you can use bundle commands. After running each of the following commands in the `dist/@here/olp-sdk-dataservice-read/bundle` folder from the root folder, you get the js bundled files.
+If you want to have a compiled project, you can use bundle commands. After running each of the following commands in the `@here/olp-sdk-dataservice-read/dist/bundle` folder from the root folder, you get the JavaScript bundled files.
 
 To get bundled files with a source map, run:
 
@@ -57,7 +57,7 @@ To get minified version for production, run:
 npm run bundle:prod
 ```
 
-To get bundled and minified js files, run:
+To get bundled and minified JavaScript files, run:
 
 ```sh
 npm run prepublish-bundle
@@ -65,15 +65,13 @@ npm run prepublish-bundle
 
 ## Simple bundle
 
-Add minified js files to your `html` and create an object of userAuth and catalogClient:
+Add minified JavaScript files to your `html` and create an object of userAuth and catalogClient:
 
 ```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="olp-sdk-authentication.0.3.0.min.js"></script>
-    <script src="olp-sdk-dataservice-api.0.3.0.min.js"></script>
-    <script src="olp-sdk-dataservice-read.0.3.0.min.js"></script>
+    <script src="dist/bundle/olp-sdk-dataservice-read.0.9.0.min.js"></script>
 </head>
 <body>
     <script>
@@ -97,4 +95,4 @@ Add minified js files to your `html` and create an object of userAuth and catalo
 
 Copyright (C) 2019 HERE Europe B.V.
 
-For license details, see the [LICENSE](LICENSE) file in the root of this project.
+For license details, see the [LICENSE](LICENSE).
