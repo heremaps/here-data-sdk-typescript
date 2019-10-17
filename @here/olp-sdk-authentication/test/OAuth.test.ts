@@ -21,6 +21,7 @@ import { assert } from "chai";
 import { requestToken, UserAuth } from "../index";
 
 import fetchMock = require("fetch-mock");
+import { loadCredentialsFromFile } from "../lib/loadCredentialsFromFile";
 
 const REPLY_TIMEOUT_MS = 600;
 const MOCK_CREATED_TIME = 1550777140;
@@ -88,8 +89,10 @@ describe("oauth-request-offline", () => {
 
     it("getTokenAuthModeFile", async () => {
         let token: string | null = null;
-        let credentialsFilePath = "./test/test-credentials.properties";
-        let userAuth = await UserAuth.setCredentialsFromFile(credentialsFilePath);
+        const credentialsFilePath = "./test/test-credentials.properties";
+        const credentials = loadCredentialsFromFile(credentialsFilePath);
+
+        const userAuth = new UserAuth({credentials, tokenRequester: requestToken});
 
         try {
             token = await userAuth.getToken();
@@ -108,7 +111,8 @@ describe("oauth-request-offline", () => {
             credentials: {
                 accessKeyId: mock_id,
                 accessKeySecret: mock_secret
-            }
+            },
+            tokenRequester: requestToken
         });
 
         try {
@@ -127,7 +131,8 @@ describe("oauth-request-offline", () => {
             credentials: {
                 accessKeyId: mock_id,
                 accessKeySecret: mock_secret
-            }
+            },
+            tokenRequester: requestToken
         });
 
         fetchMock.post("https://account.api.here.com/verify/accessToken", {
@@ -169,7 +174,8 @@ describe("oauth-request-lookupapi", () => {
             credentials: {
                 accessKeyId: mock_id,
                 accessKeySecret: mock_secret
-            }
+            },
+            tokenRequester: requestToken
         });
 
         fetchMock.get("https://account.api.here.com/user/me", {
@@ -216,7 +222,8 @@ describe("oauth-request-lookupapi", () => {
             credentials: {
                 accessKeyId: mock_id,
                 accessKeySecret: mock_secret
-            }
+            },
+            tokenRequester: requestToken
         });
 
         fetchMock.get("https://stg.account.api.here.com/user/me", {
@@ -263,7 +270,8 @@ describe("oauth-request-lookupapi", () => {
             credentials: {
                 accessKeyId: mock_id,
                 accessKeySecret: mock_secret
-            }
+            },
+            tokenRequester: requestToken
         });
 
         fetchMock.get("https://elb.cn-northwest-1.account.hereapi.cn/user/me", {
@@ -310,7 +318,8 @@ describe("oauth-request-lookupapi", () => {
             credentials: {
                 accessKeyId: mock_id,
                 accessKeySecret: mock_secret
-            }
+            },
+            tokenRequester: requestToken
         });
 
         fetchMock.get(
@@ -360,7 +369,8 @@ describe("oauth-request-lookupapi", () => {
             credentials: {
                 accessKeyId: mock_id,
                 accessKeySecret: mock_secret
-            }
+            },
+            tokenRequester: requestToken
         });
 
         fetchMock.get("http://localhost/user/me", {
@@ -406,7 +416,8 @@ describe("oauth-request-lookupapi", () => {
             credentials: {
                 accessKeyId: mock_id,
                 accessKeySecret: mock_secret
-            }
+            },
+            tokenRequester: requestToken
         });
 
         fetchMock.get("https://account.api.here.com/user/me", {

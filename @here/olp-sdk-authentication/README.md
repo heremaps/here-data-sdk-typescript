@@ -21,20 +21,37 @@ const auth = new UserAuth(config);
 Create an instance of UserAuth class before instantiating any data sources:
 
 ```typescript
+/**
+ * A function requestToken is used to obtain the access token.
+ *
+ * Client can provide own implementation or can use from @here/olp-sdk-authentication.
+ *
+ * There are two functions that work for browser and NodeJS.
+ * UserAuth can use requestToken() from requestToken.web.ts for browser
+ * or requestToken() from requestToken.ts for NodeJS.
+ *
+ * When a function imports a function using import { requestToken } from "@here/olp-sdk-authentication",
+ * the code automatically applies the corresponding function that is applicable to access browser or NodeJS.
+ *
+ * The following code is applicable both for browser and NodeJS.
+ */
+
+import { UserAuth, requestToken } from "@here/olp-sdk-authentication";
+
 const userAuth = new UserAuth({
     env: "here",
     credentials: {
         accessKeyId: "replace-with-your-access-key-id",
         accessKeySecret: "replace-with-your-access-key-secret"
-    }
+    },
+    tokenRequester: requestToken
 });
 ```
 
 Get token:
 
 ```typescript
-await userAuth.setCredentials();
-const token: string = await userAuth.fetchToken();
+const token: string = await userAuth.getToken();
  ```
 
 ## Usage with import credentials from file
@@ -42,8 +59,9 @@ Download your credentials.properties file from [OLP website](https://developer.h
 Create an instance of UserAuth class and set the path to the file with credentials:
 
 ```typescript
-
-const userAuth = UserAuth.setCredentialsFromFile("replace-with-your-path-to-credentials.properties");
+import { UserAuth, requestToken } from "@here/olp-sdk-authentication";
+const credentials = loadCredentialsFromFile("replace-with-your-path-to-credentials.properties");
+const userAuth = new UserAuth({credentials, tokenRequester: requestToken});
 
 ```
 
