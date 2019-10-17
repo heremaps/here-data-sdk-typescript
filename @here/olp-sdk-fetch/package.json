@@ -1,6 +1,6 @@
 {
   "name": "@here/olp-sdk-fetch",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Adds a subset of the fetch API for Node.js",
   "main": "dist/@here/olp-sdk-fetch/index.js",
   "browser": "dist/@here/olp-sdk-fetch/index.web.js",
