@@ -17,22 +17,22 @@
  * License-Filename: LICENSE
  */
 
-// tslint:disable-next-line: no-import-side-effect
-import "@here/olp-sdk-fetch";
-
-import { requestToken } from "./requestToken";
 import { OAuthArgs, Token } from "./requestToken_common";
-import * as PropertiesReader from "properties-reader";
 
 /**
  * User credentials. User can download the file with credentials from [OLP portal](https://account.here.com/).
  * This downloaded credentials file have the info about access key id and access key secret to get token.
  * User is able to use this credentials from the file for authentication.
  */
-interface AuthCredentials {
-    /** Access key id of the user. User can find it in user`s credentials file downloaded from OLP Portal*/
+export interface AuthCredentials {
+    /**
+     * Access key id of the user. User can find it in user`s credentials file downloaded from OLP Portal
+     */
     accessKeyId?: string;
-    /** Access key secret of the user. User can find it in user`s credentials file downloaded from OLP Portal*/
+
+    /**
+     * Access key secret of the user. User can find it in user`s credentials file downloaded from OLP Portal
+     */
     accessKeySecret?: string;
 }
 
@@ -48,8 +48,33 @@ export interface UserAuthConfig {
     env?: string;
     /** Url for a custom Environment */
     customUrl?: string;
-    /** A custom function to obtain access token. */
-    tokenRequester?: TokenRequesterFn;
+    /**
+     * A function to obtain the access token.
+     *
+     * Client can provide own implementation or can use from @here/olp-sdk-authentication.
+     *
+     * There are two functions that work for browser and NodeJS.
+     * UserAuth can use requestToken() from requestToken.web.ts for browser
+     * or requestToken() from requestToken.ts for NodeJS.
+     *
+     * When a function imports a function using import { requestToken } from "@here/olp-sdk-authentication",
+     * the code automatically applies the corresponding function that is applicable to access browser or NodeJS.
+     *
+     * The following code is applicable both for browser and NodeJS.
+     *
+     * @example
+     * import { UserAuth, requestToken } from "@here/olp-sdk-authentication";
+     *
+     *  const userAuth = new UserAuth({
+     *       credentials: {
+     *           accessKeyId: "your-access-key",
+     *           accessKeySecret: "your-access-key-secret"
+     *       },
+     *       tokenRequester: requestToken
+     *   });
+     *
+     */
+    tokenRequester: TokenRequesterFn;
 }
 
 /**
@@ -128,24 +153,6 @@ export class UserAuth {
     }
 
     /**
-     * Parse credentials file with user credentials (user`s access key id, access key secret)
-     * and retrieve object response with the credentials.
-     * @param path Path to credentials file.
-     * @returns Object with user`s credentials.
-     */
-    public static async setCredentialsFromFile(path: string): Promise<UserAuth> {
-
-        let credentials: AuthCredentials = {};
-
-        let properties = PropertiesReader(path);
-
-        credentials.accessKeyId = ( properties.get('here.access.key.id') || '' ).toString();
-        credentials.accessKeySecret = ( properties.get('here.access.key.secret') || '' ).toString();
-
-        return Promise.resolve(new UserAuth({ credentials }));
-    }
-
-    /**
      * Returns access token.
      */
     async getToken(): Promise<string> {
@@ -153,13 +160,11 @@ export class UserAuth {
             return this.m_accessToken!;
         }
 
-        const tokenRequester = this.config.tokenRequester || requestToken;
-
         if (!this.m_credentials || !this.m_credentials.accessKeyId || !this.m_credentials.accessKeySecret) {
             return Promise.reject("Error getting token. The credentials has not been added!");
         }
 
-        const response = await tokenRequester({
+        const response = await this.config.tokenRequester({
             url: this.m_apiUrl + "oauth2/token",
             consumerKey: this.m_credentials.accessKeyId,
             secretKey: this.m_credentials.accessKeySecret
