@@ -1,6 +1,6 @@
 {
   "name": "@here/olp-sdk-dataservice-read",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Wrapper around a subset of the HERE Open Location Platform Data REST API related to reading data from OLP catalogs",
   "main": "dist/@here/olp-sdk-dataservice-read/index.js",
   "browser": "dist/@here/olp-sdk-dataservice-read/index.web.js",

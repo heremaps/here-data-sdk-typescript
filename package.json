@@ -1,6 +1,6 @@
 {
   "name": "@here/olp-sdk-ts",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "HERE OLP SDK for TypeScript",
   "author": {
     "name": "HERE Europe B.V.",

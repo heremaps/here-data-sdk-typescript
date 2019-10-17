@@ -1,6 +1,6 @@
 {
   "name": "@here/olp-sdk-dataservice-api",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Generated from the OpenAPI specification of the HERE Open Location Platform Data API",
   "main": "dist/@here/olp-sdk-dataservice-api/index.js",
   "typings": "dist/@here/olp-sdk-dataservice-api/index",
