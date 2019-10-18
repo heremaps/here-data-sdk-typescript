@@ -9,7 +9,6 @@ OLP SDK for TypeScript includes core components for accessing OLP APIs from any 
 - [Available Components](#components)
 - [Context and CatalogClient](#context-catalog)
 - [VersionLayerClient example](#examples)
-- [License](#license)
 
 ## <a name="prerequisite"></a> OLP Prerequisite Knowledge
 
@@ -45,7 +44,13 @@ HERE OLP SDK consists of specific libraries, each with distinct functionality.
 - `olp-sdk-dataservice-read`: API library to retrieve Layer and Partition data from OLP catalogs.
 - `olp-sdk-fetch`: This module adds a subset of [fetch](https://fetch.spec.whatwg.org/) API for [Node.js](https://nodejs.org/).
 
-## <a name="context-catalog"></a> Context and CatalogClient
+## <a name="examples"></a> Examples
+
+[Versioned Layer Read example](./examples/nodejs-read-versioned-layer.md) shows how to retrieve layer metadata, partition metadata, and partition data from versioned layer using OLP SDK for TypeScript.
+
+[Volatile Layer Read example](./examples/nodejs-read-volatile-layer.md) shows how to retrieve layer metadata, partition metadata, and partition data from volatile layer using OLP SDK for TypeScript.
+
+## <a name="CatalogClient"></a> CatalogClient
 
 The main entry point to the OLP is `CatalogClient`. This class provides a high-level interface for retrieval of `OLP` catalog data and configuration, and defines the following operations:
 
@@ -53,7 +58,3 @@ The main entry point to the OLP is `CatalogClient`. This class provides a high-l
 - `getVersions`: Fetches a tile from this layer asynchronously
 
 More details how to use the CatalogClient are placed in the [Catalog usage example](./examples/nodejs-examples.md).
-
-## <a name="examples"></a> Layer Usage Example
-
-[Versioned Layer Read example](./examples/nodejs-read-versioned-layer.md) shows how to use VersionLayerClient and how to retrieve data, metadata and partition data from versioned layer, using OLP SDK for TypeScript.
