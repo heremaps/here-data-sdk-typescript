@@ -50,12 +50,42 @@ export interface CatalogAdminAreas {
     states?: string[];
 }
 
-export interface Size {
-    bbox?: BoundingBox;
-    centroid?: string;
-    proccessedTimestamp?: string;
-    size?: string;
-    version?: string;
+/**
+ * An interface of the bounding box data for the layer.
+ */
+export interface LayerBoundingBox {
+    east: number;
+    south: number;
+    north: number;
+    west: number;
+}
+
+/**
+ * An interface of the catalog layer summary for one zoom level.
+ */
+export interface LayerLevelSummary {
+    boundingBox: LayerBoundingBox;
+    size: number;
+    processedTimestamp: number;
+    centroid: number;
+    minPartitionSize: number;
+    maxPartitionSize: number;
+    version: number;
+    totalPartitions: number;
+}
+
+/**
+ * An interface for the catalog layer summary data.
+ */
+export interface LayerSummary {
+    /** A catalog HRN. */
+    catalogHRN: string;
+    /** A layer name. */
+    layer: string;
+    /** A layer summary for multiple zoom levels. */
+    levelSummary: {
+        [index: number]: LayerLevelSummary;
+    };
 }
 
 /* ===================================================================
@@ -101,7 +131,7 @@ export async function getDataCoverageAdminAreas(
 export async function getDataCoverageSizeMap(
     builder: RequestBuilder,
     params: { layerId: string; datalevel: string }
-): Promise<string> {
+): Promise<Response> {
     const baseUrl = "/layers/{layerId}/heatmap/size".replace(
         "{layerId}",
         UrlBuilder.toString(params["layerId"])
@@ -116,7 +146,7 @@ export async function getDataCoverageSizeMap(
         headers
     };
 
-    return builder.request<string>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }
 
 /**
@@ -129,7 +159,7 @@ export async function getDataCoverageSizeMap(
 export async function getDataCoverageSummary(
     builder: RequestBuilder,
     params: { layerId: string; version: string }
-): Promise<Size> {
+): Promise<LayerSummary> {
     const baseUrl = "/layers/{layerId}/summary".replace(
         "{layerId}",
         UrlBuilder.toString(params["layerId"])
@@ -144,7 +174,7 @@ export async function getDataCoverageSummary(
         headers
     };
 
-    return builder.request<Size>(urlBuilder, options);
+    return builder.request<LayerSummary>(urlBuilder, options);
 }
 
 /**
@@ -158,7 +188,7 @@ export async function getDataCoverageSummary(
 export async function getDataCoverageTile(
     builder: RequestBuilder,
     params: { layerId: string; datalevel: string }
-): Promise<string> {
+): Promise<Response> {
     const baseUrl = "/layers/{layerId}/tilemap".replace(
         "{layerId}",
         UrlBuilder.toString(params["layerId"])
@@ -173,7 +203,7 @@ export async function getDataCoverageTile(
         headers
     };
 
-    return builder.request<string>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }
 
 /**
@@ -185,15 +215,16 @@ export async function getDataCoverageTile(
  */
 export async function getDataCoverageTimeMap(
     builder: RequestBuilder,
-    params: { layerId: string; datalevel: string }
-): Promise<string> {
-    const baseUrl = "/layers/{layerId}/heatmap/time".replace(
+    params: { layerId: string; datalevel: string; catalogHRN: string }
+): Promise<Response> {
+    const baseUrl = "/layers/{layerId}/heatmap/age".replace(
         "{layerId}",
         UrlBuilder.toString(params["layerId"])
     );
 
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
     urlBuilder.appendQuery("datalevel", params["datalevel"]);
+    urlBuilder.appendQuery("catalogHRN", params["catalogHRN"]);
 
     const headers: { [header: string]: string } = {};
     const options: RequestOptions = {
@@ -201,5 +232,5 @@ export async function getDataCoverageTimeMap(
         headers
     };
 
-    return builder.request<string>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }

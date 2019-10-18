@@ -17,10 +17,13 @@
  * License-Filename: LICENSE
  */
 
-import { ConfigApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
+import {
+    ConfigApi,
+    CoverageApi,
+    MetadataApi
+} from "@here/olp-sdk-dataservice-api";
 import { IndexMap } from "./CatalogClientCommon";
 import { QuadKey } from "./partitioning/QuadKey";
-import { LayerSummary } from "./VersionLayerClient";
 
 /**
  * @deprecated
@@ -66,14 +69,9 @@ export interface CatalogLayer extends ConfigApi.Layer {
      * ```
      *
      * @param quadKey The quad key of the tile.
-     * @param tileRequestInit Optional request options to be passed to fetch when downloading a
-     * tile.
      * @returns A promise of the HTTP response that contains the payload of the requested tile.
      */
-    getTile: (
-        quadKey: QuadKey,
-        tileRequestInit?: RequestInit | undefined
-    ) => Promise<Response>;
+    getTile: (quadKey: QuadKey) => Promise<Response>;
 
     /**
      * Asynchronously fetches a partition from this layer.
@@ -103,21 +101,13 @@ export interface CatalogLayer extends ConfigApi.Layer {
     getPartitionsIndex: () => Promise<MetadataApi.Partitions>;
 
     /**
-     * Downloads a URL, appending the credentials that this Layer is using.
-     *
-     * @param url The URL to download.
-     * @param init Optional extra parameters.
-     */
-    downloadData: (url: string, init?: RequestInit) => Promise<Response>;
-
-    /**
      * Asynchronously fetches data coverage bitmap of this layer.
      * @param RequestInit Optional request options to be passed to fetch when downloading a
      * coverage map.
      * @returns A promise of the http response that contains the payload of the requested coverage
      * map.
      */
-    getDataCoverageBitmap?: (requestInit?: RequestInit) => Promise<Blob>;
+    getDataCoverageBitmap?: (requestInit?: RequestInit) => Promise<Response>;
 
     /**
      * Asynchronously fetches data coverage size map of this layer.
@@ -126,7 +116,7 @@ export interface CatalogLayer extends ConfigApi.Layer {
      * @returns A promise of the http response that contains the payload of the requested coverage
      * map.
      */
-    getDataCoverageSizeMap?: (requestInit?: RequestInit) => Promise<Blob>;
+    getDataCoverageSizeMap?: (requestInit?: RequestInit) => Promise<Response>;
 
     /**
      * Asynchronously fetches data coverage time map of this layer.
@@ -135,7 +125,7 @@ export interface CatalogLayer extends ConfigApi.Layer {
      * @returns A promise of the http response that contains the payload of the requested coverage
      * map.
      */
-    getDataCoverageTimeMap?: (requestInit?: RequestInit) => Promise<Blob>;
+    getDataCoverageTimeMap?: (requestInit?: RequestInit) => Promise<Response>;
 
     /**
      * Asynchronously fetches summary data for this layer.
@@ -143,5 +133,7 @@ export interface CatalogLayer extends ConfigApi.Layer {
      * summary data.
      * @returns A promise of the http response that contains the summary data.
      */
-    getSummary?: (requestInit?: RequestInit) => Promise<LayerSummary>;
+    getSummary?: (
+        requestInit?: RequestInit
+    ) => Promise<CoverageApi.LayerSummary>;
 }

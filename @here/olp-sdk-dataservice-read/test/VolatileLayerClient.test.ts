@@ -25,14 +25,18 @@ import { DownloadManager } from "../lib/DownloadManager";
 import { DataStoreDownloadManager } from "../lib/DataStoreDownloadManager";
 import { VolatileLayerClient } from "../lib/VolatileLayerClient";
 import { DataStoreContext } from "../lib/DataStoreContext";
+import { url } from "inspector";
 
-function createMockDownloadResponse(resp: Object) {
+function createMockDownloadResponse(resp: Object, blob?: string) {
+    const headers = new Headers();
+    headers.append("etag", "1237696a7c876b7e");
+    headers.append("content-type", blob || "application/json");
     const mock = {
         type: "aaa",
         status: 200,
         statusText: "success",
         ok: true,
-        headers: new Headers().append("etag", "1237696a7c876b7e"),
+        headers: headers,
         arrayBuffer: sinon.stub().returns(resp),
         json: sinon.stub().returns(resp),
         text: sinon.stub().returns(resp)
@@ -234,6 +238,20 @@ urlToResponses.set(
 );
 const headersMock = new Headers();
 headersMock.append("etag", "1237696a7c876b7e");
+
+urlToResponses.set(
+    "https://xab.query.data.api.platform.here.com/query/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/versions/0/quadkeys/23618359/depths/4",
+    {
+        subQuads: [
+            {
+                version: 0,
+                subQuadKey: "1",
+                dataHandle: "2d50139b-01a9-4ed1-a40e-784416d46c33"
+            }
+        ],
+        parentQuads: []
+    }
+);
 urlToResponses.set(
     "https://xab.query.data.api.platform.here.com/query/v1/catalogs/hrn:here:data:::live-weather-na/layers/latest-data/quadkeys/5766/depths/4",
     {
@@ -268,6 +286,44 @@ urlToResponses.set(
         subQuads: [],
         parentQuads: []
     })
+);
+
+urlToResponses.set(
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::live-weather-na/layers/latest-data/data/43d76b9f-e934-40e5-9ce4-91d88a30f1c6",
+    createMockDownloadResponse("DT_1_1010", "image/jpeg")
+);
+
+urlToResponses.set(
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::live-weather-na/layers/latest-data/data/da51785a-54b0-40cd-95ac-760f56fe5457",
+    createMockDownloadResponse("DT_1_1010", "image/jpeg")
+);
+
+urlToResponses.set(
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::live-weather-na/layers/latest-data/data/edac817d-1e62-464b-9e0f-79ea3694933d",
+    {
+        type: "aaa",
+        status: 204,
+        statusText: "success",
+        ok: true,
+        headers: headersMock,
+        arrayBuffer: sinon.stub(),
+        json: sinon.stub().returns("DT_1_1000"),
+        text: sinon.stub().returns("DT_1_1000")
+    }
+);
+
+urlToResponses.set(
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::live-weather-na/layers/latest-data/data/c9116bb9-7d00-44bf-9b26-b4ab4c274665",
+    {
+        type: "aaa",
+        status: 304,
+        statusText: "success",
+        ok: true,
+        headers: headersMock,
+        arrayBuffer: sinon.stub(),
+        json: sinon.stub().returns("DT_1_1010"),
+        text: sinon.stub().returns("DT_1_1010")
+    }
 );
 
 urlToResponses.set(
@@ -362,7 +418,6 @@ urlToResponses.set(
     }
 );
 
-
 /**
  * Mocked `DownloadManager` returns values from the `urlToResponses` map. `urlToResponses` connects
  * URLs with their corresponding and expected responses.
@@ -416,7 +471,6 @@ describe("volatileLayerClient", () => {
     it("#getPartition", async () => {
         let response = await volatileLayerClient.getPartition("75717");
         assert.isNotNull(response);
-        assert.isTrue(response.ok);
 
         let buf = await response.text();
         assert.strictEqual(buf, "DT_1_1010");
@@ -430,7 +484,7 @@ describe("volatileLayerClient", () => {
         assert.isTrue(response.ok);
 
         let buf = await response.text();
-        assert.strictEqual(buf, "DT_1_1001");
+        assert.strictEqual(buf, "DT_1_1010");
     });
 
     it("#getTiles", async () => {
@@ -444,7 +498,7 @@ describe("volatileLayerClient", () => {
             results[1].text()
         ]);
 
-        assert.deepEqual(contents, ["DT_1_1001", "DT_1_1001"]);
+        assert.deepEqual(contents, ["DT_1_1010", "DT_1_1010"]);
     });
 
     it("#getMissingTile", async () => {
@@ -470,15 +524,10 @@ describe("volatileLayerClient", () => {
         } // no etag received - skip test
 
         const buf = await response.text();
-        assert.strictEqual(buf, "DT_1_1001");
+        assert.strictEqual(buf, "DT_1_1010");
 
-        // fetch again, this time with etag
-        const init = {
-            headers: new Headers({ "if-none-match": etag })
-        };
         const cachedResponse = await volatileLayerClient.getTile(
-            utils.quadKeyFromMortonCode("23618359"),
-            init
+            utils.quadKeyFromMortonCode("23618359")
         );
         // make sure status is 304 - not modified
         assert.strictEqual(cachedResponse.status, 304);
@@ -534,14 +583,5 @@ describe("volatileLayerClient", () => {
         const partitions = await volatileLayerClient.getPartitionsMetadata();
         assert.isDefined(partitions);
         assert.isAbove(partitions.partitions.length, 0, "index is empty");
-    });
-
-    it("#dowloadData", async () => {
-        const response = await volatileLayerClient.downloadData(
-            "https://metadata.data.api.platform.here.com/downloadData/121"
-        );
-
-        assert.isDefined(response);
-        assert.isNotNull(response);
     });
 });

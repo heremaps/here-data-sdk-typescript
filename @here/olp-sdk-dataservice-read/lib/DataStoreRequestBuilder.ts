@@ -66,20 +66,15 @@ export class DataStoreRequestBuilder extends RequestBuilder {
         const options = await this.addBearerToken(init);
         return this.downloadManager
             .download(url, options)
-            .then(async response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error(JSON.stringify(response));
-            })
-            .catch(err => {
-                throw err;
-            });
+            .then(result => result.json())
+            .catch(err => Promise.reject(err));
     }
 
-    async downloadData(url: string, init?: RequestInit): Promise<Response> {
-        init = await this.addBearerToken(init);
-        return this.downloadManager.download(url, init);
+    async downloadBlob(url: string, init?: RequestInit): Promise<Response> {
+        const options = await this.addBearerToken(init);
+        return this.downloadManager
+            .download(url, options)
+            .catch(err => Promise.reject(err));
     }
 
     private async addBearerToken(init?: RequestInit): Promise<RequestInit> {

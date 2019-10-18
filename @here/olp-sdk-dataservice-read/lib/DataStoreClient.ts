@@ -61,14 +61,10 @@ export class DataStoreClient {
      * Get schema.
      *
      * @param schemaHrn String representing schema HRN.
-     * @param schemaRequestInit Optional request options to be passed to fetch when downloading
      * schema.
      * @returns Archive with schema.
      */
-    async getSchema(
-        schemaHrn: string,
-        schemaRequestInit?: RequestInit
-    ): Promise<ArrayBuffer> {
+    async getSchema(schemaHrn: string): Promise<ArrayBuffer> {
         const schemaDetails = await this.getSchemaDetails(schemaHrn);
         const schemaVariant = schemaDetails.variants!.find(
             variant => variant.id === "ds"
@@ -80,18 +76,17 @@ export class DataStoreClient {
         }
 
         const artifactBaseUrl = await this.context.getBaseUrl("artifact");
-        const schemaUrl = artifactBaseUrl + schemaVariant.url;
 
         const requestBuilder = new DataStoreRequestBuilder(
             this.context.dm,
-            "",
+            artifactBaseUrl,
             this.context.getToken
         );
-        const response = await requestBuilder
-            .downloadData(schemaUrl, schemaRequestInit)
-            .catch(() => {
-                throw new Error(`Cannot download Schema bundle: ${schemaHrn}`);
-            });
+        const response = await ArtifactApi.getArtifactUsingGET(requestBuilder, {
+            artifactHrn: schemaVariant.url
+        }).catch(() => {
+            throw new Error(`Cannot download Schema bundle: ${schemaHrn}`);
+        });
 
         if (response.status === 200) {
             return response.arrayBuffer();

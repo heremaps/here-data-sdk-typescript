@@ -379,7 +379,7 @@ export async function getBlob(
         billingTag?: string;
         range?: string;
     }
-): Promise<string> {
+): Promise<Response> {
     const baseUrl = "/layers/{layerId}/data/{dataHandle}"
         .replace("{layerId}", UrlBuilder.toString(params["layerId"]))
         .replace("{dataHandle}", UrlBuilder.toString(params["dataHandle"]));
@@ -396,7 +396,7 @@ export async function getBlob(
         headers["Range"] = params["range"] as string;
     }
 
-    return builder.request<string>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }
 
 /**

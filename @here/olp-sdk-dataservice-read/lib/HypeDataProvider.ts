@@ -101,16 +101,11 @@ export class HypeDataProvider {
         this.m_layer = layer;
     }
 
-    async getTile(
-        quadKey: QuadKey,
-        abortSignal?: AbortSignal | undefined
-    ): Promise<ArrayBufferLike> {
+    async getTile(quadKey: QuadKey): Promise<ArrayBufferLike> {
         if (this.m_layer === undefined || this.m_layer.getTile === undefined) {
             throw new Error(`Hype data provider not connected`);
         }
-        const response = await this.m_layer.getTile(quadKey, {
-            signal: abortSignal
-        });
+        const response = await this.m_layer.getTile(quadKey);
         if (!response.ok) {
             const errorMessage =
                 `Error downloading tile ${utils.mortonCodeFromQuadKey(
