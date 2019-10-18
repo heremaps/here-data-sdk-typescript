@@ -15,9 +15,9 @@
     "coverage": "nyc mocha > xunit.xml",
     "copy-tests-resourses": "cp -r test/resources dist/@here/olp-sdk-fetch/test",
     "prepare": "tsc --sourceMap false",
-    "bundle": "webpack --env.NODE_ENV=development",
+    "bundle": "npm run bundle:dev && npm run bundle:prod",
     "bundle:prod": "webpack --env.NODE_ENV=production",
-    "prepublish-bundle": "npm run bundle && npm run bundle:prod"
+    "bundle:dev": "webpack --env.NODE_ENV=development"
   },
   "nyc": {
     "include": [
