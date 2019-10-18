@@ -14,9 +14,9 @@
     "test": "mocha > xunit.xml",
     "coverage": "nyc mocha > xunit.xml",
     "prepare": "tsc --sourceMap false",
-    "bundle": "webpack --env.NODE_ENV=development",
+    "bundle": "npm run bundle:dev && npm run bundle:prod",
     "bundle:prod": "webpack --env.NODE_ENV=production",
-    "prepublish-bundle": "npm run bundle && npm run bundle:prod"
+    "bundle:dev": "webpack --env.NODE_ENV=development"
   },
   "nyc": {
     "include": [

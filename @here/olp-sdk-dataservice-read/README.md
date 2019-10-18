@@ -71,23 +71,50 @@ Add minified JavaScript files to your `html` and create an object of userAuth an
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="dist/bundle/olp-sdk-dataservice-read.0.9.0.min.js"></script>
+    <script src="https://unpkg.com/browse/@here/olp-sdk-fetch@0.9.1/dist/olp-sdk-fetch.min.js"></script>
+    <script src="https://unpkg.com/browse/@here/olp-sdk-authentication@0.9.1/dist/olp-sdk-authentication.min.js"></script>
+    <script src="https://unpkg.com/browse/@here/olp-sdk-dataservice-api@0.9.1/dist/olp-sdk-dataservice-api.min.js"></script>
+    <script src="https://unpkg.com/browse/@here/olp-sdk-dataservice-read@0.9.1/dist/olp-sdk-dataservice-read.min.js"></script>
 </head>
 <body>
     <script>
-    let userauth = new UserAuth({
-    credentials: {
-        accessKeyId: "your-app-key",
-        accessKeySecret: "your-app-secret"
-    }
-    });
-    let token = userauth.getToken();
-    const getBearerToken = () => Promise.resolve(token);
-    const dataStoreClient = new DataStoreClient({
-        getBearerToken: getBearerToken,
-        hrn: HRN.fromString("hrn:here:data:::here-optimized-map-for-location-library-2")
+    /**
+     * Authentification with olp-sdk-authentification
+     */
+    const userAuth = new UserAuth({
+        env: "here",
+        credentials: {
+            accessKeyId: "your-access-key",
+            accessKeySecret: "your-access-secret"
+        },
+        tokenRequester: requestToken
     });
 
+    /**
+     * Create DatastoreContext with olp-sdk-dataservice-read
+     */
+    const context = new DataStoreContext({
+        environment: "here",
+        getToken: () => userAuth.getToken()
+    });
+
+    /**
+     * Create client to the volatile layer with olp-sdk-dataservice-read
+     */
+    const volatileLayerClient = new VolatileLayerClient({
+        context,
+        hrn: "your-catalog-hrn",
+        layerId: "your-layer-id",
+    });
+
+    /**
+     * Get some partition from the layer by ID
+     */
+    volatileLayerClient.getPartition('some-partition-id').then(partitionResponse => {
+        partitionResponse.blob().then(partitionBlob => {
+            // your blob here
+        });
+    });
     </script>
 </body>
 </html>

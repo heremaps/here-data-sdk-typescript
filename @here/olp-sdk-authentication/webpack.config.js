@@ -13,8 +13,8 @@ module.exports = env => {
     },
     entry: "./index.web.ts",
     output: {
-      filename: `olp-sdk-authentification.${packageInfo.version}${isProd ? '.min' : '.dev'}.js`,
-      path: path.resolve(__dirname, `dist/bundle`),
+      filename: `olp-sdk-authentification${isProd ? '.min' : '.dev'}.js`,
+      path: path.resolve(__dirname, `dist`),
       libraryTarget: "umd",
       globalObject: 'this'
     },
