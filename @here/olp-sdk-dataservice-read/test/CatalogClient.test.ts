@@ -17,7 +17,8 @@
  * License-Filename: LICENSE
  */
 
-import * as utils from "../lib/partitioning/QuadKeyUtils";
+import "@here/olp-sdk-fetch";
+
 import { assert } from "chai";
 import sinon = require("sinon");
 
