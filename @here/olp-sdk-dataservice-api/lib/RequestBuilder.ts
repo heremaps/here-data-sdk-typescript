@@ -133,9 +133,25 @@ export abstract class RequestBuilder {
     }
 
     /**
+     * Helper method to download the resource.
+     *
+     * @param urlObj the URL to fetch.
+     */
+    async requestBlob(urlObj: UrlBuilder, init?: RequestOptions): Promise<Response> {
+        return this.downloadBlob(urlObj.url, init);
+    }
+
+    /**
      * Implement this function to download the given url as JSON object.
      *
      * @param url The URL to download.
      */
     abstract download<T>(url: string, init?: RequestOptions): Promise<T>;
+
+    /**
+     * Implement this function to download the given url as Blob object.
+     *
+     * @param url The URL to download.
+     */
+    abstract downloadBlob(url: string, init?: RequestOptions): Promise<Response>;
 }

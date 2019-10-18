@@ -113,7 +113,9 @@ export class CatalogClient {
      * @param layerName The name of the layer to look for.
      * @returns The promise with the layer object.
      */
-    public async getVolatileOrVersionedLayer(layerName: string): Promise<CatalogLayer> {
+    public async getVolatileOrVersionedLayer(
+        layerName: string
+    ): Promise<CatalogLayer> {
         const data = await this.findLayer(layerName);
         if (data === null) {
             return Promise.reject(
@@ -213,8 +215,7 @@ export class CatalogClient {
             return Promise.reject(
                 "Can't load layers from catalog configuration"
             );
-        };
-
+        }
 
         const layersConfigurations: ConfigApi.Layer[] =
             catalogConfiguration.layers;
@@ -260,7 +261,10 @@ export class CatalogClient {
         );
 
         for (const layerConfig of layersConfigurations) {
-            const layer: CatalogLayer | null = this.buildCatalogLayer(layerConfig, layerVersions.get(layerConfig.id));
+            const layer: CatalogLayer | null = this.buildCatalogLayer(
+                layerConfig,
+                layerVersions.get(layerConfig.id)
+            );
             if (layer) {
                 this.layers.set(layerConfig.id, layer);
             }
@@ -269,9 +273,15 @@ export class CatalogClient {
         return Promise.resolve({ ok: true });
     }
 
-    private buildCatalogLayer(config: ConfigApi.Layer, version?: number): CatalogLayer | null {
+    private buildCatalogLayer(
+        config: ConfigApi.Layer,
+        version?: number
+    ): CatalogLayer | null {
         // we're interesting only for versioned or volatile layers.
-        if (config.layerType !== "versioned" && config.layerType !== "volatile") {
+        if (
+            config.layerType !== "versioned" &&
+            config.layerType !== "volatile"
+        ) {
             return null;
         }
 
@@ -296,10 +306,11 @@ export class CatalogClient {
         const result: CatalogLayer = {
             ...config,
             apiVersion: 2,
-            downloadData: async (url: string, init?: RequestInit) => layerClient.downloadData(url, init),
-            getIndex: async(rootKey: QuadKey) => layerClient.getIndexMetadata(rootKey),
-            getPartition: async ( id: string, requestInit?: RequestInit) => layerClient.getPartition(id, requestInit),
-            getTile: async(quadKey: QuadKey, requestInit?: RequestInit) => layerClient.getTile(quadKey, requestInit),
+            getIndex: async (rootKey: QuadKey) =>
+                layerClient.getIndexMetadata(rootKey),
+            getPartition: async (id: string, requestInit?: RequestInit) =>
+                layerClient.getPartition(id, requestInit),
+            getTile: async (quadKey: QuadKey) => layerClient.getTile(quadKey),
             getPartitionsIndex: async () => layerClient.getPartitionsMetadata()
         };
 
@@ -307,10 +318,13 @@ export class CatalogClient {
         if (layerClient instanceof VersionLayerClient) {
             // make TS happy
             const versionedLayerClient = layerClient as VersionLayerClient;
-            result.getDataCoverageBitmap = async (requestInit?: RequestInit) => versionedLayerClient.getDataCoverageBitMap(requestInit);
-            result.getDataCoverageSizeMap = async (requestInit?: RequestInit) => versionedLayerClient.getDataCoverageSizeMap(requestInit);
-            result.getDataCoverageTimeMap = async (requestInit?: RequestInit) => versionedLayerClient.getDataCoverageTimeMap(requestInit);
-            result.getSummary = async (requestInit?: RequestInit) => versionedLayerClient.getSummary(requestInit);
+            result.getDataCoverageBitmap = async () =>
+                versionedLayerClient.getDataCoverageBitMap();
+            result.getDataCoverageSizeMap = async () =>
+                versionedLayerClient.getDataCoverageSizeMap();
+            result.getDataCoverageTimeMap = async () =>
+                versionedLayerClient.getDataCoverageTimeMap();
+            result.getSummary = async () => versionedLayerClient.getSummary();
         }
 
         return result;

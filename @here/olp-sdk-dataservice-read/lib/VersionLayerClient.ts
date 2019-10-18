@@ -26,10 +26,10 @@ import { ApiName, DataStoreContext } from "./DataStoreContext";
 import { DataStoreRequestBuilder } from "./DataStoreRequestBuilder";
 
 import {
-    ConfigApi,
+    BlobApi,
+    CoverageApi,
     MetadataApi,
-    QueryApi,
-    UrlBuilder
+    QueryApi
 } from "@here/olp-sdk-dataservice-api";
 import { LRUCache } from "./LRUCache";
 import { QuadKey } from "./partitioning/QuadKey";
@@ -38,7 +38,8 @@ import * as utils from "./partitioning/QuadKeyUtils";
 export enum CoverageDataType {
     BITMAP = "tilemap",
     SIZEMAP = "heatmap/size",
-    TIMEMAP = "heatmap/age"
+    TIMEMAP = "heatmap/age",
+    SUMMARY = "summary"
 }
 
 /**
@@ -61,44 +62,6 @@ export interface VersionLayerClientParams {
      * Specify which version of layer should be used.
      */
     version: number;
-}
-
-/**
- * An interface of the bounding box data for the layer.
- */
-export interface LayerBoundingBox {
-    east: number;
-    south: number;
-    north: number;
-    west: number;
-}
-
-/**
- * An interface of the catalog layer summary for one zoom level.
- */
-export interface LayerLevelSummary {
-    boundingBox: LayerBoundingBox;
-    size: number;
-    processedTimestamp: number;
-    centroid: number;
-    minPartitionSize: number;
-    maxPartitionSize: number;
-    version: number;
-    totalPartitions: number;
-}
-
-/**
- * An interface for the catalog layer summary data.
- */
-export interface LayerSummary {
-    /** A catalog HRN. */
-    catalogHRN: string;
-    /** A layer name. */
-    layer: string;
-    /** A layer summary for multiple zoom levels. */
-    levelSummary: {
-        [index: number]: LayerLevelSummary;
-    };
 }
 
 /**
@@ -161,9 +124,29 @@ export class VersionLayerClient {
                 )
             );
         }
+        if (!partition.dataHandle) {
+            return Promise.reject(
+                new Error(
+                    `No partition dataHandle for partition ${partition}. HRN: ${this.hrn}`
+                )
+            );
+        }
 
-        const url = await this.partitionUrl(partition);
-        return this.downloadData(url, partitionRequestInit);
+        const builder = await this.getRequestBuilder("blob");
+        return BlobApi.getBlob(builder, {
+            dataHandle: partition.dataHandle,
+            layerId: this.layerId
+        }).catch(async error => {
+            return Promise.reject(
+                new ErrorHTTPResponse(
+                    `Blob Service error: HTTP ${
+                        error.status
+                    }, ${error.statusText || error.cause || ""}` +
+                        `\n${error.action || ""}`,
+                    error
+                )
+            );
+        });
     }
 
     /**
@@ -196,10 +179,7 @@ export class VersionLayerClient {
      * tile.
      * @returns A promise of the HTTP response that contains the payload of the requested tile.
      */
-    async getTile(
-        quadKey: QuadKey,
-        tileRequestInit?: RequestInit
-    ): Promise<Response> {
+    async getTile(quadKey: QuadKey): Promise<Response> {
         if (!utils.isValid(quadKey)) {
             throw Error("QuadKey is not valid");
         }
@@ -210,7 +190,7 @@ export class VersionLayerClient {
             return Promise.resolve(new Response(null, { status: 204 }));
         }
 
-        return this.downloadTile(resultSub, tileRequestInit);
+        return this.downloadTile(resultSub);
     }
 
     /**
@@ -225,8 +205,7 @@ export class VersionLayerClient {
      * @returns A promise of the http response that contains the payload of the requested tile.
      */
     async getAggregatedTile(
-        quadKey: QuadKey,
-        tileRequestInit?: RequestInit
+        quadKey: QuadKey
     ): Promise<AggregatedDownloadResponse> {
         const index = await this.getIndexFor(quadKey);
 
@@ -237,8 +216,7 @@ export class VersionLayerClient {
         }
 
         const response = (await this.downloadTile(
-            resultIdx.dataHandle,
-            tileRequestInit
+            resultIdx.dataHandle
         )) as AggregatedDownloadResponse;
         response.quadKey = resultIdx.quadKey;
         return response;
@@ -284,8 +262,15 @@ export class VersionLayerClient {
      *
      *  @returns A promise with the payload of the requested bitmap.
      */
-    async getDataCoverageBitMap(requestInit?: RequestInit): Promise<Blob> {
-        return this.getDataCoverage(CoverageDataType.BITMAP, requestInit);
+    async getDataCoverageBitMap(): Promise<Response> {
+        const coverageRequestBuilder = await this.getRequestBuilder(
+            "statistics"
+        );
+        return CoverageApi.getDataCoverageTile(coverageRequestBuilder, {
+            layerId: this.layerId,
+            // @todo datalevel is hardcoded. It is known issue, ticket about API bug is created
+            datalevel: "12"
+        }).catch(this.errorHandler);
     }
 
     /**
@@ -296,8 +281,15 @@ export class VersionLayerClient {
      *
      *  @returns A promise with the payload of the requested size map.
      */
-    async getDataCoverageSizeMap(requestInit?: RequestInit): Promise<Blob> {
-        return this.getDataCoverage(CoverageDataType.SIZEMAP, requestInit);
+    async getDataCoverageSizeMap(): Promise<Response> {
+        const coverageRequestBuilder = await this.getRequestBuilder(
+            "statistics"
+        );
+        return CoverageApi.getDataCoverageSizeMap(coverageRequestBuilder, {
+            layerId: this.layerId,
+            // @todo datalevel is hardcoded. It is known issue, ticket about API bug is created
+            datalevel: "12"
+        }).catch(this.errorHandler);
     }
 
     /**
@@ -308,8 +300,16 @@ export class VersionLayerClient {
      *
      *  @returns A promise with the payload of the requested time map.
      */
-    async getDataCoverageTimeMap(requestInit?: RequestInit): Promise<Blob> {
-        return this.getDataCoverage(CoverageDataType.TIMEMAP, requestInit);
+    async getDataCoverageTimeMap(): Promise<Response> {
+        const coverageRequestBuilder = await this.getRequestBuilder(
+            "statistics"
+        );
+        return CoverageApi.getDataCoverageTimeMap(coverageRequestBuilder, {
+            layerId: this.layerId,
+            // @todo datalevel is hardcoded. It is known issue, ticket about API bug is created
+            datalevel: "12",
+            catalogHRN: this.hrn
+        }).catch(this.errorHandler);
     }
 
     /**
@@ -319,135 +319,26 @@ export class VersionLayerClient {
      *
      * @returns A promise with the layer summary.
      */
-    async getSummary(
-        requestInit?: RequestInit
-    ): Promise<LayerSummary> {
+    async getSummary(): Promise<CoverageApi.LayerSummary> {
         const coverageRequestBuilder = await this.getRequestBuilder(
             "statistics"
         );
-        const url =
-            coverageRequestBuilder.baseUrl +
-            "/layers/" +
-            this.layerId +
-            "/summary";
-
-        const urlBuilder = new UrlBuilder(url);
-        const response = await coverageRequestBuilder
-            .downloadData(urlBuilder.url, requestInit)
-            .catch(reason =>
-                Promise.reject(new Error(`Statistics Service error: ${reason}`))
-            );
-
-        let message;
-        switch (response.status) {
-            case 400:
-                message = "Bad request, incorrect version type";
-                break;
-            case 404:
-                message = "Requested file does not exist";
-                break;
-            case 500:
-                message = "Internal server error";
-                break;
-        }
-
-        switch (response.status) {
-            case 200:
-                return response.json();
-            case 400:
-            case 404:
-            case 500:
-            default:
-                return Promise.reject(
-                    new ErrorHTTPResponse(
-                        `Statistics Service error: HTTP ${response.status}: ` +
-                            `${
-                                response.statusText !== ""
-                                    ? response.statusText
-                                    : message
-                            }`,
-                        response
-                    )
-                );
-        }
+        return CoverageApi.getDataCoverageSummary(coverageRequestBuilder, {
+            layerId: this.layerId,
+            version: `${this.version}`
+        }).catch(this.errorHandler);
     }
 
-    /**
-     * Downloads a URL, appending the credentials that this Layer is using.
-     *
-     * @param url The URL to download.
-     * @param init Optional extra parameters.
-     */
-    async downloadData(
-        url: string,
-        init?: RequestInit
-    ): Promise<Response> {
-        const blobRequestBuilder = await this.getRequestBuilder("blob");
-        return blobRequestBuilder.downloadData(url, init);
-    }
-
-    /**
-     * Fetch and return data coverage of the specified type for the specified layer and version.
-     *
-     * @param coverageType The type of the coverage data.
-     * @param requestInit Optional request options to be passed to fetch when downloading
-     * the coverage map.
-     *
-     *  @returns A promise that contains the payload of the requested time map.
-     */
-    private async getDataCoverage(
-        coverageType: CoverageDataType,
-        requestInit?: RequestInit
-    ): Promise<Blob> {
-        const url = await this.coverageUrl(coverageType);
-        const urlBuilder = new UrlBuilder(url);
-        const coverageRequestBuilder = await this.getRequestBuilder(
-            "statistics"
+    private async errorHandler(error: any) {
+        return Promise.reject(
+            new ErrorHTTPResponse(
+                `Statistic Service error: HTTP ${
+                    error.status
+                }, ${error.statusText || error.cause || ""}` +
+                    `\n${error.action || ""}`,
+                error
+            )
         );
-        const response = await coverageRequestBuilder
-            .downloadData(urlBuilder.url, requestInit)
-            .catch(reason =>
-                Promise.reject(
-                    new Error(
-                        `Statistics Service error: ${reason}, HRN: ${this.hrn}`
-                    )
-                )
-            );
-
-        let message;
-        switch (response.status) {
-            case 400:
-                message = "Bad request, incorrect version type";
-                break;
-            case 404:
-                message = "Requested file does not exist";
-                break;
-            case 500:
-                message = "Internal server error";
-                break;
-        }
-
-        message += `, HRN: ${this.hrn}`;
-
-        switch (response.status) {
-            case 200:
-                return response.blob();
-            case 400:
-            case 404:
-            case 500:
-            default:
-                return Promise.reject(
-                    new ErrorHTTPResponse(
-                        `Statistics Service error: HTTP ${response.status}: ` +
-                            `${
-                                response.statusText
-                                    ? response.statusText
-                                    : message
-                            }`,
-                        response
-                    )
-                );
-        }
     }
 
     /**
@@ -516,11 +407,7 @@ export class VersionLayerClient {
 
         const subQuads = new Map<number, string>();
 
-        if (!dsIndex) {
-            return subQuads;
-        }
-
-        if (dsIndex.subQuads === undefined) {
+        if (!dsIndex || dsIndex.subQuads === undefined) {
             return subQuads;
         }
 
@@ -557,27 +444,22 @@ export class VersionLayerClient {
         return this.indexCache.get(cacheKey);
     }
 
-    private async downloadTile(
-        dataHandle: string,
-        requestInit?: RequestInit
-    ): Promise<Response> {
-        const url = await this.dataUrl(dataHandle);
-        return this.downloadData(url, requestInit);
-    }
-
-    /**
-     * Prepares URL to download coverage data.
-     *
-     * @param coverageType The type of the coverage data.
-     *
-     *  @returns url to the specific coverage service method
-     */
-    private async coverageUrl(coverageType: CoverageDataType): Promise<string> {
-        const path = "/layers/" + this.layerId + "/" + coverageType.toString();
-        const coverageRequestBuilder = await this.getRequestBuilder(
-            "statistics"
-        );
-        return `${coverageRequestBuilder.baseUrl}${path}`;
+    private async downloadTile(dataHandle: string): Promise<Response> {
+        const builder = await this.getRequestBuilder("blob");
+        return BlobApi.getBlob(builder, {
+            dataHandle,
+            layerId: this.layerId
+        }).catch(async error => {
+            return Promise.reject(
+                new ErrorHTTPResponse(
+                    `Blob Service error: HTTP ${
+                        error.status
+                    }, ${error.statusText || error.cause || ""}` +
+                        `\n${error.action || ""}`,
+                    error
+                )
+            );
+        });
     }
 
     /**
@@ -601,23 +483,6 @@ export class VersionLayerClient {
             url,
             this.context.getToken
         );
-    }
-
-    private async partitionUrl(partition: QueryApi.Partition): Promise<string> {
-        if (partition.dataHandle) {
-            return this.dataUrl(partition.dataHandle);
-        }
-        return Promise.reject(
-            new Error(
-                `No partition dataHandle for partition ${partition}. HRN: ${this.hrn}`
-            )
-        );
-    }
-
-    private async dataUrl(dataHandle: string): Promise<string> {
-        const path = "/layers/" + this.layerId + "/data/" + dataHandle;
-        const blobRequestBuilder = await this.getRequestBuilder("blob");
-        return `${blobRequestBuilder.baseUrl}${path}`;
     }
 
     /**
