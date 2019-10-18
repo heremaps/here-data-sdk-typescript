@@ -111,7 +111,7 @@ Add minified JavaScript file to your `html` and create an object of userAuth:
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="dist/bundle/olp-sdk-authentification.0.9.0.min.js"></script>
+    <script src="https://unpkg.com/browse/@here/olp-sdk-authentication@0.9.1/dist/olp-sdk-authentication.min.js"></script>
 </head>
 <body>
     <script>
@@ -120,15 +120,13 @@ Add minified JavaScript file to your `html` and create an object of userAuth:
         credentials: {
             accessKeyId: "replace-with-your-access-key-id",
             accessKeySecret: "replace-with-your-access-key-secret"
-        }
+        },
+        tokenRequester: requestToken
     });
 
-    userAuth.setCredentials().then((result) => {
-        if (result.ok) {
-            const token = await userauth.getToken();
-        }
-    });
-
+        userAuth.getToken().then(token => {
+            // your token here
+        });
     </script>
 </body>
 </html>

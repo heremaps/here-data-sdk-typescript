@@ -90,16 +90,16 @@ npm run docs
 If you want to have a compiled project, you can use bundle commands. After running each of the following commands, get the js bundled files from the root folder for each package:
 
 ```sh
-@here/olp-sdk-authentication/dist/bundle
-@here/olp-sdk-dataservice-read/dist/bundle
-@here/olp-sdk-dataservice-api/dist/bundle
-@here/olp-sdk-fetch/dist/bundle
+@here/olp-sdk-authentication/dist
+@here/olp-sdk-dataservice-read/dist
+@here/olp-sdk-dataservice-api/dist
+@here/olp-sdk-fetch/dist
 ```
 
-To get bundled js files for all modules, run:
+To get bundled js with sourcemaps files for all modules, run:
 
 ```sh
-npm run bundle
+npm run bundle:dev
 ```
 
 To get minified version for production, run:
@@ -111,8 +111,16 @@ npm run bundle:prod
 To get bundled and minified js files, run:
 
 ```sh
-npm run prepublish-bundle
+npm run bundle
 ```
+
+Or use from CDN:
+
+https://unpkg.com/browse/@here/olp-sdk-authentication@0.9.1/dist/olp-sdk-authentication.min.js
+https://unpkg.com/browse/@here/olp-sdk-dataservice-api@0.9.1/dist/olp-sdk-dataservice-api.min.js
+https://unpkg.com/browse/@here/olp-sdk-dataservice-read@0.9.1/dist/olp-sdk-dataservice-read.min.js
+https://unpkg.com/browse/@here/olp-sdk-fetch@0.9.1/dist/olp-sdk-fetch.min.js
+
 
 ## LICENSE
 
