@@ -17,9 +17,6 @@
  * License-Filename: LICENSE
  */
 
-// tslint:disable-next-line: no-import-side-effect
-import "@here/olp-sdk-fetch";
-
 export * from "./lib/DataStoreClient";
 export * from "./lib/CatalogClient";
 export * from "./lib/HRN";

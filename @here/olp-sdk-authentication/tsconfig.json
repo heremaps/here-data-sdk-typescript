@@ -6,6 +6,7 @@
     "include": [
         "./lib",
         "./test",
-        "index.ts"
+        "index.ts",
+        "index.web.ts"
     ]
 }

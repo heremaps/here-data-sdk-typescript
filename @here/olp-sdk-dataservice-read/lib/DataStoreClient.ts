@@ -17,9 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { ArtifactApi, ConfigApi } from "@here/olp-sdk-dataservice-api";
-import { GetSchemaResponse } from "@here/olp-sdk-dataservice-api/lib/artifact-api";
-import { CatalogsListResult } from "@here/olp-sdk-dataservice-api/lib/config-api";
+import { ArtifactApi, ConfigApi} from "@here/olp-sdk-dataservice-api";
 import { ErrorHTTPResponse } from "./CatalogClientCommon";
 import { DataStoreContext } from "./DataStoreContext";
 import { DataStoreRequestBuilder } from "./DataStoreRequestBuilder";
@@ -44,7 +42,7 @@ export class DataStoreClient {
      * @param schemaHrn String representing schema HRN.
      * @returns Object with schema details.
      */
-    async getSchemaDetails(schemaHrn: string): Promise<GetSchemaResponse> {
+    async getSchemaDetails(schemaHrn: string): Promise<ArtifactApi.GetSchemaResponse> {
         const artifactBaseUrl = await this.context.getBaseUrl("artifact");
 
         return ArtifactApi.getSchemaUsingGET(
@@ -120,7 +118,7 @@ export class DataStoreClient {
      * @param schemaHrn Schema HRN of layers to look for.
      * @returns A promise with list of catalogs and their layers.
      */
-    async getCatalogsBySchema(schemaHrn: string): Promise<CatalogsListResult> {
+    async getCatalogsBySchema(schemaHrn: string): Promise<ConfigApi.CatalogsListResult> {
         const configBaseUrl = await this.context.getBaseUrl("config");
         return ConfigApi.getCatalogs(
             new DataStoreRequestBuilder(
