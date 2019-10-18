@@ -26,13 +26,17 @@ import { DataStoreDownloadManager } from "../lib/DataStoreDownloadManager";
 import { VersionLayerClient } from "../lib/VersionLayerClient";
 import { DataStoreContext } from "../lib/DataStoreContext";
 
-function createMockDownloadResponse(resp: Object) {
+function createMockDownloadResponse(resp: Object, blob?: string) {
+    const headers = new Headers();
+    headers.append("etag", "1237696a7c876b7e");
+    headers.append("content-type", blob || "application/json");
     const mock = {
         type: "aaa",
         status: 200,
+
         statusText: "success",
         ok: true,
-        headers: new Headers().append("etag", "1237696a7c876b7e"),
+        headers: headers,
         arrayBuffer: sinon.stub().returns(resp),
         json: sinon.stub().returns(resp),
         text: sinon.stub().returns(resp)
@@ -246,7 +250,7 @@ urlToResponses.set(
 
 urlToResponses.set(
     "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/data/43d76b9f-e934-40e5-9ce4-91d88a30f1c6",
-    createMockDownloadResponse("DT_1_1010")
+    createMockDownloadResponse("DT_1_1010", "image/jpeg")
 );
 
 // NewversionLayerClientOffline #getMissingTitle
@@ -326,6 +330,21 @@ urlToResponses.set(
 
 const headersMock = new Headers();
 headersMock.append("etag", "1237696a7c876b7e");
+
+urlToResponses.set(
+    "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/tilemap?datalevel=12",
+    "DT_1_1010"
+);
+
+urlToResponses.set(
+    "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/heatmap/size?datalevel=12",
+    createMockDownloadResponse("DT_1_1010", "image/jpeg")
+);
+
+urlToResponses.set(
+    "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/heatmap/age?datalevel=12&catalogHRN=hrn%3Ahere%3Adata%3A%3A%3Asensor-data-sensoris-versioned-example",
+    createMockDownloadResponse("DT_1_1010", "image/jpeg")
+);
 
 // NewversionLayerClientOffline - blob
 urlToResponses.set(
@@ -443,6 +462,31 @@ urlToResponses.set(
     }
 );
 
+urlToResponses.set(
+    "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/summary?version=0",
+    {
+        catalogHRN: "hrn:here:data:::sensor-data-sensoris-versioned-example",
+        layer: "protobuf-example-berlin-v1",
+        levelSummary: {
+            "12": {
+                boundingBox: {
+                    east: 14.23828125,
+                    south: 52.03125,
+                    north: 52.822265625,
+                    west: 12.568359375
+                },
+                size: 255967186,
+                processedTimestamp: 1556973621446,
+                centroid: 23618400,
+                minPartitionSize: 128854,
+                maxPartitionSize: 18162544,
+                version: 0,
+                totalPartitions: 161
+            }
+        }
+    }
+);
+
 // NewCatalogClientOffline #downloadData
 urlToResponses.set(
     "https://metadata.data.api.platform.here.com/downloadData/121",
@@ -513,7 +557,6 @@ describe("VersionLayerClient", () => {
     it("#getPartition", async () => {
         let response = await versionLayerClient.getPartition("23618173");
         assert.isNotNull(response);
-        assert.isTrue(response.ok);
 
         let buf = await response.text();
         assert.strictEqual(buf, "DT_1_1010");
@@ -522,16 +565,25 @@ describe("VersionLayerClient", () => {
     it("#getDataCoverageBitmap", async () => {
         let response = await versionLayerClient.getDataCoverageBitMap();
         assert.isNotNull(response);
+
+        let buf = await response.text();
+        assert.strictEqual(buf, "DT_1_1010");
     });
 
     it("#getDataCoverageSizeMap", async () => {
         let response = await versionLayerClient.getDataCoverageSizeMap();
         assert.isNotNull(response);
+
+        let buf = await response.text();
+        assert.strictEqual(buf, "DT_1_1010");
     });
 
     it("#getDataCoverageTimeMap", async () => {
         let response = await versionLayerClient.getDataCoverageTimeMap();
         assert.isNotNull(response);
+
+        let buf = await response.text();
+        assert.strictEqual(buf, "DT_1_1010");
     });
 
     it("#getSummary", async () => {
@@ -590,12 +642,8 @@ describe("VersionLayerClient", () => {
         assert.strictEqual(buf, "DT_1_1001");
 
         // fetch again, this time with etag
-        const init = {
-            headers: new Headers({ "if-none-match": etag })
-        };
         const cachedResponse = await versionLayerClient.getTile(
-            utils.quadKeyFromMortonCode("23618359"),
-            init
+            utils.quadKeyFromMortonCode("23618359")
         );
         // make sure status is 304 - not modified
         assert.strictEqual(cachedResponse.status, 304);
@@ -652,14 +700,5 @@ describe("VersionLayerClient", () => {
         );
         assert.isDefined(index);
         assert.isAbove(index.size, 0, "index is empty");
-    });
-
-    it("#dowloadData", async () => {
-        const response = await versionLayerClient.downloadData(
-            "https://metadata.data.api.platform.here.com/downloadData/121"
-        );
-
-        assert.isDefined(response);
-        assert.isNotNull(response);
     });
 });

@@ -18,11 +18,16 @@
  */
 
 import {
+    BlobApi,
     ConfigApi,
     MetadataApi,
     QueryApi
 } from "@here/olp-sdk-dataservice-api";
-import { AggregatedDownloadResponse, IndexMap } from "./CatalogClientCommon";
+import {
+    AggregatedDownloadResponse,
+    IndexMap,
+    ErrorHTTPResponse
+} from "./CatalogClientCommon";
 import { ApiName, DataStoreContext } from "./DataStoreContext";
 import { DataStoreRequestBuilder } from "./DataStoreRequestBuilder";
 import { LRUCache } from "./LRUCache";
@@ -102,8 +107,19 @@ export class VolatileLayerClient {
             );
         }
 
-        const url = await this.partitionUrl(partition);
-        return this.downloadData(url, partitionRequestInit);
+        if (!partition.dataHandle) {
+            return Promise.reject(
+                new Error(
+                    `No partition dataHandle for partition ${partition}. HRN: ${this.hrn}`
+                )
+            );
+        }
+
+        const builder = await this.getRequestBuilder("blob");
+        return BlobApi.getBlob(builder, {
+            dataHandle: partition.dataHandle,
+            layerId: this.layerId
+        }).catch(this.errorHandler);
     }
 
     /**
@@ -167,10 +183,7 @@ export class VolatileLayerClient {
      * tile.
      * @returns A promise of the HTTP response that contains the payload of the requested tile.
      */
-    async getTile(
-        quadKey: QuadKey,
-        tileRequestInit?: RequestInit
-    ): Promise<Response> {
+    async getTile(quadKey: QuadKey): Promise<Response> {
         if (!utils.isValid(quadKey)) {
             throw Error("QuadKey is not valid");
         }
@@ -181,7 +194,7 @@ export class VolatileLayerClient {
             return Promise.resolve(new Response(null, { status: 204 }));
         }
 
-        return this.downloadTile(resultSub, tileRequestInit);
+        return this.downloadTile(resultSub);
     }
 
     /**
@@ -196,8 +209,7 @@ export class VolatileLayerClient {
      * @returns A promise of the http response that contains the payload of the requested tile.
      */
     async getAggregatedTile(
-        quadKey: QuadKey,
-        tileRequestInit?: RequestInit
+        quadKey: QuadKey
     ): Promise<AggregatedDownloadResponse> {
         const index = await this.getIndexFor(quadKey);
 
@@ -208,25 +220,22 @@ export class VolatileLayerClient {
         }
 
         const response = (await this.downloadTile(
-            resultIdx.dataHandle,
-            tileRequestInit
+            resultIdx.dataHandle
         )) as AggregatedDownloadResponse;
         response.quadKey = resultIdx.quadKey;
         return response;
     }
 
-    /**
-     * Downloads a URL, appending the credentials that this Layer is using.
-     *
-     * @param url The URL to download.
-     * @param init Optional extra parameters.
-     */
-    async downloadData(
-        url: string,
-        init?: RequestInit
-    ): Promise<Response> {
-        const blobRequestBuilder = await this.getRequestBuilder("blob");
-        return blobRequestBuilder.downloadData(url, init);
+    private async errorHandler(error: any) {
+        return Promise.reject(
+            new ErrorHTTPResponse(
+                `Statistics Service error: HTTP ${
+                    error.status
+                }, ${error.statusText || error.cause || ""}` +
+                    `\n${error.action || ""}`,
+                error
+            )
+        );
     }
 
     /**
@@ -255,31 +264,12 @@ export class VolatileLayerClient {
         return index;
     }
 
-    private async downloadTile(
-        dataHandle: string,
-        requestInit?: RequestInit
-    ): Promise<Response> {
-        const url = await this.dataUrl(dataHandle);
-        return this.downloadData(url, requestInit);
-    }
-
-    private async partitionUrl(partition: QueryApi.Partition): Promise<string> {
-        if (partition.dataHandle) {
-            return this.dataUrl(partition.dataHandle);
-        }
-        return Promise.reject(
-            new Error(
-                `No partition dataHandle for partition ${partition}. HRN: ${this.hrn}`
-            )
-        );
-    }
-
-    private async dataUrl(dataHandle: string): Promise<string> {
-        const path = "/layers/" + this.layerId + "/data/" + dataHandle;
-        const blobRequestBuilder = await this.getRequestBuilder(
-            "volatile-blob"
-        );
-        return `${blobRequestBuilder.baseUrl}${path}`;
+    private async downloadTile(dataHandle: string): Promise<Response> {
+        const builder = await this.getRequestBuilder("blob");
+        return BlobApi.getBlob(builder, {
+            dataHandle,
+            layerId: this.layerId
+        }).catch(this.errorHandler);
     }
 
     /**

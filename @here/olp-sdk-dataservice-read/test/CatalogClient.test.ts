@@ -30,12 +30,15 @@ import { DataStoreContext } from "../lib/DataStoreContext";
 import { CatalogLayer } from "../lib/CatalogLayer";
 
 function createMockDownloadResponse(resp: Object) {
+    const headers = new Headers();
+    headers.append("etag", "1237696a7c876b7e");
+    headers.append("content-type", "application/json");
     const mock = {
         type: "aaa",
         status: 200,
         statusText: "success",
         ok: true,
-        headers: new Headers().append("etag", "1237696a7c876b7e"),
+        headers: headers,
         arrayBuffer: sinon.stub().returns(resp),
         json: sinon.stub().returns(resp),
         text: sinon.stub().returns(resp)
@@ -1984,8 +1987,10 @@ describe("CatalogClientOffline", () => {
     });
 
     it("#getLayerNonExisting", () => {
-        catalogClient.getVolatileOrVersionedLayer("NonExistingLayer").catch(err => {
-            assert.isDefined(err);
-        });
+        catalogClient
+            .getVolatileOrVersionedLayer("NonExistingLayer")
+            .catch(err => {
+                assert.isDefined(err);
+            });
     });
 });

@@ -230,8 +230,8 @@ export async function getArtifactFileUsingGET(
 export async function getArtifactUsingGET(
     builder: RequestBuilder,
     params: { artifactHrn: string }
-): Promise<GetArtifactResponse> {
-    const baseUrl = "/artifact/{artifactHrn}".replace(
+): Promise<Response> {
+    const baseUrl = "/{artifactHrn}".replace(
         "{artifactHrn}",
         UrlBuilder.toString(params["artifactHrn"])
     );
@@ -244,7 +244,7 @@ export async function getArtifactUsingGET(
         headers
     };
 
-    return builder.request<GetArtifactResponse>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }
 
 /**
