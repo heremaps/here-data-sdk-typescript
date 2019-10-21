@@ -47,8 +47,8 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@here/olp-sdk-dataservice-api": "0.9.0",
-    "@here/olp-sdk-fetch": "0.9.0"
+    "@here/olp-sdk-dataservice-api": "0.9.1",
+    "@here/olp-sdk-fetch": "0.9.1"
   },
   "devDependencies": {
     "@types/chai": "4.2.3",
