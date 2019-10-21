@@ -1,0 +1,22 @@
+image: ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}
+
+stages:
+  - security_test
+
+test_veracode:
+  stage: security_test
+  tags:
+  - docker-prod
+  script:
+  - $CI_PROJECT_DIR/scripts/veracode/veracodeUpload.sh build/olp-edge-ts.zip OLP_EDGE_CI@here.com
+  only:
+    refs:
+      - master
+      - schedules
+    variables:
+      - $VERACODE
+  artifacts:
+    when: always
+    paths:
+      - build
+    expire_in: 1 year # save our zip for 1 year as job artifacts
