@@ -17,17 +17,30 @@
  * License-Filename: LICENSE
  */
 
-export * from "./lib/DataStoreClient";
-export * from "./lib/CatalogClient";
-export * from "./lib/HRN";
-export * from "./lib/HypeDataProvider";
-export * from "./lib/CatalogClientCommon";
-export * from "./lib/error/NotFoundError";
-export * from "./lib/partitioning/QuadKey";
-export * from "./lib/partitioning/QuadKeyUtils";
-export * from "./lib/DownloadManager";
-export * from "./lib/DataStoreContext";
-export * from "./lib/StatisticsClient";
-export * from "./lib/SummaryRequest";
-export * from "./lib/VersionLayerClient";
-export * from "./lib/VolatileLayerClient";
+/**
+ * A class that prepare information for calls to get Statistics from CoverageAPI
+ */
+export class SummaryRequest {
+    private catalogHrn: string | undefined;
+    private layerId: string | undefined;
+
+    constructor() {}
+
+    public getCatalogHrn(): string | undefined {
+        return this.catalogHrn;
+    }
+
+    public getLayerId(): string | undefined {
+        return this.layerId;
+    }
+
+    public withCatalogHrn(hrn: string) {
+        this.catalogHrn = hrn;
+        return this;
+    }
+
+    public withLayerId(layerId: string) {
+        this.layerId = layerId;
+        return this;
+    }
+}

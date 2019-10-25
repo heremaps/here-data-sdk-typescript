@@ -323,10 +323,9 @@ export class VersionLayerClient {
         const coverageRequestBuilder = await this.getRequestBuilder(
             "statistics"
         );
-        return CoverageApi.getDataCoverageSummary(coverageRequestBuilder, {
-            layerId: this.layerId,
-            version: `${this.version}`
-        }).catch(this.errorHandler);
+        return CoverageApi
+            .getDataCoverageSummary(coverageRequestBuilder, {layerId: this.layerId})
+            .catch(this.errorHandler);
     }
 
     private async errorHandler(error: any) {
