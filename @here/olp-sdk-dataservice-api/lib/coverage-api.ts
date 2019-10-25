@@ -154,11 +154,10 @@ export async function getDataCoverageSizeMap(
  *
  * @summary Retrieve Layer size data for provided layer id and version
  * @param layerId Unique Layer Identifier
- * @param version Query passed to retrieve size of data in a specific Admin Area
  */
 export async function getDataCoverageSummary(
     builder: RequestBuilder,
-    params: { layerId: string; version: string }
+    params: { layerId: string }
 ): Promise<LayerSummary> {
     const baseUrl = "/layers/{layerId}/summary".replace(
         "{layerId}",
@@ -166,7 +165,6 @@ export async function getDataCoverageSummary(
     );
 
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
-    urlBuilder.appendQuery("version", params["version"]);
 
     const headers: { [header: string]: string } = {};
     const options: RequestOptions = {
