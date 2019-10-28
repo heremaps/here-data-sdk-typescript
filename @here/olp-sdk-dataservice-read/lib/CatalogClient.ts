@@ -65,6 +65,7 @@ export class CatalogClient {
      * obtain layers.
      */
 
+    // tslint:disable-next-line: deprecation
     readonly layers = new Map<string, CatalogLayer>();
 
     /**
@@ -115,6 +116,7 @@ export class CatalogClient {
      */
     public async getVolatileOrVersionedLayer(
         layerName: string
+    // tslint:disable-next-line: deprecation
     ): Promise<CatalogLayer> {
         const data = await this.findLayer(layerName);
         if (data === null) {
@@ -191,6 +193,7 @@ export class CatalogClient {
      * @param layerName The name of the layer to look for.
      * @returns Promise with the layer object or with null if the layer is not part of this catalog.
      */
+    // tslint:disable-next-line: deprecation
     private async findLayer(layerName: string): Promise<CatalogLayer | null> {
         if (!this.layers.size) {
             await this.loadVolatileOrVersionedLayersFromConfig().catch(err =>
@@ -261,6 +264,7 @@ export class CatalogClient {
         );
 
         for (const layerConfig of layersConfigurations) {
+            // tslint:disable-next-line: deprecation
             const layer: CatalogLayer | null = this.buildCatalogLayer(
                 layerConfig,
                 layerVersions.get(layerConfig.id)
@@ -276,6 +280,7 @@ export class CatalogClient {
     private buildCatalogLayer(
         config: ConfigApi.Layer,
         version?: number
+    // tslint:disable-next-line: deprecation
     ): CatalogLayer | null {
         // we're interesting only for versioned or volatile layers.
         if (
@@ -303,6 +308,7 @@ export class CatalogClient {
         }
 
         // add required methods for interface (all required methods means that methods are in both Layer clients)
+        // tslint:disable-next-line: deprecation
         const result: CatalogLayer = {
             ...config,
             apiVersion: 2,

@@ -25,8 +25,8 @@ import {
 } from "@here/olp-sdk-dataservice-api";
 import {
     AggregatedDownloadResponse,
-    IndexMap,
-    ErrorHTTPResponse
+    ErrorHTTPResponse,
+    IndexMap
 } from "./CatalogClientCommon";
 import { ApiName, DataStoreContext } from "./DataStoreContext";
 import { DataStoreRequestBuilder } from "./DataStoreRequestBuilder";
