@@ -90,6 +90,7 @@ export class HypeDataProvider {
 
         // tslint:disable-next-line: deprecation
         const layer = await this.m_catalogClient
+            // tslint:disable-next-line: deprecation
             .getVolatileOrVersionedLayer(this.m_options.layer)
             .catch(err =>
                 Promise.reject(
