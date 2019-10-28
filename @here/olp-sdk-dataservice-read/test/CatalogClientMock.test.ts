@@ -16,7 +16,7 @@ describe("VersionLayerClientMockTests", () => {
         DataStoreContext
     >;
 
-    describe("getlastestVesion", () => {
+    describe("getLastestVesion", () => {
         const catalogLatestVersion = 43;
 
         beforeEach(() => {
@@ -33,7 +33,7 @@ describe("VersionLayerClientMockTests", () => {
             latestVersionStub.restore();
         });
 
-        it("getlastestVersion success", async () => {
+        it("getLastestVersion success", async () => {
             const catalogClient = new CatalogClient({
                 context: (dataStoreContextStubInstance as unknown) as DataStoreContext,
                 hrn: "fake-hrn-string"
@@ -42,6 +42,23 @@ describe("VersionLayerClientMockTests", () => {
             const latestVersion = await catalogClient.getLatestVersion();
 
             expect(latestVersion).to.be.equal(catalogLatestVersion);
+        });
+
+        it("getLastestVersion with setted start version", async () => {
+            const catalogClient = new CatalogClient({
+                context: (dataStoreContextStubInstance as unknown) as DataStoreContext,
+                hrn: "fake-hrn-string"
+            });
+
+            const testStartVersion = 2;
+            const latestVersion = await catalogClient.getLatestVersion(
+                testStartVersion
+            );
+
+            expect(latestVersion).to.be.equal(catalogLatestVersion);
+
+            const callStartVersionArgs = latestVersionStub.getCall(0).args[1];
+            expect(callStartVersionArgs.startVersion).equal(2);
         });
     });
 });
