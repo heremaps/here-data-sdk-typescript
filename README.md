@@ -82,8 +82,9 @@ npm run coverage
 To generate documentation for all modules and classes, run :
 
 ```sh
-npm run docs
+npm run typedoc
 ```
+The dist/doc folder will be generated
 
 #### Usage of Bundle functionality
 
@@ -116,10 +117,10 @@ npm run bundle
 
 Or use from CDN:
 
-https://unpkg.com/browse/@here/olp-sdk-authentication@0.9.1/dist/olp-sdk-authentication.min.js
-https://unpkg.com/browse/@here/olp-sdk-dataservice-api@0.9.1/dist/olp-sdk-dataservice-api.min.js
-https://unpkg.com/browse/@here/olp-sdk-dataservice-read@0.9.1/dist/olp-sdk-dataservice-read.min.js
-https://unpkg.com/browse/@here/olp-sdk-fetch@0.9.1/dist/olp-sdk-fetch.min.js
+https://unpkg.com/@here/olp-sdk-authentication@0.9.2/dist/olp-sdk-authentication.min.js
+https://unpkg.com/@here/olp-sdk-dataservice-api@0.9.2/dist/olp-sdk-dataservice-api.min.js
+https://unpkg.com/@here/olp-sdk-dataservice-read@0.9.2/dist/olp-sdk-dataservice-read.min.js
+https://unpkg.com/@here/olp-sdk-fetch@0.9.2/dist/olp-sdk-fetch.min.js
 
 
 ## LICENSE

@@ -1,7 +1,6 @@
 node_modules/
 dist/
 doc/
-docs/src/
 .vscode
 coverage
 .nyc_output
