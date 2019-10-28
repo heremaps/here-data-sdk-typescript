@@ -45,7 +45,7 @@ describe("VersionLayerClientMockTests", () => {
         });
 
 
-        it("getlastestVersion with default start version 1", async () => {
+        it("getlastestVersion with default start version", async () => {
             const catalogClient = new CatalogClient({
                 context: (dataStoreContextStubInstance as unknown) as DataStoreContext,
                 hrn: "fake-hrn-string"

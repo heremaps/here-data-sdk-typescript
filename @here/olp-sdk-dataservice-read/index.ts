@@ -32,5 +32,3 @@ export * from "./lib/DownloadManager";
 export * from "./lib/DataStoreContext";
 export * from "./lib/VersionLayerClient";
 export * from "./lib/VolatileLayerClient";
-export * from "./lib/DataStoreRequestBuilder";
-export * from "./lib/DataStoreDownloadManager";
