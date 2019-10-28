@@ -1,0 +1,19 @@
+
+{
+    "name": "@here/olp-sdk-ts",
+    "mode": "modules",
+    "module": "commonjs",
+    "out": "dist/doc",
+    "exclude": [
+        "**/node_modules/**",
+        "**/test/**/*.ts",
+        "**/dist/**/*.ts",
+        "**/scripts/*.ts"
+    ],
+    "readme": "README.md",
+    "target": "ES6",
+    "excludePrivate": "true",
+    "excludeExternals": "true",
+    "excludeNotExported": "true",
+    "external-modulemap": ".*/@here/([\\w\\-_]+)/"
+}

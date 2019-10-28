@@ -1,26 +1,28 @@
 {
   "name": "@here/olp-sdk-ts",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "HERE OLP SDK for TypeScript",
   "author": {
     "name": "HERE Europe B.V.",
     "url": "https://here.com"
   },
   "license": "Apache-2.0",
-  "private": "true",
+  "private": true,
   "workspaces": [
     "@here/*"
   ],
   "scripts": {
     "bootstrap": "lerna bootstrap --use-workspaces",
+    "prepare": "npm run clean-dists && npm run lint && npm run build && npm run test && npm run coverage && npm run bundle && npm run typedoc",
     "build": "lerna run build",
     "test": "lerna run test",
     "coverage": "lerna run coverage",
     "lint": "lerna run lint",
     "bundle": "lerna run bundle",
+    "bundle:dev": "lerna run bundle:dev",
     "bundle:prod": "lerna run bundle:prod",
-    "prepublish-bundle": "lerna run prepublish-bundle",
-    "docs": "npx typedoc --out docs/src"
+    "typedoc": "npx typedoc --disableOutputCheck --options typedoc.json",
+    "clean-dists": "rm -rf dist && rm -rf @here/*/dist"
   },
   "devDependencies": {
     "lerna": "3.16.4",

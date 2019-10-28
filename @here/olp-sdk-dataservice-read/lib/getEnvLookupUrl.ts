@@ -44,7 +44,7 @@ export function getEnvLookUpUrl(env: EnvironmentName): string {
             "(?:\\.(?:[a-z\\u00a1-\\uffff0-9]-*)*[a-z\\u00a1-\\uffff0-9]+)*";
         const tld = `(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))\\.?`;
         const port = "(?::\\d{2,5})?";
-        const path = '(?:[/?#][^\\s"]*)?';
+        const path = "(?:[/?#][^\\s\"]*)?";
         const regex = new RegExp(
             `(?:${protocol}|www\\.)(?:localhost|${ip}|${host}${domain}${tld})${port}${path}`
         );
