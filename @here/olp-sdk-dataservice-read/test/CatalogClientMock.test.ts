@@ -44,6 +44,21 @@ describe("VersionLayerClientMockTests", () => {
             expect(latestVersion).to.be.equal(catalogLatestVersion);
         });
 
+
+        it("getlastestVersion with default start version 1", async () => {
+            const catalogClient = new CatalogClient({
+                context: (dataStoreContextStubInstance as unknown) as DataStoreContext,
+                hrn: "fake-hrn-string"
+            });
+
+            const latestVersion = await catalogClient.getLatestVersion();
+
+            expect(latestVersion).to.be.equal(catalogLatestVersion);
+
+            const callStartVersionArgs = latestVersionStub.getCall(0).args[1];
+            expect(callStartVersionArgs.startVersion).equal(-1);
+        });
+
         it("getLastestVersion with setted start version", async () => {
             const catalogClient = new CatalogClient({
                 context: (dataStoreContextStubInstance as unknown) as DataStoreContext,
