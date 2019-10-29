@@ -35,13 +35,6 @@ import { LRUCache } from "./LRUCache";
 import { QuadKey } from "./partitioning/QuadKey";
 import * as utils from "./partitioning/QuadKeyUtils";
 
-export enum CoverageDataType {
-    BITMAP = "tilemap",
-    SIZEMAP = "heatmap/size",
-    TIMEMAP = "heatmap/age",
-    SUMMARY = "summary"
-}
-
 /**
  * Parameters for `VersionLayerClient` constructor.
  */
@@ -323,9 +316,9 @@ export class VersionLayerClient {
         const coverageRequestBuilder = await this.getRequestBuilder(
             "statistics"
         );
-        return CoverageApi
-            .getDataCoverageSummary(coverageRequestBuilder, {layerId: this.layerId})
-            .catch(this.errorHandler);
+        return CoverageApi.getDataCoverageSummary(coverageRequestBuilder, {
+            layerId: this.layerId
+        }).catch(this.errorHandler);
     }
 
     private async errorHandler(error: any) {
