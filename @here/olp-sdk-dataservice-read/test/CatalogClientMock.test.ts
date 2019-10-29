@@ -6,6 +6,7 @@ import { CatalogClient } from "../lib/CatalogClient";
 import { DataStoreContext } from "../lib/DataStoreContext";
 
 import { MetadataApi } from "@here/olp-sdk-dataservice-api/";
+import { ConfigApi } from "@here/olp-sdk-dataservice-api/";
 
 chai.use(sinonChai);
 const expect = chai.expect;
@@ -117,6 +118,39 @@ describe("VersionLayerClientMockTests", () => {
             const callStartVersionArgs = listVersionsStub.getCall(0).args[1];
             expect(callStartVersionArgs.startVersion).equal(testStartVersion);
             expect(callStartVersionArgs.endVersion).equal(testEndVersion);
+        });
+    });
+
+    let loadAndCacheCatalogStub: sinon.SinonStub;
+
+    describe("load and Cache Catalog Configuration Tests", () => {
+        const mockedErroreResponse: string = "testError";
+
+        beforeEach(() => {
+            loadAndCacheCatalogStub = sinon.stub(ConfigApi, "getCatalog");
+            loadAndCacheCatalogStub.callsFake((builder, params) =>
+                Promise.reject(mockedErroreResponse)
+            );
+        });
+
+        afterEach(() => {
+            loadAndCacheCatalogStub.restore();
+        });
+
+        it("Test error reject response", async () => {
+            loadAndCacheCatalogStub.callsFake(
+                (builder: any, params: any): Promise<ConfigApi.Catalog> => {
+                    return Promise.reject(mockedErroreResponse);
+                }
+            );
+
+            await catalogClient
+                .loadAndCacheCatalogConfiguration()
+                .catch(err => {
+                    expect(err).equal(
+                        "Can't load catalog configuration. HRN: fake-hrn-string, error: testError"
+                    );
+                });
         });
     });
 });
