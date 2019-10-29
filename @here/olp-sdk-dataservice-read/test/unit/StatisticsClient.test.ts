@@ -21,7 +21,12 @@ import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import { StatisticsClient, SummaryRequest } from "@here/olp-sdk-dataservice-read";
+import {
+    CoverageDataType,
+    StatisticsClient,
+    StatisticsRequest,
+    SummaryRequest
+} from "@here/olp-sdk-dataservice-read";
 import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
 import { CoverageApi } from "@here/olp-sdk-dataservice-api";
 
@@ -33,6 +38,9 @@ const expect = chai.expect;
 describe("StatistiscClient", () => {
     let sandbox: sinon.SinonSandbox;
     let getDataCoverageSummaryStub: any;
+    let getStatisticsBitMapStub: any;
+    let getStatisticsSizeMapStub: any;
+    let getStatisticsTimeMapStub: any;
     const mockedHRN = "hrn:::mocked-hrn";
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
@@ -53,7 +61,22 @@ describe("StatistiscClient", () => {
         sandbox
             .stub(dataServiceRead, "DataStoreContext")
             .callsFake(() => new MockedDataStoreContext());
-        getDataCoverageSummaryStub = sandbox.stub(CoverageApi, "getDataCoverageSummary");
+        getDataCoverageSummaryStub = sandbox.stub(
+            CoverageApi,
+            "getDataCoverageSummary"
+        );
+        getStatisticsBitMapStub = sandbox.stub(
+            CoverageApi,
+            "getDataCoverageTile"
+        );
+        getStatisticsSizeMapStub = sandbox.stub(
+            CoverageApi,
+            "getDataCoverageSizeMap"
+        );
+        getStatisticsTimeMapStub = sandbox.stub(
+            CoverageApi,
+            "getDataCoverageTimeMap"
+        );
     });
 
     afterEach(() => {
@@ -95,9 +118,11 @@ describe("StatistiscClient", () => {
             (context as unknown) as dataServiceRead.DataStoreContext
         );
         assert.isDefined(statisticsClient);
-        getDataCoverageSummaryStub.callsFake((builder: any, params: any): Promise<CoverageApi.LayerSummary> => {
-            return Promise.resolve(mockedSummary);
-        });
+        getDataCoverageSummaryStub.callsFake(
+            (builder: any, params: any): Promise<CoverageApi.LayerSummary> => {
+                return Promise.resolve(mockedSummary);
+            }
+        );
 
         const summaryRequest = new SummaryRequest()
             .withCatalogHrn(mockedHRN)
@@ -105,5 +130,62 @@ describe("StatistiscClient", () => {
 
         const summary = await statisticsClient.getSummary(summaryRequest);
         assert.isDefined(summary);
+    });
+
+    it("Should method getStatistics provide data", async () => {
+        const mockedStatistics: Response = new Response("mocked-response");
+        const context = new MockedDataStoreContext();
+        const statisticsClient = new StatisticsClient(
+            (context as unknown) as dataServiceRead.DataStoreContext
+        );
+        assert.isDefined(statisticsClient);
+        getStatisticsBitMapStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockedStatistics);
+            }
+        );
+        getStatisticsSizeMapStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockedStatistics);
+            }
+        );
+        getStatisticsTimeMapStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockedStatistics);
+            }
+        );
+
+        const statisticBitMapRequest = new StatisticsRequest()
+            .withCatalogHrn(mockedHRN)
+            .withLayerId(mockedLayerId)
+            .withDataLevel("12")
+            .withTypemap(CoverageDataType.BITMAP);
+
+        const statisticBitMap = await statisticsClient.getStatistics(
+            statisticBitMapRequest
+        );
+        assert.isDefined(statisticBitMap);
+
+        const statisticSizeMapRequest = new StatisticsRequest()
+            .withCatalogHrn(mockedHRN)
+            .withLayerId(mockedLayerId)
+            .withDataLevel("12")
+            .withTypemap(CoverageDataType.SIZEMAP);
+
+        const statisticSizeMap = await statisticsClient.getStatistics(
+            statisticSizeMapRequest
+        );
+        assert.isDefined(statisticSizeMap);
+
+        const statisticTimeMapRequest = new StatisticsRequest()
+            .withCatalogHrn(mockedHRN)
+            .withLayerId(mockedLayerId)
+            .withDataLevel("12")
+            .withTypemap(CoverageDataType.TIMEMAP);
+
+        const statisticTimeMap = await statisticsClient.getStatistics(
+            statisticTimeMapRequest
+        );
+        assert.isDefined(statisticTimeMap);
     });
 });

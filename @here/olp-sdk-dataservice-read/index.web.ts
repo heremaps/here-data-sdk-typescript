@@ -28,6 +28,7 @@ export * from "./lib/partitioning/QuadKeyUtils";
 export * from "./lib/DownloadManager";
 export * from "./lib/DataStoreContext";
 export * from "./lib/StatisticsClient";
+export * from "./lib/StatisticsRequest";
 export * from "./lib/SummaryRequest";
 export * from "./lib/VersionLayerClient";
 export * from "./lib/VolatileLayerClient";

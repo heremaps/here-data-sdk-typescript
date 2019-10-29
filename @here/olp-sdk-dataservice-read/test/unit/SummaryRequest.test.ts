@@ -30,7 +30,7 @@ const expect = chai.expect;
 
 describe("SummaryRequest", () => {
     const mockedHRN = "hrn:::mocked-hrn";
-    const mockedLayerId = "mocked-layed-id"
+    const mockedLayerId = "mocked-layed-id";
 
     it("Should initialize", () => {
         const summaryRequest = new SummaryRequest();
@@ -41,11 +41,19 @@ describe("SummaryRequest", () => {
 
     it("Should set parameters", () => {
         const summaryRequest = new SummaryRequest();
-        const summaryRequestWithCatalogHrn = summaryRequest.withCatalogHrn(mockedHRN);
-        const summaryRequestWithLAyerId = summaryRequest.withLayerId(mockedLayerId);
+        const summaryRequestWithCatalogHrn = summaryRequest.withCatalogHrn(
+            mockedHRN
+        );
+        const summaryRequestWithLAyerId = summaryRequest.withLayerId(
+            mockedLayerId
+        );
 
-        expect(summaryRequestWithCatalogHrn.getCatalogHrn()).to.be.equal(mockedHRN);
-        expect(summaryRequestWithLAyerId.getLayerId()).to.be.equal(mockedLayerId);
+        expect(summaryRequestWithCatalogHrn.getCatalogHrn()).to.be.equal(
+            mockedHRN
+        );
+        expect(summaryRequestWithLAyerId.getLayerId()).to.be.equal(
+            mockedLayerId
+        );
     });
 
     it("Should get parameters with chain", () => {
