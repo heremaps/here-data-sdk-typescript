@@ -18,9 +18,9 @@
  */
 
 import { CoverageApi } from "@here/olp-sdk-dataservice-api";
-import { ErrorHTTPResponse } from "./CatalogClientCommon";
 import { DataStoreContext } from "./DataStoreContext";
 import { DataStoreRequestBuilder } from "./DataStoreRequestBuilder";
+import { CoverageDataType, StatisticsRequest } from "./StatisticsRequest";
 import { SummaryRequest } from "./SummaryRequest";
 
 /**
@@ -37,7 +37,9 @@ export class StatisticsClient {
      *
      * @returns A promise with the layer summary.
      */
-    async getSummary(summaryRequest: SummaryRequest): Promise<CoverageApi.LayerSummary> {
+    public async getSummary(
+        summaryRequest: SummaryRequest
+    ): Promise<CoverageApi.LayerSummary> {
         const layerId = summaryRequest.getLayerId();
         const catalogHrn = summaryRequest.getCatalogHrn();
 
@@ -47,22 +49,76 @@ export class StatisticsClient {
         if (layerId === undefined) {
             return Promise.reject(new Error(`No layerId provided`));
         }
-        const coverageRequestBuilder = await this.getRequestBuilder(catalogHrn)
-            .catch(error => Promise.reject(new Error(error)));
+        const coverageRequestBuilder = await this.getRequestBuilder(
+            catalogHrn
+        ).catch(error => Promise.reject(new Error(error)));
         return CoverageApi.getDataCoverageSummary(coverageRequestBuilder, {
             layerId
+        }).catch(this.errorHandler);
+    }
+
+    public async getStatistics(
+        statisticsReuest: StatisticsRequest
+    ): Promise<Response> {
+        const layerId = statisticsReuest.getLayerId();
+        const catalogHrn = statisticsReuest.getCatalogHrn();
+        const typemap = statisticsReuest.getTypemap();
+        const dataLevel = statisticsReuest.getDataLevel();
+
+        if (catalogHrn === undefined) {
+            return Promise.reject(new Error(`No catalogHrn provided`));
+        }
+        if (layerId === undefined) {
+            return Promise.reject(new Error(`No layerId provided`));
+        }
+        if (typemap === undefined) {
+            return Promise.reject(new Error(`No typemap provided`));
+        }
+        if (dataLevel === undefined) {
+            return Promise.reject(new Error(`No dataLevel provided`));
+        }
+        const coverageRequestBuilder = await this.getRequestBuilder(
+            catalogHrn
+        ).catch(error => Promise.reject(new Error(error)));
+
+        let request;
+        switch (typemap) {
+            case CoverageDataType.BITMAP:
+                request = CoverageApi.getDataCoverageTile;
+                break;
+            case CoverageDataType.SIZEMAP:
+                request = CoverageApi.getDataCoverageSizeMap;
+                break;
+            case CoverageDataType.TIMEMAP:
+                request = CoverageApi.getDataCoverageTimeMap;
+                break;
+            default:
+                return Promise.reject(
+                    new Error(`Incorrect typemap provided: ${typemap}`)
+                );
+        }
+
+        return request(coverageRequestBuilder, {
+            layerId,
+            // @todo datalevel is hardcoded. It is known issue, ticket about API bug is created
+            datalevel: "12",
+            catalogHRN: catalogHrn
         }).catch(this.errorHandler);
     }
 
     private async errorHandler(error: Response) {
         return Promise.reject(
             new Error(
-                `Statistic Service error: HTTP ${error.status}, ${error.statusText || ""}`
+                `Statistic Service error: HTTP ${
+                    error.status
+                }, ${error.statusText || ""}`
             )
         );
     }
 
-    private async getRequestBuilder(hrn: string): Promise<DataStoreRequestBuilder> {
+    private async getRequestBuilder(
+        hrn: string
+    ): Promise<DataStoreRequestBuilder> {
         const url = await this.context
             .getBaseUrl("statistics", hrn)
             .catch(err =>
