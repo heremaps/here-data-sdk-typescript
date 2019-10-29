@@ -16,12 +16,15 @@ describe("VersionLayerClientMockTests", () => {
     let dataStoreContextStubInstance = sinon.createStubInstance(
         DataStoreContext
     );
+
     let catalogClient = new CatalogClient({
         context: (dataStoreContextStubInstance as unknown) as DataStoreContext,
         hrn: "fake-hrn-string"
     });
 
-    describe("getLastestVesion", () => {
+    let listVersionsStub: sinon.SinonStub;
+
+    describe("getLastestVesion Tests", () => {
         const catalogLatestVersion = 43;
 
         beforeEach(() => {
@@ -35,13 +38,13 @@ describe("VersionLayerClientMockTests", () => {
             latestVersionStub.restore();
         });
 
-        it("getLastestVersion success", async () => {
+        it("getLastestVersion success test", async () => {
             const latestVersion = await catalogClient.getLatestVersion();
 
             expect(latestVersion).to.be.equal(catalogLatestVersion);
         });
 
-        it("getlastestVersion with default start version", async () => {
+        it("Test getLastestVersion with default parameter start version", async () => {
             const latestVersion = await catalogClient.getLatestVersion();
 
             expect(latestVersion).to.be.equal(catalogLatestVersion);
@@ -50,8 +53,9 @@ describe("VersionLayerClientMockTests", () => {
             expect(callStartVersionArgs.startVersion).equal(-1);
         });
 
-        it("getLastestVersion with setted start version", async () => {
+        it("Test getLastestVersion with setted parameter start version", async () => {
             const testStartVersion = 2;
+
             const latestVersion = await catalogClient.getLatestVersion(
                 testStartVersion
             );
@@ -60,6 +64,59 @@ describe("VersionLayerClientMockTests", () => {
 
             const callStartVersionArgs = latestVersionStub.getCall(0).args[1];
             expect(callStartVersionArgs.startVersion).equal(testStartVersion);
+        });
+    });
+
+    describe("getVersions Tests", () => {
+        const catalogListVersions = [
+            {
+                dependencies: [
+                    {
+                        direct: false,
+                        hrn: "hrn:here:data:::my-catalog",
+                        version: 23
+                    }
+                ],
+                partitionCounts: {
+                    additionalProp1: 0,
+                    additionalProp2: 0,
+                    additionalProp3: 0
+                },
+                timestamp: "1516397474657",
+                version: 1
+            }
+        ];
+
+        beforeEach(() => {
+            listVersionsStub = sinon.stub(MetadataApi, "listVersions");
+            listVersionsStub.callsFake((builder, params) =>
+                Promise.resolve(catalogListVersions)
+            );
+        });
+
+        afterEach(() => {
+            listVersionsStub.restore();
+        });
+
+        it("getVersions success test", async () => {
+            const listVersionsResponse = await catalogClient.getVersions(1, 2);
+
+            expect(listVersionsResponse).to.be.equal(catalogListVersions);
+        });
+
+        it("Test correct usage of input parameters start version and end version", async () => {
+            const testStartVersion = 1;
+            const testEndVersion = 3;
+
+            const listVersionsResponse = await catalogClient.getVersions(
+                testStartVersion,
+                testEndVersion
+            );
+            expect(listVersionsResponse).to.be.equal(catalogListVersions);
+
+            const callStartVersionArgs = listVersionsStub.getCall(0).args[1];
+            expect(callStartVersionArgs.startVersion).equal(testStartVersion);
+            expect(callStartVersionArgs.endVersion).equal(testEndVersion);
         });
     });
 });
