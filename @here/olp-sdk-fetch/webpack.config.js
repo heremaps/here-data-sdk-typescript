@@ -5,12 +5,13 @@ module.exports = env => {
   const isProd = env.NODE_ENV === "production";
 
   return {
+    target: "web",
     mode: env.NODE_ENV,
-    devtool: isProd ? undefined : "source-map",
+    devtool: isProd ? undefined : "inline-source-map",
     resolve: {
       extensions: [".ts", ".js"]
     },
-    entry: "./index.ts",
+    entry: "./index.web.ts",
     output: {
       filename: `olp-sdk-fetch${isProd ? '.min' : '.dev'}.js`,
       path: path.resolve(__dirname, `dist`),
@@ -28,9 +29,6 @@ module.exports = env => {
           }
         }
       ]
-    },
-    node: {
-        fs: 'empty'
-      }
+    }
   };
 };
