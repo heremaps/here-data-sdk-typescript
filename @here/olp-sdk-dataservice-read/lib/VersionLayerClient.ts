@@ -31,38 +31,16 @@ import {
     MetadataApi,
     QueryApi
 } from "@here/olp-sdk-dataservice-api";
+import { HRN } from "./HRN";
 import { LRUCache } from "./LRUCache";
 import { QuadKey } from "./partitioning/QuadKey";
 import * as utils from "./partitioning/QuadKeyUtils";
-
-/**
- * Parameters for `VersionLayerClient` constructor.
- */
-export interface VersionLayerClientParams {
-    /**
-     * Context which stores and caches the shared information needed for that clients
-     */
-    context: DataStoreContext;
-    /**
-     * Specify the catalog HRN
-     */
-    hrn: string;
-    /**
-     * Layer id. It is used as layer main identifier in api queries
-     */
-    layerId: string;
-    /**
-     * Specify which version of layer should be used.
-     */
-    version: number;
-}
 
 /**
  * A class that describes versioned layer
  * and provides possibility to get layer Metadata and Partitions.
  */
 export class VersionLayerClient {
-    readonly version: number;
     readonly hrn: string;
     readonly layerId: string;
     readonly context: DataStoreContext;
@@ -86,11 +64,10 @@ export class VersionLayerClient {
         return (key: string) => utils.quadKeyFromMortonCode(key);
     }
 
-    constructor(params: VersionLayerClientParams) {
-        this.context = params.context;
-        this.hrn = params.hrn;
-        this.version = params.version;
-        this.layerId = params.layerId;
+    constructor(catalogHrn: HRN, layerId: string, context: DataStoreContext) {
+        this.context = context;
+        this.hrn = catalogHrn.toString();
+        this.layerId = layerId;
     }
 
     /**
@@ -221,8 +198,9 @@ export class VersionLayerClient {
      */
     async getPartitionsMetadata(): Promise<MetadataApi.Partitions> {
         const metaRequestBilder = await this.getRequestBuilder("metadata");
+        const latestVersion = await this.getLatestVersion();
         return MetadataApi.getPartitions(metaRequestBilder, {
-            version: this.version,
+            version: latestVersion.version,
             layerId: this.layerId
         });
     }
@@ -321,6 +299,26 @@ export class VersionLayerClient {
         }).catch(this.errorHandler);
     }
 
+    /**
+     * Gets the latest available catalog version what can be used as latest layer version
+     */
+    private async getLatestVersion(): Promise<MetadataApi.VersionResponse> {
+        const builder = await this.getRequestBuilder("metadata").catch(error =>
+            Promise.reject(error)
+        );
+        return MetadataApi.latestVersion(builder, {
+            startVersion: -1
+        }).catch(async (error: Response) =>
+            Promise.reject(
+                new Error(
+                    `Metadata Service error: HTTP ${
+                        error.status
+                    }, ${error.statusText || ""}`
+                )
+            )
+        );
+    }
+
     private async errorHandler(error: any) {
         return Promise.reject(
             new ErrorHTTPResponse(
@@ -367,9 +365,10 @@ export class VersionLayerClient {
             "/" +
             utils.mortonCodeFromQuadKey(indexRootKey).toString();
         const queryRequestBuilder = await this.getRequestBuilder("query");
+        const latestVersion = await this.getLatestVersion();
 
         dsIndex = await QueryApi.quadTreeIndex(queryRequestBuilder, {
-            version: this.version !== undefined ? this.version : -1,
+            version: latestVersion.version,
             layerId: this.layerId,
             quadKey: utils.mortonCodeFromQuadKey(indexRootKey).toString(),
             depth: this.indexDepth
@@ -486,8 +485,9 @@ export class VersionLayerClient {
         partitionId: string
     ): Promise<QueryApi.Partitions> {
         const queryRequestBilder = await this.getRequestBuilder("query");
+        const latestVersion = await this.getLatestVersion();
         return QueryApi.getPartitionsById(queryRequestBilder, {
-            version: `${this.version}`,
+            version: `${latestVersion.version}`,
             layerId: this.layerId,
             partition: [partitionId]
         });
