@@ -21,10 +21,11 @@ import * as utils from "../lib/partitioning/QuadKeyUtils";
 import { assert } from "chai";
 import sinon = require("sinon");
 
-import { DownloadManager } from "../lib/DownloadManager";
-import { DataStoreDownloadManager } from "../lib/DataStoreDownloadManager";
-import { VersionLayerClient } from "../lib/VersionLayerClient";
 import { DataStoreContext } from "../lib/DataStoreContext";
+import { DataStoreDownloadManager } from "../lib/DataStoreDownloadManager";
+import { DownloadManager } from "../lib/DownloadManager";
+import { HRN } from "../lib/HRN";
+import { VersionLayerClient } from "../lib/VersionLayerClient";
 
 function createMockDownloadResponse(resp: Object, blob?: string) {
     const headers = new Headers();
@@ -98,6 +99,11 @@ urlToResponses.set(
             parameters: {}
         }
     ]
+);
+
+urlToResponses.set(
+    "https://xab.metadata.data.api.platform.here.com/metadata/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/versions/latest?startVersion=-1",
+    { version: 0 }
 );
 
 urlToResponses.set(
@@ -545,12 +551,11 @@ describe("VersionLayerClient", () => {
         });
 
         assert.isNotNull(context);
-        versionLayerClient = await new VersionLayerClient({
-            context,
-            hrn: testHRN,
-            layerId: "protobuf-example-berlin-v1",
-            version: 0
-        });
+        versionLayerClient = await new VersionLayerClient(
+            HRN.fromString(testHRN),
+            "protobuf-example-berlin-v1",
+            context
+        );
         assert.isNotNull(versionLayerClient);
     });
 

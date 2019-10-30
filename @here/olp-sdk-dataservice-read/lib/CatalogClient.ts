@@ -21,6 +21,7 @@ import { ConfigApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
 import { CatalogLayer } from "./CatalogLayer";
 import { DataStoreContext } from "./DataStoreContext";
 import { DataStoreRequestBuilder } from "./DataStoreRequestBuilder";
+import { HRN } from "./HRN";
 import { QuadKey } from "./partitioning/QuadKey";
 import { VersionLayerClient } from "./VersionLayerClient";
 import { VolatileLayerClient } from "./VolatileLayerClient";
@@ -95,7 +96,7 @@ export class CatalogClient {
                 this.context.getToken
             ),
             { catalogHrn: this.hrn }
-        ).catch(err =>
+        ).catch((err: Response) =>
             Promise.reject(
                 `Can't load catalog configuration. HRN: ${this.hrn}, error: ${err}`
             )
@@ -116,7 +117,7 @@ export class CatalogClient {
      */
     public async getVolatileOrVersionedLayer(
         layerName: string
-    // tslint:disable-next-line: deprecation
+        // tslint:disable-next-line: deprecation
     ): Promise<CatalogLayer> {
         const data = await this.findLayer(layerName);
         if (data === null) {
@@ -280,7 +281,7 @@ export class CatalogClient {
     private buildCatalogLayer(
         config: ConfigApi.Layer,
         version?: number
-    // tslint:disable-next-line: deprecation
+        // tslint:disable-next-line: deprecation
     ): CatalogLayer | null {
         // we're interesting only for versioned or volatile layers.
         if (
@@ -293,12 +294,11 @@ export class CatalogClient {
         let layerClient: VersionLayerClient | VolatileLayerClient;
 
         if (config.layerType === "versioned") {
-            layerClient = new VersionLayerClient({
-                context: this.context,
-                hrn: this.hrn,
-                layerId: config.id,
-                version: version === undefined ? -1 : version
-            });
+            layerClient = new VersionLayerClient(
+                HRN.fromString(this.hrn),
+                config.id,
+                this.context
+            );
         } else {
             layerClient = new VolatileLayerClient({
                 context: this.context,
