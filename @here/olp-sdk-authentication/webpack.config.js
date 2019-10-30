@@ -7,7 +7,8 @@ module.exports = env => {
 
   return {
     mode: env.NODE_ENV,
-    devtool: isProd ? undefined : "source-map",
+    target: "web",
+    devtool: isProd ? undefined : "inline-source-map",
     resolve: {
       extensions: [".ts", ".js"]
     },
@@ -29,9 +30,6 @@ module.exports = env => {
           }
         }
       ]
-    },
-    node: {
-        fs: 'empty'
-      }
+    }
   };
 };

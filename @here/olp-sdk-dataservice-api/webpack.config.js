@@ -5,8 +5,9 @@ module.exports = env => {
   const isProd = env.NODE_ENV === "production";
 
   return {
+    target: "web",
     mode: env.NODE_ENV,
-    devtool: isProd ? undefined : "source-map",
+    devtool: isProd ? undefined : "inline-source-map",
     resolve: {
       extensions: [".ts", ".js"]
     },
@@ -28,9 +29,6 @@ module.exports = env => {
           }
         }
       ]
-    },
-    node: {
-        fs: 'empty'
-      }
+    }
   };
 };
