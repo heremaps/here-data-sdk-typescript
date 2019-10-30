@@ -13,8 +13,8 @@
   ],
   "scripts": {
     "bootstrap": "lerna bootstrap --use-workspaces",
-    "prepare": "npm run clean-dists && npm run lint && npm run build && npm run test && npm run coverage && npm run bundle && npm run typedoc",
-    "build": "lerna run build",
+    "prepare": "npm run clean-dists && npm run build && npm run bundle && npm run typedoc",
+    "build": "npm run clean-dists && lerna run build",
     "test": "lerna run test",
     "coverage": "lerna run coverage",
     "lint": "lerna run lint",
