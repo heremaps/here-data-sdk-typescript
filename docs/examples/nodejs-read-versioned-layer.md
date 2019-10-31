@@ -115,16 +115,16 @@ const context = new DataStoreContext({
 
 ```
 
-## VersionLayerClient
+## VersionedLayerClient
 
 Therefore, when you have context, you can get catalog clients for different catalogs and read the information.
 You can get more information about Version Layer following the [link](https://developer.here.com/olp/documentation/data-api/data_dev_guide/rest/publishing-data-versioned.html).
-To create VersionLayerClient, run:
+To create VersionedLayerClient, run:
 
 
 ```typescript
 import { UserAuth } from "@here/olp-sdk-authentification";
-import { DataStoreContext, VersionLayerClient } from "@here/olp-sdk-dataservice-read";
+import { DataStoreContext, VersionedLayerClient } from "@here/olp-sdk-dataservice-read";
 import * as utils from "@here/olp-sdk-dataservice-read";
 
 const userAuth = new UserAuth({
@@ -141,7 +141,7 @@ const context = new DataStoreContext({
 });
 
 //  Client for "protobuf-example-berlin-v1" layer from "sensor-data-sensoris-versioned-example" catalog
-const versionClient = await new VersionLayerClient({
+const versionClient = await new VersionedLayerClient({
     context,
     hrn: "hrn:here:data:::sensor-data-sensoris-versioned-example",
     layerId: "protobuf-example-berlin-v1",

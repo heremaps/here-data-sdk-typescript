@@ -25,7 +25,7 @@ import { DataStoreContext } from "../lib/DataStoreContext";
 import { DataStoreDownloadManager } from "../lib/DataStoreDownloadManager";
 import { DownloadManager } from "../lib/DownloadManager";
 import { HRN } from "../lib/HRN";
-import { VersionLayerClient } from "../lib/VersionLayerClient";
+import { VersionedLayerClient } from "../lib/VersionedLayerClient";
 
 function createMockDownloadResponse(resp: Object, blob?: string) {
     const headers = new Headers();
@@ -534,10 +534,10 @@ function createMockDownloadManager(): DownloadManager {
     return downloadMgr as any;
 }
 
-// versionLayerClient
+// VersionedLayerClient Tests
 
-describe("VersionLayerClient", () => {
-    let versionLayerClient: VersionLayerClient;
+describe("VersionedLayerClient", () => {
+    let versionedLayerClient: VersionedLayerClient;
 
     before(async () => {
         const testHRN =
@@ -551,16 +551,16 @@ describe("VersionLayerClient", () => {
         });
 
         assert.isNotNull(context);
-        versionLayerClient = await new VersionLayerClient(
+        versionedLayerClient = await new VersionedLayerClient(
             HRN.fromString(testHRN),
             "protobuf-example-berlin-v1",
             context
         );
-        assert.isNotNull(versionLayerClient);
+        assert.isNotNull(versionedLayerClient);
     });
 
     it("#getPartition", async () => {
-        let response = await versionLayerClient.getPartition("23618173");
+        let response = await versionedLayerClient.getPartition("23618173");
         assert.isNotNull(response);
 
         let buf = await response.text();
@@ -568,7 +568,7 @@ describe("VersionLayerClient", () => {
     });
 
     it("#getDataCoverageBitmap", async () => {
-        let response = await versionLayerClient.getDataCoverageBitMap();
+        let response = await versionedLayerClient.getDataCoverageBitMap();
         assert.isNotNull(response);
 
         let buf = await response.text();
@@ -576,7 +576,7 @@ describe("VersionLayerClient", () => {
     });
 
     it("#getDataCoverageSizeMap", async () => {
-        let response = await versionLayerClient.getDataCoverageSizeMap();
+        let response = await versionedLayerClient.getDataCoverageSizeMap();
         assert.isNotNull(response);
 
         let buf = await response.text();
@@ -584,7 +584,7 @@ describe("VersionLayerClient", () => {
     });
 
     it("#getDataCoverageTimeMap", async () => {
-        let response = await versionLayerClient.getDataCoverageTimeMap();
+        let response = await versionedLayerClient.getDataCoverageTimeMap();
         assert.isNotNull(response);
 
         let buf = await response.text();
@@ -592,12 +592,12 @@ describe("VersionLayerClient", () => {
     });
 
     it("#getSummary", async () => {
-        let response = await versionLayerClient.getSummary();
+        let response = await versionedLayerClient.getSummary();
         assert.isNotNull(response);
     });
 
     it("#getTile", async () => {
-        let response = await versionLayerClient.getTile(
+        let response = await versionedLayerClient.getTile(
             utils.quadKeyFromMortonCode("1476147")
         );
         assert.isNotNull(response);
@@ -609,8 +609,8 @@ describe("VersionLayerClient", () => {
 
     it("#getTiles", async () => {
         const results = await Promise.all([
-            versionLayerClient.getTile(utils.quadKeyFromMortonCode("1476147")),
-            versionLayerClient.getTile(utils.quadKeyFromMortonCode("1476147"))
+            versionedLayerClient.getTile(utils.quadKeyFromMortonCode("1476147")),
+            versionedLayerClient.getTile(utils.quadKeyFromMortonCode("1476147"))
         ]);
 
         const contents = await Promise.all([
@@ -622,7 +622,7 @@ describe("VersionLayerClient", () => {
     });
 
     it("#getMissingTile", async () => {
-        let response = await versionLayerClient.getTile(
+        let response = await versionedLayerClient.getTile(
             utils.quadKeyFromMortonCode("0000")
         );
         assert.isNotNull(response);
@@ -632,7 +632,7 @@ describe("VersionLayerClient", () => {
     });
 
     it("#getTileWithETag", async () => {
-        const response = await versionLayerClient.getTile(
+        const response = await versionedLayerClient.getTile(
             utils.quadKeyFromMortonCode("1476147")
         );
         assert.isNotNull(response);
@@ -647,7 +647,7 @@ describe("VersionLayerClient", () => {
         assert.strictEqual(buf, "DT_1_1001");
 
         // fetch again, this time with etag
-        const cachedResponse = await versionLayerClient.getTile(
+        const cachedResponse = await versionedLayerClient.getTile(
             utils.quadKeyFromMortonCode("23618359")
         );
         // make sure status is 304 - not modified
@@ -657,7 +657,7 @@ describe("VersionLayerClient", () => {
     it("#abortGetPartition", async () => {
         const abortController = new AbortController();
         const init = { signal: abortController.signal };
-        const responsePromise = await versionLayerClient.getPartition(
+        const responsePromise = await versionedLayerClient.getPartition(
             "23618173",
             init
         );
@@ -672,14 +672,14 @@ describe("VersionLayerClient", () => {
     });
 
     it("#getAggregatedTile", async () => {
-        const response = await versionLayerClient.getTile(
+        const response = await versionedLayerClient.getTile(
             utils.quadKeyFromMortonCode("5904591")
         );
         assert.strictEqual(response.status, 204);
 
         // try a direct ancestor
         {
-            const aggregatedResponse = await versionLayerClient.getAggregatedTile(
+            const aggregatedResponse = await versionedLayerClient.getAggregatedTile(
                 utils.quadKeyFromMortonCode("5904591")
             );
             assert.isTrue(aggregatedResponse.ok);
@@ -694,13 +694,13 @@ describe("VersionLayerClient", () => {
     });
 
     it("#getPartitionsMetadata", async () => {
-        const paritions = await versionLayerClient.getPartitionsMetadata();
+        const paritions = await versionedLayerClient.getPartitionsMetadata();
         assert.isDefined(paritions);
         assert.isAbove(paritions.partitions.length, 0, "index is empty");
     });
 
     it("#getIndexMetadata", async () => {
-        let index = await versionLayerClient.getIndexMetadata(
+        let index = await versionedLayerClient.getIndexMetadata(
             utils.quadKeyFromMortonCode("23618359")
         );
         assert.isDefined(index);
