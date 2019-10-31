@@ -11,7 +11,7 @@ import { ConfigApi } from "@here/olp-sdk-dataservice-api/";
 chai.use(sinonChai);
 const expect = chai.expect;
 
-describe("VersionLayerClientMockTests", () => {
+describe("VersionedLayerClientMockTests", () => {
     let latestVersionStub: sinon.SinonStub;
 
     let dataStoreContextStubInstance = sinon.createStubInstance(

@@ -23,7 +23,7 @@ import { DataStoreContext } from "./DataStoreContext";
 import { DataStoreRequestBuilder } from "./DataStoreRequestBuilder";
 import { HRN } from "./HRN";
 import { QuadKey } from "./partitioning/QuadKey";
-import { VersionLayerClient } from "./VersionLayerClient";
+import { VersionedLayerClient } from "./VersionedLayerClient";
 import { VolatileLayerClient } from "./VolatileLayerClient";
 
 /**
@@ -291,10 +291,10 @@ export class CatalogClient {
             return null;
         }
 
-        let layerClient: VersionLayerClient | VolatileLayerClient;
+        let layerClient: VersionedLayerClient | VolatileLayerClient;
 
         if (config.layerType === "versioned") {
-            layerClient = new VersionLayerClient(
+            layerClient = new VersionedLayerClient(
                 HRN.fromString(this.hrn),
                 config.id,
                 this.context
@@ -321,9 +321,9 @@ export class CatalogClient {
         };
 
         // add not required methods for interface, but required for version layer,
-        if (layerClient instanceof VersionLayerClient) {
+        if (layerClient instanceof VersionedLayerClient) {
             // make TS happy
-            const versionedLayerClient = layerClient as VersionLayerClient;
+            const versionedLayerClient = layerClient as VersionedLayerClient;
             result.getDataCoverageBitmap = async () =>
                 versionedLayerClient.getDataCoverageBitMap();
             result.getDataCoverageSizeMap = async () =>

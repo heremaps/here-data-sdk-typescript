@@ -40,7 +40,7 @@ import * as utils from "./partitioning/QuadKeyUtils";
  * A class that describes versioned layer
  * and provides possibility to get layer Metadata and Partitions.
  */
-export class VersionLayerClient {
+export class VersionedLayerClient {
     readonly hrn: string;
     readonly layerId: string;
     readonly context: DataStoreContext;
@@ -129,7 +129,7 @@ export class VersionLayerClient {
      * Example:
      *
      * ```typescript
-     * const response = versionLayerClient.getTile(tileKey);
+     * const response = versionedLayerClient.getTile(tileKey);
      * if (!response.ok) {
      *     // a network error happened
      *     console.error("Unable to download tile", response.statusText);
@@ -393,8 +393,8 @@ export class VersionLayerClient {
         indexRootKey: QuadKey,
         dsIndex: QueryApi.Index
     ): IndexMap {
-        const subkeyAddFunction = VersionLayerClient.subkeyAddFunction();
-        const toTileKeyFunction = VersionLayerClient.toTileKeyFunction();
+        const subkeyAddFunction = VersionedLayerClient.subkeyAddFunction();
+        const toTileKeyFunction = VersionedLayerClient.toTileKeyFunction();
 
         const subQuads = new Map<number, string>();
 
