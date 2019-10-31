@@ -16,7 +16,7 @@
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "test": "mocha > xunit.xml",
     "coverage": "nyc mocha > xunit.xml",
-    "prepare": "tsc --sourceMap false && npm run bundle",
+    "prepare": "rm -rf dist && tsc --sourceMap false && npm run bundle",
     "bundle": "npm run bundle:dev && npm run bundle:prod",
     "bundle:prod": "webpack --env.NODE_ENV=production",
     "bundle:dev": "webpack --env.NODE_ENV=development"
@@ -52,7 +52,7 @@
   "devDependencies": {
     "@types/chai": "4.2.3",
     "@types/mocha": "5.2.7",
-    "@types/sinon-chai":"3.2.3",
+    "@types/sinon-chai": "3.2.3",
     "awesome-typescript-loader": "5.2.1",
     "chai": "4.0.2",
     "husky": "3.0.5",
