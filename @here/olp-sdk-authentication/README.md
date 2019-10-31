@@ -111,7 +111,7 @@ Add minified JavaScript file to your `html` and create an object of userAuth:
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://unpkg.com/browse/@here/olp-sdk-authentication@0.9.1/dist/olp-sdk-authentication.min.js"></script>
+    <script src="https://unpkg.com/@here/olp-sdk-authentication/dist/olp-sdk-authentification.min.js"></script>
 </head>
 <body>
     <script>
