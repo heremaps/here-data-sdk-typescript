@@ -21,9 +21,8 @@ import { ConfigApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
 import { CatalogLayer } from "./CatalogLayer";
 import { DataStoreContext } from "./DataStoreContext";
 import { DataStoreRequestBuilder } from "./DataStoreRequestBuilder";
-import { HRN } from "./HRN";
 import { QuadKey } from "./partitioning/QuadKey";
-import { VersionLayerClient } from "./VersionLayerClient";
+import { VersionedLayerClient } from "./VersionedLayerClient";
 import { VolatileLayerClient } from "./VolatileLayerClient";
 
 /**
@@ -96,7 +95,7 @@ export class CatalogClient {
                 this.context.getToken
             ),
             { catalogHrn: this.hrn }
-        ).catch((err: Response) =>
+        ).catch(err =>
             Promise.reject(
                 `Can't load catalog configuration. HRN: ${this.hrn}, error: ${err}`
             )
@@ -117,7 +116,7 @@ export class CatalogClient {
      */
     public async getVolatileOrVersionedLayer(
         layerName: string
-        // tslint:disable-next-line: deprecation
+    // tslint:disable-next-line: deprecation
     ): Promise<CatalogLayer> {
         const data = await this.findLayer(layerName);
         if (data === null) {
@@ -281,7 +280,7 @@ export class CatalogClient {
     private buildCatalogLayer(
         config: ConfigApi.Layer,
         version?: number
-        // tslint:disable-next-line: deprecation
+    // tslint:disable-next-line: deprecation
     ): CatalogLayer | null {
         // we're interesting only for versioned or volatile layers.
         if (
@@ -291,14 +290,15 @@ export class CatalogClient {
             return null;
         }
 
-        let layerClient: VersionLayerClient | VolatileLayerClient;
+        let layerClient: VersionedLayerClient | VolatileLayerClient;
 
         if (config.layerType === "versioned") {
-            layerClient = new VersionLayerClient(
-                HRN.fromString(this.hrn),
-                config.id,
-                this.context
-            );
+            layerClient = new VersionedLayerClient({
+                context: this.context,
+                hrn: this.hrn,
+                layerId: config.id,
+                version: version === undefined ? -1 : version
+            });
         } else {
             layerClient = new VolatileLayerClient({
                 context: this.context,
@@ -321,9 +321,9 @@ export class CatalogClient {
         };
 
         // add not required methods for interface, but required for version layer,
-        if (layerClient instanceof VersionLayerClient) {
+        if (layerClient instanceof VersionedLayerClient) {
             // make TS happy
-            const versionedLayerClient = layerClient as VersionLayerClient;
+            const versionedLayerClient = layerClient as VersionedLayerClient;
             result.getDataCoverageBitmap = async () =>
                 versionedLayerClient.getDataCoverageBitMap();
             result.getDataCoverageSizeMap = async () =>

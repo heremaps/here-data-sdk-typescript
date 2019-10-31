@@ -5,13 +5,12 @@ module.exports = env => {
   const isProd = env.NODE_ENV === "production";
 
   return {
-    target: "web",
     mode: env.NODE_ENV,
-    devtool: isProd ? undefined : "inline-source-map",
+    devtool: isProd ? undefined : "source-map",
     resolve: {
       extensions: [".ts", ".js"]
     },
-    entry: "./index.web.ts",
+    entry: "./index.ts",
     output: {
       filename: `olp-sdk-dataservice-read${isProd ? '.min' : '.dev'}.js`,
       path: path.resolve(__dirname, `dist`),
@@ -29,6 +28,9 @@ module.exports = env => {
           }
         }
       ]
-    }
+    },
+    node: {
+        fs: 'empty'
+      }
   };
 };
