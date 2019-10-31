@@ -8,7 +8,7 @@ OLP SDK for TypeScript includes core components for accessing OLP APIs from any 
 - [Getting Credentials](#credentials)
 - [Available Components](#components)
 - [Context and CatalogClient](#context-catalog)
-- [VersionLayerClient example](#examples)
+- [VersionedLayerClient example](#examples)
 
 ## <a name="prerequisite"></a> OLP Prerequisite Knowledge
 
