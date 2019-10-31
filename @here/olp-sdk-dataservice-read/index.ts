@@ -23,7 +23,6 @@ import "@here/olp-sdk-fetch";
 export * from "./lib/DataStoreClient";
 export * from "./lib/CatalogClient";
 export * from "./lib/HRN";
-export * from "./lib/HypeDataProvider";
 export * from "./lib/CatalogClientCommon";
 export * from "./lib/error/NotFoundError";
 export * from "./lib/partitioning/QuadKey";
