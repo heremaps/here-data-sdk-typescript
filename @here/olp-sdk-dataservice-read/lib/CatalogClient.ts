@@ -320,19 +320,6 @@ export class CatalogClient {
             getPartitionsIndex: async () => layerClient.getPartitionsMetadata()
         };
 
-        // add not required methods for interface, but required for version layer,
-        if (layerClient instanceof VersionedLayerClient) {
-            // make TS happy
-            const versionedLayerClient = layerClient as VersionedLayerClient;
-            result.getDataCoverageBitmap = async () =>
-                versionedLayerClient.getDataCoverageBitMap();
-            result.getDataCoverageSizeMap = async () =>
-                versionedLayerClient.getDataCoverageSizeMap();
-            result.getDataCoverageTimeMap = async () =>
-                versionedLayerClient.getDataCoverageTimeMap();
-            result.getSummary = async () => versionedLayerClient.getSummary();
-        }
-
         return result;
     }
 }
