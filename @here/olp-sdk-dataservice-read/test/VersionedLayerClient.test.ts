@@ -337,21 +337,6 @@ urlToResponses.set(
 const headersMock = new Headers();
 headersMock.append("etag", "1237696a7c876b7e");
 
-urlToResponses.set(
-    "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/tilemap?datalevel=12",
-    "DT_1_1010"
-);
-
-urlToResponses.set(
-    "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/heatmap/size?datalevel=12",
-    createMockDownloadResponse("DT_1_1010", "image/jpeg")
-);
-
-urlToResponses.set(
-    "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/heatmap/age?datalevel=12&catalogHRN=hrn%3Ahere%3Adata%3A%3A%3Asensor-data-sensoris-versioned-example",
-    createMockDownloadResponse("DT_1_1010", "image/jpeg")
-);
-
 // NewversionLayerClientOffline - blob
 urlToResponses.set(
     "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/data/c9116bb9-7d00-44bf-9b26-b4ab4c274665",
@@ -408,88 +393,6 @@ urlToResponses.set(
         arrayBuffer: sinon.stub(),
         json: sinon.stub().returns(""),
         text: sinon.stub().returns("")
-    }
-);
-
-// NewversionLayerClientOffline #getDataCoverageBitmap
-urlToResponses.set(
-    "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/tilemap",
-    {
-        type: "aaa",
-        status: 200,
-        statusText: "success",
-        ok: true,
-        headers: headersMock,
-        arrayBuffer: sinon.stub(),
-        blob: sinon.stub().returns("heatmap-tillemap-blob")
-    }
-);
-
-// NewversionLayerClientOffline #getDataCoverageSizeMap
-urlToResponses.set(
-    "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/heatmap/size",
-    {
-        type: "aaa",
-        status: 200,
-        statusText: "success",
-        ok: true,
-        headers: headersMock,
-        arrayBuffer: sinon.stub(),
-        blob: sinon.stub().returns("heatmap-size-blob")
-    }
-);
-
-// NewversionLayerClientOffline #getDataCoverageTimeMap
-urlToResponses.set(
-    "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/heatmap/age",
-    {
-        type: "aaa",
-        status: 200,
-        statusText: "success",
-        ok: true,
-        headers: headersMock,
-        arrayBuffer: sinon.stub(),
-        blob: sinon.stub().returns("heatmap-age-blob")
-    }
-);
-
-// NewversionLayerClientOffline #getSummary
-urlToResponses.set(
-    "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/summary",
-    {
-        type: "aaa",
-        status: 200,
-        statusText: "success",
-        ok: true,
-        headers: headersMock,
-        arrayBuffer: sinon.stub(),
-        json: sinon.stub().returns("summary"),
-        text: sinon.stub().returns("summary")
-    }
-);
-
-urlToResponses.set(
-    "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/summary?version=0",
-    {
-        catalogHRN: "hrn:here:data:::sensor-data-sensoris-versioned-example",
-        layer: "protobuf-example-berlin-v1",
-        levelSummary: {
-            "12": {
-                boundingBox: {
-                    east: 14.23828125,
-                    south: 52.03125,
-                    north: 52.822265625,
-                    west: 12.568359375
-                },
-                size: 255967186,
-                processedTimestamp: 1556973621446,
-                centroid: 23618400,
-                minPartitionSize: 128854,
-                maxPartitionSize: 18162544,
-                version: 0,
-                totalPartitions: 161
-            }
-        }
     }
 );
 
@@ -567,35 +470,6 @@ describe("VersionedLayerClient", () => {
         assert.strictEqual(buf, "DT_1_1010");
     });
 
-    it("#getDataCoverageBitmap", async () => {
-        let response = await versionedLayerClient.getDataCoverageBitMap();
-        assert.isNotNull(response);
-
-        let buf = await response.text();
-        assert.strictEqual(buf, "DT_1_1010");
-    });
-
-    it("#getDataCoverageSizeMap", async () => {
-        let response = await versionedLayerClient.getDataCoverageSizeMap();
-        assert.isNotNull(response);
-
-        let buf = await response.text();
-        assert.strictEqual(buf, "DT_1_1010");
-    });
-
-    it("#getDataCoverageTimeMap", async () => {
-        let response = await versionedLayerClient.getDataCoverageTimeMap();
-        assert.isNotNull(response);
-
-        let buf = await response.text();
-        assert.strictEqual(buf, "DT_1_1010");
-    });
-
-    it("#getSummary", async () => {
-        let response = await versionedLayerClient.getSummary();
-        assert.isNotNull(response);
-    });
-
     it("#getTile", async () => {
         let response = await versionedLayerClient.getTile(
             utils.quadKeyFromMortonCode("1476147")
@@ -609,7 +483,9 @@ describe("VersionedLayerClient", () => {
 
     it("#getTiles", async () => {
         const results = await Promise.all([
-            versionedLayerClient.getTile(utils.quadKeyFromMortonCode("1476147")),
+            versionedLayerClient.getTile(
+                utils.quadKeyFromMortonCode("1476147")
+            ),
             versionedLayerClient.getTile(utils.quadKeyFromMortonCode("1476147"))
         ]);
 
