@@ -59,7 +59,7 @@ Download your credentials.properties file from [OLP website](https://developer.h
 Create an instance of UserAuth class and set the path to the file with credentials:
 
 ```typescript
-import { UserAuth, requestToken } from "@here/olp-sdk-authentication";
+import { UserAuth, requestToken, loadCredentialsFromFile } from "@here/olp-sdk-authentication";
 const credentials = loadCredentialsFromFile("replace-with-your-path-to-credentials.properties");
 const userAuth = new UserAuth({credentials, tokenRequester: requestToken});
 
