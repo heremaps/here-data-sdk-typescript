@@ -25,12 +25,7 @@ import {
 import { ApiName, DataStoreContext } from "./DataStoreContext";
 import { DataStoreRequestBuilder } from "./DataStoreRequestBuilder";
 
-import {
-    BlobApi,
-    CoverageApi,
-    MetadataApi,
-    QueryApi
-} from "@here/olp-sdk-dataservice-api";
+import { BlobApi, MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
 import { HRN } from "./HRN";
 import { LRUCache } from "./LRUCache";
 import { QuadKey } from "./partitioning/QuadKey";
@@ -226,80 +221,6 @@ export class VersionedLayerClient {
     }
 
     /**
-     * Fetch and return data coverage bitmap for the specified layer and version.
-     *
-     * @param requestInit Optional request options to be passed to fetch when downloading
-     * the coverage map.
-     *
-     *  @returns A promise with the payload of the requested bitmap.
-     */
-    async getDataCoverageBitMap(): Promise<Response> {
-        const coverageRequestBuilder = await this.getRequestBuilder(
-            "statistics"
-        );
-        return CoverageApi.getDataCoverageTile(coverageRequestBuilder, {
-            layerId: this.layerId,
-            // @todo datalevel is hardcoded. It is known issue, ticket about API bug is created
-            datalevel: "12"
-        }).catch(this.errorHandler);
-    }
-
-    /**
-     * Fetch and return data coverage bitmap for the specified layer and version.
-     *
-     * @param requestInit Optional request options to be passed to fetch when downloading
-     * the coverage map.
-     *
-     *  @returns A promise with the payload of the requested size map.
-     */
-    async getDataCoverageSizeMap(): Promise<Response> {
-        const coverageRequestBuilder = await this.getRequestBuilder(
-            "statistics"
-        );
-        return CoverageApi.getDataCoverageSizeMap(coverageRequestBuilder, {
-            layerId: this.layerId,
-            // @todo datalevel is hardcoded. It is known issue, ticket about API bug is created
-            datalevel: "12"
-        }).catch(this.errorHandler);
-    }
-
-    /**
-     * Fetch and return data coverage time map for the specified layer and version.
-     *
-     * @param requestInit Optional request options to be passed to fetch when downloading
-     * the coverage map.
-     *
-     *  @returns A promise with the payload of the requested time map.
-     */
-    async getDataCoverageTimeMap(): Promise<Response> {
-        const coverageRequestBuilder = await this.getRequestBuilder(
-            "statistics"
-        );
-        return CoverageApi.getDataCoverageTimeMap(coverageRequestBuilder, {
-            layerId: this.layerId,
-            // @todo datalevel is hardcoded. It is known issue, ticket about API bug is created
-            datalevel: "12",
-            catalogHRN: this.hrn
-        }).catch(this.errorHandler);
-    }
-
-    /**
-     * Fetch and return layer summary from the Statistics service.
-     *
-     * @param requestInit Optional request options to be passed to fetch when downloading summary.
-     *
-     * @returns A promise with the layer summary.
-     */
-    async getSummary(): Promise<CoverageApi.LayerSummary> {
-        const coverageRequestBuilder = await this.getRequestBuilder(
-            "statistics"
-        );
-        return CoverageApi.getDataCoverageSummary(coverageRequestBuilder, {
-            layerId: this.layerId
-        }).catch(this.errorHandler);
-    }
-
-    /**
      * Gets the latest available catalog version what can be used as latest layer version
      */
     private async getLatestVersion(): Promise<MetadataApi.VersionResponse> {
@@ -315,18 +236,6 @@ export class VersionedLayerClient {
                         error.status
                     }, ${error.statusText || ""}`
                 )
-            )
-        );
-    }
-
-    private async errorHandler(error: any) {
-        return Promise.reject(
-            new ErrorHTTPResponse(
-                `Statistic Service error: HTTP ${
-                    error.status
-                }, ${error.statusText || error.cause || ""}` +
-                    `\n${error.action || ""}`,
-                error
             )
         );
     }
