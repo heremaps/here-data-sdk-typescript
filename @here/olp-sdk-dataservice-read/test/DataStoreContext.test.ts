@@ -17,15 +17,12 @@
  * License-Filename: LICENSE
  */
 
-import { DataStoreContext } from "../lib/DataStoreContext";
 import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
-import * as LookUpUtils from "../lib/getEnvLookupUrl";
-import { DataStoreDownloadManager } from "../lib/DataStoreDownloadManager";
-import { DownloadManager } from "../lib/DownloadManager";
 import { LookupApi } from "@here/olp-sdk-dataservice-api";
 
+import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
 chai.use(sinonChai);
 
 const assert = chai.assert;
@@ -34,15 +31,27 @@ const expect = chai.expect;
 describe("DataStoreContext initialisation", () => {
     let testToken: string;
     let mockedGetToken: () => Promise<string>;
+    let sandbox: sinon.SinonSandbox;
+
+    before(() => {
+        sandbox = sinon.createSandbox();
+    });
 
     beforeEach(() => {
         testToken = "test-token-string";
         mockedGetToken = () => Promise.resolve(testToken);
     });
 
+    afterEach(() => {
+        sandbox.restore();
+    });
+
     it("Should be initialised with default params", async () => {
-        const spyGetEnvLookUpUrl = sinon.spy(LookUpUtils, "getEnvLookUpUrl");
-        const context = new DataStoreContext({
+        const spyGetEnvLookUpUrl = sandbox.spy(
+            dataServiceRead,
+            "getEnvLookUpUrl"
+        );
+        const context = new dataServiceRead.DataStoreContext({
             environment: "here",
             getToken: mockedGetToken
         });
@@ -52,14 +61,15 @@ describe("DataStoreContext initialisation", () => {
         expect(spyGetEnvLookUpUrl.calledOnceWith("here")).true;
         expect(context.environment).to.equal("here");
         expect(context.getToken).to.equal(mockedGetToken);
-        expect(context.dm instanceof DataStoreDownloadManager).true;
+        expect(context.dm instanceof dataServiceRead.DataStoreDownloadManager)
+            .true;
 
         const resolvedTokenFromContext = await context.getToken();
         expect(resolvedTokenFromContext).to.equal(testToken);
     });
 
     it("Should be used download manager from client on initialisation", async () => {
-        class CustomDownloadManager implements DownloadManager {
+        class CustomDownloadManager implements dataServiceRead.DownloadManager {
             download(url: string, init?: RequestInit) {
                 return Promise.resolve(new Response());
             }
@@ -67,7 +77,7 @@ describe("DataStoreContext initialisation", () => {
 
         const customDownloadManager = new CustomDownloadManager();
 
-        const context = new DataStoreContext({
+        const context = new dataServiceRead.DataStoreContext({
             environment: "here",
             getToken: mockedGetToken,
             dm: customDownloadManager
@@ -78,28 +88,32 @@ describe("DataStoreContext initialisation", () => {
 });
 
 describe("DataStoreContext getBaseUrl success", () => {
-    let context: DataStoreContext;
+    let context: dataServiceRead.DataStoreContext;
     let testToken: string;
     let mockedGetToken: () => Promise<string>;
     let platformAPIListStub: any;
     let platformResourseListStub: any;
+    let sandbox: sinon.SinonSandbox;
+
+    before(() => {
+        sandbox = sinon.createSandbox();
+    });
 
     beforeEach(() => {
-        platformAPIListStub = sinon.stub(LookupApi, "platformAPIList");
-        platformResourseListStub = sinon.stub(LookupApi, "resourceAPIList");
+        platformAPIListStub = sandbox.stub(LookupApi, "platformAPIList");
+        platformResourseListStub = sandbox.stub(LookupApi, "resourceAPIList");
 
         testToken = "test-token-string";
         mockedGetToken = () => Promise.resolve(testToken);
 
-        context = new DataStoreContext({
+        context = new dataServiceRead.DataStoreContext({
             environment: "here",
             getToken: mockedGetToken
         });
     });
 
     afterEach(() => {
-        platformAPIListStub.restore();
-        platformResourseListStub.restore();
+        sandbox.restore();
     });
 
     it("it should return base url to the Artifact API", async () => {
