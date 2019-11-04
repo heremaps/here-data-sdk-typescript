@@ -18,10 +18,14 @@
  */
 
 import { LookupApi } from "@here/olp-sdk-dataservice-api";
-import { DataStoreDownloadManager } from "./DataStoreDownloadManager";
-import { DataStoreRequestBuilder } from "./DataStoreRequestBuilder";
-import { DownloadManager } from "./DownloadManager";
-import { EnvironmentName, getEnvLookUpUrl } from "./getEnvLookupUrl";
+import {
+    ApiName,
+    DataStoreDownloadManager,
+    DataStoreRequestBuilder,
+    DownloadManager,
+    EnvironmentName,
+    getEnvLookUpUrl
+} from "@here/olp-sdk-dataservice-read";
 
 export interface DataStoreContextParams {
     // func, returns Promise with access token
@@ -31,23 +35,6 @@ export interface DataStoreContextParams {
     // Download manager for sending requests. Used default DataStoreDownloadManager if not set.
     dm?: DownloadManager;
 }
-
-/**
- * The list of API names of endpoints exists in the API
- */
-export type ApiName =
-    | "config"
-    | "artifact"
-    | "blob"
-    | "index"
-    | "ingest"
-    | "metadata"
-    | "notification"
-    | "publish"
-    | "query"
-    | "statistics"
-    | "stream"
-    | "volatile-blob";
 
 /**
  * DataStoreContext is the context, requires by DataStoreClient, CatalogClient or layers clients.
@@ -165,8 +152,11 @@ export class DataStoreContext {
             )
         );
 
-        this.apiListCache.set(this.cacheKeyForPlatformItems, apiList);
-        return Promise.resolve(apiList);
+        this.apiListCache.set(
+            this.cacheKeyForPlatformItems,
+            apiList as LookupApi.API[]
+        );
+        return Promise.resolve(apiList as LookupApi.API[]);
     }
 
     /**
@@ -186,9 +176,9 @@ export class DataStoreContext {
             )
         );
 
-        this.apiListCache.set(hrn, apiList);
+        this.apiListCache.set(hrn, apiList as LookupApi.API[]);
 
-        return Promise.resolve(apiList);
+        return Promise.resolve(apiList as LookupApi.API[]);
     }
 
     /**

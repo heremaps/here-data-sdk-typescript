@@ -54,19 +54,19 @@ export interface API {
     parameters?: { [key: string]: string };
 }
 
-export interface ModelError {
+export interface ApiNotFoundError {
     /**
      * Repetition of the HTTP error code
      */
-    code: number;
+    status: number;
     /**
      * Short description of the error
      */
-    message: string;
+    title: string;
     /**
-     * Complete description of the error
+     * Complete details of the error
      */
-    description?: string;
+    detail: Array<{name: string, error: string}>;
 }
 
 /* ===================================================================
@@ -83,7 +83,7 @@ export interface ModelError {
 export async function platformAPI(
     builder: RequestBuilder,
     params: { api: string; version: string }
-): Promise<API[]> {
+): Promise<API[] | ApiNotFoundError> {
     const baseUrl = "/platform/apis/{api}/{version}"
         .replace("{api}", UrlBuilder.toString(params["api"]))
         .replace("{version}", UrlBuilder.toString(params["version"]));
@@ -104,7 +104,7 @@ export async function platformAPI(
  *
  * @summary Return the list of the platform APIs.
  */
-export async function platformAPIList(builder: RequestBuilder): Promise<API[]> {
+export async function platformAPIList(builder: RequestBuilder): Promise<API[] | ApiNotFoundError> {
     const baseUrl = "/platform/apis";
 
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
@@ -135,7 +135,7 @@ export async function platformAPIList(builder: RequestBuilder): Promise<API[]> {
 export async function resourceAPI(
     builder: RequestBuilder,
     params: { hrn: string; api: string; version: string; region?: string }
-): Promise<API[]> {
+): Promise<API[] | ApiNotFoundError> {
     const baseUrl = "/resources/{hrn}/apis/{api}/{version}"
         .replace("{hrn}", UrlBuilder.toString(params["hrn"]))
         .replace("{api}", UrlBuilder.toString(params["api"]))
@@ -163,7 +163,7 @@ export async function resourceAPI(
 export async function resourceAPIList(
     builder: RequestBuilder,
     params: { hrn: string; region?: string }
-): Promise<API[]> {
+): Promise<API[] | ApiNotFoundError> {
     const baseUrl = "/resources/{hrn}/apis".replace(
         "{hrn}",
         UrlBuilder.toString(params["hrn"])
