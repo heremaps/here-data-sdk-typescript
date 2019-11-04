@@ -31,3 +31,5 @@ export * from "./lib/StatisticsRequest";
 export * from "./lib/SummaryRequest";
 export * from "./lib/VersionedLayerClient";
 export * from "./lib/VolatileLayerClient";
+export * from "./lib/ConfigClient";
+export * from "./lib/CatalogsRequest";
