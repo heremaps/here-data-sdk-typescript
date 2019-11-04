@@ -23,7 +23,8 @@
   },
   "nyc": {
     "include": [
-      "lib/**/*.ts"
+      "lib/**/*.ts",
+      "dist/@here/olp-sdk-dataservice-api/**/*.js"
     ],
     "extension": [
       ".ts"

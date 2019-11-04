@@ -21,6 +21,7 @@
 import "@here/olp-sdk-fetch";
 
 export * from "./lib/DataStoreClient";
+export * from "./lib/DataStoreDownloadManager";
 export * from "./lib/CatalogClient";
 export * from "./lib/HRN";
 export * from "./lib/CatalogClientCommon";
@@ -36,3 +37,9 @@ export * from "./lib/VersionedLayerClient";
 export * from "./lib/VolatileLayerClient";
 export * from "./lib/ConfigClient";
 export * from "./lib/CatalogsRequest";
+export * from "./lib/utils/RequestBuilderFactory";
+export * from "./lib/utils/getEnvLookupUrl";
+export * from "./lib/client/OlpClientSettings";
+export * from "./lib/cache/ApiCacheRepository";
+export * from "./lib/cache/KeyValueCache";
+export * from "./lib/DataStoreRequestBuilder";

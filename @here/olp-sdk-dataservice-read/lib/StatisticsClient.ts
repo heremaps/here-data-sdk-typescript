@@ -18,16 +18,22 @@
  */
 
 import { CoverageApi } from "@here/olp-sdk-dataservice-api";
-import { DataStoreContext } from "./DataStoreContext";
-import { DataStoreRequestBuilder } from "./DataStoreRequestBuilder";
-import { CoverageDataType, StatisticsRequest } from "./StatisticsRequest";
-import { SummaryRequest } from "./SummaryRequest";
+import {
+    CoverageDataType,
+    DataStoreRequestBuilder,
+    HRN,
+    OlpClientSettings,
+    RequestFactory,
+    StatisticsRequest,
+    SummaryRequest
+} from "@here/olp-sdk-dataservice-read";
 
 /**
  * A class that provides possibility to get Statistic Metadata and Data for Versioned layer
  */
 export class StatisticsClient {
-    constructor(private readonly context: DataStoreContext) {}
+    private readonly apiVersion: string = "v1";
+    constructor(private readonly settings: OlpClientSettings) {}
 
     /**
      * Fetch and return layer summary from the Statistics service.
@@ -79,7 +85,7 @@ export class StatisticsClient {
         }
         const coverageRequestBuilder = await this.getRequestBuilder(
             catalogHrn
-        ).catch(error => Promise.reject(new Error(error)));
+        ).catch(error => Promise.reject(error));
 
         let request;
         switch (typemap) {
@@ -119,17 +125,11 @@ export class StatisticsClient {
     private async getRequestBuilder(
         hrn: string
     ): Promise<DataStoreRequestBuilder> {
-        const url = await this.context
-            .getBaseUrl("statistics", hrn)
-            .catch(err =>
-                Promise.reject(
-                    `Error retrieving from cache builder for resource "${hrn}" and api: Statistic".\n${err}"`
-                )
-            );
-        return new DataStoreRequestBuilder(
-            this.context.dm,
-            url,
-            this.context.getToken
+        return RequestFactory.create(
+            "statistics",
+            this.apiVersion,
+            this.settings,
+            HRN.fromString(hrn)
         );
     }
 }

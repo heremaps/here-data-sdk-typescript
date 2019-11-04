@@ -21,47 +21,39 @@ import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import {
-    CoverageDataType,
-    HRN,
-    StatisticsClient,
-    StatisticsRequest,
-    SummaryRequest
-} from "@here/olp-sdk-dataservice-read";
 import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
 import { CoverageApi } from "@here/olp-sdk-dataservice-api";
 
 chai.use(sinonChai);
 
 const assert = chai.assert;
-const expect = chai.expect;
 
 describe("StatistiscClient", () => {
     let sandbox: sinon.SinonSandbox;
-    let getDataCoverageSummaryStub: any;
-    let getStatisticsBitMapStub: any;
-    let getStatisticsSizeMapStub: any;
-    let getStatisticsTimeMapStub: any;
-    const mockedHRN = HRN.fromString("hrn:here:data:::mocked-hrn");
+    let olpClientSettingsStub: sinon.SinonStubbedInstance<
+        dataServiceRead.OlpClientSettings
+    >;
+    let getDataCoverageSummaryStub: sinon.SinonStub;
+    let getStatisticsBitMapStub: sinon.SinonStub;
+    let getStatisticsSizeMapStub: sinon.SinonStub;
+    let getStatisticsTimeMapStub: sinon.SinonStub;
+    let getBaseUrlRequestStub: sinon.SinonStub;
+    const mockedHRN = dataServiceRead.HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
-
-    class MockedDataStoreContext {
-        constructor() {}
-
-        public async getBaseUrl() {
-            return Promise.resolve(fakeURL);
-        }
-    }
 
     before(() => {
         sandbox = sinon.createSandbox();
     });
 
     beforeEach(() => {
-        sandbox
-            .stub(dataServiceRead, "DataStoreContext")
-            .callsFake(() => new MockedDataStoreContext());
+        olpClientSettingsStub = sandbox.createStubInstance(
+            dataServiceRead.OlpClientSettings
+        );
+        getBaseUrlRequestStub = sandbox.stub(
+            dataServiceRead.RequestFactory,
+            "getBaseUrl"
+        );
         getDataCoverageSummaryStub = sandbox.stub(
             CoverageApi,
             "getDataCoverageSummary"
@@ -78,6 +70,8 @@ describe("StatistiscClient", () => {
             CoverageApi,
             "getDataCoverageTimeMap"
         );
+
+        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
     afterEach(() => {
@@ -85,9 +79,8 @@ describe("StatistiscClient", () => {
     });
 
     it("Shoud be initialised with context", async () => {
-        const context = new MockedDataStoreContext();
-        const statisticsClient = new StatisticsClient(
-            (context as unknown) as dataServiceRead.DataStoreContext
+        const statisticsClient = new dataServiceRead.StatisticsClient(
+            olpClientSettingsStub as any
         );
         assert.isDefined(statisticsClient);
     });
@@ -114,9 +107,8 @@ describe("StatistiscClient", () => {
                 }
             }
         };
-        const context = new MockedDataStoreContext();
-        const statisticsClient = new StatisticsClient(
-            (context as unknown) as dataServiceRead.DataStoreContext
+        const statisticsClient = new dataServiceRead.StatisticsClient(
+            olpClientSettingsStub as any
         );
         assert.isDefined(statisticsClient);
         getDataCoverageSummaryStub.callsFake(
@@ -125,7 +117,7 @@ describe("StatistiscClient", () => {
             }
         );
 
-        const summaryRequest = new SummaryRequest()
+        const summaryRequest = new dataServiceRead.SummaryRequest()
             .withCatalogHrn(mockedHRN)
             .withLayerId(mockedLayerId);
 
@@ -135,9 +127,8 @@ describe("StatistiscClient", () => {
 
     it("Should method getStatistics provide data", async () => {
         const mockedStatistics: Response = new Response("mocked-response");
-        const context = new MockedDataStoreContext();
-        const statisticsClient = new StatisticsClient(
-            (context as unknown) as dataServiceRead.DataStoreContext
+        const statisticsClient = new dataServiceRead.StatisticsClient(
+            olpClientSettingsStub as any
         );
         assert.isDefined(statisticsClient);
         getStatisticsBitMapStub.callsFake(
@@ -156,33 +147,33 @@ describe("StatistiscClient", () => {
             }
         );
 
-        const statisticBitMapRequest = new StatisticsRequest()
+        const statisticBitMapRequest = new dataServiceRead.StatisticsRequest()
             .withCatalogHrn(mockedHRN)
             .withLayerId(mockedLayerId)
             .withDataLevel("12")
-            .withTypemap(CoverageDataType.BITMAP);
+            .withTypemap(dataServiceRead.CoverageDataType.BITMAP);
 
         const statisticBitMap = await statisticsClient.getStatistics(
             statisticBitMapRequest
         );
         assert.isDefined(statisticBitMap);
 
-        const statisticSizeMapRequest = new StatisticsRequest()
+        const statisticSizeMapRequest = new dataServiceRead.StatisticsRequest()
             .withCatalogHrn(mockedHRN)
             .withLayerId(mockedLayerId)
             .withDataLevel("12")
-            .withTypemap(CoverageDataType.SIZEMAP);
+            .withTypemap(dataServiceRead.CoverageDataType.SIZEMAP);
 
         const statisticSizeMap = await statisticsClient.getStatistics(
             statisticSizeMapRequest
         );
         assert.isDefined(statisticSizeMap);
 
-        const statisticTimeMapRequest = new StatisticsRequest()
+        const statisticTimeMapRequest = new dataServiceRead.StatisticsRequest()
             .withCatalogHrn(mockedHRN)
             .withLayerId(mockedLayerId)
             .withDataLevel("12")
-            .withTypemap(CoverageDataType.TIMEMAP);
+            .withTypemap(dataServiceRead.CoverageDataType.TIMEMAP);
 
         const statisticTimeMap = await statisticsClient.getStatistics(
             statisticTimeMapRequest
