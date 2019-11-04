@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { ArtifactApi, ConfigApi} from "@here/olp-sdk-dataservice-api";
+import { ArtifactApi, ConfigApi } from "@here/olp-sdk-dataservice-api";
 import { ErrorHTTPResponse } from "./CatalogClientCommon";
 import { DataStoreContext } from "./DataStoreContext";
 import { DataStoreRequestBuilder } from "./DataStoreRequestBuilder";
@@ -42,7 +42,9 @@ export class DataStoreClient {
      * @param schemaHrn String representing schema HRN.
      * @returns Object with schema details.
      */
-    async getSchemaDetails(schemaHrn: string): Promise<ArtifactApi.GetSchemaResponse> {
+    async getSchemaDetails(
+        schemaHrn: string
+    ): Promise<ArtifactApi.GetSchemaResponse> {
         const artifactBaseUrl = await this.context.getBaseUrl("artifact");
 
         return ArtifactApi.getSchemaUsingGET(
@@ -104,27 +106,5 @@ export class DataStoreClient {
                 response
             );
         }
-    }
-
-    /**
-     * Asynchronously retrieves a list of catalogs which contain layer of certain schema that your
-     * account has access to.
-     *
-     * @param schemaHrn Schema HRN of layers to look for.
-     * @returns A promise with list of catalogs and their layers.
-     */
-    async getCatalogsBySchema(schemaHrn: string): Promise<ConfigApi.CatalogsListResult> {
-        const configBaseUrl = await this.context.getBaseUrl("config");
-        return ConfigApi.getCatalogs(
-            new DataStoreRequestBuilder(
-                this.context.dm,
-                configBaseUrl,
-                this.context.getToken
-            ),
-            {
-                verbose: "true",
-                schemaHrn
-            }
-        );
     }
 }
