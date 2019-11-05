@@ -19,8 +19,10 @@
 
 export * from "./lib/DataStoreDownloadManager";
 export * from "./lib/CatalogClient";
+export * from "./lib/DataRequest";
 export * from "./lib/HRN";
 export * from "./lib/CatalogClientCommon";
+export * from "./lib/CatalogLayer";
 export * from "./lib/error/NotFoundError";
 export * from "./lib/partitioning/QuadKey";
 export * from "./lib/partitioning/QuadKeyUtils";
@@ -29,7 +31,7 @@ export * from "./lib/DataStoreContext";
 export * from "./lib/client/StatisticsClient";
 export * from "./lib/client/StatisticsRequest";
 export * from "./lib/client/SummaryRequest";
-export * from "./lib/VersionedLayerClient";
+export * from "./lib/client/VersionedLayerClient";
 export * from "./lib/VolatileLayerClient";
 export * from "./lib/client/ConfigClient";
 export * from "./lib/client/CatalogsRequest";
