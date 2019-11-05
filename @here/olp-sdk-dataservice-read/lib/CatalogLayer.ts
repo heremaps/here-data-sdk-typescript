@@ -22,8 +22,7 @@ import {
     CoverageApi,
     MetadataApi
 } from "@here/olp-sdk-dataservice-api";
-import { IndexMap } from "./CatalogClientCommon";
-import { QuadKey } from "./partitioning/QuadKey";
+import { DataRequest, IndexMap, QuadKey } from "@here/olp-sdk-dataservice-read";
 
 /**
  * @deprecated
@@ -71,7 +70,9 @@ export interface CatalogLayer extends ConfigApi.Layer {
      * @param quadKey The quad key of the tile.
      * @returns A promise of the HTTP response that contains the payload of the requested tile.
      */
-    getTile: (quadKey: QuadKey) => Promise<Response>;
+    getTile?: (quadKey: QuadKey) => Promise<Response>;
+
+    getData?: (dataRequest: DataRequest) => Promise<Response>;
 
     /**
      * Asynchronously fetches a partition from this layer.
@@ -81,7 +82,7 @@ export interface CatalogLayer extends ConfigApi.Layer {
      * partition.
      * @returns A promise of the http response that contains the payload of the requested partition.
      */
-    getPartition: (
+    getPartition?: (
         partitionId: string,
         partitionRequestInit?: RequestInit
     ) => Promise<Response>;

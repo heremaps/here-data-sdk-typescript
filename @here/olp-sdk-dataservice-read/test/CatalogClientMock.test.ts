@@ -2,11 +2,13 @@ import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import { CatalogClient } from "../lib/CatalogClient";
-import { DataStoreContext } from "../lib/DataStoreContext";
+import {
+    CatalogClient,
+    DataStoreContext,
+    OlpClientSettings
+} from "@here/olp-sdk-dataservice-read";
 
-import { MetadataApi } from "@here/olp-sdk-dataservice-api/";
-import { ConfigApi } from "@here/olp-sdk-dataservice-api/";
+import { ConfigApi, MetadataApi } from "@here/olp-sdk-dataservice-api/";
 
 chai.use(sinonChai);
 const expect = chai.expect;
@@ -17,9 +19,13 @@ describe("VersionedLayerClientMockTests", () => {
     let dataStoreContextStubInstance = sinon.createStubInstance(
         DataStoreContext
     );
+    let olpClientSettingsStubInstance = sinon.createStubInstance(
+        OlpClientSettings
+    );
 
     let catalogClient = new CatalogClient({
         context: (dataStoreContextStubInstance as unknown) as DataStoreContext,
+        settings: (olpClientSettingsStubInstance as unknown) as OlpClientSettings,
         hrn: "fake-hrn-string"
     });
 
