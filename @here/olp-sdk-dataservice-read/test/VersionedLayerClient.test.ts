@@ -21,11 +21,14 @@ import * as utils from "../lib/partitioning/QuadKeyUtils";
 import { assert } from "chai";
 import sinon = require("sinon");
 
-import { DataStoreContext } from "../lib/DataStoreContext";
-import { DataStoreDownloadManager } from "../lib/DataStoreDownloadManager";
-import { DownloadManager } from "../lib/DownloadManager";
-import { HRN } from "../lib/HRN";
-import { VersionedLayerClient } from "../lib/VersionedLayerClient";
+import {
+    DataRequest,
+    DataStoreDownloadManager,
+    DownloadManager,
+    HRN,
+    VersionedLayerClient,
+    OlpClientSettings
+} from "@here/olp-sdk-dataservice-read";
 
 function createMockDownloadResponse(resp: Object, blob?: string) {
     const headers = new Headers();
@@ -447,23 +450,28 @@ describe("VersionedLayerClient", () => {
             "hrn:here:data:::sensor-data-sensoris-versioned-example";
         const newPromise = () => Promise.resolve("7534286159");
 
-        const context = new DataStoreContext({
+        const settings = new OlpClientSettings({
             getToken: newPromise,
             environment: "here",
             dm: createMockDownloadManager()
         });
 
-        assert.isNotNull(context);
+        assert.isNotNull(settings);
         versionedLayerClient = await new VersionedLayerClient(
             HRN.fromString(testHRN),
             "protobuf-example-berlin-v1",
-            context
+            settings
         );
         assert.isNotNull(versionedLayerClient);
     });
 
     it("#getPartition", async () => {
-        let response = await versionedLayerClient.getPartition("23618173");
+        const partitionIdDataRequest = new DataRequest().withPartitionId(
+            "23618173"
+        );
+        let response = await versionedLayerClient.getData(
+            partitionIdDataRequest
+        );
         assert.isNotNull(response);
 
         let buf = await response.text();
@@ -471,9 +479,10 @@ describe("VersionedLayerClient", () => {
     });
 
     it("#getTile", async () => {
-        let response = await versionedLayerClient.getTile(
+        const tileDataRequest = new DataRequest().withQuadKey(
             utils.quadKeyFromMortonCode("1476147")
         );
+        let response = await versionedLayerClient.getData(tileDataRequest);
         assert.isNotNull(response);
         assert.isTrue(response.ok);
 
@@ -482,11 +491,15 @@ describe("VersionedLayerClient", () => {
     });
 
     it("#getTiles", async () => {
+        const tileDataRequest1 = new DataRequest().withQuadKey(
+            utils.quadKeyFromMortonCode("1476147")
+        );
+        const tileDataRequest2 = new DataRequest().withQuadKey(
+            utils.quadKeyFromMortonCode("1476147")
+        );
         const results = await Promise.all([
-            versionedLayerClient.getTile(
-                utils.quadKeyFromMortonCode("1476147")
-            ),
-            versionedLayerClient.getTile(utils.quadKeyFromMortonCode("1476147"))
+            versionedLayerClient.getData(tileDataRequest1),
+            versionedLayerClient.getData(tileDataRequest2)
         ]);
 
         const contents = await Promise.all([
@@ -497,20 +510,11 @@ describe("VersionedLayerClient", () => {
         assert.deepEqual(contents, ["DT_1_1001", "DT_1_1001"]);
     });
 
-    it("#getMissingTile", async () => {
-        let response = await versionedLayerClient.getTile(
-            utils.quadKeyFromMortonCode("0000")
-        );
-        assert.isNotNull(response);
-        assert.isTrue(response.ok);
-        assert.isTrue(response.status == 204);
-        assert.isTrue(response.statusText == "No Content");
-    });
-
     it("#getTileWithETag", async () => {
-        const response = await versionedLayerClient.getTile(
+        const tileDataRequest = new DataRequest().withQuadKey(
             utils.quadKeyFromMortonCode("1476147")
         );
+        let response = await versionedLayerClient.getData(tileDataRequest);
         assert.isNotNull(response);
         assert.isTrue(response.ok);
         const etag = response.headers.get("etag");
@@ -523,9 +527,13 @@ describe("VersionedLayerClient", () => {
         assert.strictEqual(buf, "DT_1_1001");
 
         // fetch again, this time with etag
-        const cachedResponse = await versionedLayerClient.getTile(
+        const cachedDataRequest = new DataRequest().withQuadKey(
             utils.quadKeyFromMortonCode("23618359")
         );
+        const cachedResponse = await versionedLayerClient.getData(
+            cachedDataRequest
+        );
+
         // make sure status is 304 - not modified
         assert.strictEqual(cachedResponse.status, 304);
     });
@@ -548,9 +556,11 @@ describe("VersionedLayerClient", () => {
     });
 
     it("#getAggregatedTile", async () => {
-        const response = await versionedLayerClient.getTile(
+        const tileDataRequest = new DataRequest().withQuadKey(
             utils.quadKeyFromMortonCode("5904591")
         );
+        const response = await versionedLayerClient.getData(tileDataRequest);
+
         assert.strictEqual(response.status, 204);
 
         // try a direct ancestor

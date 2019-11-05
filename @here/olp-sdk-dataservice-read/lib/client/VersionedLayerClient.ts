@@ -18,32 +18,29 @@
  */
 
 import { BlobApi, MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
-import { ApiName } from "./cache/ApiCacheRepository";
 import {
     AggregatedDownloadResponse,
+    ApiName,
+    DataRequest,
+    DataStoreRequestBuilder,
     ErrorHTTPResponse,
-    IndexMap
-} from "./CatalogClientCommon";
-import { DataStoreContext } from "./DataStoreContext";
-import { DataStoreRequestBuilder } from "./DataStoreRequestBuilder";
-import { HRN } from "./HRN";
-import { LRUCache } from "./LRUCache";
-import { QuadKey } from "./partitioning/QuadKey";
-import * as utils from "./partitioning/QuadKeyUtils";
+    HRN,
+    IndexMap,
+    OlpClientSettings,
+    QuadKey,
+    RequestFactory
+} from "@here/olp-sdk-dataservice-read";
+
+import * as utils from "../partitioning/QuadKeyUtils";
 
 /**
  * A class that describes versioned layer
  * and provides possibility to get layer Metadata and Partitions.
  */
 export class VersionedLayerClient {
+    private readonly apiVersion: string = "v1";
     readonly hrn: string;
-    readonly layerId: string;
-    readonly context: DataStoreContext;
     private readonly indexDepth = 4;
-    private INDEX_CACHE_SIZE = 64;
-    private readonly indexCache = new LRUCache<string, IndexMap>(
-        this.INDEX_CACHE_SIZE
-    );
 
     private static subkeyAddFunction(): (
         quadKey: QuadKey,
@@ -59,13 +56,102 @@ export class VersionedLayerClient {
         return (key: string) => utils.quadKeyFromMortonCode(key);
     }
 
-    constructor(catalogHrn: HRN, layerId: string, context: DataStoreContext) {
-        this.context = context;
+    constructor(
+        catalogHrn: HRN,
+        readonly layerId: string,
+        readonly settings: OlpClientSettings
+    ) {
         this.hrn = catalogHrn.toString();
-        this.layerId = layerId;
+    }
+
+    async getData(dataRequest: DataRequest): Promise<Response> {
+        const dataHandle = dataRequest.getDataHandle();
+        const partitionId = dataRequest.getPartitionId();
+        const quadKey = dataRequest.getQuadKey();
+        const version = dataRequest.getVersion();
+
+        if (
+            dataHandle !== undefined ||
+            partitionId !== undefined ||
+            quadKey !== undefined
+        ) {
+            if (dataHandle) {
+                return this.downloadTile(dataHandle);
+            }
+
+            if (partitionId) {
+                const partitionIdDataHandle = await this.getDataHandleByPartitionId(
+                    partitionId,
+                    version
+                ).catch(error => Promise.reject(error));
+                return this.downloadTile(partitionIdDataHandle);
+            }
+
+            if (quadKey) {
+                const quadKeyDataHandle = await this.getDataHandleByQuadKey(
+                    quadKey
+                ).catch(error => Promise.reject(error));
+                return this.downloadTile(quadKeyDataHandle);
+            }
+        }
+
+        return Promise.reject(
+            new Error(
+                `No data provided. Add dataHandle, partitionId or quadKey to the DataRequest object`
+            )
+        );
     }
 
     /**
+     * Fetch and returns partition metadata
+     * @param partitionId The name of the partition to fetch.
+     * @param version The version of the layer to fetch
+     * @returns A promise of partition metadata which used to get partition data
+     */
+    private async getDataHandleByPartitionId(
+        partitionId: string,
+        version?: number
+    ): Promise<string> {
+        const queryRequestBilder = await this.getRequestBuilder("query");
+        const latestVersion = version || (await this.getLatestVersion());
+        const partitions = await QueryApi.getPartitionsById(
+            queryRequestBilder,
+            {
+                version: `${latestVersion}`,
+                layerId: this.layerId,
+                partition: [partitionId]
+            }
+        );
+        const partition = partitions.partitions.find(element => {
+            return element.partition === partitionId;
+        });
+
+        return partition && partition.dataHandle
+            ? partition.dataHandle
+            : Promise.reject(
+                  `No partition dataHandle for partition ${partitionId}. HRN: ${this.hrn}`
+              );
+    }
+
+    private async getDataHandleByQuadKey(quadKey: QuadKey): Promise<string> {
+        if (!utils.isValid(quadKey)) {
+            return Promise.reject(new Error("QuadKey is not valid"));
+        }
+
+        const index = await this.getIndexFor(quadKey);
+        const resultSub = index.get(utils.mortonCodeFromQuadKey(quadKey));
+
+        return resultSub
+            ? resultSub
+            : Promise.reject(
+                  `No tile dataHandle for QuadKey: ${utils.mortonCodeFromQuadKey(
+                      quadKey
+                  )}. HRN: ${this.hrn}`
+              );
+    }
+
+    /**
+     * @deprecated Instead could be used getData method
      * Asynchronously fetches a partition from this layer.
      * Used to get partition with generic partition type
      * To get partition with HERETile partition type use @this getTile method
@@ -97,24 +183,11 @@ export class VersionedLayerClient {
             );
         }
 
-        const builder = await this.getRequestBuilder("blob");
-        return BlobApi.getBlob(builder, {
-            dataHandle: partition.dataHandle,
-            layerId: this.layerId
-        }).catch(async error => {
-            return Promise.reject(
-                new ErrorHTTPResponse(
-                    `Blob Service error: HTTP ${
-                        error.status
-                    }, ${error.statusText || error.cause || ""}` +
-                        `\n${error.action || ""}`,
-                    error
-                )
-            );
-        });
+        return this.downloadTile(partition.dataHandle);
     }
 
     /**
+     * @deprecated Instead could be used getData method     *
      * Asynchronously fetches a tile from this catalog.
      * Used to get partition with HEREtile partition type
      *
@@ -149,7 +222,8 @@ export class VersionedLayerClient {
             throw Error("QuadKey is not valid");
         }
 
-        const resultSub = await this.getDataTag(quadKey);
+        const index = await this.getIndexFor(quadKey);
+        const resultSub = index.get(utils.mortonCodeFromQuadKey(quadKey));
 
         if (resultSub === undefined) {
             return Promise.resolve(new Response(null, { status: 204 }));
@@ -193,9 +267,9 @@ export class VersionedLayerClient {
      */
     async getPartitionsMetadata(): Promise<MetadataApi.Partitions> {
         const metaRequestBilder = await this.getRequestBuilder("metadata");
-        const latestVersion = await this.getLatestVersion();
+        const version = await this.getLatestVersion();
         return MetadataApi.getPartitions(metaRequestBilder, {
-            version: latestVersion.version,
+            version,
             layerId: this.layerId
         });
     }
@@ -211,23 +285,34 @@ export class VersionedLayerClient {
         if (!utils.isValid(rootKey)) {
             return Promise.reject(new Error("QuadKey is not valid"));
         }
-
-        const cachedIndex = this.findCachedIndex(rootKey);
-        if (cachedIndex !== undefined) {
-            return cachedIndex;
-        }
-
         return this.downloadIndex(rootKey);
+    }
+
+    /**
+     * Fetch and returns partition metadata
+     * @param partitionId The name of the partition to fetch.
+     * @returns A promise of partition metadata which used to get partition data
+     */
+    private async downloadPartitionData(
+        partitionId: string
+    ): Promise<QueryApi.Partitions> {
+        const queryRequestBilder = await this.getRequestBuilder("query");
+        const latestVersion = await this.getLatestVersion();
+        return QueryApi.getPartitionsById(queryRequestBilder, {
+            version: `${latestVersion}`,
+            layerId: this.layerId,
+            partition: [partitionId]
+        });
     }
 
     /**
      * Gets the latest available catalog version what can be used as latest layer version
      */
-    private async getLatestVersion(): Promise<MetadataApi.VersionResponse> {
+    private async getLatestVersion(): Promise<number> {
         const builder = await this.getRequestBuilder("metadata").catch(error =>
             Promise.reject(error)
         );
-        return MetadataApi.latestVersion(builder, {
+        const latestVersion = await MetadataApi.latestVersion(builder, {
             startVersion: -1
         }).catch(async (error: Response) =>
             Promise.reject(
@@ -238,64 +323,30 @@ export class VersionedLayerClient {
                 )
             )
         );
-    }
-
-    /**
-     * gets the data tag for the given tile
-     * @param quadKey
-     */
-    private async getDataTag(quadKey: QuadKey): Promise<string | undefined> {
-        const index = await this.getIndexFor(quadKey);
-        return index.get(utils.mortonCodeFromQuadKey(quadKey));
+        return latestVersion.version;
     }
 
     // finds any index that contains the given tile key
     private async getIndexFor(quadKey: QuadKey): Promise<IndexMap> {
-        for (let depth = this.indexDepth; depth >= 0; --depth) {
-            const currentIndex = this.findCachedIndex(
-                utils.computeParentKey(quadKey, depth)
-            );
-            if (currentIndex !== undefined) {
-                return currentIndex;
-            }
-        }
-
-        const index = await this.downloadIndex(
+        return this.downloadIndex(
             utils.computeParentKey(quadKey, this.indexDepth)
         );
-        return index;
     }
 
-    // downloads and caches the index
+    // downloads the index
     private async downloadIndex(indexRootKey: QuadKey): Promise<IndexMap> {
         let dsIndex: QueryApi.Index;
-        const cacheKey =
-            this.layerId +
-            "/" +
-            utils.mortonCodeFromQuadKey(indexRootKey).toString();
         const queryRequestBuilder = await this.getRequestBuilder("query");
-        const latestVersion = await this.getLatestVersion();
+        const version = await this.getLatestVersion();
 
         dsIndex = await QueryApi.quadTreeIndex(queryRequestBuilder, {
-            version: latestVersion.version,
+            version,
             layerId: this.layerId,
             quadKey: utils.mortonCodeFromQuadKey(indexRootKey).toString(),
             depth: this.indexDepth
         });
 
-        // check the cache again in case of parallel requests
-        const cachedIndex = this.indexCache.get(cacheKey);
-        if (cachedIndex !== undefined) {
-            return cachedIndex;
-        }
-
-        const index = this.parseIndex(indexRootKey, dsIndex);
-        this.cacheIndex(cacheKey, index);
-        return index;
-    }
-
-    private cacheIndex(cacheKey: string, index: IndexMap): void {
-        this.indexCache.set(cacheKey, index);
+        return this.parseIndex(indexRootKey, dsIndex);
     }
 
     private parseIndex(
@@ -335,15 +386,6 @@ export class VersionedLayerClient {
         return subQuads;
     }
 
-    // // finds a cached index for the given tile
-    private findCachedIndex(quadKey: QuadKey): IndexMap | undefined {
-        const cacheKey =
-            this.layerId +
-            "/" +
-            utils.mortonCodeFromQuadKey(quadKey).toString();
-        return this.indexCache.get(cacheKey);
-    }
-
     private async downloadTile(dataHandle: string): Promise<Response> {
         const builder = await this.getRequestBuilder("blob");
         return BlobApi.getBlob(builder, {
@@ -371,35 +413,16 @@ export class VersionedLayerClient {
     private async getRequestBuilder(
         builderType: ApiName
     ): Promise<DataStoreRequestBuilder> {
-        const url = await this.context
-            .getBaseUrl(builderType, this.hrn)
-            .catch(err =>
-                Promise.reject(
-                    `Error retrieving from cache builder for resource "${this.hrn}" and api: "${builderType}.\n${err}"`
-                )
-            );
-        return new DataStoreRequestBuilder(
-            this.context.dm,
-            url,
-            this.context.getToken
+        return RequestFactory.create(
+            builderType,
+            this.apiVersion,
+            this.settings,
+            HRN.fromString(this.hrn)
+        ).catch(err =>
+            Promise.reject(
+                `Error retrieving from cache builder for resource "${this.hrn}" and api: "${builderType}.\n${err}"`
+            )
         );
-    }
-
-    /**
-     * Fetch and returns partition metadata
-     * @param partitionId The name of the partition to fetch.
-     * @returns A promise of partition metadata which used to get partition data
-     */
-    private async downloadPartitionData(
-        partitionId: string
-    ): Promise<QueryApi.Partitions> {
-        const queryRequestBilder = await this.getRequestBuilder("query");
-        const latestVersion = await this.getLatestVersion();
-        return QueryApi.getPartitionsById(queryRequestBilder, {
-            version: `${latestVersion.version}`,
-            layerId: this.layerId,
-            partition: [partitionId]
-        });
     }
 
     private findAggregatedIndex(

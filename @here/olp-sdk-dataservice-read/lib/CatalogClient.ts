@@ -18,13 +18,17 @@
  */
 
 import { ConfigApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
-import { CatalogLayer } from "./CatalogLayer";
-import { DataStoreContext } from "./DataStoreContext";
-import { DataStoreRequestBuilder } from "./DataStoreRequestBuilder";
-import { HRN } from "./HRN";
-import { QuadKey } from "./partitioning/QuadKey";
-import { VersionedLayerClient } from "./VersionedLayerClient";
-import { VolatileLayerClient } from "./VolatileLayerClient";
+import {
+    CatalogLayer,
+    DataRequest,
+    DataStoreContext,
+    DataStoreRequestBuilder,
+    HRN,
+    OlpClientSettings,
+    QuadKey,
+    VersionedLayerClient,
+    VolatileLayerClient
+} from "@here/olp-sdk-dataservice-read";
 
 /**
  * Interface of parameters fo DatastoreClient constructor.
@@ -34,6 +38,11 @@ export interface CatalogClientParams {
      * The context of the data store with shared and cached data (base urls, for example)
      */
     context: DataStoreContext;
+
+    /**
+     * Parameter to configure the behaviour of the OlpClient
+     */
+    settings: OlpClientSettings;
 
     /**
      * The catalog HRN
@@ -51,6 +60,7 @@ export interface CatalogClientParams {
  */
 export class CatalogClient {
     private readonly context: DataStoreContext;
+    private readonly settings: OlpClientSettings;
     private readonly hrn: string;
 
     // Catalog version
@@ -73,7 +83,9 @@ export class CatalogClient {
      * Constructs a new `CatalogClient`
      */
     constructor(params: CatalogClientParams) {
+        // context will be replaced after OLPEDGE-935
         this.context = params.context;
+        this.settings = params.settings;
         this.hrn = params.hrn;
         this.version = params.version || this.MAGIC_VERSION;
     }
@@ -297,7 +309,7 @@ export class CatalogClient {
             layerClient = new VersionedLayerClient(
                 HRN.fromString(this.hrn),
                 config.id,
-                this.context
+                this.settings
             );
         } else {
             layerClient = new VolatileLayerClient({
@@ -314,11 +326,28 @@ export class CatalogClient {
             apiVersion: 2,
             getIndex: async (rootKey: QuadKey) =>
                 layerClient.getIndexMetadata(rootKey),
-            getPartition: async (id: string, requestInit?: RequestInit) =>
-                layerClient.getPartition(id, requestInit),
-            getTile: async (quadKey: QuadKey) => layerClient.getTile(quadKey),
             getPartitionsIndex: async () => layerClient.getPartitionsMetadata()
         };
+
+        // @todo temporary solution. Will be removed in scope of OLPEDGE-938
+        if (layerClient instanceof VersionedLayerClient) {
+            // make TS happy
+            const versionedLayerClient = layerClient as VersionedLayerClient;
+            result.getData = async (dataRequest: DataRequest) =>
+                versionedLayerClient.getData(dataRequest);
+        }
+
+        // @todo temporary solution. Will be removed in scope of OLPEDGE-938
+        if (layerClient instanceof VolatileLayerClient) {
+            // make TS happy
+            const volatileLayerClient = layerClient as VolatileLayerClient;
+            result.getPartition = async (
+                partitionId: string,
+                requestInit?: RequestInit
+            ) => volatileLayerClient.getPartition(partitionId, requestInit);
+            result.getTile = async (quadKey: QuadKey) =>
+                volatileLayerClient.getTile(quadKey);
+        }
 
         return result;
     }

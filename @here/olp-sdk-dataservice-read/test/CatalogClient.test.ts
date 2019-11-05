@@ -22,12 +22,15 @@ import "@here/olp-sdk-fetch";
 import { assert } from "chai";
 import sinon = require("sinon");
 
-import { CatalogClient } from "../lib/CatalogClient";
-import { DownloadManager } from "../lib/DownloadManager";
-import { DataStoreDownloadManager } from "../lib/DataStoreDownloadManager";
-import { HRN } from "../lib/HRN";
-import { DataStoreContext } from "../lib/DataStoreContext";
-import { CatalogLayer } from "../lib/CatalogLayer";
+import {
+    CatalogClient,
+    CatalogLayer,
+    DataStoreContext,
+    DataStoreDownloadManager,
+    DownloadManager,
+    HRN,
+    OlpClientSettings
+} from "@here/olp-sdk-dataservice-read";
 
 function createMockDownloadResponse(resp: Object) {
     const headers = new Headers();
@@ -1955,9 +1958,15 @@ describe("CatalogClientOffline", () => {
             environment: "here",
             getToken: newPromise
         });
+        const settings = new OlpClientSettings({
+            dm: createMockDownloadManager(),
+            environment: "here",
+            getToken: newPromise
+        });
 
         catalogClient = new CatalogClient({
             context,
+            settings,
             hrn: testHRN.toString()
         });
         assert.isNotNull(catalogClient);

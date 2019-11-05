@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { QuadKey } from "./partitioning/QuadKey";
+import { QuadKey } from "@here/olp-sdk-dataservice-read";
 
 /**
  * A typedef for a map that matches subkeys to the meta data of the given subkey.
