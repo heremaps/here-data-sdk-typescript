@@ -126,7 +126,7 @@ describe("StatistiscClient", () => {
         );
 
         const summaryRequest = new SummaryRequest()
-            .withCatalogHrn("hrn:here:data:::mocked-hrn")
+            .withCatalogHrn(mockedHRN)
             .withLayerId(mockedLayerId);
 
         const summary = await statisticsClient.getSummary(summaryRequest);
