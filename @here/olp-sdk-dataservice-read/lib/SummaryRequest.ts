@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
+import { HRN } from "./HRN";
+
 /**
  * A class that prepare information for calls to get Statistics from CoverageAPI
  */
 export class SummaryRequest {
     private catalogHrn: string | undefined;
     private layerId: string | undefined;
-
-    constructor() {}
 
     public getCatalogHrn(): string | undefined {
         return this.catalogHrn;
@@ -34,12 +34,22 @@ export class SummaryRequest {
         return this.layerId;
     }
 
-    public withCatalogHrn(hrn: string) {
-        this.catalogHrn = hrn;
+    /**
+     * Setter for the provided hrn
+     * @param hrn Required. Specify the catalog hrn
+     * @returns this to have ability to chain methods
+     */
+    public withCatalogHrn(hrn: HRN): SummaryRequest {
+        this.catalogHrn = hrn.toString();
         return this;
     }
 
-    public withLayerId(layerId: string) {
+    /**
+     * Setter for the provided layerId
+     * @param layerId Required. Specify the LayerId
+     * @returns this to have ability to chain methods
+     */
+    public withLayerId(layerId: string): SummaryRequest {
         this.layerId = layerId;
         return this;
     }

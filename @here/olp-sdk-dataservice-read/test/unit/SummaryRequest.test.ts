@@ -21,7 +21,7 @@ import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import { SummaryRequest } from "@here/olp-sdk-dataservice-read";
+import { HRN, SummaryRequest } from "@here/olp-sdk-dataservice-read";
 
 chai.use(sinonChai);
 
@@ -29,7 +29,7 @@ const assert = chai.assert;
 const expect = chai.expect;
 
 describe("SummaryRequest", () => {
-    const mockedHRN = "hrn:::mocked-hrn";
+    const mockedHRN = HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
 
     it("Should initialize", () => {
