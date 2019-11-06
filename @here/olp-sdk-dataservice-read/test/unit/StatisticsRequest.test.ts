@@ -23,6 +23,7 @@ import sinonChai = require("sinon-chai");
 
 import {
     CoverageDataType,
+    HRN,
     StatisticsRequest
 } from "@here/olp-sdk-dataservice-read";
 
@@ -32,7 +33,7 @@ const assert = chai.assert;
 const expect = chai.expect;
 
 describe("SummaryRequest", () => {
-    const mockedHRN = "hrn:::mocked-hrn";
+    const mockedHRN = HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
     const mockedDataLevel = "42";
     const mockedTimemap = CoverageDataType.TIMEMAP;

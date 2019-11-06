@@ -23,6 +23,7 @@ import sinonChai = require("sinon-chai");
 
 import {
     CoverageDataType,
+    HRN,
     StatisticsClient,
     StatisticsRequest,
     SummaryRequest
@@ -41,7 +42,7 @@ describe("StatistiscClient", () => {
     let getStatisticsBitMapStub: any;
     let getStatisticsSizeMapStub: any;
     let getStatisticsTimeMapStub: any;
-    const mockedHRN = "hrn:::mocked-hrn";
+    const mockedHRN = HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
 
@@ -93,7 +94,7 @@ describe("StatistiscClient", () => {
 
     it("Should method getSummary provide data", async () => {
         const mockedSummary: CoverageApi.LayerSummary = {
-            catalogHRN: mockedHRN,
+            catalogHRN: "hrn:here:data:::mocked-hrn",
             layer: mockedLayerId,
             levelSummary: {
                 "1": {
@@ -125,7 +126,7 @@ describe("StatistiscClient", () => {
         );
 
         const summaryRequest = new SummaryRequest()
-            .withCatalogHrn(mockedHRN)
+            .withCatalogHrn("hrn:here:data:::mocked-hrn")
             .withLayerId(mockedLayerId);
 
         const summary = await statisticsClient.getSummary(summaryRequest);

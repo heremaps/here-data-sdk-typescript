@@ -17,11 +17,12 @@
  * License-Filename: LICENSE
  */
 
+import { HRN } from "./HRN";
+
 export enum CoverageDataType {
     BITMAP = "tilemap",
     SIZEMAP = "heatmap/size",
-    TIMEMAP = "heatmap/age",
-    SUMMARY = "summary"
+    TIMEMAP = "heatmap/age"
 }
 
 /**
@@ -51,22 +52,45 @@ export class StatisticsRequest {
         return this.dataLevel;
     }
 
-    public withCatalogHrn(hrn: string) {
-        this.catalogHrn = hrn;
+    /**
+     * Setter for the provided hrn
+     * @param hrn Required. Specify the catalog hrn
+     * @returns this to have ability to chain methods
+     */
+    public withCatalogHrn(hrn: HRN): StatisticsRequest {
+        this.catalogHrn = hrn.toString();
         return this;
     }
 
-    public withLayerId(layerId: string) {
+    /**
+     * Setter for the provided layerId
+     * @param layerId Required. Specify the LayerId
+     * @returns this to have ability to chain methods
+     */
+    public withLayerId(layerId: string): StatisticsRequest {
         this.layerId = layerId;
         return this;
     }
 
-    public withTypemap(type: CoverageDataType) {
-        this.typemap = type;
+    /**
+     * Setter for the provided coverageDataType
+     * @param coverageDataType Required. This parameter points to appropriate StatisticAPI endpoint.
+     * BITMAP to fetch bitmap representing availability of data in partitions,
+     * SIZEMAP to fetch HeatMap representing partition size,
+     * TIMEMAP to fetch HeatMap representing partition update time
+     * @returns this to have ability to chain methods
+     */
+    public withTypemap(coverageDataType: CoverageDataType): StatisticsRequest {
+        this.typemap = coverageDataType;
         return this;
     }
 
-    public withDataLevel(dataLevel: string) {
+    /**
+     * Setter for the provided dataLevel
+     * @param dataLevel Required. Specify the tile level you want to get coverage data about
+     * @returns this to have ability to chain methods
+     */
+    public withDataLevel(dataLevel: string): StatisticsRequest {
         this.dataLevel = dataLevel;
         return this;
     }
