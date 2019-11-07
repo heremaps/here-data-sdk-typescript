@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { HRN } from "./HRN";
+import { HRN } from "@here/olp-sdk-dataservice-read";
 
 /**
  * A class that prepare information for calls to get Statistics from CoverageAPI

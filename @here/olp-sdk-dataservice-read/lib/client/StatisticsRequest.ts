@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { HRN } from "./HRN";
+import { HRN } from "@here/olp-sdk-dataservice-read";
 
 export enum CoverageDataType {
     BITMAP = "tilemap",
