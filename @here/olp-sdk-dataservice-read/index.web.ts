@@ -17,7 +17,6 @@
  * License-Filename: LICENSE
  */
 
-export * from "./lib/DataStoreClient";
 export * from "./lib/DataStoreDownloadManager";
 export * from "./lib/CatalogClient";
 export * from "./lib/HRN";
@@ -27,16 +26,18 @@ export * from "./lib/partitioning/QuadKey";
 export * from "./lib/partitioning/QuadKeyUtils";
 export * from "./lib/DownloadManager";
 export * from "./lib/DataStoreContext";
-export * from "./lib/StatisticsClient";
-export * from "./lib/StatisticsRequest";
-export * from "./lib/SummaryRequest";
+export * from "./lib/client/StatisticsClient";
+export * from "./lib/client/StatisticsRequest";
+export * from "./lib/client/SummaryRequest";
 export * from "./lib/VersionedLayerClient";
 export * from "./lib/VolatileLayerClient";
-export * from "./lib/ConfigClient";
-export * from "./lib/CatalogsRequest";
+export * from "./lib/client/ConfigClient";
+export * from "./lib/client/CatalogsRequest";
 export * from "./lib/utils/RequestBuilderFactory";
 export * from "./lib/utils/getEnvLookupUrl";
 export * from "./lib/client/OlpClientSettings";
 export * from "./lib/cache/ApiCacheRepository";
 export * from "./lib/cache/KeyValueCache";
 export * from "./lib/DataStoreRequestBuilder";
+export * from "./lib/client/SchemaRequest";
+export * from "./lib/client/ArtifactClient";

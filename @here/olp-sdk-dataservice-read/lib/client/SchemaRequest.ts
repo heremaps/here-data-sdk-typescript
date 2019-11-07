@@ -17,4 +17,25 @@
  * License-Filename: LICENSE
  */
 
-describe("DataStoreClient", () => {});
+import { HRN } from "@here/olp-sdk-dataservice-read";
+
+/**
+ * A class that prepare information for calls to the Artifact API.
+ */
+export class SchemaRequest {
+    private schemaHrn: HRN | undefined;
+
+    public getSchema(): HRN | undefined {
+        return this.schemaHrn;
+    }
+
+    /**
+     * Set value of schema HRN to use in methods getSchema and getSchemaDetails from [[ArtifactClient]].
+     *
+     * @param schemaHrn required, schema HRN
+     */
+    public withSchema(schemaHrn: HRN): SchemaRequest {
+        this.schemaHrn = schemaHrn;
+        return this;
+    }
+}
