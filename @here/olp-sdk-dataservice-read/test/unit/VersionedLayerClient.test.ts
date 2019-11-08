@@ -62,11 +62,11 @@ describe("VersionedLayerClient", () => {
         getPartitionsByIdStub = sandbox.stub(QueryApi, "getPartitionsById");
         getQuadTreeIndexStub = sandbox.stub(QueryApi, "quadTreeIndex");
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
-        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
         getBaseUrlRequestStub = sandbox.stub(
             dataServiceRead.RequestFactory,
             "getBaseUrl"
-        );
+            );
+        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
     afterEach(() => {
@@ -191,7 +191,7 @@ describe("VersionedLayerClient", () => {
             parentQuads: [
                 {
                     version: 12,
-                    partition: "1476147",
+                    partition: "23618403",
                     dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
                 }
             ]
@@ -217,7 +217,7 @@ describe("VersionedLayerClient", () => {
         );
 
         const dataRequest = new dataServiceRead.DataRequest().withQuadKey(
-            utils.quadKeyFromMortonCode("1476147")
+            utils.quadKeyFromMortonCode("23618403")
         );
 
         const response = await versionedLayerClient.getData(
