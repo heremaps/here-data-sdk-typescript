@@ -22,7 +22,7 @@ import {
     CoverageApi,
     MetadataApi
 } from "@here/olp-sdk-dataservice-api";
-import { DataRequest, IndexMap, QuadKey } from "@here/olp-sdk-dataservice-read";
+import { DataRequest, IndexMap, PartitionsRequest, QuadKey } from "@here/olp-sdk-dataservice-read";
 
 /**
  * @deprecated
@@ -75,6 +75,14 @@ export interface CatalogLayer extends ConfigApi.Layer {
     getData?: (dataRequest: DataRequest) => Promise<Response>;
 
     /**
+     * Fetch all partitions metadata from layer
+     * @returns list of partittions metadata
+     */
+    getPartitions?: (
+        partitionsRequest: PartitionsRequest
+    ) => Promise<MetadataApi.Partitions>;
+
+    /**
      * Asynchronously fetches a partition from this layer.
      *
      * @param partitionId The id of the partition to fetch.
@@ -99,7 +107,7 @@ export interface CatalogLayer extends ConfigApi.Layer {
      * Fetch all partitions metadata from layer
      * @returns list of partittions metadata
      */
-    getPartitionsIndex: () => Promise<MetadataApi.Partitions>;
+    getPartitionsIndex?: () => Promise<MetadataApi.Partitions>;
 
     /**
      * Asynchronously fetches data coverage bitmap of this layer.
