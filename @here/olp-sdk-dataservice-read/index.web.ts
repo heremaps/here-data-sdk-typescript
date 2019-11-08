@@ -43,3 +43,4 @@ export * from "./lib/cache/KeyValueCache";
 export * from "./lib/DataStoreRequestBuilder";
 export * from "./lib/client/SchemaRequest";
 export * from "./lib/client/ArtifactClient";
+export * from "./lib/client/PartitionsRequest";
