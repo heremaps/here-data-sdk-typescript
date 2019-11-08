@@ -26,6 +26,7 @@ import {
     DataStoreDownloadManager,
     DownloadManager,
     HRN,
+    PartitionsRequest,
     VersionedLayerClient,
     OlpClientSettings
 } from "@here/olp-sdk-dataservice-read";
@@ -580,7 +581,10 @@ describe("VersionedLayerClient", () => {
     });
 
     it("#getPartitionsMetadata", async () => {
-        const paritions = await versionedLayerClient.getPartitionsMetadata();
+        const partitionsRequest = new PartitionsRequest();
+        const paritions = await versionedLayerClient.getPartitions(
+            partitionsRequest
+        );
         assert.isDefined(paritions);
         assert.isAbove(paritions.partitions.length, 0, "index is empty");
     });

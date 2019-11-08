@@ -27,6 +27,7 @@ import {
     HRN,
     IndexMap,
     OlpClientSettings,
+    PartitionsRequest,
     QuadKey,
     RequestFactory
 } from "@here/olp-sdk-dataservice-read";
@@ -265,9 +266,11 @@ export class VersionedLayerClient {
      * Fetch all partitions metadata from layer
      * @returns list of partittions metadata
      */
-    async getPartitionsMetadata(): Promise<MetadataApi.Partitions> {
+    async getPartitions(
+        partitionsRequest: PartitionsRequest
+    ): Promise<MetadataApi.Partitions> {
         const metaRequestBilder = await this.getRequestBuilder("metadata");
-        const version = await this.getLatestVersion();
+        const version = partitionsRequest.getVersion() || (await this.getLatestVersion());
         return MetadataApi.getPartitions(metaRequestBilder, {
             version,
             layerId: this.layerId
