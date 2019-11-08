@@ -49,7 +49,7 @@ describe("SummaryRequest", () => {
         );
 
         expect(summaryRequestWithCatalogHrn.getCatalogHrn()).to.be.equal(
-            mockedHRN
+            mockedHRN.toString()
         );
         expect(summaryRequestWithLAyerId.getLayerId()).to.be.equal(
             mockedLayerId
@@ -61,7 +61,7 @@ describe("SummaryRequest", () => {
             .withCatalogHrn(mockedHRN)
             .withLayerId(mockedLayerId);
 
-        expect(summaryRequest.getCatalogHrn()).to.be.equal(mockedHRN);
+        expect(summaryRequest.getCatalogHrn()).to.be.equal(mockedHRN.toString());
         expect(summaryRequest.getLayerId()).to.be.equal(mockedLayerId);
     });
 });

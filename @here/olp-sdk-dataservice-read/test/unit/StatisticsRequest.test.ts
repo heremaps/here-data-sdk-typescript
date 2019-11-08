@@ -61,7 +61,7 @@ describe("SummaryRequest", () => {
         );
 
         expect(statisticsRequestWithCatalogHrn.getCatalogHrn()).to.be.equal(
-            mockedHRN
+            mockedHRN.toString()
         );
         expect(statisticsRequestWithLayerId.getLayerId()).to.be.equal(
             mockedLayerId
@@ -81,7 +81,7 @@ describe("SummaryRequest", () => {
             .withDataLevel(mockedDataLevel)
             .withTypemap(mockedTimemap);
 
-        expect(statisticsRequest.getCatalogHrn()).to.be.equal(mockedHRN);
+        expect(statisticsRequest.getCatalogHrn()).to.be.equal(mockedHRN.toString());
         expect(statisticsRequest.getLayerId()).to.be.equal(mockedLayerId);
         expect(statisticsRequest.getDataLevel()).to.be.equal(mockedDataLevel);
         expect(statisticsRequest.getTypemap()).to.be.equal(mockedTimemap);
