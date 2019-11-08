@@ -106,11 +106,6 @@ urlToResponses.set(
 );
 
 urlToResponses.set(
-    "https://xab.metadata.data.api.platform.here.com/metadata/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/versions/latest?startVersion=-1",
-    { version: 0 }
-);
-
-urlToResponses.set(
     "https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::sensor-data-sensoris-versioned-example/apis",
     [
         {
@@ -193,9 +188,257 @@ urlToResponses.set(
     ]
 );
 
-// // NewversionLayerClientOffline catalogs - getpartitions
 urlToResponses.set(
-    "https://xab.query.data.api.platform.here.com/query/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/partitions?partition=23618173&version=0",
+    "https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::sensor-data-sensoris-versioned-example/apis/query/v1",
+    [
+        {
+            api: "blob",
+            version: "v1",
+            baseURL:
+                "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example",
+            parameters: {}
+        },
+        {
+            api: "index",
+            version: "v1",
+            baseURL:
+                "https://index.data.api.platform.here.com/index/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example",
+            parameters: {}
+        },
+        {
+            api: "ingest",
+            version: "v1",
+            baseURL:
+                "https://ingest.data.api.platform.here.com/ingest/v1/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "metadata",
+            version: "v1",
+            baseURL:
+                "https://xab.metadata.data.api.platform.here.com/metadata/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example",
+            parameters: {}
+        },
+        {
+            api: "notification",
+            version: "v2",
+            baseURL:
+                "https://sub.data.api.platform.here.com/notification/v2/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example",
+            parameters: {}
+        },
+        {
+            api: "publish",
+            version: "v1",
+            baseURL:
+                "https://publish.data.api.platform.here.com/publish/v1/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "publish",
+            version: "v2",
+            baseURL:
+                "https://publish.data.api.platform.here.com/publish/v2/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "query",
+            version: "v1",
+            baseURL:
+                "https://xab.query.data.api.platform.here.com/query/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example",
+            parameters: {}
+        },
+        {
+            api: "statistics",
+            version: "v1",
+            baseURL:
+                "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example",
+            parameters: {}
+        },
+        {
+            api: "stream",
+            version: "v2",
+            baseURL:
+                "https://web.streaming.data.api.platform.here.com/stream/v2/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "volatile-blob",
+            version: "v1",
+            baseURL:
+                "https://volatile-blob.data.api.platform.here.com/blobstore/v1/catalogs/rib-2",
+            parameters: {}
+        }
+    ]
+);
+
+urlToResponses.set(
+    "https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::sensor-data-sensoris-versioned-example/apis/metadata/v1",
+    [
+        {
+            api: "blob",
+            version: "v1",
+            baseURL:
+                "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example",
+            parameters: {}
+        },
+        {
+            api: "index",
+            version: "v1",
+            baseURL:
+                "https://index.data.api.platform.here.com/index/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example",
+            parameters: {}
+        },
+        {
+            api: "ingest",
+            version: "v1",
+            baseURL:
+                "https://ingest.data.api.platform.here.com/ingest/v1/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "metadata",
+            version: "v1",
+            baseURL:
+                "https://xab.metadata.data.api.platform.here.com/metadata/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example",
+            parameters: {}
+        },
+        {
+            api: "notification",
+            version: "v2",
+            baseURL:
+                "https://sub.data.api.platform.here.com/notification/v2/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example",
+            parameters: {}
+        },
+        {
+            api: "publish",
+            version: "v1",
+            baseURL:
+                "https://publish.data.api.platform.here.com/publish/v1/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "publish",
+            version: "v2",
+            baseURL:
+                "https://publish.data.api.platform.here.com/publish/v2/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "query",
+            version: "v1",
+            baseURL:
+                "https://xab.query.data.api.platform.here.com/query/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example",
+            parameters: {}
+        },
+        {
+            api: "statistics",
+            version: "v1",
+            baseURL:
+                "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example",
+            parameters: {}
+        },
+        {
+            api: "stream",
+            version: "v2",
+            baseURL:
+                "https://web.streaming.data.api.platform.here.com/stream/v2/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "volatile-blob",
+            version: "v1",
+            baseURL:
+                "https://volatile-blob.data.api.platform.here.com/blobstore/v1/catalogs/rib-2",
+            parameters: {}
+        }
+    ]
+);
+
+urlToResponses.set(
+    "https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::sensor-data-sensoris-versioned-example/apis/blob/v1",
+    [
+        {
+            api: "blob",
+            version: "v1",
+            baseURL:
+                "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example",
+            parameters: {}
+        },
+        {
+            api: "index",
+            version: "v1",
+            baseURL:
+                "https://index.data.api.platform.here.com/index/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example",
+            parameters: {}
+        },
+        {
+            api: "ingest",
+            version: "v1",
+            baseURL:
+                "https://ingest.data.api.platform.here.com/ingest/v1/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "metadata",
+            version: "v1",
+            baseURL:
+                "https://xab.metadata.data.api.platform.here.com/metadata/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example",
+            parameters: {}
+        },
+        {
+            api: "notification",
+            version: "v2",
+            baseURL:
+                "https://sub.data.api.platform.here.com/notification/v2/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example",
+            parameters: {}
+        },
+        {
+            api: "publish",
+            version: "v1",
+            baseURL:
+                "https://publish.data.api.platform.here.com/publish/v1/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "publish",
+            version: "v2",
+            baseURL:
+                "https://publish.data.api.platform.here.com/publish/v2/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "query",
+            version: "v1",
+            baseURL:
+                "https://xab.query.data.api.platform.here.com/query/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example",
+            parameters: {}
+        },
+        {
+            api: "statistics",
+            version: "v1",
+            baseURL:
+                "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example",
+            parameters: {}
+        },
+        {
+            api: "stream",
+            version: "v2",
+            baseURL:
+                "https://web.streaming.data.api.platform.here.com/stream/v2/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "volatile-blob",
+            version: "v1",
+            baseURL:
+                "https://volatile-blob.data.api.platform.here.com/blobstore/v1/catalogs/rib-2",
+            parameters: {}
+        }
+    ]
+);
+
+urlToResponses.set(
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/partitions?partition=23618173&version=0",
     {
         partitions: [
             {
@@ -209,7 +452,7 @@ urlToResponses.set(
 );
 
 urlToResponses.set(
-    "https://xab.metadata.data.api.platform.here.com/metadata/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/partitions?version=0",
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/partitions?version=0",
     {
         partitions: [
             {
@@ -263,18 +506,9 @@ urlToResponses.set(
     createMockDownloadResponse("DT_1_1010", "image/jpeg")
 );
 
-// NewversionLayerClientOffline #getMissingTitle
-urlToResponses.set(
-    "https://xab.query.data.api.platform.here.com/query/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/versions/0/quadkeys/1/depths/4",
-    createMockDownloadResponse({
-        subQuads: [],
-        parentQuads: []
-    })
-);
 
-// NewversionLayerClientOffline #getIndex
 urlToResponses.set(
-    "https://xab.query.data.api.platform.here.com/query/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/versions/0/quadkeys/23618359/depths/4",
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/versions/0/quadkeys/5766/depths/4",
     {
         subQuads: [
             {
@@ -293,55 +527,79 @@ urlToResponses.set(
     }
 );
 
-// NewversionLayerClientOffline #getTile
 urlToResponses.set(
-    "https://xab.query.data.api.platform.here.com/query/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/versions/0/quadkeys/92259/depths/4",
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/versions/0/quadkeys/23064/depths/4",
     {
         subQuads: [
             {
                 version: 12,
-                subQuadKey: "19",
-                dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
-            },
-            {
-                version: 12,
-                subQuadKey: "79",
-                dataHandle: "edac817d-1e62-464b-9e0f-79ea3694933d"
-            },
-            {
-                version: 12,
-                subQuadKey: "311",
+                subQuadKey: "1",
                 dataHandle: "c9116bb9-7d00-44bf-9b26-b4ab4c274665"
-            },
-            {
-                version: 12,
-                subQuadKey: "316",
-                dataHandle: "541a3304-3bfe-4625-9898-29ea4869b052"
-            },
-            {
-                version: 12,
-                subQuadKey: "317",
-                dataHandle: "448495fc-5359-467a-8a12-4179c0c56b25"
-            },
-            {
-                version: 12,
-                subQuadKey: "318",
-                dataHandle: "e91a7396-c23b-46f5-9d70-6534c41c71f1"
-            },
-            {
-                version: 12,
-                subQuadKey: "319",
-                dataHandle: "b49c283d-e234-469b-aa87-2e11edb17ce4"
             }
         ],
-        parentQuads: []
+        parentQuads: [
+            {
+                version: 12,
+                partition: "5904591",
+                dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
+            }
+        ]
     }
 );
+
+urlToResponses.set(
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/versions/0/quadkeys/92259/depths/4",
+    {
+        subQuads: [
+            {
+                version: 12,
+                subQuadKey: "1",
+                dataHandle: "c9116bb9-7d00-44bf-9b26-b4ab4c274665"
+            }
+        ],
+        parentQuads: [
+            {
+                version: 12,
+                partition: "23618359",
+                dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
+            }
+        ]
+    }
+);
+
+// NewversionLayerClientOffline #getIndex
+urlToResponses.set(
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/versions/0/quadkeys/23618359/depths/4",
+    {
+        subQuads: [
+            {
+                version: 12,
+                subQuadKey: "1",
+                dataHandle: "c9116bb9-7d00-44bf-9b26-b4ab4c274665"
+            }
+        ],
+        parentQuads: [
+            {
+                version: 12,
+                partition: "1476147",
+                dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
+            }
+        ]
+    }
+);
+
 
 const headersMock = new Headers();
 headersMock.append("etag", "1237696a7c876b7e");
 
 // NewversionLayerClientOffline - blob
+urlToResponses.set(
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/versions/latest?startVersion=-1",
+    {
+        version: 0
+    }
+);
+
 urlToResponses.set(
     "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/data/c9116bb9-7d00-44bf-9b26-b4ab4c274665",
     {
@@ -356,20 +614,6 @@ urlToResponses.set(
     }
 );
 
-// NewversionLayerClientOffline #getTitles
-urlToResponses.set(
-    "https://xab.query.data.api.platform.here.com/query/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/versions/0/quadkeys/5766/depths/4",
-    {
-        subQuads: [
-            {
-                version: 12,
-                subQuadKey: "307",
-                dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
-            }
-        ],
-        parentQuads: []
-    }
-);
 // NewversionLayerClientOffline #getTitles
 urlToResponses.set(
     "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/data/da51785a-54b0-40cd-95ac-760f56fe5457",
@@ -526,17 +770,6 @@ describe("VersionedLayerClient", () => {
 
         const buf = await response.text();
         assert.strictEqual(buf, "DT_1_1001");
-
-        // fetch again, this time with etag
-        const cachedDataRequest = new DataRequest().withQuadKey(
-            utils.quadKeyFromMortonCode("23618359")
-        );
-        const cachedResponse = await versionedLayerClient.getData(
-            cachedDataRequest
-        );
-
-        // make sure status is 304 - not modified
-        assert.strictEqual(cachedResponse.status, 304);
     });
 
     it("#abortGetPartition", async () => {
@@ -557,26 +790,16 @@ describe("VersionedLayerClient", () => {
     });
 
     it("#getAggregatedTile", async () => {
-        const tileDataRequest = new DataRequest().withQuadKey(
+        const aggregatedResponse = await versionedLayerClient.getAggregatedTile(
             utils.quadKeyFromMortonCode("5904591")
         );
-        const response = await versionedLayerClient.getData(tileDataRequest);
-
-        assert.strictEqual(response.status, 204);
-
-        // try a direct ancestor
-        {
-            const aggregatedResponse = await versionedLayerClient.getAggregatedTile(
-                utils.quadKeyFromMortonCode("5904591")
+        assert.isTrue(aggregatedResponse.ok);
+        assert.isDefined(aggregatedResponse.quadKey);
+        if (aggregatedResponse.quadKey !== undefined) {
+            assert.strictEqual(
+                utils.mortonCodeFromQuadKey(aggregatedResponse.quadKey),
+                5904591
             );
-            assert.isTrue(aggregatedResponse.ok);
-            assert.isDefined(aggregatedResponse.quadKey);
-            if (aggregatedResponse.quadKey !== undefined) {
-                assert.strictEqual(
-                    utils.mortonCodeFromQuadKey(aggregatedResponse.quadKey),
-                    5904591
-                );
-            }
         }
     });
 
