@@ -40,6 +40,9 @@ export class RequestFactory {
      * @param serviceVersion The version of the service
      * @param settings Instance of [[OlpClientSettings]]
      * @param hrn Optional [[HRN]] for the catalog
+     * @param abortSignal A signal object that allows you to communicate with a request (such as a Fetch)
+     * and abort it if required via an AbortController object
+     *  @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
      *
      * @returns The [[Promise]] with constructed [[DataStoreRequestBuilder]]
      */
@@ -47,7 +50,8 @@ export class RequestFactory {
         serviceName: ApiName,
         serviceVersion: string,
         settings: OlpClientSettings,
-        hrn?: HRN
+        hrn?: HRN,
+        abortSignal?: AbortSignal
     ): Promise<DataStoreRequestBuilder> {
         return RequestFactory.getBaseUrl(
             serviceName,
@@ -61,7 +65,8 @@ export class RequestFactory {
                           new DataStoreRequestBuilder(
                               settings.downloadManager,
                               baseUrl,
-                              settings.token
+                              settings.token,
+                              abortSignal
                           )
                       )
                     : Promise.reject(
