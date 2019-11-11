@@ -102,7 +102,7 @@ export class DataStoreDownloadManager implements DownloadManager {
                 (err.hasOwnProperty("name") && err.name === "AbortError") ||
                 retryCount > maxRetries
             ) {
-                throw err;
+                return Promise.reject(err);
             }
         }
         return DataStoreDownloadManager.waitFor(

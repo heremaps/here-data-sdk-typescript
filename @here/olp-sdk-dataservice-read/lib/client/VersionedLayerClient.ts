@@ -65,7 +65,17 @@ export class VersionedLayerClient {
         this.hrn = catalogHrn.toString();
     }
 
-    async getData(dataRequest: DataRequest): Promise<Response> {
+    /**
+     * Fetch partition by id or quadKey or dataHandle
+     * @param dataRequest Instance of the configuret request params [[DataRequest]]
+     * @param abortSignal A signal object that allows you to communicate with a request (such as a Fetch)
+     * and abort it if required via an AbortController object
+     *  @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
+     */
+    async getData(
+        dataRequest: DataRequest,
+        abortSignal?: AbortSignal
+    ): Promise<Response> {
         const dataHandle = dataRequest.getDataHandle();
         const partitionId = dataRequest.getPartitionId();
         const quadKey = dataRequest.getQuadKey();
@@ -77,7 +87,7 @@ export class VersionedLayerClient {
             quadKey !== undefined
         ) {
             if (dataHandle) {
-                return this.downloadTile(dataHandle);
+                return this.downloadTile(dataHandle, abortSignal);
             }
 
             if (partitionId) {
@@ -85,14 +95,14 @@ export class VersionedLayerClient {
                     partitionId,
                     version
                 ).catch(error => Promise.reject(error));
-                return this.downloadTile(partitionIdDataHandle);
+                return this.downloadTile(partitionIdDataHandle, abortSignal);
             }
 
             if (quadKey) {
                 const quadKeyDataHandle = await this.getDataHandleByQuadKey(
                     quadKey
                 ).catch(error => Promise.reject(error));
-                return this.downloadTile(quadKeyDataHandle);
+                return this.downloadTile(quadKeyDataHandle, abortSignal);
             }
         }
 
@@ -270,7 +280,8 @@ export class VersionedLayerClient {
         partitionsRequest: PartitionsRequest
     ): Promise<MetadataApi.Partitions> {
         const metaRequestBilder = await this.getRequestBuilder("metadata");
-        const version = partitionsRequest.getVersion() || (await this.getLatestVersion());
+        const version =
+            partitionsRequest.getVersion() || (await this.getLatestVersion());
         return MetadataApi.getPartitions(metaRequestBilder, {
             version,
             layerId: this.layerId
@@ -389,22 +400,15 @@ export class VersionedLayerClient {
         return subQuads;
     }
 
-    private async downloadTile(dataHandle: string): Promise<Response> {
-        const builder = await this.getRequestBuilder("blob");
+    private async downloadTile(
+        dataHandle: string,
+        abortSignal?: AbortSignal
+    ): Promise<Response> {
+        const builder = await this.getRequestBuilder("blob", abortSignal);
         return BlobApi.getBlob(builder, {
             dataHandle,
             layerId: this.layerId
-        }).catch(async error => {
-            return Promise.reject(
-                new ErrorHTTPResponse(
-                    `Blob Service error: HTTP ${
-                        error.status
-                    }, ${error.statusText || error.cause || ""}` +
-                        `\n${error.action || ""}`,
-                    error
-                )
-            );
-        });
+        }).catch(async error => Promise.reject(`Blob Service error: ${error}`));
     }
 
     /**
@@ -414,13 +418,15 @@ export class VersionedLayerClient {
      * @returns requestBuilder
      */
     private async getRequestBuilder(
-        builderType: ApiName
+        builderType: ApiName,
+        abortSignal?: AbortSignal
     ): Promise<DataStoreRequestBuilder> {
         return RequestFactory.create(
             builderType,
             this.apiVersion,
             this.settings,
-            HRN.fromString(this.hrn)
+            HRN.fromString(this.hrn),
+            abortSignal
         ).catch(err =>
             Promise.reject(
                 `Error retrieving from cache builder for resource "${this.hrn}" and api: "${builderType}.\n${err}"`
