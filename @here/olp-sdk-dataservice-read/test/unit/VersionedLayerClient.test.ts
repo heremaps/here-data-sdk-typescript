@@ -29,7 +29,6 @@ import { Index } from "@here/olp-sdk-dataservice-api/lib/query-api";
 chai.use(sinonChai);
 
 const assert = chai.assert;
-const expect = chai.expect;
 
 describe("VersionedLayerClient", () => {
     let sandbox: sinon.SinonSandbox;
@@ -65,7 +64,7 @@ describe("VersionedLayerClient", () => {
         getBaseUrlRequestStub = sandbox.stub(
             dataServiceRead.RequestFactory,
             "getBaseUrl"
-            );
+        );
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
@@ -238,5 +237,50 @@ describe("VersionedLayerClient", () => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.message);
             });
+    });
+
+    it("Should be aborted fetching by abort signal", async () => {
+        const mockedBlobData = new Response("mocked-blob-response");
+        const mockedPartitionsIdData = {
+            partitions: [
+                {
+                    version: 1,
+                    partition: "42",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+                }
+            ]
+        };
+
+        getPartitionsByIdStub.callsFake(
+            (builder: any, params: any): Promise<QueryApi.Partitions> => {
+                return Promise.resolve(mockedPartitionsIdData);
+            }
+        );
+        getBlobStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return builder.abortSignal.aborted
+                    ? Promise.reject("AbortError")
+                    : Promise.resolve(mockedBlobData);
+            }
+        );
+
+        const dataRequest = new dataServiceRead.DataRequest()
+            .withPartitionId("42")
+            .withVersion(2);
+
+        const abortController = new AbortController();
+
+        versionedLayerClient
+            .getData(
+                (dataRequest as unknown) as dataServiceRead.DataRequest,
+                abortController.signal
+            )
+            .then()
+            .catch((err: any) => {
+                assert.strictEqual(err, "AbortError");
+                assert.isTrue(abortController.signal.aborted);
+            });
+
+        abortController.abort();
     });
 });

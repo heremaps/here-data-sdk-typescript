@@ -49,21 +49,20 @@ export class DataStoreRequestBuilder extends RequestBuilder {
     constructor(
         readonly downloadManager: DownloadManager,
         baseUrl: string,
-        private readonly getBearerToken: () => Promise<string>
+        private readonly getBearerToken: () => Promise<string>,
+        private readonly abortSignal?: AbortSignal
     ) {
         super(baseUrl);
     }
 
-    clone(baseUrl?: string): DataStoreRequestBuilder {
-        return new DataStoreRequestBuilder(
-            this.downloadManager,
-            baseUrl === undefined ? this.baseUrl : baseUrl,
-            this.getBearerToken
-        );
-    }
-
     async download<T>(url: string, init?: RequestInit): Promise<T> {
-        const options = await this.addBearerToken(init);
+        let options = await this.addBearerToken(init);
+        if (this.abortSignal) {
+            options = {
+                ...options,
+                ...this.addAbortSignal(init)
+            };
+        }
         return this.downloadManager
             .download(url, options)
             .then(result => result.json())
@@ -71,7 +70,13 @@ export class DataStoreRequestBuilder extends RequestBuilder {
     }
 
     async downloadBlob(url: string, init?: RequestInit): Promise<Response> {
-        const options = await this.addBearerToken(init);
+        let options = await this.addBearerToken(init);
+        if (this.abortSignal) {
+            options = {
+                ...options,
+                ...this.addAbortSignal(init)
+            };
+        }
         return this.downloadManager
             .download(url, options)
             .catch(err => Promise.reject(err));
@@ -79,5 +84,11 @@ export class DataStoreRequestBuilder extends RequestBuilder {
 
     private async addBearerToken(init?: RequestInit): Promise<RequestInit> {
         return addBearerToken(this.getBearerToken, init);
+    }
+
+    private addAbortSignal(init?: RequestInit): RequestInit {
+        const options: RequestInit = init || {};
+        options.signal = this.abortSignal;
+        return options;
     }
 }
