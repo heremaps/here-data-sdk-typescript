@@ -21,11 +21,13 @@ import * as utils from "../lib/partitioning/QuadKeyUtils";
 import { assert } from "chai";
 import sinon = require("sinon");
 
-import { DownloadManager } from "../lib/DownloadManager";
-import { DataStoreDownloadManager } from "../lib/DataStoreDownloadManager";
-import { VolatileLayerClient } from "../lib/VolatileLayerClient";
-import { DataStoreContext } from "../lib/DataStoreContext";
-import { url } from "inspector";
+import {
+    DownloadManager,
+    DataStoreDownloadManager,
+    HRN,
+    OlpClientSettings,
+    VolatileLayerClient
+} from "@here/olp-sdk-dataservice-read";
 
 function createMockDownloadResponse(resp: Object, blob?: string) {
     const headers = new Headers();
@@ -156,7 +158,7 @@ urlToResponses.set(
             api: "query",
             version: "v1",
             baseURL:
-                "https://xab.query.data.api.platform.here.com/query/v1/catalogs/hrn:here:data:::live-weather-na",
+                "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::live-weather-na",
             parameters: {}
         },
         {
@@ -184,7 +186,256 @@ urlToResponses.set(
 );
 
 urlToResponses.set(
-    "https://xab.query.data.api.platform.here.com/query/v1/catalogs/hrn:here:data:::live-weather-na/layers/latest-data/quadkeys/75717/depths/4",
+    "https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::live-weather-na/apis/query/v1",
+    [
+        {
+            api: "blob",
+            version: "v1",
+            baseURL:
+                "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::live-weather-na",
+            parameters: {}
+        },
+        {
+            api: "index",
+            version: "v1",
+            baseURL:
+                "https://index.data.api.platform.here.com/index/v1/catalogs/hrn:here:data:::live-weather-na",
+            parameters: {}
+        },
+        {
+            api: "ingest",
+            version: "v1",
+            baseURL:
+                "https://ingest.data.api.platform.here.com/ingest/v1/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "metadata",
+            version: "v1",
+            baseURL:
+                "https://xab.metadata.data.api.platform.here.com/metadata/v1/catalogs/hrn:here:data:::live-weather-na",
+            parameters: {}
+        },
+        {
+            api: "notification",
+            version: "v2",
+            baseURL:
+                "https://sub.data.api.platform.here.com/notification/v2/catalogs/hrn:here:data:::live-weather-na",
+            parameters: {}
+        },
+        {
+            api: "publish",
+            version: "v1",
+            baseURL:
+                "https://publish.data.api.platform.here.com/publish/v1/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "publish",
+            version: "v2",
+            baseURL:
+                "https://publish.data.api.platform.here.com/publish/v2/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "query",
+            version: "v1",
+            baseURL:
+                "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::live-weather-na",
+            parameters: {}
+        },
+        {
+            api: "statistics",
+            version: "v1",
+            baseURL:
+                "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::live-weather-na",
+            parameters: {}
+        },
+        {
+            api: "stream",
+            version: "v2",
+            baseURL:
+                "https://web.streaming.data.api.platform.here.com/stream/v2/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "volatile-blob",
+            version: "v1",
+            baseURL:
+                "https://volatile-blob.data.api.platform.here.com/blobstore/v1/catalogs/rib-2",
+            parameters: {}
+        }
+    ]
+);
+
+urlToResponses.set(
+    "https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::live-weather-na/apis/blob/v1",
+    [
+        {
+            api: "blob",
+            version: "v1",
+            baseURL:
+                "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::live-weather-na",
+            parameters: {}
+        },
+        {
+            api: "index",
+            version: "v1",
+            baseURL:
+                "https://index.data.api.platform.here.com/index/v1/catalogs/hrn:here:data:::live-weather-na",
+            parameters: {}
+        },
+        {
+            api: "ingest",
+            version: "v1",
+            baseURL:
+                "https://ingest.data.api.platform.here.com/ingest/v1/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "metadata",
+            version: "v1",
+            baseURL:
+                "https://xab.metadata.data.api.platform.here.com/metadata/v1/catalogs/hrn:here:data:::live-weather-na",
+            parameters: {}
+        },
+        {
+            api: "notification",
+            version: "v2",
+            baseURL:
+                "https://sub.data.api.platform.here.com/notification/v2/catalogs/hrn:here:data:::live-weather-na",
+            parameters: {}
+        },
+        {
+            api: "publish",
+            version: "v1",
+            baseURL:
+                "https://publish.data.api.platform.here.com/publish/v1/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "publish",
+            version: "v2",
+            baseURL:
+                "https://publish.data.api.platform.here.com/publish/v2/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "query",
+            version: "v1",
+            baseURL:
+                "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::live-weather-na",
+            parameters: {}
+        },
+        {
+            api: "statistics",
+            version: "v1",
+            baseURL:
+                "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::live-weather-na",
+            parameters: {}
+        },
+        {
+            api: "stream",
+            version: "v2",
+            baseURL:
+                "https://web.streaming.data.api.platform.here.com/stream/v2/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "volatile-blob",
+            version: "v1",
+            baseURL:
+                "https://volatile-blob.data.api.platform.here.com/blobstore/v1/catalogs/rib-2",
+            parameters: {}
+        }
+    ]
+);
+
+urlToResponses.set(
+    "https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::live-weather-na/apis/metadata/v1",
+    [
+        {
+            api: "blob",
+            version: "v1",
+            baseURL:
+                "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::live-weather-na",
+            parameters: {}
+        },
+        {
+            api: "index",
+            version: "v1",
+            baseURL:
+                "https://index.data.api.platform.here.com/index/v1/catalogs/hrn:here:data:::live-weather-na",
+            parameters: {}
+        },
+        {
+            api: "ingest",
+            version: "v1",
+            baseURL:
+                "https://ingest.data.api.platform.here.com/ingest/v1/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "metadata",
+            version: "v1",
+            baseURL:
+                "https://xab.metadata.data.api.platform.here.com/metadata/v1/catalogs/hrn:here:data:::live-weather-na",
+            parameters: {}
+        },
+        {
+            api: "notification",
+            version: "v2",
+            baseURL:
+                "https://sub.data.api.platform.here.com/notification/v2/catalogs/hrn:here:data:::live-weather-na",
+            parameters: {}
+        },
+        {
+            api: "publish",
+            version: "v1",
+            baseURL:
+                "https://publish.data.api.platform.here.com/publish/v1/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "publish",
+            version: "v2",
+            baseURL:
+                "https://publish.data.api.platform.here.com/publish/v2/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "query",
+            version: "v1",
+            baseURL:
+                "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::live-weather-na",
+            parameters: {}
+        },
+        {
+            api: "statistics",
+            version: "v1",
+            baseURL:
+                "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::live-weather-na",
+            parameters: {}
+        },
+        {
+            api: "stream",
+            version: "v2",
+            baseURL:
+                "https://web.streaming.data.api.platform.here.com/stream/v2/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "volatile-blob",
+            version: "v1",
+            baseURL:
+                "https://volatile-blob.data.api.platform.here.com/blobstore/v1/catalogs/rib-2",
+            parameters: {}
+        }
+    ]
+);
+
+urlToResponses.set(
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::live-weather-na/layers/latest-data/quadkeys/75717/depths/4",
     {
         partitions: [
             {
@@ -198,7 +449,7 @@ urlToResponses.set(
 );
 
 urlToResponses.set(
-    "https://xab.query.data.api.platform.here.com/query/v1/catalogs/hrn:here:data:::live-weather-na/layers/latest-data/partitions?partition=75717",
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::live-weather-na/layers/latest-data/partitions?partition=75717",
     {
         partitions: [
             {
@@ -212,7 +463,7 @@ urlToResponses.set(
 );
 
 urlToResponses.set(
-    "https://xab.metadata.data.api.platform.here.com/metadata/v1/catalogs/hrn:here:data:::live-weather-na/layers/latest-data/partitions",
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::live-weather-na/layers/latest-data/partitions",
     {
         partitions: [
             {
@@ -240,7 +491,7 @@ const headersMock = new Headers();
 headersMock.append("etag", "1237696a7c876b7e");
 
 urlToResponses.set(
-    "https://xab.query.data.api.platform.here.com/query/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/versions/0/quadkeys/23618359/depths/4",
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::sensor-data-sensoris-versioned-example/layers/protobuf-example-berlin-v1/versions/0/quadkeys/23618359/depths/4",
     {
         subQuads: [
             {
@@ -252,8 +503,9 @@ urlToResponses.set(
         parentQuads: []
     }
 );
+// https://blob.data.api.platform.here.com/blobstore/
 urlToResponses.set(
-    "https://xab.query.data.api.platform.here.com/query/v1/catalogs/hrn:here:data:::live-weather-na/layers/latest-data/quadkeys/5766/depths/4",
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::live-weather-na/layers/latest-data/quadkeys/5766/depths/4",
     {
         subQuads: [
             {
@@ -263,6 +515,26 @@ urlToResponses.set(
             }
         ],
         parentQuads: []
+    }
+);
+
+urlToResponses.set(
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::live-weather-na/layers/latest-data/quadkeys/23064/depths/4",
+    {
+        subQuads: [
+            {
+                version: 12,
+                subQuadKey: "1",
+                dataHandle: "c9116bb9-7d00-44bf-9b26-b4ab4c274665"
+            }
+        ],
+        parentQuads: [
+            {
+                version: 12,
+                partition: "5904591",
+                dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
+            }
+        ]
     }
 );
 
@@ -281,7 +553,7 @@ urlToResponses.set(
 );
 
 urlToResponses.set(
-    "https://xab.query.data.api.platform.here.com/query/v1/catalogs/hrn:here:data:::live-weather-na/layers/latest-data/quadkeys/1/depths/4",
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::live-weather-na/layers/latest-data/quadkeys/1/depths/4",
     createMockDownloadResponse({
         subQuads: [],
         parentQuads: []
@@ -327,7 +599,7 @@ urlToResponses.set(
 );
 
 urlToResponses.set(
-    "https://xab.query.data.api.platform.here.com/query/v1/catalogs/hrn:here:data:::live-weather-na/layers/latest-data/quadkeys/92259/depths/4",
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::live-weather-na/layers/latest-data/quadkeys/92259/depths/4",
     {
         subQuads: [
             {
@@ -453,18 +725,18 @@ describe("volatileLayerClient", () => {
         const testHRN = "hrn:here:data:::live-weather-na";
         const newPromise = () => Promise.resolve("7534286159");
 
-        const context = new DataStoreContext({
+        const settings = new OlpClientSettings({
             getToken: newPromise,
             environment: "here",
             dm: createMockDownloadManager()
         });
 
-        assert.isNotNull(context);
-        volatileLayerClient = await new VolatileLayerClient({
-            context,
-            hrn: testHRN,
-            layerId: "latest-data"
-        });
+        assert.isNotNull(settings);
+        volatileLayerClient = await new VolatileLayerClient(
+            HRN.fromString(testHRN),
+            "latest-data",
+            settings
+        );
         assert.isNotNull(volatileLayerClient);
     });
 
@@ -534,24 +806,16 @@ describe("volatileLayerClient", () => {
     });
 
     it("#getAggregatedTile", async () => {
-        const response = await volatileLayerClient.getTile(
+        const aggregatedResponse = await volatileLayerClient.getAggregatedTile(
             utils.quadKeyFromMortonCode("5904591")
         );
-        assert.strictEqual(response.status, 204);
-
-        // try a direct ancestor
-        {
-            const aggregatedResponse = await volatileLayerClient.getAggregatedTile(
-                utils.quadKeyFromMortonCode("5904591")
+        assert.isTrue(aggregatedResponse.ok);
+        assert.isDefined(aggregatedResponse.quadKey);
+        if (aggregatedResponse.quadKey !== undefined) {
+            assert.strictEqual(
+                utils.mortonCodeFromQuadKey(aggregatedResponse.quadKey),
+                5904591
             );
-            assert.isTrue(aggregatedResponse.ok);
-            assert.isDefined(aggregatedResponse.quadKey);
-            if (aggregatedResponse.quadKey !== undefined) {
-                assert.strictEqual(
-                    utils.mortonCodeFromQuadKey(aggregatedResponse.quadKey),
-                    5904591
-                );
-            }
         }
     });
 
