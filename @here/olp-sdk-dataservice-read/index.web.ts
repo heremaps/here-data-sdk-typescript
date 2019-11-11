@@ -32,7 +32,7 @@ export * from "./lib/client/StatisticsClient";
 export * from "./lib/client/StatisticsRequest";
 export * from "./lib/client/SummaryRequest";
 export * from "./lib/client/VersionedLayerClient";
-export * from "./lib/VolatileLayerClient";
+export * from "./lib/client/VolatileLayerClient";
 export * from "./lib/client/ConfigClient";
 export * from "./lib/client/CatalogsRequest";
 export * from "./lib/utils/RequestBuilderFactory";

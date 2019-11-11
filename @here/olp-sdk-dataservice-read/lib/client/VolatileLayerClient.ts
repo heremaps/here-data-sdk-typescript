@@ -23,46 +23,24 @@ import {
     MetadataApi,
     QueryApi
 } from "@here/olp-sdk-dataservice-api";
-import { ApiName } from "./cache/ApiCacheRepository";
 import {
     AggregatedDownloadResponse,
+    ApiName,
+    DataStoreRequestBuilder,
     ErrorHTTPResponse,
-    IndexMap
-} from "./CatalogClientCommon";
-import { DataStoreContext } from "./DataStoreContext";
-import { DataStoreRequestBuilder } from "./DataStoreRequestBuilder";
-import { LRUCache } from "./LRUCache";
-import { QuadKey } from "./partitioning/QuadKey";
-import * as utils from "./partitioning/QuadKeyUtils";
-
-/**
- * Parameters for `VolatileLayerClient` constructor.
- */
-export interface VolatileLayerClientParams {
-    /**
-     * Context which stores and caches the shared information needed for that clients
-     */
-    context: DataStoreContext;
-    /**
-     * Specify the catalog HRN
-     */
-    hrn: string;
-    /**
-     * Layer id. It is used as layer main identifier in api queries
-     */
-    layerId: string;
-}
+    HRN,
+    IndexMap,
+    OlpClientSettings,
+    QuadKey,
+    RequestFactory
+} from "@here/olp-sdk-dataservice-read";
+import * as utils from "../partitioning/QuadKeyUtils";
 
 export class VolatileLayerClient {
+    private readonly apiVersion: string = "v1";
     readonly hrn: string;
-    readonly layerId: string;
-    readonly context: DataStoreContext;
 
     private readonly indexDepth = 4;
-    private INDEX_CACHE_SIZE = 64;
-    private readonly indexCache = new LRUCache<string, IndexMap>(
-        this.INDEX_CACHE_SIZE
-    );
 
     private static subkeyAddFunction(): (
         quadKey: QuadKey,
@@ -77,10 +55,12 @@ export class VolatileLayerClient {
         return (key: string) => utils.quadKeyFromMortonCode(key);
     }
 
-    constructor(params: VolatileLayerClientParams) {
-        this.context = params.context;
-        this.hrn = params.hrn;
-        this.layerId = params.layerId;
+    constructor(
+        catalogHrn: HRN,
+        readonly layerId: string,
+        readonly settings: OlpClientSettings
+    ) {
+        this.hrn = catalogHrn.toString();
     }
 
     /**
@@ -145,12 +125,6 @@ export class VolatileLayerClient {
         if (!utils.isValid(rootKey)) {
             return Promise.reject(new Error("QuadKey is not valid"));
         }
-
-        const cachedIndex = this.findCachedIndex(rootKey);
-        if (cachedIndex !== undefined) {
-            return cachedIndex;
-        }
-
         return this.downloadIndex(rootKey);
     }
 
@@ -250,19 +224,9 @@ export class VolatileLayerClient {
 
     // finds any index that contains the given tile key
     private async getIndexFor(quadKey: QuadKey): Promise<IndexMap> {
-        for (let depth = this.indexDepth; depth >= 0; --depth) {
-            const currentIndex = this.findCachedIndex(
-                utils.computeParentKey(quadKey, depth)
-            );
-            if (currentIndex !== undefined) {
-                return currentIndex;
-            }
-        }
-
-        const index = await this.downloadIndex(
+        return this.downloadIndex(
             utils.computeParentKey(quadKey, this.indexDepth)
         );
-        return index;
     }
 
     private async downloadTile(dataHandle: string): Promise<Response> {
@@ -295,38 +259,25 @@ export class VolatileLayerClient {
      * @returns requestBuilder
      */
     private async getRequestBuilder(
-        builderType: ApiName
+        builderType: ApiName,
+        abortSignal?: AbortSignal
     ): Promise<DataStoreRequestBuilder> {
-        const url = await this.context
-            .getBaseUrl(builderType, this.hrn)
-            .catch(err =>
-                Promise.reject(
-                    `Error retrieving from cache builder for resource "${this.hrn}" and api: "${builderType}.\n${err}"`
-                )
-            );
-        return new DataStoreRequestBuilder(
-            this.context.dm,
-            url,
-            this.context.getToken
+        return RequestFactory.create(
+            builderType,
+            this.apiVersion,
+            this.settings,
+            HRN.fromString(this.hrn),
+            abortSignal
+        ).catch(err =>
+            Promise.reject(
+                `Error retrieving from cache builder for resource "${this.hrn}" and api: "${builderType}.\n${err}"`
+            )
         );
-    }
-
-    // // finds a cached index for the given tile
-    private findCachedIndex(quadKey: QuadKey): IndexMap | undefined {
-        const cacheKey =
-            this.layerId +
-            "/" +
-            utils.mortonCodeFromQuadKey(quadKey).toString();
-        return this.indexCache.get(cacheKey);
     }
 
     // downloads and caches the index
     private async downloadIndex(indexRootKey: QuadKey): Promise<IndexMap> {
         let dsIndex: ConfigApi.Index;
-        const cacheKey =
-            this.layerId +
-            "/" +
-            utils.mortonCodeFromQuadKey(indexRootKey).toString();
         const queryRequestBuilder = await this.getRequestBuilder("query");
 
         dsIndex = await QueryApi.quadTreeIndexVolatile(queryRequestBuilder, {
@@ -335,19 +286,7 @@ export class VolatileLayerClient {
             depth: this.indexDepth
         });
 
-        // check the cache again in case of parallel requests
-        const cachedIndex = this.indexCache.get(cacheKey);
-        if (cachedIndex !== undefined) {
-            return cachedIndex;
-        }
-
-        const index = this.parseIndex(indexRootKey, dsIndex);
-        this.cacheIndex(cacheKey, index);
-        return index;
-    }
-
-    private cacheIndex(cacheKey: string, index: IndexMap): void {
-        this.indexCache.set(cacheKey, index);
+        return this.parseIndex(indexRootKey, dsIndex);
     }
 
     private parseIndex(

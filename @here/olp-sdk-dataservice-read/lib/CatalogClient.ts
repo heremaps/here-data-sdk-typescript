@@ -313,11 +313,11 @@ export class CatalogClient {
                 this.settings
             );
         } else {
-            layerClient = new VolatileLayerClient({
-                context: this.context,
-                hrn: this.hrn,
-                layerId: config.id
-            });
+            layerClient = new VolatileLayerClient(
+                HRN.fromString(this.hrn),
+                config.id,
+                this.settings
+            );
         }
 
         // add required methods for interface (all required methods means that methods are in both Layer clients)
