@@ -19,53 +19,25 @@
 
 import { ConfigApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
 import {
+    ApiName,
     CatalogLayer,
     DataRequest,
-    DataStoreContext,
     DataStoreRequestBuilder,
     HRN,
     OlpClientSettings,
     PartitionsRequest,
     QuadKey,
+    RequestFactory,
     VersionedLayerClient,
     VolatileLayerClient
 } from "@here/olp-sdk-dataservice-read";
 
 /**
- * Interface of parameters fo DatastoreClient constructor.
- */
-export interface CatalogClientParams {
-    /**
-     * The context of the data store with shared and cached data (base urls, for example)
-     */
-    context: DataStoreContext;
-
-    /**
-     * Parameter to configure the behaviour of the OlpClient
-     */
-    settings: OlpClientSettings;
-
-    /**
-     * The catalog HRN
-     */
-    hrn: string;
-
-    /**
-     * (optional) The version of the catalog to obtain. If not specified, the latest available catalog is fetched.
-     */
-    version?: number;
-}
-
-/**
  * The `CatalogClient` class is the class to interact with a DataStore catalog.
  */
 export class CatalogClient {
-    private readonly context: DataStoreContext;
-    private readonly settings: OlpClientSettings;
+    private readonly apiVersion: string = "v1";
     private readonly hrn: string;
-
-    // Catalog version
-    private readonly version: number;
 
     /**
      * Magic number to define latest or undefined version for the requests.
@@ -83,12 +55,8 @@ export class CatalogClient {
     /**
      * Constructs a new `CatalogClient`
      */
-    constructor(params: CatalogClientParams) {
-        // context will be replaced after OLPEDGE-935
-        this.context = params.context;
-        this.settings = params.settings;
-        this.hrn = params.hrn;
-        this.version = params.version || this.MAGIC_VERSION;
+    constructor(catalogHrn: HRN, readonly settings: OlpClientSettings) {
+        this.hrn = catalogHrn.toString();
     }
 
     /**
@@ -98,24 +66,15 @@ export class CatalogClient {
      *
      * @summary Gets the details of a catalog.
      */
-    public async loadAndCacheCatalogConfiguration(): Promise<
-        ConfigApi.Catalog
-    > {
-        const configBaseUrl = await this.context.getBaseUrl("config");
-        const configuration: ConfigApi.Catalog = await ConfigApi.getCatalog(
-            new DataStoreRequestBuilder(
-                this.context.dm,
-                configBaseUrl,
-                this.context.getToken
-            ),
-            { catalogHrn: this.hrn }
-        ).catch((err: Response) =>
-            Promise.reject(
-                `Can't load catalog configuration. HRN: ${this.hrn}, error: ${err}`
-            )
-        );
+    public async getCatalog(): Promise<ConfigApi.Catalog> {
+        const builder = await this.getRequestBuilder("config");
 
-        return Promise.resolve(configuration);
+        return ConfigApi.getCatalog(builder, { catalogHrn: this.hrn }).catch(
+            (err: Response) =>
+                Promise.reject(
+                    `Can't load catalog configuration. HRN: ${this.hrn}, error: ${err}`
+                )
+        );
     }
 
     /**
@@ -149,21 +108,14 @@ export class CatalogClient {
      * indicates the virtual initial version before the first publication which will have version 0.
      * @returns A promise of the http response that contains the payload with latest version.
      */
-    async getLatestVersion(
-        startVersion: number = -1
-    ): Promise<MetadataApi.VersionResponse> {
-        const metadataBaseUrl = await this.context.getBaseUrl(
-            "metadata",
-            this.hrn
+    async getLatestVersion(startVersion: number = -1): Promise<number> {
+        const builder = await this.getRequestBuilder("metadata").catch(error =>
+            Promise.reject(error)
         );
-        return MetadataApi.latestVersion(
-            new DataStoreRequestBuilder(
-                this.context.dm,
-                metadataBaseUrl,
-                this.context.getToken
-            ),
-            { startVersion }
-        );
+        const latestVersion = await MetadataApi.latestVersion(builder, {
+            startVersion
+        });
+        return latestVersion.version;
     }
 
     /**
@@ -183,22 +135,11 @@ export class CatalogClient {
         endVersion?: number
     ): Promise<MetadataApi.VersionInfos> {
         if (endVersion === undefined) {
-            const latestVersionRS = await this.getLatestVersion(startVersion);
-            endVersion = latestVersionRS.version;
+            endVersion = await this.getLatestVersion(startVersion);
         }
 
-        const metadataBaseUrl = await this.context.getBaseUrl(
-            "metadata",
-            this.hrn
-        );
-        return MetadataApi.listVersions(
-            new DataStoreRequestBuilder(
-                this.context.dm,
-                metadataBaseUrl,
-                this.context.getToken
-            ),
-            { startVersion, endVersion }
-        );
+        const builder = await this.getRequestBuilder("metadata");
+        return MetadataApi.listVersions(builder, { startVersion, endVersion });
     }
 
     /**
@@ -224,7 +165,7 @@ export class CatalogClient {
         ok: boolean;
         message?: string;
     }> {
-        const catalogConfiguration: ConfigApi.Catalog = await this.loadAndCacheCatalogConfiguration().catch(
+        const catalogConfiguration: ConfigApi.Catalog = await this.getCatalog().catch(
             err => Promise.reject(err)
         );
 
@@ -237,34 +178,25 @@ export class CatalogClient {
         const layersConfigurations: ConfigApi.Layer[] =
             catalogConfiguration.layers;
 
-        const metadataBaseUrl = await this.context.getBaseUrl(
-            "metadata",
-            this.hrn
-        );
-        const metadataRequestBuilder = new DataStoreRequestBuilder(
-            this.context.dm,
-            metadataBaseUrl,
-            this.context.getToken
+        const metadataRequestBuilder = await this.getRequestBuilder("metadata");
+
+        const catalogLatestVersionInfo = await MetadataApi.latestVersion(
+            metadataRequestBuilder,
+            { startVersion: this.MAGIC_VERSION }
         );
 
-        let catalogExactVersion = this.version;
-        if (catalogExactVersion === this.MAGIC_VERSION) {
-            const catalogLatestVersionInfo = await MetadataApi.latestVersion(
-                metadataRequestBuilder,
-                { startVersion: this.MAGIC_VERSION }
-            );
-
-            if (
-                catalogLatestVersionInfo.version === undefined ||
-                catalogLatestVersionInfo.version === -1
-            ) {
-                throw new Error(
+        if (
+            catalogLatestVersionInfo.version === undefined ||
+            catalogLatestVersionInfo.version === -1
+        ) {
+            return Promise.reject(
+                new Error(
                     "Invalid version received from latest version call, cannot proceed. Instance: " +
                         this.hrn
-                );
-            }
-            catalogExactVersion = catalogLatestVersionInfo.version;
+                )
+            );
         }
+        const catalogExactVersion = catalogLatestVersionInfo.version;
 
         const layerVersionsFromApi = await MetadataApi.getLayerVersion(
             metadataRequestBuilder,
@@ -355,5 +287,28 @@ export class CatalogClient {
         }
 
         return result;
+    }
+
+    /**
+     * Fetch baseUrl and create requestBuilder for sending requests to the look-up API
+     * @param builderType endpoint name is needed to create propriate requestBuilder
+     *
+     * @returns requestBuilder
+     */
+    private async getRequestBuilder(
+        builderType: ApiName,
+        abortSignal?: AbortSignal
+    ): Promise<DataStoreRequestBuilder> {
+        return RequestFactory.create(
+            builderType,
+            this.apiVersion,
+            this.settings,
+            HRN.fromString(this.hrn),
+            abortSignal
+        ).catch((err: Response) =>
+            Promise.reject(
+                `Error retrieving from cache builder for resource "${this.hrn}" and api: "${builderType}.\n${err}"`
+            )
+        );
     }
 }

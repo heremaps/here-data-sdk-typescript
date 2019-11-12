@@ -25,7 +25,6 @@ import sinon = require("sinon");
 import {
     CatalogClient,
     CatalogLayer,
-    DataStoreContext,
     DataStoreDownloadManager,
     DownloadManager,
     HRN,
@@ -133,7 +132,7 @@ urlToResponses.set(
             api: "metadata",
             version: "v1",
             baseURL:
-                "https://xab.metadata.data.api.platform.here.com/metadata/v1/catalogs/hrn:here:data:::rib-2",
+                "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::rib-2",
             parameters: {}
         },
         {
@@ -189,14 +188,180 @@ urlToResponses.set(
 );
 
 urlToResponses.set(
-    "https://xab.metadata.data.api.platform.here.com/metadata/v1/catalogs/hrn:here:data:::rib-2/versions/latest?startVersion=-1",
+    "https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::rib-2/apis/metadata/v1",
+    [
+        {
+            api: "blob",
+            version: "v1",
+            baseURL:
+                "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::rib-2",
+            parameters: {}
+        },
+        {
+            api: "index",
+            version: "v1",
+            baseURL:
+                "https://index.data.api.platform.here.com/index/v1/catalogs/hrn:here:data:::rib-2",
+            parameters: {}
+        },
+        {
+            api: "ingest",
+            version: "v1",
+            baseURL:
+                "https://ingest.data.api.platform.here.com/ingest/v1/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "metadata",
+            version: "v1",
+            baseURL:
+                "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::rib-2",
+            parameters: {}
+        },
+        {
+            api: "notification",
+            version: "v2",
+            baseURL:
+                "https://sub.data.api.platform.here.com/notification/v2/catalogs/hrn:here:data:::rib-2",
+            parameters: {}
+        },
+        {
+            api: "publish",
+            version: "v1",
+            baseURL:
+                "https://publish.data.api.platform.here.com/publish/v1/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "publish",
+            version: "v2",
+            baseURL:
+                "https://publish.data.api.platform.here.com/publish/v2/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "query",
+            version: "v1",
+            baseURL:
+                "https://xab.query.data.api.platform.here.com/query/v1/catalogs/hrn:here:data:::rib-2",
+            parameters: {}
+        },
+        {
+            api: "statistics",
+            version: "v1",
+            baseURL:
+                "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::rib-2",
+            parameters: {}
+        },
+        {
+            api: "stream",
+            version: "v2",
+            baseURL:
+                "https://web.streaming.data.api.platform.here.com/stream/v2/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "volatile-blob",
+            version: "v1",
+            baseURL:
+                "https://volatile-blob.data.api.platform.here.com/blobstore/v1/catalogs/rib-2",
+            parameters: {}
+        }
+    ]
+);
+
+urlToResponses.set(
+    "https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::rib-2/apis/config/v1",
+    [
+        {
+            api: "blob",
+            version: "v1",
+            baseURL:
+                "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::rib-2",
+            parameters: {}
+        },
+        {
+            api: "index",
+            version: "v1",
+            baseURL:
+                "https://index.data.api.platform.here.com/index/v1/catalogs/hrn:here:data:::rib-2",
+            parameters: {}
+        },
+        {
+            api: "ingest",
+            version: "v1",
+            baseURL:
+                "https://ingest.data.api.platform.here.com/ingest/v1/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "metadata",
+            version: "v1",
+            baseURL:
+                "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::rib-2",
+            parameters: {}
+        },
+        {
+            api: "notification",
+            version: "v2",
+            baseURL:
+                "https://sub.data.api.platform.here.com/notification/v2/catalogs/hrn:here:data:::rib-2",
+            parameters: {}
+        },
+        {
+            api: "publish",
+            version: "v1",
+            baseURL:
+                "https://publish.data.api.platform.here.com/publish/v1/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "publish",
+            version: "v2",
+            baseURL:
+                "https://publish.data.api.platform.here.com/publish/v2/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "query",
+            version: "v1",
+            baseURL:
+                "https://xab.query.data.api.platform.here.com/query/v1/catalogs/hrn:here:data:::rib-2",
+            parameters: {}
+        },
+        {
+            api: "statistics",
+            version: "v1",
+            baseURL:
+                "https://statistics.data.api.platform.here.com/statistics/v1/catalogs/hrn:here:data:::rib-2",
+            parameters: {}
+        },
+        {
+            api: "stream",
+            version: "v2",
+            baseURL:
+                "https://web.streaming.data.api.platform.here.com/stream/v2/catalogs/rib-2",
+            parameters: {}
+        },
+        {
+            api: "volatile-blob",
+            version: "v1",
+            baseURL:
+                "https://volatile-blob.data.api.platform.here.com/blobstore/v1/catalogs/rib-2",
+            parameters: {}
+        }
+    ]
+);
+
+urlToResponses.set(
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::rib-2/versions/latest?startVersion=-1",
     {
         version: 12
     }
 );
 
 urlToResponses.set(
-    "https://xab.metadata.data.api.platform.here.com/metadata/v1/catalogs/hrn:here:data:::rib-2/versions?startVersion=-1&endVersion=12",
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::rib-2/versions?startVersion=-1&endVersion=12",
     {
         versions: [
             {
@@ -445,7 +610,7 @@ urlToResponses.set(
 );
 
 urlToResponses.set(
-    "https://xab.metadata.data.api.platform.here.com/metadata/v1/catalogs/hrn:here:data:::rib-2/layerVersions?version=12",
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::rib-2/layerVersions?version=12",
     {
         version: 12,
         layerVersions: [
@@ -480,7 +645,7 @@ urlToResponses.set(
 
 // NewCatalogClientOffline - config catalog
 urlToResponses.set(
-    "https://config.data.api.platform.here.com/config/v1/catalogs/hrn:here:data:::rib-2",
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::rib-2/catalogs/hrn:here:data:::rib-2",
     {
         id: "here-internal-test",
         hrn: "hrn:here-dev:data:::here-internal-test",
@@ -1184,7 +1349,7 @@ urlToResponses.set(
 
 // NewCatalogClientOffline #getPartitionIndex
 urlToResponses.set(
-    "https://xab.metadata.data.api.platform.here.com/metadata/v1/catalogs/hrn:here:data:::rib-2/layers/testlayer/partitions?version=-1",
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::rib-2/layers/testlayer/partitions?version=-1",
     {
         partitions: [
             {
@@ -1261,7 +1426,7 @@ urlToResponses.set(
 
 // NewCatalogClientOffline catalogs - getpartitions
 urlToResponses.set(
-    "https://xab.metadata.data.api.platform.here.com/metadata/v1/catalogs/hrn:here:data:::rib-2/layers/hype-test-prefetch/partitions?version=-1",
+    "https://blob.data.api.platform.here.com/blobstore/v1/catalogs/hrn:here:data:::rib-2/layers/hype-test-prefetch/partitions?version=-1",
     {
         partitions: [
             {
@@ -1953,29 +2118,20 @@ describe("CatalogClientOffline", () => {
     before(async () => {
         const testHRN = HRN.fromString("hrn:here:data:::rib-2");
         const newPromise = () => Promise.resolve("7534286159");
-        const context = new DataStoreContext({
-            dm: createMockDownloadManager(),
-            environment: "here",
-            getToken: newPromise
-        });
         const settings = new OlpClientSettings({
             dm: createMockDownloadManager(),
             environment: "here",
             getToken: newPromise
         });
 
-        catalogClient = new CatalogClient({
-            context,
-            settings,
-            hrn: testHRN.toString()
-        });
+        catalogClient = new CatalogClient(testHRN, settings);
         assert.isNotNull(catalogClient);
     });
 
     it("#getLatestVersion", async () => {
-        const versionResponse = await catalogClient.getLatestVersion();
-        assert.isDefined(versionResponse);
-        assert.isTrue(versionResponse.version > 0);
+        const version = await catalogClient.getLatestVersion();
+        assert.isDefined(version);
+        assert.isTrue(version > 0);
     });
 
     it("#getVersions", async () => {
@@ -1990,7 +2146,7 @@ describe("CatalogClientOffline", () => {
 
     it("#getLayer", async () => {
         const layer = (await catalogClient.getVolatileOrVersionedLayer(
-            "testlayer_res"
+            "testlayer"
         )) as CatalogLayer;
         assert.isDefined(layer);
     });
