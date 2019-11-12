@@ -64,14 +64,14 @@ export class StatisticsClient {
     }
 
     public async getStatistics(
-        statisticsReuest: StatisticsRequest
+        statisticsRequest: StatisticsRequest
     ): Promise<Response> {
-        const layerId = statisticsReuest.getLayerId();
-        const catalogHrn = statisticsReuest.getCatalogHrn();
-        const typemap = statisticsReuest.getTypemap();
-        const dataLevel = statisticsReuest.getDataLevel();
+        const layerId = statisticsRequest.getLayerId();
+        const catalogHRN = statisticsRequest.getCatalogHrn();
+        const typemap = statisticsRequest.getTypemap();
+        const datalevel = statisticsRequest.getDataLevel();
 
-        if (catalogHrn === undefined) {
+        if (catalogHRN === undefined) {
             return Promise.reject(new Error(`No catalogHrn provided`));
         }
         if (layerId === undefined) {
@@ -80,11 +80,11 @@ export class StatisticsClient {
         if (typemap === undefined) {
             return Promise.reject(new Error(`No typemap provided`));
         }
-        if (dataLevel === undefined) {
+        if (datalevel === undefined) {
             return Promise.reject(new Error(`No dataLevel provided`));
         }
         const coverageRequestBuilder = await this.getRequestBuilder(
-            catalogHrn
+            catalogHRN
         ).catch(error => Promise.reject(error));
 
         let request;
@@ -106,9 +106,8 @@ export class StatisticsClient {
 
         return request(coverageRequestBuilder, {
             layerId,
-            // @todo datalevel is hardcoded. It is known issue, ticket about API bug is created
-            datalevel: "12",
-            catalogHRN: catalogHrn
+            datalevel,
+            catalogHRN
         }).catch(this.errorHandler);
     }
 
