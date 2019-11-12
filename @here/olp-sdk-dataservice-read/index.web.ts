@@ -18,8 +18,9 @@
  */
 
 export * from "./lib/DataStoreDownloadManager";
-export * from "./lib/CatalogClient";
-export * from "./lib/DataRequest";
+export * from "./lib/client/CatalogClient";
+export * from "./lib/client/CatalogRequest";
+export * from "./lib/client/DataRequest";
 export * from "./lib/HRN";
 export * from "./lib/CatalogClientCommon";
 export * from "./lib/CatalogLayer";
