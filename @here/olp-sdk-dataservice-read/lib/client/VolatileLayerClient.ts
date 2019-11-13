@@ -24,19 +24,26 @@ import {
     QueryApi
 } from "@here/olp-sdk-dataservice-api";
 import {
+    addQuadKeys,
     AggregatedDownloadResponse,
     ApiName,
+    computeParentKey,
     DataRequest,
     DataStoreRequestBuilder,
     ErrorHTTPResponse,
     HRN,
     IndexMap,
+    isValid,
+    mortonCodeFromQuadKey,
     OlpClientSettings,
     PartitionsRequest,
     QuadKey,
+    quadKeyFromMortonCode,
+    QuadKeyPartitionsRequest,
+    QuadTreeIndexRequest,
+    QueryClient,
     RequestFactory
 } from "@here/olp-sdk-dataservice-read";
-import * as utils from "../partitioning/QuadKeyUtils";
 
 export class VolatileLayerClient {
     private readonly apiVersion: string = "v1";
@@ -49,12 +56,12 @@ export class VolatileLayerClient {
         sub: string
     ) => QuadKey {
         return (quadKey: QuadKey, sub: string) => {
-            const subQuadKey = utils.quadKeyFromMortonCode(sub);
-            return utils.addQuadKeys(quadKey, subQuadKey);
+            const subQuadKey = quadKeyFromMortonCode(sub);
+            return addQuadKeys(quadKey, subQuadKey);
         };
     }
     private static toTileKeyFunction(): (key: string) => QuadKey {
-        return (key: string) => utils.quadKeyFromMortonCode(key);
+        return (key: string) => quadKeyFromMortonCode(key);
     }
 
     constructor(
@@ -100,10 +107,16 @@ export class VolatileLayerClient {
             }
 
             if (quadKey) {
-                const quadKeyDataHandle = await this.getDataHandleByQuadKey(
+                const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest().withQuadKey(
                     quadKey
-                ).catch((error: Response) => Promise.reject(error));
-                return this.downloadPartition(quadKeyDataHandle, abortSignal);
+                );
+                const quadTreeIndex = await this.getPartitions(
+                    quadKeyPartitionsRequest
+                ).catch(error => Promise.reject(error));
+                return this.downloadPartition(
+                    quadTreeIndex.subQuads[0].dataHandle,
+                    abortSignal
+                );
             }
         }
 
@@ -138,23 +151,6 @@ export class VolatileLayerClient {
             ? partition.dataHandle
             : Promise.reject(
                   `No partition dataHandle for partition ${partitionId}. HRN: ${this.hrn}`
-              );
-    }
-
-    private async getDataHandleByQuadKey(quadKey: QuadKey): Promise<string> {
-        if (!utils.isValid(quadKey)) {
-            return Promise.reject(new Error("QuadKey is not valid"));
-        }
-
-        const index = await this.getIndexFor(quadKey);
-        const resultSub = index.get(utils.mortonCodeFromQuadKey(quadKey));
-
-        return resultSub
-            ? resultSub
-            : Promise.reject(
-                  `No tile dataHandle for QuadKey: ${utils.mortonCodeFromQuadKey(
-                      quadKey
-                  )}. HRN: ${this.hrn}`
               );
     }
 
@@ -193,12 +189,63 @@ export class VolatileLayerClient {
     }
 
     /**
-     * Fetch all partitions metadata from layer
+     * Fetch partitions metadata from Query API by QuadKey
+     * @returns Quad Tree Index for partition
+     */
+    async getPartitions(
+        quadKeyPartitionsRequest: QuadKeyPartitionsRequest,
+        abortSignal?: AbortSignal
+    ): Promise<QueryApi.Index>;
+
+    /**
+     * Fetch all or by some IDs partitions metadata from layer
      * @returns list of partittions metadata
      */
     async getPartitions(
-        partitionsRequest: PartitionsRequest
-    ): Promise<MetadataApi.Partitions> {
+        partitionsRequest: PartitionsRequest,
+        abortSignal?: AbortSignal
+    ): Promise<MetadataApi.Partitions>;
+
+    /**
+     * @param request
+     * @param abortSignal
+     */
+    async getPartitions(
+        request: QuadKeyPartitionsRequest | PartitionsRequest,
+        abortSignal?: AbortSignal
+    ): Promise<QueryApi.Index | MetadataApi.Partitions> {
+        if (request instanceof QuadKeyPartitionsRequest) {
+            const quadKey = request.getQuadKey();
+            if (!quadKey) {
+                return Promise.reject("Please provide correct QuadKey");
+            }
+
+            const queryClient = new QueryClient(this.settings);
+
+            const quadTreeIndexRequest = new QuadTreeIndexRequest(
+                HRN.fromString(this.hrn),
+                this.layerId,
+                "volatile"
+            )
+                .withQuadKey(quadKey)
+                .withDepth(request.getDepth());
+
+            const quadTreeIndex = await queryClient.fetchQuadTreeIndex(
+                quadTreeIndexRequest,
+                abortSignal
+            );
+
+            const result: MetadataApi.Partitions = {
+                partitions: quadTreeIndex.subQuads.map(subQuad => ({
+                    dataHandle: subQuad.dataHandle,
+                    version: subQuad.version,
+                    partition: mortonCodeFromQuadKey(quadKey).toString()
+                }))
+            };
+
+            return Promise.resolve(result);
+        }
+
         const metaRequestBilder = await this.getRequestBuilder("metadata");
         return MetadataApi.getPartitions(metaRequestBilder, {
             layerId: this.layerId
@@ -213,13 +260,14 @@ export class VolatileLayerClient {
      * @returns A promise to the index object parsed as a map.
      */
     async getIndexMetadata(rootKey: QuadKey): Promise<IndexMap> {
-        if (!utils.isValid(rootKey)) {
+        if (!isValid(rootKey)) {
             return Promise.reject(new Error("QuadKey is not valid"));
         }
         return this.downloadIndex(rootKey);
     }
 
     /**
+     * @deprecated
      * Asynchronously fetches a tile from this catalog.
      * Used to get partition with HEREtile partition type
      *
@@ -250,7 +298,7 @@ export class VolatileLayerClient {
      * @returns A promise of the HTTP response that contains the payload of the requested tile.
      */
     async getTile(quadKey: QuadKey): Promise<Response> {
-        if (!utils.isValid(quadKey)) {
+        if (!isValid(quadKey)) {
             throw Error("QuadKey is not valid");
         }
 
@@ -292,32 +340,18 @@ export class VolatileLayerClient {
         return response;
     }
 
-    private async errorHandler(error: any) {
-        return Promise.reject(
-            new ErrorHTTPResponse(
-                `Statistics Service error: HTTP ${
-                    error.status
-                }, ${error.statusText || error.cause || ""}` +
-                    `\n${error.action || ""}`,
-                error
-            )
-        );
-    }
-
     /**
      * gets the data tag for the given tile
      * @param quadKey
      */
     private async getDataTag(quadKey: QuadKey): Promise<string | undefined> {
         const index = await this.getIndexFor(quadKey);
-        return index.get(utils.mortonCodeFromQuadKey(quadKey));
+        return index.get(mortonCodeFromQuadKey(quadKey));
     }
 
     // finds any index that contains the given tile key
     private async getIndexFor(quadKey: QuadKey): Promise<IndexMap> {
-        return this.downloadIndex(
-            utils.computeParentKey(quadKey, this.indexDepth)
-        );
+        return this.downloadIndex(computeParentKey(quadKey, this.indexDepth));
     }
 
     private async downloadPartition(
@@ -328,7 +362,7 @@ export class VolatileLayerClient {
         return BlobApi.getBlob(builder, {
             dataHandle,
             layerId: this.layerId
-        }).catch(this.errorHandler);
+        }).catch(async error => Promise.reject(error));
     }
 
     /**
@@ -376,7 +410,7 @@ export class VolatileLayerClient {
 
         dsIndex = await QueryApi.quadTreeIndexVolatile(queryRequestBuilder, {
             layerId: this.layerId,
-            quadKey: utils.mortonCodeFromQuadKey(indexRootKey).toString(),
+            quadKey: mortonCodeFromQuadKey(indexRootKey).toString(),
             depth: this.indexDepth
         });
 
@@ -405,17 +439,14 @@ export class VolatileLayerClient {
                 indexRootKey,
                 sub.subQuadKey
             );
-            subQuads.set(
-                utils.mortonCodeFromQuadKey(subTileKey),
-                sub.dataHandle
-            );
+            subQuads.set(mortonCodeFromQuadKey(subTileKey), sub.dataHandle);
         }
 
         if (dsIndex.parentQuads !== undefined) {
             for (const parent of dsIndex.parentQuads) {
                 const parentTileKey = toTileKeyFunction(parent.partition);
                 subQuads.set(
-                    utils.mortonCodeFromQuadKey(parentTileKey),
+                    mortonCodeFromQuadKey(parentTileKey),
                     parent.dataHandle
                 );
             }
@@ -432,11 +463,11 @@ export class VolatileLayerClient {
         let key = quadKey;
 
         for (let level = quadKey.level; level >= 0; --level) {
-            const sub = index.get(utils.mortonCodeFromQuadKey(key));
+            const sub = index.get(mortonCodeFromQuadKey(key));
             if (sub !== undefined) {
                 return { dataHandle: sub, quadKey: key };
             }
-            key = utils.computeParentKey(key, 1);
+            key = computeParentKey(key, 1);
         }
 
         return undefined;

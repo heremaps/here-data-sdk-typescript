@@ -18,8 +18,7 @@
  */
 
 import { assert } from "chai";
-import { QuadKey } from "../lib/partitioning/QuadKey";
-import * as utils from "../lib/partitioning/QuadKeyUtils";
+import * as utils from "../lib/utils/QuadKeyUtils";
 
 describe("QuadKeyUtils", () => {
     it("Can be constructed from root morton code", () => {
