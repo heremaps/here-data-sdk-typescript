@@ -26,7 +26,8 @@ import {
     DataStoreDownloadManager,
     HRN,
     OlpClientSettings,
-    VolatileLayerClient
+    VolatileLayerClient,
+    PartitionsRequest
 } from "@here/olp-sdk-dataservice-read";
 
 function createMockDownloadResponse(resp: Object, blob?: string) {
@@ -843,8 +844,9 @@ describe("volatileLayerClient", () => {
         assert.isDefined(index);
     });
 
-    it("#getPartitionsMetadata", async () => {
-        const partitions = await volatileLayerClient.getPartitionsMetadata();
+    it("#getPartitions", async () => {
+        const partitionsRequest = new PartitionsRequest();
+        const partitions = await volatileLayerClient.getPartitions(partitionsRequest);
         assert.isDefined(partitions);
         assert.isAbove(partitions.partitions.length, 0, "index is empty");
     });
