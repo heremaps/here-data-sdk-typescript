@@ -20,9 +20,15 @@
 import {
     ConfigApi,
     CoverageApi,
-    MetadataApi
+    MetadataApi,
+    QueryApi
 } from "@here/olp-sdk-dataservice-api";
-import { DataRequest, IndexMap, PartitionsRequest, QuadKey } from "@here/olp-sdk-dataservice-read";
+import {
+    DataRequest,
+    IndexMap,
+    PartitionsRequest,
+    QuadKey
+} from "@here/olp-sdk-dataservice-read";
 
 /**
  * @deprecated

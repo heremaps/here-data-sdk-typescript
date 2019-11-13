@@ -17,7 +17,6 @@
  * License-Filename: LICENSE
  */
 
-import * as utils from "../lib/partitioning/QuadKeyUtils";
 import { assert } from "chai";
 import sinon = require("sinon");
 
@@ -27,7 +26,9 @@ import {
     HRN,
     OlpClientSettings,
     VolatileLayerClient,
-    PartitionsRequest
+    PartitionsRequest,
+    quadKeyFromMortonCode,
+    mortonCodeFromQuadKey
 } from "@here/olp-sdk-dataservice-read";
 
 function createMockDownloadResponse(resp: Object, blob?: string) {
@@ -736,7 +737,7 @@ describe("volatileLayerClient", () => {
         volatileLayerClient = await new VolatileLayerClient(
             HRN.fromString(testHRN),
             "latest-data",
-            settings
+            settings as any
         );
         assert.isNotNull(volatileLayerClient);
     });
@@ -751,7 +752,7 @@ describe("volatileLayerClient", () => {
 
     it("#getTile", async () => {
         let response = await volatileLayerClient.getTile(
-            utils.quadKeyFromMortonCode("1476147")
+            quadKeyFromMortonCode("1476147")
         );
         assert.isNotNull(response);
         assert.isTrue(response.ok);
@@ -762,8 +763,8 @@ describe("volatileLayerClient", () => {
 
     it("#getTiles", async () => {
         const results = await Promise.all([
-            volatileLayerClient.getTile(utils.quadKeyFromMortonCode("1476147")),
-            volatileLayerClient.getTile(utils.quadKeyFromMortonCode("1476147"))
+            volatileLayerClient.getTile(quadKeyFromMortonCode("1476147")),
+            volatileLayerClient.getTile(quadKeyFromMortonCode("1476147"))
         ]);
 
         const contents = await Promise.all([
@@ -776,7 +777,7 @@ describe("volatileLayerClient", () => {
 
     it("#getMissingTile", async () => {
         let response = await volatileLayerClient.getTile(
-            utils.quadKeyFromMortonCode("0000")
+            quadKeyFromMortonCode("0000")
         );
         assert.isNotNull(response);
         assert.isTrue(response.ok);
@@ -786,7 +787,7 @@ describe("volatileLayerClient", () => {
 
     it("#getTileWithETag", async () => {
         const response = await volatileLayerClient.getTile(
-            utils.quadKeyFromMortonCode("1476147")
+            quadKeyFromMortonCode("1476147")
         );
         assert.isNotNull(response);
         assert.isTrue(response.ok);
@@ -800,7 +801,7 @@ describe("volatileLayerClient", () => {
         assert.strictEqual(buf, "DT_1_1010");
 
         const cachedResponse = await volatileLayerClient.getTile(
-            utils.quadKeyFromMortonCode("23618359")
+            quadKeyFromMortonCode("23618359")
         );
         // make sure status is 304 - not modified
         assert.strictEqual(cachedResponse.status, 304);
@@ -808,13 +809,13 @@ describe("volatileLayerClient", () => {
 
     it("#getAggregatedTile", async () => {
         const aggregatedResponse = await volatileLayerClient.getAggregatedTile(
-            utils.quadKeyFromMortonCode("5904591")
+            quadKeyFromMortonCode("5904591")
         );
         assert.isTrue(aggregatedResponse.ok);
         assert.isDefined(aggregatedResponse.quadKey);
         if (aggregatedResponse.quadKey !== undefined) {
             assert.strictEqual(
-                utils.mortonCodeFromQuadKey(aggregatedResponse.quadKey),
+                mortonCodeFromQuadKey(aggregatedResponse.quadKey),
                 5904591
             );
         }
@@ -839,14 +840,16 @@ describe("volatileLayerClient", () => {
 
     it("#getIndexMetadata", async () => {
         let index = await volatileLayerClient.getIndexMetadata(
-            utils.quadKeyFromMortonCode("75717")
+            quadKeyFromMortonCode("75717")
         );
         assert.isDefined(index);
     });
 
     it("#getPartitions", async () => {
         const partitionsRequest = new PartitionsRequest();
-        const partitions = await volatileLayerClient.getPartitions(partitionsRequest);
+        const partitions = (await volatileLayerClient.getPartitions(
+            partitionsRequest as any
+        )) as any;
         assert.isDefined(partitions);
         assert.isAbove(partitions.partitions.length, 0, "index is empty");
     });
