@@ -258,7 +258,9 @@ export class CatalogClient {
             ...config,
             apiVersion: 2,
             getIndex: async (rootKey: QuadKey) =>
-                layerClient.getIndexMetadata(rootKey)
+                layerClient.getIndexMetadata(rootKey),
+            getPartitionsIndex: async (partitionsRequest: PartitionsRequest) =>
+                layerClient.getPartitions(partitionsRequest)
         };
 
         // @todo temporary solution. Will be removed in scope of OLPEDGE-938
@@ -267,9 +269,6 @@ export class CatalogClient {
             const versionedLayerClient = layerClient as VersionedLayerClient;
             result.getData = async (dataRequest: DataRequest) =>
                 versionedLayerClient.getData(dataRequest);
-            result.getPartitions = async (
-                partitionsRequest: PartitionsRequest
-            ) => versionedLayerClient.getPartitions(partitionsRequest);
         }
 
         // @todo temporary solution. Will be removed in scope of OLPEDGE-938
@@ -282,8 +281,6 @@ export class CatalogClient {
             ) => volatileLayerClient.getPartition(partitionId, requestInit);
             result.getTile = async (quadKey: QuadKey) =>
                 volatileLayerClient.getTile(quadKey);
-            result.getPartitionsIndex = async () =>
-                volatileLayerClient.getPartitionsMetadata();
         }
 
         return result;

@@ -75,14 +75,6 @@ export interface CatalogLayer extends ConfigApi.Layer {
     getData?: (dataRequest: DataRequest) => Promise<Response>;
 
     /**
-     * Fetch all partitions metadata from layer
-     * @returns list of partittions metadata
-     */
-    getPartitions?: (
-        partitionsRequest: PartitionsRequest
-    ) => Promise<MetadataApi.Partitions>;
-
-    /**
      * Asynchronously fetches a partition from this layer.
      *
      * @param partitionId The id of the partition to fetch.
@@ -107,7 +99,7 @@ export interface CatalogLayer extends ConfigApi.Layer {
      * Fetch all partitions metadata from layer
      * @returns list of partittions metadata
      */
-    getPartitionsIndex?: () => Promise<MetadataApi.Partitions>;
+    getPartitionsIndex: (partitionsRequest: PartitionsRequest) => Promise<MetadataApi.Partitions>;
 
     /**
      * Asynchronously fetches data coverage bitmap of this layer.
