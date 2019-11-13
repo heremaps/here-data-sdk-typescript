@@ -19,20 +19,25 @@
 
 import { BlobApi, MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
 import {
+    addQuadKeys,
     AggregatedDownloadResponse,
     ApiName,
+    computeParentKey,
     DataRequest,
     DataStoreRequestBuilder,
-    ErrorHTTPResponse,
     HRN,
     IndexMap,
+    isValid,
+    mortonCodeFromQuadKey,
     OlpClientSettings,
     PartitionsRequest,
     QuadKey,
+    quadKeyFromMortonCode,
+    QuadKeyPartitionsRequest,
+    QuadTreeIndexRequest,
+    QueryClient,
     RequestFactory
 } from "@here/olp-sdk-dataservice-read";
-
-import * as utils from "../partitioning/QuadKeyUtils";
 
 /**
  * A class that describes versioned layer
@@ -40,7 +45,7 @@ import * as utils from "../partitioning/QuadKeyUtils";
  */
 export class VersionedLayerClient {
     private readonly apiVersion: string = "v1";
-    readonly hrn: string;
+    private readonly hrn: string;
     private readonly indexDepth = 4;
 
     private static subkeyAddFunction(): (
@@ -48,13 +53,13 @@ export class VersionedLayerClient {
         sub: string
     ) => QuadKey {
         return (quadKey: QuadKey, sub: string) => {
-            const subQuadKey = utils.quadKeyFromMortonCode(sub);
-            return utils.addQuadKeys(quadKey, subQuadKey);
+            const subQuadKey = quadKeyFromMortonCode(sub);
+            return addQuadKeys(quadKey, subQuadKey);
         };
     }
 
     private static toTileKeyFunction(): (key: string) => QuadKey {
-        return (key: string) => utils.quadKeyFromMortonCode(key);
+        return (key: string) => quadKeyFromMortonCode(key);
     }
 
     constructor(
@@ -87,7 +92,7 @@ export class VersionedLayerClient {
             quadKey !== undefined
         ) {
             if (dataHandle) {
-                return this.downloadTile(dataHandle, abortSignal);
+                return this.downloadPartition(dataHandle, abortSignal);
             }
 
             if (partitionId) {
@@ -95,14 +100,23 @@ export class VersionedLayerClient {
                     partitionId,
                     version
                 ).catch(error => Promise.reject(error));
-                return this.downloadTile(partitionIdDataHandle, abortSignal);
+                return this.downloadPartition(
+                    partitionIdDataHandle,
+                    abortSignal
+                );
             }
 
             if (quadKey) {
-                const quadKeyDataHandle = await this.getDataHandleByQuadKey(
+                const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest().withQuadKey(
                     quadKey
+                );
+                const quadTreeIndex = await this.getPartitions(
+                    quadKeyPartitionsRequest
                 ).catch(error => Promise.reject(error));
-                return this.downloadTile(quadKeyDataHandle, abortSignal);
+                return this.downloadPartition(
+                    quadTreeIndex.subQuads[0].dataHandle,
+                    abortSignal
+                );
             }
         }
 
@@ -144,23 +158,6 @@ export class VersionedLayerClient {
               );
     }
 
-    private async getDataHandleByQuadKey(quadKey: QuadKey): Promise<string> {
-        if (!utils.isValid(quadKey)) {
-            return Promise.reject(new Error("QuadKey is not valid"));
-        }
-
-        const index = await this.getIndexFor(quadKey);
-        const resultSub = index.get(utils.mortonCodeFromQuadKey(quadKey));
-
-        return resultSub
-            ? resultSub
-            : Promise.reject(
-                  `No tile dataHandle for QuadKey: ${utils.mortonCodeFromQuadKey(
-                      quadKey
-                  )}. HRN: ${this.hrn}`
-              );
-    }
-
     /**
      * @deprecated Instead could be used getData method
      * Asynchronously fetches a partition from this layer.
@@ -194,7 +191,7 @@ export class VersionedLayerClient {
             );
         }
 
-        return this.downloadTile(partition.dataHandle);
+        return this.downloadPartition(partition.dataHandle);
     }
 
     /**
@@ -229,18 +226,18 @@ export class VersionedLayerClient {
      * @returns A promise of the HTTP response that contains the payload of the requested tile.
      */
     async getTile(quadKey: QuadKey): Promise<Response> {
-        if (!utils.isValid(quadKey)) {
+        if (!isValid(quadKey)) {
             throw Error("QuadKey is not valid");
         }
 
         const index = await this.getIndexFor(quadKey);
-        const resultSub = index.get(utils.mortonCodeFromQuadKey(quadKey));
+        const resultSub = index.get(mortonCodeFromQuadKey(quadKey));
 
         if (resultSub === undefined) {
             return Promise.resolve(new Response(null, { status: 204 }));
         }
 
-        return this.downloadTile(resultSub);
+        return this.downloadPartition(resultSub);
     }
 
     /**
@@ -265,7 +262,7 @@ export class VersionedLayerClient {
             return Promise.resolve(new Response(null, { status: 204 }));
         }
 
-        const response = (await this.downloadTile(
+        const response = (await this.downloadPartition(
             resultIdx.dataHandle
         )) as AggregatedDownloadResponse;
         response.quadKey = resultIdx.quadKey;
@@ -273,15 +270,60 @@ export class VersionedLayerClient {
     }
 
     /**
+     * Fetch partitions metadata from Query API by QuadKey
+     * @returns Quad Tree Index for partition
+     */
+    async getPartitions(
+        quadKeyPartitionsRequest: QuadKeyPartitionsRequest,
+        abortSignal?: AbortSignal
+    ): Promise<QueryApi.Index>;
+
+    /**
      * Fetch all partitions metadata from layer
      * @returns list of partittions metadata
      */
     async getPartitions(
-        partitionsRequest: PartitionsRequest
-    ): Promise<MetadataApi.Partitions> {
-        const metaRequestBilder = await this.getRequestBuilder("metadata");
-        const version =
-            partitionsRequest.getVersion() || (await this.getLatestVersion());
+        partitionsRequest: PartitionsRequest,
+        abortSignal?: AbortSignal
+    ): Promise<MetadataApi.Partitions>;
+
+    async getPartitions(
+        request: QuadKeyPartitionsRequest | PartitionsRequest,
+        abortSignal?: AbortSignal
+    ): Promise<QueryApi.Index | MetadataApi.Partitions> {
+        if (request instanceof QuadKeyPartitionsRequest) {
+            const quadKey = request.getQuadKey();
+            if (!quadKey) {
+                return Promise.reject("Please provide correct QuadKey");
+            }
+
+            const queryClient = new QueryClient(this.settings);
+
+            const quadTreeIndexRequest = new QuadTreeIndexRequest(
+                HRN.fromString(this.hrn),
+                this.layerId,
+                "versioned"
+            )
+                .withQuadKey(quadKey)
+                .withVersion(request.getVersion())
+                .withDepth(request.getDepth());
+
+            const forSpecificCatalogVersion = request.getVersion();
+            if (forSpecificCatalogVersion) {
+                quadTreeIndexRequest.withVersion(forSpecificCatalogVersion);
+            }
+
+            return queryClient.fetchQuadTreeIndex(
+                quadTreeIndexRequest,
+                abortSignal
+            );
+        }
+
+        const metaRequestBilder = await this.getRequestBuilder(
+            "metadata",
+            abortSignal
+        );
+        const version = request.getVersion() || (await this.getLatestVersion());
         return MetadataApi.getPartitions(metaRequestBilder, {
             version,
             layerId: this.layerId
@@ -296,7 +338,7 @@ export class VersionedLayerClient {
      * @returns A promise to the index object parsed as a map.
      */
     async getIndexMetadata(rootKey: QuadKey): Promise<IndexMap> {
-        if (!utils.isValid(rootKey)) {
+        if (!isValid(rootKey)) {
             return Promise.reject(new Error("QuadKey is not valid"));
         }
         return this.downloadIndex(rootKey);
@@ -342,9 +384,7 @@ export class VersionedLayerClient {
 
     // finds any index that contains the given tile key
     private async getIndexFor(quadKey: QuadKey): Promise<IndexMap> {
-        return this.downloadIndex(
-            utils.computeParentKey(quadKey, this.indexDepth)
-        );
+        return this.downloadIndex(computeParentKey(quadKey, this.indexDepth));
     }
 
     // downloads the index
@@ -356,7 +396,7 @@ export class VersionedLayerClient {
         dsIndex = await QueryApi.quadTreeIndex(queryRequestBuilder, {
             version,
             layerId: this.layerId,
-            quadKey: utils.mortonCodeFromQuadKey(indexRootKey).toString(),
+            quadKey: mortonCodeFromQuadKey(indexRootKey).toString(),
             depth: this.indexDepth
         });
 
@@ -381,17 +421,14 @@ export class VersionedLayerClient {
                 indexRootKey,
                 sub.subQuadKey
             );
-            subQuads.set(
-                utils.mortonCodeFromQuadKey(subTileKey),
-                sub.dataHandle
-            );
+            subQuads.set(mortonCodeFromQuadKey(subTileKey), sub.dataHandle);
         }
 
         if (dsIndex.parentQuads !== undefined) {
             for (const parent of dsIndex.parentQuads) {
                 const parentTileKey = toTileKeyFunction(parent.partition);
                 subQuads.set(
-                    utils.mortonCodeFromQuadKey(parentTileKey),
+                    mortonCodeFromQuadKey(parentTileKey),
                     parent.dataHandle
                 );
             }
@@ -400,7 +437,7 @@ export class VersionedLayerClient {
         return subQuads;
     }
 
-    private async downloadTile(
+    private async downloadPartition(
         dataHandle: string,
         abortSignal?: AbortSignal
     ): Promise<Response> {
@@ -442,11 +479,11 @@ export class VersionedLayerClient {
         let key = quadKey;
 
         for (let level = quadKey.level; level >= 0; --level) {
-            const sub = index.get(utils.mortonCodeFromQuadKey(key));
+            const sub = index.get(mortonCodeFromQuadKey(key));
             if (sub !== undefined) {
                 return { dataHandle: sub, quadKey: key };
             }
-            key = utils.computeParentKey(key, 1);
+            key = computeParentKey(key, 1);
         }
 
         return undefined;

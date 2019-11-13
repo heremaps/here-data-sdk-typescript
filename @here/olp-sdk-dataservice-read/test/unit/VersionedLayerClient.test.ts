@@ -23,7 +23,7 @@ import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
 import { BlobApi, MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
-import * as utils from "@here/olp-sdk-dataservice-read/lib/partitioning/QuadKeyUtils";
+import * as utils from "@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils";
 import { Index } from "@here/olp-sdk-dataservice-api/lib/query-api";
 
 chai.use(sinonChai);

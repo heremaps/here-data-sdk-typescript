@@ -21,7 +21,7 @@
  * A class that prepare information for calls to get Partitions metadata from MetadataAPI.
  */
 export class PartitionsRequest {
-    private version: number | undefined;
+    private version?: number;
 
     public getVersion(): number | undefined {
         return this.version;
@@ -30,10 +30,11 @@ export class PartitionsRequest {
     /**
      * Setter for the provided version.
      * Method is optional. If the version does not specified the last layer version will be used
-     * @param version Required. Specify the layer version.
-     * @returns this to have ability to chain methods
+     *
+     * @param version Specify the catalog version or set to undefined to use the latest catalog version.
+     * @returns The updated [[PartitionsRequest]] instance
      */
-    public withVersion(version: number): PartitionsRequest {
+    public withVersion(version?: number): PartitionsRequest {
         this.version = version;
         return this;
     }
