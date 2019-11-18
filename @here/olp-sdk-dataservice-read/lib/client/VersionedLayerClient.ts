@@ -408,7 +408,7 @@ export class VersionedLayerClient {
         return BlobApi.getBlob(builder, {
             dataHandle,
             layerId: this.layerId
-        }).catch(async error => Promise.reject(`Blob Service error: ${error}`));
+        }).catch(async error => Promise.reject(error));
     }
 
     /**
