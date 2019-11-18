@@ -278,7 +278,7 @@ export class CatalogClient {
             result.getPartition = async (
                 partitionId: string,
                 requestInit?: RequestInit
-            ) => volatileLayerClient.getPartition(partitionId, requestInit);
+            ) => volatileLayerClient.getPartition(partitionId);
             result.getTile = async (quadKey: QuadKey) =>
                 volatileLayerClient.getTile(quadKey);
         }
