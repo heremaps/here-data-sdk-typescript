@@ -46,7 +46,7 @@ describe("VersionedLayerClient", () => {
 
     before(() => {
         sandbox = sinon.createSandbox();
-        let settings = sinon.createStubInstance(
+        let settings = sandbox.createStubInstance(
             dataServiceRead.OlpClientSettings
         );
         versionedLayerClient = new dataServiceRead.VersionedLayerClient(

@@ -26,6 +26,7 @@ import {
 import {
     AggregatedDownloadResponse,
     ApiName,
+    DataRequest,
     DataStoreRequestBuilder,
     ErrorHTTPResponse,
     HRN,
@@ -65,12 +66,103 @@ export class VolatileLayerClient {
     }
 
     /**
+     * Fetch partition by id or quadKey or dataHandle
+     * @param dataRequest Instance of the configuret request params [[DataRequest]]
+     * @param abortSignal A signal object that allows you to communicate with a request (such as a Fetch)
+     * and abort it if required via an AbortController object
+     *  @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
+     */
+    async getData(
+        dataRequest: DataRequest,
+        abortSignal?: AbortSignal
+    ): Promise<Response> {
+        const dataHandle = dataRequest.getDataHandle();
+        const partitionId = dataRequest.getPartitionId();
+        const quadKey = dataRequest.getQuadKey();
+
+        if (
+            dataHandle !== undefined ||
+            partitionId !== undefined ||
+            quadKey !== undefined
+        ) {
+            if (dataHandle) {
+                return this.downloadPartition(dataHandle, abortSignal);
+            }
+
+            if (partitionId) {
+                const partitionIdDataHandle = await this.getDataHandleByPartitionId(
+                    partitionId
+                ).catch((error: Response) => Promise.reject(error));
+                return this.downloadPartition(
+                    partitionIdDataHandle,
+                    abortSignal
+                );
+            }
+
+            if (quadKey) {
+                const quadKeyDataHandle = await this.getDataHandleByQuadKey(
+                    quadKey
+                ).catch((error: Response) => Promise.reject(error));
+                return this.downloadPartition(quadKeyDataHandle, abortSignal);
+            }
+        }
+
+        return Promise.reject(
+            new Error(
+                `No data provided. Add dataHandle, partitionId or quadKey to the DataRequest object`
+            )
+        );
+    }
+
+    /**
+     * Fetch and returns partition metadata
+     * @param partitionId The name of the partition to fetch.
+     * @returns A promise of partition metadata which used to get partition data
+     */
+    private async getDataHandleByPartitionId(
+        partitionId: string
+    ): Promise<string> {
+        const queryRequestBilder = await this.getRequestBuilder("query");
+        const partitions = await QueryApi.getPartitionsById(
+            queryRequestBilder,
+            {
+                layerId: this.layerId,
+                partition: [partitionId]
+            }
+        );
+        const partition = partitions.partitions.find(element => {
+            return element.partition === partitionId;
+        });
+
+        return partition && partition.dataHandle
+            ? partition.dataHandle
+            : Promise.reject(
+                  `No partition dataHandle for partition ${partitionId}. HRN: ${this.hrn}`
+              );
+    }
+
+    private async getDataHandleByQuadKey(quadKey: QuadKey): Promise<string> {
+        if (!utils.isValid(quadKey)) {
+            return Promise.reject(new Error("QuadKey is not valid"));
+        }
+
+        const index = await this.getIndexFor(quadKey);
+        const resultSub = index.get(utils.mortonCodeFromQuadKey(quadKey));
+
+        return resultSub
+            ? resultSub
+            : Promise.reject(
+                  `No tile dataHandle for QuadKey: ${utils.mortonCodeFromQuadKey(
+                      quadKey
+                  )}. HRN: ${this.hrn}`
+              );
+    }
+
+    /**
      * Asynchronously fetches a partition from this layer.
      * Used to get partition with generic partition type
      * To get partition with HERETile partition type use @this getTile method
      * @param partitionId The name of the partition to fetch.
-     * @param partitionRequestInit Optional request options to be passed to fetch when downloading a
-     * partition.
      * @returns A promise of the http response that contains the payload of the requested partition.
      */
     async getPartition(
@@ -97,11 +189,7 @@ export class VolatileLayerClient {
             );
         }
 
-        const builder = await this.getRequestBuilder("blob");
-        return BlobApi.getBlob(builder, {
-            dataHandle: partition.dataHandle,
-            layerId: this.layerId
-        }).catch(this.errorHandler);
+        return this.downloadPartition(partition.dataHandle);
     }
 
     /**
@@ -172,7 +260,7 @@ export class VolatileLayerClient {
             return Promise.resolve(new Response(null, { status: 204 }));
         }
 
-        return this.downloadTile(resultSub);
+        return this.downloadPartition(resultSub);
     }
 
     /**
@@ -197,7 +285,7 @@ export class VolatileLayerClient {
             return Promise.resolve(new Response(null, { status: 204 }));
         }
 
-        const response = (await this.downloadTile(
+        const response = (await this.downloadPartition(
             resultIdx.dataHandle
         )) as AggregatedDownloadResponse;
         response.quadKey = resultIdx.quadKey;
@@ -232,8 +320,11 @@ export class VolatileLayerClient {
         );
     }
 
-    private async downloadTile(dataHandle: string): Promise<Response> {
-        const builder = await this.getRequestBuilder("blob");
+    private async downloadPartition(
+        dataHandle: string,
+        abortSignal?: AbortSignal
+    ): Promise<Response> {
+        const builder = await this.getRequestBuilder("blob", abortSignal);
         return BlobApi.getBlob(builder, {
             dataHandle,
             layerId: this.layerId
