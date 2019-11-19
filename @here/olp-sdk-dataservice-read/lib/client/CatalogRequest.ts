@@ -17,7 +17,26 @@
  * License-Filename: LICENSE
  */
 
+import { validateBillingTag } from "@here/olp-sdk-dataservice-read";
+
 /**
  * A class that prepare information for calls to get Catalog metadata from ConfigAPI.
  */
-export class CatalogRequest {}
+export class CatalogRequest {
+    private billingTag?: string;
+
+    /**
+     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
+     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     */
+    public withBillingTag(tag: string) {
+        this.billingTag = validateBillingTag(tag);
+    }
+
+    /**
+     * Billing Tag for grouping billing records together
+     */
+    public getBillingTag(): string | undefined {
+        return this.billingTag;
+    }
+}

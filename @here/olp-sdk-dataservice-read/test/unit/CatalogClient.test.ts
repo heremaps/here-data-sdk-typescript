@@ -23,7 +23,6 @@ import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
 import { ConfigApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
-import * as utils from "@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils";
 
 chai.use(sinonChai);
 
@@ -165,7 +164,9 @@ describe("CatalogClient", () => {
             }
         );
 
-        const response = await catalogClient.getCatalog();
+        const response = await catalogClient.getCatalog(
+            new dataServiceRead.CatalogRequest()
+        );
 
         assert.isDefined(response);
         expect(response).to.be.equal(mockedCatalogResponse);

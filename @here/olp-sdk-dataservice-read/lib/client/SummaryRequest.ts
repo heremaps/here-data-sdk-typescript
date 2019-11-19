@@ -17,14 +17,15 @@
  * License-Filename: LICENSE
  */
 
-import { HRN } from "@here/olp-sdk-dataservice-read";
+import { HRN, validateBillingTag } from "@here/olp-sdk-dataservice-read";
 
 /**
  * A class that prepare information for calls to get Statistics from CoverageAPI
  */
 export class SummaryRequest {
-    private catalogHrn: string | undefined;
-    private layerId: string | undefined;
+    private catalogHrn?: string;
+    private layerId?: string;
+    private billingTag?: string;
 
     public getCatalogHrn(): string | undefined {
         return this.catalogHrn;
@@ -52,5 +53,20 @@ export class SummaryRequest {
     public withLayerId(layerId: string): SummaryRequest {
         this.layerId = layerId;
         return this;
+    }
+
+    /**
+     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
+     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     */
+    public withBillingTag(tag: string) {
+        this.billingTag = validateBillingTag(tag);
+    }
+
+    /**
+     * Billing Tag for grouping billing records together
+     */
+    public getBillingTag(): string | undefined {
+        return this.billingTag;
     }
 }

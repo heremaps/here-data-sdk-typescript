@@ -75,7 +75,6 @@ export class OlpClientSettings {
         this.getValidToken = params.getToken;
         this.env = params.environment;
         this.dm = params.dm || new DataStoreDownloadManager();
-
         this.keyValueCache = new KeyValueCache();
     }
 

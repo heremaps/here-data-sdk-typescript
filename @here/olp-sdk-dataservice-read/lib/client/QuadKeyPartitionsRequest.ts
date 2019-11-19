@@ -17,7 +17,11 @@
  * License-Filename: LICENSE
  */
 
-import { QuadKey, QuadTreeIndexDepth } from "@here/olp-sdk-dataservice-read";
+import {
+    QuadKey,
+    QuadTreeIndexDepth,
+    validateBillingTag
+} from "@here/olp-sdk-dataservice-read";
 
 /**
  * A class that prepare information for calls to get Quad Tree metadata from Query API.
@@ -27,6 +31,7 @@ export class QuadKeyPartitionsRequest {
     private version?: number;
     private quadKey?: QuadKey;
     private depth?: QuadTreeIndexDepth;
+    private billingTag?: string;
 
     /**
      * The version of the catalog against which to run the query.
@@ -82,5 +87,20 @@ export class QuadKeyPartitionsRequest {
      */
     public getDepth(): QuadTreeIndexDepth {
         return this.depth || 0;
+    }
+
+    /**
+     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
+     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     */
+    public withBillingTag(tag: string) {
+        this.billingTag = validateBillingTag(tag);
+    }
+
+    /**
+     * Billing Tag for grouping billing records together
+     */
+    public getBillingTag(): string | undefined {
+        return this.billingTag;
     }
 }

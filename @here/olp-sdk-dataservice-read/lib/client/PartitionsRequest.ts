@@ -17,11 +17,14 @@
  * License-Filename: LICENSE
  */
 
+import { validateBillingTag } from "@here/olp-sdk-dataservice-read";
+
 /**
  * A class that prepare information for calls to get Partitions metadata from MetadataAPI.
  */
 export class PartitionsRequest {
     private version?: number;
+    private billingTag?: string;
 
     public getVersion(): number | undefined {
         return this.version;
@@ -37,5 +40,20 @@ export class PartitionsRequest {
     public withVersion(version?: number): PartitionsRequest {
         this.version = version;
         return this;
+    }
+
+    /**
+     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
+     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     */
+    public withBillingTag(tag: string) {
+        this.billingTag = validateBillingTag(tag);
+    }
+
+    /**
+     * Billing Tag for grouping billing records together
+     */
+    public getBillingTag(): string | undefined {
+        return this.billingTag;
     }
 }
