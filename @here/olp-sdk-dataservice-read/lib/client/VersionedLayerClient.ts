@@ -69,17 +69,23 @@ export class VersionedLayerClient {
             quadKey !== undefined
         ) {
             if (dataHandle) {
-                return this.downloadPartition(dataHandle, abortSignal);
+                return this.downloadPartition(
+                    dataHandle,
+                    abortSignal,
+                    dataRequest.getBillingTag()
+                );
             }
 
             if (partitionId) {
                 const partitionIdDataHandle = await this.getDataHandleByPartitionId(
                     partitionId,
-                    version
+                    version,
+                    dataRequest.getBillingTag()
                 ).catch(error => Promise.reject(error));
                 return this.downloadPartition(
                     partitionIdDataHandle,
-                    abortSignal
+                    abortSignal,
+                    dataRequest.getBillingTag()
                 );
             }
 
@@ -92,7 +98,8 @@ export class VersionedLayerClient {
                 ).catch(error => Promise.reject(error));
                 return this.downloadPartition(
                     quadTreeIndex.subQuads[0].dataHandle,
-                    abortSignal
+                    abortSignal,
+                    dataRequest.getBillingTag()
                 );
             }
         }
@@ -158,10 +165,13 @@ export class VersionedLayerClient {
             "metadata",
             abortSignal
         );
-        const version = request.getVersion() || (await this.getLatestVersion());
+        const version =
+            request.getVersion() ||
+            (await this.getLatestVersion(request.getBillingTag()));
         return MetadataApi.getPartitions(metaRequestBilder, {
             version,
-            layerId: this.layerId
+            layerId: this.layerId,
+            billingTag: request.getBillingTag()
         });
     }
 
@@ -173,16 +183,19 @@ export class VersionedLayerClient {
      */
     private async getDataHandleByPartitionId(
         partitionId: string,
-        version?: number
+        version?: number,
+        billingTag?: string
     ): Promise<string> {
         const queryRequestBilder = await this.getRequestBuilder("query");
-        const latestVersion = version || (await this.getLatestVersion());
+        const latestVersion =
+            version || (await this.getLatestVersion(billingTag));
         const partitions = await QueryApi.getPartitionsById(
             queryRequestBilder,
             {
                 version: `${latestVersion}`,
                 layerId: this.layerId,
-                partition: [partitionId]
+                partition: [partitionId],
+                billingTag
             }
         );
         const partition = partitions.partitions.find(element => {
@@ -199,12 +212,13 @@ export class VersionedLayerClient {
     /**
      * Gets the latest available catalog version what can be used as latest layer version
      */
-    private async getLatestVersion(): Promise<number> {
+    private async getLatestVersion(billingTag?: string): Promise<number> {
         const builder = await this.getRequestBuilder("metadata").catch(error =>
             Promise.reject(error)
         );
         const latestVersion = await MetadataApi.latestVersion(builder, {
-            startVersion: -1
+            startVersion: -1,
+            billingTag
         }).catch(async (error: Response) =>
             Promise.reject(
                 new Error(
@@ -219,12 +233,14 @@ export class VersionedLayerClient {
 
     private async downloadPartition(
         dataHandle: string,
-        abortSignal?: AbortSignal
+        abortSignal?: AbortSignal,
+        billingTag?: string
     ): Promise<Response> {
         const builder = await this.getRequestBuilder("blob", abortSignal);
         return BlobApi.getBlob(builder, {
             dataHandle,
-            layerId: this.layerId
+            layerId: this.layerId,
+            billingTag
         }).catch(async error => Promise.reject(error));
     }
 

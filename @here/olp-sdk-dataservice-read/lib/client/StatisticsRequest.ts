@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { HRN } from "@here/olp-sdk-dataservice-read";
+import { HRN, validateBillingTag } from "@here/olp-sdk-dataservice-read";
 
 export enum CoverageDataType {
     BITMAP = "tilemap",
@@ -29,10 +29,11 @@ export enum CoverageDataType {
  * A class that prepare information for calls to get Statistics from CoverageAPI
  */
 export class StatisticsRequest {
-    private catalogHrn: string | undefined;
-    private layerId: string | undefined;
-    private typemap: CoverageDataType | undefined;
-    private dataLevel: string | undefined;
+    private catalogHrn?: string;
+    private layerId?: string;
+    private typemap?: CoverageDataType;
+    private dataLevel?: string;
+    private billingTag?: string;
 
     constructor() {}
 
@@ -93,5 +94,20 @@ export class StatisticsRequest {
     public withDataLevel(dataLevel: string): StatisticsRequest {
         this.dataLevel = dataLevel;
         return this;
+    }
+
+    /**
+     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
+     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     */
+    public withBillingTag(tag: string) {
+        this.billingTag = validateBillingTag(tag);
+    }
+
+    /**
+     * Billing Tag for grouping billing records together
+     */
+    public getBillingTag(): string | undefined {
+        return this.billingTag;
     }
 }

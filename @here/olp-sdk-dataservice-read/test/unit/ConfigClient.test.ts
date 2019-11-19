@@ -73,6 +73,10 @@ describe("ConfigClient", () => {
             public getSchema() {
                 return "test-schema-hrn";
             }
+
+            public getBillingTag() {
+                return undefined;
+            }
         }
 
         const catalogsConfigRequest = new MockedCatalogsRequest();
@@ -90,6 +94,9 @@ describe("ConfigClient", () => {
     it("Should return all catalogs provided without setted filter by schema HRN.", async () => {
         class MockedCatalogsRequest {
             public getSchema() {
+                return undefined;
+            }
+            public getBillingTag() {
                 return undefined;
             }
         }

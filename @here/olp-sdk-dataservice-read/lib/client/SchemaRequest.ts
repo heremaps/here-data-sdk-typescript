@@ -18,12 +18,14 @@
  */
 
 import { ArtifactApi } from "@here/olp-sdk-dataservice-api";
+import { validateBillingTag } from "@here/olp-sdk-dataservice-read";
 
 /**
  * A class that prepare information for calls to the Artifact API.
  */
 export class SchemaRequest {
-    private variant: ArtifactApi.Variant | undefined;
+    private variant?: ArtifactApi.Variant;
+    private billingTag?: string;
 
     public getVariant(): ArtifactApi.Variant | undefined {
         return this.variant;
@@ -37,5 +39,20 @@ export class SchemaRequest {
     public withVariant(variant: ArtifactApi.Variant): SchemaRequest {
         this.variant = variant;
         return this;
+    }
+
+    /**
+     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
+     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     */
+    public withBillingTag(tag: string) {
+        this.billingTag = validateBillingTag(tag);
+    }
+
+    /**
+     * Billing Tag for grouping billing records together
+     */
+    public getBillingTag(): string | undefined {
+        return this.billingTag;
     }
 }

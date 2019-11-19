@@ -43,15 +43,15 @@ export class QueryClient {
 
     /**
      * Fetch the Quad Tree Index
-     * @param requestParams Configured instance of [[QuadTreeIndexRequest]]
+     * @param request Configured instance of [[QuadTreeIndexRequest]]
      * @param abortSignal The signal to aborting request
      */
     public async fetchQuadTreeIndex(
-        requestParams: QuadTreeIndexRequest,
+        request: QuadTreeIndexRequest,
         abortSignal?: AbortSignal
     ): Promise<QueryApi.Index> {
-        const quadKey = requestParams.getQuadKey();
-        const layerId = requestParams.getLayerId();
+        const quadKey = request.getQuadKey();
+        const layerId = request.getLayerId();
 
         if (!quadKey || !isValid(quadKey)) {
             return Promise.reject("Please provide correct QuadKey");
@@ -62,10 +62,11 @@ export class QueryClient {
         }
 
         const catalogVersion =
-            requestParams.getVersion() ||
+            request.getVersion() ||
             (await this.getCatalogLatestVersion(
-                requestParams.getCatalogHrn(),
-                abortSignal
+                request.getCatalogHrn(),
+                abortSignal,
+                request.getBillingTag()
             ).catch(error =>
                 Promise.reject(
                     `Error getting the last catalog version: ${error}`
@@ -76,11 +77,11 @@ export class QueryClient {
             return Promise.reject(`Please provide correct catalog version`);
         }
 
-        const request = await RequestFactory.create(
+        const requestBuilder = await RequestFactory.create(
             "query",
             this.apiVersion,
             this.settings,
-            requestParams.getCatalogHrn(),
+            request.getCatalogHrn(),
             abortSignal
         ).catch(error =>
             Promise.reject(
@@ -88,7 +89,7 @@ export class QueryClient {
             )
         );
 
-        const subQuadKeysMaxLength = requestParams.getDepth();
+        const subQuadKeysMaxLength = request.getDepth();
 
         let fetchingQuadTreeIndexFunction:
             | typeof QueryApi.quadTreeIndex
@@ -99,14 +100,16 @@ export class QueryClient {
             layerId: string;
             quadKey: string;
             depth: number;
+            billingTag?: string;
         } = {
             version: 0,
             layerId,
             depth: subQuadKeysMaxLength,
-            quadKey: mortonCodeFromQuadKey(quadKey).toString()
+            quadKey: mortonCodeFromQuadKey(quadKey).toString(),
+            billingTag: request.getBillingTag()
         };
 
-        if (requestParams.getLayerType() === "volatile") {
+        if (request.getLayerType() === "volatile") {
             fetchingQuadTreeIndexFunction = QueryApi.quadTreeIndexVolatile;
         } else {
             fetchingQuadTreeIndexFunction = QueryApi.quadTreeIndex;
@@ -117,7 +120,7 @@ export class QueryClient {
         }
 
         return fetchingQuadTreeIndexFunction(
-            request,
+            requestBuilder,
             paramsForFetchQuadTreeIndex
         );
     }
@@ -127,7 +130,8 @@ export class QueryClient {
      */
     private async getCatalogLatestVersion(
         catalogHrn: HRN,
-        abortSignal?: AbortSignal
+        abortSignal?: AbortSignal,
+        billingTag?: string
     ): Promise<number> {
         const request = await RequestFactory.create(
             "metadata",
@@ -142,7 +146,8 @@ export class QueryClient {
         );
 
         const latestVersion = await MetadataApi.latestVersion(request, {
-            startVersion: -1
+            startVersion: -1,
+            billingTag
         }).catch(error => Promise.reject(error));
 
         return Promise.resolve(latestVersion.version);

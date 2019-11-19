@@ -17,16 +17,17 @@
  * License-Filename: LICENSE
  */
 
-import { QuadKey } from "@here/olp-sdk-dataservice-read";
+import { QuadKey, validateBillingTag } from "@here/olp-sdk-dataservice-read";
 
 /**
  * A class that prepare information for calls to get Data from BlobAPI
  */
 export class DataRequest {
-    private dataHandle: string | undefined;
-    private partitionId: string | undefined;
-    private quadKey: QuadKey | undefined;
-    private version: number | undefined;
+    private dataHandle?: string;
+    private partitionId?: string;
+    private quadKey?: QuadKey;
+    private version?: number;
+    private billingTag?: string;
 
     public getDataHandle(): string | undefined {
         return this.dataHandle;
@@ -82,5 +83,20 @@ export class DataRequest {
     public withVersion(version: number): DataRequest {
         this.version = version;
         return this;
+    }
+
+    /**
+     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
+     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     */
+    public withBillingTag(tag: string) {
+        this.billingTag = validateBillingTag(tag);
+    }
+
+    /**
+     * Billing Tag for grouping billing records together
+     */
+    public getBillingTag(): string | undefined {
+        return this.billingTag;
     }
 }

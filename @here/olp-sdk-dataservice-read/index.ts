@@ -49,3 +49,5 @@ export * from "./lib/client/QuadTreeIndexRequest";
 export * from "./lib/client/QuadKeyPartitionsRequest";
 export * from "./lib/client/SchemaRequest";
 export * from "./lib/client/CatalogVersionRequest";
+export * from "./lib/utils/validateBillingTag";
+export * from "./lib/client/CatalogRequest";
