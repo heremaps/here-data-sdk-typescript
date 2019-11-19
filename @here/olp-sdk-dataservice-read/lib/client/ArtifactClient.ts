@@ -21,6 +21,7 @@ import { ArtifactApi } from "@here/olp-sdk-dataservice-api";
 import {
     OlpClientSettings,
     RequestFactory,
+    SchemaDetailsRequest,
     SchemaRequest
 } from "@here/olp-sdk-dataservice-read";
 
@@ -42,13 +43,15 @@ export class ArtifactClient {
      * @returns Object with schema details.
      */
     public async getSchemaDetails(
-        schemaRequest: SchemaRequest
+        schemaDetailsRequest: SchemaDetailsRequest
     ): Promise<ArtifactApi.GetSchemaResponse> {
-        const hrn = schemaRequest.getSchema();
+        const hrn = schemaDetailsRequest.getSchema();
 
         if (!hrn) {
             return Promise.reject(
-                `Please provide the schema HRN by SchemaRequest.withScema()`
+                new Error(
+                    `Please provide the schema HRN by schemaDetailsRequest.withScema()`
+                )
             );
         }
 
@@ -73,35 +76,22 @@ export class ArtifactClient {
      * @returns Archive with schema.
      */
     public async getSchema(schemaRequest: SchemaRequest): Promise<ArrayBuffer> {
-        const hrn = schemaRequest.getSchema();
-
-        if (!hrn) {
+        const variant = schemaRequest.getVariant();
+        if (!variant) {
             return Promise.reject(
-                `Please provide the schema HRN by SchemaRequest.withScema()`
+                new Error(
+                    `Please provide the schema variant by schemaRequest.withVariant()`
+                )
             );
         }
-
-        const schemaDetails = await this.getSchemaDetails(schemaRequest);
-        const schemaVariant = schemaDetails.variants!.find(
-            variant => variant.id === "ds"
-        );
-        if (schemaVariant === undefined) {
-            return Promise.reject(
-                `URL of the schema bundle is not found: ${schemaDetails}`
-            );
-        }
-
-        const hrnStr = hrn.toString();
         const request = await RequestFactory.create(
             "artifact",
             this.apiVersion,
             this.settings
         ).catch(error => Promise.reject(error));
         const response = await ArtifactApi.getArtifactUsingGET(request, {
-            artifactHrn: schemaVariant.url
-        }).catch(() =>
-            Promise.reject(`Cannot download schema bundle: ${hrnStr}`)
-        );
+            artifactHrn: variant.url
+        }).catch(() => Promise.reject(`Cannot download schema bundle`));
 
         if (response.status === 200) {
             return response.arrayBuffer();
@@ -115,7 +105,7 @@ export class ArtifactClient {
         };
         const message = response.statusText || messages[response.status];
         return Promise.reject(
-            `Artifact Service error: HTTP ${response.status}: ${message}, HRN: ${hrnStr}`
+            `Artifact Service error: HTTP ${response.status}: ${message}`
         );
     }
 }
