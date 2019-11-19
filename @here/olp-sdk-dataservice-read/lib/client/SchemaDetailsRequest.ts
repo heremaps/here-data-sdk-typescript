@@ -17,25 +17,25 @@
  * License-Filename: LICENSE
  */
 
-import { ArtifactApi } from "@here/olp-sdk-dataservice-api";
+import { HRN } from "@here/olp-sdk-dataservice-read";
 
 /**
  * A class that prepare information for calls to the Artifact API.
  */
-export class SchemaRequest {
-    private variant: ArtifactApi.Variant | undefined;
+export class SchemaDetailsRequest {
+    private schemaHrn: HRN | undefined;
 
-    public getVariant(): ArtifactApi.Variant | undefined {
-        return this.variant;
+    public getSchema(): HRN | undefined {
+        return this.schemaHrn;
     }
 
     /**
-     * Set value of schema HRN to use in methods getSchema and getSchema from [[ArtifactClient]].
+     * Set value of schema HRN to use in methods getSchema and getSchemaDetails from [[ArtifactClient]].
      *
-     * @param variant required, ArtifactApi.Variant
+     * @param schemaHrn required, schema HRN
      */
-    public withVariant(variant: ArtifactApi.Variant): SchemaRequest {
-        this.variant = variant;
+    public withSchema(schemaHrn: HRN): SchemaDetailsRequest {
+        this.schemaHrn = schemaHrn;
         return this;
     }
 }
