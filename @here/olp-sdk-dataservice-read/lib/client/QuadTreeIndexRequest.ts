@@ -17,7 +17,11 @@
  * License-Filename: LICENSE
  */
 
-import { HRN, QuadKey } from "@here/olp-sdk-dataservice-read";
+import {
+    HRN,
+    QuadKey,
+    validateBillingTag
+} from "@here/olp-sdk-dataservice-read";
 
 // tslint:disable-next-line: no-magic-numbers
 export type QuadTreeIndexDepth = 0 | 1 | 2 | 3 | 4;
@@ -30,6 +34,7 @@ export class QuadTreeIndexRequest {
     private version?: number;
     private quadKey?: QuadKey;
     private depth?: number;
+    private billingTag?: string;
 
     /**
      * Constructs the [[QuadTreeIndexRequest]] for fetching Quad tree index from Query API
@@ -120,5 +125,20 @@ export class QuadTreeIndexRequest {
      */
     getLayerId(): string | undefined {
         return this.layerId;
+    }
+
+    /**
+     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
+     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     */
+    public withBillingTag(tag: string) {
+        this.billingTag = validateBillingTag(tag);
+    }
+
+    /**
+     * Billing Tag for grouping billing records together
+     */
+    public getBillingTag(): string | undefined {
+        return this.billingTag;
     }
 }

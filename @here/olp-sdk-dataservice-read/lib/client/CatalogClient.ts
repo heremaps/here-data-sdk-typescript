@@ -26,6 +26,7 @@ import {
     OlpClientSettings,
     RequestFactory
 } from "@here/olp-sdk-dataservice-read";
+import { CatalogRequest } from "./CatalogRequest";
 
 /**
  * The `CatalogClient` class is the class to interact with a DataStore catalog.
@@ -48,14 +49,18 @@ export class CatalogClient {
      *
      * @summary Gets the details of a catalog.
      */
-    public async getCatalog(): Promise<ConfigApi.Catalog> {
+    public async getCatalog(
+        request: CatalogRequest
+    ): Promise<ConfigApi.Catalog> {
         const builder = await this.getRequestBuilder("config");
 
-        return ConfigApi.getCatalog(builder, { catalogHrn: this.hrn }).catch(
-            (err: Response) =>
-                Promise.reject(
-                    `Can't load catalog configuration. HRN: ${this.hrn}, error: ${err}`
-                )
+        return ConfigApi.getCatalog(builder, {
+            catalogHrn: this.hrn,
+            billingTag: request.getBillingTag()
+        }).catch((err: Response) =>
+            Promise.reject(
+                `Can't load catalog configuration. HRN: ${this.hrn}, error: ${err}`
+            )
         );
     }
 
@@ -75,7 +80,8 @@ export class CatalogClient {
             Promise.reject(error)
         );
         const latestVersion = await MetadataApi.latestVersion(builder, {
-            startVersion
+            startVersion,
+            billingTag: request.getBillingTag()
         });
         return latestVersion.version;
     }
@@ -104,7 +110,11 @@ export class CatalogClient {
         const builder = await this.getRequestBuilder("metadata").catch(error =>
             Promise.reject(error)
         );
-        return MetadataApi.listVersions(builder, { startVersion, endVersion });
+        return MetadataApi.listVersions(builder, {
+            startVersion,
+            endVersion,
+            billingTag: request.getBillingTag()
+        });
     }
 
     /**

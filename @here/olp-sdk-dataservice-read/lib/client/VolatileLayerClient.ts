@@ -65,16 +65,22 @@ export class VolatileLayerClient {
             quadKey !== undefined
         ) {
             if (dataHandle) {
-                return this.downloadPartition(dataHandle, abortSignal);
+                return this.downloadPartition(
+                    dataHandle,
+                    abortSignal,
+                    dataRequest.getBillingTag()
+                );
             }
 
             if (partitionId) {
                 const partitionIdDataHandle = await this.getDataHandleByPartitionId(
-                    partitionId
+                    partitionId,
+                    dataRequest.getBillingTag()
                 ).catch((error: Response) => Promise.reject(error));
                 return this.downloadPartition(
                     partitionIdDataHandle,
-                    abortSignal
+                    abortSignal,
+                    dataRequest.getBillingTag()
                 );
             }
 
@@ -87,7 +93,8 @@ export class VolatileLayerClient {
                 ).catch(error => Promise.reject(error));
                 return this.downloadPartition(
                     quadTreeIndex.subQuads[0].dataHandle,
-                    abortSignal
+                    abortSignal,
+                    dataRequest.getBillingTag()
                 );
             }
         }
@@ -155,18 +162,21 @@ export class VolatileLayerClient {
 
         const metaRequestBilder = await this.getRequestBuilder("metadata");
         return MetadataApi.getPartitions(metaRequestBilder, {
-            layerId: this.layerId
+            layerId: this.layerId,
+            billingTag: request.getBillingTag()
         });
     }
 
     private async downloadPartition(
         dataHandle: string,
-        abortSignal?: AbortSignal
+        abortSignal?: AbortSignal,
+        billingTag?: string
     ): Promise<Response> {
         const builder = await this.getRequestBuilder("blob", abortSignal);
         return BlobApi.getBlob(builder, {
             dataHandle,
-            layerId: this.layerId
+            layerId: this.layerId,
+            billingTag
         }).catch(async error => Promise.reject(error));
     }
 
@@ -199,14 +209,16 @@ export class VolatileLayerClient {
      * @returns A promise of partition metadata which used to get partition data
      */
     private async getDataHandleByPartitionId(
-        partitionId: string
+        partitionId: string,
+        billingTag?: string
     ): Promise<string> {
         const queryRequestBilder = await this.getRequestBuilder("query");
         const partitions = await QueryApi.getPartitionsById(
             queryRequestBilder,
             {
                 layerId: this.layerId,
-                partition: [partitionId]
+                partition: [partitionId],
+                billingTag
             }
         );
         const partition = partitions.partitions.find(element => {

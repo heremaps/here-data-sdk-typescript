@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { ArtifactApi } from "@here/olp-sdk-dataservice-api";
+import { validateBillingTag } from "@here/olp-sdk-dataservice-read";
 
 /**
  * A class that prepare information for calls to the Artifact API.
@@ -25,6 +25,7 @@ import { ArtifactApi } from "@here/olp-sdk-dataservice-api";
 export class CatalogVersionRequest {
     private startVersion?: number;
     private endVersion?: number;
+    private billingTag?: string;
 
     public getStartVersion(): number | undefined {
         return this.startVersion;
@@ -54,5 +55,20 @@ export class CatalogVersionRequest {
     public withEndVersion(version?: number): CatalogVersionRequest {
         this.endVersion = version;
         return this;
+    }
+
+    /**
+     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
+     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     */
+    public withBillingTag(tag: string) {
+        this.billingTag = validateBillingTag(tag);
+    }
+
+    /**
+     * Billing Tag for grouping billing records together
+     */
+    public getBillingTag(): string | undefined {
+        return this.billingTag;
     }
 }

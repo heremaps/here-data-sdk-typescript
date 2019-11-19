@@ -17,13 +17,14 @@
  * License-Filename: LICENSE
  */
 
-import { HRN } from "@here/olp-sdk-dataservice-read";
+import { HRN, validateBillingTag } from "@here/olp-sdk-dataservice-read";
 
 /**
  * A class that prepare information for calls to the Artifact API.
  */
 export class SchemaDetailsRequest {
-    private schemaHrn: HRN | undefined;
+    private schemaHrn?: HRN;
+    private billingTag?: string;
 
     public getSchema(): HRN | undefined {
         return this.schemaHrn;
@@ -37,5 +38,20 @@ export class SchemaDetailsRequest {
     public withSchema(schemaHrn: HRN): SchemaDetailsRequest {
         this.schemaHrn = schemaHrn;
         return this;
+    }
+
+    /**
+     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
+     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     */
+    public withBillingTag(tag: string) {
+        this.billingTag = validateBillingTag(tag);
+    }
+
+    /**
+     * Billing Tag for grouping billing records together
+     */
+    public getBillingTag(): string | undefined {
+        return this.billingTag;
     }
 }

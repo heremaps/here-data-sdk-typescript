@@ -40,18 +40,22 @@ export class ConfigClient {
      * If schema is not setted, then filter will return search for all.
      */
     public async getCatalogs(
-        catalogsRequest: CatalogsRequest
+        request: CatalogsRequest
     ): Promise<ConfigApi.CatalogsListResult> {
-        const request = await RequestFactory.create(
+        const requestBuilder = await RequestFactory.create(
             "config",
             this.apiVersion,
             this.settings
         ).catch(error => Promise.reject(error));
         return ConfigApi.getCatalogs(
-            request,
-            catalogsRequest.getSchema()
-                ? { verbose: "true", schemaHrn: catalogsRequest.getSchema() }
-                : {}
+            requestBuilder,
+            request.getSchema()
+                ? {
+                      verbose: "true",
+                      schemaHrn: request.getSchema(),
+                      billingTag: request.getBillingTag()
+                  }
+                : { billingTag: request.getBillingTag() }
         );
     }
 }
