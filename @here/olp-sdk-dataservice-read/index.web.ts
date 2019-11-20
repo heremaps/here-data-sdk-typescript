@@ -45,3 +45,4 @@ export * from "./lib/client/QueryClient";
 export * from "./lib/client/QuadTreeIndexRequest";
 export * from "./lib/client/QuadKeyPartitionsRequest";
 export * from "./lib/client/SchemaRequest";
+export * from "./lib/client/CatalogVersionRequest";

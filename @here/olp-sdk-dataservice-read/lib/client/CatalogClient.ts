@@ -20,6 +20,7 @@
 import { ConfigApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
 import {
     ApiName,
+    CatalogVersionRequest,
     DataStoreRequestBuilder,
     HRN,
     OlpClientSettings,
@@ -61,11 +62,15 @@ export class CatalogClient {
     /**
      * Get the latest version of the catalog.
      *
-     * @param startVersion Catalog start version (exclusive). Default is -1. By convention -1
+     * @param request Is [[CatalogVersionRequest]] instance and has ((getStartVersion)) method to get startVersion.
+     * Catalog start version (exclusive). Default is -1. By convention -1
      * indicates the virtual initial version before the first publication which will have version 0.
      * @returns A promise of the http response that contains the payload with latest version.
      */
-    async getLatestVersion(startVersion: number = -1): Promise<number> {
+    public async getLatestVersion(
+        request: CatalogVersionRequest
+    ): Promise<number> {
+        const startVersion = request.getStartVersion() || -1;
         const builder = await this.getRequestBuilder("metadata").catch(error =>
             Promise.reject(error)
         );
@@ -79,23 +84,26 @@ export class CatalogClient {
      * Get the information about specific catalog versions. Maximum number of versions to be
      * returned per call is 1000 versions. If range is bigger than 1000 versions 400 Bad Request
      * will be returned.
-     *
-     * @param startVersion Catalog start version (exclusive). Default is -1. By convention -1
+     * @param request Is [[CatalogVersionRequest]] instance and has ((getStartVersion)) and ((getEndVersion)) methods.
+     * StartVersion - Catalog start version (exclusive). Default is -1. By convention -1
      * indicates the virtual initial version before the first publication which will have version 0.
-     * @param endVersion Catalog end version (inclusive). If not defined, then the latest catalog
+     * EndVersion - Catalog end version (inclusive). If not defined, then the latest catalog
      * version will be fethced and used.
      * @returns A promise of the http response that contains the payload with versions in requested
      * range.
      */
-    async getVersions(
-        startVersion: number = -1,
-        endVersion?: number
+    public async getVersions(
+        request: CatalogVersionRequest
     ): Promise<MetadataApi.VersionInfos> {
+        const startVersion = request.getStartVersion() || -1;
+        let endVersion = request.getEndVersion();
         if (endVersion === undefined) {
-            endVersion = await this.getLatestVersion(startVersion);
+            endVersion = await this.getLatestVersion(request);
         }
 
-        const builder = await this.getRequestBuilder("metadata");
+        const builder = await this.getRequestBuilder("metadata").catch(error =>
+            Promise.reject(error)
+        );
         return MetadataApi.listVersions(builder, { startVersion, endVersion });
     }
 
