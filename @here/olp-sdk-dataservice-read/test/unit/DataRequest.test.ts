@@ -28,7 +28,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("SummaryRequest", () => {
+describe("DataRequest", () => {
     const mockedDataHandle = "43d76b9f-e934-40e5-9ce4-91d88a30f1c6";
     const mockedPartitionId = "123123123";
     const mockedVersion = 42;
@@ -41,7 +41,7 @@ describe("SummaryRequest", () => {
     it("Should initialize", () => {
         const dataRequest = new DataRequest();
 
-        assert.isDefined(DataRequest);
+        assert.isDefined(dataRequest);
         expect(dataRequest).be.instanceOf(DataRequest);
     });
 
