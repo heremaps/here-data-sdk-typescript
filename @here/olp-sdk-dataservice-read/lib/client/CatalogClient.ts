@@ -20,16 +20,10 @@
 import { ConfigApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
 import {
     ApiName,
-    CatalogLayer,
-    DataRequest,
     DataStoreRequestBuilder,
     HRN,
     OlpClientSettings,
-    PartitionsRequest,
-    QuadKey,
-    RequestFactory,
-    VersionedLayerClient,
-    VolatileLayerClient
+    RequestFactory
 } from "@here/olp-sdk-dataservice-read";
 
 /**
@@ -38,19 +32,6 @@ import {
 export class CatalogClient {
     private readonly apiVersion: string = "v1";
     private readonly hrn: string;
-
-    /**
-     * Magic number to define latest or undefined version for the requests.
-     */
-    private readonly MAGIC_VERSION = -1;
-
-    /**
-     * The layers this catalog contains. You can also use [[getLayer]] as a convenience function to
-     * obtain layers.
-     */
-
-    // tslint:disable-next-line: deprecation
-    readonly layers = new Map<string, CatalogLayer>();
 
     /**
      * Constructs a new `CatalogClient`
@@ -75,30 +56,6 @@ export class CatalogClient {
                     `Can't load catalog configuration. HRN: ${this.hrn}, error: ${err}`
                 )
         );
-    }
-
-    /**
-     * @deprecated
-     * Convenience function to obtain a layer object from this catalog.
-     *
-     * Rejects an Error if the layer does not exist in this catalog or if the layer type is not
-     * versioned or volatile.
-     *
-     * @param layerName The name of the layer to look for.
-     * @returns The promise with the layer object.
-     */
-    public async getVolatileOrVersionedLayer(
-        layerName: string
-        // tslint:disable-next-line: deprecation
-    ): Promise<CatalogLayer> {
-        const data = await this.findLayer(layerName);
-        if (data === null) {
-            return Promise.reject(
-                new Error(`Layer '${layerName}' not found in catalog`)
-            );
-        }
-
-        return Promise.resolve(data);
     }
 
     /**
@@ -140,150 +97,6 @@ export class CatalogClient {
 
         const builder = await this.getRequestBuilder("metadata");
         return MetadataApi.listVersions(builder, { startVersion, endVersion });
-    }
-
-    /**
-     * Convenience function to obtain a layer object from this catalog.
-     *
-     * @param layerName The name of the layer to look for.
-     * @returns Promise with the layer object or with null if the layer is not part of this catalog.
-     */
-    // tslint:disable-next-line: deprecation
-    private async findLayer(layerName: string): Promise<CatalogLayer | null> {
-        if (!this.layers.size) {
-            await this.loadVolatileOrVersionedLayersFromConfig().catch(err =>
-                Promise.reject(`Can't find layer: ${layerName}. Error: ${err}`)
-            );
-        }
-        return Promise.resolve(this.layers.get(layerName) || null);
-    }
-
-    /**
-     * Loads to the cache Versioned or Volatile layers
-     */
-    private async loadVolatileOrVersionedLayersFromConfig(): Promise<{
-        ok: boolean;
-        message?: string;
-    }> {
-        const catalogConfiguration: ConfigApi.Catalog = await this.getCatalog().catch(
-            err => Promise.reject(err)
-        );
-
-        if (!catalogConfiguration) {
-            return Promise.reject(
-                "Can't load layers from catalog configuration"
-            );
-        }
-
-        const layersConfigurations: ConfigApi.Layer[] =
-            catalogConfiguration.layers;
-
-        const metadataRequestBuilder = await this.getRequestBuilder("metadata");
-
-        const catalogLatestVersionInfo = await MetadataApi.latestVersion(
-            metadataRequestBuilder,
-            { startVersion: this.MAGIC_VERSION }
-        );
-
-        if (
-            catalogLatestVersionInfo.version === undefined ||
-            catalogLatestVersionInfo.version === -1
-        ) {
-            return Promise.reject(
-                new Error(
-                    "Invalid version received from latest version call, cannot proceed. Instance: " +
-                        this.hrn
-                )
-            );
-        }
-        const catalogExactVersion = catalogLatestVersionInfo.version;
-
-        const layerVersionsFromApi = await MetadataApi.getLayerVersion(
-            metadataRequestBuilder,
-            { version: catalogExactVersion }
-        );
-
-        const layerVersions = new Map<string, number>(
-            layerVersionsFromApi.layerVersions.map(
-                v => [v.layer, v.version] as [string, number]
-            )
-        );
-
-        for (const layerConfig of layersConfigurations) {
-            // tslint:disable-next-line: deprecation
-            const layer: CatalogLayer | null = this.buildCatalogLayer(
-                layerConfig,
-                layerVersions.get(layerConfig.id)
-            );
-            if (layer) {
-                this.layers.set(layerConfig.id, layer);
-            }
-        }
-
-        return Promise.resolve({ ok: true });
-    }
-
-    private buildCatalogLayer(
-        config: ConfigApi.Layer,
-        version?: number
-        // tslint:disable-next-line: deprecation
-    ): CatalogLayer | null {
-        // we're interesting only for versioned or volatile layers.
-        if (
-            config.layerType !== "versioned" &&
-            config.layerType !== "volatile"
-        ) {
-            return null;
-        }
-
-        let layerClient: VersionedLayerClient | VolatileLayerClient;
-
-        if (config.layerType === "versioned") {
-            layerClient = new VersionedLayerClient(
-                HRN.fromString(this.hrn),
-                config.id,
-                this.settings
-            );
-        } else {
-            layerClient = new VolatileLayerClient(
-                HRN.fromString(this.hrn),
-                config.id,
-                this.settings
-            );
-        }
-
-        // add required methods for interface (all required methods means that methods are in both Layer clients)
-        // tslint:disable-next-line: deprecation
-        const result: CatalogLayer = {
-            ...config,
-            apiVersion: 2,
-            getIndex: async (rootKey: QuadKey) =>
-                layerClient.getIndexMetadata(rootKey),
-            getPartitionsIndex: async (partitionsRequest: PartitionsRequest) =>
-                layerClient.getPartitions(partitionsRequest)
-        };
-
-        // @todo temporary solution. Will be removed in scope of OLPEDGE-938
-        if (layerClient instanceof VersionedLayerClient) {
-            // make TS happy
-            const versionedLayerClient = layerClient as VersionedLayerClient;
-            result.getData = async (dataRequest: DataRequest) =>
-                versionedLayerClient.getData(dataRequest);
-        }
-
-        // @todo temporary solution. Will be removed in scope of OLPEDGE-938
-        if (layerClient instanceof VolatileLayerClient) {
-            // make TS happy
-            const volatileLayerClient = layerClient as VolatileLayerClient;
-            result.getPartition = async (
-                partitionId: string,
-                requestInit?: RequestInit
-            ) => volatileLayerClient.getPartition(partitionId);
-            result.getTile = async (quadKey: QuadKey) =>
-                volatileLayerClient.getTile(quadKey);
-        }
-
-        return result;
     }
 
     /**

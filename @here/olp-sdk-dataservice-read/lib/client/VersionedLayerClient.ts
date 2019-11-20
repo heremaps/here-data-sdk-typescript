@@ -19,20 +19,12 @@
 
 import { BlobApi, MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
 import {
-    addQuadKeys,
-    AggregatedDownloadResponse,
     ApiName,
-    computeParentKey,
     DataRequest,
     DataStoreRequestBuilder,
     HRN,
-    IndexMap,
-    isValid,
-    mortonCodeFromQuadKey,
     OlpClientSettings,
     PartitionsRequest,
-    QuadKey,
-    quadKeyFromMortonCode,
     QuadKeyPartitionsRequest,
     QuadTreeIndexRequest,
     QueryClient,
@@ -46,21 +38,6 @@ import {
 export class VersionedLayerClient {
     private readonly apiVersion: string = "v1";
     private readonly hrn: string;
-    private readonly indexDepth = 4;
-
-    private static subkeyAddFunction(): (
-        quadKey: QuadKey,
-        sub: string
-    ) => QuadKey {
-        return (quadKey: QuadKey, sub: string) => {
-            const subQuadKey = quadKeyFromMortonCode(sub);
-            return addQuadKeys(quadKey, subQuadKey);
-        };
-    }
-
-    private static toTileKeyFunction(): (key: string) => QuadKey {
-        return (key: string) => quadKeyFromMortonCode(key);
-    }
 
     constructor(
         catalogHrn: HRN,
@@ -128,148 +105,6 @@ export class VersionedLayerClient {
     }
 
     /**
-     * Fetch and returns partition metadata
-     * @param partitionId The name of the partition to fetch.
-     * @param version The version of the layer to fetch
-     * @returns A promise of partition metadata which used to get partition data
-     */
-    private async getDataHandleByPartitionId(
-        partitionId: string,
-        version?: number
-    ): Promise<string> {
-        const queryRequestBilder = await this.getRequestBuilder("query");
-        const latestVersion = version || (await this.getLatestVersion());
-        const partitions = await QueryApi.getPartitionsById(
-            queryRequestBilder,
-            {
-                version: `${latestVersion}`,
-                layerId: this.layerId,
-                partition: [partitionId]
-            }
-        );
-        const partition = partitions.partitions.find(element => {
-            return element.partition === partitionId;
-        });
-
-        return partition && partition.dataHandle
-            ? partition.dataHandle
-            : Promise.reject(
-                  `No partition dataHandle for partition ${partitionId}. HRN: ${this.hrn}`
-              );
-    }
-
-    /**
-     * @deprecated Instead could be used getData method
-     * Asynchronously fetches a partition from this layer.
-     * Used to get partition with generic partition type
-     * To get partition with HERETile partition type use @this getTile method
-     * @param partitionId The name of the partition to fetch.
-     * @param partitionRequestInit Optional request options to be passed to fetch when downloading a
-     * partition.
-     * @returns A promise of the http response that contains the payload of the requested partition.
-     */
-    async getPartition(
-        partitionId: string,
-        partitionRequestInit?: RequestInit
-    ): Promise<Response> {
-        const partitions = await this.downloadPartitionData(partitionId);
-        const partition = partitions.partitions.find(element => {
-            return element.partition === partitionId;
-        });
-        if (partition === undefined) {
-            return Promise.reject(
-                new Error(
-                    `Unknown partition: ${partitionId} in layer ${this.layerId}. HRN: ${this.hrn}`
-                )
-            );
-        }
-        if (!partition.dataHandle) {
-            return Promise.reject(
-                new Error(
-                    `No partition dataHandle for partition ${partition}. HRN: ${this.hrn}`
-                )
-            );
-        }
-
-        return this.downloadPartition(partition.dataHandle);
-    }
-
-    /**
-     * @deprecated Instead could be used getData method     *
-     * Asynchronously fetches a tile from this catalog.
-     * Used to get partition with HEREtile partition type
-     *
-     * Note: If the tile doesn't exist in the catalog, a successful response with a `204` status
-     * code is returned.
-     *
-     * Example:
-     *
-     * ```typescript
-     * const response = versionedLayerClient.getTile(tileKey);
-     * if (!response.ok) {
-     *     // a network error happened
-     *     console.error("Unable to download tile", response.statusText);
-     *     return;
-     * }
-     * if (response.status === 204) {
-     *     // 204 - NO CONTENT, no data exists at the given tile. Do nothing.
-     *     return;
-     * }
-     *
-     * // the response is ok and contains data, access it, for example, as arrayBuffer:
-     * const payload = await response.arrayBuffer();
-     * ```
-     *
-     * @param quadKey The quad key of the tile.
-     * @param tileRequestInit Optional request options to be passed to fetch when downloading a
-     * tile.
-     * @returns A promise of the HTTP response that contains the payload of the requested tile.
-     */
-    async getTile(quadKey: QuadKey): Promise<Response> {
-        if (!isValid(quadKey)) {
-            throw Error("QuadKey is not valid");
-        }
-
-        const index = await this.getIndexFor(quadKey);
-        const resultSub = index.get(mortonCodeFromQuadKey(quadKey));
-
-        if (resultSub === undefined) {
-            return Promise.resolve(new Response(null, { status: 204 }));
-        }
-
-        return this.downloadPartition(resultSub);
-    }
-
-    /**
-     * Asynchronously fetches an aggregated tile from this layer.
-     *
-     * The result of this operation is the tile at the given tileKey or the closest ancestor that
-     * contains data.
-     *
-     * @param quadKey The quad key of the tile.
-     * @param tileRequestInit Optional request options to be passed to fetch when downloading a
-     * tile.
-     * @returns A promise of the http response that contains the payload of the requested tile.
-     */
-    async getAggregatedTile(
-        quadKey: QuadKey
-    ): Promise<AggregatedDownloadResponse> {
-        const index = await this.getIndexFor(quadKey);
-
-        const resultIdx = this.findAggregatedIndex(index, quadKey);
-
-        if (resultIdx === undefined) {
-            return Promise.resolve(new Response(null, { status: 204 }));
-        }
-
-        const response = (await this.downloadPartition(
-            resultIdx.dataHandle
-        )) as AggregatedDownloadResponse;
-        response.quadKey = resultIdx.quadKey;
-        return response;
-    }
-
-    /**
      * Fetch partitions metadata from Query API by QuadKey
      * @returns Quad Tree Index for partition
      */
@@ -331,34 +166,34 @@ export class VersionedLayerClient {
     }
 
     /**
-     * Asynchronously gets index metadata versioned layers.
-     * Can be used to get partitionId
-     *
-     * @param rootKey The root quad key of the returned index.
-     * @returns A promise to the index object parsed as a map.
-     */
-    async getIndexMetadata(rootKey: QuadKey): Promise<IndexMap> {
-        if (!isValid(rootKey)) {
-            return Promise.reject(new Error("QuadKey is not valid"));
-        }
-        return this.downloadIndex(rootKey);
-    }
-
-    /**
      * Fetch and returns partition metadata
      * @param partitionId The name of the partition to fetch.
+     * @param version The version of the layer to fetch
      * @returns A promise of partition metadata which used to get partition data
      */
-    private async downloadPartitionData(
-        partitionId: string
-    ): Promise<QueryApi.Partitions> {
+    private async getDataHandleByPartitionId(
+        partitionId: string,
+        version?: number
+    ): Promise<string> {
         const queryRequestBilder = await this.getRequestBuilder("query");
-        const latestVersion = await this.getLatestVersion();
-        return QueryApi.getPartitionsById(queryRequestBilder, {
-            version: `${latestVersion}`,
-            layerId: this.layerId,
-            partition: [partitionId]
+        const latestVersion = version || (await this.getLatestVersion());
+        const partitions = await QueryApi.getPartitionsById(
+            queryRequestBilder,
+            {
+                version: `${latestVersion}`,
+                layerId: this.layerId,
+                partition: [partitionId]
+            }
+        );
+        const partition = partitions.partitions.find(element => {
+            return element.partition === partitionId;
         });
+
+        return partition && partition.dataHandle
+            ? partition.dataHandle
+            : Promise.reject(
+                  `No partition dataHandle for partition ${partitionId}. HRN: ${this.hrn}`
+              );
     }
 
     /**
@@ -380,61 +215,6 @@ export class VersionedLayerClient {
             )
         );
         return latestVersion.version;
-    }
-
-    // finds any index that contains the given tile key
-    private async getIndexFor(quadKey: QuadKey): Promise<IndexMap> {
-        return this.downloadIndex(computeParentKey(quadKey, this.indexDepth));
-    }
-
-    // downloads the index
-    private async downloadIndex(indexRootKey: QuadKey): Promise<IndexMap> {
-        let dsIndex: QueryApi.Index;
-        const queryRequestBuilder = await this.getRequestBuilder("query");
-        const version = await this.getLatestVersion();
-
-        dsIndex = await QueryApi.quadTreeIndex(queryRequestBuilder, {
-            version,
-            layerId: this.layerId,
-            quadKey: mortonCodeFromQuadKey(indexRootKey).toString(),
-            depth: this.indexDepth
-        });
-
-        return this.parseIndex(indexRootKey, dsIndex);
-    }
-
-    private parseIndex(
-        indexRootKey: QuadKey,
-        dsIndex: QueryApi.Index
-    ): IndexMap {
-        const subkeyAddFunction = VersionedLayerClient.subkeyAddFunction();
-        const toTileKeyFunction = VersionedLayerClient.toTileKeyFunction();
-
-        const subQuads = new Map<number, string>();
-
-        if (!dsIndex || dsIndex.subQuads === undefined) {
-            return subQuads;
-        }
-
-        for (const sub of dsIndex.subQuads) {
-            const subTileKey: QuadKey = subkeyAddFunction(
-                indexRootKey,
-                sub.subQuadKey
-            );
-            subQuads.set(mortonCodeFromQuadKey(subTileKey), sub.dataHandle);
-        }
-
-        if (dsIndex.parentQuads !== undefined) {
-            for (const parent of dsIndex.parentQuads) {
-                const parentTileKey = toTileKeyFunction(parent.partition);
-                subQuads.set(
-                    mortonCodeFromQuadKey(parentTileKey),
-                    parent.dataHandle
-                );
-            }
-        }
-
-        return subQuads;
     }
 
     private async downloadPartition(
@@ -469,23 +249,5 @@ export class VersionedLayerClient {
                 `Error retrieving from cache builder for resource "${this.hrn}" and api: "${builderType}.\n${err}"`
             )
         );
-    }
-
-    private findAggregatedIndex(
-        index: IndexMap,
-        quadKey: QuadKey
-    ): { dataHandle: string; quadKey: QuadKey } | undefined {
-        // get the index of the closest parent
-        let key = quadKey;
-
-        for (let level = quadKey.level; level >= 0; --level) {
-            const sub = index.get(mortonCodeFromQuadKey(key));
-            if (sub !== undefined) {
-                return { dataHandle: sub, quadKey: key };
-            }
-            key = computeParentKey(key, 1);
-        }
-
-        return undefined;
     }
 }
