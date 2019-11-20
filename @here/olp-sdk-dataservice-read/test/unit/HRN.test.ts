@@ -18,7 +18,7 @@
  */
 
 import { assert } from "chai";
-import { HRN } from "../lib/HRN";
+import { HRN } from "../../lib/HRN";
 
 describe("HRN", () => {
     it("fromString", () => {

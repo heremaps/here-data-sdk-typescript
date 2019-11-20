@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { getEnvLookUpUrl } from "../lib/utils/getEnvLookupUrl";
+import { getEnvLookUpUrl } from "../../lib/utils/getEnvLookupUrl";
 
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
