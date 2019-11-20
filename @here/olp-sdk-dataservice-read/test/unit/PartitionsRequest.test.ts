@@ -28,7 +28,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("SummaryRequest", () => {
+describe("PartitionsRequest", () => {
     const mockedVersion = 42;
 
     it("Should initialize", () => {
