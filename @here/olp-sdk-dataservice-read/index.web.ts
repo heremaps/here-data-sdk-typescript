@@ -17,33 +17,4 @@
  * License-Filename: LICENSE
  */
 
-export * from "./lib/DataStoreDownloadManager";
-export * from "./lib/client/CatalogClient";
-export * from "./lib/client/CatalogRequest";
-export * from "./lib/client/DataRequest";
-export * from "./lib/HRN";
-export * from "./lib/utils/QuadKeyUtils";
-export * from "./lib/DownloadManager";
-export * from "./lib/client/StatisticsClient";
-export * from "./lib/client/StatisticsRequest";
-export * from "./lib/client/SummaryRequest";
-export * from "./lib/client/VersionedLayerClient";
-export * from "./lib/client/VolatileLayerClient";
-export * from "./lib/client/ConfigClient";
-export * from "./lib/client/CatalogsRequest";
-export * from "./lib/utils/RequestBuilderFactory";
-export * from "./lib/utils/getEnvLookupUrl";
-export * from "./lib/client/OlpClientSettings";
-export * from "./lib/cache/ApiCacheRepository";
-export * from "./lib/cache/KeyValueCache";
-export * from "./lib/DataStoreRequestBuilder";
-export * from "./lib/client/SchemaDetailsRequest";
-export * from "./lib/client/ArtifactClient";
-export * from "./lib/client/PartitionsRequest";
-export * from "./lib/client/QueryClient";
-export * from "./lib/client/QuadTreeIndexRequest";
-export * from "./lib/client/QuadKeyPartitionsRequest";
-export * from "./lib/client/SchemaRequest";
-export * from "./lib/client/CatalogVersionRequest";
-export * from "./lib/utils/validateBillingTag";
-export * from "./lib/client/CatalogRequest";
+export * from "./lib";
