@@ -1,6 +1,6 @@
 # HERE OLP SDK for TypeScript
 
-The HERE OLP SDK for TypeScript is a _work-in-progress_ TypeScript client for [HERE Open Location Platform](https://platform.here.com).
+The HERE OLP SDK for TypeScript is a TypeScript client for [HERE Open Location Platform](https://platform.here.com).
 
 ## Health Сheck
 
@@ -87,12 +87,12 @@ npm run coverage
 
 #### Generate documentation with TypeDoc
 
-To generate documentation for all modules and classes, run :
+To generate documentation for all modules and classes, run:
 
 ```sh
 npm run typedoc
 ```
-The dist/doc folder will be generated
+The dist/doc folder will be generated.
 
 #### Usage of Bundle functionality
 
