@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-// tslint:disable-next-line: no-import-side-effect
-import "@here/olp-sdk-fetch";
-
-export * from "./lib";
+export * from "./QuadKeyUtils";
+export * from "./RequestBuilderFactory";
+export * from "./getEnvLookupUrl";
+export * from "./validateBillingTag";
