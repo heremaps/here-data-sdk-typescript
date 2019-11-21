@@ -22,7 +22,6 @@ export * from "./lib/client/CatalogClient";
 export * from "./lib/client/CatalogRequest";
 export * from "./lib/client/DataRequest";
 export * from "./lib/HRN";
-export * from "./lib/error/NotFoundError";
 export * from "./lib/utils/QuadKeyUtils";
 export * from "./lib/DownloadManager";
 export * from "./lib/client/StatisticsClient";
