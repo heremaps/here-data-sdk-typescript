@@ -92,7 +92,7 @@ export class VersionedLayerClient {
             if (quadKey) {
                 const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest().withQuadKey(
                     quadKey
-                );
+                ).withVersion(version);
                 const quadTreeIndex = await this.getPartitions(
                     quadKeyPartitionsRequest
                 ).catch(error => Promise.reject(error));
@@ -163,6 +163,7 @@ export class VersionedLayerClient {
 
         const metaRequestBilder = await this.getRequestBuilder(
             "metadata",
+            HRN.fromString(this.hrn),
             abortSignal
         );
         const version =
@@ -186,7 +187,10 @@ export class VersionedLayerClient {
         version?: number,
         billingTag?: string
     ): Promise<string> {
-        const queryRequestBilder = await this.getRequestBuilder("query");
+        const queryRequestBilder = await this.getRequestBuilder(
+            "query",
+            HRN.fromString(this.hrn)
+        );
         const latestVersion =
             version || (await this.getLatestVersion(billingTag));
         const partitions = await QueryApi.getPartitionsById(
@@ -213,7 +217,10 @@ export class VersionedLayerClient {
      * Gets the latest available catalog version what can be used as latest layer version
      */
     private async getLatestVersion(billingTag?: string): Promise<number> {
-        const builder = await this.getRequestBuilder("metadata").catch(error =>
+        const builder = await this.getRequestBuilder(
+            "metadata",
+            HRN.fromString(this.hrn)
+        ).catch(error =>
             Promise.reject(error)
         );
         const latestVersion = await MetadataApi.latestVersion(builder, {
@@ -236,7 +243,11 @@ export class VersionedLayerClient {
         abortSignal?: AbortSignal,
         billingTag?: string
     ): Promise<Response> {
-        const builder = await this.getRequestBuilder("blob", abortSignal);
+        const builder = await this.getRequestBuilder(
+            "blob",
+            HRN.fromString(this.hrn),
+            abortSignal
+        );
         return BlobApi.getBlob(builder, {
             dataHandle,
             layerId: this.layerId,
@@ -252,13 +263,14 @@ export class VersionedLayerClient {
      */
     private async getRequestBuilder(
         builderType: ApiName,
+        hrn?: HRN,
         abortSignal?: AbortSignal
     ): Promise<DataStoreRequestBuilder> {
         return RequestFactory.create(
             builderType,
             this.apiVersion,
             this.settings,
-            HRN.fromString(this.hrn),
+            hrn,
             abortSignal
         ).catch(err =>
             Promise.reject(
