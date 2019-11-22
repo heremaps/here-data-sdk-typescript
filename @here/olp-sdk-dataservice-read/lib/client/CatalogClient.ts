@@ -46,13 +46,22 @@ export class CatalogClient {
      * Loads and cache the full catalog configuration for the requested catalog.
      * The catalog configuration contains descriptive and structural
      * information such as layer definitions and layer types.
+     * @param catalogRequest Instance of the configuret request params [[CatalogRequest]]
+     * @param abortSignal A signal object that allows you to communicate with a request (such as a Fetch)
+     * and abort it if required via an AbortController object
+     *  @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
      *
      * @summary Gets the details of a catalog.
      */
     public async getCatalog(
-        request: CatalogRequest
+        request: CatalogRequest,
+        abortSignal?: AbortSignal
     ): Promise<ConfigApi.Catalog> {
-        const builder = await this.getRequestBuilder("config");
+        const builder = await this.getRequestBuilder(
+            "config",
+            undefined,
+            abortSignal
+        );
 
         return ConfigApi.getCatalog(builder, {
             catalogHrn: this.hrn,
@@ -70,13 +79,21 @@ export class CatalogClient {
      * @param request Is [[CatalogVersionRequest]] instance and has ((getStartVersion)) method to get startVersion.
      * Catalog start version (exclusive). Default is -1. By convention -1
      * indicates the virtual initial version before the first publication which will have version 0.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as a Fetch)
+     * and abort it if required via an AbortController object
+     *  @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
      * @returns A promise of the http response that contains the payload with latest version.
      */
     public async getLatestVersion(
-        request: CatalogVersionRequest
+        request: CatalogVersionRequest,
+        abortSignal?: AbortSignal
     ): Promise<number> {
         const startVersion = request.getStartVersion() || -1;
-        const builder = await this.getRequestBuilder("metadata").catch(error =>
+        const builder = await this.getRequestBuilder(
+            "metadata",
+            HRN.fromString(this.hrn),
+            abortSignal
+        ).catch(error =>
             Promise.reject(error)
         );
         const latestVersion = await MetadataApi.latestVersion(builder, {
@@ -95,11 +112,15 @@ export class CatalogClient {
      * indicates the virtual initial version before the first publication which will have version 0.
      * EndVersion - Catalog end version (inclusive). If not defined, then the latest catalog
      * version will be fethced and used.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as a Fetch)
+     * and abort it if required via an AbortController object
+     *  @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
      * @returns A promise of the http response that contains the payload with versions in requested
      * range.
      */
     public async getVersions(
-        request: CatalogVersionRequest
+        request: CatalogVersionRequest,
+        abortSignal?: AbortSignal
     ): Promise<MetadataApi.VersionInfos> {
         const startVersion = request.getStartVersion() || -1;
         let endVersion = request.getEndVersion();
@@ -107,7 +128,11 @@ export class CatalogClient {
             endVersion = await this.getLatestVersion(request);
         }
 
-        const builder = await this.getRequestBuilder("metadata").catch(error =>
+        const builder = await this.getRequestBuilder(
+            "metadata",
+            HRN.fromString(this.hrn),
+            abortSignal
+        ).catch(error =>
             Promise.reject(error)
         );
         return MetadataApi.listVersions(builder, {
@@ -120,18 +145,22 @@ export class CatalogClient {
     /**
      * Fetch baseUrl and create requestBuilder for sending requests to the look-up API
      * @param builderType endpoint name is needed to create propriate requestBuilder
-     *
+     * @param hrn catalog hrn
+     * @param abortSignal A signal object that allows you to communicate with a request (such as a Fetch)
+     * and abort it if required via an AbortController object
+     *  @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
      * @returns requestBuilder
      */
     private async getRequestBuilder(
         builderType: ApiName,
+        hrn?: HRN,
         abortSignal?: AbortSignal
     ): Promise<DataStoreRequestBuilder> {
         return RequestFactory.create(
             builderType,
             this.apiVersion,
             this.settings,
-            HRN.fromString(this.hrn),
+            hrn,
             abortSignal
         ).catch((err: Response) =>
             Promise.reject(

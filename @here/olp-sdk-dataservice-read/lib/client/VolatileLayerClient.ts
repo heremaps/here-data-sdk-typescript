@@ -75,7 +75,8 @@ export class VolatileLayerClient {
             if (partitionId) {
                 const partitionIdDataHandle = await this.getDataHandleByPartitionId(
                     partitionId,
-                    dataRequest.getBillingTag()
+                    dataRequest.getBillingTag(),
+                    abortSignal
                 ).catch((error: Response) => Promise.reject(error));
                 return this.downloadPartition(
                     partitionIdDataHandle,
@@ -160,7 +161,10 @@ export class VolatileLayerClient {
             return Promise.resolve(result);
         }
 
-        const metaRequestBilder = await this.getRequestBuilder("metadata");
+        const metaRequestBilder = await this.getRequestBuilder(
+            "metadata",
+            HRN.fromString(this.hrn)
+        );
         return MetadataApi.getPartitions(metaRequestBilder, {
             layerId: this.layerId,
             billingTag: request.getBillingTag()
@@ -172,7 +176,11 @@ export class VolatileLayerClient {
         abortSignal?: AbortSignal,
         billingTag?: string
     ): Promise<Response> {
-        const builder = await this.getRequestBuilder("blob", abortSignal);
+        const builder = await this.getRequestBuilder(
+            "blob",
+            HRN.fromString(this.hrn),
+            abortSignal
+        );
         return BlobApi.getBlob(builder, {
             dataHandle,
             layerId: this.layerId,
@@ -188,13 +196,14 @@ export class VolatileLayerClient {
      */
     private async getRequestBuilder(
         builderType: ApiName,
+        hrn?: HRN,
         abortSignal?: AbortSignal
     ): Promise<DataStoreRequestBuilder> {
         return RequestFactory.create(
             builderType,
             this.apiVersion,
             this.settings,
-            HRN.fromString(this.hrn),
+            hrn,
             abortSignal
         ).catch(err =>
             Promise.reject(
@@ -210,9 +219,13 @@ export class VolatileLayerClient {
      */
     private async getDataHandleByPartitionId(
         partitionId: string,
-        billingTag?: string
+        billingTag?: string,
+        abortSignal?: AbortSignal
     ): Promise<string> {
-        const queryRequestBilder = await this.getRequestBuilder("query");
+        const queryRequestBilder = await this.getRequestBuilder(
+            "query",
+            HRN.fromString(this.hrn)
+        );
         const partitions = await QueryApi.getPartitionsById(
             queryRequestBilder,
             {
