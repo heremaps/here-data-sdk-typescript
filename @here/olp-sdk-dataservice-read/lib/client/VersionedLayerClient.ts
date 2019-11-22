@@ -92,7 +92,7 @@ export class VersionedLayerClient {
             if (quadKey) {
                 const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest().withQuadKey(
                     quadKey
-                );
+                ).withVersion(version);
                 const quadTreeIndex = await this.getPartitions(
                     quadKeyPartitionsRequest
                 ).catch(error => Promise.reject(error));
