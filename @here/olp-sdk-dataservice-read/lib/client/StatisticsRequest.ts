@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { HRN, validateBillingTag } from "@here/olp-sdk-dataservice-read";
+import { HRN, validateBillingTag } from "..";
 
 export enum CoverageDataType {
     BITMAP = "tilemap",

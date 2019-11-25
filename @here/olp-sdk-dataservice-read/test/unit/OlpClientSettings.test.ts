@@ -20,7 +20,9 @@
 import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
-import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
+import { OlpClientSettings } from "../../lib";
+import * as lib from "../../lib";
+
 chai.use(sinonChai);
 const expect = chai.expect;
 
@@ -38,9 +40,7 @@ class MockedKeyValueCache {
 
 class MockedDataStoreDownloadManager {
     public async download(url: string, init?: RequestInit) {
-        return Promise.resolve(
-            new Response("test-download-manager-downloaded-result")
-        );
+        return Promise.resolve("test-download-manager-downloaded-result");
     }
 }
 
@@ -67,11 +67,11 @@ describe("OlpClientSettings", () => {
     });
 
     beforeEach(() => {
-        KeyValueCacheStub = sandbox.stub(dataServiceRead, "KeyValueCache");
+        KeyValueCacheStub = sandbox.stub(lib, "KeyValueCache");
         KeyValueCacheStub.callsFake((cache, hrn) => new MockedKeyValueCache());
 
         DataStoreDownloadManagerStub = sandbox.stub(
-            dataServiceRead,
+            lib,
             "DataStoreDownloadManager"
         );
         DataStoreDownloadManagerStub.callsFake(
@@ -80,7 +80,7 @@ describe("OlpClientSettings", () => {
     });
 
     it("Should be configured with correct params and default download manager", async () => {
-        const settings = new dataServiceRead.OlpClientSettings({
+        const settings = new OlpClientSettings({
             environment: "test-env",
             getToken: () => Promise.resolve("test-token")
         });
@@ -93,7 +93,7 @@ describe("OlpClientSettings", () => {
         const downloadedResult = await settings.downloadManager.download(
             "fake-url"
         );
-        expect(downloadedResult.body).equal(
+        expect(downloadedResult).equal(
             "test-download-manager-downloaded-result"
         );
 
@@ -102,7 +102,7 @@ describe("OlpClientSettings", () => {
     });
 
     it("Should be configured with correct params and custom download manager", async () => {
-        const settings = new dataServiceRead.OlpClientSettings({
+        const settings = new OlpClientSettings({
             environment: "test-env",
             getToken: () => Promise.resolve("test-token"),
             dm: new MockedCustomDataStoreDownloadManager()
@@ -111,7 +111,7 @@ describe("OlpClientSettings", () => {
         const downloadedResult = await settings.downloadManager.download(
             "fake-url"
         );
-        expect(downloadedResult.body).equal(
+        expect(await downloadedResult.text()).equal(
             "test-custom-download-manager-downloaded-result"
         );
     });

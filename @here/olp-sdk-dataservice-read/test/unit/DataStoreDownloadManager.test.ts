@@ -19,7 +19,7 @@
 
 import { assert } from "chai";
 import * as sinon from "sinon";
-import { DataStoreDownloadManager } from "@here/olp-sdk-dataservice-read";
+import { DataStoreDownloadManager } from "../../lib";
 
 describe("DataStoreDownloadManager", function() {
     const fakeDataUrl = `https://download.example.url`;

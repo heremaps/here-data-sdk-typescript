@@ -2,21 +2,18 @@
   "name": "@here/olp-sdk-dataservice-api",
   "version": "0.9.2",
   "description": "Generated from the OpenAPI specification of the HERE Open Location Platform Data API",
-  "main": "dist/@here/olp-sdk-dataservice-api/index.js",
-  "typings": "dist/@here/olp-sdk-dataservice-api/index",
+  "main": "index.js",
+  "typings": "index",
   "directories": {
     "test": "test",
-    "lib": "dist"
+    "lib": "lib"
   },
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "build": "tsc",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "test": "mocha > xunit.xml",
     "coverage": "nyc mocha > xunit.xml",
-    "prepare": "rm -rf dist && tsc --sourceMap false && npm run bundle",
+    "prepare": "tsc --sourceMap false && npm run bundle",
     "bundle": "npm run bundle:dev && npm run bundle:prod",
     "bundle:prod": "webpack --env.NODE_ENV=production",
     "bundle:dev": "webpack --env.NODE_ENV=development"
@@ -24,7 +21,7 @@
   "nyc": {
     "include": [
       "lib/**/*.ts",
-      "dist/@here/olp-sdk-dataservice-api/**/*.js"
+      "lib/**/*.js"
     ],
     "extension": [
       ".ts"

@@ -17,11 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import {
-    HRN,
-    QuadKey,
-    validateBillingTag
-} from "@here/olp-sdk-dataservice-read";
+import { HRN, QuadKey, validateBillingTag } from "..";
 
 // tslint:disable-next-line: no-magic-numbers
 export type QuadTreeIndexDepth = 0 | 1 | 2 | 3 | 4;

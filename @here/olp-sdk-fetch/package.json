@@ -1,27 +1,27 @@
 {
   "name": "@here/olp-sdk-fetch",
-  "version": "0.9.2",
+  "version": "1.0.0",
   "description": "Adds a subset of the fetch API for Node.js",
-  "main": "dist/@here/olp-sdk-fetch/index.js",
-  "browser": "dist/@here/olp-sdk-fetch/index.web.js",
-  "typings": "dist/@here/olp-sdk-fetch/index.web",
+  "main": "index.js",
+  "browser": "index.web.js",
+  "typings": "index.web",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "build": "tsc && npm run copy-tests-resourses",
+    "build": "tsc",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "test": "mocha > xunit.xml",
     "coverage": "nyc mocha > xunit.xml",
-    "copy-tests-resourses": "cp -r test/resources dist/@here/olp-sdk-fetch/test",
-    "prepare": "rm -rf dist && tsc --sourceMap false && npm run bundle",
+    "prepare": "tsc --sourceMap false && npm run bundle",
     "bundle": "npm run bundle:dev && npm run bundle:prod",
     "bundle:prod": "webpack --env.NODE_ENV=production",
     "bundle:dev": "webpack --env.NODE_ENV=development"
   },
   "nyc": {
     "include": [
-      "index.ts"
+      "*.ts",
+      "*.js"
     ],
     "extension": [
       ".ts"

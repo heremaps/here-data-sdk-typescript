@@ -20,7 +20,7 @@
 import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
-import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
+import * as dataServiceRead from "../../lib";
 import * as dataServiceApi from "@here/olp-sdk-dataservice-api";
 chai.use(sinonChai);
 const expect = chai.expect;

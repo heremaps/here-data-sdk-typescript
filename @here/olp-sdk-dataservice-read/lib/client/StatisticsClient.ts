@@ -26,7 +26,7 @@ import {
     RequestFactory,
     StatisticsRequest,
     SummaryRequest
-} from "@here/olp-sdk-dataservice-read";
+} from "..";
 
 /**
  * A class that provides possibility to get Statistic Metadata and Data for Versioned layer

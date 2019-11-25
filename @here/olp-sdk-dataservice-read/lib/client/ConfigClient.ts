@@ -18,11 +18,7 @@
  */
 
 import { ConfigApi } from "@here/olp-sdk-dataservice-api";
-import {
-    CatalogsRequest,
-    OlpClientSettings,
-    RequestFactory
-} from "@here/olp-sdk-dataservice-read";
+import { CatalogsRequest, OlpClientSettings, RequestFactory } from "..";
 
 export class ConfigClient {
     private readonly apiVersion = "v1";

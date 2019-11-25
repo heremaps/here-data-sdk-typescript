@@ -30,7 +30,7 @@ import {
     QuadTreeIndexRequest,
     QueryClient,
     RequestFactory
-} from "@here/olp-sdk-dataservice-read";
+} from "..";
 
 export class VolatileLayerClient {
     private readonly apiVersion: string = "v1";

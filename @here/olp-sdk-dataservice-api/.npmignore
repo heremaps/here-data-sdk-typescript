@@ -1,6 +1,13 @@
 *.ts
 !*.d.ts
+.nyc_output
+coverage
 test/
 tsconfig.json
 .gitignore
 .gitreview
+*.tgz
+.prettierrc.json
+tslint.json
+xunit.xml
+webpack.config.js
