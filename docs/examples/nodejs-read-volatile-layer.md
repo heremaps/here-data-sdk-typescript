@@ -38,7 +38,7 @@ Create the index.ts file and app skeleton:
 
 ```typescript
 /**
- * Example Node.js app for reading a volatile layer from the datastore
+ * Example Node.js app for reading a volatile layer from the datastore.
  */
 
 class App {
@@ -66,15 +66,15 @@ App works!
 ## Log in to the datastore
 
 To work with the datastore, you need to have an [account](https://account.here.com).
-To get your account and create a test app to get app access key id and access key secret, log in to the [HERE Open Location Platform (OLP)](https://platform.here.com/admin/apps) and create a test app.
+To get an access key id and access key secret, log in to the [HERE Open Location Platform (OLP)](https://platform.here.com/admin/apps) and create a test app.
 
-Now, you can get a token for requests to the datastore by using the @here/olp-sdk-authentification.
+Now, you can get a token for requests to the datastore using @here/olp-sdk-authentification.
 
-Log into the api. Modify our app to the following state:
+Log in to the API. Modify our app to the following state:
 
 ```typescript
 /**
- * Example Node.js app for reading a versioned layer from the datastore
+ * Example Node.js app for reading a volatile layer from the datastore
  */
 import { UserAuth, requestToken } from "@here/olp-sdk-authentification";
 
@@ -96,7 +96,7 @@ To do so, you need the `OlpClientSettings` object. It contains a download manage
 
 ```typescript
 /**
- * Example Node.js app for reading a versioned layer from the datastore
+ * Example Node.js app for reading a volatile layer from the datastore
  */
 import { UserAuth } from "@here/olp-sdk-authentification";
 import { OlpClientSettings } from "@here/olp-sdk-dataservice-read";
@@ -119,8 +119,8 @@ const settings = new OlpClientSettings({
 
 ## VolatileLayerClient
 
-When you have  the `OlpClientSettings` object, you can get catalog clients for different catalogs and read the information.
-For information on a volatile layers, see [the related section](https://developer.here.com/olp/documentation/get-started/dev_guide/shared_content/topics/olp/concepts/layers.html#volatile-layers) in the Get Started guide.
+When you have  the `OlpClientSettings` object, you can get catalog clients for different catalogs and read information.
+For more information on volatile layers, see [the related section](https://developer.here.com/olp/documentation/get-started/dev_guide/shared_content/topics/olp/concepts/layers.html#volatile-layers) in the Get Started guide.
 To create `VolatileLayerClient`, run:
 
 ```typescript
@@ -135,13 +135,13 @@ const volatileClient = await new VolatileLayerClient(
 
 `VolatileLayerClient` has 2 public methods:
 
-1. getData() - to fetch partition data
-2. getPartitions() - to fetch partitions metadata
+1. getData() - fetches partition data
+2. getPartitions() - fetches partitions metadata
 
 The `getData()` method expects the following arguments:
 
-* `dataRequest` &ndash; the `DataRequest` instanse. This class prepares data for the requests to the BlobAPI. The `getData` method can fetch partition data by the following 3 types of parameters you can provide to it. It could be next parameters (sorted by priority): `dataHandle`, `partitionId` and `quadKey`. Below you can take a look on the example of creating `DataRequest` instanse.
-* `abortSignal` &ndash; a signal object that allows you to communicate with the request (such as a `fetch`) and, if required, abort it  using the `AbortController` object. For more information, see [`AbortSignal` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal).
+* `dataRequest` &ndash; the `DataRequest` instanсe. This class prepares data for the requests to the BlobAPI. The `getData` method can fetch partition data by the following 3 types of parameters (sorted by priority): `dataHandle`, `partitionId` and `quadKey`. Below, see an example of how to create the `DataRequest` instanсe.
+* `abortSignal` &ndash; a signal object that allows you to communicate with the request (such as the `fetch` request) and, if required, abort it  using the `AbortController` object. For more information, see [`AbortSignal` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal).
 
 ```typescript
 import { DataRequest } from "@here/olp-sdk-dataservice-read";
@@ -154,11 +154,11 @@ request.withPartitionId("123123123");
 // Add the `QuadKey` property.
 request.withQuadKey(quadKeyFromMortonCode("123123123"));
 
-//Also data could be added by chain like so
+// Also, you can add data in the following way:
 const requestByChain = new DataRequest().withPartitionId("123123123").withQuadKey(quadKeyFromMortonCode("123123123"));
 ```
 
-Now, you can get data from the layer
+Now, you can get data from the layer.
 
 ```typescript
 const request = new DataRequest().withDataHandle("TEST24A111D82321A9BA9071A7EF042.042");
@@ -168,9 +168,9 @@ const result = await volatileClient.getData(request);
 The `getPartitions` method expects the following arguments:
 
 * QuadKeyPartitionsRequest `or` PartitionsRequest`.
-* `abortSignal` &ndash; a signal object that allows you to communicate with the request (such as a `fetch`) and, if required, abort it  using the `AbortController` object. For more information, see [`AbortSignal` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal).
+* `abortSignal` &ndash; a signal object that allows you to communicate with the request (such as the `fetch` request) and, if required, abort it  using the `AbortController` object. For more information, see [`AbortSignal` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal).
 
-To fetch partitions metadata from Query API by `QuadKey`, use `QuadKeyPartitionsRequest`. It expects a quadKey, depth (from 0 to 4), and version (optional).
+To fetch partitions metadata from the `query` API by `QuadKey`, use `QuadKeyPartitionsRequest`. It expects a quadKey and depth (from 0 to 4).
 
 ```typescript
 import { QuadKeyPartitionsRequest } from "@here/olp-sdk-dataservice-read";
@@ -181,7 +181,7 @@ const request = new QuadKeyPartitionsRequest()
 const result = await volatileClient.getPartitions(request);
 ```
 
-To fetch partitions metadata from the MetadataAPI use `PartitionsRequest`. 
+To fetch partitions metadata from the `metadata` API use `PartitionsRequest`. 
 
 ```typescript
 import { PartitionsRequest } from "@here/olp-sdk-dataservice-read";
