@@ -7,16 +7,16 @@ OLP SDK for TypeScript includes core components for accessing OLP APIs from any 
 - [OLP Prerequisite Knowledge](#prerequisite)
 - [Getting Credentials](#credentials)
 - [Available Components](#components)
-- [Context and CatalogClient](#context-catalog)
+- [Context and CatalogClient](#catalog-client)
 - [VersionedLayerClient example](#examples)
 
 ## <a name="prerequisite"></a> OLP Prerequisite Knowledge
 
 The use of HERE OLP SDK requires a basic understanding of the following OLP-related concepts:
 
-- [OLP Catalog](https://developer.here.com/olp/documentation/data-user-guide/shared_content/topics/olp/concepts/catalogs.html)
-- [OLP Layers](https://developer.here.com/olp/documentation/data-user-guide/shared_content/topics/olp/concepts/layers.html)
-- [OLP Partitions](https://developer.here.com/olp/documentation/data-user-guide/shared_content/topics/olp/concepts/partitions.html)
+- [OLP Catalog](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/catalogs.html)
+- [OLP Layers](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/layers.html)
+- [OLP Partitions](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/partitions.html)
 - [HERE Resource Name (HRN)](https://developer.here.com/olp/documentation/data-user-guide/shared_content/topics/olp/concepts/hrn.html)
 
 For more details, see [HERE OLP Data User Guide](https://developer.here.com/olp/documentation/data-user-guide/index.html).
@@ -33,7 +33,7 @@ The following two authentication approaches are available within your applicatio
 
 2. Using your **app access key id** and **secret access key**, which you can find on platform's [Apps & Keys](https://platform.here.com/profile/apps-and-keys) page. For more details on how to create your authentication and authorization client for retrieving HERE tokens, see [Authentication and Authorization Developer's Guide](https://developer.here.com/olp/documentation/access_control/topics/introduction.html).
 
-After you set up the credentials, you can then use them to access HERE OLP SDK libraries.
+After you set up the credentials, you can use them to access HERE OLP SDK libraries.
 
 ## <a name="components"></a> Available Components
 
@@ -50,7 +50,7 @@ HERE OLP SDK consists of specific libraries, each with distinct functionality.
 
 [Volatile Layer Read example](./examples/nodejs-read-volatile-layer.md) shows how to retrieve layer metadata, partition metadata, and partition data from volatile layer using OLP SDK for TypeScript.
 
-## <a name="CatalogClient"></a> CatalogClient
+## <a name="catalog-client"></a> CatalogClient
 
 The main entry point to the OLP is `CatalogClient`. This class provides a high-level interface for retrieval of `OLP` catalog data and configuration, and defines the following operations:
 
