@@ -25,7 +25,7 @@ import {
     getEnvLookUpUrl,
     HRN,
     OlpClientSettings
-} from "@here/olp-sdk-dataservice-read";
+} from "..";
 
 /**
  * The helper utils for making Request object with base urls to the services from

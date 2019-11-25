@@ -21,7 +21,7 @@ import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import { PartitionsRequest } from "@here/olp-sdk-dataservice-read";
+import { PartitionsRequest } from "../../";
 
 chai.use(sinonChai);
 

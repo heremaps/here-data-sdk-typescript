@@ -23,7 +23,7 @@ import {
     RequestFactory,
     SchemaDetailsRequest,
     SchemaRequest
-} from "@here/olp-sdk-dataservice-read";
+} from "..";
 
 export class ArtifactClient {
     private readonly apiVersion = "v1";

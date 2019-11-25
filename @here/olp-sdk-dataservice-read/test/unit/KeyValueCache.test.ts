@@ -1,7 +1,7 @@
 import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
-import { KeyValueCache } from "@here/olp-sdk-dataservice-read/lib";
+import { KeyValueCache } from "../../lib";
 chai.use(sinonChai);
 const expect = chai.expect;
 

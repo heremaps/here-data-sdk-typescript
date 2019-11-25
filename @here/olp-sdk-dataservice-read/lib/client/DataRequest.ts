@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { QuadKey, validateBillingTag } from "@here/olp-sdk-dataservice-read";
+import { QuadKey, validateBillingTag } from "..";
 
 /**
  * A class that prepare information for calls to get Data from BlobAPI

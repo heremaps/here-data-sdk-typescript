@@ -21,7 +21,7 @@ import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import { HRN, SummaryRequest } from "@here/olp-sdk-dataservice-read";
+import { HRN, SummaryRequest } from "../../lib";
 
 chai.use(sinonChai);
 
@@ -61,7 +61,9 @@ describe("SummaryRequest", () => {
             .withCatalogHrn(mockedHRN)
             .withLayerId(mockedLayerId);
 
-        expect(summaryRequest.getCatalogHrn()).to.be.equal(mockedHRN.toString());
+        expect(summaryRequest.getCatalogHrn()).to.be.equal(
+            mockedHRN.toString()
+        );
         expect(summaryRequest.getLayerId()).to.be.equal(mockedLayerId);
     });
 });

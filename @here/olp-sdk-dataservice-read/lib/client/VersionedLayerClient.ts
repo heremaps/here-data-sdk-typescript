@@ -29,7 +29,7 @@ import {
     QuadTreeIndexRequest,
     QueryClient,
     RequestFactory
-} from "@here/olp-sdk-dataservice-read";
+} from "..";
 
 /**
  * A class that describes versioned layer
@@ -90,9 +90,9 @@ export class VersionedLayerClient {
             }
 
             if (quadKey) {
-                const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest().withQuadKey(
-                    quadKey
-                ).withVersion(version);
+                const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest()
+                    .withQuadKey(quadKey)
+                    .withVersion(version);
                 const quadTreeIndex = await this.getPartitions(
                     quadKeyPartitionsRequest
                 ).catch(error => Promise.reject(error));
@@ -220,9 +220,7 @@ export class VersionedLayerClient {
         const builder = await this.getRequestBuilder(
             "metadata",
             HRN.fromString(this.hrn)
-        ).catch(error =>
-            Promise.reject(error)
-        );
+        ).catch(error => Promise.reject(error));
         const latestVersion = await MetadataApi.latestVersion(builder, {
             startVersion: -1,
             billingTag
