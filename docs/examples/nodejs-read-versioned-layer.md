@@ -32,13 +32,13 @@ Install SDK modules:
 npm install --save @here/olp-sdk-authentication @here/olp-sdk-dataservice-read @here/olp-sdk-dataservice-api
 ```
 
-Now everything is set to create the app.
+Now, everything is set to create the app.
 
-Create index.ts file add app skeleton:
+Create the index.ts file and add app skeleton:
 
 ```typescript
 /**
- * Example Node.js app for reading versioned layer from datastore
+ * Example Node.js app for reading a versioned layer from the datastore
  */
 
 class App {
@@ -66,11 +66,11 @@ App works!
 ## Log in to the datastore
 
 To work with the datastore, you need to have an [account](https://account.here.com).
-To get your account and create a test app to get app access key id and access key secret, log in to the [HERE Open Location Platform (OLP)](https://platform.here.com/admin/apps) and create a test app.
+To get an access key id and access key secret, log in to the [HERE Open Location Platform (OLP)](https://platform.here.com/admin/apps) and create a test app.
 
-Now, you can get a token for requests to the datastore by using the @here/olp-sdk-authentification.
+Now, you can get a token for requests to the datastore using @here/olp-sdk-authentification.
 
-Log into the api. Modify our app to the following state:
+Log in to the API. Modify our app to the following state:
 
 ```typescript
 /**
@@ -119,8 +119,8 @@ const settings = new OlpClientSettings({
 
 ## VersionedLayerClient
 
-When you have  the `OlpClientSettings` object, you can get catalog clients for different catalogs and read the information.
-For information on a version layer following, see [the related section](https://developer.here.com/olp/documentation/get-started/dev_guide/shared_content/topics/olp/concepts/layers.html#versioned-layers) in the Get Started guide.
+When you have  the `OlpClientSettings` object, you can get catalog clients for different catalogs and read information.
+For more information on versioned layers, see [the related section](https://developer.here.com/olp/documentation/get-started/dev_guide/shared_content/topics/olp/concepts/layers.html#versioned-layers) in the Get Started guide.
 To create `VersionedLayerClient`, run:
 
 ```typescript
@@ -134,13 +134,13 @@ const versionClient = await new VersionedLayerClient(
 
 `VersionedLayerClient` has 2 public methods:
 
-1. getData() - to fetch partition data
-2. getPartitions() - to fetch partitions metadata
+1. getData() - fetches partition data
+2. getPartitions() - fetches partitions metadata
 
 The `getData()` method expects the following arguments:
 
-* `dataRequest` &ndash; the `DataRequest` instanse. This class prepares data for the requests to the BlobAPI. The `getData` method can fetch partition data by the following 3 types of parameters you can provide to it. It could be next parameters (sorted by priority): `dataHandle`, `partitionId` and `quadKey`. Below you can take a look on the example of creating `DataRequest` instanse.
-* `abortSignal` &ndash; a signal object that allows you to communicate with the request (such as a `fetch`) and, if required, abort it  using the `AbortController` object. For more information, see [`AbortSignal` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal).
+* `dataRequest` &ndash; the `DataRequest` instanсe. This class prepares data for the requests to the BlobAPI. The `getData` method can fetch partition data by the following 3 types of parameters (sorted by priority): `dataHandle`, `partitionId` and `quadKey`. Below, see an example of how to create the `DataRequest` instanсe.
+* `abortSignal` &ndash; a signal object that allows you to communicate with the request (such as the `fetch` request) and, if required, abort it  using the `AbortController` object. For more information, see [`AbortSignal` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal).
 
 ```typescript
 import { DataRequest } from "@here/olp-sdk-dataservice-read";
@@ -153,11 +153,11 @@ request.withPartitionId("123123123");
 // Add the `QuadKey` property.
 request.withQuadKey(quadKeyFromMortonCode("123121122"));
 
-// Also data could be added by chain like so
+// Also, you can add data in the following way:
 const requestByChain = new DataRequest().withPartitionId("123123123").withQuadKey(quadKeyFromMortonCode("123121122"));
 ```
 
-Now, you can get data from the layer
+Now, you can get data from the layer.
 
 ```typescript
 const request = new DataRequest().withDataHandle("TESTE24A111D82321A9BA9071A7EF042.042");
@@ -167,9 +167,9 @@ const result = await versionClient.getData(request);
 The `getPartitions` method expects the following arguments:
 
 * `QuadKeyPartitionsRequest` or `PartitionsRequest`.
-* `abortSignal` &ndash; a signal object that allows you to communicate with the request (such as a `fetch`) and, if required, abort it  using the `AbortController` object. For more information, see [`AbortSignal` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal).
+* `abortSignal` &ndash; a signal object that allows you to communicate with the request (such as the `fetch` request) and, if required, abort it  using the `AbortController` object. For more information, see [`AbortSignal` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal).
 
-To fetch partitions metadata from Query API by `QuadKey`, use `QuadKeyPartitionsRequest`. It expects a quadKey, depth (from 0 to 4), and version (optional).
+To fetch partitions metadata from the `query` API by `QuadKey`, use `QuadKeyPartitionsRequest`. It expects a quadkey, depth (from 0 to 4), and layer version (optional).
 
 ```typescript
 import { QuadKeyPartitionsRequest } from "@here/olp-sdk-dataservice-read";
@@ -181,7 +181,7 @@ const request = new QuadKeyPartitionsRequest()
 const result = await versionClient.getPartitions(request);
 ```
 
-To fetch partitions metadata from the MetadataAPI, use `PartitionsRequest`. It expects version parameter (optional). If you skip version and pass an empty `PartitionsRequest` instanse, than the last layer version will be used.
+To fetch partitions metadata from the `metadata` API, use `PartitionsRequest`. It expects version parameter (optional). If you skip version and pass an empty `PartitionsRequest` instanсe, than the last layer version will be returned.
 
 ```typescript
 import { PartitionsRequest } from "@here/olp-sdk-dataservice-read";
