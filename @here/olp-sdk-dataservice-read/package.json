@@ -2,9 +2,9 @@
   "name": "@here/olp-sdk-dataservice-read",
   "version": "0.9.2",
   "description": "Wrapper around a subset of the HERE Open Location Platform Data REST API related to reading data from OLP catalogs",
-  "main": "dist/@here/olp-sdk-dataservice-read/index.js",
-  "browser": "dist/@here/olp-sdk-dataservice-read/index.web.js",
-  "typings": "dist/@here/olp-sdk-dataservice-read/index.web",
+  "main": "index.js",
+  "browser": "index.web.js",
+  "typings": "index.web",
   "directories": {
     "test": "test",
     "lib": "lib"
@@ -14,7 +14,7 @@
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "test": "mocha > xunit.xml",
     "coverage": "nyc mocha > xunit.xml",
-    "prepare": "rm -rf dist && tsc --sourceMap false && npm run bundle",
+    "prepare": "tsc --sourceMap false && npm run bundle",
     "bundle": "npm run bundle:dev && npm run bundle:prod",
     "bundle:prod": "webpack --env.NODE_ENV=production",
     "bundle:dev": "webpack --env.NODE_ENV=development"
@@ -22,7 +22,7 @@
   "nyc": {
     "include": [
       "lib/**/*.ts",
-      "dist/@here/olp-sdk-dataservice-read/**/*.js"
+      "lib/**/*.js"
     ],
     "extension": [
       ".ts"

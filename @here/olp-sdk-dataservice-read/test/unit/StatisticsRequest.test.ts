@@ -21,11 +21,7 @@ import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import {
-    CoverageDataType,
-    HRN,
-    StatisticsRequest
-} from "@here/olp-sdk-dataservice-read";
+import { CoverageDataType, HRN, StatisticsRequest } from "../../lib";
 
 chai.use(sinonChai);
 
@@ -81,7 +77,9 @@ describe("SummaryRequest", () => {
             .withDataLevel(mockedDataLevel)
             .withTypemap(mockedTimemap);
 
-        expect(statisticsRequest.getCatalogHrn()).to.be.equal(mockedHRN.toString());
+        expect(statisticsRequest.getCatalogHrn()).to.be.equal(
+            mockedHRN.toString()
+        );
         expect(statisticsRequest.getLayerId()).to.be.equal(mockedLayerId);
         expect(statisticsRequest.getDataLevel()).to.be.equal(mockedDataLevel);
         expect(statisticsRequest.getTypemap()).to.be.equal(mockedTimemap);

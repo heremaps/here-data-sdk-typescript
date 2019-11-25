@@ -13,16 +13,14 @@
   ],
   "scripts": {
     "bootstrap": "lerna bootstrap --use-workspaces",
-    "prepare": "npm run clean-dists && npm run build && npm run bundle && npm run typedoc",
-    "build": "npm run clean-dists && lerna run build",
+    "build": "lerna run build",
     "test": "lerna run test",
     "coverage": "lerna run coverage",
     "lint": "lerna run lint",
     "bundle": "lerna run bundle",
     "bundle:dev": "lerna run bundle:dev",
     "bundle:prod": "lerna run bundle:prod",
-    "typedoc": "npx typedoc --disableOutputCheck --options typedoc.json",
-    "clean-dists": "rm -rf dist && rm -rf @here/*/dist"
+    "typedoc": "npx typedoc --disableOutputCheck --options typedoc.json"
   },
   "devDependencies": {
     "lerna": "3.16.4",

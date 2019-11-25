@@ -25,7 +25,7 @@ import {
     HRN,
     OlpClientSettings,
     RequestFactory
-} from "@here/olp-sdk-dataservice-read";
+} from "..";
 import { CatalogRequest } from "./CatalogRequest";
 
 /**
@@ -93,9 +93,7 @@ export class CatalogClient {
             "metadata",
             HRN.fromString(this.hrn),
             abortSignal
-        ).catch(error =>
-            Promise.reject(error)
-        );
+        ).catch(error => Promise.reject(error));
         const latestVersion = await MetadataApi.latestVersion(builder, {
             startVersion,
             billingTag: request.getBillingTag()
@@ -132,9 +130,7 @@ export class CatalogClient {
             "metadata",
             HRN.fromString(this.hrn),
             abortSignal
-        ).catch(error =>
-            Promise.reject(error)
-        );
+        ).catch(error => Promise.reject(error));
         return MetadataApi.listVersions(builder, {
             startVersion,
             endVersion,

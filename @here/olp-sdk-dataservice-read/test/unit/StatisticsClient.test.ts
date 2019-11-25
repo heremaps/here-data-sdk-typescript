@@ -21,7 +21,7 @@ import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
+import * as dataServiceRead from "../../lib";
 import { CoverageApi } from "@here/olp-sdk-dataservice-api";
 
 chai.use(sinonChai);
@@ -38,7 +38,9 @@ describe("StatistiscClient", () => {
     let getStatisticsSizeMapStub: sinon.SinonStub;
     let getStatisticsTimeMapStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
-    const mockedHRN = dataServiceRead.HRN.fromString("hrn:here:data:::mocked-hrn");
+    const mockedHRN = dataServiceRead.HRN.fromString(
+        "hrn:here:data:::mocked-hrn"
+    );
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
 

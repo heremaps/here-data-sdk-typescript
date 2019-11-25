@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { HRN, validateBillingTag } from "@here/olp-sdk-dataservice-read";
+import { HRN, validateBillingTag } from "..";
 
 /**
  * A class that prepare information for calls to get Statistics from CoverageAPI

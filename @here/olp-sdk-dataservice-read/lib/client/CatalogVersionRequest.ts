@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { validateBillingTag } from "@here/olp-sdk-dataservice-read";
+import { validateBillingTag } from "..";
 
 /**
  * A class that prepare information for calls to the Artifact API.

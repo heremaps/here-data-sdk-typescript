@@ -35,7 +35,7 @@ Add minified JavaScript files to your `html`:
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://unpkg.com/@here/olp-sdk-dataservice-api/dist/olp-sdk-dataservice-api.min.js"></script>
+    <script src="https://unpkg.com/@here/olp-sdk-dataservice-api/bundle.umd.min.js"></script>
 </head>
     <body>
     </body>

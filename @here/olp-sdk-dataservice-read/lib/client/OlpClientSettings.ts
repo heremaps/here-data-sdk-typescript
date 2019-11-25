@@ -17,12 +17,8 @@
  * License-Filename: LICENSE
  */
 
-import {
-    DataStoreDownloadManager,
-    DownloadManager,
-    EnvironmentName,
-    KeyValueCache
-} from "@here/olp-sdk-dataservice-read";
+import { DataStoreDownloadManager, DownloadManager, KeyValueCache } from "..";
+import { EnvironmentName } from "../utils";
 
 /**
  * Params to construct the [[OlpClientSettings]]

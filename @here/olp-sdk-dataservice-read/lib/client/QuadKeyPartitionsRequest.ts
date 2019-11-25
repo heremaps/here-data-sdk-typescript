@@ -17,11 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import {
-    QuadKey,
-    QuadTreeIndexDepth,
-    validateBillingTag
-} from "@here/olp-sdk-dataservice-read";
+import { QuadKey, QuadTreeIndexDepth, validateBillingTag } from "..";
 
 /**
  * A class that prepare information for calls to get Quad Tree metadata from Query API.

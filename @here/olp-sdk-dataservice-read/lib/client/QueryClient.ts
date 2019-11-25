@@ -25,7 +25,7 @@ import {
     OlpClientSettings,
     QuadTreeIndexRequest,
     RequestFactory
-} from "@here/olp-sdk-dataservice-read";
+} from "..";
 
 /**
  * The [[QueryClient]] is client to the query service provides a way to get information (metadata)

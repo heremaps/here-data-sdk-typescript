@@ -126,10 +126,10 @@ npm run bundle
 Or use from CDN:
 
 ```
-https://unpkg.com/@here/olp-sdk-authentication/dist/olp-sdk-authentification.min.js
-https://unpkg.com/@here/olp-sdk-dataservice-api/dist/olp-sdk-dataservice-api.min.js
-https://unpkg.com/@here/olp-sdk-dataservice-read/dist/olp-sdk-dataservice-read.min.js
-https://unpkg.com/@here/olp-sdk-fetch/dist/olp-sdk-fetch.min.js
+https://unpkg.com/@here/olp-sdk-authentication/bundle.umd.min.js
+https://unpkg.com/@here/olp-sdk-dataservice-api/bundle.umd.min.js
+https://unpkg.com/@here/olp-sdk-dataservice-read/bundle.umd.min.js
+https://unpkg.com/@here/olp-sdk-fetch/bundle.umd.min.js
 ```
 
 ## LICENSE

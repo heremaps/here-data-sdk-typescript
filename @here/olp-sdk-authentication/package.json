@@ -2,9 +2,9 @@
   "name": "@here/olp-sdk-authentication",
   "version": "0.9.2",
   "description": "Wrapper around the HERE Authentication and Authorization REST API obtaining short-lived access tokens that are used to authenticate requests to HERE services.",
-  "main": "dist/@here/olp-sdk-authentication/index.js",
-  "browser": "dist/@here/olp-sdk-authentication/index.web.js",
-  "typings": "dist/@here/olp-sdk-authentication/index.web",
+  "main": "index.js",
+  "browser": "index.web.js",
+  "typings": "index.web",
   "directories": {
     "test": "test",
     "lib": "lib"
@@ -14,14 +14,15 @@
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "test": "mocha > xunit.xml",
     "coverage": "nyc mocha > xunit.xml",
-    "prepare": "rm -rf dist && tsc --sourceMap false && npm run bundle",
+    "prepare": "tsc --sourceMap false && npm run bundle",
     "bundle": "npm run bundle:dev && npm run bundle:prod",
     "bundle:prod": "webpack --env.NODE_ENV=production",
     "bundle:dev": "webpack --env.NODE_ENV=development"
   },
   "nyc": {
     "include": [
-      "lib/**/*.ts"
+      "lib/**/*.ts",
+      "lib/**/*.js"
     ],
     "extension": [
       ".ts"

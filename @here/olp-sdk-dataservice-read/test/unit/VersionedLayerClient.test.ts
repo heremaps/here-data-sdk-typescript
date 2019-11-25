@@ -21,9 +21,8 @@ import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
+import * as dataServiceRead from "../../lib";
 import { BlobApi, MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
-import * as utils from "@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils";
 import { Index } from "@here/olp-sdk-dataservice-api/lib/query-api";
 
 chai.use(sinonChai);
@@ -216,7 +215,7 @@ describe("VersionedLayerClient", () => {
         );
 
         const dataRequest = new dataServiceRead.DataRequest().withQuadKey(
-            utils.quadKeyFromMortonCode("23618403")
+            dataServiceRead.quadKeyFromMortonCode("23618403")
         );
 
         const response = await versionedLayerClient.getData(

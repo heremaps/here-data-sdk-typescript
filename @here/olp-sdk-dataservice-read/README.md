@@ -71,10 +71,10 @@ Add minified JavaScript files to your `html` and create an object of userAuth an
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://unpkg.com/@here/olp-sdk-fetch/dist/olp-sdk-fetch.min.js"></script>
-    <script src="https://unpkg.com/@here/olp-sdk-authentication/dist/olp-sdk-authentification.min.js"></script>
-    <script src="https://unpkg.com/@here/olp-sdk-dataservice-api/dist/olp-sdk-dataservice-api.min.js"></script>
-    <script src="https://unpkg.com/@here/olp-sdk-dataservice-read/dist/olp-sdk-dataservice-read.min.js"></script>
+    <script src="https://unpkg.com/@here/olp-sdk-fetch/bundle.umd.min.js"></script>
+    <script src="https://unpkg.com/@here/olp-sdk-authentication/bundle.umd.min.js"></script>
+    <script src="https://unpkg.com/@here/olp-sdk-dataservice-api/bundle.umd.min.js"></script>
+    <script src="https://unpkg.com/@here/olp-sdk-dataservice-read/dist/bundle.umd.min.js"></script>
 </head>
 <body>
     <script>
