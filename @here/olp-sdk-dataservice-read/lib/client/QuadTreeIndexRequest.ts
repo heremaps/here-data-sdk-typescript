@@ -31,6 +31,7 @@ export class QuadTreeIndexRequest {
     private quadKey?: QuadKey;
     private depth?: number;
     private billingTag?: string;
+    
 
     /**
      * Constructs the [[QuadTreeIndexRequest]] for fetching Quad tree index from Query API
@@ -82,6 +83,15 @@ export class QuadTreeIndexRequest {
     }
 
     /**
+     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
+     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     */
+    public withBillingTag(tag: string): QuadTreeIndexRequest {
+        this.billingTag = validateBillingTag(tag);
+        return this;
+    }
+
+    /**
      * The configured catalog version for the request
      */
     public getVersion(): number | undefined {
@@ -105,30 +115,22 @@ export class QuadTreeIndexRequest {
     /**
      * The configured type of layer for request
      */
-    getLayerType() {
+    public getLayerType() {
         return this.layerType;
     }
 
     /**
      * The configured [[HRN]] instance of the catalog hrn for request
      */
-    getCatalogHrn(): HRN {
+    public getCatalogHrn(): HRN {
         return this.catalogHrn;
     }
 
     /**
      * The layer id for request
      */
-    getLayerId(): string | undefined {
+    public getLayerId(): string | undefined {
         return this.layerId;
-    }
-
-    /**
-     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
-     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
-     */
-    public withBillingTag(tag: string) {
-        this.billingTag = validateBillingTag(tag);
     }
 
     /**

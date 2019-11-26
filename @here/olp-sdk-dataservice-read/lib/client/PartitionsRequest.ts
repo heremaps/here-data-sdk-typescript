@@ -46,8 +46,9 @@ export class PartitionsRequest {
      * Billing Tag is an optional free-form tag which is used for grouping billing records together.
      * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
      */
-    public withBillingTag(tag: string) {
+    public withBillingTag(tag: string): PartitionsRequest {
         this.billingTag = validateBillingTag(tag);
+        return this;
     }
 
     /**

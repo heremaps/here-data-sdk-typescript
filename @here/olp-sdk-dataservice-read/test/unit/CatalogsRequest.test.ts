@@ -29,6 +29,7 @@ const assert = chai.assert;
 const expect = chai.expect;
 
 describe("CatalogsRequest", () => {
+    const billingTag = "billingTag";
     const mockedSchemaHRN1 = "hrn:::test-hrn1";
     const mockedSchemaHRN2 = "hrn:::test-hrn2";
 
@@ -41,20 +42,20 @@ describe("CatalogsRequest", () => {
 
     it("Should set parameters", () => {
         const catalogsRequest = new CatalogsRequest();
-        const catalogsRequestWithSchemaHrn = catalogsRequest.withSchema(
-            mockedSchemaHRN1
-        );
+        const catalogsRequestWithSchemaHrn = catalogsRequest.withSchema(mockedSchemaHRN1);
+        const catalogsRequestWithBillTag = catalogsRequest.withBillingTag(billingTag);
 
-        expect(catalogsRequestWithSchemaHrn.getSchema()).to.be.equal(
-            mockedSchemaHRN1
-        );
+        expect(catalogsRequestWithSchemaHrn.getSchema()).to.be.equal(mockedSchemaHRN1);
+        expect(catalogsRequestWithBillTag.getBillingTag()).to.be.equal(billingTag);
     });
 
     it("Should set parameters with chain", () => {
         const catalogsRequest = new CatalogsRequest()
             .withSchema(mockedSchemaHRN1)
-            .withSchema(mockedSchemaHRN2);
+            .withSchema(mockedSchemaHRN2)
+            .withBillingTag(billingTag);
 
         expect(catalogsRequest.getSchema()).to.be.equal(mockedSchemaHRN2);
+        expect(catalogsRequest.getBillingTag()).to.be.equal(billingTag);
     });
 });

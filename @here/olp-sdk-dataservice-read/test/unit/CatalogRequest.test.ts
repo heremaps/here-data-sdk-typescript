@@ -28,11 +28,20 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("SummaryRequest", () => {
+describe("CatalogRequest", () => {
+    const billingTag = "billingTag";
+
     it("Should initialize", () => {
         const catalogRequest = new CatalogRequest();
 
         assert.isDefined(CatalogRequest);
         expect(catalogRequest).be.instanceOf(CatalogRequest);
+    });
+
+    it("Should set parameters", () => {
+        const catalogRequest = new CatalogRequest();
+        const catalogRequestWithBillTag = catalogRequest.withBillingTag(billingTag);
+
+        expect(catalogRequestWithBillTag.getBillingTag()).to.be.equal(billingTag);
     });
 });

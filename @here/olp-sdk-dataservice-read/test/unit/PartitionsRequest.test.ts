@@ -29,6 +29,7 @@ const assert = chai.assert;
 const expect = chai.expect;
 
 describe("PartitionsRequest", () => {
+    const billingTag = "billingTag";
     const mockedVersion = 42;
 
     it("Should initialize", () => {
@@ -40,20 +41,19 @@ describe("PartitionsRequest", () => {
 
     it("Should set parameters", () => {
         const partitionsRequest = new PartitionsRequest();
-        const partitionsRequestWithVersion = partitionsRequest.withVersion(
-            mockedVersion
-        );
+        const partitionsRequestWithVersion = partitionsRequest.withVersion(mockedVersion);
+        const partitionsRequestWithBillTag = partitionsRequest.withBillingTag(billingTag);
 
-        expect(partitionsRequestWithVersion.getVersion()).to.be.equal(
-            mockedVersion
-        );
+        expect(partitionsRequestWithVersion.getVersion()).to.be.equal(mockedVersion);
+        expect(partitionsRequestWithBillTag.getBillingTag()).to.be.equal(billingTag);
     });
 
     it("Should get parameters with chain", () => {
-        const partitionsRequest = new PartitionsRequest().withVersion(
-            mockedVersion
-        );
+        const partitionsRequest = new PartitionsRequest()
+            .withVersion(mockedVersion)
+            .withBillingTag(billingTag);
 
         expect(partitionsRequest.getVersion()).to.be.equal(mockedVersion);
+        expect(partitionsRequest.getBillingTag()).to.be.equal(billingTag);
     });
 });

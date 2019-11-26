@@ -155,7 +155,7 @@ export async function getVolatileBlob(
         dataHandle: string;
         billingTag?: string;
     }
-): Promise<string> {
+): Promise<Response> {
     const baseUrl = "/layers/{layerId}/data/{dataHandle}"
         .replace("{layerId}", UrlBuilder.toString(params["layerId"]))
         .replace("{dataHandle}", UrlBuilder.toString(params["dataHandle"]));
@@ -169,7 +169,7 @@ export async function getVolatileBlob(
         headers
     };
 
-    return builder.request<string>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }
 
 /**
