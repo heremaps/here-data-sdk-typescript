@@ -39,7 +39,7 @@ After you set up the credentials, you can use them to access the HERE OLP SDK li
 
 The OLP SDK for TypeScript package contains four independent modules that focus on a specific set of responsibilities:
 
-- `olp-sdk-authentification`: gets OAuth2 bearer tokens used to confirm OLP requests.
+- `olp-sdk-authentication`: gets OAuth2 bearer tokens used to confirm OLP requests.
 - `olp-sdk-dataservice-api`: retrieves data from OLP.
 - `olp-sdk-dataservice-read`: retrieves layer and partition data from OLP catalogs.
 - `olp-sdk-fetch`: adds a subset of the fetch API for Node.js.

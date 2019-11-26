@@ -79,7 +79,7 @@ Add minified JavaScript files to your `html` and create an object of userAuth an
 <body>
     <script>
     /**
-     * Authentification with olp-sdk-authentification
+     * Authentification with olp-sdk-authentication
      */
     const userAuth = new UserAuth({
         env: "here",
