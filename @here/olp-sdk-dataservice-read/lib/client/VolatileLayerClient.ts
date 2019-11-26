@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { BlobApi, MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
+import { MetadataApi, QueryApi, VolatileBlobApi } from "@here/olp-sdk-dataservice-api";
 import {
     ApiName,
     DataRequest,
@@ -145,20 +145,10 @@ export class VolatileLayerClient {
                 .withQuadKey(quadKey)
                 .withDepth(request.getDepth());
 
-            const quadTreeIndex = await queryClient.fetchQuadTreeIndex(
+            return queryClient.fetchQuadTreeIndex(
                 quadTreeIndexRequest,
                 abortSignal
             );
-
-            const result: MetadataApi.Partitions = {
-                partitions: quadTreeIndex.subQuads.map(subQuad => ({
-                    dataHandle: subQuad.dataHandle,
-                    version: subQuad.version,
-                    partition: mortonCodeFromQuadKey(quadKey).toString()
-                }))
-            };
-
-            return Promise.resolve(result);
         }
 
         const metaRequestBilder = await this.getRequestBuilder(
@@ -177,11 +167,11 @@ export class VolatileLayerClient {
         billingTag?: string
     ): Promise<Response> {
         const builder = await this.getRequestBuilder(
-            "blob",
+            "volatile-blob",
             HRN.fromString(this.hrn),
             abortSignal
         );
-        return BlobApi.getBlob(builder, {
+        return VolatileBlobApi.getVolatileBlob(builder, {
             dataHandle,
             layerId: this.layerId,
             billingTag

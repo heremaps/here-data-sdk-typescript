@@ -29,6 +29,7 @@ const assert = chai.assert;
 const expect = chai.expect;
 
 describe("SummaryRequest", () => {
+    const billingTag = "billingTag";
     const mockedHRN = HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
     const mockedDataLevel = "42";
@@ -43,31 +44,17 @@ describe("SummaryRequest", () => {
 
     it("Should set parameters", () => {
         const statisticsRequest = new StatisticsRequest();
-        const statisticsRequestWithCatalogHrn = statisticsRequest.withCatalogHrn(
-            mockedHRN
-        );
-        const statisticsRequestWithLayerId = statisticsRequest.withLayerId(
-            mockedLayerId
-        );
-        const statisticsRequestWithDataLevel = statisticsRequest.withDataLevel(
-            mockedDataLevel
-        );
-        const statisticsRequestWithTimemap = statisticsRequest.withTypemap(
-            mockedTimemap
-        );
+        const statisticsRequestWithCatalogHrn = statisticsRequest.withCatalogHrn(mockedHRN);
+        const statisticsRequestWithLayerId = statisticsRequest.withLayerId(mockedLayerId);
+        const statisticsRequestWithDataLevel = statisticsRequest.withDataLevel(mockedDataLevel);
+        const statisticsRequestWithTimemap = statisticsRequest.withTypemap(mockedTimemap);
+        const statisticsRequestWithBillTag = statisticsRequest.withBillingTag(billingTag);
 
-        expect(statisticsRequestWithCatalogHrn.getCatalogHrn()).to.be.equal(
-            mockedHRN.toString()
-        );
-        expect(statisticsRequestWithLayerId.getLayerId()).to.be.equal(
-            mockedLayerId
-        );
-        expect(statisticsRequestWithDataLevel.getDataLevel()).to.be.equal(
-            mockedDataLevel
-        );
-        expect(statisticsRequestWithTimemap.getTypemap()).to.be.equal(
-            mockedTimemap
-        );
+        expect(statisticsRequestWithCatalogHrn.getCatalogHrn()).to.be.equal(mockedHRN.toString());
+        expect(statisticsRequestWithLayerId.getLayerId()).to.be.equal(mockedLayerId);
+        expect(statisticsRequestWithDataLevel.getDataLevel()).to.be.equal(mockedDataLevel);
+        expect(statisticsRequestWithTimemap.getTypemap()).to.be.equal(mockedTimemap);
+        expect(statisticsRequestWithBillTag.getBillingTag()).to.be.equal(billingTag);
     });
 
     it("Should get parameters with chain", () => {
@@ -75,13 +62,13 @@ describe("SummaryRequest", () => {
             .withCatalogHrn(mockedHRN)
             .withLayerId(mockedLayerId)
             .withDataLevel(mockedDataLevel)
-            .withTypemap(mockedTimemap);
+            .withTypemap(mockedTimemap)
+            .withBillingTag(billingTag);
 
-        expect(statisticsRequest.getCatalogHrn()).to.be.equal(
-            mockedHRN.toString()
-        );
+        expect(statisticsRequest.getCatalogHrn()).to.be.equal(mockedHRN.toString());
         expect(statisticsRequest.getLayerId()).to.be.equal(mockedLayerId);
         expect(statisticsRequest.getDataLevel()).to.be.equal(mockedDataLevel);
         expect(statisticsRequest.getTypemap()).to.be.equal(mockedTimemap);
+        expect(statisticsRequest.getBillingTag()).to.be.equal(billingTag);
     });
 });

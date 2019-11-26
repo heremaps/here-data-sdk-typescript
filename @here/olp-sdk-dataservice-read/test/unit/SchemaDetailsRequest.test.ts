@@ -29,6 +29,7 @@ const assert = chai.assert;
 const expect = chai.expect;
 
 describe("SchemaDetailsRequest", () => {
+    const billingTag = "billingTag";
     const mockedHRN = HRN.fromString("hrn:here:data:::mocked-hrn");
 
     it("Should initialize", () => {
@@ -41,13 +42,25 @@ describe("SchemaDetailsRequest", () => {
     it("Should set parameters", () => {
         const schemaDetailsRequest = new SchemaDetailsRequest();
 
-        const schemaDetailsRequestWithVariant = schemaDetailsRequest.withSchema(
-            mockedHRN
-        );
+        const schemaDetailsRequestWithSchema = schemaDetailsRequest.withSchema(mockedHRN);
+        const schemaRequestWithBilTag = schemaDetailsRequest.withBillingTag(billingTag);
 
-        assert.isDefined(schemaDetailsRequestWithVariant);
-        expect(schemaDetailsRequestWithVariant.getSchema()).to.be.equal(
+        assert.isDefined(schemaDetailsRequestWithSchema);
+        assert.isDefined(schemaRequestWithBilTag);
+        expect(schemaDetailsRequestWithSchema.getSchema()).to.be.equal(
             mockedHRN
         );
+        expect(schemaRequestWithBilTag.getBillingTag()).to.be.equal(
+            billingTag
+        );
+    });
+
+    it("Should set parameters with chain", () => {
+        const schemaDetailsRequest = new SchemaDetailsRequest()
+            .withSchema(mockedHRN)
+            .withBillingTag(billingTag);
+
+        expect(schemaDetailsRequest.getSchema()).to.be.equal(mockedHRN);
+        expect(schemaDetailsRequest.getBillingTag()).to.be.equal(billingTag);
     });
 });

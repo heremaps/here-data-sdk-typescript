@@ -29,6 +29,7 @@ const assert = chai.assert;
 const expect = chai.expect;
 
 describe("SchemaRequest", () => {
+    const billingTag = "billingTag";
     const mockedVersion = {
         id: "42",
         url: "http://fake.url"
@@ -47,10 +48,24 @@ describe("SchemaRequest", () => {
         const schemaRequestWithVariant = schemaRequest.withVariant(
             mockedVersion
         );
+        const schemaRequestWithBilTag = schemaRequest.withBillingTag(billingTag);
 
         assert.isDefined(schemaRequestWithVariant);
+        assert.isDefined(schemaRequestWithBilTag);
         expect(schemaRequestWithVariant.getVariant()).to.be.equal(
             mockedVersion
         );
+        expect(schemaRequestWithBilTag.getBillingTag()).to.be.equal(
+            billingTag
+        );
+    });
+
+    it("Should set parameters with chain", () => {
+        const schemaRequest = new SchemaRequest()
+            .withVariant(mockedVersion)
+            .withBillingTag(billingTag);
+
+        expect(schemaRequest.getVariant()).to.be.equal(mockedVersion);
+        expect(schemaRequest.getBillingTag()).to.be.equal(billingTag);
     });
 });

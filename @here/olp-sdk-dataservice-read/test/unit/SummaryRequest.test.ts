@@ -29,6 +29,7 @@ const assert = chai.assert;
 const expect = chai.expect;
 
 describe("SummaryRequest", () => {
+    const billingTag = "billingTag";
     const mockedHRN = HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
 
@@ -47,6 +48,7 @@ describe("SummaryRequest", () => {
         const summaryRequestWithLAyerId = summaryRequest.withLayerId(
             mockedLayerId
         );
+        const summaryRequestWithBillTag = summaryRequest.withBillingTag(billingTag);
 
         expect(summaryRequestWithCatalogHrn.getCatalogHrn()).to.be.equal(
             mockedHRN.toString()
@@ -54,16 +56,21 @@ describe("SummaryRequest", () => {
         expect(summaryRequestWithLAyerId.getLayerId()).to.be.equal(
             mockedLayerId
         );
+        expect(summaryRequestWithBillTag.getBillingTag()).to.be.equal(
+            billingTag
+        );
     });
 
     it("Should get parameters with chain", () => {
         const summaryRequest = new SummaryRequest()
             .withCatalogHrn(mockedHRN)
-            .withLayerId(mockedLayerId);
+            .withLayerId(mockedLayerId)
+            .withBillingTag(billingTag);
 
         expect(summaryRequest.getCatalogHrn()).to.be.equal(
             mockedHRN.toString()
         );
         expect(summaryRequest.getLayerId()).to.be.equal(mockedLayerId);
+        expect(summaryRequest.getBillingTag()).to.be.equal(billingTag);
     });
 });
