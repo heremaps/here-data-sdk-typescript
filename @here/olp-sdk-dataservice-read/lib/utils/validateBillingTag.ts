@@ -27,7 +27,7 @@
 export function validateBillingTag(tag: string): string {
     const pattern = /^[A-Za-z0-9_-]{4,16}$/;
 
-    if (pattern.test(tag)) {
+    if (!pattern.test(tag)) {
         throw new Error(
             "The billing tag must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9]"
         );

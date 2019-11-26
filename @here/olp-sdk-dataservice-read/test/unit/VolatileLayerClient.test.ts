@@ -22,7 +22,7 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
-import { MetadataApi, QueryApi, BlobApi } from "@here/olp-sdk-dataservice-api";
+import { MetadataApi, QueryApi, VolatileBlobApi } from "@here/olp-sdk-dataservice-api";
 
 chai.use(sinonChai);
 
@@ -56,7 +56,7 @@ describe("volatileLayerClient", () => {
     });
 
     beforeEach(() => {
-        getBlobStub = sandbox.stub(BlobApi, "getBlob");
+        getBlobStub = sandbox.stub(VolatileBlobApi, "getVolatileBlob");
         getPartitionsStub = sandbox.stub(MetadataApi, "getPartitions");
         getPartitionsByIdStub = sandbox.stub(QueryApi, "getPartitionsById");
         getQuadTreeIndexStub = sandbox.stub(QueryApi, "quadTreeIndexVolatile");
@@ -190,6 +190,64 @@ describe("volatileLayerClient", () => {
         );
         assert.isDefined(response);
         assert.isTrue(response.ok);
+    });
+
+    it("Should method getData with partitionId parameter and version return error", async () => {
+        const mockedErrorResponse = "some error";
+
+        getPartitionsByIdStub.callsFake(
+            (builder: any, params: any): Promise<QueryApi.Partitions> => {
+                throw new Error(mockedErrorResponse);
+            }
+        );
+
+        const dataRequest = new dataServiceRead.DataRequest()
+            .withPartitionId("42")
+            .withVersion(2);
+
+        const response = await volatileLayerClient.getData(
+            (dataRequest as unknown) as dataServiceRead.DataRequest
+        )
+        .catch(error => {
+            assert.isDefined(error);
+            assert.equal(mockedErrorResponse, error.message);
+        });
+    });
+
+    it("Should method getData with wrong partitionId parameter and version return error", async () => {
+        const mockedBlobData = new Response("mocked-blob-response");
+        const mockedErrorResponse = "No partition dataHandle for partition 42. HRN: hrn:here:data:::live-weather-na";
+        const mockedPartitionsIdData = {
+            partitions: [
+                {
+                    version: 1,
+                    partition: "13",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+                }
+            ]
+        };
+
+        getPartitionsByIdStub.callsFake(
+            (builder: any, params: any): Promise<QueryApi.Partitions> => {
+                return Promise.resolve(mockedPartitionsIdData);
+            }
+        );
+        getBlobStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockedBlobData);
+            }
+        );
+
+        const dataRequest = new dataServiceRead.DataRequest()
+            .withPartitionId("42")
+            .withVersion(2);
+
+        const response = await volatileLayerClient.getData(
+            (dataRequest as unknown) as dataServiceRead.DataRequest
+        ).catch(error => {
+            assert.isDefined(error);
+            assert.equal(mockedErrorResponse, error);
+        });
     });
 
     xit("Should method getData provide data with quadKey", async () => {
