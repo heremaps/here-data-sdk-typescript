@@ -1,4 +1,4 @@
-# Example of how to read layer data on Node.js using @here/olp-edge-sdk-dataservice-read and @here/olp-edge-sdk-authentification
+# Example of how to read layer data on Node.js using @here/olp-sdk-dataservice-read and @here/olp-sdk-authentication
 
 This example shows how to retrieve partition metadata and partition data using the OLP SDK for TypeScript.
 
@@ -29,7 +29,7 @@ npm install --save-dev @types/node
 Install SDK modules:
 
 ```shell
-npm install --save @here/olp-edge-sdk-authentification @here/olp-edge-sdk-dataservice-read @here/olp-edge-sdk-dataservice-api
+npm install --save @here/olp-sdk-authentication @here/olp-sdk-dataservice-read
 ```
 
 Now, everything is set to create the app.
@@ -68,7 +68,7 @@ App works!
 To work with the datastore, you need to have an [account](https://account.here.com).
 To get an access key id and access key secret, log in to the [HERE Open Location Platform (OLP)](https://platform.here.com/admin/apps) and create a test app.
 
-Now, you can get a token for requests to the datastore using @here/olp-sdk-authentification.
+Now, you can get a token for requests to the datastore using @here/olp-sdk-authentication.
 
 Log in to the API. Modify our app to the following state:
 
@@ -76,7 +76,7 @@ Log in to the API. Modify our app to the following state:
 /**
  * Example Node.js app for reading a volatile layer from the datastore
  */
-import { UserAuth, requestToken } from "@here/olp-sdk-authentification";
+import { UserAuth, requestToken } from "@here/olp-sdk-authentication";
 
 const userAuth = new UserAuth({
     env: "here",
@@ -98,7 +98,7 @@ To do so, you need the `OlpClientSettings` object. It contains a download manage
 /**
  * Example Node.js app for reading a volatile layer from the datastore
  */
-import { UserAuth } from "@here/olp-sdk-authentification";
+import { UserAuth } from "@here/olp-sdk-authentication";
 import { OlpClientSettings } from "@here/olp-sdk-dataservice-read";
 
 const userAuth = new UserAuth({
