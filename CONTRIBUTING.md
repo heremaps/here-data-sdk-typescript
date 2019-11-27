@@ -1,4 +1,4 @@
-The team behind [OLP SDK for TypeScript](https://github.com/heremaps/here-olp-sdk-ts) gratefully accepts contributions via [pull requests](https://help.github.com/articles/about-pull-requests/) filed against the [GitHub project](https://github.com/heremaps/harp.gl/pulls). As part of filing a pull request, we ask you to sign off the [Developer Certificate of Origin](https://developercertificate.org/) (DCO).
+The team behind [OLP SDK for TypeScript](https://github.com/heremaps/here-olp-sdk-typescript) gratefully accepts contributions via [pull requests](https://help.github.com/articles/about-pull-requests/) filed against the [GitHub project](https://github.com/heremaps/harp.gl/pulls). As part of filing a pull request, we ask you to sign off the [Developer Certificate of Origin](https://developercertificate.org/) (DCO).
 
 To maintain a high software quality standard, we strongly prefer contributions to follow these rules:
 
@@ -22,7 +22,7 @@ To maintain a high software quality standard, we strongly prefer contributions t
   - As a result, tools like [git-bisect](https://git-scm.com/docs/git-bisect) can operate in a more meaningful way.
   - Fixing up commits allows for making fixes to commit messages, which is not possible by only adding new commits. If you are unfamiliar with fixing up existing commits, please read about [rewriting history](https://git-scm.com/book/id/v2/Git-Tools-Rewriting-History) and `git rebase --interactive` in particular.
 
-- To resolve conflicts, rebase pull request branches onto their target branch instead of merging the target branch into the pull request branch. This again results in a cleanehistory without "criss-cross" merges.
+- To resolve conflicts, rebase pull request branches onto their target branch instead of merging the target branch into the pull request branch. This again results in a clean history without "criss-cross" merges.
 
 - Please see [CODINGSTYLE.md](CODINGSTYLE.md) for more information about the coding style.
 
