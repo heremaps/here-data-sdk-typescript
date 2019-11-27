@@ -36,4 +36,8 @@ npm run test
 # generate test coverage
 npm run coverage
 
+#test chromium --headless instalation
+
+cd tests/integration/ && node test-chrome-headless-installed.js
+
 

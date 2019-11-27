@@ -26,5 +26,8 @@
     "lerna": "3.16.4",
     "@types/node": "12.7.5",
     "typescript": "3.5.3"
+  },
+  "dependencies": {
+    "puppeteer": "^2.0.0"
   }
 }
