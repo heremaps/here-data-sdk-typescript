@@ -73,7 +73,7 @@ export class QueryClient {
                 )
             ));
 
-        if (!catalogVersion) {
+        if (!catalogVersion && catalogVersion !== 0) {
             return Promise.reject(`Please provide correct catalog version`);
         }
 

@@ -65,6 +65,15 @@ export class QuadKeyPartitionsRequest {
     }
 
     /**
+     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
+     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     */
+    public withBillingTag(tag: string): QuadKeyPartitionsRequest {
+        this.billingTag = validateBillingTag(tag);
+        return this;
+    }
+
+    /**
      * The configured catalog version for the request
      */
     public getVersion(): number | undefined {
@@ -83,14 +92,6 @@ export class QuadKeyPartitionsRequest {
      */
     public getDepth(): QuadTreeIndexDepth {
         return this.depth || 0;
-    }
-
-    /**
-     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
-     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
-     */
-    public withBillingTag(tag: string) {
-        this.billingTag = validateBillingTag(tag);
     }
 
     /**
