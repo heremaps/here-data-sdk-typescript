@@ -132,6 +132,45 @@ describe("CatalogClient", () => {
         assert.isTrue(response.versions.length > 0);
     });
 
+    it("Should method getVersions provide data with startVersion parameters", async () => {
+        const mockedVersions: MetadataApi.VersionInfos = {
+            versions: [
+                {
+                    dependencies: [
+                        {
+                            direct: true,
+                            hrn: "mocked:::hrn",
+                            version: 42
+                        }
+                    ],
+                    timestamp: 13,
+                    version: 42
+                }
+            ]
+        };
+
+        getListVersionsStub.callsFake(
+            (builder: any, params: any): Promise<MetadataApi.VersionInfos> => {
+                return Promise.resolve(mockedVersions);
+            }
+        );
+        getVersionStub.callsFake(
+            (builder: any, params: any): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve({version: 42});
+            }
+        );
+
+        const catalogRequest = new dataServiceRead.CatalogVersionRequest()
+            .withStartVersion(13);
+
+        const response = await catalogClient.getVersions(
+            (catalogRequest as unknown) as dataServiceRead.CatalogVersionRequest
+        );
+
+        assert.isDefined(response);
+        assert.isTrue(response.versions.length > 0);
+    });
+
     it("Should method getCatalog provide data", async () => {
         const mockedCatalogResponse: ConfigApi.Catalog = {
             id: "here-internal-test",

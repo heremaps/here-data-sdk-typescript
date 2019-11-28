@@ -33,6 +33,7 @@ describe("volatileLayerClient", () => {
     let sandbox: sinon.SinonSandbox;
     let getPartitionsStub: sinon.SinonStub;
     let getBlobStub: sinon.SinonStub;
+    let getVersionStub: sinon.SinonStub;
     let getPartitionsByIdStub: sinon.SinonStub;
     let getQuadTreeIndexStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
@@ -58,6 +59,7 @@ describe("volatileLayerClient", () => {
     beforeEach(() => {
         getBlobStub = sandbox.stub(VolatileBlobApi, "getVolatileBlob");
         getPartitionsStub = sandbox.stub(MetadataApi, "getPartitions");
+        getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
         getPartitionsByIdStub = sandbox.stub(QueryApi, "getPartitionsById");
         getQuadTreeIndexStub = sandbox.stub(QueryApi, "quadTreeIndexVolatile");
         getBaseUrlRequestStub = sandbox.stub(
@@ -75,7 +77,7 @@ describe("volatileLayerClient", () => {
         assert.isDefined(volatileLayerClient);
     });
 
-    it("Should method getPartitions provide data", async () => {
+    it("Should method getPartitions provide data with PartitionsRequest", async () => {
         const mockedPartitions = {
             partitions: [
                 {
@@ -103,6 +105,17 @@ describe("volatileLayerClient", () => {
 
         assert.isDefined(partitions);
         expect(partitions).to.be.equal(mockedPartitions);
+    });
+
+    it("Should method getPartitions return error without QuadKeyPartitionsRequest", async () => {
+        const mockedErrorResponse = "Please provide correct QuadKey";
+
+        const quadKeyRequest = new dataServiceRead.QuadKeyPartitionsRequest();
+        const partitions = await volatileLayerClient.getPartitions(quadKeyRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error);
+            });
     });
 
     it("Should method getData provide data with dataHandle parameter", async () => {
@@ -250,8 +263,11 @@ describe("volatileLayerClient", () => {
         });
     });
 
-    xit("Should method getData provide data with quadKey", async () => {
+    it("Should method getData provide data with quadKey", async () => {
         const mockedBlobData = new Response("mocked-blob-response");
+        const mockedVersion = {
+            version: 42
+        };
 
         const mockedQuadKeyTreeData = {
             subQuads: [
@@ -275,6 +291,30 @@ describe("volatileLayerClient", () => {
                 return Promise.resolve(mockedQuadKeyTreeData);
             }
         );
+        getVersionStub.callsFake(
+            (builder: any, params: any): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve(mockedVersion);
+            }
+        );
+        const mockedPartitions = {
+            partitions: [
+                {
+                    version: 1,
+                    partition: "42",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+                },
+                {
+                    version: 42,
+                    partition: "42",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+                }
+            ]
+        };
+        getPartitionsStub.callsFake(
+            (builder: any, params: any): Promise<MetadataApi.Partitions> => {
+                return Promise.resolve(mockedPartitions);
+            }
+        );
         getBlobStub.callsFake(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.resolve(mockedBlobData);
@@ -287,7 +327,6 @@ describe("volatileLayerClient", () => {
 
         const response = await volatileLayerClient.getData(dataRequest as any);
         assert.isDefined(response);
-        assert.isTrue(response.ok);
     });
 
     it("Should method getData return Error without dataRequest parameters", async () => {
