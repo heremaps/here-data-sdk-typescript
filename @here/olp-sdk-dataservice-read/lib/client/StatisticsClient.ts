@@ -57,7 +57,7 @@ export class StatisticsClient {
         }
         const coverageRequestBuilder = await this.getRequestBuilder(
             catalogHrn
-        ).catch(error => Promise.reject(new Error(error)));
+        ).catch(error => Promise.reject(error));
         return CoverageApi.getDataCoverageSummary(coverageRequestBuilder, {
             layerId
         }).catch(this.errorHandler);

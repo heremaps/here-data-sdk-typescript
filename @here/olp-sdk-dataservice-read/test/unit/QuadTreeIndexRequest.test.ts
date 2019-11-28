@@ -21,7 +21,7 @@ import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import { HRN, QuadTreeIndexRequest } from "../../lib";
+import * as dataServiceRead from "../../lib";
 
 chai.use(sinonChai);
 
@@ -30,7 +30,7 @@ const expect = chai.expect;
 
 describe("QuadTreeIndexRequest", () => {
     const billingTag = "billingTag";
-    const mockedHRN = HRN.fromString("hrn:here:data:::mocked-hrn");
+    const mockedHRN = dataServiceRead.HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
     const mockedVersion = 42;
     const mockedLayerType = "volatile";
@@ -42,21 +42,21 @@ describe("QuadTreeIndexRequest", () => {
     };
 
     it("Should initialize", () => {
-        const quadTreeRequest = new QuadTreeIndexRequest(
+        const quadTreeRequest = new dataServiceRead.QuadTreeIndexRequest(
             mockedHRN,
             mockedLayerId,
             mockedLayerType
         );
 
         assert.isDefined(quadTreeRequest);
-        expect(quadTreeRequest).be.instanceOf(QuadTreeIndexRequest);
+        expect(quadTreeRequest).be.instanceOf(dataServiceRead.QuadTreeIndexRequest);
         expect(quadTreeRequest.getCatalogHrn()).to.be.equal(mockedHRN);
         expect(quadTreeRequest.getLayerId()).to.be.equal(mockedLayerId);
         expect(quadTreeRequest.getLayerType()).to.be.equal(mockedLayerType);
     });
 
     it("Should set parameters", () => {
-        const quadTreeRequest = new QuadTreeIndexRequest(
+        const quadTreeRequest = new dataServiceRead.QuadTreeIndexRequest(
             mockedHRN,
             mockedLayerId,
             mockedLayerType
@@ -71,7 +71,7 @@ describe("QuadTreeIndexRequest", () => {
     });
 
     it("Should get parameters with chain", () => {
-        const quadTreeRequest = new QuadTreeIndexRequest(
+        const quadTreeRequest = new dataServiceRead.QuadTreeIndexRequest(
                 mockedHRN,
                 mockedLayerId,
                 mockedLayerType
