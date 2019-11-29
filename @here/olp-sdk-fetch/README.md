@@ -1,4 +1,4 @@
-# @here/olp-sdk-fetch
+# Fetch Library
 
 ## Overview
 
@@ -18,11 +18,11 @@ import "@here/olp-sdk-fetch"
 
 This adds `fetch` to the global `Node.js` namespace.
 
-## Behavior in Browser Context
+## Behavior in a Browser Context
 
 When this module is used in a browser context, it does not perform any actions, nor adds any code.
 
-## Usage of Bundle functionality:
+## Generate a Bundle
 
 If you want to have a compiled project, you can use bundle commands. After running each of the following commands in the `@here/olp-sdk-fetch/dist/bundle` folder from the root folder, you get the JavaScript bundled files.
 
@@ -39,8 +39,24 @@ npm run bundle:prod
 ```
 
 To get a bundled and minified JavaScript files, run:
+
 ```sh
 npm run prepublish-bundle
+```
+
+## Use a Bundle from CDN
+
+Add minified JavaScript file to your `html` and create an object of userAuth:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://unpkg.com/@here/olp-sdk-fetch/bundle.umd.min.js"></script>
+</head>
+<body>
+</body>
+</html>
 ```
 
 ## LICENSE

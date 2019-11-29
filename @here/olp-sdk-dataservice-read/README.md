@@ -1,10 +1,10 @@
-# DataStore Access Library
+# DataService Access Library
 
-# Overview
+## Overview
 
 This repository contains the complete source code for the HERE OLP SDK for TypeScript Dataservice Read `@here/olp-sdk-dataservice-read` project. `olp-sdk-dataservice-read` is a TypeScript library that will fetch request Layer and Partition data from the OLP catalogs.
 
-# Directory Layout
+## Directory Layout
 
 Here is an overview of the top-level files of the repository:
 
@@ -15,16 +15,16 @@ Here is an overview of the top-level files of the repository:
                         |
                         +- test   # Test code
 
-# Development
+## Development
 
-## Prerequisites
+### Prerequisites
 
 The following NPM packages are required to build/test the library:
 
     - node: >= 10.0.0
     - npm: >= 6.0.0
 
-## Building
+### Build
 
 Open a command prompt of the working tree's root directory and type:
 
@@ -33,7 +33,7 @@ npm install
 npm run build
 ```
 
-## Testing
+### Test
 
 Open a command prompt of the working tree's root directory and type:
 
@@ -41,7 +41,7 @@ Open a command prompt of the working tree's root directory and type:
 npm run test
 ```
 
-## Usage of Bundle functionality
+### Generate a Bundle
 
 If you want to have a compiled project, you can use bundle commands. After running each of the following commands in the `@here/olp-sdk-dataservice-read/dist/bundle` folder from the root folder, you get the JavaScript bundled files.
 
@@ -63,7 +63,7 @@ To get bundled and minified JavaScript files, run:
 npm run prepublish-bundle
 ```
 
-## Simple bundle
+### Use a Bundle from CDN
 
 Add minified JavaScript files to your `html` and create an object of userAuth and catalogClient:
 
@@ -89,7 +89,6 @@ Add minified JavaScript files to your `html` and create an object of userAuth an
         },
         tokenRequester: requestToken
     });
-
     /**
      * Create DatastoreContext with olp-sdk-dataservice-read
      */
@@ -97,7 +96,6 @@ Add minified JavaScript files to your `html` and create an object of userAuth an
         environment: "here",
         getToken: () => userAuth.getToken()
     });
-
     /**
      * Create client to the volatile layer with olp-sdk-dataservice-read
      */
@@ -106,7 +104,6 @@ Add minified JavaScript files to your `html` and create an object of userAuth an
         hrn: "your-catalog-hrn",
         layerId: "your-layer-id",
     });
-
     /**
      * Get some partition from the layer by ID
      */
