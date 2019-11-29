@@ -1,14 +1,16 @@
-# Overview
+# Authentification library
 
-This repository contains all required methods and classes to request access token for OAuth authentication.
+## Overview
+
+This repository contains all required methods and classes to request an access token for OAuth authentication.
 
 ## UserAuth
 
-## Description
+### Description
 
 UserAuth class instance is used to obtain client token by providing authentication data.
 
-## Configuration
+### Configure
 
 Creating an instance of UserAuth class requires configuration object to be passed to the constructor:
 
@@ -16,7 +18,7 @@ Creating an instance of UserAuth class requires configuration object to be passe
 const auth = new UserAuth(config);
 ```
 
-## Usage with local authorization
+### Use with Local Authorization
 
 Create an instance of UserAuth class before instantiating any data sources:
 
@@ -54,8 +56,9 @@ Get token:
 const token: string = await userAuth.getToken();
  ```
 
-## Usage with import credentials from file
-Download your credentials.properties file from [OLP website](https://developer.here.com/olp/documentation/access-control/user-guide/topics/get-credentials.html).
+### Use with Credentials Imported from a File
+
+Download your **credentials.properties** file from the [OLP website](https://developer.here.com/olp/documentation/access-control/user-guide/topics/get-credentials.html).
 Create an instance of UserAuth class and set the path to the file with credentials:
 
 ```typescript
@@ -81,7 +84,7 @@ Get token:
 const token: string = await userAuth.getToken();
 ```
 
-## Usage of Bundle functionality:
+### Generate a Bundle
 
 If you want to have a compiled project, you can use bundle commands. After running each of the following commands in the `@here/olp-sdk-authentication/dist/bundle` folder from the root folder, you get the JavaScript bundled files.
 
@@ -103,7 +106,7 @@ To get bundled and minified JavaScript files, run:
 npm run prepublish-bundle
 ```
 
-## Simple bundle
+### Use a Bundle from CDN
 
 Add minified JavaScript file to your `html` and create an object of userAuth:
 
@@ -111,6 +114,7 @@ Add minified JavaScript file to your `html` and create an object of userAuth:
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://unpkg.com/@here/olp-sdk-fetch/bundle.umd.min.js"></script>
     <script src="https://unpkg.com/@here/olp-sdk-authentication/bundle.umd.min.js"></script>
 </head>
 <body>
@@ -123,7 +127,6 @@ Add minified JavaScript file to your `html` and create an object of userAuth:
         },
         tokenRequester: requestToken
     });
-
         userAuth.getToken().then(token => {
             // your token here
         });

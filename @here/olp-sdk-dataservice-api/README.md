@@ -1,11 +1,10 @@
-# Generated DataStore API
+# DataService API Library
 
-# Overview
+## Overview
 
 This API is generated directly from the official OpenAPI (former Swagger) definition of the [HERE Open Location Platform Data API](https://developer.here.com/olp/documentation/data-api/data_dev_guide/index.html).
 
-
-## Usage of Bundle functionality
+## Generate a Bundle
 
 If you want to have a compiled project, you can use bundle commands. After running each of the following commands in the `dist/@here/olp-sdk-dataservice-api/bundle` folder from the root folder, you get the JavaScript bundled files.
 
@@ -27,7 +26,7 @@ To get bundled and minified JavaScript files, run:
 npm run prepublish-bundle
 ```
 
-## Simple bundle
+## Use a Bundle from CDN
 
 Add minified JavaScript files to your `html`:
 
