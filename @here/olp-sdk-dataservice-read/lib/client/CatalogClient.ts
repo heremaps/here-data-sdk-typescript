@@ -27,6 +27,7 @@ import {
     RequestFactory
 } from "..";
 import { CatalogRequest } from "./CatalogRequest";
+import { LayersVersionRequest } from "./LayersVersionRequest";
 
 /**
  * The `CatalogClient` class is the class to interact with a DataStore catalog.
@@ -99,6 +100,37 @@ export class CatalogClient {
             billingTag: request.getBillingTag()
         });
         return latestVersion.version;
+    }
+
+    public async getLayersVersion(
+        request: LayersVersionRequest,
+        abortSignal?: AbortSignal
+    ): Promise<number> {
+        const builder = await this.getRequestBuilder(
+            "metadata",
+            HRN.fromString(this.hrn),
+            abortSignal
+        ).catch(error => Promise.reject(error));
+        const layersVersion = await MetadataApi.getLayerVersion(
+            builder,
+            {
+                version: request.getVersion(),
+                billingTag: request.getBillingTag()
+            }
+        );
+
+        if (layersVersion.version === undefined) {
+            const catalogRequest = new CatalogVersionRequest();
+            const billingTag = request.getBillingTag();
+            if (billingTag) {
+                catalogRequest.withBillingTag(billingTag);
+            }
+            layersVersion.version = await this.getLatestVersion(
+                catalogRequest
+            );
+        }
+
+        return layersVersion.version;
     }
 
     /**

@@ -32,6 +32,7 @@ const expect = chai.expect;
 describe("CatalogClient", () => {
     let sandbox: sinon.SinonSandbox;
     let getVersionStub: sinon.SinonStub;
+    let getLayersVersionStub: sinon.SinonStub;
     let getCatalogStub: sinon.SinonStub;
     let getListVersionsStub: sinon.SinonStub;
     let catalogClient: dataServiceRead.CatalogClient;
@@ -54,6 +55,7 @@ describe("CatalogClient", () => {
 
     beforeEach(() => {
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
+        getLayersVersionStub = sandbox.stub(MetadataApi, "getLayerVersion");
         getCatalogStub = sandbox.stub(ConfigApi, "getCatalog");
         getListVersionsStub = sandbox.stub(MetadataApi, "listVersions");
         getBaseUrlRequestStub = sandbox.stub(
@@ -130,6 +132,58 @@ describe("CatalogClient", () => {
 
         assert.isDefined(response);
         assert.isTrue(response.versions.length > 0);
+    });
+
+    it("Should method getLayersVersion provide data with version parameter", async () => {
+        const mockedVersion = {
+            layerVersions: [
+                { layer: "testLayer1", version: 1, timestamp: 11 },
+                { layer: "testLayer2", version: 2, timestamp: 22 },
+                { layer: "testLayer3", version: 3, timestamp: 33 }
+            ],
+            version: 2
+        };
+
+        getLayersVersionStub.callsFake(
+            (builder: any, params: any): Promise<MetadataApi.LayerVersions> => {
+                return Promise.resolve(mockedVersion);
+            }
+        );
+
+        const catalogRequest = new dataServiceRead.LayersVersionRequest().withVersion(
+            2
+        );
+        const response = await catalogClient.getLayersVersion(
+            (catalogRequest as unknown) as dataServiceRead.LayersVersionRequest
+        );
+
+        assert.isDefined(response);
+        expect(response).to.be.equal(mockedVersion.version);
+    });
+
+    it("Should method getLayersVersion provide data for lastest version without version parameter", async () => {
+        const mockedVersion = {
+            layerVersions: [
+                { layer: "testLayer1", version: 11, timestamp: 11 },
+                { layer: "testLayer2", version: 12, timestamp: 22 },
+                { layer: "testLayer3", version: 13, timestamp: 33 }
+            ],
+            version: 13
+        };
+
+        getLayersVersionStub.callsFake(
+            (builder: any, params: any): Promise<MetadataApi.LayerVersions> => {
+                return Promise.resolve(mockedVersion);
+            }
+        );
+
+        const catalogRequest = new dataServiceRead.LayersVersionRequest();
+        const response = await catalogClient.getLayersVersion(
+            (catalogRequest as unknown) as dataServiceRead.LayersVersionRequest
+        );
+
+        assert.isDefined(response);
+        expect(response).to.be.equal(mockedVersion.version);
     });
 
     it("Should method getCatalog provide data", async () => {

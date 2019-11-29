@@ -264,7 +264,7 @@ export async function getChanges(
  */
 export async function getLayerVersion(
     builder: RequestBuilder,
-    params: { version: number; billingTag?: string }
+    params: { version: number | undefined; billingTag?: string }
 ): Promise<LayerVersions> {
     const baseUrl = "/layerVersions";
 
