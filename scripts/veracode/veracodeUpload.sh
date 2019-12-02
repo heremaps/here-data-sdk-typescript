@@ -17,8 +17,10 @@
 # Examples:
 # veracodeUpload.sh /tmp/veracode.war michal.vossberg@here.com 443849 1.0.0-RC1
 #
-LATEST_TAG=$(git describe --abbrev=0 --tags)
+set +e
+LATEST_TAG=$(git describe --abbrev=0 --tags) || LATEST_TAG=$(git describe --abbrev=0 --tags --always)
 LATEST_HASH=$(git rev-parse --short=7 HEAD)
+set -e
 echo "##############################"
 echo "LATEST_TAG is ${LATEST_TAG}"
 echo "##############################"
