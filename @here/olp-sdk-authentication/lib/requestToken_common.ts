@@ -39,6 +39,7 @@ export interface OAuthArgs {
     nonce?: string;
     timestamp?: number;
     expiresIn?: number;
+    scope?: string;
 }
 
 /**
@@ -123,6 +124,7 @@ export async function requestToken_common(
 
     const body = {
         grantType: "client_credentials",
+        scope: args.scope,
         expiresIn:
             args.expiresIn === undefined
                 ? SECS_PER_MIN * MINS_PER_HOUR
