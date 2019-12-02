@@ -18,7 +18,7 @@
  */
 
 import { assert } from "chai";
-import { requestToken, UserAuth } from "../index";
+import { requestToken, Token, UserAuth } from "../index";
 
 import fetchMock = require("fetch-mock");
 import { loadCredentialsFromFile } from "../lib/loadCredentialsFromFile";
@@ -457,4 +457,42 @@ describe("oauth-request-lookupapi", () => {
             assert.fail();
         }
     });
+});
+
+describe("auth-request-project-scope", () => {
+    let token: string | null = null;
+    const mockedScope = "mocked-scope";
+    const mock_id = "Tt7wZRTAar";
+    const mock_secret = "khcy1LMBtMZsRVn1-dn7riw9x8";
+    const mockedToken: Token = {
+        accessToken: "fake-access-token",
+        expiresIn: 42,
+        tokenType: "fake"
+    };
+    const mockedTokenRequester = async (params: any): Promise<Token> => {
+        assert.strictEqual(params.scope, mockedScope);
+        return Promise.resolve(mockedToken);
+    };
+
+    it("Should scope be present on userAuth", async () => {
+        const userAuth = new UserAuth({
+        env: "here-dev",
+        credentials: {
+            accessKeyId: mock_id,
+            accessKeySecret: mock_secret
+        },
+            tokenRequester: mockedTokenRequester,
+            scope: mockedScope
+        });
+
+        try {
+            token = await userAuth.getToken();
+            assert.isNotEmpty(token);
+            assert.equal(mockedToken.accessToken, token);
+        } catch (err) {
+            console.error("Token not retrieved:", err);
+            assert.fail();
+        }
+    });
+
 });

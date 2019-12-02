@@ -75,6 +75,12 @@ export interface UserAuthConfig {
      *
      */
     tokenRequester: TokenRequesterFn;
+    /**
+     * Project scope.
+     * If the project is specified, the resulting token is bound to it.
+     * If the desired resource is restricted to a specific project, to get a valid token, specify this project.
+     */
+    scope?: string;
 }
 
 /**
@@ -116,6 +122,7 @@ export class UserAuth {
     private m_accessToken: string | undefined;
     private m_expirationDate?: Date;
     private m_credentials: AuthCredentials = {};
+    private m_scope?: string;
     private readonly m_apiUrl: string;
 
     constructor(private readonly config: UserAuthConfig) {
@@ -148,6 +155,7 @@ export class UserAuth {
             throw new Error(`The credentials has not been added, please add credentials!`);
         }
 
+        this.m_scope = config.scope;
         this.m_credentials = config.credentials;
 
     }
@@ -167,7 +175,8 @@ export class UserAuth {
         const response = await this.config.tokenRequester({
             url: this.m_apiUrl + "oauth2/token",
             consumerKey: this.m_credentials.accessKeyId,
-            secretKey: this.m_credentials.accessKeySecret
+            secretKey: this.m_credentials.accessKeySecret,
+            scope: this.m_scope
         }).catch(err => Promise.reject(`Error fetching token: ${err}`));
 
         if (response.accessToken) {
