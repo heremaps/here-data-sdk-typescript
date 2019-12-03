@@ -43,6 +43,10 @@ The OLP SDK for TypeScript package contains four independent modules that focus 
 - `olp-sdk-dataservice-read`: retrieves layer and partition data from OLP catalogs.
 - `olp-sdk-fetch`: adds a subset of the fetch API for Node.js.
 
+## Reference Documentation
+
+The API reference documentation for the HERE OLP SDK for Typescript is available [here](https://heremaps.github.io/here-olp-sdk-typescript/).
+
 ## <a name="examples"></a> Examples
 
 The [Versioned Layer Read example](./examples/nodejs-read-versioned-layer.md) shows how to retrieve layer metadata, partition metadata, and partition data from a versioned layer using the OLP SDK for TypeScript.
