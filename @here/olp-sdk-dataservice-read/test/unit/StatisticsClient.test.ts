@@ -127,6 +127,40 @@ describe("StatistiscClient", () => {
         assert.isDefined(summary);
     });
 
+    it("Should method getSummary return error if catalogHRN is not provided", async () => {
+        const mockedErrorResponse = "No catalogHrn provided";
+        const statisticsClient = new dataServiceRead.StatisticsClient(
+            olpClientSettingsStub as any
+        );
+        assert.isDefined(statisticsClient);
+
+        const summaryRequest = new dataServiceRead.SummaryRequest()
+            .withLayerId(mockedLayerId);
+
+        const summary = await statisticsClient.getSummary(summaryRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.message);
+            });
+    });
+
+    it("Should method getSummary return error if layerId is not provided", async () => {
+        const mockedErrorResponse = "No layerId provided";
+        const statisticsClient = new dataServiceRead.StatisticsClient(
+            olpClientSettingsStub as any
+        );
+        assert.isDefined(statisticsClient);
+
+        const summaryRequest = new dataServiceRead.SummaryRequest()
+            .withCatalogHrn(mockedHRN);
+
+        const summary = await statisticsClient.getSummary(summaryRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.message);
+            });
+    });
+
     it("Should method getStatistics provide data", async () => {
         const mockedStatistics: Response = new Response("mocked-response");
         const statisticsClient = new dataServiceRead.StatisticsClient(
@@ -181,5 +215,85 @@ describe("StatistiscClient", () => {
             statisticTimeMapRequest
         );
         assert.isDefined(statisticTimeMap);
+    });
+
+    it("Should method getStatistics return error if catalogHRN is not provided", async () => {
+        const mockedErrorResponse = "No catalogHrn provided";
+        const statisticsClient = new dataServiceRead.StatisticsClient(
+            olpClientSettingsStub as any
+        );
+        assert.isDefined(statisticsClient);
+
+        const statisticRequest = new dataServiceRead.StatisticsRequest()
+            .withLayerId(mockedLayerId)
+            .withDataLevel("12")
+            .withTypemap(dataServiceRead.CoverageDataType.BITMAP);
+
+        const statistic = await statisticsClient.getStatistics(
+            statisticRequest
+        ).catch(error => {
+            assert.isDefined(error);
+            assert.equal(mockedErrorResponse, error.message);
+        });
+    });
+
+    it("Should method getStatistics return error if layerId is not provided", async () => {
+        const mockedErrorResponse = "No layerId provided";
+        const statisticsClient = new dataServiceRead.StatisticsClient(
+            olpClientSettingsStub as any
+        );
+        assert.isDefined(statisticsClient);
+
+        const statisticRequest = new dataServiceRead.StatisticsRequest()
+            .withCatalogHrn(mockedHRN)
+            .withDataLevel("12")
+            .withTypemap(dataServiceRead.CoverageDataType.BITMAP);
+
+        const statistic = await statisticsClient.getStatistics(
+            statisticRequest
+        ).catch(error => {
+            assert.isDefined(error);
+            assert.equal(mockedErrorResponse, error.message);
+        });
+    });
+
+    it("Should method getStatistics return error if dataLevel is not provided", async () => {
+        const mockedErrorResponse = "No dataLevel provided";
+        const statisticsClient = new dataServiceRead.StatisticsClient(
+            olpClientSettingsStub as any
+        );
+        assert.isDefined(statisticsClient);
+
+        const statisticRequest = new dataServiceRead.StatisticsRequest()
+            .withCatalogHrn(mockedHRN)
+            .withLayerId(mockedLayerId)
+            .withTypemap(dataServiceRead.CoverageDataType.BITMAP);
+
+        const statistic = await statisticsClient.getStatistics(
+            statisticRequest
+        ).catch(error => {
+            assert.isDefined(error);
+            assert.equal(mockedErrorResponse, error.message);
+        });
+    });
+
+    it("Should method getStatistics return error if typemap is not provided", async () => {
+        const mockedErrorResponse = "No typemap provided";
+        const statisticsClient = new dataServiceRead.StatisticsClient(
+            olpClientSettingsStub as any
+        );
+        assert.isDefined(statisticsClient);
+
+        const statisticRequest = new dataServiceRead.StatisticsRequest()
+            .withCatalogHrn(mockedHRN)
+            .withLayerId(mockedLayerId)
+            .withDataLevel("12");
+
+        const statistic = await statisticsClient.getStatistics(
+            statisticRequest
+        ).catch(error => {
+            assert.isDefined(error);
+            assert.equal(mockedErrorResponse, error.message);
+        });
     });
 });

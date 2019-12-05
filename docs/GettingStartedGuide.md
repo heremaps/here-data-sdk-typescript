@@ -7,8 +7,7 @@ In this guide, learn how to authenticate to and start working with the HERE OLP 
 - [OLP Prerequisite Knowledge](#prerequisite)
 - [Get Credentials](#credentials)
 - [Available Components](#components)
-- [Context and CatalogClient](#catalog-client)
-- [VersionedLayerClient example](#examples)
+- [Examples](#examples)
 
 ## <a name="prerequisite"></a> OLP Prerequisite Knowledge
 
@@ -44,17 +43,12 @@ The OLP SDK for TypeScript package contains four independent modules that focus 
 - `olp-sdk-dataservice-read`: retrieves layer and partition data from OLP catalogs.
 - `olp-sdk-fetch`: adds a subset of the fetch API for Node.js.
 
+## Reference Documentation
+
+The API reference documentation for the HERE OLP SDK for Typescript is available [here](https://heremaps.github.io/here-olp-sdk-typescript/).
+
 ## <a name="examples"></a> Examples
 
 The [Versioned Layer Read example](./examples/nodejs-read-versioned-layer.md) shows how to retrieve layer metadata, partition metadata, and partition data from a versioned layer using the OLP SDK for TypeScript.
 
 The [Volatile Layer Read example](./examples/nodejs-read-volatile-layer.md) shows how to retrieve layer metadata, partition metadata, and partition data from a volatile layer using the OLP SDK for TypeScript.
-
-## <a name="catalog-client"></a> CatalogClient
-
-The main entry point to OLP is `CatalogClient`. This class provides a high-level interface to retrieve `OLP` catalog data and configuration, and defines the following operations:
-
-- `getLatestVersion`: fetches the latest version of the catalog.
-- `getVersions`: fetches a tile from this layer asynchronously.
-
-For more details on how to use the CatalogClient, see the [Catalog usage example](./examples/nodejs-examples.md).
