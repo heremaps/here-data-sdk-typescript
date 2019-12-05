@@ -32,6 +32,7 @@ const expect = chai.expect;
 describe("StatistiscClient", () => {
     let sandbox: sinon.SinonSandbox;
     let getVersionStub: sinon.SinonStub;
+    let getPartitionsByIdStub: sinon.SinonStub;
     let quadTreeIndexVolatileStub: sinon.SinonStub;
     let olpClientSettingsStub: sinon.SinonStubbedInstance<
         dataServiceRead.OlpClientSettings
@@ -58,6 +59,7 @@ describe("StatistiscClient", () => {
         );
         quadTreeIndexVolatileStub = sandbox.stub(QueryApi, "quadTreeIndexVolatile");
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
+        getPartitionsByIdStub = sandbox.stub(QueryApi, "getPartitionsById");
         getBaseUrlRequestStub = sandbox.stub(
             dataServiceRead.RequestFactory,
             "getBaseUrl"
@@ -204,6 +206,74 @@ describe("StatistiscClient", () => {
         ).withQuadKey(mockedQuadKey);
 
         const result = await queryClient.fetchQuadTreeIndex(quadTreeIndexRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error);
+            });
+    });
+
+    it("Should method getPartitionsById provide data with all parameters", async () => {
+        const mockedIds = ["1", "2", "13", "42"];
+        const mockedLayerId = "fake-layer-id";
+        const mockedHRN = dataServiceRead.HRN.fromString(
+            "hrn:here:data:::mocked-hrn"
+        );
+        const mockedPartitionsResponse = {
+            "partitions": [
+                {
+                "checksum": "291f66029c232400e3403cd6e9cfd36e",
+                "compressedDataSize": 1024,
+                "dataHandle": "1b2ca68f-d4a0-4379-8120-cd025640510c",
+                "dataSize": 1024,
+                "crc": "c3f276d7",
+                "partition": "314010583",
+                "version": 2
+                }
+            ]
+        };
+        const queryClient = new dataServiceRead.QueryClient(
+            olpClientSettingsStub as any
+        );
+        assert.isDefined(queryClient);
+
+        getPartitionsByIdStub.callsFake(
+            (builder: any, params: any): Promise<QueryApi.Partitions> => {
+                return Promise.resolve(mockedPartitionsResponse);
+            }
+        );
+
+        const partitionsRequest = new dataServiceRead.PartitionsRequest()
+            .withVersion(42)
+            .withPartitionIds(mockedIds);
+
+        const response = await queryClient.getPartitionsById(
+            partitionsRequest,
+            mockedLayerId,
+            mockedHRN
+        );
+
+        assert.isDefined(response);
+        expect(response).to.be.equal(mockedPartitionsResponse);
+    });
+
+    it("Should method getPartitionsById return error if partitionIds list is not provided", async () => {
+        const mockedErrorResponse = "Please provide correct partitionIds list";
+        const mockedLayerId = "fake-layer-id";
+        const mockedHRN = dataServiceRead.HRN.fromString(
+            "hrn:here:data:::mocked-hrn"
+        );
+        const queryClient = new dataServiceRead.QueryClient(
+            olpClientSettingsStub as any
+        );
+        assert.isDefined(queryClient);
+
+        const partitionsRequest = new dataServiceRead.PartitionsRequest();
+
+        const response = await queryClient.getPartitionsById(
+                partitionsRequest,
+                mockedLayerId,
+                mockedHRN
+            )
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error);

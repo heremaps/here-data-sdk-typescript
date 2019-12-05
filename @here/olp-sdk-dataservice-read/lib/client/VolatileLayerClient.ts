@@ -128,7 +128,7 @@ export class VolatileLayerClient {
     async getPartitions(
         request: QuadKeyPartitionsRequest | PartitionsRequest,
         abortSignal?: AbortSignal
-    ): Promise<QueryApi.Index | MetadataApi.Partitions> {
+    ): Promise<QueryApi.Index | MetadataApi.Partitions | QueryApi.Partitions> {
         if (request instanceof QuadKeyPartitionsRequest) {
             const quadKey = request.getQuadKey();
             if (!quadKey) {
@@ -147,6 +147,17 @@ export class VolatileLayerClient {
 
             return queryClient.fetchQuadTreeIndex(
                 quadTreeIndexRequest,
+                abortSignal
+            );
+        }
+
+        if (request.getPartitionIds()) {
+            const queryClient = new QueryClient(this.settings);
+
+            return queryClient.getPartitionsById(
+                request,
+                this.layerId,
+                HRN.fromString(this.hrn),
                 abortSignal
             );
         }

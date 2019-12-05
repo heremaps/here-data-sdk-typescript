@@ -107,6 +107,37 @@ describe("volatileLayerClient", () => {
         expect(partitions).to.be.equal(mockedPartitions);
     });
 
+    it("Should method getPartitions provide data with PartitionIds list", async () => {
+        const mockedIds = ["1", "2", "13", "42"];
+        const mockedPartitions = {
+            partitions: [
+                {
+                    version: 1,
+                    partition: "42",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+                },
+                {
+                    version: 42,
+                    partition: "42",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+                }
+            ]
+        };
+        getPartitionsByIdStub.callsFake(
+            (builder: any, params: any): Promise<QueryApi.Partitions> => {
+                return Promise.resolve(mockedPartitions);
+            }
+        );
+
+        const partitionsRequest = new dataServiceRead.PartitionsRequest().withPartitionIds(mockedIds);
+        const partitions = await volatileLayerClient.getPartitions(
+            partitionsRequest
+        );
+
+        assert.isDefined(partitions);
+        expect(partitions).to.be.equal(mockedPartitions);
+    });
+
     it("Should method getPartitions return error without QuadKeyPartitionsRequest", async () => {
         const mockedErrorResponse = "Please provide correct QuadKey";
 
