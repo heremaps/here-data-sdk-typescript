@@ -32,6 +32,8 @@ const expect = chai.expect;
 describe("CatalogClient", () => {
     let sandbox: sinon.SinonSandbox;
     let getVersionStub: sinon.SinonStub;
+    let getLayerVersionsStub: sinon.SinonStub;
+    let getLatestVersionStub: sinon.SinonStub;
     let getCatalogStub: sinon.SinonStub;
     let getListVersionsStub: sinon.SinonStub;
     let catalogClient: dataServiceRead.CatalogClient;
@@ -53,6 +55,7 @@ describe("CatalogClient", () => {
     });
 
     beforeEach(() => {
+        getLayerVersionsStub = sandbox.stub(MetadataApi, "getLayerVersions");
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
         getCatalogStub = sandbox.stub(ConfigApi, "getCatalog");
         getListVersionsStub = sandbox.stub(MetadataApi, "listVersions");
@@ -132,6 +135,70 @@ describe("CatalogClient", () => {
         assert.isTrue(response.versions.length > 0);
     });
 
+    it("Should method getLayerVersions provide data with version parameter", async () => {
+        const mockedVersion = {
+            layerVersions: [
+                { layer: "testLayer1", version: 1, timestamp: 11 },
+                { layer: "testLayer2", version: 2, timestamp: 22 },
+                { layer: "testLayer3", version: 3, timestamp: 33 }
+            ],
+            version: 3
+        };
+
+        getLayerVersionsStub.callsFake(
+            (builder: any, params: any): Promise<MetadataApi.LayerVersions> => {
+                return Promise.resolve(mockedVersion);
+            }
+        );
+
+        const catalogRequest = new dataServiceRead.LayerVersionsRequest().withVersion(
+            3
+        );
+        const response = await catalogClient.getLayerVersions(
+            (catalogRequest as unknown) as dataServiceRead.LayerVersionsRequest
+        );
+
+        assert.isDefined(response);
+        expect(response).to.be.equal(mockedVersion.layerVersions);
+    });
+
+    it("Should method getLayerVersions provide data for latests version when version parameter is not setted", async () => {
+        const mockedLayerVersions = {
+            layerVersions: [
+                { layer: "testLayer1", version: 1, timestamp: 11 },
+                { layer: "testLayer2", version: 2, timestamp: 22 },
+                { layer: "testLayer3", version: 3, timestamp: 33 },
+                { layer: "testLayer4", version: 4, timestamp: 44 }
+            ],
+            version: 4
+        };
+        getLayerVersionsStub.callsFake(
+            (builder: any, params: any): Promise<MetadataApi.LayerVersions> => {
+                return Promise.resolve(mockedLayerVersions);
+            }
+        );
+
+        const mockedLatestVersion = {
+            version: 4
+        };
+        getVersionStub.callsFake(
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve(mockedLatestVersion);
+            }
+        );
+        const catalogRequest = new dataServiceRead.LayerVersionsRequest();
+
+        const response = await catalogClient.getLayerVersions(
+            (catalogRequest as unknown) as dataServiceRead.LayerVersionsRequest
+        );
+
+        assert.isDefined(response);
+        expect(response).to.be.equal(mockedLayerVersions.layerVersions);
+    });
+
     it("Should method getVersions provide data with startVersion parameters", async () => {
         const mockedVersions: MetadataApi.VersionInfos = {
             versions: [
@@ -155,13 +222,17 @@ describe("CatalogClient", () => {
             }
         );
         getVersionStub.callsFake(
-            (builder: any, params: any): Promise<MetadataApi.VersionResponse> => {
-                return Promise.resolve({version: 42});
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve({ version: 42 });
             }
         );
 
-        const catalogRequest = new dataServiceRead.CatalogVersionRequest()
-            .withStartVersion(13);
+        const catalogRequest = new dataServiceRead.CatalogVersionRequest().withStartVersion(
+            13
+        );
 
         const response = await catalogClient.getVersions(
             (catalogRequest as unknown) as dataServiceRead.CatalogVersionRequest
