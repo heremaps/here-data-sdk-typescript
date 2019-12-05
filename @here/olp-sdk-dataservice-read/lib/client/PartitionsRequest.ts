@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { validateBillingTag } from "..";
+import { validateBillingTag, validatePartitionsIdsList } from "..";
 
 /**
  * A class that prepare information for calls to get Partitions metadata from MetadataAPI.
@@ -25,6 +25,7 @@ import { validateBillingTag } from "..";
 export class PartitionsRequest {
     private version?: number;
     private billingTag?: string;
+    private partitionIds?: string[];
 
     public getVersion(): number | undefined {
         return this.version;
@@ -56,5 +57,22 @@ export class PartitionsRequest {
      */
     public getBillingTag(): string | undefined {
         return this.billingTag;
+    }
+
+    /**
+     * Setter for the provided partition ids.
+     *
+     * @param ids Partition ids. Required quantity is between 1 and 100.
+     * If it is not provided all partitions will be retrieved.
+     * If its quantity is less than 1 (empty array) or more than 100, error will be throwen.
+     * @returns The updated [[PartitionsRequest]] instance
+     */
+    public withPartitionIds(ids: string[]): PartitionsRequest {
+        this.partitionIds = validatePartitionsIdsList(ids);
+        return this;
+    }
+
+    public getPartitionIds(): string[] | undefined {
+        return this.partitionIds;
     }
 }

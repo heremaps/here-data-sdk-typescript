@@ -23,6 +23,7 @@ import {
     isValid,
     mortonCodeFromQuadKey,
     OlpClientSettings,
+    PartitionsRequest,
     QuadTreeIndexRequest,
     RequestFactory
 } from "..";
@@ -122,6 +123,41 @@ export class QueryClient {
         return fetchingQuadTreeIndexFunction(
             requestBuilder,
             paramsForFetchQuadTreeIndex
+        );
+    }
+
+    public async getPartitionsById(
+        request: PartitionsRequest,
+        layerId: string,
+        hrn: HRN,
+        abortSignal?: AbortSignal
+    ): Promise<QueryApi.Partitions> {
+        const idsList = request.getPartitionIds();
+        const version = request.getVersion();
+
+        if (!idsList) {
+            return Promise.reject("Please provide correct partitionIds list");
+        }
+
+        const requestBuilder = await RequestFactory.create(
+            "query",
+            this.apiVersion,
+            this.settings,
+            hrn,
+            abortSignal
+        ).catch(error =>
+            Promise.reject(
+                `Erorr creating request object for query service: ${error}`
+            )
+        );
+        
+        return QueryApi.getPartitionsById(
+            requestBuilder,
+            {
+                layerId,
+                partition: idsList,
+                version: version ? `${version}` : undefined,
+            }
         );
     }
 

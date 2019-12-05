@@ -17,8 +17,21 @@
  * License-Filename: LICENSE
  */
 
-export * from "./QuadKeyUtils";
-export * from "./RequestBuilderFactory";
-export * from "./getEnvLookupUrl";
-export * from "./validateBillingTag";
-export * from "./validatePartitionsIdsList";
+/**
+ * Validate partitions ids list.
+ * It must be between 1 - 100 items
+ *
+ * @param list of strings, represents the partitions ids.
+ * @returns list of strings if it's valid, else throws an error.
+ */
+export function validatePartitionsIdsList(list: string[]): string[] {
+    const LIST_MAX_LENGTH = 100;
+    const length = list.length;
+
+    if (length < 1 || length > LIST_MAX_LENGTH) {
+        throw new Error(
+            "The partition ids quantity must be between 1 - 100"
+        );
+    }
+    return list;
+}
