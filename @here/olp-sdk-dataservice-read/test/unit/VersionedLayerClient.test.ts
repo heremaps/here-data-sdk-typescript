@@ -28,17 +28,19 @@ import { Index } from "@here/olp-sdk-dataservice-api/lib/query-api";
 chai.use(sinonChai);
 
 const assert = chai.assert;
+const expect = chai.expect;
 
 describe("VersionedLayerClient", () => {
     let sandbox: sinon.SinonSandbox;
     let getBlobStub: sinon.SinonStub;
+    let getPartitionsStub: sinon.SinonStub;
     let getPartitionsByIdStub: sinon.SinonStub;
     let getQuadTreeIndexStub: sinon.SinonStub;
     let getVersionStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
     let versionedLayerClient: dataServiceRead.VersionedLayerClient;
     const mockedHRN = dataServiceRead.HRN.fromString(
-        "hrn:here:data:::live-weather-na"
+        "hrn:here:data:::mocked-hrn"
     );
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
@@ -57,6 +59,7 @@ describe("VersionedLayerClient", () => {
 
     beforeEach(() => {
         getBlobStub = sandbox.stub(BlobApi, "getBlob");
+        getPartitionsStub = sandbox.stub(MetadataApi, "getPartitions");
         getPartitionsByIdStub = sandbox.stub(QueryApi, "getPartitionsById");
         getQuadTreeIndexStub = sandbox.stub(QueryApi, "quadTreeIndex");
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
@@ -216,7 +219,7 @@ describe("VersionedLayerClient", () => {
 
         const dataRequest = new dataServiceRead.DataRequest().withQuadKey(
             dataServiceRead.quadKeyFromMortonCode("23618403")
-        );
+        ).withVersion(42);
 
         const response = await versionedLayerClient.getData(
             (dataRequest as unknown) as dataServiceRead.DataRequest
@@ -281,5 +284,101 @@ describe("VersionedLayerClient", () => {
             });
 
         abortController.abort();
+    });
+
+    it("Should method getPartitions provide data with PartitionsRequest", async () => {
+        const mockedVersion = {
+            version: 42
+        };
+        const mockedPartitions = {
+            partitions: [
+                {
+                    version: 1,
+                    partition: "42",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+                },
+                {
+                    version: 42,
+                    partition: "42",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+                }
+            ]
+        };
+        getPartitionsStub.callsFake(
+            (builder: any, params: any): Promise<MetadataApi.Partitions> => {
+                return Promise.resolve(mockedPartitions);
+            }
+        );
+
+        getVersionStub.callsFake(
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve(mockedVersion);
+            }
+        );
+
+        const partitionsRequest = new dataServiceRead.PartitionsRequest();
+        const partitions = await versionedLayerClient.getPartitions(
+            partitionsRequest
+        );
+
+        assert.isDefined(partitions);
+        expect(partitions).to.be.equal(mockedPartitions);
+    });
+
+    it("Should method getPartitions provide data with PartitionIds list", async () => {
+        const mockedIds = ["1", "2", "13", "42"];
+        const mockedVersion = {
+            version: 42
+        };
+        const mockedPartitions = {
+            partitions: [
+                {
+                    version: 1,
+                    partition: "42",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+                },
+                {
+                    version: 42,
+                    partition: "42",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+                }
+            ]
+        };
+        getPartitionsByIdStub.callsFake(
+            (builder: any, params: any): Promise<QueryApi.Partitions> => {
+                return Promise.resolve(mockedPartitions);
+            }
+        );
+
+        getVersionStub.callsFake(
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve(mockedVersion);
+            }
+        );
+
+        const partitionsRequest = new dataServiceRead.PartitionsRequest().withPartitionIds(mockedIds);
+        const partitions = await versionedLayerClient.getPartitions(
+            partitionsRequest
+        );
+
+        assert.isDefined(partitions);
+        expect(partitions).to.be.equal(mockedPartitions);
+    });
+
+    it("Should method getPartitions return error without QuadKeyPartitionsRequest", async () => {
+        const mockedErrorResponse = "Please provide correct QuadKey";
+
+        const quadKeyRequest = new dataServiceRead.QuadKeyPartitionsRequest();
+        const partitions = await versionedLayerClient.getPartitions(quadKeyRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error);
+            });
     });
 });
