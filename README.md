@@ -137,4 +137,4 @@ npm run bundle
 
 Copyright (C) 2019 HERE Europe B.V.
 
-For license details, see the [LICENSE](LICENSE) file in the root of this project.
+For license details, see the [LICENSE](https://github.com/heremaps/here-olp-sdk-typescript/blob/master/LICENSE) file in the root of this project.
