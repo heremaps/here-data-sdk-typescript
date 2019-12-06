@@ -28,23 +28,24 @@ import {
 } from "..";
 
 /**
- * The helper utils for making Request object with base urls to the services from
- * lookup api, token callback and download manager.
+ * A helper utils that makes the `Request` object with the base URLs of the API Lookup Service, token callback, and download manager.
  *
- * Also can be used for getting base url to the service from lookup api.
+ * Also, you can use it to get the base URLs of the API Lookup Service.
  */
 export class RequestFactory {
     /**
-     * Factory method for building [[DataStoreRequestBuilder]]
-     * @param serviceName The name of the service in API
-     * @param serviceVersion The version of the service
-     * @param settings Instance of [[OlpClientSettings]]
-     * @param hrn Optional [[HRN]] for the catalog
-     * @param abortSignal A signal object that allows you to communicate with a request (such as a Fetch)
-     * and abort it if required via an AbortController object
-     *  @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
+     * Factory method for building [[DataStoreRequestBuilder]].
+     * 
+     * @param serviceName The name of the service in the API.
+     * @param serviceVersion The version of the service.
+     * @param settings The [[OlpClientSettings]] instance.
+     * @param hrn A HERE Resource Name ([[HRN]]) of the catalog.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     * 
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
      *
-     * @returns The [[Promise]] with constructed [[DataStoreRequestBuilder]]
+     * @returns The [[Promise]] with constructed [[DataStoreRequestBuilder]].
      */
     public static async create(
         serviceName: ApiName,
@@ -81,14 +82,14 @@ export class RequestFactory {
     }
 
     /**
-     * Getts base url to the API service with caching support.
+     * Gets a base URL of the API service that supports caching.
      *
-     * @param serviceName The name of the service in API
-     * @param serviceVersion The version of the service
-     * @param settings Instance of [[OlpClientSettings]]
-     * @param hrn Optional [[HRN]] for the catalog
+     * @param serviceName The name of the API service.
+     * @param serviceVersion The version of the service.
+     * @param settings The [[OlpClientSettings]] instance.
+     * @param hrn The [[HRN]] of the catalog.
      *
-     * @returns The [[Promise]] with the base url to the service
+     * @return The [[Promise]] with the base URL of the service.
      */
     public static async getBaseUrl(
         serviceName: ApiName,
