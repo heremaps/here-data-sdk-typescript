@@ -278,7 +278,9 @@ export async function getPartitionsById(
     );
 
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
-    urlBuilder.appendQuery("partition", params["partition"]);
+    params["partition"].forEach((item: string) => {
+        urlBuilder.appendQuery("partition", item);
+    });
     urlBuilder.appendQuery("version", params["version"]);
     urlBuilder.appendQuery("additionalFields", params["additionalFields"]);
     urlBuilder.appendQuery("billingTag", params["billingTag"]);
