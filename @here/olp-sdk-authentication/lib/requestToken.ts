@@ -30,6 +30,12 @@ function getRandomValues(data: Uint8Array): Uint8Array {
     return crypto.randomFillSync(data);
 }
 
+/**
+ * Creates an access token.
+ * 
+ * @param args The arguments needed to get the access token.
+ * @return The generated access token.
+ */
 export async function requestToken(args: OAuthArgs): Promise<Token> {
     return requestToken_common(args, { sign, getRandomValues });
 }

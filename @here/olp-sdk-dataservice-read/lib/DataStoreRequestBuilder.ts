@@ -45,7 +45,23 @@ async function addBearerToken(
     return init;
 }
 
+/**
+ * An implementation of [[RequestBuilder]] and the `downloadBlob` and `download` methods.
+ * It is used to configure the [[RequestBuilder]] instance with a base URL of a service.
+ */
 export class DataStoreRequestBuilder extends RequestBuilder {
+    /**
+     * Cerates the [[DataStoreRequestBuilder]] instance.
+     * 
+     * @param downloadManager The configured instance of the [[DownloadManager]] interface implementation.
+     * You can use our default [[DatastoreDownloadManager]] or create your implementation.
+     * @param baseUrl The URL string.
+     * @param getBearerToken Retrieves the access token.
+     * @return The access token.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     * @return The [[DataStoreRequestBuilder]] instance.
+     */
     constructor(
         readonly downloadManager: DownloadManager,
         baseUrl: string,
@@ -55,6 +71,13 @@ export class DataStoreRequestBuilder extends RequestBuilder {
         super(baseUrl);
     }
 
+    /**
+     * Downloads data from the provided URL.
+     * 
+     * @param url The URL of the data that you want to download.
+     * @param init The helper object for the request.
+     * @return The data of the type specified in the generics.
+     */
     async download<T>(url: string, init?: RequestInit): Promise<T> {
         let options = await this.addBearerToken(init);
         if (this.abortSignal) {
@@ -69,6 +92,13 @@ export class DataStoreRequestBuilder extends RequestBuilder {
             .catch(err => Promise.reject(err));
     }
 
+    /**
+     * Downloads the blob data from the specified URL.
+     * 
+     * @param url The URL of the blob data that you want to download.
+     * @param init The helper object for the request.
+     * @return The blob data.
+     */
     async downloadBlob(url: string, init?: RequestInit): Promise<Response> {
         let options = await this.addBearerToken(init);
         if (this.abortSignal) {
