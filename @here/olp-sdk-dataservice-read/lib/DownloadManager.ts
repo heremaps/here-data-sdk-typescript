@@ -18,22 +18,19 @@
  */
 
 /**
- * DownloadManager for downloading URLs.
- *
- * Interface for DataStoreRequestBuilder.
- *
- * DataStoreRequestBuilder has own default implementation of download manager.
- *
- * If you want to use your own download manager, you are able implement this interface end set it.
+ * It's an interface for `@here/olp-sdk-dataservice-api` that is used to send requests to OLP services.
+ * [[DataStoreRequestBuilder]] has its own default implementation of the download manager.
+ * If you want to use your download manager, you can implement this interface, and then set your download manager.
  *
  * @see DataStoreRequestBuilder.
  */
 export interface DownloadManager {
     /**
-     * Downloads a URL and returns the response.
+     * Downloads data from the specified URL.
      *
-     * @param url The URL to download.
-     * @param init Optional extra parameters for the download.
+     * @param url The URL that you want to download.
+     * @param init The helper object for the request.
+     * @return The data from the specified URL.
      */
     download(url: string, init?: RequestInit): Promise<Response>;
 }
