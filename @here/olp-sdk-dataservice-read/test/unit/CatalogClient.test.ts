@@ -34,6 +34,7 @@ describe("CatalogClient", () => {
     let getVersionStub: sinon.SinonStub;
     let getCatalogStub: sinon.SinonStub;
     let getListVersionsStub: sinon.SinonStub;
+    let getEarliestVersionsStub: sinon.SinonStub;
     let catalogClient: dataServiceRead.CatalogClient;
     let getBaseUrlRequestStub: sinon.SinonStub;
     const fakeURL = "http://fake-base.url";
@@ -56,6 +57,7 @@ describe("CatalogClient", () => {
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
         getCatalogStub = sandbox.stub(ConfigApi, "getCatalog");
         getListVersionsStub = sandbox.stub(MetadataApi, "listVersions");
+        getEarliestVersionsStub = sandbox.stub(MetadataApi, "minimumVersion");
         getBaseUrlRequestStub = sandbox.stub(
             dataServiceRead.RequestFactory,
             "getBaseUrl"
@@ -130,6 +132,32 @@ describe("CatalogClient", () => {
 
         assert.isDefined(response);
         assert.isTrue(response.versions.length > 0);
+    });
+
+    it("Should method getEarliestVersion provide the minimun version availiable for the given catalogRequest", async () => {
+        const testBillingTag =  "testBillingTag";
+        const mockedEarliestVersion: MetadataApi.VersionResponse = {
+            version: 5
+        };
+
+        getEarliestVersionsStub.callsFake(
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve(mockedEarliestVersion);
+            }
+        );
+
+        const catalogRequest = new dataServiceRead.CatalogVersionRequest().withBillingTag(
+            testBillingTag
+        );        
+        const response = await catalogClient.getEarliestVersion(
+            (catalogRequest as unknown) as dataServiceRead.CatalogVersionRequest
+        );
+
+        assert.isDefined(response);
+        expect(response).to.be.equal(mockedEarliestVersion);
     });
 
     it("Should method getVersions provide data with startVersion parameters", async () => {

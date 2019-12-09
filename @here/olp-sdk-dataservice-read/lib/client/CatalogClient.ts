@@ -74,7 +74,34 @@ export class CatalogClient {
     }
 
     /**
-     * Get the latest version of the catalog.
+     * Returns minimum version for the given catalog. If the catalog doesn't contain any versions error will be returned.
+     * @param request Is [[CatalogVersionRequest]] instance and has ((getBillingTag)) method.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as a Fetch)
+     * and abort it if required via an AbortController object.
+     *  @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
+     *  @returns A promise of the http response that contains the pminimum version for the given catalog.
+     */
+    public async getEarliestVersion(
+        request: CatalogVersionRequest,
+        abortSignal?: AbortSignal
+    ): Promise<MetadataApi.VersionResponse> {
+        const builder = await this.getRequestBuilder(
+            "metadata",
+            HRN.fromString(this.hrn),
+            abortSignal
+        ).catch(error => Promise.reject(error));        
+
+        const earliestVersion = await MetadataApi.minimumVersion(
+            builder,
+            {
+                billingTag: request.getBillingTag()
+            }
+        ).catch(err => Promise.reject(`Error getting earliest catalog version: ${err}`));
+
+        return Promise.resolve(earliestVersion);
+    }
+
+    /* Get the latest version of the catalog.
      *
      * @param request Is [[CatalogVersionRequest]] instance and has ((getStartVersion)) method to get startVersion.
      * Catalog start version (exclusive). Default is -1. By convention -1
