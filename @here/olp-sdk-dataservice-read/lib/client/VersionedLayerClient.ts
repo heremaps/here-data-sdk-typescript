@@ -32,27 +32,40 @@ import {
 } from "..";
 
 /**
- * A class that describes versioned layer
- * and provides possibility to get layer Metadata and Partitions.
+ * Describes a versioned layer and provides the possibility to get partitions metadata and data.
  */
 export class VersionedLayerClient {
     private readonly apiVersion: string = "v1";
     private readonly hrn: string;
 
+    /**
+     * Creates the [[VersionedLayerClient]] instance.
+     * 
+     * @param catalogHrn The HERE Resource Name (HRN) of the catalog from which you want to get partitions metadata and data.
+     * @param layerId The ID of the layer.
+     * @param settings The [[OlpClientSettings]] instance.
+     * @return The [[VersionedLayerClient]] instance.
+     */
     constructor(
         catalogHrn: HRN,
+        // The ID of the layer.
         readonly layerId: string,
+        // The [[OlpClientSettings]] instance.
         readonly settings: OlpClientSettings
     ) {
         this.hrn = catalogHrn.toString();
     }
 
     /**
-     * Fetch partition by id or quadKey or dataHandle
-     * @param dataRequest Instance of the configuret request params [[DataRequest]]
-     * @param abortSignal A signal object that allows you to communicate with a request (such as a Fetch)
-     * and abort it if required via an AbortController object
-     *  @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
+     * Fetches partition data using one of the following methods: ID, quadkey, or data handle.
+     * 
+     * @param dataRequest The [[DataRequest]] instance of the configured request parameters.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     * 
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal 
+     * 
+     * @return The data from the requested partition.
      */
     async getData(
         dataRequest: DataRequest,
@@ -112,8 +125,15 @@ export class VersionedLayerClient {
     }
 
     /**
-     * Fetch partitions metadata from Query API by QuadKey
-     * @returns Quad Tree Index for partition
+     * Fetches partitions metadata from the Query API using a quadkey.
+     * 
+     * @param quadKeyPartitionsRequest The [[QuadKeyPartitionsRequest]] instance.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     * 
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
+     * 
+     * @returns The quadtree index for the requested partitions.
      */
     async getPartitions(
         quadKeyPartitionsRequest: QuadKeyPartitionsRequest,
@@ -121,8 +141,18 @@ export class VersionedLayerClient {
     ): Promise<QueryApi.Index>;
 
     /**
-     * Fetch all partitions metadata from layer
-     * @returns list of partittions metadata
+     * Fetches all partitions metadata from a layer using the partition ID from the [[PartitionsRequest]] instance.
+     * 
+     * @param partitionsRequest The [[PartitionsRequest]] instance.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     * 
+     * @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal 
+     * 
+     * @returns A list of metadata for each of the partitions from the requested layer.
+     * If the partition IDs are not set, you get metadata from all of the partitions of the requested layer
+     * from the OLP Metadata Service.
+     * If the IDs are set, you get data from the OLP Query Service.
      */
     async getPartitions(
         partitionsRequest: PartitionsRequest,
@@ -265,7 +295,7 @@ export class VersionedLayerClient {
     }
 
     /**
-     * Fetch baseUrl and create requestBuilder for sending requests to the look-up API
+     * Fetch baseUrl and create requestBuilder for sending requests to the API Lookup Service.
      * @param builderType endpoint name is needed to create propriate requestBuilder
      *
      * @returns requestBuilder

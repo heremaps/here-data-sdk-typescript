@@ -21,20 +21,27 @@ import { ArtifactApi } from "@here/olp-sdk-dataservice-api";
 import { validateBillingTag } from "..";
 
 /**
- * A class that prepare information for calls to the Artifact API.
+ * Prepares information for calls to the OLP Artifact Service.
  */
 export class SchemaRequest {
     private variant?: ArtifactApi.Variant;
     private billingTag?: string;
 
+    /** 
+     * Gets the `Variant` object of the schema for the request.
+     * 
+     * @return The `Variant` object of the schema.
+     */
     public getVariant(): ArtifactApi.Variant | undefined {
         return this.variant;
     }
 
     /**
-     * Set value of schema HRN to use in methods getSchema and getSchema from [[ArtifactClient]].
+     * Sets a value of a schema HERE Resource Name (HRN) that is used in
+     * the `getSchema` and `getSchemaDetails` methods of [[ArtifactClient]].
      *
-     * @param variant required, ArtifactApi.Variant
+     * @param variant The `Variant` object of the schema
+     * @return The [[SchemaRequest]] instance that you can use to chain methods.
      */
     public withVariant(variant: ArtifactApi.Variant): SchemaRequest {
         this.variant = variant;
@@ -42,8 +49,11 @@ export class SchemaRequest {
     }
 
     /**
-     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
-     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     * An optional free-form tag that is used for grouping billing records together.
+     * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
+     * 
+     * @param tag The `BillingTag` string.
+     * @return The updated [[SchemaRequest]] instance that you can use to chain methods.
      */
     public withBillingTag(tag: string): SchemaRequest {
         this.billingTag = validateBillingTag(tag);
@@ -51,7 +61,9 @@ export class SchemaRequest {
     }
 
     /**
-     * Billing Tag for grouping billing records together
+     * Gets a billing tag to group billing records together.
+     * 
+     * @return The `BillingTag` string.
      */
     public getBillingTag(): string | undefined {
         return this.billingTag;

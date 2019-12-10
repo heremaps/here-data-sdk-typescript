@@ -20,25 +20,36 @@
 import { HRN, validateBillingTag } from "..";
 
 /**
- * A class that prepare information for calls to get Statistics from CoverageAPI
+ * Prepares information for calls to get a summary from the OLP Statistics Service.
  */
 export class SummaryRequest {
     private catalogHrn?: string;
     private layerId?: string;
     private billingTag?: string;
 
+    /**
+     * Gets the configured [[HRN]] string of the catalog HERE Resource Name(HRN) for the request.
+     * 
+     * @return The configured [[HRN]] string.
+     */
     public getCatalogHrn(): string | undefined {
         return this.catalogHrn;
     }
 
+    /**
+     * Gets a layer ID for the request.
+     * 
+     * @return The layer ID string.
+     */
     public getLayerId(): string | undefined {
         return this.layerId;
     }
 
     /**
-     * Setter for the provided hrn
-     * @param hrn Required. Specify the catalog hrn
-     * @returns this to have ability to chain methods
+     * A setter for the provided catalog HERE Resource Name (HRN).
+     * 
+     * @param hrn The catalog HRN.
+     * @returns The [[SummaryRequest]] instance that you can use to chain methods.
      */
     public withCatalogHrn(hrn: HRN): SummaryRequest {
         this.catalogHrn = hrn.toString();
@@ -46,9 +57,10 @@ export class SummaryRequest {
     }
 
     /**
-     * Setter for the provided layerId
-     * @param layerId Required. Specify the LayerId
-     * @returns this to have ability to chain methods
+     * A setter for the provided `layerId` string.
+     * 
+     * @param layerId The ID of the layer.
+     * @returns The [[SummaryRequest]] instance that you can use to chain methods.
      */
     public withLayerId(layerId: string): SummaryRequest {
         this.layerId = layerId;
@@ -56,8 +68,11 @@ export class SummaryRequest {
     }
 
     /**
-     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
-     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     * An optional free-form tag that is used for grouping billing records together.
+     * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
+     * 
+     * @param tag The `BillingTag` string.
+     * @return The updated [[SummaryRequest]] instance that you can use to chain methods.
      */
     public withBillingTag(tag: string): SummaryRequest {
         this.billingTag = validateBillingTag(tag);
@@ -65,7 +80,9 @@ export class SummaryRequest {
     }
 
     /**
-     * Billing Tag for grouping billing records together
+     * Gets a billing tag to group billing records together.
+     * 
+     * @return The `BillingTag` string.
      */
     public getBillingTag(): string | undefined {
         return this.billingTag;
