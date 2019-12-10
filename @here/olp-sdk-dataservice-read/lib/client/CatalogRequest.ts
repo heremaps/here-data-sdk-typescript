@@ -20,14 +20,17 @@
 import { validateBillingTag } from "..";
 
 /**
- * A class that prepare information for calls to get Catalog metadata from ConfigAPI.
+ * Prepares information for calls to get catalog metadata from the OLP Config Service.
  */
 export class CatalogRequest {
     private billingTag?: string;
 
     /**
-     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
-     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     * An optional free-form tag that is used for grouping billing records together.
+     * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
+     * 
+     * @param tag The `BillingTag` string.
+     * @return The updated [[CatalogRequest]] instance that you can use to chain methods.
      */
     public withBillingTag(tag: string): CatalogRequest {
         this.billingTag = validateBillingTag(tag);
@@ -35,7 +38,9 @@ export class CatalogRequest {
     }
 
     /**
-     * Billing Tag for grouping billing records together
+     * Gets a billing tag to group billing records together.
+     * 
+     * @return The `BillingTag` string.
      */
     public getBillingTag(): string | undefined {
         return this.billingTag;

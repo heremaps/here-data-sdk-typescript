@@ -20,21 +20,28 @@
 import { validateBillingTag } from "..";
 
 /**
- * A class that prepare information for calls to getCatalogs from ConfigAPI.
+ * Prepares information for calls to get catalogs from the OLP Config Service.
  */
 export class CatalogsRequest {
     private schemaHrn?: string;
     private billingTag?: string;
 
+    /**
+     *  Gets a schema HERE Resource Name (HRN) for the request.
+     * 
+     * @return The schema HRN.
+     */
     public getSchema(): string | undefined {
         return this.schemaHrn;
     }
 
     /**
-     * Set value of layer schema HRN to use in method getCatalogs from ConfigClient.
-     * If schema is setted, then getCatalogs will return filtered response by the specified layer schema HRN.
-     * If schema is not setted, then filter will return search for all.
-     * @param schemaHrn layer schema HRN
+     * Sets a value of a layer schema HERE Resource Name (HRN) that is used in the `getCatalogs` method of the [[ConfigClient]] instance.
+     * If the schema is set, the `getCatalogs` method returns catalogs witch have a layer or layers with the specific schema HRN.
+     * If the schema is not set, the filter returns all of the catalogs to which you have access.
+     * 
+     * @param schemaHrn The layer schema HRN.
+     * @return The updated [[CatalogRequest]] instance that you can use to chain methods.
      */
     public withSchema(schemaHrn: string): CatalogsRequest {
         this.schemaHrn = schemaHrn;
@@ -42,8 +49,11 @@ export class CatalogsRequest {
     }
 
     /**
-     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
-     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     * An optional free-form tag that is used for grouping billing records together.
+     * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
+     * 
+     * @param tag The `BillingTag` string.
+     * @return The updated [[CatalogsRequest]] instance that you can use to chain methods.
      */
     public withBillingTag(tag: string): CatalogsRequest {
         this.billingTag = validateBillingTag(tag);
@@ -51,7 +61,9 @@ export class CatalogsRequest {
     }
 
     /**
-     * Billing Tag for grouping billing records together
+     * Gets a billing tag to group billing records together.
+     * 
+     * @return The `BillingTag` string.
      */
     public getBillingTag(): string | undefined {
         return this.billingTag;

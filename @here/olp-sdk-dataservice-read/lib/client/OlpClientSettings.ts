@@ -21,11 +21,11 @@ import { DataStoreDownloadManager, DownloadManager, KeyValueCache } from "..";
 import { EnvironmentName } from "../utils";
 
 /**
- * Params to construct the [[OlpClientSettings]]
+ * Parameters used to construct the [[OlpClientSettings]] class.
  */
 export interface OlpClientSettingsParams {
     /**
-     * Async callback to return a [[Promise]] with token for requests.
+     * An asynchronous callback used to return a [[Promise]] with the access token for requests.
      *
      * @example
      * ```typescript
@@ -34,12 +34,14 @@ export interface OlpClientSettingsParams {
      *  const userAuth = new UserAuth(/** parameters **);
      *  const getToken = userAuth.getToken();
      * ```
+     * 
+     * @return The [[Promise]] with the access token for requests. 
      */
     getToken: () => Promise<string>;
 
     /**
-     * Environment to use for getting url to the look-up api service.
-     * You can set the url to you custom service also.
+     * An environment that should be used to get the URL of the API Lookup Service.
+     * You can also specify a URL of your custom service.
      *
      * @example
      *
@@ -50,8 +52,8 @@ export interface OlpClientSettingsParams {
     environment: EnvironmentName;
 
     /**
-     * Download manager for sending requests.
-     * Used default [[DataStoreDownloadManager]] if not set.
+     * A download manager for sending requests.
+     * If not set, the default [[DataStoreDownloadManager]] class is used.
      *
      * @see interface [[DownloadManager]]
      */
@@ -59,7 +61,7 @@ export interface OlpClientSettingsParams {
 }
 
 /**
- * OlpClient settings class. Use this class to configure the behaviour of the OlpClient.
+ * Сonfigures the behaviour of the OLP clients (for example, [[CatalogClient]] or [[VersionedLayerClient]]).
  */
 export class OlpClientSettings {
     private keyValueCache: KeyValueCache;
@@ -67,6 +69,12 @@ export class OlpClientSettings {
     private env: EnvironmentName;
     private dm: DownloadManager;
 
+    /**
+     * Creates the [[OlpClientSettings]] instance.
+     * 
+     * @param params Parameters used to construct the [[OlpClientSettings]] class.
+     * @return The [[OlpClientSettings]] instance.
+     */
     constructor(params: OlpClientSettingsParams) {
         this.getValidToken = params.getToken;
         this.env = params.environment;
@@ -75,28 +83,37 @@ export class OlpClientSettings {
     }
 
     /**
-     * Download manager for sending requests.
+     * A download manager for requests.
+     * 
+     * @return The [[DownloadManager]] instance.
      */
     get downloadManager(): DownloadManager {
         return this.dm;
     }
 
     /**
-     * Async callback to return a [[Promise]] with token for requests
+     * An asynchronous callback used to return a [[Promise]] with the access token for requests.
+     * 
+     * @return A function that returns the [[Promise]] with the access token string for requests.
      */
     get token(): () => Promise<string> {
         return this.getValidToken;
     }
 
     /**
-     * Environment to use for getting url to the look-up api service
+     * An environment that should be used to get the URL of the API Lookup Service.
+     * You can also specify a URL of your custom service.
+     * 
+     * @return The string with the environment name or the URL of your local environment.
      */
     get environment(): string {
         return this.env;
     }
 
     /**
-     * Cache expecting a key,value pair
+     * Caches using a key-value pair.
+     * 
+     * @returns The [[KeyValueCache]] instance.
      */
     get cache(): KeyValueCache {
         return this.keyValueCache;

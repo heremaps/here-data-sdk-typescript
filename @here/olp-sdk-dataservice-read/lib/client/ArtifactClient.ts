@@ -25,22 +25,25 @@ import {
     SchemaRequest
 } from "..";
 
+/**
+ * Gets schema metadata and data from the OLP Artifact Service. 
+ */
 export class ArtifactClient {
     private readonly apiVersion = "v1";
 
     /**
-     * Constructs a new client to work with data
-     * about schemas in the Artifact API.
+     * Constructs a new client to work with schemas data in the OLP Artifact Service.
      *
-     * @param settings The instance of [[OlpClientSettings]]
+     * @param settings The [[OlpClientSettings]] instance.
+     * @return The [[ArtifactClient]] instance.
      */
     constructor(private readonly settings: OlpClientSettings) {}
 
     /**
-     * Get schema details.
+     * Gets schema metadata.
      *
-     * @param schemaHrn String representing schema HRN.
-     * @returns Object with schema details.
+     * @param schemaDetailsRequest The [[SchemaDetailsRequest]] instance.
+     * @return An object with the schema metadata.
      */
     public async getSchemaDetails(
         schemaDetailsRequest: SchemaDetailsRequest
@@ -69,11 +72,10 @@ export class ArtifactClient {
     }
 
     /**
-     * Get schema.
+     * Gets schema data.
      *
-     * @param schemaHrn String representing schema HRN.
-     * schema.
-     * @returns Archive with schema.
+     * @param schemaRequest The [[SchemaRequest]] instance.
+     * @return A blob with the schema.
      */
     public async getSchema(schemaRequest: SchemaRequest): Promise<ArrayBuffer> {
         const variant = schemaRequest.getVariant();

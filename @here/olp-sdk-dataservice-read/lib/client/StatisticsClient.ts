@@ -28,18 +28,26 @@ import {
     SummaryRequest
 } from "..";
 
-/**
- * A class that provides possibility to get Statistic Metadata and Data for Versioned layer
+/*
+ * A client for the OLP Statistics Service.
  */
 export class StatisticsClient {
     private readonly apiVersion: string = "v1";
+
+    /**
+     * Creates the [[StatisticsClient]] instance.
+     * 
+     * @param settings The [[OlpClientSettings]] instance.
+     * 
+     * @return The [[StatisticsClient]] instance.
+     */
     constructor(private readonly settings: OlpClientSettings) {}
 
     /**
-     * Fetch and return layer summary from the Statistics service.
+     * Fetches and returns a layer summary from the OLP Statistics Service.
      *
-     * @param summaryRequest Options which are needed to fetch summary.
-     * Includes @catalogHrn and @layerId
+     * @param summaryRequest Parameters that are needed to fetch the layer summary.
+     * Includes [[catalogHrn]] and [[layerId]].
      *
      * @returns A promise with the layer summary.
      */
@@ -63,6 +71,17 @@ export class StatisticsClient {
         }).catch(this.errorHandler);
     }
 
+    /**
+     * Depending on the map type that you specify in the [[StatisticsRequest]] instance, gets the [StatisticsRequest]] instance
+     * with one of the following settings:
+     * * BITMAP &ndash; fetches a bitmap that represents the availability of data in partitions.
+     * * SIZEMAP &ndash; fetches a heatmap that represents a partition size.
+     * * TIMEMAP &ndash; fetches a heatmap that represents partition update time.
+     * 
+     * @param statisticsRequest The [[StatisticsRequest]] instance with the requested settings.
+     * 
+     * @return The [StatisticsRequest]] instance with the requested settings.
+     */
     public async getStatistics(
         statisticsRequest: StatisticsRequest
     ): Promise<Response> {
