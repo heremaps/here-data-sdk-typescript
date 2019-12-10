@@ -11,10 +11,29 @@
   "workspaces": [
     "@here/*"
   ],
+  "nyc": {
+    "include": [
+      "@here/**/*.ts",
+      "@here/**/*.js"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text",
+      "html"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  },
   "scripts": {
     "bootstrap": "lerna bootstrap --use-workspaces",
     "build": "lerna run build",
     "test": "lerna run test",
+    "integration-test": "nyc mocha --opts ./tests/integration/mocha.opts > xunit.xml",
     "coverage": "lerna run coverage",
     "lint": "lerna run lint",
     "bundle": "lerna run bundle",
