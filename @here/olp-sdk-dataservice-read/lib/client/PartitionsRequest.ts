@@ -20,23 +20,28 @@
 import { validateBillingTag, validatePartitionsIdsList } from "..";
 
 /**
- * A class that prepare information for calls to get Partitions metadata from MetadataAPI.
+ * Prepares information for calls to get partitions metadata from the OLP Metadata Service.
  */
 export class PartitionsRequest {
     private version?: number;
     private billingTag?: string;
     private partitionIds?: string[];
 
+    /**
+     * Gets a layer version for the request.
+     * 
+     * @return The layer version number.
+     */
     public getVersion(): number | undefined {
         return this.version;
     }
 
     /**
-     * Setter for the provided version.
-     * Method is optional. If the version does not specified the last layer version will be used
+     * An optional method that sets the provided layer version.
+     * If the layer version is not specified, the last layer version is used.
      *
-     * @param version Specify the catalog version or set to undefined to use the latest catalog version.
-     * @returns The updated [[PartitionsRequest]] instance
+     * @param version Specify the layer version or, if you want to use the latest layer version, set to undefined.
+     * @returns The updated [[PartitionsRequest]] instance that you can use to chain methods.
      */
     public withVersion(version?: number): PartitionsRequest {
         this.version = version;
@@ -44,8 +49,11 @@ export class PartitionsRequest {
     }
 
     /**
-     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
-     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     * An optional free-form tag that is used for grouping billing records together.
+     * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
+     * 
+     * @param tag The `BillingTag` string.
+     * @return The updated [[PartitionsRequest]] instance that you can use to chain methods.
      */
     public withBillingTag(tag: string): PartitionsRequest {
         this.billingTag = validateBillingTag(tag);
@@ -53,19 +61,22 @@ export class PartitionsRequest {
     }
 
     /**
-     * Billing Tag for grouping billing records together
+     * Gets a billing tag to group billing records together.
+     * 
+     * @return The `BillingTag` string.
      */
     public getBillingTag(): string | undefined {
         return this.billingTag;
     }
 
     /**
-     * Setter for the provided partition ids.
+     * A setter for the provided partition IDs.
      *
-     * @param ids Partition ids. Required quantity is between 1 and 100.
-     * If it is not provided all partitions will be retrieved.
-     * If its quantity is less than 1 (empty array) or more than 100, error will be throwen.
-     * @returns The updated [[PartitionsRequest]] instance
+     * @param ids The ID of partitions from which you want to get metadata.
+     * The required quantity is between 1 and 100.
+     * If partition IDs are not provided, all partitions are retrieved.
+     * If the quantity of partition IDs is less than 1 (empty array) or more than 100, an error is thrown.
+     * @returns The updated [[PartitionsRequest]] instance that you can use to chain methods.
      */
     public withPartitionIds(ids: string[]): PartitionsRequest {
         this.partitionIds = validatePartitionsIdsList(ids);
