@@ -37,4 +37,7 @@ npm run test
 # generate test coverage
 npm run coverage
 
+# Integration tests
+npm run integration-test
+
 

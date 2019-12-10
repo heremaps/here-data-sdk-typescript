@@ -80,10 +80,16 @@ npm run build
 
 #### Test the SDK
 
-To test the built results, run the following command:
+To test the built results with unit tests, run the following command:
 
 ```sh
 npm run test
+```
+
+To test the built results with integration tests, run the following command:
+
+```sh
+npm run integration-test
 ```
 
 #### Test Coverage
