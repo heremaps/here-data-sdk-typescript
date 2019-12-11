@@ -18,23 +18,25 @@
  */
 
 /**
- * The `QuadKey` instances are used to address a tile in a quad tree.
+ * Addresses a tile in a quadtree.
  *
- * A quad key is defined by a row, a column, and a level. The tree has a root at level 0, with one
- * single tile. On every level, each tile is divided into four children (therefore the name
- * quad tree).
+ * A quadkey is defined by a row, a column, and a level. The tree has a root at level 0 that contains one
+ * single tile. On every level, each tile is divided into four children (hence, the name "quadtree").
  *
- * Within each [[level]], any particular tile is addressed with [[row]] and [[column]]. The number
- * of rows and columns in each level is 2 to the power of the level. This means: On level 0, only
- * one tile exists, columns and rows are both 1. On level 1, 4 tiles exist, in 2 rows and 2 columns.
- * On level 2 we have 16 tiles, in 4 rows and 4 columns. And so on.
+ * Within each [[level]], a tile is addressed with a [[row]] and [[column]]. The number
+ * of rows and columns in each level is 2 to the power of the level. This means that on level 0, only
+ * one tile exists, so there is 1 column and 1 row. On level 1, 4 tiles exist in 2 rows and 2 columns.
+ * On level 2, we have 16 tiles in 4 rows and 4 columns. And so on.
  *
- * Note - as JavaScript's number type can hold 53 bits in its mantissa, only levels up to 26 can be
- * represented in the number representation returned by [[mortonCode]]().
+ * @note As the JavaScript number type can hold 53 bits in its mantissa, only levels up to 26 can be
+ * represented in the number representation returned by [[`mortonCodeFromQuadKey`]].
  */
 export interface QuadKey {
+    /** The row that contains the tile. */
     readonly row: number;
+    /** The column that contains the tile. */
     readonly column: number;
+    /** The level that contains the tile. */
     readonly level: number;
 }
 
@@ -98,10 +100,10 @@ const powerOfTwo = [
 // tslint:enable:no-magic-numbers
 
 /**
- * Creates a quad key from a numeric or string Morton code representation.
+ * Creates a quadkey from a numeric or string Morton code representation.
  *
- * @param code The Morton code to be converted.
- * @returns A new instance of [[QuadKey]].
+ * @param code The Morton code that you want to convert.
+ * @returns The [[QuadKey]] instance.
  */
 export function quadKeyFromMortonCode(code: number | string): QuadKey {
     if (typeof code === "string") {
@@ -129,9 +131,10 @@ export function quadKeyFromMortonCode(code: number | string): QuadKey {
 }
 
 /**
- * Converts the quad key into a morton code numeric representation.
+ * Converts a quadkey into a Morton code numeric representation.
  *
- * @returns A number representing morton code of [[QuadKey]].
+ * @param key The quadkey that you need to convert to the Morton code.
+ * @returns The number representing the Morton code of [[QuadKey]].
  */
 export function mortonCodeFromQuadKey(key: QuadKey): number {
     let column = key.column;
@@ -153,13 +156,13 @@ export function mortonCodeFromQuadKey(key: QuadKey): number {
 }
 
 /**
- * Compute a new quad key that is result of appending a `subKey` (relative) quad key to the current.
+ * Computes a new quadkey that is a result of appending the `subKey` (relative) quadkey to the current quadkey.
  *
- * This function treats the current quad key as a root for a relative quad key,
- * the result quad key level is computed as current level plus relative level.
- *
- * @param subKey A relative quad key to use as a relative quad key.
- * @returns A new instance of [[QuadKey]].
+ * This function treats the current quadkey as a root for a relative quadkey.
+ * The quadkey level of the result is computed as the current level plus the relative level.
+ * @param root The current quadkey.
+ * @param subKey The relative quadkey.
+ * @returns The [[QuadKey]] instance.
  */
 export function addQuadKeys(root: QuadKey, subKey: QuadKey): QuadKey {
     // tslint:disable:no-bitwise
@@ -171,14 +174,13 @@ export function addQuadKeys(root: QuadKey, subKey: QuadKey): QuadKey {
 }
 
 /**
- * Compute a new quad key that is a parent of a current quad key.
+ * Computes a new quadkey that is the parent of the current quadkey.
  *
- * By default it will return the first ancestor, `delta` parameter is used to return the N one.
- *
- * If the result level is negative the root quad key is returned.
- *
+ * If the result level is negative, the root quadkey is returned.
+ * @param key The current quadkey.
  * @param delta The numeric difference between the current level and the ancestor level.
- * @returns A new instance of [[QuadKey]].
+ * @note If the ancestor level is not specified, the function returns the first ancestor.
+ * @returns The [[QuadKey]] instance.
  */
 export function computeParentKey(key: QuadKey, delta: number = 1): QuadKey {
     if (delta < 0) {
@@ -193,15 +195,17 @@ export function computeParentKey(key: QuadKey, delta: number = 1): QuadKey {
 }
 
 /**
- * Checks that quad key is valid.
+ * Checks if a quadkey is valid.
  *
- * Row and column must not be greater than the maximum rows/columns for the given level.
- * Maximum rows/columns for level is computed as 2 to the power of level.
- * Note - as JavaScript's number type can hold 53 bits in its mantissa, only levels up to 26 can be
- * represented in the number representation returned by [[mortonCodeFromQuadKey]]().
- * Level must be positive, level can't be greater than 26.
+ * The number of rows and columns must not be greater than the maximum number of rows and columns in the given level.
+ * The maximum number of rows and columns in a level is computed as 2 to the power of the level.
  *
- * @returns True if the QuadKey is valid, false otherwise.
+ * @note As the JavaScript number type can hold 53 bits in its mantissa, only levels up to 26 can be
+ * represented in the number representation returned by [[mortonCodeFromQuadKey]].
+ * A level must be positive and can't be greater than 26.
+ *
+ * @param key The current quadkey.
+ * @return True if the quadkey is valid, false otherwise.
  */
 export function isValid(key: QuadKey): boolean {
     // tslint:disable-next-line:no-magic-numbers

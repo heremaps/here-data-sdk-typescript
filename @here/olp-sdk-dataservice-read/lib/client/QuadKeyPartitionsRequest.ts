@@ -20,8 +20,9 @@
 import { QuadKey, QuadTreeIndexDepth, validateBillingTag } from "..";
 
 /**
- * A class that prepare information for calls to get Quad Tree metadata from Query API.
- * Works only with versioned or volatile layers where the partitioning scheme is `heretile`
+ * Prepares information for calls to get quadtree metadata from the OLP Query Service.
+ *
+ * This class works only with versioned and volatile layers where the partitioning scheme is HERE Tile.
  */
 export class QuadKeyPartitionsRequest {
     private version?: number;
@@ -30,10 +31,11 @@ export class QuadKeyPartitionsRequest {
     private billingTag?: string;
 
     /**
-     * The version of the catalog against which to run the query.
-     * Must be a valid catalog version.
-     * @param version Specify the catalog version or set to undefined to use the latest catalog version.
-     * @returns The updated [[QuadKeyPartitionsRequest]] instance
+     * The version of the catalog against which you want to run the query.
+     * It must be a valid catalog version.
+     *
+     * @param version Specify the catalog version or, if you want to use the latest catalog version, set to undefined.
+     * @returns The updated [[QuadKeyPartitionsRequest]] instance that you can use to chain methods.
      */
     public withVersion(version?: number): QuadKeyPartitionsRequest {
         this.version = version;
@@ -41,9 +43,10 @@ export class QuadKeyPartitionsRequest {
     }
 
     /**
-     * The geometric area, represented as a HERE tile.
-     * @param quadKey The `QuadKey` are used to address a tile in a quad tree.
-     * @returns The updated [[QuadKeyPartitionsRequest]] instance
+     * A geometric area represented as a HERE tile.
+     *
+     * @param quadKey Addresses a tile in the quadtree.
+     * @returns The updated [[QuadKeyPartitionsRequest]] instance that you can use to chain methods.
      */
     public withQuadKey(quadKey: QuadKey): QuadKeyPartitionsRequest {
         this.quadKey = quadKey;
@@ -52,12 +55,13 @@ export class QuadKeyPartitionsRequest {
 
     /**
      * The recursion depth of the response.
-     * If set to 0, the response includes only data for the quadKey specified in the request.
-     * In this way, depth describes the maximum length of the subQuadKeys in the response.
      * The maximum allowed value for the depth parameter is 4.
      *
      * @param depth The recursion depth of the response.
-     * @returns The updated [[QuadKeyPartitionsRequest]] instance
+     * @returns The updated [[QuadKeyPartitionsRequest]] instance that you can use to chain methods.
+     *
+     * If set to 0, the response includes only data from the quadkey specified in the request.
+     * In this way, the depth describes the maximum length of the subQuadKeys in the response.
      */
     public withDepth(depth: QuadTreeIndexDepth): QuadKeyPartitionsRequest {
         this.depth = depth;
@@ -65,8 +69,12 @@ export class QuadKeyPartitionsRequest {
     }
 
     /**
-     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
-     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     * An optional free-form tag that is used for grouping billing records together.
+     *
+     * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
+     *
+     * @param tag The `BillingTag` string.
+     * @return The updated [[QuadKeyPartitionsRequest]] instance that you can use to chain methods.
      */
     public withBillingTag(tag: string): QuadKeyPartitionsRequest {
         this.billingTag = validateBillingTag(tag);
@@ -74,28 +82,36 @@ export class QuadKeyPartitionsRequest {
     }
 
     /**
-     * The configured catalog version for the request
+     * The configured catalog version for the request.
+     *
+     * @return The catalog version number.
      */
     public getVersion(): number | undefined {
         return this.version;
     }
 
     /**
-     * The configured QuadKey for the request
+     * Gets the configured [[QuadKey]] object for the request.
+     *
+     * @return The the configured [[QuadKey]] object.
      */
     public getQuadKey(): QuadKey | undefined {
         return this.quadKey;
     }
 
     /**
-     * The configuret depth for the request
+     * Gets the configured depth for the request.
+     *
+     * @return The number of the configured depth.
      */
     public getDepth(): QuadTreeIndexDepth {
         return this.depth || 0;
     }
 
     /**
-     * Billing Tag for grouping billing records together
+     * Gets a billing tag to group billing records together.
+     *
+     * @return The `BillingTag` string.
      */
     public getBillingTag(): string | undefined {
         return this.billingTag;

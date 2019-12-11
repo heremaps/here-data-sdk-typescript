@@ -18,39 +18,56 @@
  */
 
 /**
- * Platform specific parts of signing a request using cryptographically
- * strong algorithms.
+ * Platform-specific parts of signing a request using HMAC algorithms.
  */
 export interface Signer {
     /**
-     * Signs the data using the secret key and returns the string.
+     * Signs data using your secret key and returns a `Promise` that fulfills `ArrayBuffer` containing the signature.
+     *
+     * @param data The `ArrayBufferLike` object containing the data to be signed.
+     * @param secretKey Your secret key that is used for signing.
+     * @return The encrypted ID for an access token.
      */
     sign: (data: ArrayBufferLike, secretKey: string) => Promise<string>;
     /**
-     * Returns a uid that can be used for the nonce parameter of oauth.
+     * Fills the passed `TypedArray` with cryptographically strong random values (random in its cryptographic meaning).
+     *
+     * @param data The integer-based `TypedArray`.
+     * @return The input array.
+     * @note The `TypedArray` is modified in-place, and no copy is made.
      */
     getRandomValues: (data: Uint8Array) => Uint8Array;
 }
 
+/**
+ * Contains arguments needed to get an access token.
+ */
 export interface OAuthArgs {
+    /** The environment in which you work. */
     url: string;
+    /** Your consumer key. */
     consumerKey: string;
+    /** Your secret key. */
     secretKey: string;
+    /** A unique token that your application generates for each unique request. If not provided, the default token is used. */
     nonce?: string;
+    /** The time when you authenticated. */
     timestamp?: number;
+    /** The expiration time (in milliseconds). */
     expiresIn?: number;
+    /** The project scope. */
     scope?: string;
 }
 
 /**
- * Interface for access token.
- * @param accessToken Token for access.
- * @param tokenType Type of token.
- * @param expiresIn Expiration time in miliseconds.
+ * Interface for an access token.
  */
 export interface Token {
+    /** The token for access. */
     accessToken: string;
+    /** The type of token. */
     tokenType: string;
+    /** The expiration time (in milliseconds). */
     expiresIn: number;
 }
 
@@ -97,9 +114,8 @@ async function getOAuthAuthorization(
         encodeURIComponent(args.url) +
         "&" +
         encodeURIComponent(
-            `oauth_consumer_key=${args.consumerKey}&oauth_nonce=${
-                args.nonce
-            }&oauth_signature_method=HMAC-SHA1&oauth_timestamp=${args.timestamp}&oauth_version=1.0`);
+            `oauth_consumer_key=${args.consumerKey}&oauth_nonce=${args.nonce}&oauth_signature_method=HMAC-SHA1&oauth_timestamp=${args.timestamp}&oauth_version=1.0`
+        );
 
     const signature = await signLatin1(
         signatureBase,
@@ -116,6 +132,13 @@ async function getOAuthAuthorization(
     }",oauth_version="1.0",oauth_signature="${encodeURIComponent(signature)}"`;
 }
 
+/**
+ * Creates an access token.
+ *
+ * @param args The arguments needed to get the access token.
+ * @param tokenSigner The encrypted ID for the access token.
+ * @return The access token.
+ */
 export async function requestToken_common(
     args: OAuthArgs,
     tokenSigner: Signer

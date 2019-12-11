@@ -20,32 +20,42 @@
 import * as PropertiesReader from "properties-reader";
 import { AuthCredentials } from "./UserAuth";
 
- /**
-  * Parser for NodeJs usage.
-  *
-  * Parse credentials.properties file from
-  * [OLP website](https://developer.here.com/olp/documentation/access-control/user-guide/topics/get-credentials.html)
-  * and retrieve object response with the credentials.
-  *
-  * @param path Path to credentials file.
-  * @throws Error if the parsing was not success.
-  * @returns Object with user`s credentials.
-  */
- export function loadCredentialsFromFile(path: string): AuthCredentials {
+/**
+ * Parses the **credentials.properties** file from the
+ * Open Location Platform (OLP)
+ * [website](https://developer.here.com/olp/documentation/access-control/user-guide/topics/get-credentials.html)
+ * and retrieves an object with user credentials.
+ *
+ * @param path The path to the **credentials.properties** file.
+ * @throws An error if the parsing is not successful.
+ * @return The object with the access key ID and access key secret.
+ */
+export function loadCredentialsFromFile(path: string): AuthCredentials {
     const config = PropertiesReader(path);
     const configAccessKeyIdValueName = "here.access.key.id";
     const configAccessKeySecretValueName = "here.access.key.secret";
 
-    const parseValueFromConfig = (value: string | number | boolean | null, valueName: string): string => {
+    const parseValueFromConfig = (
+        value: string | number | boolean | null,
+        valueName: string
+    ): string => {
         if (!value) {
-            throw new Error(`Error parsing value ${valueName} from configuration`);
+            throw new Error(
+                `Error parsing value ${valueName} from configuration`
+            );
         }
 
         return value.toString();
     };
 
     return {
-        accessKeyId: parseValueFromConfig(config.get(configAccessKeyIdValueName), configAccessKeyIdValueName),
-        accessKeySecret: parseValueFromConfig(config.get(configAccessKeySecretValueName), configAccessKeySecretValueName)
+        accessKeyId: parseValueFromConfig(
+            config.get(configAccessKeyIdValueName),
+            configAccessKeyIdValueName
+        ),
+        accessKeySecret: parseValueFromConfig(
+            config.get(configAccessKeySecretValueName),
+            configAccessKeySecretValueName
+        )
     };
- }
+}

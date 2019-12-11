@@ -20,7 +20,7 @@
 import { DownloadManager } from "./DownloadManager";
 
 /** @internal
- * DeferredPromise takes an executor function for executing it later, when [[exec]] is called.
+ * 'DeferredPromise' takes an executor function for executing it later, when [[exec]] is called.
  * This class allows wrapping other promises or long running functions for later execution.
  */
 class DeferredPromise<T> {
@@ -49,25 +49,26 @@ class DeferredPromise<T> {
 }
 
 /**
- * `DataStoreDownloadManager` for downloading URLs.
+ * An implementation of the [[DownloadManager]] interface requested by the `datastore-api` module
+ * for fetching data from the backend or sending requests to the backend.
+ * This implementation allows you to fetch blob or JSON data with aborting or re-sending (on timeouts) mechanisms
+ * that limit maximum parallel requests.
  *
  * Features:
  *
- * * Limits the amount of parallel downloads, useful when requesting a large amount of URLs that
+ * * Limits the number of parallel downloads. It is useful when requesting a large number of URLs that
  *   would otherwise stall the browser.
  * * Retries the downloads with an increasing timeout on HTTP 503 replies.
  */
 export class DataStoreDownloadManager implements DownloadManager {
     /**
-     * The timeout in milliseconds to wait between retries. This timeout is multiplied with the
-     * number of retries. First retry waits for 0 ms, second retry for 500 ms, third for 1000 ms and
+     * The timeout (in milliseconds) to wait between retries. This timeout is multiplied with the
+     * number of retries. First retry waits for 0 ms, second retry for 500 ms, third for 1000 ms, and
      * so on.
      */
     static readonly retryTimeout = 500;
 
-    /**
-     * The amount of maximum parallel downloads to allow.
-     */
+    /** The number of maximum parallel downloads. */
     static readonly maxParallelDownloads = 16;
 
     private activeDownloadCount = 0;
@@ -77,11 +78,11 @@ export class DataStoreDownloadManager implements DownloadManager {
     /**
      * Retries the downloads with an increasing timeout on HTTP 503 replies.
      *
-     * @param fetchFunction typeof fetch
-     * @param retryCount int, the counter of tries re-fetch response after 503 response
-     * @param maxRetries int, the maximum amount of trying to re-fetch after 503 response
-     * @param url string, url to endpoint
-     * @param init RequestInit, extra request params
+     * @param fetchFunction The type of fetch.
+     * @param retryCount int, The counter of tries to re-fetch response after the 503 response.
+     * @param maxRetries int, The maximum amount of tries to re-fetch after the 503 response.
+     * @param url string, The URL of the endpoint.
+     * @param init RequestInit, The extra request parameters.
      */
     private static async fetchRepeatedly(
         fetchFunction: typeof fetch,
@@ -123,10 +124,11 @@ export class DataStoreDownloadManager implements DownloadManager {
     }
 
     /**
-     * Constructs a new [[DataStoreDownloadManager]].
+     * Constructs the [[DataStoreDownloadManager]] instance.
      *
-     * @param fetchFunction The default fetch function to use.
-     * @param maxRetries The maximum amount to try to re-fetch a resource.
+     * @param fetchFunction The default fetch function.
+     * @param maxRetries The maximum amount of tries to re-fetch a resource.
+     * @return The [[DataStoreDownloadManager]] instance.
      */
     constructor(
         readonly fetchFunction = fetch,
@@ -134,12 +136,13 @@ export class DataStoreDownloadManager implements DownloadManager {
     ) {}
 
     /**
-     * Downloads a URL and returns the response.
+     * Downloads a URL and returns the `Response`.
      *
-     * Does not merge multiple requests to the same URL.
+     * This method does not merge multiple requests to the same URL.
      *
-     * @param url The URL to download.
-     * @param init Optional extra parameters for the download.
+     * @param url The URL that you want to download.
+     * @param init Extra parameters for the download.
+     * @return The URL that is used to download data.
      */
     async download(url: string, init?: RequestInit): Promise<Response> {
         if (

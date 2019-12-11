@@ -29,29 +29,37 @@ import {
 import { CatalogRequest } from "./CatalogRequest";
 
 /**
- * The `CatalogClient` class is the class to interact with a DataStore catalog.
+ * Interacts with the DataStore catalog.
  */
 export class CatalogClient {
     private readonly apiVersion: string = "v1";
     private readonly hrn: string;
 
     /**
-     * Constructs a new `CatalogClient`
+     * Constructs the [[CatalogClient]] instance.
+     *
+     * @param catalogHrn The HERE Resource Name (HRN) of the catalog.
+     * @param settings The [[OlpClientSettings]] instance.
+     * @return The [[CatalogClient]] instance.
      */
     constructor(catalogHrn: HRN, readonly settings: OlpClientSettings) {
         this.hrn = catalogHrn.toString();
     }
 
     /**
-     * Loads and cache the full catalog configuration for the requested catalog.
+     * Loads and caches the full catalog configuration for the requested catalog.
      * The catalog configuration contains descriptive and structural
      * information such as layer definitions and layer types.
-     * @param catalogRequest Instance of the configuret request params [[CatalogRequest]]
-     * @param abortSignal A signal object that allows you to communicate with a request (such as a Fetch)
-     * and abort it if required via an AbortController object
-     *  @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
      *
-     * @summary Gets the details of a catalog.
+     * @summary Gets details about the requested catalog.
+     *
+     * @param request The [[CatalogRequest]] instance that contains the configured request parameters.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @return The catalog metadata.
      */
     public async getCatalog(
         request: CatalogRequest,
@@ -101,15 +109,20 @@ export class CatalogClient {
         return Promise.resolve(earliestVersion);
     }
 
-    /* Get the latest version of the catalog.
+    /* 
+     * Gets the latest version of a catalog.
      *
-     * @param request Is [[CatalogVersionRequest]] instance and has ((getStartVersion)) method to get startVersion.
-     * Catalog start version (exclusive). Default is -1. By convention -1
-     * indicates the virtual initial version before the first publication which will have version 0.
-     * @param abortSignal A signal object that allows you to communicate with a request (such as a Fetch)
-     * and abort it if required via an AbortController object
-     *  @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
-     * @returns A promise of the http response that contains the payload with latest version.
+     * @param request The [[CatalogVersionRequest]] instance with the `getStartVersion` method used to get
+     * the catalog start version (exclusive).
+     *
+     * The default value is -1. By convention -1
+     * indicates the virtual initial version before the first publication that has version 0.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @returns A promise of the HTTP response that contains the payload with the latest version.
      */
     public async getLatestVersion(
         request: CatalogVersionRequest,
@@ -129,18 +142,20 @@ export class CatalogClient {
     }
 
     /**
-     * Get the information about specific catalog versions. Maximum number of versions to be
-     * returned per call is 1000 versions. If range is bigger than 1000 versions 400 Bad Request
-     * will be returned.
-     * @param request Is [[CatalogVersionRequest]] instance and has ((getStartVersion)) and ((getEndVersion)) methods.
-     * StartVersion - Catalog start version (exclusive). Default is -1. By convention -1
-     * indicates the virtual initial version before the first publication which will have version 0.
-     * EndVersion - Catalog end version (inclusive). If not defined, then the latest catalog
-     * version will be fethced and used.
-     * @param abortSignal A signal object that allows you to communicate with a request (such as a Fetch)
-     * and abort it if required via an AbortController object
-     *  @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
-     * @returns A promise of the http response that contains the payload with versions in requested
+     * Gets information about specific catalog versions. The maximum number of versions to be
+     * returned per call is 1000 versions. If the range is bigger than 1000 versions, you get the 400 Bad Request error.
+     *
+     * @param request The [[CatalogVersionRequest]] instance with the `getStartVersion` and `getEndVersion` methods.
+     * * `StartVersion` - a catalog start version (exclusive). Default is -1. By convention -1
+     * indicates the virtual initial version before the first publication that has version 0.
+     * * `EndVersion` - a catalog end version (inclusive). If not defined, then the latest catalog
+     * version is fethced and used.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @returns A promise of the HTTP response that contains the payload with versions in the requested
      * range.
      */
     public async getVersions(
@@ -166,13 +181,15 @@ export class CatalogClient {
     }
 
     /**
-     * Fetch baseUrl and create requestBuilder for sending requests to the look-up API
-     * @param builderType endpoint name is needed to create propriate requestBuilder
-     * @param hrn catalog hrn
-     * @param abortSignal A signal object that allows you to communicate with a request (such as a Fetch)
-     * and abort it if required via an AbortController object
-     *  @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
-     * @returns requestBuilder
+     * Fetches `baseUrl` and creates `requestBuilder` for sending requests to the API Lookup Service.
+     * @param builderType The endpoint name that is needed to create apropriate `requestBuilder`.
+     * @param hrn The catalog HERE Resource Name (HRN).
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @returns `requestBuilder`
      */
     private async getRequestBuilder(
         builderType: ApiName,

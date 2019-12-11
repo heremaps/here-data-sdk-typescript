@@ -21,7 +21,7 @@ import { HRN } from "../HRN";
 import { KeyValueCache } from "./KeyValueCache";
 
 /**
- * The list of API names of endpoints exists in the API
+ * The list of the API endpoints names that the Open Location Platform (OLP) SDK for Typescript uses.
  */
 export type ApiName =
     | "config"
@@ -38,22 +38,30 @@ export type ApiName =
     | "volatile-blob";
 
 /**
- * Class for cache base urls to the API expecting a key,value pair.
- * Key format is: <hrn>::<service_name>::<serviceVersion>::api
+ * Caches the base URLs of the API using a key-value pair.
+ * The key format is `<hrn>::<service_name>::<serviceVersion>::api`.
  */
 export class ApiCacheRepository {
     private readonly hrn: string;
 
+    /**
+     * Generates the [[ApiCacheRepository]] instance.
+     * 
+     * @param cache The [[KeyValueCache]] instance.
+     * @param hrn The HERE Resource Name (HRN) for which you want to use the [[ApiCacheRepository]] instance.
+     * @return The [[ApiCacheRepository]] instance.
+     */
     constructor(private readonly cache: KeyValueCache, hrn?: HRN) {
         this.hrn = hrn ? hrn.toString() : "platform-api";
     }
 
     /**
-     * Store key,value pair into the cache
-     * @param service The name of the service in the api
-     * @param serviceVersion The version of the service
-     * @param serviceUrl The base url of the service
-     * @return Returns true if the operation is successfull, false otherwise.
+     * Stores a key-value pair in the cache.
+     * 
+     * @param service The name of the API service for which you need the key-value pair.
+     * @param serviceVersion The version of the service.
+     * @param serviceUrl The base URL of the service.
+     * @return True if the operation is successful, false otherwise.
      */
     public put(
         service: ApiName,
@@ -65,10 +73,11 @@ export class ApiCacheRepository {
     }
 
     /**
-     * Store key,value pair into the cache
-     * @param service
-     * @param serviceVersion
-     * @returns The base url of the service or undefined if not exists
+     * Gets a base URL from the cache.
+     * 
+     * @param service The name of the API service for which you want to get the base URL.
+     * @param serviceVersion The service version.
+     * @return The base URL of the service, or undefined if the base URL does not exist.
      */
     public get(service: string, serviceVersion: string): string | undefined {
         const key = this.createKey(this.hrn, service, serviceVersion);

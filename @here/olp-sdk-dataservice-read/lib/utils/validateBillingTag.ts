@@ -18,11 +18,12 @@
  */
 
 /**
- * Validate billinig tag.
- * It must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9]
+ * Validates the billinig tag.
  *
- * @param tag string, represents the billing tag.
- * @returns Billing tag back if it's valid, else throws an error.
+ * It must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
+ *
+ * @param tag The string that represents the billing tag.
+ * @return The billing tag if it's valid. Otherwise, throws an error.
  */
 export function validateBillingTag(tag: string): string {
     const pattern = /^[A-Za-z0-9_-]{4,16}$/;

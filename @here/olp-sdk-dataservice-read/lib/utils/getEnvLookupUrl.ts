@@ -18,8 +18,8 @@
  */
 
 /**
- * The name of environment
- * You can also pass the url string to your local or some custom environment
+ * The name of the environment that you use for work.
+ * You can also pass the URL string of your local or custom environment.
  */
 export type EnvironmentName =
     | "here"
@@ -30,9 +30,10 @@ export type EnvironmentName =
     | string;
 
 /**
- * @param env Environment to use. You can also pass the url string to your local or some custom environment
- *
- * @returns the url string to the lookup api service, based on env or url string to the custom service if passed.
+ * Gets the URL string of the API Lookup Service.
+ * 
+ * @param env The environment that you use for work. You can also pass the URL string of your local or custom environment.
+ * @return Based on the specified environment, the URL string of the API Lookup Service or the URL string of the custom service.
  */
 export function getEnvLookUpUrl(env: EnvironmentName): string {
     function isURL(str: string) {

@@ -18,20 +18,19 @@
  */
 
 /**
- * Validate partitions ids list.
- * It must be between 1 - 100 items
+ * Validates a list of partitions IDs.
  *
- * @param list of strings, represents the partitions ids.
- * @returns list of strings if it's valid, else throws an error.
+ * It must be between 1&ndash;100 items.
+ *
+ * @param list The lists of strings that represent the partitions IDs.
+ * @returns The list of strings if it's valid. Otherwise, throws an error.
  */
 export function validatePartitionsIdsList(list: string[]): string[] {
     const LIST_MAX_LENGTH = 100;
     const length = list.length;
 
     if (length < 1 || length > LIST_MAX_LENGTH) {
-        throw new Error(
-            "The partition ids quantity must be between 1 - 100"
-        );
+        throw new Error("The partition ids quantity must be between 1 - 100");
     }
     return list;
 }

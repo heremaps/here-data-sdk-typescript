@@ -20,20 +20,28 @@
 import { ConfigApi } from "@here/olp-sdk-dataservice-api";
 import { CatalogsRequest, OlpClientSettings, RequestFactory } from "..";
 
+/**
+ * A client for the OLP Config Service.
+ */
 export class ConfigClient {
     private readonly apiVersion = "v1";
     /**
-     * Constructs a new client to the data store to work with data
+     * Constructs a new client for the data store to work with data
      * about catalogs configurations in the store.
      *
-     * @param settings The instance of [[OlpClientSettings]]
+     * @param settings The [[OlpClientSettings]] instance.
+     * @return The [[ConfigClient]] instance.
      */
     constructor(private readonly settings: OlpClientSettings) {}
 
     /**
-     * Asynchronously retrieves a list of catalogs that your account has access to.
-     * If set the schema, then will return filtered only catalogs (layers) by the specified layer schema HRN.
-     * If schema is not setted, then filter will return search for all.
+     * Asynchronously retrieves a list of catalogs to which you have access.
+     *
+     * @param request The [[CatalogsRequest]] instance.
+     * @return The list of catalogs to which you have access.
+     *
+     * If the schema is set, you get the catalogs with layers filtered by the specified layer schema HERE Resource Name (HRN).
+     * If the schema is not set, the filter returns all of the catalogs to which you have access.
      */
     public async getCatalogs(
         request: CatalogsRequest
