@@ -37,7 +37,7 @@ export class CatalogClient {
 
     /**
      * Constructs the [[CatalogClient]] instance.
-     * 
+     *
      * @param catalogHrn The HERE Resource Name (HRN) of the catalog.
      * @param settings The [[OlpClientSettings]] instance.
      * @return The [[CatalogClient]] instance.
@@ -50,15 +50,15 @@ export class CatalogClient {
      * Loads and caches the full catalog configuration for the requested catalog.
      * The catalog configuration contains descriptive and structural
      * information such as layer definitions and layer types.
-     * 
+     *
      * @summary Gets details about the requested catalog.
-     * 
-     * @param catalogRequest The [[CatalogRequest]] instance that contains the configured request parameters.
+     *
+     * @param request The [[CatalogRequest]] instance that contains the configured request parameters.
      * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
      * and, if required, abort it using the `AbortController` object.
-     * 
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
-     * 
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
      * @return The catalog metadata.
      */
     public async getCatalog(
@@ -85,13 +85,15 @@ export class CatalogClient {
      * Gets the latest version of a catalog.
      *
      * @param request The [[CatalogVersionRequest]] instance with the `getStartVersion` method used to get
-     * the catalog start version (exclusive). The default value is -1. By convention -1
+     * the catalog start version (exclusive).
+     *
+     * The default value is -1. By convention -1
      * indicates the virtual initial version before the first publication that has version 0.
      * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
      * and, if required, abort it using the `AbortController` object.
-     * 
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
-     * 
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
      * @returns A promise of the HTTP response that contains the payload with the latest version.
      */
     public async getLatestVersion(
@@ -114,7 +116,7 @@ export class CatalogClient {
     /**
      * Gets information about specific catalog versions. The maximum number of versions to be
      * returned per call is 1000 versions. If the range is bigger than 1000 versions, you get the 400 Bad Request error.
-     * 
+     *
      * @param request The [[CatalogVersionRequest]] instance with the `getStartVersion` and `getEndVersion` methods.
      * * `StartVersion` - a catalog start version (exclusive). Default is -1. By convention -1
      * indicates the virtual initial version before the first publication that has version 0.
@@ -122,9 +124,9 @@ export class CatalogClient {
      * version is fethced and used.
      * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
      * and, if required, abort it using the `AbortController` object.
-     * 
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
-     * 
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
      * @returns A promise of the HTTP response that contains the payload with versions in the requested
      * range.
      */
@@ -156,9 +158,9 @@ export class CatalogClient {
      * @param hrn The catalog HERE Resource Name (HRN).
      * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
      * and, if required, abort it using the `AbortController` object.
-     * 
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
-     * 
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
      * @returns `requestBuilder`
      */
     private async getRequestBuilder(

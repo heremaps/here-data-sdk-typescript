@@ -23,7 +23,7 @@
 export interface HRNData {
     /**
      * One of the following string partitions:
-     * * `"here"
+     * * `"here"`
      * * `"here-dev"`
      * * `"here-cn"`
      * * `"here-cn-dev"`
@@ -31,17 +31,17 @@ export interface HRNData {
     partition: string;
     /**
      * The name of the API service.
-     * 
+     *
      * @example `"data"`.
      */
     service: string;
-    // The region of the HRN.
+    /** The region of the HRN. */
     region?: string;
-    // The account of the HRN.
+    /** The account of the HRN. */
     account?: string;
     /**
      * The resource of the HRN.
-     * 
+     *
      * @example The catalog name of the `datastore` HRNs.
      */
     resource: string;
@@ -63,6 +63,14 @@ export class HRN {
     private static RESOURCE_TYPE_POS = 3;
     private static RESOURCE_PARAMS_COUNT = 3;
 
+    /**
+     * Returns a new HRN from a string representation of an HRN.
+     *
+     * @example `hrn:here:data:::example-catalog`
+     *
+     * @param hrn The HRN string
+     * @return The new HRN.
+     */
     static fromString(hrn: string): HRN {
         // special case - also allow http and https as 'catalog-url' local URLs
         if (hrn.startsWith("http:") || hrn.startsWith("https:")) {
@@ -110,7 +118,7 @@ export class HRN {
 
     /**
      * Converts the specified HRN to its string representation.
-     * 
+     *
      * @example
      * `hrn:partition:service:region:account:resource`.
      *

@@ -22,8 +22,8 @@ import { AuthCredentials } from "./UserAuth";
 
 /**
  * Parses the **credentials.properties** file from the
- * [Open Location Platform (OLP) website]
- * (https://developer.here.com/olp/documentation/access-control/user-guide/topics/get-credentials.html)
+ * Open Location Platform (OLP)
+ * [website](https://developer.here.com/olp/documentation/access-control/user-guide/topics/get-credentials.html)
  * and retrieves an object with user credentials.
  *
  * @param path The path to the **credentials.properties** file.

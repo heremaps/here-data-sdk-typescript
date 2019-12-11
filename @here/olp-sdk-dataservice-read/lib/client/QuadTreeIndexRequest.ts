@@ -21,6 +21,7 @@ import { HRN, QuadKey, validateBillingTag } from "..";
 
 /**
  * The recursion depth of the quadtree.
+ *
  * If set to 0, the response includes only data for the quadKey specified in the request.
  * In this way, depth describes the maximum length of the subQuadKeys in the response.
  * The maximum allowed value for the depth parameter is 4.
@@ -30,6 +31,7 @@ export type QuadTreeIndexDepth = 0 | 1 | 2 | 3 | 4;
 
 /**
  * Prepares information for calls to get quadtree metadata from the OLP Query Service.
+ *
  * This class works only with versioned or volatile layers where the partitioning scheme is HERE Tile.
  */
 export class QuadTreeIndexRequest {
@@ -37,7 +39,6 @@ export class QuadTreeIndexRequest {
     private quadKey?: QuadKey;
     private depth?: number;
     private billingTag?: string;
-    
 
     /**
      * Constructs the [[QuadTreeIndexRequest]] instance for fetching the quadtree index from the OLP Query Service
@@ -57,7 +58,7 @@ export class QuadTreeIndexRequest {
     /**
      * The version of the catalog against which you want to run the query.
      * It must be a valid catalog version.
-     * 
+     *
      * @param version Specify the catalog version or, if you want to use the latest catalog version, set to undefined.
      * @returns The updated [[QuadKeyPartitionsRequest]] instance that you can use to chain methods.
      */
@@ -68,7 +69,7 @@ export class QuadTreeIndexRequest {
 
     /**
      * A geometric area represented as a HERE tile.
-     * 
+     *
      * @param quadKey Addresses a tile in the quadtree.
      * @returns The updated [[QuadKeyPartitionsRequest]] instance that you can use to chain methods.
      */
@@ -83,6 +84,7 @@ export class QuadTreeIndexRequest {
      *
      * @param depth The recursion depth of the response.
      * @returns The updated [[QuadKeyPartitionsRequest]] instance that you can use to chain methods.
+     *
      * If set to 0, the response includes only data from the quadkey specified in the request.
      * In this way, the depth describes the maximum length of the subQuadKeys in the response.
      */
@@ -93,8 +95,9 @@ export class QuadTreeIndexRequest {
 
     /**
      * An optional free-form tag that is used for grouping billing records together.
+     *
      * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
-     * 
+     *
      * @param tag The `BillingTag` string.
      * @return The updated [[QuadTreeIndexRequest]] instance that you can use to chain methods.
      */
@@ -105,7 +108,7 @@ export class QuadTreeIndexRequest {
 
     /**
      * The configured catalog version for the request.
-     * 
+     *
      * @return The catalog version number.
      */
     public getVersion(): number | undefined {
@@ -114,7 +117,7 @@ export class QuadTreeIndexRequest {
 
     /**
      * Gets the configured [[QuadKey]] object for the request.
-     * 
+     *
      * @return The the configured [[QuadKey]] object.
      */
     public getQuadKey(): QuadKey | undefined {
@@ -123,7 +126,7 @@ export class QuadTreeIndexRequest {
 
     /**
      * Gets the configured depth for the request.
-     * 
+     *
      * @return The number of the configured depth.
      */
     public getDepth(): number {
@@ -133,7 +136,7 @@ export class QuadTreeIndexRequest {
     /**
      * Gets the configured type of the layer for the request.
      * By default, a layer of the versioned type is used.
-     * 
+     *
      * @return The layer type.
      */
     public getLayerType() {
@@ -142,7 +145,7 @@ export class QuadTreeIndexRequest {
 
     /**
      * Gets the configured [[HRN]] instance of the catalog HERE Resource Name(HRN) for the request.
-     * 
+     *
      * @return The configured [[HRN]] instance.
      */
     public getCatalogHrn(): HRN {
@@ -151,7 +154,7 @@ export class QuadTreeIndexRequest {
 
     /**
      * Gets a layer ID for the request.
-     * 
+     *
      * @return The layer ID string.
      */
     public getLayerId(): string | undefined {
@@ -160,7 +163,7 @@ export class QuadTreeIndexRequest {
 
     /**
      * Gets a billing tag to group billing records together.
-     * 
+     *
      * @return The `BillingTag` string.
      */
     public getBillingTag(): string | undefined {

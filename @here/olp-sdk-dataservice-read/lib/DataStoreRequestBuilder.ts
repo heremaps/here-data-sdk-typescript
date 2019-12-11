@@ -52,14 +52,16 @@ async function addBearerToken(
 export class DataStoreRequestBuilder extends RequestBuilder {
     /**
      * Cerates the [[DataStoreRequestBuilder]] instance.
-     * 
+     *
      * @param downloadManager The configured instance of the [[DownloadManager]] interface implementation.
-     * You can use our default [[DatastoreDownloadManager]] or create your implementation.
+     * You can use our default `DatastoreDownloadManager` or create your implementation.
      * @param baseUrl The URL string.
      * @param getBearerToken Retrieves the access token.
-     * @return The access token.
      * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
      * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
      * @return The [[DataStoreRequestBuilder]] instance.
      */
     constructor(
@@ -73,7 +75,7 @@ export class DataStoreRequestBuilder extends RequestBuilder {
 
     /**
      * Downloads data from the provided URL.
-     * 
+     *
      * @param url The URL of the data that you want to download.
      * @param init The helper object for the request.
      * @return The data of the type specified in the generics.
@@ -94,7 +96,7 @@ export class DataStoreRequestBuilder extends RequestBuilder {
 
     /**
      * Downloads the blob data from the specified URL.
-     * 
+     *
      * @param url The URL of the blob data that you want to download.
      * @param init The helper object for the request.
      * @return The blob data.

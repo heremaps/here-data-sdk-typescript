@@ -21,7 +21,7 @@ import { OAuthArgs, Token } from "./requestToken_common";
 
 /**
  * User credentials.
- * 
+ *
  * Download the file with credentials from the [Open Location Platform (OLP) portal](https://account.here.com/).
  * The downloaded **credentials.properties** file contains the access key ID and access key secret needed to get the access token.
  * You can also use the access key ID and access key secret for authentication.
@@ -29,13 +29,13 @@ import { OAuthArgs, Token } from "./requestToken_common";
 export interface AuthCredentials {
     /**
      * Your access key ID.
-     * 
+     *
      * Find the access key ID in the **credentials.properties** file downloaded from the OLP Portal.
      */
     accessKeyId?: string;
     /**
      * Your access key secret.
-     * 
+     *
      * Find the access key secret in the **credentials.properties** file downloaded from the OLP Portal.
      */
     accessKeySecret?: string;
@@ -43,7 +43,7 @@ export interface AuthCredentials {
 
 /**
  * Gets an access token.
- * 
+ *
  * @param args The arguments needed to get the access token.
  * @return The generated access token.
  */
@@ -53,11 +53,11 @@ export type TokenRequesterFn = (args: OAuthArgs) => Promise<Token>;
  * Parameters for authentification.
  */
 export interface UserAuthConfig {
-    // Credentials for authorization.
+    /** Credentials for authorization. */
     credentials?: AuthCredentials;
-    // One of the following environments: here, here-dev, here-cn, and here-cn-dev.
+    /** One of the following environments: here, here-dev, here-cn, and here-cn-dev. */
     env?: string;
-    // The URL of your custom environment.
+    /** The URL of your custom environment. */
     customUrl?: string;
     /**
      * Gets the access token.
@@ -65,8 +65,8 @@ export interface UserAuthConfig {
      * You can provide your own implementation or use one from `@here/olp-sdk-authentication`.
      *
      * There are two functions that work for the browser and Node.js.
-     * For the browser, `UserAuth` uses `requestToken()` from [[requestToken.web.ts]](requestToken.web.ts).
-     * For Node.js,`UserAuth` uses `requestToken()` from [[requestToken.ts]](requestToken.ts).
+     * For the browser, `UserAuth` uses `requestToken()` from requestToken.web.ts.
+     * For Node.js,`UserAuth` uses `requestToken()` from requestToken.ts.
      *
      * When a function imports a function using `import { requestToken }` from "@here/olp-sdk-authentication"`,
      * the code automatically applies to the corresponding function.
@@ -74,6 +74,8 @@ export interface UserAuthConfig {
      * The following code is applicable for both the browser and Node.js.
      *
      * @example
+     *
+     * ```typescript
      * import { UserAuth, requestToken } from "@here/olp-sdk-authentication";
      *
      *  const userAuth = new UserAuth({
@@ -83,11 +85,12 @@ export interface UserAuthConfig {
      *       },
      *       tokenRequester: requestToken
      *   });
-     *
+     * ```
      */
     tokenRequester: TokenRequesterFn;
     /**
      * Project scope.
+     *
      * If the project is specified, the resulting token is bound to it.
      * If the desired resource is restricted to a specific project, to get a valid token, specify this project.
      */
@@ -103,28 +106,28 @@ export interface UserInfo {
      * Begins with `AUTHINVITE` if status is invited. Otherwise, use your HERE ID.
      */
     userId: string;
-    // The realm to which you belong.
+    /** The realm to which you belong. */
     realm: string;
-    // Your first name.
+    /** Your first name. */
     firstname: string;
-    // Your last name.
+    /** Your last name. */
     lastname: string;
-    // Your email address.
+    /** Your email address. */
     email: string;
-    // Your date of birth.
+    /** Your date of birth. */
     dob: string;
-    // Your native language.
+    /** Your native language. */
     language: string;
-    // The code of the country in which you live.
+    /** The code of the country in which you live. */
     countryCode: string;
-    // `true` if your email is verified, `false` otherwise.
+    /** True if your email is verified, false otherwise. */
     emailVerified: boolean;
     marketingEnabled: boolean;
-    // The Unix time (seconds) when the authorization was created.
+    /** The Unix time (seconds) when the authorization was created. */
     createdTime: number;
-    // The Unix time (seconds) when the authorization was updated.
+    /** The Unix time (seconds) when the authorization was updated. */
     updatedTime: number;
-    // Your user status.
+    /** Your user status. */
     state: string;
 }
 
@@ -140,7 +143,7 @@ export class UserAuth {
 
     /**
      * Creates the [[UserAuth]] instance.
-     * 
+     *
      * @param config Parameters for authentication.
      * @return The [[UserAuth]] instance.
      */
@@ -181,7 +184,7 @@ export class UserAuth {
 
     /**
      * Retrieves the access token.
-     * 
+     *
      * @return The access token if it is valid, or an error if at least one of the following credentials is not stated:
      * access key ID or acces key secret.
      */
@@ -200,12 +203,14 @@ export class UserAuth {
             );
         }
 
-        const response = await this.config.tokenRequester({
-            url: this.m_apiUrl + "oauth2/token",
-            consumerKey: this.m_credentials.accessKeyId,
-            secretKey: this.m_credentials.accessKeySecret,
-            scope: this.m_scope
-        }).catch(err => Promise.reject(`Error fetching token: ${err}`));
+        const response = await this.config
+            .tokenRequester({
+                url: this.m_apiUrl + "oauth2/token",
+                consumerKey: this.m_credentials.accessKeyId,
+                secretKey: this.m_credentials.accessKeySecret,
+                scope: this.m_scope
+            })
+            .catch(err => Promise.reject(`Error fetching token: ${err}`));
 
         if (response.accessToken) {
             this.m_accessToken = response.accessToken;
@@ -224,7 +229,7 @@ export class UserAuth {
 
     /**
      * Validates the access token.
-     * 
+     *
      * @param token The string containing the token.
      * @return True if the access token is valid, false otherwise.
      */
@@ -253,7 +258,7 @@ export class UserAuth {
 
     /**
      * Retrieves user data.
-     * 
+     *
      * @param userToken The string that contains the user token.
      * @return The `json` object with the user data.
      */

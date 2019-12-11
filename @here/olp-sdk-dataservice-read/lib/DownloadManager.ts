@@ -22,7 +22,7 @@
  * [[DataStoreRequestBuilder]] has its own default implementation of the download manager.
  * If you want to use your download manager, you can implement this interface, and then set your download manager.
  *
- * @see DataStoreRequestBuilder.
+ * @see [[DataStoreRequestBuilder]]
  */
 export interface DownloadManager {
     /**

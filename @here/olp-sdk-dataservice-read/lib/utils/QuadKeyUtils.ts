@@ -32,11 +32,11 @@
  * represented in the number representation returned by [[`mortonCodeFromQuadKey`]].
  */
 export interface QuadKey {
-    // The row that contains the tile.
+    /** The row that contains the tile. */
     readonly row: number;
-    // The column that contains the tile.
+    /** The column that contains the tile. */
     readonly column: number;
-    // The level that contains the tile.
+    /** The level that contains the tile. */
     readonly level: number;
 }
 
@@ -101,7 +101,7 @@ const powerOfTwo = [
 
 /**
  * Creates a quadkey from a numeric or string Morton code representation.
- * 
+ *
  * @param code The Morton code that you want to convert.
  * @returns The [[QuadKey]] instance.
  */
@@ -132,7 +132,7 @@ export function quadKeyFromMortonCode(code: number | string): QuadKey {
 
 /**
  * Converts a quadkey into a Morton code numeric representation.
- * 
+ *
  * @param key The quadkey that you need to convert to the Morton code.
  * @returns The number representing the Morton code of [[QuadKey]].
  */
@@ -199,11 +199,11 @@ export function computeParentKey(key: QuadKey, delta: number = 1): QuadKey {
  *
  * The number of rows and columns must not be greater than the maximum number of rows and columns in the given level.
  * The maximum number of rows and columns in a level is computed as 2 to the power of the level.
- * 
+ *
  * @note As the JavaScript number type can hold 53 bits in its mantissa, only levels up to 26 can be
  * represented in the number representation returned by [[mortonCodeFromQuadKey]].
  * A level must be positive and can't be greater than 26.
- * 
+ *
  * @param key The current quadkey.
  * @return True if the quadkey is valid, false otherwise.
  */
