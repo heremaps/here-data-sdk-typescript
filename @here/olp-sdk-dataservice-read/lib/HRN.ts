@@ -18,33 +18,37 @@
  */
 
 /**
- * The `HRNData` interface contains all the fields that make up a HERE Resource Name (HRN).
+ * Contains all the fields that make up a HERE Resource Name (HRN).
  */
 export interface HRNData {
     /**
-     * The partition of the string, for example, `"here"` or `"here-dev"` or `"here-cn"`, or `"here-cn-dev"`.
+     * One of the following string partitions:
+     * * `"here"`
+     * * `"here-dev"`
+     * * `"here-cn"`
+     * * `"here-cn-dev"`
      */
     partition: string;
     /**
-     * The service, for example, `"data"`.
+     * The name of the API service.
+     *
+     * @example `"data"`.
      */
     service: string;
-    /**
-     * The region of this HRN.
-     */
+    /** The region of the HRN. */
     region?: string;
-    /**
-     * The account of this HRN.
-     */
+    /** The account of the HRN. */
     account?: string;
     /**
-     * The resource of this HRN, for example, the catalog name for `datastore` HRNs.
+     * The resource of the HRN.
+     *
+     * @example The catalog name of the `datastore` HRNs.
      */
     resource: string;
 }
 
 /**
- * The HRN class encapsulates a HERE Resource Name.
+ * Contains a HERE Resource Name (HRN) &ndash; a unique identifier for resources such as catalogs, schemas, and pipelines.
  */
 export class HRN {
     private static PARTITION_POS = 1;
@@ -59,6 +63,14 @@ export class HRN {
     private static RESOURCE_TYPE_POS = 3;
     private static RESOURCE_PARAMS_COUNT = 3;
 
+    /**
+     * Returns a new HRN from a string representation of an HRN.
+     *
+     * @example `hrn:here:data:::example-catalog`
+     *
+     * @param hrn The HRN string
+     * @return The new HRN.
+     */
     static fromString(hrn: string): HRN {
         // special case - also allow http and https as 'catalog-url' local URLs
         if (hrn.startsWith("http:") || hrn.startsWith("https:")) {
@@ -86,7 +98,7 @@ export class HRN {
     }
 
     /**
-     * Creates a new HRN based on the fields of the given HRNData.
+     * Creates a new HRN based on the fields of the given [[HRNData]].
      *
      * @example
      * ```TypeScript
@@ -97,17 +109,20 @@ export class HRN {
      * });
      * ```
      *
-     * Use [[fromString]] to create an HRN from a string representation.
+     * Uses [[fromString]] to create an HRN from the string representation.
      *
-     * @param data The data for this HRN.
+     * @param data The data from this HRN.
+     * @return The [[HRN]] instance.
      */
     constructor(readonly data: HRNData) {}
 
     /**
-     * Converts this HRN to its string representation, for example,
+     * Converts the specified HRN to its string representation.
+     *
+     * @example
      * `hrn:partition:service:region:account:resource`.
      *
-     * @returns The string representation of this HRN.
+     * @return The string representation of the HRN.
      */
     toString(): string {
         return (

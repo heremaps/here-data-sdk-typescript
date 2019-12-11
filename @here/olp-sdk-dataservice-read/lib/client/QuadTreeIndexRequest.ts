@@ -19,27 +19,35 @@
 
 import { HRN, QuadKey, validateBillingTag } from "..";
 
+/**
+ * The recursion depth of the quadtree.
+ *
+ * If set to 0, the response includes only data for the quadKey specified in the request.
+ * In this way, depth describes the maximum length of the subQuadKeys in the response.
+ * The maximum allowed value for the depth parameter is 4.
+ */
 // tslint:disable-next-line: no-magic-numbers
 export type QuadTreeIndexDepth = 0 | 1 | 2 | 3 | 4;
 
 /**
- * A class that prepare information for calls to get Quad Tree metadata from Query API.
- * Works only with versioned or volatile layers where the partitioning scheme is `heretile`
+ * Prepares information for calls to get quadtree metadata from the OLP Query Service.
+ *
+ * This class works only with versioned or volatile layers where the partitioning scheme is HERE Tile.
  */
 export class QuadTreeIndexRequest {
     private version?: number;
     private quadKey?: QuadKey;
     private depth?: number;
     private billingTag?: string;
-    
 
     /**
-     * Constructs the [[QuadTreeIndexRequest]] for fetching Quad tree index from Query API
+     * Constructs the [[QuadTreeIndexRequest]] instance for fetching the quadtree index from the OLP Query Service
      * for volatile or versioned layers
      *
-     * @param catalogHrn The [[HRN]] instance represents the catalog hrn
-     * @param layerId The id of the layer
-     * @param layerType The type of layer wich be used for request. The versioned is by default
+     * @param catalogHrn The catalog HERE Resource Name ([[HRN]]).
+     * @param layerId The ID of the layer.
+     * @param layerType The type of layer that you want to use for the request. By default, a layer of the versioned type is used.
+     * @return The [[QuadTreeIndexRequest]] instance
      */
     constructor(
         private catalogHrn: HRN,
@@ -48,10 +56,11 @@ export class QuadTreeIndexRequest {
     ) {}
 
     /**
-     * The version of the catalog against which to run the query.
-     * Must be a valid catalog version.
-     * @param version A valid catalog version. The latest catalog version uses if not set.
-     * @returns The updated [[QuadTreeIndexRequest]] instance
+     * The version of the catalog against which you want to run the query.
+     * It must be a valid catalog version.
+     *
+     * @param version Specify the catalog version or, if you want to use the latest catalog version, set to undefined.
+     * @returns The updated [[QuadKeyPartitionsRequest]] instance that you can use to chain methods.
      */
     public withVersion(version?: number): QuadTreeIndexRequest {
         this.version = version;
@@ -59,9 +68,10 @@ export class QuadTreeIndexRequest {
     }
 
     /**
-     * The geometric area, represented as a HERE tile.
-     * @param quadKey The `QuadKey` are used to address a tile in a quad tree.
-     * @returns The updated [[QuadTreeIndexRequest]] instance
+     * A geometric area represented as a HERE tile.
+     *
+     * @param quadKey Addresses a tile in the quadtree.
+     * @returns The updated [[QuadKeyPartitionsRequest]] instance that you can use to chain methods.
      */
     public withQuadKey(quadKey: QuadKey): QuadTreeIndexRequest {
         this.quadKey = quadKey;
@@ -70,12 +80,13 @@ export class QuadTreeIndexRequest {
 
     /**
      * The recursion depth of the response.
-     * If set to 0, the response includes only data for the quadKey specified in the request.
-     * In this way, depth describes the maximum length of the subQuadKeys in the response.
      * The maximum allowed value for the depth parameter is 4.
      *
      * @param depth The recursion depth of the response.
-     * @returns The updated [[QuadTreeIndexRequest]] instance
+     * @returns The updated [[QuadKeyPartitionsRequest]] instance that you can use to chain methods.
+     *
+     * If set to 0, the response includes only data from the quadkey specified in the request.
+     * In this way, the depth describes the maximum length of the subQuadKeys in the response.
      */
     public withDepth(depth: QuadTreeIndexDepth): QuadTreeIndexRequest {
         this.depth = depth;
@@ -83,8 +94,12 @@ export class QuadTreeIndexRequest {
     }
 
     /**
-     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
-     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     * An optional free-form tag that is used for grouping billing records together.
+     *
+     * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
+     *
+     * @param tag The `BillingTag` string.
+     * @return The updated [[QuadTreeIndexRequest]] instance that you can use to chain methods.
      */
     public withBillingTag(tag: string): QuadTreeIndexRequest {
         this.billingTag = validateBillingTag(tag);
@@ -92,49 +107,64 @@ export class QuadTreeIndexRequest {
     }
 
     /**
-     * The configured catalog version for the request
+     * The configured catalog version for the request.
+     *
+     * @return The catalog version number.
      */
     public getVersion(): number | undefined {
         return this.version;
     }
 
     /**
-     * The configured QuadKey for the request
+     * Gets the configured [[QuadKey]] object for the request.
+     *
+     * @return The the configured [[QuadKey]] object.
      */
     public getQuadKey(): QuadKey | undefined {
         return this.quadKey;
     }
 
     /**
-     * The configuret depth for the request
+     * Gets the configured depth for the request.
+     *
+     * @return The number of the configured depth.
      */
     public getDepth(): number {
         return this.depth || 0;
     }
 
     /**
-     * The configured type of layer for request
+     * Gets the configured type of the layer for the request.
+     * By default, a layer of the versioned type is used.
+     *
+     * @return The layer type.
      */
     public getLayerType() {
         return this.layerType;
     }
 
     /**
-     * The configured [[HRN]] instance of the catalog hrn for request
+     * Gets the configured [[HRN]] instance of the catalog HERE Resource Name(HRN) for the request.
+     *
+     * @return The configured [[HRN]] instance.
      */
     public getCatalogHrn(): HRN {
         return this.catalogHrn;
     }
 
     /**
-     * The layer id for request
+     * Gets a layer ID for the request.
+     *
+     * @return The layer ID string.
      */
     public getLayerId(): string | undefined {
         return this.layerId;
     }
 
     /**
-     * Billing Tag for grouping billing records together
+     * Gets a billing tag to group billing records together.
+     *
+     * @return The `BillingTag` string.
      */
     public getBillingTag(): string | undefined {
         return this.billingTag;

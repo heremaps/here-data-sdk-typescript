@@ -18,40 +18,45 @@
  */
 
 /**
- * Class for cache expecting a key,value pair.
+ * An in-memory caching instance. All the repository instances use it for reading or caching information.
  */
 export class KeyValueCache {
     private readonly cache: Map<string, string>;
+    /**
+     * Cerates the `KeyValueCache` instance.
+     *
+     * @return The `KeyValueCache` instance.
+     */
     constructor() {
         this.cache = new Map();
     }
 
     /**
-     * Store key,value pair into the cache
+     * Stores a key-value pair in the cache.
      *
-     * @param key Key for this value
-     * @param value The value of string type
-     * @return Returns true if the operation is successfull, false otherwise.
+     * @param key The key for this value.
+     * @param value The value of the string type.
+     * @return True if the operation is successful, false otherwise.
      */
     public put(key: string, value: string): boolean {
         return this.cache.set(key, value).has(key);
     }
 
     /**
-     * Get key,value pair from the cache
+     * Gets a key-value pair from the cache.
      *
-     * @param key Key to look for
+     * @param key The key for the requested value.
+     * @return The value.
      */
     public get(key: string): string | undefined {
         return this.cache.get(key);
     }
 
     /**
-     * Remove a key,value pair from the cache
+     * Removes a key-value pair from the cache.
      *
-     * @param key Key for the value to remove from cache
-     *
-     * @return Returns true if the operation is successfull, false otherwise.
+     * @param key The key for the value that you want to remove from the cache.
+     * @return True if the operation is successful, false otherwise.
      */
     public remove(key: string): boolean {
         return this.cache.delete(key);

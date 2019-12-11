@@ -19,14 +19,20 @@
 
 import { HRN, validateBillingTag } from "..";
 
+/**
+ * A map type that is supported by the OLP Statistics Service.
+ */
 export enum CoverageDataType {
+    /** Represents the availability of data in partitions. */
     BITMAP = "tilemap",
+    /** A heatmap that represents a partition size. */
     SIZEMAP = "heatmap/size",
+    /** A heatmap that represents partition update time. */
     TIMEMAP = "heatmap/age"
 }
 
 /**
- * A class that prepare information for calls to get Statistics from CoverageAPI
+ *  Prepares information for calls to get statistics from the OLP Statistics Service.
  */
 export class StatisticsRequest {
     private catalogHrn?: string;
@@ -35,28 +41,47 @@ export class StatisticsRequest {
     private dataLevel?: string;
     private billingTag?: string;
 
-    constructor() {}
-
+    /**
+     * Gets the configured [[HRN]] string of the catalog HERE Resource Name(HRN) for the request.
+     *
+     * @return The configured [[HRN]] string.
+     */
     public getCatalogHrn(): string | undefined {
         return this.catalogHrn;
     }
 
+    /**
+     * Gets a layer ID for the request.
+     *
+     * @return The layer ID string.
+     */
     public getLayerId(): string | undefined {
         return this.layerId;
     }
 
+    /**
+     * Gets a map type that is supported by the OLP Statistics Service.
+     *
+     * @return The requested map type.
+     */
     public getTypemap(): CoverageDataType | undefined {
         return this.typemap;
     }
 
+    /**
+     * Gets a tile level for the request.
+     *
+     * @return The requested tile level string.
+     */
     public getDataLevel(): string | undefined {
         return this.dataLevel;
     }
 
     /**
-     * Setter for the provided hrn
-     * @param hrn Required. Specify the catalog hrn
-     * @returns this to have ability to chain methods
+     * A setter for the provided catalog HERE Resource Name (HRN).
+     *
+     * @param hrn The catalog HRN.
+     * @returns The updated [[StatisticsRequest]] instance that you can use to chain methods.
      */
     public withCatalogHrn(hrn: HRN): StatisticsRequest {
         this.catalogHrn = hrn.toString();
@@ -64,9 +89,10 @@ export class StatisticsRequest {
     }
 
     /**
-     * Setter for the provided layerId
-     * @param layerId Required. Specify the LayerId
-     * @returns this to have ability to chain methods
+     * A setter for the requested `layerId` string.
+     *
+     * @param layerId The ID of the layer.
+     * @returns The updated [[StatisticsRequest]] instance that you can use to chain methods.
      */
     public withLayerId(layerId: string): StatisticsRequest {
         this.layerId = layerId;
@@ -74,12 +100,13 @@ export class StatisticsRequest {
     }
 
     /**
-     * Setter for the provided coverageDataType
-     * @param coverageDataType Required. This parameter points to appropriate StatisticAPI endpoint.
-     * BITMAP to fetch bitmap representing availability of data in partitions,
-     * SIZEMAP to fetch HeatMap representing partition size,
-     * TIMEMAP to fetch HeatMap representing partition update time
-     * @returns this to have ability to chain methods
+     * A setter for the provided `coverageDataType` string.
+     *
+     * @param coverageDataType Points at one of the following Statistic API endpoints:
+     * * BITMAP &ndash; fetches a bitmap that represents the availability of data in partitions.
+     * * SIZEMAP &ndash; fetches a heatmap that represents a partition size.
+     * * TIMEMAP &ndash; fetches a heatmap that represents partition update time.
+     * @returns The updated [[StatisticsRequest]] instance that you can use to chain methods.
      */
     public withTypemap(coverageDataType: CoverageDataType): StatisticsRequest {
         this.typemap = coverageDataType;
@@ -87,9 +114,10 @@ export class StatisticsRequest {
     }
 
     /**
-     * Setter for the provided dataLevel
-     * @param dataLevel Required. Specify the tile level you want to get coverage data about
-     * @returns this to have ability to chain methods
+     * A setter for the provided `dataLevel` string.
+     *
+     * @param dataLevel Specify the tile level about which you want to get statistical data.
+     * @returns The updated [[StatisticsRequest]] instance that you can use to chain methods.
      */
     public withDataLevel(dataLevel: string): StatisticsRequest {
         this.dataLevel = dataLevel;
@@ -97,8 +125,12 @@ export class StatisticsRequest {
     }
 
     /**
-     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
-     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     * An optional free-form tag that is used for grouping billing records together.
+     *
+     * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
+     *
+     * @param tag The `BillingTag` string.
+     * @return The updated [[StatisticsRequest]] instance that you can use to chain methods.
      */
     public withBillingTag(tag: string): StatisticsRequest {
         this.billingTag = validateBillingTag(tag);
@@ -106,7 +138,9 @@ export class StatisticsRequest {
     }
 
     /**
-     * Billing Tag for grouping billing records together
+     * Gets a billing tag to group billing records together.
+     *
+     * @return The `BillingTag` string.
      */
     public getBillingTag(): string | undefined {
         return this.billingTag;

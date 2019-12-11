@@ -23,28 +23,37 @@ import {
     isValid,
     mortonCodeFromQuadKey,
     OlpClientSettings,
+    PartitionsRequest,
     QuadTreeIndexRequest,
     RequestFactory
 } from "..";
 
 /**
- * The [[QueryClient]] is client to the query service provides a way to get information (metadata)
+ * A client for the OLP Query Service that provides a way to get information (metadata)
  * about layers and partitions stored in a catalog.
- * This service exposes the metadata for single partitions that users can query one by one or by specifying a parent tile.
+ * This service exposes the metadata for a single partition that you can query one by one or using a parent tile.
  */
 export class QueryClient {
     private readonly apiVersion = "v1";
 
     /**
-     * Constructs a new client for Query Service
-     * @param settings The instance of [[OlpClientSettings]]
+     * Constructs a new client for the OLP Query Service.
+     *
+     * @param settings The [[OlpClientSettings]] instance.
+     * @return The [[QueryClient]] instance.
      */
     constructor(private readonly settings: OlpClientSettings) {}
 
     /**
-     * Fetch the Quad Tree Index
-     * @param request Configured instance of [[QuadTreeIndexRequest]]
-     * @param abortSignal The signal to aborting request
+     * Fetches the quadtree index.
+     *
+     * @param request The configured [[QuadTreeIndexRequest]] instance.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @return The quadtree index object.
      */
     public async fetchQuadTreeIndex(
         request: QuadTreeIndexRequest,
@@ -123,6 +132,51 @@ export class QueryClient {
             requestBuilder,
             paramsForFetchQuadTreeIndex
         );
+    }
+
+    /**
+     * Gets partitions using their IDs.
+     *
+     * @param request The `PartitionsRequest` instance.
+     * @param layerId The ID of the layer from which you want to get partitions.
+     * @param hrn The HERE Resource Name (HRN) of the layer.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @return The requested partitions.
+     */
+    public async getPartitionsById(
+        request: PartitionsRequest,
+        layerId: string,
+        hrn: HRN,
+        abortSignal?: AbortSignal
+    ): Promise<QueryApi.Partitions> {
+        const idsList = request.getPartitionIds();
+        const version = request.getVersion();
+
+        if (!idsList) {
+            return Promise.reject("Please provide correct partitionIds list");
+        }
+
+        const requestBuilder = await RequestFactory.create(
+            "query",
+            this.apiVersion,
+            this.settings,
+            hrn,
+            abortSignal
+        ).catch(error =>
+            Promise.reject(
+                `Erorr creating request object for query service: ${error}`
+            )
+        );
+
+        return QueryApi.getPartitionsById(requestBuilder, {
+            layerId,
+            partition: idsList,
+            version: version ? `${version}` : undefined
+        });
     }
 
     /**
