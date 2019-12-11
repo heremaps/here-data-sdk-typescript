@@ -49,7 +49,7 @@ class DeferredPromise<T> {
 }
 
 /**
- *  * An implementation of the [[DownloadManager]] interface requested by the `datastore-api` module
+ * An implementation of the [[DownloadManager]] interface requested by the `datastore-api` module
  * for fetching data from the backend or sending requests to the backend.
  * This implementation allows you to fetch blob or JSON data with aborting or re-sending (on timeouts) mechanisms
  * that limit maximum parallel requests.
@@ -68,7 +68,7 @@ export class DataStoreDownloadManager implements DownloadManager {
      */
     static readonly retryTimeout = 500;
 
-    // The number of maximum parallel downloads.
+    /** The number of maximum parallel downloads. */
     static readonly maxParallelDownloads = 16;
 
     private activeDownloadCount = 0;

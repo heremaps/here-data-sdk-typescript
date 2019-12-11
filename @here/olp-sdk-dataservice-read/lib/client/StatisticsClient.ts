@@ -28,7 +28,7 @@ import {
     SummaryRequest
 } from "..";
 
-/*
+/**
  * A client for the OLP Statistics Service.
  */
 export class StatisticsClient {
@@ -36,9 +36,9 @@ export class StatisticsClient {
 
     /**
      * Creates the [[StatisticsClient]] instance.
-     * 
+     *
      * @param settings The [[OlpClientSettings]] instance.
-     * 
+     *
      * @return The [[StatisticsClient]] instance.
      */
     constructor(private readonly settings: OlpClientSettings) {}
@@ -72,14 +72,14 @@ export class StatisticsClient {
     }
 
     /**
-     * Depending on the map type that you specify in the [[StatisticsRequest]] instance, gets the [StatisticsRequest]] instance
+     * Depending on the map type that you specify in the [[StatisticsRequest]] instance, gets the [[StatisticsRequest]] instance
      * with one of the following settings:
      * * BITMAP &ndash; fetches a bitmap that represents the availability of data in partitions.
      * * SIZEMAP &ndash; fetches a heatmap that represents a partition size.
      * * TIMEMAP &ndash; fetches a heatmap that represents partition update time.
-     * 
+     *
      * @param statisticsRequest The [[StatisticsRequest]] instance with the requested settings.
-     * 
+     *
      * @return The [StatisticsRequest]] instance with the requested settings.
      */
     public async getStatistics(

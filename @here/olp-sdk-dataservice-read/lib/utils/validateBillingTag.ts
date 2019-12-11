@@ -19,6 +19,7 @@
 
 /**
  * Validates the billinig tag.
+ *
  * It must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
  *
  * @param tag The string that represents the billing tag.

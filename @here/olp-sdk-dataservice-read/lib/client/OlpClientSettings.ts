@@ -25,7 +25,7 @@ import { EnvironmentName } from "../utils";
  */
 export interface OlpClientSettingsParams {
     /**
-     * An asynchronous callback used to return a [[Promise]] with the access token for requests.
+     * An asynchronous callback used to return a `Promise` with the access token for requests.
      *
      * @example
      * ```typescript
@@ -34,8 +34,8 @@ export interface OlpClientSettingsParams {
      *  const userAuth = new UserAuth(/** parameters **);
      *  const getToken = userAuth.getToken();
      * ```
-     * 
-     * @return The [[Promise]] with the access token for requests. 
+     *
+     * @return The `Promise` with the access token for requests.
      */
     getToken: () => Promise<string>;
 
@@ -55,7 +55,7 @@ export interface OlpClientSettingsParams {
      * A download manager for sending requests.
      * If not set, the default [[DataStoreDownloadManager]] class is used.
      *
-     * @see interface [[DownloadManager]]
+     * @see [[DownloadManager]]
      */
     dm?: DownloadManager;
 }
@@ -71,7 +71,7 @@ export class OlpClientSettings {
 
     /**
      * Creates the [[OlpClientSettings]] instance.
-     * 
+     *
      * @param params Parameters used to construct the [[OlpClientSettings]] class.
      * @return The [[OlpClientSettings]] instance.
      */
@@ -84,7 +84,7 @@ export class OlpClientSettings {
 
     /**
      * A download manager for requests.
-     * 
+     *
      * @return The [[DownloadManager]] instance.
      */
     get downloadManager(): DownloadManager {
@@ -92,9 +92,9 @@ export class OlpClientSettings {
     }
 
     /**
-     * An asynchronous callback used to return a [[Promise]] with the access token for requests.
-     * 
-     * @return A function that returns the [[Promise]] with the access token string for requests.
+     * An asynchronous callback used to return a `Promise` with the access token for requests.
+     *
+     * @return A function that returns the `Promise` with the access token string for requests.
      */
     get token(): () => Promise<string> {
         return this.getValidToken;
@@ -103,7 +103,7 @@ export class OlpClientSettings {
     /**
      * An environment that should be used to get the URL of the API Lookup Service.
      * You can also specify a URL of your custom service.
-     * 
+     *
      * @return The string with the environment name or the URL of your local environment.
      */
     get environment(): string {
@@ -112,7 +112,7 @@ export class OlpClientSettings {
 
     /**
      * Caches using a key-value pair.
-     * 
+     *
      * @returns The [[KeyValueCache]] instance.
      */
     get cache(): KeyValueCache {

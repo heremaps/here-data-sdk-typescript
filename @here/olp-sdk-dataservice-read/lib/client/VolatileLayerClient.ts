@@ -17,7 +17,11 @@
  * License-Filename: LICENSE
  */
 
-import { MetadataApi, QueryApi, VolatileBlobApi } from "@here/olp-sdk-dataservice-api";
+import {
+    MetadataApi,
+    QueryApi,
+    VolatileBlobApi
+} from "@here/olp-sdk-dataservice-api";
 import {
     ApiName,
     DataRequest,
@@ -37,12 +41,12 @@ import {
  */
 export class VolatileLayerClient {
     private readonly apiVersion: string = "v1";
-    // The HERE Resource Name (HRN) of the layer.
+    /** The HERE Resource Name (HRN) of the layer. */
     readonly hrn: string;
 
     /**
      * Creates the [[VolatileLayerClient]] instance.
-     * 
+     *
      * @param catalogHrn The HERE Resource Name of the catalog from which you want to get partitions metadata and data.
      * @param layerId The ID of the layer.
      * @param settings The [[OlpClientSettings]] instance.
@@ -52,7 +56,7 @@ export class VolatileLayerClient {
         catalogHrn: HRN,
         // The ID of the layer.
         readonly layerId: string,
-        // The [[OlpClientSettings]] instance. 
+        // The [[OlpClientSettings]] instance.
         readonly settings: OlpClientSettings
     ) {
         this.hrn = catalogHrn.toString();
@@ -60,13 +64,13 @@ export class VolatileLayerClient {
 
     /**
      * Fetches partition data using one of the following methods: ID, quadkey, or data handle.
-     * 
+     *
      * @param dataRequest The [[DataRequest]] instance of the configured request parameters.
      * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
      * and, if required, abort it using the `AbortController` object.
-     * 
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal 
-     * 
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
      * @return The data from the requested partition.
      */
     async getData(
@@ -127,13 +131,13 @@ export class VolatileLayerClient {
 
     /**
      * Fetches partitions metadata from the Query API using a quadkey.
-     * 
+     *
      * @param quadKeyPartitionsRequest The [[QuadKeyPartitionsRequest]] instance.
      * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
      * and, if required, abort it using the `AbortController` object.
-     * 
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
-     * 
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
      * @returns The quadtree index for the requested partitions.
      */
     async getPartitions(
@@ -143,13 +147,13 @@ export class VolatileLayerClient {
 
     /**
      * Fetches all partitions metadata from a layer using the partition ID from the [[PartitionsRequest]] instance.
-     * 
+     *
      * @param partitionsRequest The [[PartitionsRequest]] instance.
      * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
      * and, if required, abort it using the `AbortController` object.
-     * 
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal 
-     * 
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
      * @returns A list of metadata for each of the partitions from the requested layer.
      * If the partition IDs are not set, you get metadata from all of the partitions of the requested layer
      * from the OLP Metadata Service.

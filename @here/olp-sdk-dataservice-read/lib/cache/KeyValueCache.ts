@@ -24,8 +24,8 @@ export class KeyValueCache {
     private readonly cache: Map<string, string>;
     /**
      * Cerates the `KeyValueCache` instance.
-     * 
-     * @return the `KeyValueCache` instance.
+     *
+     * @return The `KeyValueCache` instance.
      */
     constructor() {
         this.cache = new Map();
@@ -44,7 +44,7 @@ export class KeyValueCache {
 
     /**
      * Gets a key-value pair from the cache.
-     * 
+     *
      * @param key The key for the requested value.
      * @return The value.
      */
@@ -54,7 +54,7 @@ export class KeyValueCache {
 
     /**
      * Removes a key-value pair from the cache.
-     * 
+     *
      * @param key The key for the value that you want to remove from the cache.
      * @return True if the operation is successful, false otherwise.
      */

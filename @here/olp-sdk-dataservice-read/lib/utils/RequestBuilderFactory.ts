@@ -35,17 +35,17 @@ import {
 export class RequestFactory {
     /**
      * Factory method for building [[DataStoreRequestBuilder]].
-     * 
+     *
      * @param serviceName The name of the service in the API.
      * @param serviceVersion The version of the service.
      * @param settings The [[OlpClientSettings]] instance.
      * @param hrn A HERE Resource Name ([[HRN]]) of the catalog.
      * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
      * and, if required, abort it using the `AbortController` object.
-     * 
-     * @see https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal
      *
-     * @returns The [[Promise]] with constructed [[DataStoreRequestBuilder]].
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @returns The Promise with constructed [[DataStoreRequestBuilder]].
      */
     public static async create(
         serviceName: ApiName,
@@ -89,7 +89,7 @@ export class RequestFactory {
      * @param settings The [[OlpClientSettings]] instance.
      * @param hrn The [[HRN]] of the catalog.
      *
-     * @return The [[Promise]] with the base URL of the service.
+     * @return The Promise with the base URL of the service.
      */
     public static async getBaseUrl(
         serviceName: ApiName,

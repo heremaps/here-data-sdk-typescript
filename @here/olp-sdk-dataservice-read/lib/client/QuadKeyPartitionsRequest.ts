@@ -21,6 +21,7 @@ import { QuadKey, QuadTreeIndexDepth, validateBillingTag } from "..";
 
 /**
  * Prepares information for calls to get quadtree metadata from the OLP Query Service.
+ *
  * This class works only with versioned and volatile layers where the partitioning scheme is HERE Tile.
  */
 export class QuadKeyPartitionsRequest {
@@ -32,7 +33,7 @@ export class QuadKeyPartitionsRequest {
     /**
      * The version of the catalog against which you want to run the query.
      * It must be a valid catalog version.
-     * 
+     *
      * @param version Specify the catalog version or, if you want to use the latest catalog version, set to undefined.
      * @returns The updated [[QuadKeyPartitionsRequest]] instance that you can use to chain methods.
      */
@@ -43,7 +44,7 @@ export class QuadKeyPartitionsRequest {
 
     /**
      * A geometric area represented as a HERE tile.
-     * 
+     *
      * @param quadKey Addresses a tile in the quadtree.
      * @returns The updated [[QuadKeyPartitionsRequest]] instance that you can use to chain methods.
      */
@@ -58,6 +59,7 @@ export class QuadKeyPartitionsRequest {
      *
      * @param depth The recursion depth of the response.
      * @returns The updated [[QuadKeyPartitionsRequest]] instance that you can use to chain methods.
+     *
      * If set to 0, the response includes only data from the quadkey specified in the request.
      * In this way, the depth describes the maximum length of the subQuadKeys in the response.
      */
@@ -68,8 +70,9 @@ export class QuadKeyPartitionsRequest {
 
     /**
      * An optional free-form tag that is used for grouping billing records together.
+     *
      * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
-     * 
+     *
      * @param tag The `BillingTag` string.
      * @return The updated [[QuadKeyPartitionsRequest]] instance that you can use to chain methods.
      */
@@ -80,7 +83,7 @@ export class QuadKeyPartitionsRequest {
 
     /**
      * The configured catalog version for the request.
-     * 
+     *
      * @return The catalog version number.
      */
     public getVersion(): number | undefined {
@@ -89,7 +92,7 @@ export class QuadKeyPartitionsRequest {
 
     /**
      * Gets the configured [[QuadKey]] object for the request.
-     * 
+     *
      * @return The the configured [[QuadKey]] object.
      */
     public getQuadKey(): QuadKey | undefined {
@@ -98,7 +101,7 @@ export class QuadKeyPartitionsRequest {
 
     /**
      * Gets the configured depth for the request.
-     * 
+     *
      * @return The number of the configured depth.
      */
     public getDepth(): QuadTreeIndexDepth {
@@ -107,7 +110,7 @@ export class QuadKeyPartitionsRequest {
 
     /**
      * Gets a billing tag to group billing records together.
-     * 
+     *
      * @return The `BillingTag` string.
      */
     public getBillingTag(): string | undefined {
