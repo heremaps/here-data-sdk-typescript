@@ -1,3 +1,21 @@
+## v1.1.0 (11/12/2019)
+
+**Common**
+
+* Updated the development dependencies.
+
+**olp-sdk-dataservice-read**
+
+* Added the `getPartitionsById` method to `QueryClient`. Now, you can fetch metadata from specific partitions using their IDs.
+* Updated the `getPartitions` method in `VersionedLayerClient` and `VolatileLayerClient`. Now, you can fetch metadata from specific partitions of a volatile or versioned layer using partitions IDs.
+* Updated documentation for the public API.
+
+**olp-sdk-authentication**
+
+* The scope support was added to `UserAuth` through `UserAuthConfig`. You can now access the project bound resources using the `UserAuthConfig` scope field.
+* Updated documentation for the public API.
+
+
 ## v1.0.0 (02/12/2019)
 
 **olp-sdk-dataservice-read**
