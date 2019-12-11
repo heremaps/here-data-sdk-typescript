@@ -29,11 +29,19 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
+
+class MockCatalogVersionRequest {
+    public getBillingTag(): string | undefined {
+        return "testBillingTag";
+    }
+}
+
 describe("CatalogClient", () => {
     let sandbox: sinon.SinonSandbox;
     let getVersionStub: sinon.SinonStub;
     let getCatalogStub: sinon.SinonStub;
     let getListVersionsStub: sinon.SinonStub;
+    let getEarliestVersionsStub: sinon.SinonStub;
     let catalogClient: dataServiceRead.CatalogClient;
     let getBaseUrlRequestStub: sinon.SinonStub;
     const fakeURL = "http://fake-base.url";
@@ -56,6 +64,7 @@ describe("CatalogClient", () => {
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
         getCatalogStub = sandbox.stub(ConfigApi, "getCatalog");
         getListVersionsStub = sandbox.stub(MetadataApi, "listVersions");
+        getEarliestVersionsStub = sandbox.stub(MetadataApi, "minimumVersion");
         getBaseUrlRequestStub = sandbox.stub(
             dataServiceRead.RequestFactory,
             "getBaseUrl"
@@ -132,6 +141,56 @@ describe("CatalogClient", () => {
         assert.isTrue(response.versions.length > 0);
     });
 
+    it("Should method getEarliestVersion provide the minimun version availiable for the given catalogRequest", async () => {
+        const mockedEarliestVersion: MetadataApi.VersionResponse = {
+            version: 5
+        };
+
+        getEarliestVersionsStub.callsFake(
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve(mockedEarliestVersion);
+            }
+        );
+
+        const catalogRequest = new MockCatalogVersionRequest();
+        const response = await catalogClient.getEarliestVersion(
+            (catalogRequest as unknown) as dataServiceRead.CatalogVersionRequest
+        );
+
+        assert.isDefined(response);
+        expect(response).to.be.equal(mockedEarliestVersion);
+    });
+
+    it("Should method getEarliestVersion return error getting earliest catalog version", async () => {
+        const mockedErrorResponse = "TestError";
+
+        getEarliestVersionsStub.callsFake(
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
+                return Promise.reject(mockedErrorResponse);
+            }
+        );
+
+        const catalogRequest = new dataServiceRead.CatalogVersionRequest();
+
+        const response = await catalogClient
+            .getEarliestVersion(
+                (catalogRequest as unknown) as dataServiceRead.CatalogVersionRequest
+            )
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(
+                    "Error getting earliest catalog version: TestError",
+                    error
+                );
+            });
+    });
+
     it("Should method getVersions provide data with startVersion parameters", async () => {
         const mockedVersions: MetadataApi.VersionInfos = {
             versions: [
@@ -155,13 +214,17 @@ describe("CatalogClient", () => {
             }
         );
         getVersionStub.callsFake(
-            (builder: any, params: any): Promise<MetadataApi.VersionResponse> => {
-                return Promise.resolve({version: 42});
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve({ version: 42 });
             }
         );
 
-        const catalogRequest = new dataServiceRead.CatalogVersionRequest()
-            .withStartVersion(13);
+        const catalogRequest = new dataServiceRead.CatalogVersionRequest().withStartVersion(
+            13
+        );
 
         const response = await catalogClient.getVersions(
             (catalogRequest as unknown) as dataServiceRead.CatalogVersionRequest
