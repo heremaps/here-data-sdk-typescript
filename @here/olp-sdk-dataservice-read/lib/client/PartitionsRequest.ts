@@ -29,7 +29,7 @@ export class PartitionsRequest {
 
     /**
      * Gets a layer version for the request.
-     * 
+     *
      * @return The layer version number.
      */
     public getVersion(): number | undefined {
@@ -50,8 +50,9 @@ export class PartitionsRequest {
 
     /**
      * An optional free-form tag that is used for grouping billing records together.
+     *
      * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
-     * 
+     *
      * @param tag The `BillingTag` string.
      * @return The updated [[PartitionsRequest]] instance that you can use to chain methods.
      */
@@ -62,7 +63,7 @@ export class PartitionsRequest {
 
     /**
      * Gets a billing tag to group billing records together.
-     * 
+     *
      * @return The `BillingTag` string.
      */
     public getBillingTag(): string | undefined {
@@ -73,6 +74,7 @@ export class PartitionsRequest {
      * A setter for the provided partition IDs.
      *
      * @param ids The ID of partitions from which you want to get metadata.
+     *
      * The required quantity is between 1 and 100.
      * If partition IDs are not provided, all partitions are retrieved.
      * If the quantity of partition IDs is less than 1 (empty array) or more than 100, an error is thrown.
@@ -83,6 +85,11 @@ export class PartitionsRequest {
         return this;
     }
 
+    /**
+     * Gets partition IDs for the request.
+     *
+     * @return The `partitionIds` string.
+     */
     public getPartitionIds(): string[] | undefined {
         return this.partitionIds;
     }

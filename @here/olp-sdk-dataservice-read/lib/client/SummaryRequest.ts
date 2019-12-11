@@ -29,7 +29,7 @@ export class SummaryRequest {
 
     /**
      * Gets the configured [[HRN]] string of the catalog HERE Resource Name(HRN) for the request.
-     * 
+     *
      * @return The configured [[HRN]] string.
      */
     public getCatalogHrn(): string | undefined {
@@ -38,7 +38,7 @@ export class SummaryRequest {
 
     /**
      * Gets a layer ID for the request.
-     * 
+     *
      * @return The layer ID string.
      */
     public getLayerId(): string | undefined {
@@ -47,7 +47,7 @@ export class SummaryRequest {
 
     /**
      * A setter for the provided catalog HERE Resource Name (HRN).
-     * 
+     *
      * @param hrn The catalog HRN.
      * @returns The [[SummaryRequest]] instance that you can use to chain methods.
      */
@@ -58,7 +58,7 @@ export class SummaryRequest {
 
     /**
      * A setter for the provided `layerId` string.
-     * 
+     *
      * @param layerId The ID of the layer.
      * @returns The [[SummaryRequest]] instance that you can use to chain methods.
      */
@@ -69,8 +69,9 @@ export class SummaryRequest {
 
     /**
      * An optional free-form tag that is used for grouping billing records together.
+     *
      * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
-     * 
+     *
      * @param tag The `BillingTag` string.
      * @return The updated [[SummaryRequest]] instance that you can use to chain methods.
      */
@@ -81,7 +82,7 @@ export class SummaryRequest {
 
     /**
      * Gets a billing tag to group billing records together.
-     * 
+     *
      * @return The `BillingTag` string.
      */
     public getBillingTag(): string | undefined {

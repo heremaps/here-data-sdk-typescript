@@ -27,9 +27,9 @@ export class SchemaRequest {
     private variant?: ArtifactApi.Variant;
     private billingTag?: string;
 
-    /** 
+    /**
      * Gets the `Variant` object of the schema for the request.
-     * 
+     *
      * @return The `Variant` object of the schema.
      */
     public getVariant(): ArtifactApi.Variant | undefined {
@@ -50,8 +50,9 @@ export class SchemaRequest {
 
     /**
      * An optional free-form tag that is used for grouping billing records together.
+     *
      * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
-     * 
+     *
      * @param tag The `BillingTag` string.
      * @return The updated [[SchemaRequest]] instance that you can use to chain methods.
      */
@@ -62,7 +63,7 @@ export class SchemaRequest {
 
     /**
      * Gets a billing tag to group billing records together.
-     * 
+     *
      * @return The `BillingTag` string.
      */
     public getBillingTag(): string | undefined {

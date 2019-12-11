@@ -23,11 +23,11 @@ import { HRN, validateBillingTag } from "..";
  * A map type that is supported by the OLP Statistics Service.
  */
 export enum CoverageDataType {
-    // Represents the availability of data in partitions.
+    /** Represents the availability of data in partitions. */
     BITMAP = "tilemap",
-    // A heatmap that represents a partition size.
+    /** A heatmap that represents a partition size. */
     SIZEMAP = "heatmap/size",
-    // A heatmap that represents partition update time.
+    /** A heatmap that represents partition update time. */
     TIMEMAP = "heatmap/age"
 }
 
@@ -43,7 +43,7 @@ export class StatisticsRequest {
 
     /**
      * Gets the configured [[HRN]] string of the catalog HERE Resource Name(HRN) for the request.
-     * 
+     *
      * @return The configured [[HRN]] string.
      */
     public getCatalogHrn(): string | undefined {
@@ -52,7 +52,7 @@ export class StatisticsRequest {
 
     /**
      * Gets a layer ID for the request.
-     * 
+     *
      * @return The layer ID string.
      */
     public getLayerId(): string | undefined {
@@ -61,7 +61,7 @@ export class StatisticsRequest {
 
     /**
      * Gets a map type that is supported by the OLP Statistics Service.
-     * 
+     *
      * @return The requested map type.
      */
     public getTypemap(): CoverageDataType | undefined {
@@ -70,7 +70,7 @@ export class StatisticsRequest {
 
     /**
      * Gets a tile level for the request.
-     * 
+     *
      * @return The requested tile level string.
      */
     public getDataLevel(): string | undefined {
@@ -79,7 +79,7 @@ export class StatisticsRequest {
 
     /**
      * A setter for the provided catalog HERE Resource Name (HRN).
-     * 
+     *
      * @param hrn The catalog HRN.
      * @returns The updated [[StatisticsRequest]] instance that you can use to chain methods.
      */
@@ -90,7 +90,7 @@ export class StatisticsRequest {
 
     /**
      * A setter for the requested `layerId` string.
-     * 
+     *
      * @param layerId The ID of the layer.
      * @returns The updated [[StatisticsRequest]] instance that you can use to chain methods.
      */
@@ -101,7 +101,7 @@ export class StatisticsRequest {
 
     /**
      * A setter for the provided `coverageDataType` string.
-     * 
+     *
      * @param coverageDataType Points at one of the following Statistic API endpoints:
      * * BITMAP &ndash; fetches a bitmap that represents the availability of data in partitions.
      * * SIZEMAP &ndash; fetches a heatmap that represents a partition size.
@@ -115,7 +115,7 @@ export class StatisticsRequest {
 
     /**
      * A setter for the provided `dataLevel` string.
-     * 
+     *
      * @param dataLevel Specify the tile level about which you want to get statistical data.
      * @returns The updated [[StatisticsRequest]] instance that you can use to chain methods.
      */
@@ -126,8 +126,9 @@ export class StatisticsRequest {
 
     /**
      * An optional free-form tag that is used for grouping billing records together.
+     *
      * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
-     * 
+     *
      * @param tag The `BillingTag` string.
      * @return The updated [[StatisticsRequest]] instance that you can use to chain methods.
      */
@@ -138,7 +139,7 @@ export class StatisticsRequest {
 
     /**
      * Gets a billing tag to group billing records together.
-     * 
+     *
      * @return The `BillingTag` string.
      */
     public getBillingTag(): string | undefined {

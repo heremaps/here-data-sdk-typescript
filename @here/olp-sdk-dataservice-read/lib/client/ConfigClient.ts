@@ -36,9 +36,10 @@ export class ConfigClient {
 
     /**
      * Asynchronously retrieves a list of catalogs to which you have access.
-     * 
+     *
      * @param request The [[CatalogsRequest]] instance.
      * @return The list of catalogs to which you have access.
+     *
      * If the schema is set, you get the catalogs with layers filtered by the specified layer schema HERE Resource Name (HRN).
      * If the schema is not set, the filter returns all of the catalogs to which you have access.
      */
