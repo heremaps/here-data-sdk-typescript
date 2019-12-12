@@ -36,3 +36,4 @@ export * from "./QuadTreeIndexRequest";
 export * from "./QuadKeyPartitionsRequest";
 export * from "./SchemaRequest";
 export * from "./CatalogVersionRequest";
+export * from "./LayerVersionsRequest";
