@@ -65,6 +65,13 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Contains arguments needed to get an access token.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -83,6 +90,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_authentication_lib_requesttoken_common_.oauthargs.html#consumerkey" class="tsd-kind-icon">consumer<wbr>Key</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_authentication_lib_requesttoken_common_.oauthargs.html#expiresin" class="tsd-kind-icon">expires<wbr>In</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_authentication_lib_requesttoken_common_.oauthargs.html#nonce" class="tsd-kind-icon">nonce</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_authentication_lib_requesttoken_common_.oauthargs.html#scope" class="tsd-kind-icon">scope</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_authentication_lib_requesttoken_common_.oauthargs.html#secretkey" class="tsd-kind-icon">secret<wbr>Key</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_authentication_lib_requesttoken_common_.oauthargs.html#timestamp" class="tsd-kind-icon">timestamp</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_authentication_lib_requesttoken_common_.oauthargs.html#url" class="tsd-kind-icon">url</a></li>
@@ -99,9 +107,14 @@
 					<div class="tsd-signature tsd-kind-icon">consumer<wbr>Key<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-authentication/lib/requestToken_common.ts#L37">olp-sdk-authentication/lib/requestToken_common.ts:37</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-authentication/lib/requestToken_common.ts#L49">olp-sdk-authentication/lib/requestToken_common.ts:49</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Your consumer key.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="expiresin" class="tsd-anchor"></a>
@@ -109,9 +122,14 @@
 					<div class="tsd-signature tsd-kind-icon">expires<wbr>In<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-authentication/lib/requestToken_common.ts#L41">olp-sdk-authentication/lib/requestToken_common.ts:41</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-authentication/lib/requestToken_common.ts#L57">olp-sdk-authentication/lib/requestToken_common.ts:57</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The expiration time (in milliseconds).</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="nonce" class="tsd-anchor"></a>
@@ -119,9 +137,29 @@
 					<div class="tsd-signature tsd-kind-icon">nonce<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-authentication/lib/requestToken_common.ts#L39">olp-sdk-authentication/lib/requestToken_common.ts:39</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-authentication/lib/requestToken_common.ts#L53">olp-sdk-authentication/lib/requestToken_common.ts:53</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A unique token that your application generates for each unique request. If not provided, the default token is used.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="scope" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> scope</h3>
+					<div class="tsd-signature tsd-kind-icon">scope<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-authentication/lib/requestToken_common.ts#L59">olp-sdk-authentication/lib/requestToken_common.ts:59</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The project scope.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="secretkey" class="tsd-anchor"></a>
@@ -129,9 +167,14 @@
 					<div class="tsd-signature tsd-kind-icon">secret<wbr>Key<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-authentication/lib/requestToken_common.ts#L38">olp-sdk-authentication/lib/requestToken_common.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-authentication/lib/requestToken_common.ts#L51">olp-sdk-authentication/lib/requestToken_common.ts:51</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Your secret key.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="timestamp" class="tsd-anchor"></a>
@@ -139,9 +182,14 @@
 					<div class="tsd-signature tsd-kind-icon">timestamp<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-authentication/lib/requestToken_common.ts#L40">olp-sdk-authentication/lib/requestToken_common.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-authentication/lib/requestToken_common.ts#L55">olp-sdk-authentication/lib/requestToken_common.ts:55</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The time when you authenticated.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="url" class="tsd-anchor"></a>
@@ -149,9 +197,14 @@
 					<div class="tsd-signature tsd-kind-icon">url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-authentication/lib/requestToken_common.ts#L36">olp-sdk-authentication/lib/requestToken_common.ts:36</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-authentication/lib/requestToken_common.ts#L47">olp-sdk-authentication/lib/requestToken_common.ts:47</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The environment in which you work.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -181,6 +234,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="_olp_sdk_authentication_lib_requesttoken_common_.oauthargs.html#nonce" class="tsd-kind-icon">nonce</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_olp_sdk_authentication_lib_requesttoken_common_.oauthargs.html#scope" class="tsd-kind-icon">scope</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="_olp_sdk_authentication_lib_requesttoken_common_.oauthargs.html#secretkey" class="tsd-kind-icon">secret<wbr>Key</a>

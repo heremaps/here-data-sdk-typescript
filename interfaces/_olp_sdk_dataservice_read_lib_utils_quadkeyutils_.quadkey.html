@@ -68,17 +68,20 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>The <code>QuadKey</code> instances are used to address a tile in a quad tree.</p>
+						<p>Addresses a tile in a quadtree.</p>
 					</div>
-					<p>A quad key is defined by a row, a column, and a level. The tree has a root at level 0, with one
-						single tile. On every level, each tile is divided into four children (therefore the name
-					quad tree).</p>
-					<p>Within each <a href="_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html#level">level</a>, any particular tile is addressed with <a href="_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html#row">row</a> and <a href="_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html#column">column</a>. The number
-						of rows and columns in each level is 2 to the power of the level. This means: On level 0, only
-						one tile exists, columns and rows are both 1. On level 1, 4 tiles exist, in 2 rows and 2 columns.
-					On level 2 we have 16 tiles, in 4 rows and 4 columns. And so on.</p>
-					<p>Note - as JavaScript&#39;s number type can hold 53 bits in its mantissa, only levels up to 26 can be
-					represented in the number representation returned by <a href="">[mortonCode]</a>.</p>
+					<p>A quadkey is defined by a row, a column, and a level. The tree has a root at level 0 that contains one
+					single tile. On every level, each tile is divided into four children (hence, the name &quot;quadtree&quot;).</p>
+					<p>Within each <a href="_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html#level">level</a>, a tile is addressed with a <a href="_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html#row">row</a> and <a href="_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html#column">column</a>. The number
+						of rows and columns in each level is 2 to the power of the level. This means that on level 0, only
+						one tile exists, so there is 1 column and 1 row. On level 1, 4 tiles exist in 2 rows and 2 columns.
+					On level 2, we have 16 tiles in 4 rows and 4 columns. And so on.</p>
+					<dl class="tsd-comment-tags">
+						<dt>note</dt>
+						<dd><p>As the JavaScript number type can hold 53 bits in its mantissa, only levels up to 26 can be
+							represented in the number representation returned by [[<code>mortonCodeFromQuadKey</code>]].</p>
+						</dd>
+					</dl>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
@@ -112,9 +115,14 @@
 					<div class="tsd-signature tsd-kind-icon">column<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L37">olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:37</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L38">olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:38</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The column that contains the tile.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="level" class="tsd-anchor"></a>
@@ -122,9 +130,14 @@
 					<div class="tsd-signature tsd-kind-icon">level<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L38">olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L40">olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:40</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The level that contains the tile.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="row" class="tsd-anchor"></a>
@@ -132,9 +145,14 @@
 					<div class="tsd-signature tsd-kind-icon">row<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L36">olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:36</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L36">olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:36</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The row that contains the tile.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>

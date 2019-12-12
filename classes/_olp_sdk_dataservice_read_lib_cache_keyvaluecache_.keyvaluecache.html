@@ -68,7 +68,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Class for cache expecting a key,value pair.</p>
+						<p>An in-memory caching instance. All the repository instances use it for reading or caching information.</p>
 					</div>
 				</div>
 			</section>
@@ -113,10 +113,16 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/cache/KeyValueCache.ts#L24">olp-sdk-dataservice-read/lib/cache/KeyValueCache.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/cache/KeyValueCache.ts#L24">olp-sdk-dataservice-read/lib/cache/KeyValueCache.ts:24</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Cerates the <code>KeyValueCache</code> instance.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_cache_keyvaluecache_.keyvaluecache.html" class="tsd-signature-type">KeyValueCache</a></h4>
+							<p>The <code>KeyValueCache</code> instance.</p>
 						</li>
 					</ul>
 				</section>
@@ -133,12 +139,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/cache/KeyValueCache.ts#L45">olp-sdk-dataservice-read/lib/cache/KeyValueCache.ts:45</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/cache/KeyValueCache.ts#L51">olp-sdk-dataservice-read/lib/cache/KeyValueCache.ts:51</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Get key,value pair from the cache</p>
+									<p>Gets a key-value pair from the cache.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -146,7 +152,7 @@
 								<li>
 									<h5>key: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Key to look for</p>
+										<p>The key for the requested value.</p>
 									</div>
 								</li>
 							</ul>
@@ -154,6 +160,7 @@
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">undefined</span>
 							</h4>
+							<p>The value.</p>
 						</li>
 					</ul>
 				</section>
@@ -167,12 +174,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/cache/KeyValueCache.ts#L36">olp-sdk-dataservice-read/lib/cache/KeyValueCache.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/cache/KeyValueCache.ts#L41">olp-sdk-dataservice-read/lib/cache/KeyValueCache.ts:41</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Store key,value pair into the cache</p>
+									<p>Stores a key-value pair in the cache.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -180,18 +187,18 @@
 								<li>
 									<h5>key: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Key for this value</p>
+										<p>The key for this value.</p>
 									</div>
 								</li>
 								<li>
 									<h5>value: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The value of string type</p>
+										<p>The value of the string type.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-							<p>Returns true if the operation is successfull, false otherwise.</p>
+							<p>True if the operation is successful, false otherwise.</p>
 						</li>
 					</ul>
 				</section>
@@ -205,12 +212,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/cache/KeyValueCache.ts#L56">olp-sdk-dataservice-read/lib/cache/KeyValueCache.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/cache/KeyValueCache.ts#L61">olp-sdk-dataservice-read/lib/cache/KeyValueCache.ts:61</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Remove a key,value pair from the cache</p>
+									<p>Removes a key-value pair from the cache.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -218,12 +225,12 @@
 								<li>
 									<h5>key: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Key for the value to remove from cache</p>
+										<p>The key for the value that you want to remove from the cache.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-							<p>Returns true if the operation is successfull, false otherwise.</p>
+							<p>True if the operation is successful, false otherwise.</p>
 						</li>
 					</ul>
 				</section>

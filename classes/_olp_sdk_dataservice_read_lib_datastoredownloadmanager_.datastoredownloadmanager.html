@@ -68,11 +68,14 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p><code>DataStoreDownloadManager</code> for downloading URLs.</p>
+						<p>An implementation of the <a href="../interfaces/_olp_sdk_dataservice_read_lib_downloadmanager_.downloadmanager.html">DownloadManager</a> interface requested by the <code>datastore-api</code> module
+							for fetching data from the backend or sending requests to the backend.
+							This implementation allows you to fetch blob or JSON data with aborting or re-sending (on timeouts) mechanisms
+						that limit maximum parallel requests.</p>
 					</div>
 					<p>Features:</p>
 					<ul>
-						<li>Limits the amount of parallel downloads, useful when requesting a large amount of URLs that
+						<li>Limits the number of parallel downloads. It is useful when requesting a large number of URLs that
 						would otherwise stall the browser.</li>
 						<li>Retries the downloads with an increasing timeout on HTTP 503 replies.</li>
 					</ul>
@@ -132,12 +135,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts#L123">olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts:123</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts#L124">olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts:124</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Constructs a new <a href="_olp_sdk_dataservice_read_lib_datastoredownloadmanager_.datastoredownloadmanager.html">DataStoreDownloadManager</a>.</p>
+									<p>Constructs the <a href="_olp_sdk_dataservice_read_lib_datastoredownloadmanager_.datastoredownloadmanager.html">DataStoreDownloadManager</a> instance.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -146,7 +149,7 @@
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> fetchFunction: <span class="tsd-signature-type">fetch</span><span class="tsd-signature-symbol"> =&nbsp;fetch</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
-											<p>The default fetch function to use.</p>
+											<p>The default fetch function.</p>
 										</div>
 									</div>
 								</li>
@@ -154,12 +157,13 @@
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> maxRetries: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;5</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
-											<p>The maximum amount to try to re-fetch a resource.</p>
+											<p>The maximum amount of tries to re-fetch a resource.</p>
 										</div>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_datastoredownloadmanager_.datastoredownloadmanager.html" class="tsd-signature-type">DataStoreDownloadManager</a></h4>
+							<p>The <a href="_olp_sdk_dataservice_read_lib_datastoredownloadmanager_.datastoredownloadmanager.html">DataStoreDownloadManager</a> instance.</p>
 						</li>
 					</ul>
 				</section>
@@ -172,12 +176,12 @@
 					<div class="tsd-signature tsd-kind-icon">fetch<wbr>Function<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">fetch</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts#L132">olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts:132</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts#L134">olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts:134</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The default fetch function to use.</p>
+							<p>The default fetch function.</p>
 						</div>
 					</div>
 				</section>
@@ -187,12 +191,12 @@
 					<div class="tsd-signature tsd-kind-icon">max<wbr>Retries<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts#L133">olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts:133</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts#L135">olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts:135</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The maximum amount to try to re-fetch a resource.</p>
+							<p>The maximum amount of tries to re-fetch a resource.</p>
 						</div>
 					</div>
 				</section>
@@ -202,12 +206,12 @@
 					<div class="tsd-signature tsd-kind-icon">max<wbr>Parallel<wbr>Downloads<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">16</span><span class="tsd-signature-symbol"> =&nbsp;16</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts#L71">olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts:71</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts#L72">olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts:72</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The amount of maximum parallel downloads to allow.</p>
+							<p>The number of maximum parallel downloads.</p>
 						</div>
 					</div>
 				</section>
@@ -217,13 +221,13 @@
 					<div class="tsd-signature tsd-kind-icon">retry<wbr>Timeout<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">500</span><span class="tsd-signature-symbol"> =&nbsp;500</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts#L66">olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts:66</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts#L69">olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts:69</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The timeout in milliseconds to wait between retries. This timeout is multiplied with the
-								number of retries. First retry waits for 0 ms, second retry for 500 ms, third for 1000 ms and
+							<p>The timeout (in milliseconds) to wait between retries. This timeout is multiplied with the
+								number of retries. First retry waits for 0 ms, second retry for 500 ms, third for 1000 ms, and
 							so on.</p>
 						</div>
 					</div>
@@ -242,31 +246,32 @@
 							<aside class="tsd-sources">
 								<p>Implementation of <a href="../interfaces/_olp_sdk_dataservice_read_lib_downloadmanager_.downloadmanager.html">DownloadManager</a>.<a href="../interfaces/_olp_sdk_dataservice_read_lib_downloadmanager_.downloadmanager.html#download">download</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts#L144">olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts:144</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts#L147">olp-sdk-dataservice-read/lib/DataStoreDownloadManager.ts:147</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Downloads a URL and returns the response.</p>
+									<p>Downloads a URL and returns the <code>Response</code>.</p>
 								</div>
-								<p>Does not merge multiple requests to the same URL.</p>
+								<p>This method does not merge multiple requests to the same URL.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>url: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The URL to download.</p>
+										<p>The URL that you want to download.</p>
 									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> init: <span class="tsd-signature-type">RequestInit</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Optional extra parameters for the download.</p>
+										<p>Extra parameters for the download.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>The URL that is used to download data.</p>
 						</li>
 					</ul>
 				</section>

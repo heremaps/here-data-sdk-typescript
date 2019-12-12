@@ -68,8 +68,8 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Class for cache base urls to the API expecting a key,value pair.
-						Key format is: <hrn>::<service_name>::<serviceVersion>::api</p>
+						<p>Caches the base URLs of the API using a key-value pair.
+						The key format is <code>&lt;hrn&gt;::&lt;service_name&gt;::&lt;serviceVersion&gt;::api</code>.</p>
 					</div>
 				</div>
 			</section>
@@ -113,19 +113,35 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/cache/ApiCacheRepository.ts#L45">olp-sdk-dataservice-read/lib/cache/ApiCacheRepository.ts:45</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/cache/ApiCacheRepository.ts#L45">olp-sdk-dataservice-read/lib/cache/ApiCacheRepository.ts:45</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Generates the <a href="_olp_sdk_dataservice_read_lib_cache_apicacherepository_.apicacherepository.html">ApiCacheRepository</a> instance.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>cache: <a href="_olp_sdk_dataservice_read_lib_cache_keyvaluecache_.keyvaluecache.html" class="tsd-signature-type">KeyValueCache</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The <a href="_olp_sdk_dataservice_read_lib_cache_keyvaluecache_.keyvaluecache.html">KeyValueCache</a> instance.</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> hrn: <a href="_olp_sdk_dataservice_read_lib_hrn_.hrn.html" class="tsd-signature-type">HRN</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The HERE Resource Name (HRN) for which you want to use the <a href="_olp_sdk_dataservice_read_lib_cache_apicacherepository_.apicacherepository.html">ApiCacheRepository</a> instance.</p>
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_cache_apicacherepository_.apicacherepository.html" class="tsd-signature-type">ApiCacheRepository</a></h4>
+							<p>The <a href="_olp_sdk_dataservice_read_lib_cache_apicacherepository_.apicacherepository.html">ApiCacheRepository</a> instance.</p>
 						</li>
 					</ul>
 				</section>
@@ -142,28 +158,34 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/cache/ApiCacheRepository.ts#L73">olp-sdk-dataservice-read/lib/cache/ApiCacheRepository.ts:73</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/cache/ApiCacheRepository.ts#L82">olp-sdk-dataservice-read/lib/cache/ApiCacheRepository.ts:82</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Store key,value pair into the cache</p>
+									<p>Gets a base URL from the cache.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>service: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The name of the API service for which you want to get the base URL.</p>
+									</div>
 								</li>
 								<li>
 									<h5>serviceVersion: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The service version.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">undefined</span>
 							</h4>
-							<p>The base url of the service or undefined if not exists</p>
+							<p>The base URL of the service, or undefined if the base URL does not exist.</p>
 						</li>
 					</ul>
 				</section>
@@ -177,12 +199,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/cache/ApiCacheRepository.ts#L58">olp-sdk-dataservice-read/lib/cache/ApiCacheRepository.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/cache/ApiCacheRepository.ts#L66">olp-sdk-dataservice-read/lib/cache/ApiCacheRepository.ts:66</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Store key,value pair into the cache</p>
+									<p>Stores a key-value pair in the cache.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -190,24 +212,24 @@
 								<li>
 									<h5>service: <a href="../modules/_olp_sdk_dataservice_read_lib_cache_apicacherepository_.html#apiname" class="tsd-signature-type">ApiName</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The name of the service in the api</p>
+										<p>The name of the API service for which you need the key-value pair.</p>
 									</div>
 								</li>
 								<li>
 									<h5>serviceVersion: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The version of the service</p>
+										<p>The version of the service.</p>
 									</div>
 								</li>
 								<li>
 									<h5>serviceUrl: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The base url of the service</p>
+										<p>The base URL of the service.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-							<p>Returns true if the operation is successfull, false otherwise.</p>
+							<p>True if the operation is successful, false otherwise.</p>
 						</li>
 					</ul>
 				</section>

@@ -68,9 +68,9 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>The <a href="_olp_sdk_dataservice_read_lib_client_queryclient_.queryclient.html">QueryClient</a> is client to the query service provides a way to get information (metadata)
+						<p>A client for the OLP Query Service that provides a way to get information (metadata)
 							about layers and partitions stored in a catalog.
-						This service exposes the metadata for single partitions that users can query one by one or by specifying a parent tile.</p>
+						This service exposes the metadata for a single partition that you can query one by one or using a parent tile.</p>
 					</div>
 				</div>
 			</section>
@@ -96,6 +96,7 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_queryclient_.queryclient.html#fetchquadtreeindex" class="tsd-kind-icon">fetch<wbr>Quad<wbr>Tree<wbr>Index</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_queryclient_.queryclient.html#getpartitionsbyid" class="tsd-kind-icon">get<wbr>Partitions<wbr>ById</a></li>
 							</ul>
 						</section>
 					</div>
@@ -113,12 +114,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/QueryClient.ts#L36">olp-sdk-dataservice-read/lib/client/QueryClient.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/QueryClient.ts#L37">olp-sdk-dataservice-read/lib/client/QueryClient.ts:37</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Constructs a new client for Query Service</p>
+									<p>Constructs a new client for the OLP Query Service.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -127,12 +128,13 @@
 									<h5>settings: <a href="_olp_sdk_dataservice_read_lib_client_olpclientsettings_.olpclientsettings.html" class="tsd-signature-type">OlpClientSettings</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
-											<p>The instance of <a href="_olp_sdk_dataservice_read_lib_client_olpclientsettings_.olpclientsettings.html">OlpClientSettings</a></p>
+											<p>The <a href="_olp_sdk_dataservice_read_lib_client_olpclientsettings_.olpclientsettings.html">OlpClientSettings</a> instance.</p>
 										</div>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_queryclient_.queryclient.html" class="tsd-signature-type">QueryClient</a></h4>
+							<p>The <a href="_olp_sdk_dataservice_read_lib_client_queryclient_.queryclient.html">QueryClient</a> instance.</p>
 						</li>
 					</ul>
 				</section>
@@ -149,12 +151,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/QueryClient.ts#L49">olp-sdk-dataservice-read/lib/client/QueryClient.ts:49</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/QueryClient.ts#L58">olp-sdk-dataservice-read/lib/client/QueryClient.ts:58</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Fetch the Quad Tree Index</p>
+									<p>Fetches the quadtree index.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -162,17 +164,72 @@
 								<li>
 									<h5>request: <a href="_olp_sdk_dataservice_read_lib_client_quadtreeindexrequest_.quadtreeindexrequest.html" class="tsd-signature-type">QuadTreeIndexRequest</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Configured instance of <a href="_olp_sdk_dataservice_read_lib_client_quadtreeindexrequest_.quadtreeindexrequest.html">QuadTreeIndexRequest</a></p>
+										<p>The configured <a href="_olp_sdk_dataservice_read_lib_client_quadtreeindexrequest_.quadtreeindexrequest.html">QuadTreeIndexRequest</a> instance.</p>
 									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The signal to aborting request</p>
+										<p>A signal object that allows you to communicate with a request (such as the <code>fetch</code> request)
+										and, if required, abort it using the <code>AbortController</code> object.</p>
+										<p>For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_dataservice_api_lib_query_api_.index.html" class="tsd-signature-type">Index</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>The quadtree index object.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getpartitionsbyid" class="tsd-anchor"></a>
+					<h3>get<wbr>Partitions<wbr>ById</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Partitions<wbr>ById<span class="tsd-signature-symbol">(</span>request<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html" class="tsd-signature-type">PartitionsRequest</a>, layerId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, hrn<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_hrn_.hrn.html" class="tsd-signature-type">HRN</a>, abortSignal<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">AbortSignal</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_dataservice_api_lib_query_api_.partitions.html" class="tsd-signature-type">Partitions</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/QueryClient.ts#L150">olp-sdk-dataservice-read/lib/client/QueryClient.ts:150</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets partitions using their IDs.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>request: <a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html" class="tsd-signature-type">PartitionsRequest</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The <code>PartitionsRequest</code> instance.</p>
+									</div>
+								</li>
+								<li>
+									<h5>layerId: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The ID of the layer from which you want to get partitions.</p>
+									</div>
+								</li>
+								<li>
+									<h5>hrn: <a href="_olp_sdk_dataservice_read_lib_hrn_.hrn.html" class="tsd-signature-type">HRN</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The HERE Resource Name (HRN) of the layer.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>A signal object that allows you to communicate with a request (such as the <code>fetch</code> request)
+										and, if required, abort it using the <code>AbortController</code> object.</p>
+										<p>For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_dataservice_api_lib_query_api_.partitions.html" class="tsd-signature-type">Partitions</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>The requested partitions.</p>
 						</li>
 					</ul>
 				</section>
@@ -201,6 +258,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_olp_sdk_dataservice_read_lib_client_queryclient_.queryclient.html#fetchquadtreeindex" class="tsd-kind-icon">fetch<wbr>Quad<wbr>Tree<wbr>Index</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_olp_sdk_dataservice_read_lib_client_queryclient_.queryclient.html#getpartitionsbyid" class="tsd-kind-icon">get<wbr>Partitions<wbr>ById</a>
 							</li>
 						</ul>
 					</li>

@@ -65,6 +65,13 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Gets schema metadata and data from the OLP Artifact Service.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -105,13 +112,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/ArtifactClient.ts#L29">olp-sdk-dataservice-read/lib/client/ArtifactClient.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/ArtifactClient.ts#L32">olp-sdk-dataservice-read/lib/client/ArtifactClient.ts:32</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Constructs a new client to work with data
-									about schemas in the Artifact API.</p>
+									<p>Constructs a new client to work with schemas data in the OLP Artifact Service.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -120,12 +126,13 @@
 									<h5>settings: <a href="_olp_sdk_dataservice_read_lib_client_olpclientsettings_.olpclientsettings.html" class="tsd-signature-type">OlpClientSettings</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
-											<p>The instance of <a href="_olp_sdk_dataservice_read_lib_client_olpclientsettings_.olpclientsettings.html">OlpClientSettings</a></p>
+											<p>The <a href="_olp_sdk_dataservice_read_lib_client_olpclientsettings_.olpclientsettings.html">OlpClientSettings</a> instance.</p>
 										</div>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_artifactclient_.artifactclient.html" class="tsd-signature-type">ArtifactClient</a></h4>
+							<p>The <a href="_olp_sdk_dataservice_read_lib_client_artifactclient_.artifactclient.html">ArtifactClient</a> instance.</p>
 						</li>
 					</ul>
 				</section>
@@ -142,22 +149,25 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/ArtifactClient.ts#L78">olp-sdk-dataservice-read/lib/client/ArtifactClient.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/ArtifactClient.ts#L80">olp-sdk-dataservice-read/lib/client/ArtifactClient.ts:80</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Get schema.</p>
+									<p>Gets schema data.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>schemaRequest: <a href="_olp_sdk_dataservice_read_lib_client_schemarequest_.schemarequest.html" class="tsd-signature-type">SchemaRequest</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The <a href="_olp_sdk_dataservice_read_lib_client_schemarequest_.schemarequest.html">SchemaRequest</a> instance.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">ArrayBuffer</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>Archive with schema.</p>
+							<p>A blob with the schema.</p>
 						</li>
 					</ul>
 				</section>
@@ -171,22 +181,25 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/ArtifactClient.ts#L45">olp-sdk-dataservice-read/lib/client/ArtifactClient.ts:45</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/ArtifactClient.ts#L48">olp-sdk-dataservice-read/lib/client/ArtifactClient.ts:48</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Get schema details.</p>
+									<p>Gets schema metadata.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>schemaDetailsRequest: <a href="_olp_sdk_dataservice_read_lib_client_schemadetailsrequest_.schemadetailsrequest.html" class="tsd-signature-type">SchemaDetailsRequest</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The <a href="_olp_sdk_dataservice_read_lib_client_schemadetailsrequest_.schemadetailsrequest.html">SchemaDetailsRequest</a> instance.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_dataservice_api_lib_artifact_api_.getschemaresponse.html" class="tsd-signature-type">GetSchemaResponse</a><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>Object with schema details.</p>
+							<p>An object with the schema metadata.</p>
 						</li>
 					</ul>
 				</section>

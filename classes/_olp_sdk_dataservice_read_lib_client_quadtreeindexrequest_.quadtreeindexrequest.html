@@ -68,9 +68,9 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A class that prepare information for calls to get Quad Tree metadata from Query API.
-						Works only with versioned or volatile layers where the partitioning scheme is <code>heretile</code></p>
+						<p>Prepares information for calls to get quadtree metadata from the OLP Query Service.</p>
 					</div>
+					<p>This class works only with versioned or volatile layers where the partitioning scheme is HERE Tile.</p>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
@@ -122,12 +122,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L33">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L41">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:41</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Constructs the <a href="_olp_sdk_dataservice_read_lib_client_quadtreeindexrequest_.quadtreeindexrequest.html">QuadTreeIndexRequest</a> for fetching Quad tree index from Query API
+									<p>Constructs the <a href="_olp_sdk_dataservice_read_lib_client_quadtreeindexrequest_.quadtreeindexrequest.html">QuadTreeIndexRequest</a> instance for fetching the quadtree index from the OLP Query Service
 									for volatile or versioned layers</p>
 								</div>
 							</div>
@@ -137,7 +137,7 @@
 									<h5>catalogHrn: <a href="_olp_sdk_dataservice_read_lib_hrn_.hrn.html" class="tsd-signature-type">HRN</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
-											<p>The <a href="_olp_sdk_dataservice_read_lib_hrn_.hrn.html">HRN</a> instance represents the catalog hrn</p>
+											<p>The catalog HERE Resource Name (<a href="_olp_sdk_dataservice_read_lib_hrn_.hrn.html">HRN</a>).</p>
 										</div>
 									</div>
 								</li>
@@ -145,7 +145,7 @@
 									<h5>layerId: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
-											<p>The id of the layer</p>
+											<p>The ID of the layer.</p>
 										</div>
 									</div>
 								</li>
@@ -153,12 +153,13 @@
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> layerType: <span class="tsd-signature-type">"versioned"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"volatile"</span><span class="tsd-signature-symbol"> =&nbsp;&quot;versioned&quot;</span></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
-											<p>The type of layer wich be used for request. The versioned is by default</p>
+											<p>The type of layer that you want to use for the request. By default, a layer of the versioned type is used.</p>
 										</div>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_quadtreeindexrequest_.quadtreeindexrequest.html" class="tsd-signature-type">QuadTreeIndexRequest</a></h4>
+							<p>The <a href="_olp_sdk_dataservice_read_lib_client_quadtreeindexrequest_.quadtreeindexrequest.html">QuadTreeIndexRequest</a> instance</p>
 						</li>
 					</ul>
 				</section>
@@ -175,18 +176,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L139">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:139</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L169">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:169</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Billing Tag for grouping billing records together</p>
+									<p>Gets a billing tag to group billing records together.</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">undefined</span>
 							</h4>
+							<p>The <code>BillingTag</code> string.</p>
 						</li>
 					</ul>
 				</section>
@@ -200,15 +202,16 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L125">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:125</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L151">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:151</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>The configured <a href="_olp_sdk_dataservice_read_lib_hrn_.hrn.html">HRN</a> instance of the catalog hrn for request</p>
+									<p>Gets the configured <a href="_olp_sdk_dataservice_read_lib_hrn_.hrn.html">HRN</a> instance of the catalog HERE Resource Name(HRN) for the request.</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_hrn_.hrn.html" class="tsd-signature-type">HRN</a></h4>
+							<p>The configured <a href="_olp_sdk_dataservice_read_lib_hrn_.hrn.html">HRN</a> instance.</p>
 						</li>
 					</ul>
 				</section>
@@ -222,15 +225,16 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L111">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:111</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L132">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:132</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>The configuret depth for the request</p>
+									<p>Gets the configured depth for the request.</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
+							<p>The number of the configured depth.</p>
 						</li>
 					</ul>
 				</section>
@@ -244,18 +248,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L132">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:132</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L160">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:160</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>The layer id for request</p>
+									<p>Gets a layer ID for the request.</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">undefined</span>
 							</h4>
+							<p>The layer ID string.</p>
 						</li>
 					</ul>
 				</section>
@@ -269,18 +274,20 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L118">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:118</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L142">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:142</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>The configured type of layer for request</p>
+									<p>Gets the configured type of the layer for the request.
+									By default, a layer of the versioned type is used.</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">"versioned"</span>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">"volatile"</span>
 							</h4>
+							<p>The layer type.</p>
 						</li>
 					</ul>
 				</section>
@@ -294,18 +301,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L104">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:104</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L123">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:123</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>The configured QuadKey for the request</p>
+									<p>Gets the configured <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html">QuadKey</a> object for the request.</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html" class="tsd-signature-type">QuadKey</a>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">undefined</span>
 							</h4>
+							<p>The the configured <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html">QuadKey</a> object.</p>
 						</li>
 					</ul>
 				</section>
@@ -319,18 +327,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L97">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:97</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L114">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:114</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>The configured catalog version for the request</p>
+									<p>The configured catalog version for the request.</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">undefined</span>
 							</h4>
+							<p>The catalog version number.</p>
 						</li>
 					</ul>
 				</section>
@@ -344,22 +353,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L89">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:89</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L104">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:104</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Billing Tag is an optional free-form tag which is used for grouping billing records together.
-									If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].</p>
+									<p>An optional free-form tag that is used for grouping billing records together.</p>
 								</div>
+								<p>If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>tag: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The <code>BillingTag</code> string.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_quadtreeindexrequest_.quadtreeindexrequest.html" class="tsd-signature-type">QuadTreeIndexRequest</a></h4>
+							<p>The updated <a href="_olp_sdk_dataservice_read_lib_client_quadtreeindexrequest_.quadtreeindexrequest.html">QuadTreeIndexRequest</a> instance that you can use to chain methods.</p>
 						</li>
 					</ul>
 				</section>
@@ -373,14 +386,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L80">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:80</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L91">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:91</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>The recursion depth of the response.
-										If set to 0, the response includes only data for the quadKey specified in the request.
-										In this way, depth describes the maximum length of the subQuadKeys in the response.
 									The maximum allowed value for the depth parameter is 4.</p>
 								</div>
 							</div>
@@ -394,7 +405,9 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_quadtreeindexrequest_.quadtreeindexrequest.html" class="tsd-signature-type">QuadTreeIndexRequest</a></h4>
-							<p>The updated <a href="_olp_sdk_dataservice_read_lib_client_quadtreeindexrequest_.quadtreeindexrequest.html">QuadTreeIndexRequest</a> instance</p>
+							<p>The updated <a href="_olp_sdk_dataservice_read_lib_client_quadkeypartitionsrequest_.quadkeypartitionsrequest.html">QuadKeyPartitionsRequest</a> instance that you can use to chain methods.</p>
+							<p>If set to 0, the response includes only data from the quadkey specified in the request.
+							In this way, the depth describes the maximum length of the subQuadKeys in the response.</p>
 						</li>
 					</ul>
 				</section>
@@ -408,12 +421,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L66">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L76">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:76</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>The geometric area, represented as a HERE tile.</p>
+									<p>A geometric area represented as a HERE tile.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -421,12 +434,12 @@
 								<li>
 									<h5>quadKey: <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html" class="tsd-signature-type">QuadKey</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The <code>QuadKey</code> are used to address a tile in a quad tree.</p>
+										<p>Addresses a tile in the quadtree.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_quadtreeindexrequest_.quadtreeindexrequest.html" class="tsd-signature-type">QuadTreeIndexRequest</a></h4>
-							<p>The updated <a href="_olp_sdk_dataservice_read_lib_client_quadtreeindexrequest_.quadtreeindexrequest.html">QuadTreeIndexRequest</a> instance</p>
+							<p>The updated <a href="_olp_sdk_dataservice_read_lib_client_quadkeypartitionsrequest_.quadkeypartitionsrequest.html">QuadKeyPartitionsRequest</a> instance that you can use to chain methods.</p>
 						</li>
 					</ul>
 				</section>
@@ -440,13 +453,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L56">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts#L65">olp-sdk-dataservice-read/lib/client/QuadTreeIndexRequest.ts:65</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>The version of the catalog against which to run the query.
-									Must be a valid catalog version.</p>
+									<p>The version of the catalog against which you want to run the query.
+									It must be a valid catalog version.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -454,12 +467,12 @@
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> version: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>A valid catalog version. The latest catalog version uses if not set.</p>
+										<p>Specify the catalog version or, if you want to use the latest catalog version, set to undefined.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_quadtreeindexrequest_.quadtreeindexrequest.html" class="tsd-signature-type">QuadTreeIndexRequest</a></h4>
-							<p>The updated <a href="_olp_sdk_dataservice_read_lib_client_quadtreeindexrequest_.quadtreeindexrequest.html">QuadTreeIndexRequest</a> instance</p>
+							<p>The updated <a href="_olp_sdk_dataservice_read_lib_client_quadkeypartitionsrequest_.quadkeypartitionsrequest.html">QuadKeyPartitionsRequest</a> instance that you can use to chain methods.</p>
 						</li>
 					</ul>
 				</section>

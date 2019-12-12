@@ -68,7 +68,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>The <code>HRNData</code> interface contains all the fields that make up a HERE Resource Name (HRN).</p>
+						<p>Contains all the fields that make up a HERE Resource Name (HRN).</p>
 					</div>
 				</div>
 			</section>
@@ -105,12 +105,12 @@
 					<div class="tsd-signature tsd-kind-icon">account<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/HRN.ts#L39">olp-sdk-dataservice-read/lib/HRN.ts:39</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/HRN.ts#L41">olp-sdk-dataservice-read/lib/HRN.ts:41</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The account of this HRN.</p>
+							<p>The account of the HRN.</p>
 						</div>
 					</div>
 				</section>
@@ -120,12 +120,18 @@
 					<div class="tsd-signature tsd-kind-icon">partition<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/HRN.ts#L27">olp-sdk-dataservice-read/lib/HRN.ts:27</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/HRN.ts#L31">olp-sdk-dataservice-read/lib/HRN.ts:31</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The partition of the string, for example, <code>&quot;here&quot;</code> or <code>&quot;here-dev&quot;</code> or <code>&quot;here-cn&quot;</code>, or <code>&quot;here-cn-dev&quot;</code>.</p>
+							<p>One of the following string partitions:</p>
+							<ul>
+								<li><code>&quot;here&quot;</code></li>
+								<li><code>&quot;here-dev&quot;</code></li>
+								<li><code>&quot;here-cn&quot;</code></li>
+								<li><code>&quot;here-cn-dev&quot;</code></li>
+							</ul>
 						</div>
 					</div>
 				</section>
@@ -135,12 +141,12 @@
 					<div class="tsd-signature tsd-kind-icon">region<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/HRN.ts#L35">olp-sdk-dataservice-read/lib/HRN.ts:35</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/HRN.ts#L39">olp-sdk-dataservice-read/lib/HRN.ts:39</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The region of this HRN.</p>
+							<p>The region of the HRN.</p>
 						</div>
 					</div>
 				</section>
@@ -150,13 +156,18 @@
 					<div class="tsd-signature tsd-kind-icon">resource<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/HRN.ts#L43">olp-sdk-dataservice-read/lib/HRN.ts:43</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/HRN.ts#L47">olp-sdk-dataservice-read/lib/HRN.ts:47</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The resource of this HRN, for example, the catalog name for <code>datastore</code> HRNs.</p>
+							<p>The resource of the HRN.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><p>The catalog name of the <code>datastore</code> HRNs.</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -165,13 +176,18 @@
 					<div class="tsd-signature tsd-kind-icon">service<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/HRN.ts#L31">olp-sdk-dataservice-read/lib/HRN.ts:31</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/HRN.ts#L37">olp-sdk-dataservice-read/lib/HRN.ts:37</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The service, for example, <code>&quot;data&quot;</code>.</p>
+							<p>The name of the API service.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>example</dt>
+							<dd><p><code>&quot;data&quot;</code>.</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 			</section>

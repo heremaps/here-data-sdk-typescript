@@ -97,30 +97,33 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L164">olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:164</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L167">olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:167</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Compute a new quad key that is result of appending a <code>subKey</code> (relative) quad key to the current.</p>
+									<p>Computes a new quadkey that is a result of appending the <code>subKey</code> (relative) quadkey to the current quadkey.</p>
 								</div>
-								<p>This function treats the current quad key as a root for a relative quad key,
-								the result quad key level is computed as current level plus relative level.</p>
+								<p>This function treats the current quadkey as a root for a relative quadkey.
+								The quadkey level of the result is computed as the current level plus the relative level.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>root: <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html" class="tsd-signature-type">QuadKey</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The current quadkey.</p>
+									</div>
 								</li>
 								<li>
 									<h5>subKey: <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html" class="tsd-signature-type">QuadKey</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>A relative quad key to use as a relative quad key.</p>
+										<p>The relative quadkey.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html" class="tsd-signature-type">QuadKey</a></h4>
-							<p>A new instance of <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html">QuadKey</a>.</p>
+							<p>The <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html">QuadKey</a> instance.</p>
 						</li>
 					</ul>
 				</section>
@@ -134,20 +137,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L183">olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:183</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L185">olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:185</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Compute a new quad key that is a parent of a current quad key.</p>
+									<p>Computes a new quadkey that is the parent of the current quadkey.</p>
 								</div>
-								<p>By default it will return the first ancestor, <code>delta</code> parameter is used to return the N one.</p>
-								<p>If the result level is negative the root quad key is returned.</p>
+								<p>If the result level is negative, the root quadkey is returned.</p>
+								<dl class="tsd-comment-tags">
+									<dt>note</dt>
+									<dd><p>If the ancestor level is not specified, the function returns the first ancestor.</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>key: <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html" class="tsd-signature-type">QuadKey</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The current quadkey.</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> delta: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> =&nbsp;1</span></h5>
@@ -157,7 +167,7 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html" class="tsd-signature-type">QuadKey</a></h4>
-							<p>A new instance of <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html">QuadKey</a>.</p>
+							<p>The <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html">QuadKey</a> instance.</p>
 						</li>
 					</ul>
 				</section>
@@ -171,27 +181,34 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L206">olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:206</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L210">olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:210</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Checks that quad key is valid.</p>
+									<p>Checks if a quadkey is valid.</p>
 								</div>
-								<p>Row and column must not be greater than the maximum rows/columns for the given level.
-									Maximum rows/columns for level is computed as 2 to the power of level.
-									Note - as JavaScript&#39;s number type can hold 53 bits in its mantissa, only levels up to 26 can be
-									represented in the number representation returned by <a href="_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.html#mortoncodefromquadkey">mortonCodeFromQuadKey</a>().
-								Level must be positive, level can&#39;t be greater than 26.</p>
+								<p>The number of rows and columns must not be greater than the maximum number of rows and columns in the given level.
+								The maximum number of rows and columns in a level is computed as 2 to the power of the level.</p>
+								<dl class="tsd-comment-tags">
+									<dt>note</dt>
+									<dd><p>As the JavaScript number type can hold 53 bits in its mantissa, only levels up to 26 can be
+											represented in the number representation returned by <a href="_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.html#mortoncodefromquadkey">mortonCodeFromQuadKey</a>.
+										A level must be positive and can&#39;t be greater than 26.</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>key: <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html" class="tsd-signature-type">QuadKey</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The current quadkey.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
-							<p>True if the QuadKey is valid, false otherwise.</p>
+							<p>True if the quadkey is valid, false otherwise.</p>
 						</li>
 					</ul>
 				</section>
@@ -205,22 +222,25 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L136">olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:136</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L139">olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:139</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Converts the quad key into a morton code numeric representation.</p>
+									<p>Converts a quadkey into a Morton code numeric representation.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>key: <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html" class="tsd-signature-type">QuadKey</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The quadkey that you need to convert to the Morton code.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
-							<p>A number representing morton code of <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html">QuadKey</a>.</p>
+							<p>The number representing the Morton code of <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html">QuadKey</a>.</p>
 						</li>
 					</ul>
 				</section>
@@ -234,12 +254,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L106">olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:106</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L108">olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:108</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Creates a quad key from a numeric or string Morton code representation.</p>
+									<p>Creates a quadkey from a numeric or string Morton code representation.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -247,12 +267,12 @@
 								<li>
 									<h5>code: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The Morton code to be converted.</p>
+										<p>The Morton code that you want to convert.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html" class="tsd-signature-type">QuadKey</a></h4>
-							<p>A new instance of <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html">QuadKey</a>.</p>
+							<p>The <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html">QuadKey</a> instance.</p>
 						</li>
 					</ul>
 				</section>

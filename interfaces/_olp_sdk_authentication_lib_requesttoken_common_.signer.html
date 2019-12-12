@@ -68,8 +68,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Platform specific parts of signing a request using cryptographically
-						strong algorithms.</p>
+						<p>Platform-specific parts of signing a request using HMAC algorithms.</p>
 					</div>
 				</div>
 			</section>
@@ -103,13 +102,24 @@
 					<div class="tsd-signature tsd-kind-icon">get<wbr>Random<wbr>Values<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-authentication/lib/requestToken_common.ts#L32">olp-sdk-authentication/lib/requestToken_common.ts:32</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-authentication/lib/requestToken_common.ts#L39">olp-sdk-authentication/lib/requestToken_common.ts:39</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Returns a uid that can be used for the nonce parameter of oauth.</p>
+							<p>Fills the passed <code>TypedArray</code> with cryptographically strong random values (random in its cryptographic meaning).</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>param</dt>
+							<dd><p>The integer-based <code>TypedArray</code>.</p>
+							</dd>
+							<dt>returns</dt>
+							<dd><p>The input array.</p>
+							</dd>
+							<dt>note</dt>
+							<dd><p>The <code>TypedArray</code> is modified in-place, and no copy is made.</p>
+							</dd>
+						</dl>
 					</div>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
@@ -139,13 +149,24 @@
 					<div class="tsd-signature tsd-kind-icon">sign<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-authentication/lib/requestToken_common.ts#L28">olp-sdk-authentication/lib/requestToken_common.ts:28</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-authentication/lib/requestToken_common.ts#L31">olp-sdk-authentication/lib/requestToken_common.ts:31</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Signs the data using the secret key and returns the string.</p>
+							<p>Signs data using your secret key and returns a <code>Promise</code> that fulfills <code>ArrayBuffer</code> containing the signature.</p>
 						</div>
+						<dl class="tsd-comment-tags">
+							<dt>param</dt>
+							<dd><p>The <code>ArrayBufferLike</code> object containing the data to be signed.</p>
+							</dd>
+							<dt>param</dt>
+							<dd><p>Your secret key that is used for signing.</p>
+							</dd>
+							<dt>returns</dt>
+							<dd><p>The encrypted ID for an access token.</p>
+							</dd>
+						</dl>
 					</div>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>

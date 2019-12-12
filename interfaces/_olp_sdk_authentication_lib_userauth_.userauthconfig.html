@@ -65,6 +65,13 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Parameters for authentification.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -83,6 +90,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_authentication_lib_userauth_.userauthconfig.html#credentials" class="tsd-kind-icon">credentials</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_authentication_lib_userauth_.userauthconfig.html#customurl" class="tsd-kind-icon">custom<wbr>Url</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_authentication_lib_userauth_.userauthconfig.html#env" class="tsd-kind-icon">env</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_authentication_lib_userauth_.userauthconfig.html#scope" class="tsd-kind-icon">scope</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_authentication_lib_userauth_.userauthconfig.html#tokenrequester" class="tsd-kind-icon">token<wbr>Requester</a></li>
 							</ul>
 						</section>
@@ -97,12 +105,12 @@
 					<div class="tsd-signature tsd-kind-icon">credentials<span class="tsd-signature-symbol">:</span> <a href="_olp_sdk_authentication_lib_userauth_.authcredentials.html" class="tsd-signature-type">AuthCredentials</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-authentication/lib/UserAuth.ts#L46">olp-sdk-authentication/lib/UserAuth.ts:46</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-authentication/lib/UserAuth.ts#L57">olp-sdk-authentication/lib/UserAuth.ts:57</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Credentials for authorization</p>
+							<p>Credentials for authorization.</p>
 						</div>
 					</div>
 				</section>
@@ -112,12 +120,12 @@
 					<div class="tsd-signature tsd-kind-icon">custom<wbr>Url<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-authentication/lib/UserAuth.ts#L50">olp-sdk-authentication/lib/UserAuth.ts:50</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-authentication/lib/UserAuth.ts#L61">olp-sdk-authentication/lib/UserAuth.ts:61</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Url for a custom Environment</p>
+							<p>The URL of your custom environment.</p>
 						</div>
 					</div>
 				</section>
@@ -127,13 +135,30 @@
 					<div class="tsd-signature tsd-kind-icon">env<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-authentication/lib/UserAuth.ts#L48">olp-sdk-authentication/lib/UserAuth.ts:48</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-authentication/lib/UserAuth.ts#L59">olp-sdk-authentication/lib/UserAuth.ts:59</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Environment</p>
+							<p>One of the following environments: here, here-dev, here-cn, and here-cn-dev.</p>
 						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="scope" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> scope</h3>
+					<div class="tsd-signature tsd-kind-icon">scope<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-authentication/lib/UserAuth.ts#L97">olp-sdk-authentication/lib/UserAuth.ts:97</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Project scope.</p>
+						</div>
+						<p>If the project is specified, the resulting token is bound to it.
+						If the desired resource is restricted to a specific project, to get a valid token, specify this project.</p>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
@@ -142,30 +167,31 @@
 					<div class="tsd-signature tsd-kind-icon">token<wbr>Requester<span class="tsd-signature-symbol">:</span> <a href="../modules/_olp_sdk_authentication_lib_userauth_.html#tokenrequesterfn" class="tsd-signature-type">TokenRequesterFn</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-authentication/lib/UserAuth.ts#L77">olp-sdk-authentication/lib/UserAuth.ts:77</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-authentication/lib/UserAuth.ts#L90">olp-sdk-authentication/lib/UserAuth.ts:90</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>A function to obtain the access token.</p>
+							<p>Gets the access token.</p>
 						</div>
-						<p>Client can provide own implementation or can use from @here/olp-sdk-authentication.</p>
-						<p>There are two functions that work for browser and NodeJS.
-							UserAuth can use requestToken() from requestToken.web.ts for browser
-						or requestToken() from requestToken.ts for NodeJS.</p>
-						<p>When a function imports a function using import { requestToken } from &quot;@here/olp-sdk-authentication&quot;,
-						the code automatically applies the corresponding function that is applicable to access browser or NodeJS.</p>
-						<p>The following code is applicable both for browser and NodeJS.</p>
+						<p>You can provide your own implementation or use one from <code>@here/olp-sdk-authentication</code>.</p>
+						<p>There are two functions that work for the browser and Node.js.
+							For the browser, <code>UserAuth</code> uses <code>requestToken()</code> from requestToken.web.ts.
+						For Node.js,<code>UserAuth</code> uses <code>requestToken()</code> from requestToken.ts.</p>
+						<p>When a function imports a function using <code>import { requestToken }</code> from &quot;@here/olp-sdk-authentication&quot;`,
+						the code automatically applies to the corresponding function.</p>
+						<p>The following code is applicable for both the browser and Node.js.</p>
 						<dl class="tsd-comment-tags">
 							<dt>example</dt>
-							<dd><p>import { UserAuth, requestToken } from &quot;@here/olp-sdk-authentication&quot;;</p>
-								<p> const userAuth = new UserAuth({
-									credentials: {
-									accessKeyId: &quot;your-access-key&quot;,
-									accessKeySecret: &quot;your-access-key-secret&quot;
-									},
-									tokenRequester: requestToken
-								});</p>
+							<dd><pre><code class="language-typescript"><span class="hljs-keyword">import</span> { UserAuth, requestToken } <span class="hljs-keyword">from</span> <span class="hljs-string">"@here/olp-sdk-authentication"</span>;
+
+ <span class="hljs-keyword">const</span> userAuth = <span class="hljs-keyword">new</span> UserAuth({
+      credentials: {
+          accessKeyId: <span class="hljs-string">"your-access-key"</span>,
+          accessKeySecret: <span class="hljs-string">"your-access-key-secret"</span>
+      },
+      tokenRequester: requestToken
+  });</code></pre>
 							</dd>
 						</dl>
 					</div>
@@ -204,6 +230,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="_olp_sdk_authentication_lib_userauth_.userauthconfig.html#env" class="tsd-kind-icon">env</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_olp_sdk_authentication_lib_userauth_.userauthconfig.html#scope" class="tsd-kind-icon">scope</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="_olp_sdk_authentication_lib_userauth_.userauthconfig.html#tokenrequester" class="tsd-kind-icon">token<wbr>Requester</a>

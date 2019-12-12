@@ -65,6 +65,14 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>An implementation of <a href="_olp_sdk_dataservice_api_lib_requestbuilder_.requestbuilder.html">RequestBuilder</a> and the <code>downloadBlob</code> and <code>download</code> methods.
+						It is used to configure the <a href="_olp_sdk_dataservice_api_lib_requestbuilder_.requestbuilder.html">RequestBuilder</a> instance with a base URL of a service.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -120,19 +128,40 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_olp_sdk_dataservice_api_lib_requestbuilder_.requestbuilder.html">RequestBuilder</a>.<a href="_olp_sdk_dataservice_api_lib_requestbuilder_.requestbuilder.html#constructor">constructor</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/DataStoreRequestBuilder.ts#L48">olp-sdk-dataservice-read/lib/DataStoreRequestBuilder.ts:48</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/DataStoreRequestBuilder.ts#L52">olp-sdk-dataservice-read/lib/DataStoreRequestBuilder.ts:52</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Cerates the <a href="_olp_sdk_dataservice_read_lib_datastorerequestbuilder_.datastorerequestbuilder.html">DataStoreRequestBuilder</a> instance.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>downloadManager: <a href="../interfaces/_olp_sdk_dataservice_read_lib_downloadmanager_.downloadmanager.html" class="tsd-signature-type">DownloadManager</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The configured instance of the <a href="../interfaces/_olp_sdk_dataservice_read_lib_downloadmanager_.downloadmanager.html">DownloadManager</a> interface implementation.
+											You can use our default <code>DatastoreDownloadManager</code> or create your implementation.</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>baseUrl: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The URL string.</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>getBearerToken: <span class="tsd-signature-type">function</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Retrieves the access token.</p>
+										</div>
+									</div>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter-siganture">
 											<ul class="tsd-signatures tsd-kind-type-literal tsd-is-not-exported">
@@ -148,9 +177,17 @@
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>A signal object that allows you to communicate with a request (such as the <code>fetch</code> request)
+											and, if required, abort it using the <code>AbortController</code> object.</p>
+											<p>For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_datastorerequestbuilder_.datastorerequestbuilder.html" class="tsd-signature-type">DataStoreRequestBuilder</a></h4>
+							<p>The <a href="_olp_sdk_dataservice_read_lib_datastorerequestbuilder_.datastorerequestbuilder.html">DataStoreRequestBuilder</a> instance.</p>
 						</li>
 					</ul>
 				</section>
@@ -164,7 +201,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from <a href="_olp_sdk_dataservice_api_lib_requestbuilder_.requestbuilder.html">RequestBuilder</a>.<a href="_olp_sdk_dataservice_api_lib_requestbuilder_.requestbuilder.html#baseurl">baseUrl</a></p>
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-api/lib/RequestBuilder.ts#L124">olp-sdk-dataservice-api/lib/RequestBuilder.ts:124</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-api/lib/RequestBuilder.ts#L124">olp-sdk-dataservice-api/lib/RequestBuilder.ts:124</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -179,9 +216,15 @@
 					<div class="tsd-signature tsd-kind-icon">download<wbr>Manager<span class="tsd-signature-symbol">:</span> <a href="../interfaces/_olp_sdk_dataservice_read_lib_downloadmanager_.downloadmanager.html" class="tsd-signature-type">DownloadManager</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/DataStoreRequestBuilder.ts#L50">olp-sdk-dataservice-read/lib/DataStoreRequestBuilder.ts:50</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/DataStoreRequestBuilder.ts#L68">olp-sdk-dataservice-read/lib/DataStoreRequestBuilder.ts:68</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The configured instance of the <a href="../interfaces/_olp_sdk_dataservice_read_lib_downloadmanager_.downloadmanager.html">DownloadManager</a> interface implementation.
+							You can use our default <code>DatastoreDownloadManager</code> or create your implementation.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -197,9 +240,14 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_olp_sdk_dataservice_api_lib_requestbuilder_.requestbuilder.html">RequestBuilder</a>.<a href="_olp_sdk_dataservice_api_lib_requestbuilder_.requestbuilder.html#download">download</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/DataStoreRequestBuilder.ts#L58">olp-sdk-dataservice-read/lib/DataStoreRequestBuilder.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/DataStoreRequestBuilder.ts#L83">olp-sdk-dataservice-read/lib/DataStoreRequestBuilder.ts:83</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Downloads data from the provided URL.</p>
+								</div>
+							</div>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
@@ -210,12 +258,19 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>url: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The URL of the data that you want to download.</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> init: <span class="tsd-signature-type">RequestInit</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The helper object for the request.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>The data of the type specified in the generics.</p>
 						</li>
 					</ul>
 				</section>
@@ -230,19 +285,31 @@
 							<aside class="tsd-sources">
 								<p>Overrides <a href="_olp_sdk_dataservice_api_lib_requestbuilder_.requestbuilder.html">RequestBuilder</a>.<a href="_olp_sdk_dataservice_api_lib_requestbuilder_.requestbuilder.html#downloadblob">downloadBlob</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/DataStoreRequestBuilder.ts#L72">olp-sdk-dataservice-read/lib/DataStoreRequestBuilder.ts:72</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/DataStoreRequestBuilder.ts#L104">olp-sdk-dataservice-read/lib/DataStoreRequestBuilder.ts:104</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Downloads the blob data from the specified URL.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>url: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The URL of the blob data that you want to download.</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> init: <span class="tsd-signature-type">RequestInit</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The helper object for the request.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>The blob data.</p>
 						</li>
 					</ul>
 				</section>
@@ -257,7 +324,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_olp_sdk_dataservice_api_lib_requestbuilder_.requestbuilder.html">RequestBuilder</a>.<a href="_olp_sdk_dataservice_api_lib_requestbuilder_.requestbuilder.html#request">request</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-api/lib/RequestBuilder.ts#L131">olp-sdk-dataservice-api/lib/RequestBuilder.ts:131</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-api/lib/RequestBuilder.ts#L131">olp-sdk-dataservice-api/lib/RequestBuilder.ts:131</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -298,7 +365,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from <a href="_olp_sdk_dataservice_api_lib_requestbuilder_.requestbuilder.html">RequestBuilder</a>.<a href="_olp_sdk_dataservice_api_lib_requestbuilder_.requestbuilder.html#requestblob">requestBlob</a></p>
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-api/lib/RequestBuilder.ts#L140">olp-sdk-dataservice-api/lib/RequestBuilder.ts:140</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-api/lib/RequestBuilder.ts#L140">olp-sdk-dataservice-api/lib/RequestBuilder.ts:140</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">

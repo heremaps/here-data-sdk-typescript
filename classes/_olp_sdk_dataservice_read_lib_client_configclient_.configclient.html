@@ -65,6 +65,13 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>A client for the OLP Config Service.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -104,12 +111,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/ConfigClient.ts#L24">olp-sdk-dataservice-read/lib/client/ConfigClient.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/ConfigClient.ts#L27">olp-sdk-dataservice-read/lib/client/ConfigClient.ts:27</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Constructs a new client to the data store to work with data
+									<p>Constructs a new client for the data store to work with data
 									about catalogs configurations in the store.</p>
 								</div>
 							</div>
@@ -119,12 +126,13 @@
 									<h5>settings: <a href="_olp_sdk_dataservice_read_lib_client_olpclientsettings_.olpclientsettings.html" class="tsd-signature-type">OlpClientSettings</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
-											<p>The instance of <a href="_olp_sdk_dataservice_read_lib_client_olpclientsettings_.olpclientsettings.html">OlpClientSettings</a></p>
+											<p>The <a href="_olp_sdk_dataservice_read_lib_client_olpclientsettings_.olpclientsettings.html">OlpClientSettings</a> instance.</p>
 										</div>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_configclient_.configclient.html" class="tsd-signature-type">ConfigClient</a></h4>
+							<p>The <a href="_olp_sdk_dataservice_read_lib_client_configclient_.configclient.html">ConfigClient</a> instance.</p>
 						</li>
 					</ul>
 				</section>
@@ -141,23 +149,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/ConfigClient.ts#L38">olp-sdk-dataservice-read/lib/client/ConfigClient.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/ConfigClient.ts#L46">olp-sdk-dataservice-read/lib/client/ConfigClient.ts:46</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Asynchronously retrieves a list of catalogs that your account has access to.
-										If set the schema, then will return filtered only catalogs (layers) by the specified layer schema HRN.
-									If schema is not setted, then filter will return search for all.</p>
+									<p>Asynchronously retrieves a list of catalogs to which you have access.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>request: <a href="_olp_sdk_dataservice_read_lib_client_catalogsrequest_.catalogsrequest.html" class="tsd-signature-type">CatalogsRequest</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The <a href="_olp_sdk_dataservice_read_lib_client_catalogsrequest_.catalogsrequest.html">CatalogsRequest</a> instance.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_dataservice_api_lib_config_api_.catalogslistresult.html" class="tsd-signature-type">CatalogsListResult</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>The list of catalogs to which you have access.</p>
+							<p>If the schema is set, you get the catalogs with layers filtered by the specified layer schema HERE Resource Name (HRN).
+							If the schema is not set, the filter returns all of the catalogs to which you have access.</p>
 						</li>
 					</ul>
 				</section>

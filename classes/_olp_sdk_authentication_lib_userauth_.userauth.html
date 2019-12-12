@@ -68,8 +68,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p><code>UserAuth</code> class instance is used to work with accounts API: obtain an access token, user info,
-						etc.</p>
+						<p>Used to get and validate an access token, and to get user data.</p>
 					</div>
 				</div>
 			</section>
@@ -114,16 +113,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-authentication/lib/UserAuth.ts#L119">olp-sdk-authentication/lib/UserAuth.ts:119</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-authentication/lib/UserAuth.ts#L142">olp-sdk-authentication/lib/UserAuth.ts:142</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates the <a href="_olp_sdk_authentication_lib_userauth_.userauth.html">UserAuth</a> instance.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>config: <a href="../interfaces/_olp_sdk_authentication_lib_userauth_.userauthconfig.html" class="tsd-signature-type">UserAuthConfig</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Parameters for authentication.</p>
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_authentication_lib_userauth_.userauth.html" class="tsd-signature-type">UserAuth</a></h4>
+							<p>The <a href="_olp_sdk_authentication_lib_userauth_.userauth.html">UserAuth</a> instance.</p>
 						</li>
 					</ul>
 				</section>
@@ -140,15 +150,17 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-authentication/lib/UserAuth.ts#L158">olp-sdk-authentication/lib/UserAuth.ts:158</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-authentication/lib/UserAuth.ts#L191">olp-sdk-authentication/lib/UserAuth.ts:191</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns access token.</p>
+									<p>Retrieves the access token.</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>The access token if it is valid, or an error if at least one of the following credentials is not stated:
+							access key ID or acces key secret.</p>
 						</li>
 					</ul>
 				</section>
@@ -162,12 +174,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-authentication/lib/UserAuth.ts#L220">olp-sdk-authentication/lib/UserAuth.ts:220</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-authentication/lib/UserAuth.ts#L265">olp-sdk-authentication/lib/UserAuth.ts:265</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Retrieve user&#39;s info.</p>
+									<p>Retrieves user data.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -175,11 +187,12 @@
 								<li>
 									<h5>userToken: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>String containing the user&#39;s token.</p>
+										<p>The string that contains the user token.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_authentication_lib_userauth_.userinfo.html" class="tsd-signature-type">UserInfo</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>The <code>json</code> object with the user data.</p>
 						</li>
 					</ul>
 				</section>
@@ -193,7 +206,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-authentication/lib/UserAuth.ts#L193">olp-sdk-authentication/lib/UserAuth.ts:193</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-authentication/lib/UserAuth.ts#L236">olp-sdk-authentication/lib/UserAuth.ts:236</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -206,12 +219,12 @@
 								<li>
 									<h5>token: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>String containing the token.</p>
+										<p>The string containing the token.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>True if access token is valid.</p>
+							<p>True if the access token is valid, false otherwise.</p>
 						</li>
 					</ul>
 				</section>

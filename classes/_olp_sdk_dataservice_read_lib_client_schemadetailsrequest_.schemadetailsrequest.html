@@ -68,7 +68,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A class that prepare information for calls to the Artifact API.</p>
+						<p>Prepares information for calls to the OLP Artifact Service.</p>
 					</div>
 				</div>
 			</section>
@@ -108,18 +108,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/SchemaDetailsRequest.ts#L55">olp-sdk-dataservice-read/lib/client/SchemaDetailsRequest.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/SchemaDetailsRequest.ts#L70">olp-sdk-dataservice-read/lib/client/SchemaDetailsRequest.ts:70</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Billing Tag for grouping billing records together</p>
+									<p>Gets a billing tag to group billing records together.</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">undefined</span>
 							</h4>
+							<p>The <code>BillingTag</code> string.</p>
 						</li>
 					</ul>
 				</section>
@@ -133,13 +134,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/SchemaDetailsRequest.ts#L29">olp-sdk-dataservice-read/lib/client/SchemaDetailsRequest.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/SchemaDetailsRequest.ts#L35">olp-sdk-dataservice-read/lib/client/SchemaDetailsRequest.ts:35</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets schema metadata for the request.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_hrn_.hrn.html" class="tsd-signature-type">HRN</a>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">undefined</span>
 							</h4>
+							<p>An object with the schema metadata.</p>
 						</li>
 					</ul>
 				</section>
@@ -153,22 +160,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/SchemaDetailsRequest.ts#L47">olp-sdk-dataservice-read/lib/client/SchemaDetailsRequest.ts:47</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/SchemaDetailsRequest.ts#L60">olp-sdk-dataservice-read/lib/client/SchemaDetailsRequest.ts:60</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Billing Tag is an optional free-form tag which is used for grouping billing records together.
-									If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].</p>
+									<p>An optional free-form tag that is used for grouping billing records together.</p>
 								</div>
+								<p>If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>tag: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The <code>BillingTag</code> string.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_schemadetailsrequest_.schemadetailsrequest.html" class="tsd-signature-type">SchemaDetailsRequest</a></h4>
+							<p>The updated <a href="_olp_sdk_dataservice_read_lib_client_schemadetailsrequest_.schemadetailsrequest.html">SchemaDetailsRequest</a> instance that you can use to chain methods.</p>
 						</li>
 					</ul>
 				</section>
@@ -182,12 +193,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/SchemaDetailsRequest.ts#L38">olp-sdk-dataservice-read/lib/client/SchemaDetailsRequest.ts:38</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/SchemaDetailsRequest.ts#L47">olp-sdk-dataservice-read/lib/client/SchemaDetailsRequest.ts:47</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Set value of schema HRN to use in methods getSchema and getSchemaDetails from <a href="_olp_sdk_dataservice_read_lib_client_artifactclient_.artifactclient.html">ArtifactClient</a>.</p>
+									<p>Sets a value of a schema HERE Resource Name (HRN) that is used in
+									the <code>getSchema</code> and <code>getSchemaDetails</code> methods of <a href="_olp_sdk_dataservice_read_lib_client_artifactclient_.artifactclient.html">ArtifactClient</a>.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -195,11 +207,12 @@
 								<li>
 									<h5>schemaHrn: <a href="_olp_sdk_dataservice_read_lib_hrn_.hrn.html" class="tsd-signature-type">HRN</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>required, schema HRN</p>
+										<p>The layer schema HRN.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_schemadetailsrequest_.schemadetailsrequest.html" class="tsd-signature-type">SchemaDetailsRequest</a></h4>
+							<p>The updated <a href="_olp_sdk_dataservice_read_lib_client_schemadetailsrequest_.schemadetailsrequest.html">SchemaDetailsRequest</a> instance that you can use to chain methods.</p>
 						</li>
 					</ul>
 				</section>

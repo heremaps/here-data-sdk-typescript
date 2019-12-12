@@ -68,7 +68,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>A class that provides possibility to get Statistic Metadata and Data for Versioned layer</p>
+						<p>A client for the OLP Statistics Service.</p>
 					</div>
 				</div>
 			</section>
@@ -112,16 +112,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/StatisticsClient.ts#L35">olp-sdk-dataservice-read/lib/client/StatisticsClient.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/StatisticsClient.ts#L35">olp-sdk-dataservice-read/lib/client/StatisticsClient.ts:35</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Creates the <a href="_olp_sdk_dataservice_read_lib_client_statisticsclient_.statisticsclient.html">StatisticsClient</a> instance.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>settings: <a href="_olp_sdk_dataservice_read_lib_client_olpclientsettings_.olpclientsettings.html" class="tsd-signature-type">OlpClientSettings</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The <a href="_olp_sdk_dataservice_read_lib_client_olpclientsettings_.olpclientsettings.html">OlpClientSettings</a> instance.</p>
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_statisticsclient_.statisticsclient.html" class="tsd-signature-type">StatisticsClient</a></h4>
+							<p>The <a href="_olp_sdk_dataservice_read_lib_client_statisticsclient_.statisticsclient.html">StatisticsClient</a> instance.</p>
 						</li>
 					</ul>
 				</section>
@@ -138,16 +149,31 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/StatisticsClient.ts#L66">olp-sdk-dataservice-read/lib/client/StatisticsClient.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/StatisticsClient.ts#L85">olp-sdk-dataservice-read/lib/client/StatisticsClient.ts:85</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Depending on the map type that you specify in the <a href="_olp_sdk_dataservice_read_lib_client_statisticsrequest_.statisticsrequest.html">StatisticsRequest</a> instance, gets the <a href="_olp_sdk_dataservice_read_lib_client_statisticsrequest_.statisticsrequest.html">StatisticsRequest</a> instance
+									with one of the following settings:</p>
+									<ul>
+										<li>BITMAP &ndash; fetches a bitmap that represents the availability of data in partitions.</li>
+										<li>SIZEMAP &ndash; fetches a heatmap that represents a partition size.</li>
+										<li>TIMEMAP &ndash; fetches a heatmap that represents partition update time.</li>
+									</ul>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>statisticsRequest: <a href="_olp_sdk_dataservice_read_lib_client_statisticsrequest_.statisticsrequest.html" class="tsd-signature-type">StatisticsRequest</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The <a href="_olp_sdk_dataservice_read_lib_client_statisticsrequest_.statisticsrequest.html">StatisticsRequest</a> instance with the requested settings.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>The [StatisticsRequest]] instance with the requested settings.</p>
 						</li>
 					</ul>
 				</section>
@@ -161,12 +187,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/StatisticsClient.ts#L46">olp-sdk-dataservice-read/lib/client/StatisticsClient.ts:46</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/StatisticsClient.ts#L54">olp-sdk-dataservice-read/lib/client/StatisticsClient.ts:54</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Fetch and return layer summary from the Statistics service.</p>
+									<p>Fetches and returns a layer summary from the OLP Statistics Service.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -174,8 +200,8 @@
 								<li>
 									<h5>summaryRequest: <a href="_olp_sdk_dataservice_read_lib_client_summaryrequest_.summaryrequest.html" class="tsd-signature-type">SummaryRequest</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Options which are needed to fetch summary.
-										Includes @catalogHrn and @layerId</p>
+										<p>Parameters that are needed to fetch the layer summary.
+										Includes [[catalogHrn]] and [[layerId]].</p>
 									</div>
 								</li>
 							</ul>

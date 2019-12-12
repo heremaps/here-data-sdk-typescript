@@ -68,7 +68,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>The <code>CatalogClient</code> class is the class to interact with a DataStore catalog.</p>
+						<p>Interacts with the DataStore catalog.</p>
 					</div>
 				</div>
 			</section>
@@ -119,24 +119,35 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L36">olp-sdk-dataservice-read/lib/client/CatalogClient.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L36">olp-sdk-dataservice-read/lib/client/CatalogClient.ts:36</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Constructs a new <code>CatalogClient</code></p>
+									<p>Constructs the <a href="_olp_sdk_dataservice_read_lib_client_catalogclient_.catalogclient.html">CatalogClient</a> instance.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>catalogHrn: <a href="_olp_sdk_dataservice_read_lib_hrn_.hrn.html" class="tsd-signature-type">HRN</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The HERE Resource Name (HRN) of the catalog.</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>settings: <a href="_olp_sdk_dataservice_read_lib_client_olpclientsettings_.olpclientsettings.html" class="tsd-signature-type">OlpClientSettings</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>The <a href="_olp_sdk_dataservice_read_lib_client_olpclientsettings_.olpclientsettings.html">OlpClientSettings</a> instance.</p>
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_catalogclient_.catalogclient.html" class="tsd-signature-type">CatalogClient</a></h4>
+							<p>The <a href="_olp_sdk_dataservice_read_lib_client_catalogclient_.catalogclient.html">CatalogClient</a> instance.</p>
 						</li>
 					</ul>
 				</section>
@@ -149,9 +160,14 @@
 					<div class="tsd-signature tsd-kind-icon">settings<span class="tsd-signature-symbol">:</span> <a href="_olp_sdk_dataservice_read_lib_client_olpclientsettings_.olpclientsettings.html" class="tsd-signature-type">OlpClientSettings</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L41">olp-sdk-dataservice-read/lib/client/CatalogClient.ts:41</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L45">olp-sdk-dataservice-read/lib/client/CatalogClient.ts:45</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The <a href="_olp_sdk_dataservice_read_lib_client_olpclientsettings_.olpclientsettings.html">OlpClientSettings</a> instance.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -166,18 +182,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L56">olp-sdk-dataservice-read/lib/client/CatalogClient.ts:56</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L64">olp-sdk-dataservice-read/lib/client/CatalogClient.ts:64</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Loads and cache the full catalog configuration for the requested catalog.
+									<p>Loads and caches the full catalog configuration for the requested catalog.
 										The catalog configuration contains descriptive and structural
 									information such as layer definitions and layer types.</p>
 								</div>
 								<dl class="tsd-comment-tags">
 									<dt>summary</dt>
-									<dd><p>Gets the details of a catalog.</p>
+									<dd><p>Gets details about the requested catalog.</p>
 									</dd>
 								</dl>
 							</div>
@@ -185,17 +201,21 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>request: <a href="_olp_sdk_dataservice_read_lib_client_catalogrequest_.catalogrequest.html" class="tsd-signature-type">CatalogRequest</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The <a href="_olp_sdk_dataservice_read_lib_client_catalogrequest_.catalogrequest.html">CatalogRequest</a> instance that contains the configured request parameters.</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>A signal object that allows you to communicate with a request (such as a Fetch)
-											and abort it if required via an AbortController object
-										@see <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal">https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal</a></p>
+										<p>A signal object that allows you to communicate with a request (such as the <code>fetch</code> request)
+										and, if required, abort it using the <code>AbortController</code> object.</p>
+										<p>For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_dataservice_api_lib_config_api_.catalog.html" class="tsd-signature-type">Catalog</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>The catalog metadata.</p>
 						</li>
 					</ul>
 				</section>
@@ -209,12 +229,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L87">olp-sdk-dataservice-read/lib/client/CatalogClient.ts:87</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L99">olp-sdk-dataservice-read/lib/client/CatalogClient.ts:99</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Get the latest version of the catalog.</p>
+									<p>Gets the latest version of a catalog.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -222,22 +242,23 @@
 								<li>
 									<h5>request: <a href="_olp_sdk_dataservice_read_lib_client_catalogversionrequest_.catalogversionrequest.html" class="tsd-signature-type">CatalogVersionRequest</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Is <a href="_olp_sdk_dataservice_read_lib_client_catalogversionrequest_.catalogversionrequest.html">CatalogVersionRequest</a> instance and has ((getStartVersion)) method to get startVersion.
-											Catalog start version (exclusive). Default is -1. By convention -1
-										indicates the virtual initial version before the first publication which will have version 0.</p>
+										<p>The <a href="_olp_sdk_dataservice_read_lib_client_catalogversionrequest_.catalogversionrequest.html">CatalogVersionRequest</a> instance with the <code>getStartVersion</code> method used to get
+										the catalog start version (exclusive).</p>
+										<p>The default value is -1. By convention -1
+										indicates the virtual initial version before the first publication that has version 0.</p>
 									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>A signal object that allows you to communicate with a request (such as a Fetch)
-											and abort it if required via an AbortController object
-										@see <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal">https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal</a></p>
+										<p>A signal object that allows you to communicate with a request (such as the <code>fetch</code> request)
+										and, if required, abort it using the <code>AbortController</code> object.</p>
+										<p>For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>A promise of the http response that contains the payload with latest version.</p>
+							<p>A promise of the HTTP response that contains the payload with the latest version.</p>
 						</li>
 					</ul>
 				</section>
@@ -251,14 +272,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/fc13da8/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L119">olp-sdk-dataservice-read/lib/client/CatalogClient.ts:119</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L133">olp-sdk-dataservice-read/lib/client/CatalogClient.ts:133</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Get the information about specific catalog versions. Maximum number of versions to be
-										returned per call is 1000 versions. If range is bigger than 1000 versions 400 Bad Request
-									will be returned.</p>
+									<p>Gets information about specific catalog versions. The maximum number of versions to be
+									returned per call is 1000 versions. If the range is bigger than 1000 versions, you get the 400 Bad Request error.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -266,24 +286,26 @@
 								<li>
 									<h5>request: <a href="_olp_sdk_dataservice_read_lib_client_catalogversionrequest_.catalogversionrequest.html" class="tsd-signature-type">CatalogVersionRequest</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Is <a href="_olp_sdk_dataservice_read_lib_client_catalogversionrequest_.catalogversionrequest.html">CatalogVersionRequest</a> instance and has ((getStartVersion)) and ((getEndVersion)) methods.
-											StartVersion - Catalog start version (exclusive). Default is -1. By convention -1
-											indicates the virtual initial version before the first publication which will have version 0.
-											EndVersion - Catalog end version (inclusive). If not defined, then the latest catalog
-										version will be fethced and used.</p>
+										<p>The <a href="_olp_sdk_dataservice_read_lib_client_catalogversionrequest_.catalogversionrequest.html">CatalogVersionRequest</a> instance with the <code>getStartVersion</code> and <code>getEndVersion</code> methods.</p>
+										<ul>
+											<li><code>StartVersion</code> - a catalog start version (exclusive). Default is -1. By convention -1
+											indicates the virtual initial version before the first publication that has version 0.</li>
+											<li><code>EndVersion</code> - a catalog end version (inclusive). If not defined, then the latest catalog
+											version is fethced and used.</li>
+										</ul>
 									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>A signal object that allows you to communicate with a request (such as a Fetch)
-											and abort it if required via an AbortController object
-										@see <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal">https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal</a></p>
+										<p>A signal object that allows you to communicate with a request (such as the <code>fetch</code> request)
+										and, if required, abort it using the <code>AbortController</code> object.</p>
+										<p>For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_dataservice_api_lib_metadata_api_.versioninfos.html" class="tsd-signature-type">VersionInfos</a><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>A promise of the http response that contains the payload with versions in requested
+							<p>A promise of the HTTP response that contains the payload with versions in the requested
 							range.</p>
 						</li>
 					</ul>
