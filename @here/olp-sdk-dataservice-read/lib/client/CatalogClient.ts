@@ -27,6 +27,7 @@ import {
     RequestFactory
 } from "..";
 import { CatalogRequest } from "./CatalogRequest";
+import { LayerVersionsRequest } from "./LayerVersionsRequest";
 
 /**
  * Interacts with the DataStore catalog.
@@ -106,6 +107,63 @@ export class CatalogClient {
         );
 
         return Promise.resolve(earliestVersion);
+    }
+
+    /**
+     * Returns information about layer versions for the catalog version. It will return array with
+     * all catalog layers and latest version for each layer or return error if the catalog does not
+     * have any versions or if the version passed in the query parameter does not exist. If a layer
+     * does not have any data for the requested version it is excluded from the response.
+     *
+     * @param request Is [[LayerVersionsRequest]] instance and has ((getVersion)) method.
+     * Version - catalog version to get all related layers versions. If not defined, then the version will be the latest catalog version.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as a Fetch)
+     * and abort it if required via an AbortController object.
+     * @returns A promise of the http response that contains an array with all catalog layers and latest version for each layer.
+     */
+    public async getLayerVersions(
+        request: LayerVersionsRequest,
+        abortSignal?: AbortSignal
+    ): Promise<MetadataApi.LayerVersion[]> {
+        const builder = await this.getRequestBuilder(
+            "metadata",
+            HRN.fromString(this.hrn),
+            abortSignal
+        ).catch(error => Promise.reject(error));
+        let requestedCatalogVersion = request.getVersion();
+
+        let latestVersionError: any;
+        if (!requestedCatalogVersion) {
+            const billingtag = request.getBillingTag();
+            const catalogVersionRequest = new CatalogVersionRequest();
+            if (billingtag) {
+                catalogVersionRequest.withBillingTag(billingtag);
+            }
+            requestedCatalogVersion = await this.getLatestVersion(
+                catalogVersionRequest
+            ).catch(error => {
+                latestVersionError = error;
+                return undefined;
+            });
+            
+            if (!requestedCatalogVersion) {
+                return Promise.reject(`Failed to get the latest version with error: ${latestVersionError}`);
+            }
+        }
+
+        let layerVersionsError: any;
+        const layerVersions = await MetadataApi.getLayerVersions(builder, {
+            version: requestedCatalogVersion,
+            billingTag: request.getBillingTag()
+        }).catch(err => {
+            layerVersionsError = err;
+            return undefined;
+        });
+        if (!layerVersions) {
+            return Promise.reject(`Failed to get layerVersions with error: ${layerVersionsError}`);
+        }
+
+        return Promise.resolve(layerVersions.layerVersions);
     }
 
     /**

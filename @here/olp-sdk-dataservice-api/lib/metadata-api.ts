@@ -262,7 +262,7 @@ export async function getChanges(
  * If supplied, it must be between 4 - 16 characters, contain only alphanumeric ASCII characters [A-Za-z0-9].
  * Grouping billing records by billing tag will be available in future releases.
  */
-export async function getLayerVersion(
+export async function getLayerVersions(
     builder: RequestBuilder,
     params: { version: number; billingTag?: string }
 ): Promise<LayerVersions> {
