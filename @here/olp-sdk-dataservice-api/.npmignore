@@ -2,7 +2,9 @@
 !*.d.ts
 .nyc_output
 coverage
-test/
+test
+tests
+dist
 tsconfig.json
 .gitignore
 .gitreview
