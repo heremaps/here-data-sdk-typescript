@@ -7,6 +7,10 @@ cache: yarn
 env:
   global:
   - WORKSPACE=$TRAVIS_BUILD_DIR
+addons:
+  apt:
+    packages:
+    - libgconf-2-4
 branches:
     only:
       - master

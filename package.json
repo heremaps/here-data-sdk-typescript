@@ -33,6 +33,8 @@
     "bootstrap": "lerna bootstrap --use-workspaces",
     "build": "lerna run build",
     "test": "lerna run test",
+    "test-published-bundles": "cd tests/integration/bundles/umd && tsc && cd - && mocha-puppeteer tests/integration/bundles/umd/olp-sdk-published.test.js --args no-sandbox disable-setuid-sandbox",
+    "test-generated-bundles": "cd tests/integration/bundles/umd && tsc && cd - && mocha-puppeteer tests/integration/bundles/umd/olp-sdk-generated.test.js --args no-sandbox disable-setuid-sandbox",
     "integration-test": "nyc mocha --opts ./tests/integration/mocha.opts > xunit.xml",
     "coverage": "lerna run coverage",
     "lint": "lerna run lint",
@@ -42,8 +44,9 @@
     "typedoc": "npx typedoc --disableOutputCheck --options typedoc.json"
   },
   "devDependencies": {
-    "lerna": "3.16.4",
     "@types/node": "12.7.5",
+    "lerna": "3.16.4",
+    "mocha-puppeteer": "^0.14.0",
     "typescript": "3.5.3"
   }
 }
