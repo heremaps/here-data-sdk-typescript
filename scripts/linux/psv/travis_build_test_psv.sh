@@ -24,9 +24,14 @@
 yarn
 
 # initialize lerna monorepo with yarn workspaces
-# build the project
-# generate bundles and typedocs
 yarn bootstrap
+
+# build the project
+npm run build
+
+# generate bundles and typedocs
+npm run bundle
+npm run typedoc
 
 # check the lints
 npm run lint
@@ -39,5 +44,8 @@ npm run coverage
 
 # Integration tests
 npm run integration-test
+
+# Test the generated bundles
+npm run test-generated-bundles
 
 

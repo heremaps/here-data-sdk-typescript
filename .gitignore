@@ -9,3 +9,6 @@ xunit.xml
 *.d.ts
 *.js.map
 app.ts
+.cache/
+.mocha-puppeteer/
+
