@@ -26,7 +26,8 @@ import {
   HRN,
   PartitionsRequest,
   DataRequest,
-  quadKeyFromMortonCode
+  quadKeyFromMortonCode,
+  QuadKeyPartitionsRequest
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "./FetchMock";
 import { Buffer } from "buffer";
@@ -729,5 +730,114 @@ describe("VersionedLayerClient", () => {
 
         assert.isDefined(data);
         expect(fetchStub.callCount).to.be.equal(4);
+    });
+
+    it("Shoud read partitions metadata by QuadKey for specific VersionLayer", async () => {
+      const mockedResponses = new Map();
+
+      const billingTag = "billingTag";
+      const mockedVersion = 42;
+      const mockedDepth = 3;
+      const mockedQuadKey = {
+        row: 1,
+        column: 2,
+        level: 3
+      };
+  
+      // Set the response from lookup api with the info about Query API.
+      mockedResponses.set(
+        `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/query/v1`,
+        new Response(
+          JSON.stringify([
+            {
+              api: "query",
+              version: "v1",
+              baseURL: "https://query.data.api.platform.here.com/query/v1",
+              parameters: {
+                additionalProp1: "string",
+                additionalProp2: "string",
+                additionalProp3: "string"
+              }
+            }
+          ])
+        )
+      );
+  
+      // Set the response with mocked partitions
+      mockedResponses.set(
+        `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/versions/42/quadkeys/70/depths/3`,
+        new Response(
+          JSON.stringify({
+            parentQuads: [
+              {
+                additionalMetadata: "string",
+                checksum: "string",
+                compressedDataSize: 0,
+                dataHandle: "675911FF6236B7C7604BF8B105F1BB58",
+                dataSize: 0,
+                crc: "c3f276d7",
+                partition: "73982",
+                version: 0
+              }
+            ],
+            subQuads: [
+              {
+                additionalMetadata: "string",
+                checksum: "291f66029c232400e3403cd6e9cfd36e",
+                compressedDataSize: 200,
+                dataHandle: "1b2ca68f-d4a0-4379-8120-cd025640510c",
+                dataSize: 1024,
+                crc: "c3f276d7",
+                subQuadKey: "string",
+                version: 1
+              }
+            ]
+          })
+        )
+      );
+  
+      // Setup the fetch to use mocked responses.
+      fetchMock.withMockedResponses(mockedResponses);
+  
+      // Setup Layer Client with new OlpClientSettings.
+      const settings = new OlpClientSettings({
+        environment: "here",
+        getToken: () => Promise.resolve("test-token-string")
+      });
+      const layerClient = new VersionedLayerClient(
+        HRN.fromString("hrn:here:data:::test-hrn"),
+        "test-layed-id",
+        settings
+      );
+  
+      const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest();  
+      assert.isDefined(quadKeyPartitionsRequest);
+      expect(quadKeyPartitionsRequest).be.instanceOf(QuadKeyPartitionsRequest); 
+  
+      const quadKeyPartitionsRequestWithVersion = quadKeyPartitionsRequest.withVersion(
+        mockedVersion
+      );
+      const quadKeyPartitionsRequestWithDepth = quadKeyPartitionsRequest.withDepth(
+        mockedDepth
+      );
+      const quadKeyPartitionsRequestWithQuadKey = quadKeyPartitionsRequest.withQuadKey(
+        mockedQuadKey
+      );
+      const quadKeyPartitionsRequestWithBillTag = quadKeyPartitionsRequest.withBillingTag(
+        billingTag
+      );
+
+      expect(quadKeyPartitionsRequestWithVersion.getVersion()).to.be.equal(mockedVersion);
+      expect(quadKeyPartitionsRequestWithDepth.getDepth()).to.be.equal(mockedDepth);
+      expect(quadKeyPartitionsRequestWithQuadKey.getQuadKey()).to.be.equal(mockedQuadKey);
+      expect(quadKeyPartitionsRequestWithBillTag.getBillingTag()).to.be.equal(billingTag);
+  
+      const partitions = await layerClient.getPartitions(
+        quadKeyPartitionsRequest
+      );
+  
+      expect(partitions.parentQuads[0].partition).to.be.equal(
+        "73982"
+      );
     });
 });
