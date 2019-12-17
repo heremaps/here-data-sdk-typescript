@@ -56,8 +56,8 @@ describe("oauth-request", () => {
 
 describe("oauth-request-offline", () => {
     const mock_token = "eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsIm";
-    const mock_id = "Tt7wZRTAar";
-    const mock_secret = "khcy1LMBtMZsRVn1-dn7riw9x8";
+    const mock_id = "mock-id";
+    const mock_scrt = "mock-str";
 
     beforeEach(() => {
         fetchMock.config.overwriteRoutes = true;
@@ -110,7 +110,7 @@ describe("oauth-request-offline", () => {
         const userAuth = new UserAuth({
             credentials: {
                 accessKeyId: mock_id,
-                accessKeySecret: mock_secret
+                accessKeySecret: mock_scrt
             },
             tokenRequester: requestToken
         });
@@ -130,7 +130,7 @@ describe("oauth-request-offline", () => {
         const userAuth = new UserAuth({
             credentials: {
                 accessKeyId: mock_id,
-                accessKeySecret: mock_secret
+                accessKeySecret: mock_scrt
             },
             tokenRequester: requestToken
         });
@@ -152,8 +152,8 @@ describe("oauth-request-offline", () => {
 
 describe("oauth-request-lookupapi", () => {
     const mock_token = "eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsIm";
-    const mock_id = "Tt7wZRTAar";
-    const mock_secret = "khcy1LMBtMZsRVn1-dn7riw9x8";
+    const mock_id = "mock-id";
+    const mock_scrt = "mock-str";
 
     beforeEach(() => {
         fetchMock.config.overwriteRoutes = true;
@@ -173,7 +173,7 @@ describe("oauth-request-lookupapi", () => {
             env: "here",
             credentials: {
                 accessKeyId: mock_id,
-                accessKeySecret: mock_secret
+                accessKeySecret: mock_scrt
             },
             tokenRequester: requestToken
         });
@@ -221,7 +221,7 @@ describe("oauth-request-lookupapi", () => {
             env: "here-dev",
             credentials: {
                 accessKeyId: mock_id,
-                accessKeySecret: mock_secret
+                accessKeySecret: mock_scrt
             },
             tokenRequester: requestToken
         });
@@ -269,7 +269,7 @@ describe("oauth-request-lookupapi", () => {
             env: "here-cn",
             credentials: {
                 accessKeyId: mock_id,
-                accessKeySecret: mock_secret
+                accessKeySecret: mock_scrt
             },
             tokenRequester: requestToken
         });
@@ -317,7 +317,7 @@ describe("oauth-request-lookupapi", () => {
             env: "here-cn-dev",
             credentials: {
                 accessKeyId: mock_id,
-                accessKeySecret: mock_secret
+                accessKeySecret: mock_scrt
             },
             tokenRequester: requestToken
         });
@@ -368,7 +368,7 @@ describe("oauth-request-lookupapi", () => {
             customUrl: "http://localhost/",
             credentials: {
                 accessKeyId: mock_id,
-                accessKeySecret: mock_secret
+                accessKeySecret: mock_scrt
             },
             tokenRequester: requestToken
         });
@@ -415,7 +415,7 @@ describe("oauth-request-lookupapi", () => {
         const userAuth = new UserAuth({
             credentials: {
                 accessKeyId: mock_id,
-                accessKeySecret: mock_secret
+                accessKeySecret: mock_scrt
             },
             tokenRequester: requestToken
         });
@@ -462,8 +462,8 @@ describe("oauth-request-lookupapi", () => {
 describe("auth-request-project-scope", () => {
     let token: string | null = null;
     const mockedScope = "mocked-scope";
-    const mock_id = "Tt7wZRTAar";
-    const mock_secret = "khcy1LMBtMZsRVn1-dn7riw9x8";
+    const mock_id = "mock-id";
+    const mock_scrt = "mock-str";
     const mockedToken: Token = {
         accessToken: "fake-access-token",
         expiresIn: 42,
@@ -479,7 +479,7 @@ describe("auth-request-project-scope", () => {
         env: "here-dev",
         credentials: {
             accessKeyId: mock_id,
-            accessKeySecret: mock_secret
+            accessKeySecret: mock_scrt
         },
             tokenRequester: mockedTokenRequester,
             scope: mockedScope

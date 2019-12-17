@@ -42,8 +42,6 @@ global.btoa = () => "mocked-btoa-string";
 
 describe("oauth-request-offline", () => {
     const mock_token = "eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsIm";
-    const mock_id = "Tt7wZRTAar";
-    const mock_secret = "khcy1LMBtMZsRVn1-dn7riw9x8";
 
     beforeEach(() => {
         fetchMock.config.overwriteRoutes = true;
