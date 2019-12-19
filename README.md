@@ -6,9 +6,9 @@ The HERE OLP SDK for TypeScript is a TypeScript client for the <a href="https://
 
 ### Build and Test
 
-| Master                      | Node version        | Status                                                                                                                                                                                       |
-| :-------------------------- | :------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Build/Test/Bundling/Typedoc | Node 12.13.0 (LTS)) | <a href="https://travis-ci.com/heremaps/here-olp-sdk-typescript" target="_blank"><img src="https://travis-ci.com/heremaps/here-olp-sdk-typescript.svg?branch=master" alt="Build Status"></a> |
+| Master                      | Node version       | Status                                                                                                                                                                                       |
+| :-------------------------- | :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Build/Test/Bundling/Typedoc | Node 12.13.0 (LTS) | <a href="https://travis-ci.com/heremaps/here-olp-sdk-typescript" target="_blank"><img src="https://travis-ci.com/heremaps/here-olp-sdk-typescript.svg?branch=master" alt="Build Status"></a> |
 
 ## Why Use
 
