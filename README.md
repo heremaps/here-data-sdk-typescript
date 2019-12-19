@@ -1,14 +1,14 @@
 # HERE OLP SDK for TypeScript
 
-The HERE OLP SDK for TypeScript is a TypeScript client for the [HERE Open Location Platform](https://platform.here.com).
+The HERE OLP SDK for TypeScript is a TypeScript client for the <a href="https://platform.here.com" target="_blank">HERE Open Location Platform</a>.
 
 ## Health Сheck
 
-**Build & Test**
+### Build and Test
 
-|   Master                       | Node version                    | Status                          |
-| :----------------------------- | :------------------------------ |:------------------------------- |
-| Build/Test/Bundling/Typedoc    | Node 12.13.0 lts                | [![Build Status](https://travis-ci.com/heremaps/here-olp-sdk-typescript.svg?branch=master)](https://travis-ci.com/heremaps/here-olp-sdk-typescript)   |
+| Master                      | Node version        | Status                                                                                                                                                                                       |
+| :-------------------------- | :------------------ | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Build/Test/Bundling/Typedoc | Node 12.13.0 (LTS)) | <a href="https://travis-ci.com/heremaps/here-olp-sdk-typescript" target="_blank"><img src="https://travis-ci.com/heremaps/here-olp-sdk-typescript.svg?branch=master" alt="Build Status"></a> |
 
 ## Why Use
 
@@ -18,9 +18,9 @@ The OLP SDK for TypeScrypt is a modern, lightweight, and modular SDK with minima
 
 This SDK lets you:
 
-* Authenticate to HERE OLP using client credentials
-* Read catalog and partition metadata
-* Retrieve data from versioned and volatile layers of OLP catalogs
+- Authenticate to HERE OLP using client credentials
+- Read catalog and partition metadata
+- Retrieve data from versioned and volatile layers of OLP catalogs
 
 Additionally, the SDK includes classes for work with geospatial tiling schemes that are used by most OLP catalog layers.
 
@@ -28,11 +28,13 @@ Additionally, the SDK includes classes for work with geospatial tiling schemes t
 
 The OLP SDK for TypeScript repository is a monorepo that contains the core components of the OLP SDK organized in the NPM workspace.
 
-All components can be used stand-alone and are in the **@here** subdirectory.
+All components can be used stand-alone and are in the <a href="https://github.com/heremaps/here-olp-sdk-typescript/tree/master/%40here" target="_blank">@here</a> subdirectory.
 
 ## Installation
 
-You can install the SDK modules using npm:
+You can install the SDK modules using npm or add compiled bundles to an HTML page.
+
+To install the SDK modules using npm, run the following commands:
 
 ```sh
 npm install @here/olp-sdk-authentication
@@ -40,7 +42,7 @@ npm install @here/olp-sdk-dataservice-read
 npm install @here/olp-sdk-dataservice-api
 ```
 
-You can also use the compiled bundles from CDN:
+To use the compiled bundles from the CDN, add the following files to an HTML page:
 
 ```
 https://unpkg.com/@here/olp-sdk-authentication/bundle.umd.min.js
@@ -49,50 +51,54 @@ https://unpkg.com/@here/olp-sdk-dataservice-read/bundle.umd.min.js
 https://unpkg.com/@here/olp-sdk-fetch/bundle.umd.min.js
 ```
 
-To learn how to use the HERE OLP SDK for TypeScript, see the [Getting Started Guide](docs/GettingStartedGuide.md).
+To learn how to use the HERE OLP SDK for TypeScript, see the <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/master/docs/GettingStartedGuide.md" target="_blank">Getting Started Guide</a>.
 
 ## Development
 
 ### Dependencies
 
-* npm 6.0.0+ (for installation instructions, see [npm](https://www.npmjs.com/))
-* Node.js 10+ (for installation instructions, see [Node.js](http://nodejs.org))
-* Lerna.js 3+ (for installation instructions, see [Lerna.js](http://lerna.js.org))
-* TypeDoc 0.15+ (for installation instructions, see [TypeDoc](http://typedoc.org))
+The HERE OLP SDK for TypeScript has the following dependencies:
 
-> Note: As an alternative to npm, you can also use Yarn 1+ (for installation instructions, see [Yarn](http://yarnpkg.com))
+- npm 6.0.0+ (for installation instructions, see <a href="https://www.npmjs.com/" target="_blank">npm</a>)
+- Node.js 10+ (for installation instructions, see <a href="http://nodejs.org" target="_blank">Node.js</a>)
+- Lerna.js 3+ (for installation instructions, see <a href="http://lerna.js.org" target="_blank">Lerna.js</a>)
+- TypeDoc 0.15+ (for installation instructions, see <a href="http://typedoc.org" target="_blank">TypeDoc</a>)
+
+> **Note:** As an alternative to npm, you can also use Yarn 1+ (for installation instructions, see <a href="http://yarnpkg.com" target="_blank">Yarn</a>).
 
 #### Download Dependencies
 
-To bootstrap the packages in the current Lerna repo, install all interdependent packages, and link any cross-dependencies, run the following command:
+To bootstrap the packages in the current Lerna repository, install all interdependent packages, and link any cross-dependencies, run the following command:
 
 ```sh
 yarn install && yarn bootstrap
 ```
 
-#### Build the SDK
+### Build the SDK
 
-To build a TypeScript source code into a JavaScript code, run the following command:
+To build TypeScript source code into JavaScript code, run the following command:
 
 ```sh
 npm run build
 ```
 
-#### Test the SDK
+### Test the SDK
 
-To test the built results with unit tests, run the following command:
+You can test the build results using unit and integration tests.
+
+To test the build results using unit tests, run the following command:
 
 ```sh
 npm run test
 ```
 
-To test the built results with integration tests, run the following command:
+To test the build results using integration tests, run the following command:
 
 ```sh
 npm run integration-test
 ```
 
-#### Test Coverage
+### Test Coverage
 
 To run unit tests and generate test coverage reports, run the following command:
 
@@ -100,7 +106,7 @@ To run unit tests and generate test coverage reports, run the following command:
 npm run coverage
 ```
 
-#### Generate Documentation with TypeDoc
+### Generate Documentation with TypeDoc
 
 To generate documentation for all modules and classes, run the following command:
 
@@ -108,9 +114,9 @@ To generate documentation for all modules and classes, run the following command
 npm run typedoc
 ```
 
-The **dist/doc** folder is generated.
+The **dist/doc** folder is generated with documentation from the annotated source code.
 
-#### Use the Bundle Functionality
+### Use the Bundle Functionality
 
 If you want to have a compiled project, you can use bundle commands. After running each of the following commands, you get the .js bundled files from the root folder for each package:
 
@@ -143,4 +149,4 @@ npm run bundle
 
 Copyright (C) 2019 HERE Europe B.V.
 
-For license details, see the [LICENSE](https://github.com/heremaps/here-olp-sdk-typescript/blob/master/LICENSE) file in the root of this project.
+For license details, see the <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/master/LICENSE" target="_blank">LICENSE</a> file in the root of this project.
