@@ -20,6 +20,7 @@
 export * from "./utils";
 export * from "./client";
 export * from "./cache";
+export * from "./layerDataProvider";
 
 export * from "./DataStoreRequestBuilder";
 export * from "./DataStoreDownloadManager";
