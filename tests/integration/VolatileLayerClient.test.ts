@@ -73,6 +73,189 @@ describe("VolatileLayerClient", () => {
     expect(layerClient).to.be.instanceOf(VolatileLayerClient);
   });
 
+  it("Shoud be fetched partitions metadata for specific IDs", async () => {
+    const mockedResponses = new Map();
+
+    // Set the response from lookup api with the info about Query API.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/query/v1`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "query",
+            version: "v1",
+            baseURL: "https://query.data.api.platform.here.com/query/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ])
+      )
+    );
+
+    // Set the response with mocked partitions for IDs 100 and 1000 from Query service
+    mockedResponses.set(
+      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/partitions?partition=100&partition=1000`,
+      new Response(
+        JSON.stringify({
+          partitions: [
+            {
+              checksum: "291f66029c232400e3403cd6e9cfd36e",
+              compressedDataSize: 1024,
+              dataHandle: "1b2ca68f-d4a0-4379-8120-cd025640510c",
+              dataSize: 1024,
+              crc: "c3f276d7",
+              partition: "100",
+              version: 2
+            },
+            {
+              checksum: "123f66029c232400e3403cd6e9cfd45b",
+              compressedDataSize: 2084,
+              dataHandle: "1b2ca68f-d4a0-4379-8120-cd025640578e",
+              dataSize: 2084,
+              crc: "c3f2766y",
+              partition: "1000",
+              version: 2
+            }
+          ]
+        })
+      )
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    // Setup Layer Client with new OlpClientSettings.
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+    const layerClient = new VolatileLayerClient(
+      HRN.fromString("hrn:here:data:::test-hrn"),
+      "test-layed-id",
+      settings
+    );
+
+    // Setup PartitionsRequest to filter response by partition IDs 100 and 1000.
+    const request = new PartitionsRequest().withPartitionIds(["100", "1000"]);
+
+    // Send request for partitions metadata.
+    const partitions = await layerClient.getPartitions(request).catch(error => {
+      console.log(`Error getting partitions: ${error}`);
+    });
+
+    // Check if partitions fetched succesful.
+    assert.isDefined(partitions);
+
+    if (partitions) {
+      // Check if partitions returns as expected.
+      expect(partitions.partitions[0].dataHandle).to.be.equal(
+        "1b2ca68f-d4a0-4379-8120-cd025640510c"
+      );
+      expect(partitions.partitions[1].dataHandle).to.be.equal(
+        "1b2ca68f-d4a0-4379-8120-cd025640578e"
+      );
+      expect(partitions.partitions[2]).to.be.undefined;
+
+      /**
+       * Check if the count of requests are as expected. Should be called 2 times. One to the lookup service
+       * for the baseURL to the Query service and another one to the query service.
+       */
+      expect(fetchStub.callCount).to.be.equal(2);
+    }
+  });
+
+  it("Shoud be fetched data with PartitionId", async () => {
+    const mockedResponses = new Map();
+    const mockedPartitionId = "0000042";
+    const mockedData = Buffer.alloc(42);
+    const mockedPartitionsIdData = {
+      partitions: [
+        {
+          version: 1,
+          partition: "0000042",
+          dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+        },
+        {
+          version: 42,
+          partition: "0000019",
+          dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+        }
+      ]
+    };
+
+    // Set the response from lookup api with the info about Query API.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/query/v1`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "query",
+            version: "v1",
+            baseURL: "https://query.data.api.platform.here.com/query/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ])
+      )
+    );
+
+    mockedResponses.set(
+      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/partitions?partition=0000042`,
+      new Response(JSON.stringify(mockedPartitionsIdData))
+    );
+    // Set the response from lookup api with the info about Metadata service.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/volatile-blob/v1`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "blob",
+            version: "v1",
+            baseURL:
+              "https://volatile-blob.data.api.platform.here.com/volatile-blob/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ])
+      )
+    );
+
+    // Set the response of mocked partitions from metadata service.
+    mockedResponses.set(
+      `https://volatile-blob.data.api.platform.here.com/volatile-blob/v1/layers/test-layed-id/data/3C3BE24A341D82321A9BA9075A7EF498.123`,
+      new Response(mockedData)
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+    const layerClient = new VolatileLayerClient(
+      testHRN,
+      testVolatileLayerId,
+      settings
+    );
+
+    const request = new DataRequest().withPartitionId(mockedPartitionId);
+
+    const data = await layerClient.getData(request);
+
+    assert.isDefined(data);
+    expect(fetchStub.callCount).to.be.equal(4);
+  });
+
   it("Shoud be fetched partitions all metadata", async () => {
     const mockedResponses = new Map();
 
