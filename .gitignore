@@ -11,4 +11,3 @@ xunit.xml
 app.ts
 .cache/
 .mocha-puppeteer/
-
