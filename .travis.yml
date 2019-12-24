@@ -3,6 +3,8 @@ dist: xenial
 language: node_js
 node_js:
   - lts/*
+scripts:
+  - npm install codecov -g
 cache: yarn
 env:
   global:
