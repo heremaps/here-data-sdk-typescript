@@ -40,7 +40,7 @@ npm run lint
 npm run test
 
 # generate test coverage
-npm run coverage
+npm run codecov
 
 # Integration tests
 npm run integration-test

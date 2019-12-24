@@ -37,6 +37,7 @@
     "test-generated-bundles": "cd tests/integration/bundles/umd && tsc && cd - && mocha-puppeteer tests/integration/bundles/umd/olp-sdk-generated.test.js --args no-sandbox disable-setuid-sandbox",
     "integration-test": "nyc mocha --opts ./tests/integration/mocha.opts > xunit.xml",
     "coverage": "lerna run coverage",
+    "codecov": "lerna run codecov",
     "lint": "lerna run lint",
     "bundle": "lerna run bundle",
     "bundle:dev": "lerna run bundle:dev",
