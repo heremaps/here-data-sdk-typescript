@@ -18,4 +18,5 @@
  */
 
 export * from "./ApiCacheRepository";
+export * from "./ConfigCacheRepository";
 export * from "./KeyValueCache";
