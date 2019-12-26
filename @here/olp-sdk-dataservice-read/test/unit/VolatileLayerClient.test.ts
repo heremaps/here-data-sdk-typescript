@@ -372,4 +372,92 @@ describe("volatileLayerClient", () => {
                 assert.equal(mockedErrorResponse, error.message);
             });
     });
+
+    it("Should method getData return Error with correct partitionId and wrong layerId", async () => {
+        let settings = sandbox.createStubInstance(
+            dataServiceRead.OlpClientSettings
+        );
+        const volatileClient = new dataServiceRead.VolatileLayerClient(
+            mockedHRN,
+            "mockedLayerId",
+            (settings as unknown) as dataServiceRead.OlpClientSettings
+        );
+        
+        const dataRequest = new dataServiceRead.DataRequest().withPartitionId(
+            "42"
+        );
+
+        const mockedPartitionsIdData = {
+            status: 400,
+            title: "Bad request",
+            detail: [
+                {
+                    name: "layer",
+                    error: "Layer 'mockedLayerId' is missing in the catalog configuration."
+                }
+            ]
+        };
+
+        getPartitionsByIdStub.callsFake(
+            (builder: any, params: any): any => {
+                return Promise.resolve(mockedPartitionsIdData);
+            }
+        );
+
+        const response = await volatileClient
+            .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(error, mockedPartitionsIdData);
+            });
+    });
+
+    it("Should method getData return Error with correct quadKey and wrong version parameter", async () => {
+        let settings = sandbox.createStubInstance(
+            dataServiceRead.OlpClientSettings
+        );
+        const volatileClient = new dataServiceRead.VolatileLayerClient(
+            mockedHRN,
+            "mockedLayerId",
+            (settings as unknown) as dataServiceRead.OlpClientSettings
+        );
+        const dataRequest = new dataServiceRead.DataRequest().withQuadKey(
+            dataServiceRead.quadKeyFromMortonCode("23618403")
+        );
+
+        const mockedPartitionsIdData = {
+            status: 400,
+            title: "Bad request",
+            detail: [
+                {
+                    name: "layer",
+                    error: "Layer 'mockedLayerId' is missing in the catalog configuration."
+                }
+            ]
+        };
+
+        const mockedVersion = {
+            version: 42
+        };
+
+        getVersionStub.callsFake(
+            (builder: any, params: any): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve(mockedVersion);
+            }
+        );
+
+        getQuadTreeIndexStub.callsFake(
+            (builder: any, params: any): any => {
+                return Promise.resolve(mockedPartitionsIdData);
+            }
+        );
+
+        const response = await volatileClient
+            .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(error, mockedPartitionsIdData);
+            });
+    });
+
 });

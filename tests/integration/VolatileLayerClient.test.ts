@@ -646,7 +646,8 @@ describe("VolatileLayerClient", () => {
     const partitions = await layerClient.getPartitions(
       quadKeyPartitionsRequest
     );
-
-    expect(partitions.parentQuads[0].partition).to.be.equal("73982");
+    if (partitions.parentQuads) {
+      expect(partitions.parentQuads[0].partition).to.be.equal("73982");
+    }
   });
 });
