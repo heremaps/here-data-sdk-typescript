@@ -106,14 +106,21 @@ export class VersionedLayerClient {
                 const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest()
                     .withQuadKey(quadKey)
                     .withVersion(version);
-                const quadTreeIndex = await this.getPartitions(
+                const quadTreeIndexResponse = await this.getPartitions(
                     quadKeyPartitionsRequest
                 ).catch(error => Promise.reject(error));
-                return this.downloadPartition(
-                    quadTreeIndex.subQuads[0].dataHandle,
-                    abortSignal,
-                    dataRequest.getBillingTag()
-                );
+
+                if (quadTreeIndexResponse.status && quadTreeIndexResponse.status === 400) {
+                    return Promise.reject(quadTreeIndexResponse);
+                }
+
+                return quadTreeIndexResponse.subQuads
+                    ? this.downloadPartition(
+                        quadTreeIndexResponse.subQuads[0].dataHandle,
+                        abortSignal,
+                        dataRequest.getBillingTag()
+                    )
+                    : Promise.reject(`No dataHandle for quadKey ${quadKey}. HRN: ${this.hrn}`);
             }
         }
 
@@ -235,7 +242,7 @@ export class VersionedLayerClient {
         );
         const latestVersion =
             version || (await this.getLatestVersion(billingTag));
-        const partitions = await QueryApi.getPartitionsById(
+        const partitionsListRepsonse = await QueryApi.getPartitionsById(
             queryRequestBilder,
             {
                 version: `${latestVersion}`,
@@ -243,8 +250,13 @@ export class VersionedLayerClient {
                 partition: [partitionId],
                 billingTag
             }
-        );
-        const partition = partitions.partitions.find(element => {
+        ).catch(async error => Promise.reject(error));
+
+        if (partitionsListRepsonse.status && partitionsListRepsonse.status === 400) {
+            return Promise.reject(partitionsListRepsonse);
+        }
+
+        const partition = partitionsListRepsonse.partitions && partitionsListRepsonse.partitions.find(element => {
             return element.partition === partitionId;
         });
 
