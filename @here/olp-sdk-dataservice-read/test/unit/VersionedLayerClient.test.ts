@@ -176,7 +176,7 @@ describe("VersionedLayerClient", () => {
         assert.isTrue(response.ok);
     });
 
-    it("Should method getData provide data with partitionId quadKey", async () => {
+    it("Should method getData provide data with quadKey", async () => {
         const mockedBlobData = new Response("mocked-blob-response");
         const mockedVersion = {
             version: 42
@@ -238,6 +238,66 @@ describe("VersionedLayerClient", () => {
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.message);
+            });
+    });
+
+    it("Should method getData return Error with correct partitionId and wrong version parameter", async () => {
+        const dataRequest = new dataServiceRead.DataRequest().withVersion(100500).withPartitionId(
+            "42"
+        );
+
+        const mockedPartitionsIdData = {
+            status: 400,
+            title: "Bad request",
+            detail: [
+                {
+                    name: "version",
+                    error: 'Invalid version: latest known version is 181'
+                }
+            ]
+        };
+
+        getPartitionsByIdStub.callsFake(
+            (builder: any, params: any): any => {
+                return Promise.resolve(mockedPartitionsIdData);
+            }
+        );
+
+        const response = await versionedLayerClient
+            .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(error, mockedPartitionsIdData);
+            });
+    });
+
+    it("Should method getData return Error with correct quadKey and wrong version parameter", async () => {
+        const dataRequest = new dataServiceRead.DataRequest().withVersion(100500).withQuadKey(
+            dataServiceRead.quadKeyFromMortonCode("23618403")
+        );
+
+        const mockedPartitionsIdData = {
+            status: 400,
+            title: "Bad request",
+            detail: [
+                {
+                    name: "version",
+                    error: 'Invalid version: latest known version is 181'
+                }
+            ]
+        };
+
+        getQuadTreeIndexStub.callsFake(
+            (builder: any, params: any): any => {
+                return Promise.resolve(mockedPartitionsIdData);
+            }
+        );
+
+        const response = await versionedLayerClient
+            .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(error, mockedPartitionsIdData);
             });
     });
 

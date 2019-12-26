@@ -37,12 +37,21 @@ export interface Index {
     /**
      * Result of the index resource call. For each parent tile, one element with the respective parent-quad data is contained in the array.
      */
-    parentQuads: ParentQuad[];
+    parentQuads?: ParentQuad[];
     /**
      * Result of the index resource call. For each tile that contains data in the requested quadKey,
      * one element with the respective sub-quad data is contained in the array.
      */
-    subQuads: SubQuad[];
+    subQuads?: SubQuad[];
+    /**
+     * Error code
+     */
+    status?: number;
+
+    /**
+     * Error description
+     */
+    title?: string;
 }
 
 export interface ParentQuad {
@@ -132,7 +141,17 @@ export interface Partition {
  * Describes a list of partitions for a given layer and layer version.
  */
 export interface Partitions {
-    partitions: Partition[];
+    partitions?: Partition[];
+
+    /**
+     * Error code
+     */
+    status?: number;
+
+    /**
+     * Error description
+     */
+    title?: string;
 }
 
 export interface SubQuad {
