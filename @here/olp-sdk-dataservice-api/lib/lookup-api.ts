@@ -58,15 +58,17 @@ export interface ApiNotFoundError {
     /**
      * Repetition of the HTTP error code
      */
-    status: number;
+    status?: number;
     /**
      * Short description of the error
      */
-    title: string;
+    title?: string;
     /**
      * Complete details of the error
      */
-    detail: Array<{name: string, error: string}>;
+    detail?: Array<{name: string, error: string}>;
+    error?: string;
+    error_description?: string;
 }
 
 /* ===================================================================

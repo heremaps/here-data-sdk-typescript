@@ -131,6 +131,20 @@ export class RequestFactory {
                 async (
                     result: LookupApi.API[] | LookupApi.ApiNotFoundError
                 ) => {
+                    if (!(result instanceof Array)) {
+                        if (result.status === 404) {
+                            return Promise.reject(
+                                `Getting API error: ${result.title}`
+                            );
+                        }
+
+                        if (result.error) {
+                            return Promise.reject(
+                                `Getting API error: ${result.error}, ${result.error_description}`
+                            );
+                        }
+                    }
+
                     if (result instanceof Array && result[0].baseURL) {
                         apiCache.put(
                             serviceName,
@@ -138,12 +152,6 @@ export class RequestFactory {
                             result[0].baseURL
                         );
                         return Promise.resolve(result[0].baseURL);
-                    }
-
-                    if (!(result instanceof Array) && result.status === 404) {
-                        return Promise.reject(
-                            `Getting API error: ${result.title}`
-                        );
                     }
 
                     return Promise.reject(
