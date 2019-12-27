@@ -39,8 +39,8 @@ npm run lint
 # run tests
 npm run test
 
-# generate test coverage
-npm run codecov
+# generate and upload codecov
+npm run codecov && npx codecov
 
 # Integration tests
 npm run integration-test
