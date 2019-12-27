@@ -1,0 +1,22 @@
+coverage:
+  range: 60..100
+  round: down
+  precision: 1
+  status:
+    project:
+      authentication:
+        paths:
+          - ./@here/olp-sdk-authentication
+        threshold: 1
+      dataservice-read:
+        paths:
+          - ./@here/olp-sdk-dataservice-read
+        threshold: 1
+      olp-sdk-fetch:
+        paths:
+          - ./@here/olp-sdk-fetch
+        threshold: 1
+ignore:
+  - ./@here/olp-sdk-authentication/test
+  - ./@here/olp-sdk-dataservice-read/test
+  - ./@here/olp-sdk-fetch/test

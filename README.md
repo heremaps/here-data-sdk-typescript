@@ -10,6 +10,11 @@ The HERE OLP SDK for TypeScript is a TypeScript client for the <a href="https://
 | :-------------------------- | :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Build/Test/Bundling/Typedoc | Node 12.13.0 (LTS) | <a href="https://travis-ci.com/heremaps/here-olp-sdk-typescript" target="_blank"><img src="https://travis-ci.com/heremaps/here-olp-sdk-typescript.svg?branch=master" alt="Build Status"></a> |
 
+### Test Coverage
+
+<a href="https://codecov.io/gh/heremaps/here-olp-sdk-typescript/" target="_blank"><img src="https://codecov.io/gh/heremaps/here-olp-sdk-typescript/branch/master/graph/badge.svg" alt="Linux code coverage"/></a>
+
+
 ## Why Use
 
 The Open Location Platform (OLP) SDK for TypeScript provides support for the core HERE OLP use cases. The SDK is intended to save your time and effort on using OLP REST APIs. It provides a set of stable APIs that simplify complex OLP operations and keeps up to date with the latest OLP REST API changes.
