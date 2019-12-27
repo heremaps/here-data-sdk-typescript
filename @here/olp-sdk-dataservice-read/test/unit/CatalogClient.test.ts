@@ -227,7 +227,7 @@ describe("CatalogClient", () => {
         );
 
         assert.isDefined(response);
-        expect(response).to.be.equal(mockedEarliestVersion);
+        expect(response).to.be.equal(mockedEarliestVersion.version);
     });
 
     it("Should method getEarliestVersion return error getting earliest catalog version", async () => {
