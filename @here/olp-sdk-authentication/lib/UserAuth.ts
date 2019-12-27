@@ -38,7 +38,7 @@ export interface AuthCredentials {
      *
      * Find the access key secret in the **credentials.properties** file downloaded from the OLP Portal.
      */
-    accessKeySecret?: string;
+    accessKeyScrt?: string;
 }
 
 /**
@@ -196,7 +196,7 @@ export class UserAuth {
         if (
             !this.m_credentials ||
             !this.m_credentials.accessKeyId ||
-            !this.m_credentials.accessKeySecret
+            !this.m_credentials.accessKeyScrt
         ) {
             return Promise.reject(
                 "Error getting token. The credentials has not been added!"
@@ -207,7 +207,7 @@ export class UserAuth {
             .tokenRequester({
                 url: this.m_apiUrl + "oauth2/token",
                 consumerKey: this.m_credentials.accessKeyId,
-                secretKey: this.m_credentials.accessKeySecret,
+                secretKey: this.m_credentials.accessKeyScrt,
                 scope: this.m_scope
             })
             .catch(err => Promise.reject(`Error fetching token: ${err}`));
