@@ -48,6 +48,7 @@
     "@types/node": "12.7.5",
     "lerna": "3.16.4",
     "mocha-puppeteer": "^0.14.0",
-    "typescript": "3.5.3"
+    "typescript": "3.5.3",
+    "codecov": "^3.6.1"
   }
 }

@@ -13,7 +13,7 @@
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "test": "mocha > xunit.xml",
     "coverage": "nyc mocha > xunit.xml",
-    "codecov": "npm run coverage && nyc report --reporter=json",
+    "codecov": "npm run coverage && nyc report --reporter=lcov",
     "prepare": "tsc --sourceMap false && npm run bundle",
     "bundle": "npm run bundle:dev && npm run bundle:prod",
     "bundle:prod": "webpack --env.NODE_ENV=production",
