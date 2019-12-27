@@ -93,7 +93,7 @@ export class CatalogClient {
     public async getEarliestVersion(
         request: CatalogVersionRequest,
         abortSignal?: AbortSignal
-    ): Promise<MetadataApi.VersionResponse> {
+    ): Promise<number> {
         const builder = await this.getRequestBuilder(
             "metadata",
             HRN.fromString(this.hrn),
@@ -106,7 +106,7 @@ export class CatalogClient {
             Promise.reject(`Error getting earliest catalog version: ${err}`)
         );
 
-        return Promise.resolve(earliestVersion);
+        return Promise.resolve(earliestVersion.version);
     }
 
     /**
