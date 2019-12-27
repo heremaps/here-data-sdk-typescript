@@ -25,7 +25,7 @@ describe("loadCredentialsFromFile", () => {
         const credentials = loadCredentialsFromFile("./test/test-credentials.properties");
 
         assert.strictEqual(credentials.accessKeyId, "Tt7wZRTAar");
-        assert.strictEqual(credentials.accessKeySecret, "khcy1LMBtMZsRVn1-dn7riw9x8");
+        assert.strictEqual(credentials.accessKeyScrt, "khcy1LMBtMZsRVn1-dn7riw9x8");
     });
 
     it("should throw an error", () => {

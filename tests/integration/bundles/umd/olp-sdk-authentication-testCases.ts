@@ -36,7 +36,7 @@ export const OlpSdkAuthenticationTestCases: {
                 const userAuth = new UserAuth({
                     credentials: {
                         accessKeyId: "mocked-id",
-                        accessKeySecret: "mocked-str"
+                        accessKeyScrt: "mocked-str"
                     },
                     tokenRequester: requestToken
                 });
