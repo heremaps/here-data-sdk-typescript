@@ -24,7 +24,8 @@ import {
   OlpClientSettings,
   HRN,
   CatalogVersionRequest,
-  CatalogClient
+  CatalogClient,
+  CatalogRequest
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "./FetchMock";
 
@@ -69,7 +70,7 @@ describe("CatalogClient", () => {
     expect(catalogClient).to.be.instanceOf(CatalogClient);
   });
 
-  it("Get the information about all catalog versions", async () => {
+  it("Should fetch the information about all catalog versions", async () => {
     const mockedResponses = new Map();
 
     // Set the response from lookup api with the info about Metadata service.
@@ -181,6 +182,71 @@ describe("CatalogClient", () => {
     expect(versionsResponse.versions[1].version).to.be.equal(2);
     expect(versionsResponse.versions[2].version).to.be.equal(3);
     expect(versionsResponse.versions[3].version).to.be.equal(50);
+
+    expect(fetchStub.callCount).to.be.equal(2);
+  });
+
+  it("Should fetch the configuration of all catalogs", async () => {
+    const mockedResponses = new Map();
+
+    // Set the response from lookup api with the info about Metadata service.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis/config/v1`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "config",
+            version: "v1",
+            baseURL: "https://config.data.api.platform.here.com/config/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ])
+      )
+    );
+
+    const mockedCatalogs = {
+        id: "here-internal-test",
+        hrn: "hrn:here-dev:data:::here-internal-test",
+        name: "here-internal-test",
+        summary: "Internal test for here",
+        description: "Used for internal testing on the staging olp.",
+        tags: [],
+        created: "2018-07-13T20:50:08.425Z",
+        replication: {},
+        layers: [
+            {
+                id: "mocked-layed-id",
+                hrn:
+                    "hrn:here-dev:data:::here-internal-test:hype-test-prefetch",
+                partitioning: {
+                    tileLevels: [],
+                    scheme: "heretile"
+                },
+                contentType: "application/x-protobuf",
+                layerType: "versioned"
+            }
+        ],
+        version: 3
+    };
+
+    // Set the response from Metadata service with the versions info from the catalog.
+    mockedResponses.set(
+      `https://config.data.api.platform.here.com/config/v1/catalogs/hrn:here:data:::test-hrn`,
+      new Response(JSON.stringify(mockedCatalogs))
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    const request = new CatalogRequest();
+
+    let response = await catalogClient.getCatalog(request);
+
+    assert.isDefined(response);
 
     expect(fetchStub.callCount).to.be.equal(2);
   });
