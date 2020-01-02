@@ -29,7 +29,6 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-
 class MockCatalogVersionRequest {
     public getBillingTag(): string | undefined {
         return "testBillingTag";
@@ -227,7 +226,7 @@ describe("CatalogClient", () => {
         );
 
         assert.isDefined(response);
-        expect(response).to.be.equal(mockedEarliestVersion);
+        expect(response).to.be.equal(mockedEarliestVersion.version);
     });
 
     it("Should method getEarliestVersion return error getting earliest catalog version", async () => {
