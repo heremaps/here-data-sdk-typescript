@@ -1,4 +1,4 @@
-# Authentification library
+# Authentication library
 
 ## Overview
 
@@ -54,7 +54,7 @@ Get token:
 
 ```typescript
 const token: string = await userAuth.getToken();
- ```
+```
 
 ### Use with Credentials Imported from a File
 
@@ -62,10 +62,15 @@ Download your **credentials.properties** file from the [OLP website](https://dev
 Create an instance of UserAuth class and set the path to the file with credentials:
 
 ```typescript
-import { UserAuth, requestToken, loadCredentialsFromFile } from "@here/olp-sdk-authentication";
-const credentials = loadCredentialsFromFile("replace-with-your-path-to-credentials.properties");
-const userAuth = new UserAuth({credentials, tokenRequester: requestToken});
-
+import {
+    UserAuth,
+    requestToken,
+    loadCredentialsFromFile
+} from "@here/olp-sdk-authentication";
+const credentials = loadCredentialsFromFile(
+    "replace-with-your-path-to-credentials.properties"
+);
+const userAuth = new UserAuth({ credentials, tokenRequester: requestToken });
 ```
 
 Notice that your credentials.properties file should match the following format:
@@ -76,7 +81,7 @@ here.client.id = "your-here-client-id"
 here.access.key.id = "your-here-access-key-id"
 here.access.key.secret = "your-here-access-key-secret"
 here.token.endpoint.url = "your-here-token-endpoint-url"
- ```
+```
 
 Get token:
 
@@ -86,7 +91,7 @@ const token: string = await userAuth.getToken();
 
 ### Generate a Bundle
 
-If you want to have a compiled project, you can use bundle commands. After running each of the following commands in the `@here/olp-sdk-authentication/dist/bundle` folder from the root folder, you get the JavaScript bundled files.
+If you want to have a compiled project, you can use bundle commands. After running each of the following commands in the `@here/olp-sdk-authentication` folder from the root folder, you get the JavaScript bundled files.
 
 To get bundled files with a source map, run:
 
@@ -113,25 +118,25 @@ Add minified JavaScript file to your `html` and create an object of userAuth:
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <script src="https://unpkg.com/@here/olp-sdk-fetch/bundle.umd.min.js"></script>
-    <script src="https://unpkg.com/@here/olp-sdk-authentication/bundle.umd.min.js"></script>
-</head>
-<body>
-    <script>
-    const userAuth = new UserAuth({
-        env: "here",
-        credentials: {
-            accessKeyId: "replace-with-your-access-key-id",
-            accessKeySecret: "replace-with-your-access-key-secret"
-        },
-        tokenRequester: requestToken
-    });
-        userAuth.getToken().then(token => {
-            // your token here
-        });
-    </script>
-</body>
+    <head>
+        <script src="https://unpkg.com/@here/olp-sdk-fetch/bundle.umd.min.js"></script>
+        <script src="https://unpkg.com/@here/olp-sdk-authentication/bundle.umd.min.js"></script>
+    </head>
+    <body>
+        <script>
+            const userAuth = new UserAuth({
+                env: "here",
+                credentials: {
+                    accessKeyId: "replace-with-your-access-key-id",
+                    accessKeySecret: "replace-with-your-access-key-secret"
+                },
+                tokenRequester: requestToken
+            });
+            userAuth.getToken().then(token => {
+                // your token here
+            });
+        </script>
+    </body>
 </html>
 ```
 

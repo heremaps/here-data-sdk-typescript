@@ -43,7 +43,7 @@ npm run test
 
 ### Generate a Bundle
 
-If you want to have a compiled project, you can use bundle commands. After running each of the following commands in the `@here/olp-sdk-dataservice-read/dist/bundle` folder from the root folder, you get the JavaScript bundled files.
+If you want to have a compiled project, you can use bundle commands. After running each of the following commands in the `@here/olp-sdk-dataservice-read` folder from the root folder, you get the JavaScript bundled files.
 
 To get bundled files with a source map, run:
 
@@ -70,50 +70,52 @@ Add minified JavaScript files to your `html` and create an object of userAuth an
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <script src="https://unpkg.com/@here/olp-sdk-fetch/bundle.umd.min.js"></script>
-    <script src="https://unpkg.com/@here/olp-sdk-authentication/bundle.umd.min.js"></script>
-    <script src="https://unpkg.com/@here/olp-sdk-dataservice-api/bundle.umd.min.js"></script>
-    <script src="https://unpkg.com/@here/olp-sdk-dataservice-read/bundle.umd.min.js"></script>
-</head>
-<body>
-    <script>
-    /**
-     * Authentification with olp-sdk-authentication
-     */
-    const userAuth = new UserAuth({
-        env: "here",
-        credentials: {
-            accessKeyId: "your-access-key",
-            accessKeySecret: "your-access-secret"
-        },
-        tokenRequester: requestToken
-    });
-    /**
-     * Create DatastoreContext with olp-sdk-dataservice-read
-     */
-    const context = new DataStoreContext({
-        environment: "here",
-        getToken: () => userAuth.getToken()
-    });
-    /**
-     * Create client to the volatile layer with olp-sdk-dataservice-read
-     */
-    const volatileLayerClient = new VolatileLayerClient({
-        context,
-        hrn: "your-catalog-hrn",
-        layerId: "your-layer-id",
-    });
-    /**
-     * Get some partition from the layer by ID
-     */
-    volatileLayerClient.getPartition('some-partition-id').then(partitionResponse => {
-        partitionResponse.blob().then(partitionBlob => {
-            // your blob here
-        });
-    });
-    </script>
-</body>
+    <head>
+        <script src="https://unpkg.com/@here/olp-sdk-fetch/bundle.umd.min.js"></script>
+        <script src="https://unpkg.com/@here/olp-sdk-authentication/bundle.umd.min.js"></script>
+        <script src="https://unpkg.com/@here/olp-sdk-dataservice-api/bundle.umd.min.js"></script>
+        <script src="https://unpkg.com/@here/olp-sdk-dataservice-read/bundle.umd.min.js"></script>
+    </head>
+    <body>
+        <script>
+            /**
+             * Authentication with olp-sdk-authentication
+             */
+            const userAuth = new UserAuth({
+                env: "here",
+                credentials: {
+                    accessKeyId: "your-access-key",
+                    accessKeySecret: "your-access-secret"
+                },
+                tokenRequester: requestToken
+            });
+            /**
+             * Create DatastoreContext with olp-sdk-dataservice-read
+             */
+            const context = new DataStoreContext({
+                environment: "here",
+                getToken: () => userAuth.getToken()
+            });
+            /**
+             * Create client to the volatile layer with olp-sdk-dataservice-read
+             */
+            const volatileLayerClient = new VolatileLayerClient({
+                context,
+                hrn: "your-catalog-hrn",
+                layerId: "your-layer-id"
+            });
+            /**
+             * Get some partition from the layer by ID
+             */
+            volatileLayerClient
+                .getPartition("some-partition-id")
+                .then(partitionResponse => {
+                    partitionResponse.blob().then(partitionBlob => {
+                        // your blob here
+                    });
+                });
+        </script>
+    </body>
 </html>
 ```
 
