@@ -93,7 +93,7 @@ export class CatalogClient {
     public async getEarliestVersion(
         request: CatalogVersionRequest,
         abortSignal?: AbortSignal
-    ): Promise<MetadataApi.VersionResponse> {
+    ): Promise<number> {
         const builder = await this.getRequestBuilder(
             "metadata",
             HRN.fromString(this.hrn),
@@ -106,7 +106,7 @@ export class CatalogClient {
             Promise.reject(`Error getting earliest catalog version: ${err}`)
         );
 
-        return Promise.resolve(earliestVersion);
+        return Promise.resolve(earliestVersion.version);
     }
 
     /**
@@ -145,9 +145,11 @@ export class CatalogClient {
                 latestVersionError = error;
                 return undefined;
             });
-            
+
             if (!requestedCatalogVersion) {
-                return Promise.reject(`Failed to get the latest version with error: ${latestVersionError}`);
+                return Promise.reject(
+                    `Failed to get the latest version with error: ${latestVersionError}`
+                );
             }
         }
 
@@ -160,7 +162,9 @@ export class CatalogClient {
             return undefined;
         });
         if (!layerVersions) {
-            return Promise.reject(`Failed to get layerVersions with error: ${layerVersionsError}`);
+            return Promise.reject(
+                `Failed to get layerVersions with error: ${layerVersionsError}`
+            );
         }
 
         return Promise.resolve(layerVersions.layerVersions);
@@ -195,7 +199,7 @@ export class CatalogClient {
             startVersion,
             billingTag: request.getBillingTag()
         });
-        return latestVersion.version;
+        return Promise.resolve(latestVersion.version);
     }
 
     /**
