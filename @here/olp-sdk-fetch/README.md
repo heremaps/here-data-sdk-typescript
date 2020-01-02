@@ -24,7 +24,7 @@ When this module is used in a browser context, it does not perform any actions, 
 
 ## Generate a Bundle
 
-If you want to have a compiled project, you can use bundle commands. After running each of the following commands in the `@here/olp-sdk-fetch/dist/bundle` folder from the root folder, you get the JavaScript bundled files.
+If you want to have a compiled project, you can use bundle commands. After running each of the following commands in the `@here/olp-sdk-fetch` folder from the root folder, you get the JavaScript bundled files.
 
 To have the bundled files with source map, run:
 
@@ -51,11 +51,10 @@ Add minified JavaScript file to your `html` and create an object of userAuth:
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <script src="https://unpkg.com/@here/olp-sdk-fetch/bundle.umd.min.js"></script>
-</head>
-<body>
-</body>
+    <head>
+        <script src="https://unpkg.com/@here/olp-sdk-fetch/bundle.umd.min.js"></script>
+    </head>
+    <body></body>
 </html>
 ```
 

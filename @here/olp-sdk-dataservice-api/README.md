@@ -6,7 +6,7 @@ This API is generated directly from the official OpenAPI (former Swagger) defini
 
 ## Generate a Bundle
 
-If you want to have a compiled project, you can use bundle commands. After running each of the following commands in the `dist/@here/olp-sdk-dataservice-api/bundle` folder from the root folder, you get the JavaScript bundled files.
+If you want to have a compiled project, you can use bundle commands. After running each of the following commands in the `@here/olp-sdk-dataservice-api` folder from the root folder, you get the JavaScript bundled files.
 
 To get bundled files with a source map, run:
 
@@ -33,11 +33,10 @@ Add minified JavaScript files to your `html`:
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <script src="https://unpkg.com/@here/olp-sdk-dataservice-api/bundle.umd.min.js"></script>
-</head>
-    <body>
-    </body>
+    <head>
+        <script src="https://unpkg.com/@here/olp-sdk-dataservice-api/bundle.umd.min.js"></script>
+    </head>
+    <body></body>
 </html>
 ```
 
