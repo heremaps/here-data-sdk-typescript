@@ -22,23 +22,25 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 import {
   OlpClientSettings,
-  ArtifactClient,
+  ConfigClient,
   SchemaRequest,
   SchemaDetailsRequest,
-  HRN
+  HRN,
+  CatalogsRequest
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "./FetchMock";
+import { ConfigApi } from "@here/olp-sdk-dataservice-api";
 
 chai.use(sinonChai);
 
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("artifactClient", () => {
+describe("configClient", () => {
   let fetchMock: FetchMock;
   let sandbox: sinon.SinonSandbox;
   let fetchStub: sinon.SinonStub;
-  let artifactClient: ArtifactClient;
+  let configClient: ConfigClient;
   let settings: OlpClientSettings;
 
   before(() => {
@@ -54,31 +56,41 @@ describe("artifactClient", () => {
     fetchStub = sandbox.stub(global as any, "fetch");
     fetchStub.callsFake(fetchMock.fetch());
 
-    // Setup Artifact Client with new OlpClientSettings.
+    // Setup Config Client with new OlpClientSettings.
     settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    artifactClient = new ArtifactClient(settings);
+    configClient = new ConfigClient(settings);
   });
 
   it("Shoud be initialized with settings", async () => {
-    assert.isDefined(artifactClient);
-    expect(artifactClient).to.be.instanceOf(ArtifactClient);
+    assert.isDefined(configClient);
+    expect(configClient).to.be.instanceOf(ConfigClient);
   });
 
-  it("Should fetch the schema details", async () => {
+  it("Should fetch the list of catalogs to which you have access", async () => {
     const mockedResponses = new Map();
+
+    const mockedCatalogsHRN: ConfigApi.CatalogsListResult = {
+        results: {
+            items: [
+                { hrn: "hrn:::test-hrn" },
+                { hrn: "hrn:::test-hrn2" },
+                { hrn: "hrn:::test-hrn3" }
+            ]
+        }
+    };
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis/artifact/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis/config/v1`,
       new Response(
         JSON.stringify([
           {
-            api: "artifact",
+            api: "config",
             version: "v1",
-            baseURL: "https://artifact.data.api.platform.here.com/artifact/v1",
+            baseURL: "https://config.data.api.platform.here.com/config/v1",
             parameters: {
               additionalProp1: "string",
               additionalProp2: "string",
@@ -89,78 +101,38 @@ describe("artifactClient", () => {
       )
     );
 
-    const mockedResponse = {
-        artifacts: [
-          {
-            artifactId: "test_v1",
-            created: {},
-            groupId: "com.here.rib.schema",
-            hrn: "hrn:here:artifact::realm:com.here.test.mock:test_v1",
-            updated: {},
-            version: "1.0.0"
-          }
-        ],
-        schema: {
-          artifactId: "topology-geometry_v1",
-          created: "2020-01-02T12:28:06.578Z",
-          groupId: "com.here.rib.schema",
-          hrn: "hrn:here:artifact::realm:com.here.test.mock:test_v1",
-          name: "test_v1",
-          summary: "The schema for road topology.",
-          updated: "2020-01-02T12:28:06.578Z",
-          version: "1.0.0"
-        },
-        schemaValidationResults: [
-          {
-            backwardsCompatibility: true,
-            fileExtension: true,
-            googleStyle: true,
-            majorVersionInPackage: true,
-            module: "string",
-            packageConsistency: true
-          }
-        ],
-        variants: [
-          {
-            id: "doc",
-            url: "artifact/hrn:here:artifact:::com.here.schema.fake:100500-v1"
-          },
-          {
-            id: "doc",
-            url: "artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2"
-          }
-        ]
-      };
-
     // Set the response from Metadata service with the versions info from the catalog.
     mockedResponses.set(
-      `https://artifact.data.api.platform.here.com/artifact/v1/schema/hrn:here:schema:::com.here.schema.mock:test_v2:2.38.0`,
-      new Response(JSON.stringify(mockedResponse))
+      `https://config.data.api.platform.here.com/config/v1/catalogs`,
+      new Response(JSON.stringify(mockedCatalogsHRN))
     );
 
     // Setup the fetch to use mocked responses.
     fetchMock.withMockedResponses(mockedResponses);
 
-    const request = new SchemaDetailsRequest().withSchema(HRN.fromString("hrn:here:schema:::com.here.schema.mock:test_v2:2.38.0"));
+    const request = new CatalogsRequest();
 
-    const response = await artifactClient.getSchemaDetails(request);
+    const response = await configClient.getCatalogs(request);
 
     assert.isDefined(response);
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
-  it("Should fetch the schema data", async () => {
+  it("Should fetch the list of catalogs to which you have access filtered by hrn", async () => {
     const mockedResponses = new Map();
-
+    
+    const mockedCatalogsFilteredByHRN: ConfigApi.CatalogsListResult = {
+        results: { items: [{ hrn: "hrn:::test-hrn" }] }
+    };
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis/artifact/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis/config/v1`,
       new Response(
         JSON.stringify([
           {
-            api: "artifact",
+            api: "config",
             version: "v1",
-            baseURL: "https://artifact.data.api.platform.here.com/artifact/v1",
+            baseURL: "https://config.data.api.platform.here.com/config/v1",
             parameters: {
               additionalProp1: "string",
               additionalProp2: "string",
@@ -171,23 +143,18 @@ describe("artifactClient", () => {
       )
     );
 
-    const mockedResponse = Buffer.alloc(42);
-
     // Set the response from Metadata service with the versions info from the catalog.
     mockedResponses.set(
-      `https://artifact.data.api.platform.here.com/artifact/v1/artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2`,
-      new Response(JSON.stringify(mockedResponse))
+      `https://config.data.api.platform.here.com/config/v1/catalogs?verbose=true&schemaHrn=hrn%3A%3A%3Atest-hrn`,
+      new Response(JSON.stringify(mockedCatalogsFilteredByHRN))
     );
 
     // Setup the fetch to use mocked responses.
     fetchMock.withMockedResponses(mockedResponses);
 
-    const request = new SchemaRequest().withVariant({
-        id: "doc",
-        url: "artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2"
-    });
+    const request = new CatalogsRequest().withSchema("hrn:::test-hrn");
 
-    const response = await artifactClient.getSchema(request);
+    const response = await configClient.getCatalogs(request);
 
     assert.isDefined(response);
     expect(fetchStub.callCount).to.be.equal(2);
