@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,9 @@ import {
   OlpClientSettings,
   HRN,
   StatisticsClient,
-  SummaryRequest
+  SummaryRequest,
+  StatisticsRequest,
+  CoverageDataType
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "./FetchMock";
 
@@ -167,5 +169,140 @@ describe("StatisticsClient", () => {
         assert.isDefined(error);
         assert.equal(mockedErrorResponse, error.message);
       });
+  });
+
+  it("Should method getStatistics return timemap statistics data", async () => {
+    const mockedResponses = new Map();
+
+    // Set the response from lookup api
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis/statistics/v1`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "statistics",
+            version: "v1",
+            baseURL:
+              "https://statistics.data.api.platform.here.com/statistics/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ])
+      )
+    );
+
+    // Set the response from Statistics service with the statistics info.
+    const mockedData = Buffer.alloc(42);
+
+    mockedResponses.set(
+      `https://statistics.data.api.platform.here.com/statistics/v1/layers/mocked-layed-id/heatmap/age?datalevel=3&catalogHRN=hrn%3Ahere%3Adata%3A%3A%3Amocked-hrn`,
+      new Response(JSON.stringify(mockedData))
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    const statisticsRequest = new StatisticsRequest()
+      .withCatalogHrn(mockedHRN)
+      .withLayerId(mockedLayerId)
+      .withDataLevel("3")
+      .withTypemap(CoverageDataType.TIMEMAP);
+
+    const summaryResponse = await statisticsClient.getStatistics(statisticsRequest);
+    assert.isDefined(summaryResponse);
+    expect(fetchStub.callCount).to.be.equal(2);
+  });
+
+  it("Should method getStatistics return sizemap statistics data", async () => {
+    const mockedResponses = new Map();
+
+    // Set the response from lookup api
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis/statistics/v1`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "statistics",
+            version: "v1",
+            baseURL:
+              "https://statistics.data.api.platform.here.com/statistics/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ])
+      )
+    );
+
+    // Set the response from Statistics service with the statistics info.
+    const mockedData = Buffer.alloc(42);
+
+    mockedResponses.set(
+      `https://statistics.data.api.platform.here.com/statistics/v1/layers/mocked-layed-id/heatmap/size?datalevel=3`,
+      new Response(JSON.stringify(mockedData))
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    const statisticsRequest = new StatisticsRequest()
+      .withCatalogHrn(mockedHRN)
+      .withLayerId(mockedLayerId)
+      .withDataLevel("3")
+      .withTypemap(CoverageDataType.SIZEMAP);
+
+    const summaryResponse = await statisticsClient.getStatistics(statisticsRequest);
+    assert.isDefined(summaryResponse);
+    expect(fetchStub.callCount).to.be.equal(2);
+  });
+
+  it("Should method getStatistics return bitmap statistics data", async () => {
+    const mockedResponses = new Map();
+
+    // Set the response from lookup api
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis/statistics/v1`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "statistics",
+            version: "v1",
+            baseURL:
+              "https://statistics.data.api.platform.here.com/statistics/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ])
+      )
+    );
+
+    // Set the response from Statistics service with the statistics info.
+    const mockedData = Buffer.alloc(42);
+
+    mockedResponses.set(
+      `https://statistics.data.api.platform.here.com/statistics/v1/layers/mocked-layed-id/tilemap?datalevel=3`,
+      new Response(JSON.stringify(mockedData))
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    const statisticsRequest = new StatisticsRequest()
+      .withCatalogHrn(mockedHRN)
+      .withLayerId(mockedLayerId)
+      .withDataLevel("3")
+      .withTypemap(CoverageDataType.BITMAP);
+
+    const summaryResponse = await statisticsClient.getStatistics(statisticsRequest);
+    assert.isDefined(summaryResponse);
+    expect(fetchStub.callCount).to.be.equal(2);
   });
 });
