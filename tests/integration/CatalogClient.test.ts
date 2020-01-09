@@ -70,6 +70,105 @@ describe("CatalogClient", () => {
     expect(catalogClient).to.be.instanceOf(CatalogClient);
   });
 
+  it("Should fetch the information about about specific catalog versions", async () => {
+    const mockedResponses = new Map();
+
+    // Set the response from lookup api with the info about Metadata service.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ])
+      )
+    );
+
+    const mockedVersions = {
+      versions: [
+        {
+          dependencies: [
+            {
+              direct: false,
+              hrn: "hrn:here:data:::my-catalog",
+              version: 23
+            }
+          ],
+          partitionCounts: {
+            additionalProp1: 0,
+            additionalProp2: 0,
+            additionalProp3: 0
+          },
+          timestamp: "1516397474657",
+          version: 2
+        },
+        {
+          dependencies: [
+            {
+              direct: false,
+              hrn: "hrn:here:data:::my-catalog",
+              version: 23
+            }
+          ],
+          partitionCounts: {
+            additionalProp1: 0,
+            additionalProp2: 0,
+            additionalProp3: 0
+          },
+          timestamp: "1516397474657",
+          version: 3
+        },
+        {
+          dependencies: [
+            {
+              direct: false,
+              hrn: "hrn:here:data:::my-catalog",
+              version: 23
+            }
+          ],
+          partitionCounts: {
+            additionalProp1: 0,
+            additionalProp2: 0,
+            additionalProp3: 0
+          },
+          timestamp: "1516397474657",
+          version: 4
+        }
+      ]
+    };
+
+    // Set the response from Metadata service with the versions info from the catalog.
+    mockedResponses.set(
+      `https://metadata.data.api.platform.here.com/metadata/v1/versions?startVersion=2&endVersion=4`,
+      new Response(JSON.stringify(mockedVersions))
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    const request = new CatalogVersionRequest()
+      .withStartVersion(2)
+      .withEndVersion(4);
+
+    let versionsResponse = await catalogClient.getVersions(request);
+
+    assert.isDefined(versionsResponse);
+
+    expect(versionsResponse.versions[0].version).to.be.equal(2);
+    expect(versionsResponse.versions[1].version).to.be.equal(3);
+    expect(versionsResponse.versions[2].version).to.be.equal(4);
+
+    expect(fetchStub.callCount).to.be.equal(2);
+  });
+
   it("Should fetch the information about all catalog versions", async () => {
     const mockedResponses = new Map();
 
@@ -156,34 +255,53 @@ describe("CatalogClient", () => {
             additionalProp3: 0
           },
           timestamp: "1516397474657",
+          version: 4
+        },
+        {
+          dependencies: [
+            {
+              direct: false,
+              hrn: "hrn:here:data:::my-catalog",
+              version: 23
+            }
+          ],
+          partitionCounts: {
+            additionalProp1: 0,
+            additionalProp2: 0,
+            additionalProp3: 0
+          },
+          timestamp: "1516397474657",
           version: 50
         }
       ]
     };
 
-    // Set the response from Metadata service with the versions info from the catalog.
     mockedResponses.set(
-      `https://metadata.data.api.platform.here.com/metadata/v1/versions?startVersion=1&endVersion=50`,
+      `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
+      new Response(JSON.stringify(mockedVersions))
+    );
+
+    mockedResponses.set(
+      `https://metadata.data.api.platform.here.com/metadata/v1/versions?startVersion=-1`,
       new Response(JSON.stringify(mockedVersions))
     );
 
     // Setup the fetch to use mocked responses.
     fetchMock.withMockedResponses(mockedResponses);
 
-    const request = new CatalogVersionRequest()
-      .withStartVersion(1)
-      .withEndVersion(50);
+    const request = new CatalogVersionRequest();
 
     let versionsResponse = await catalogClient.getVersions(request);
-
+    
     assert.isDefined(versionsResponse);
 
     expect(versionsResponse.versions[0].version).to.be.equal(1);
     expect(versionsResponse.versions[1].version).to.be.equal(2);
     expect(versionsResponse.versions[2].version).to.be.equal(3);
-    expect(versionsResponse.versions[3].version).to.be.equal(50);
+    expect(versionsResponse.versions[3].version).to.be.equal(4);
+    expect(versionsResponse.versions[4].version).to.be.equal(50);
 
-    expect(fetchStub.callCount).to.be.equal(2);
+    expect(fetchStub.callCount).to.be.equal(3);
   });
 
   it("Should fetch the configuration of all catalogs", async () => {
@@ -209,28 +327,27 @@ describe("CatalogClient", () => {
     );
 
     const mockedCatalogs = {
-        id: "here-internal-test",
-        hrn: "hrn:here-dev:data:::here-internal-test",
-        name: "here-internal-test",
-        summary: "Internal test for here",
-        description: "Used for internal testing on the staging olp.",
-        tags: [],
-        created: "2018-07-13T20:50:08.425Z",
-        replication: {},
-        layers: [
-            {
-                id: "mocked-layed-id",
-                hrn:
-                    "hrn:here-dev:data:::here-internal-test:hype-test-prefetch",
-                partitioning: {
-                    tileLevels: [],
-                    scheme: "heretile"
-                },
-                contentType: "application/x-protobuf",
-                layerType: "versioned"
-            }
-        ],
-        version: 3
+      id: "here-internal-test",
+      hrn: "hrn:here-dev:data:::here-internal-test",
+      name: "here-internal-test",
+      summary: "Internal test for here",
+      description: "Used for internal testing on the staging olp.",
+      tags: [],
+      created: "2018-07-13T20:50:08.425Z",
+      replication: {},
+      layers: [
+        {
+          id: "mocked-layed-id",
+          hrn: "hrn:here-dev:data:::here-internal-test:hype-test-prefetch",
+          partitioning: {
+            tileLevels: [],
+            scheme: "heretile"
+          },
+          contentType: "application/x-protobuf",
+          layerType: "versioned"
+        }
+      ],
+      version: 3
     };
 
     // Set the response from Metadata service with the versions info from the catalog.
@@ -274,28 +391,27 @@ describe("CatalogClient", () => {
     );
 
     const mockedCatalog = {
-        id: "here-internal-test",
-        hrn: "hrn:here-dev:data:::here-internal-test",
-        name: "here-internal-test",
-        summary: "Internal test for here",
-        description: "Catalog Description",
-        tags: [],
-        created: "2018-07-13T20:50:08.425Z",
-        replication: {},
-        layers: [
-            {
-                id: "mocked-layed-id",
-                hrn:
-                    "hrn:here-dev:data:::here-internal-test:hype-test-prefetch",
-                partitioning: {
-                    tileLevels: [],
-                    scheme: "heretile"
-                },
-                contentType: "application/x-protobuf",
-                layerType: "versioned"
-            }
-        ],
-        version: 3
+      id: "here-internal-test",
+      hrn: "hrn:here-dev:data:::here-internal-test",
+      name: "here-internal-test",
+      summary: "Internal test for here",
+      description: "Catalog Description",
+      tags: [],
+      created: "2018-07-13T20:50:08.425Z",
+      replication: {},
+      layers: [
+        {
+          id: "mocked-layed-id",
+          hrn: "hrn:here-dev:data:::here-internal-test:hype-test-prefetch",
+          partitioning: {
+            tileLevels: [],
+            scheme: "heretile"
+          },
+          contentType: "application/x-protobuf",
+          layerType: "versioned"
+        }
+      ],
+      version: 3
     };
 
     // Set the response from Metadata service with the versions info from the catalog.
@@ -312,19 +428,22 @@ describe("CatalogClient", () => {
 
     assert.isDefined(catalogConfig);
     expect(catalogConfig.id).to.be.equal("here-internal-test");
-    expect(catalogConfig.hrn).to.be.equal("hrn:here-dev:data:::here-internal-test");
+    expect(catalogConfig.hrn).to.be.equal(
+      "hrn:here-dev:data:::here-internal-test"
+    );
     expect(catalogConfig.name).to.be.equal("here-internal-test");
     expect(catalogConfig.summary).to.be.equal("Internal test for here");
-    expect(catalogConfig.description).to.be.equal("Catalog Description");    
+    expect(catalogConfig.description).to.be.equal("Catalog Description");
     expect(catalogConfig.created).to.be.equal("2018-07-13T20:50:08.425Z");
     expect(catalogConfig.version).to.be.equal(3);
     expect(catalogConfig.layers[0].id).to.be.equal("mocked-layed-id");
-    expect(catalogConfig.layers[0].hrn).to.be.equal("hrn:here-dev:data:::here-internal-test:hype-test-prefetch");
+    expect(catalogConfig.layers[0].hrn).to.be.equal(
+      "hrn:here-dev:data:::here-internal-test:hype-test-prefetch"
+    );
     expect(catalogConfig.layers[0].layerType).to.be.equal("versioned");
     assert.isDefined(catalogConfig.tags);
     assert.isDefined(catalogConfig.replication);
 
     expect(fetchStub.callCount).to.be.equal(2);
   });
-
 });
