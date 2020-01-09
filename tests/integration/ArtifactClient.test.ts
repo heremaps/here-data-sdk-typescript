@@ -34,7 +34,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("artifactClient", () => {
+describe("ArtifactClient", () => {
   let fetchMock: FetchMock;
   let sandbox: sinon.SinonSandbox;
   let fetchStub: sinon.SinonStub;
@@ -90,47 +90,47 @@ describe("artifactClient", () => {
     );
 
     const mockedResponse = {
-        artifacts: [
-          {
-            artifactId: "test_v1",
-            created: {},
-            groupId: "com.here.rib.schema",
-            hrn: "hrn:here:artifact::realm:com.here.test.mock:test_v1",
-            updated: {},
-            version: "1.0.0"
-          }
-        ],
-        schema: {
-          artifactId: "topology-geometry_v1",
-          created: "2020-01-02T12:28:06.578Z",
+      artifacts: [
+        {
+          artifactId: "test_v1",
+          created: {},
           groupId: "com.here.rib.schema",
           hrn: "hrn:here:artifact::realm:com.here.test.mock:test_v1",
-          name: "test_v1",
-          summary: "The schema for road topology.",
-          updated: "2020-01-02T12:28:06.578Z",
+          updated: {},
           version: "1.0.0"
+        }
+      ],
+      schema: {
+        artifactId: "topology-geometry_v1",
+        created: "2020-01-02T12:28:06.578Z",
+        groupId: "com.here.rib.schema",
+        hrn: "hrn:here:artifact::realm:com.here.test.mock:test_v1",
+        name: "test_v1",
+        summary: "The schema for road topology.",
+        updated: "2020-01-02T12:28:06.578Z",
+        version: "1.0.0"
+      },
+      schemaValidationResults: [
+        {
+          backwardsCompatibility: true,
+          fileExtension: true,
+          googleStyle: true,
+          majorVersionInPackage: true,
+          module: "string",
+          packageConsistency: true
+        }
+      ],
+      variants: [
+        {
+          id: "doc",
+          url: "artifact/hrn:here:artifact:::com.here.schema.fake:100500-v1"
         },
-        schemaValidationResults: [
-          {
-            backwardsCompatibility: true,
-            fileExtension: true,
-            googleStyle: true,
-            majorVersionInPackage: true,
-            module: "string",
-            packageConsistency: true
-          }
-        ],
-        variants: [
-          {
-            id: "doc",
-            url: "artifact/hrn:here:artifact:::com.here.schema.fake:100500-v1"
-          },
-          {
-            id: "doc",
-            url: "artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2"
-          }
-        ]
-      };
+        {
+          id: "doc",
+          url: "artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2"
+        }
+      ]
+    };
 
     // Set the response from Metadata service with the versions info from the catalog.
     mockedResponses.set(
@@ -149,7 +149,7 @@ describe("artifactClient", () => {
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
-  it("Should fetch the schema data", async () => {
+  it("Should fetch file of the schema", async () => {
     const mockedResponses = new Map();
 
     // Set the response from lookup api with the info about Metadata service.
@@ -172,24 +172,40 @@ describe("artifactClient", () => {
     );
 
     const mockedResponse = Buffer.alloc(42);
+    const mockedResponse2 = Buffer.alloc(50);
 
     // Set the response from Metadata service with the versions info from the catalog.
     mockedResponses.set(
       `https://artifact.data.api.platform.here.com/artifact/v1/artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2`,
-      new Response(JSON.stringify(mockedResponse))
+      new Response(mockedResponse)
+    );
+
+    mockedResponses.set(
+      `https://artifact.data.api.platform.here.com/artifact/v1/artifact/hrn:here:artifact:::com.here.schema.fake:100702-v2`,
+      new Response(mockedResponse2)
     );
 
     // Setup the fetch to use mocked responses.
     fetchMock.withMockedResponses(mockedResponses);
 
     const request = new SchemaRequest().withVariant({
-        id: "doc",
-        url: "artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2"
+      id: "doc",
+      url: "artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2"
+    });
+
+    const request2 = new SchemaRequest().withVariant({
+      id: "doc",
+      url: "artifact/hrn:here:artifact:::com.here.schema.fake:100702-v2"
     });
 
     const response = await artifactClient.getSchema(request);
 
+    const response2 = await artifactClient.getSchema(request2);
+
     assert.isDefined(response);
-    expect(fetchStub.callCount).to.be.equal(2);
+    expect(response.byteLength).to.be.equal(42);
+    assert.isDefined(response2);
+    expect(response2.byteLength).to.be.equal(50);
+    expect(fetchStub.callCount).to.be.equal(3);
   });
 });
