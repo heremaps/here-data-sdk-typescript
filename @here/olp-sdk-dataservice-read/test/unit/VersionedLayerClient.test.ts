@@ -217,9 +217,9 @@ describe("VersionedLayerClient", () => {
             }
         );
 
-        const dataRequest = new dataServiceRead.DataRequest().withQuadKey(
-            dataServiceRead.quadKeyFromMortonCode("23618403")
-        ).withVersion(42);
+        const dataRequest = new dataServiceRead.DataRequest()
+            .withQuadKey(dataServiceRead.quadKeyFromMortonCode("23618403"))
+            .withVersion(42);
 
         const response = await versionedLayerClient.getData(
             (dataRequest as unknown) as dataServiceRead.DataRequest
@@ -242,9 +242,9 @@ describe("VersionedLayerClient", () => {
     });
 
     it("Should method getData return Error with correct partitionId and wrong version parameter", async () => {
-        const dataRequest = new dataServiceRead.DataRequest().withVersion(100500).withPartitionId(
-            "42"
-        );
+        const dataRequest = new dataServiceRead.DataRequest()
+            .withVersion(100500)
+            .withPartitionId("42");
 
         const mockedPartitionsIdData = {
             status: 400,
@@ -252,16 +252,14 @@ describe("VersionedLayerClient", () => {
             detail: [
                 {
                     name: "version",
-                    error: 'Invalid version: latest known version is 181'
+                    error: "Invalid version: latest known version is 181"
                 }
             ]
         };
 
-        getPartitionsByIdStub.callsFake(
-            (builder: any, params: any): any => {
-                return Promise.resolve(mockedPartitionsIdData);
-            }
-        );
+        getPartitionsByIdStub.callsFake((builder: any, params: any): any => {
+            return Promise.resolve(mockedPartitionsIdData);
+        });
 
         const response = await versionedLayerClient
             .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
@@ -272,9 +270,9 @@ describe("VersionedLayerClient", () => {
     });
 
     it("Should method getData return Error with correct quadKey and wrong version parameter", async () => {
-        const dataRequest = new dataServiceRead.DataRequest().withVersion(100500).withQuadKey(
-            dataServiceRead.quadKeyFromMortonCode("23618403")
-        );
+        const dataRequest = new dataServiceRead.DataRequest()
+            .withVersion(100500)
+            .withQuadKey(dataServiceRead.quadKeyFromMortonCode("23618403"));
 
         const mockedPartitionsIdData = {
             status: 400,
@@ -282,16 +280,14 @@ describe("VersionedLayerClient", () => {
             detail: [
                 {
                     name: "version",
-                    error: 'Invalid version: latest known version is 181'
+                    error: "Invalid version: latest known version is 181"
                 }
             ]
         };
 
-        getQuadTreeIndexStub.callsFake(
-            (builder: any, params: any): any => {
-                return Promise.resolve(mockedPartitionsIdData);
-            }
-        );
+        getQuadTreeIndexStub.callsFake((builder: any, params: any): any => {
+            return Promise.resolve(mockedPartitionsIdData);
+        });
 
         const response = await versionedLayerClient
             .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
@@ -422,7 +418,9 @@ describe("VersionedLayerClient", () => {
             }
         );
 
-        const partitionsRequest = new dataServiceRead.PartitionsRequest().withPartitionIds(mockedIds);
+        const partitionsRequest = new dataServiceRead.PartitionsRequest().withPartitionIds(
+            mockedIds
+        );
         const partitions = await versionedLayerClient.getPartitions(
             partitionsRequest
         );
@@ -431,7 +429,7 @@ describe("VersionedLayerClient", () => {
         expect(partitions).to.be.equal(mockedPartitions);
     });
 
-    it("Should method getPartitions provide data with additionalFields parameter", async () => {
+    it("Should layerClient sends a PartitionsRequest for getPartitions with additionalFields params", async () => {
         const mockedVersion = {
             version: 42
         };
@@ -497,10 +495,77 @@ describe("VersionedLayerClient", () => {
         const mockedErrorResponse = "Please provide correct QuadKey";
 
         const quadKeyRequest = new dataServiceRead.QuadKeyPartitionsRequest();
-        const partitions = await versionedLayerClient.getPartitions(quadKeyRequest)
+        const partitions = await versionedLayerClient
+            .getPartitions(quadKeyRequest)
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error);
             });
+    });
+
+    it("Should layerClient sends a QuadKeyPartitionsRequest for getPartitions with additionalFields params", async () => {
+        const mockedBlobData = new Response("mocked-blob-response");
+        const mockedVersion = {
+            version: 42
+        };
+        const mockedQuadKeyTreeData = {
+            subQuads: [
+                {
+                    version: 12,
+                    subQuadKey: "1",
+                    dataHandle: "c9116bb9-7d00-44bf-9b26-b4ab4c274665"
+                }
+            ],
+            parentQuads: [
+                {
+                    version: 12,
+                    partition: "23618403",
+                    dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
+                }
+            ]
+        };
+
+        getQuadTreeIndexStub.callsFake(
+            (builder: any, params: any): Promise<Index> => {
+                return Promise.resolve(mockedQuadKeyTreeData);
+            }
+        );
+        getBlobStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockedBlobData);
+            }
+        );
+        getVersionStub.callsFake(
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve(mockedVersion);
+            }
+        );
+
+        const quadKeyPartitionsRequest = new dataServiceRead.QuadKeyPartitionsRequest()
+            .withQuadKey(dataServiceRead.quadKeyFromMortonCode("23618403"))
+            .withAdditionalFields([
+                "dataSize",
+                "checksum",
+                "compressedDataSize"
+            ]);
+
+        const partitionsResponse = await versionedLayerClient.getPartitions(
+            quadKeyPartitionsRequest
+        );
+        assert.isDefined(partitionsResponse);
+
+        // check if layer client sends a request for getPartitions with correct params
+        expect(
+            getQuadTreeIndexStub.getCalls()[0].args[1].additionalFields[0]
+        ).to.be.equal("dataSize");
+        expect(
+            getQuadTreeIndexStub.getCalls()[0].args[1].additionalFields[1]
+        ).to.be.equal("checksum");
+        expect(
+            getQuadTreeIndexStub.getCalls()[0].args[1].additionalFields[2]
+        ).to.be.equal("compressedDataSize");
     });
 });

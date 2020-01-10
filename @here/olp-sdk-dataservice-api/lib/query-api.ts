@@ -390,7 +390,9 @@ export async function quadTreeIndexVolatile(
         .replace("{depth}", UrlBuilder.toString(params["depth"]));
 
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
-    urlBuilder.appendQuery("additionalFields", params["additionalFields"]);
+    if (params["additionalFields"]) {
+        urlBuilder.appendQuery("additionalFields", params["additionalFields"]);
+    }
     urlBuilder.appendQuery("billingTag", params["billingTag"]);
 
     const headers: { [header: string]: string } = {};

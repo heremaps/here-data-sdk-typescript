@@ -30,7 +30,9 @@ const expect = chai.expect;
 
 describe("QuadTreeIndexRequest", () => {
     const billingTag = "billingTag";
-    const mockedHRN = dataServiceRead.HRN.fromString("hrn:here:data:::mocked-hrn");
+    const mockedHRN = dataServiceRead.HRN.fromString(
+        "hrn:here:data:::mocked-hrn"
+    );
     const mockedLayerId = "mocked-layed-id";
     const mockedVersion = 42;
     const mockedLayerType = "volatile";
@@ -49,7 +51,9 @@ describe("QuadTreeIndexRequest", () => {
         );
 
         assert.isDefined(quadTreeRequest);
-        expect(quadTreeRequest).be.instanceOf(dataServiceRead.QuadTreeIndexRequest);
+        expect(quadTreeRequest).be.instanceOf(
+            dataServiceRead.QuadTreeIndexRequest
+        );
         expect(quadTreeRequest.getCatalogHrn()).to.be.equal(mockedHRN);
         expect(quadTreeRequest.getLayerId()).to.be.equal(mockedLayerId);
         expect(quadTreeRequest.getLayerType()).to.be.equal(mockedLayerType);
@@ -61,27 +65,50 @@ describe("QuadTreeIndexRequest", () => {
             mockedLayerId,
             mockedLayerType
         );
-        const quadTreeRequestWithVersion = quadTreeRequest.withVersion(mockedVersion);
-        const quadTreeRequestWithQuadKey = quadTreeRequest.withQuadKey(mockedQuadKey);
-        const quadTreeRequestWithBillTag = quadTreeRequest.withBillingTag(billingTag);
+        const quadTreeRequestWithVersion = quadTreeRequest.withVersion(
+            mockedVersion
+        );
+        const quadTreeRequestWithQuadKey = quadTreeRequest.withQuadKey(
+            mockedQuadKey
+        );
+        const quadTreeRequestWithBillTag = quadTreeRequest.withBillingTag(
+            billingTag
+        );
+        const quadTreeRequestWithAddFields = quadTreeRequest.withAdditionalFields(
+            ["dataSize", "checksum", "compressedDataSize", "crc"]
+        );
 
-        expect(quadTreeRequestWithVersion.getVersion()).to.be.equal(mockedVersion);
-        expect(quadTreeRequestWithQuadKey.getQuadKey()).to.be.equal(mockedQuadKey);
-        expect(quadTreeRequestWithBillTag.getBillingTag()).to.be.equal(billingTag);
+        expect(quadTreeRequestWithVersion.getVersion()).to.be.equal(
+            mockedVersion
+        );
+        expect(quadTreeRequestWithQuadKey.getQuadKey()).to.be.equal(
+            mockedQuadKey
+        );
+        expect(quadTreeRequestWithBillTag.getBillingTag()).to.be.equal(
+            billingTag
+        );
+        assert.isDefined(quadTreeRequest.getAdditionalFields());
     });
 
     it("Should get parameters with chain", () => {
         const quadTreeRequest = new dataServiceRead.QuadTreeIndexRequest(
-                mockedHRN,
-                mockedLayerId,
-                mockedLayerType
-            )
+            mockedHRN,
+            mockedLayerId,
+            mockedLayerType
+        )
             .withVersion(mockedVersion)
             .withQuadKey(mockedQuadKey)
-            .withBillingTag(billingTag);
+            .withBillingTag(billingTag)
+            .withAdditionalFields([
+                "dataSize",
+                "checksum",
+                "compressedDataSize",
+                "crc"
+            ]);
 
         expect(quadTreeRequest.getVersion()).to.be.equal(mockedVersion);
         expect(quadTreeRequest.getQuadKey()).to.be.equal(mockedQuadKey);
         expect(quadTreeRequest.getBillingTag()).to.be.equal(billingTag);
+        assert.isDefined(quadTreeRequest.getAdditionalFields());
     });
 });

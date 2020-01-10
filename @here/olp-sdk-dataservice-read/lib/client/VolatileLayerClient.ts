@@ -121,11 +121,13 @@ export class VolatileLayerClient {
 
                 return quadTreeIndex.subQuads
                     ? this.downloadPartition(
-                        quadTreeIndex.subQuads[0].dataHandle,
-                        abortSignal,
-                        dataRequest.getBillingTag()
-                    )
-                    : Promise.reject(`No dataHandle for quadKey ${quadKey}. HRN: ${this.hrn}`);
+                          quadTreeIndex.subQuads[0].dataHandle,
+                          abortSignal,
+                          dataRequest.getBillingTag()
+                      )
+                    : Promise.reject(
+                          `No dataHandle for quadKey ${quadKey}. HRN: ${this.hrn}`
+                      );
             }
         }
 
@@ -189,7 +191,8 @@ export class VolatileLayerClient {
                 "volatile"
             )
                 .withQuadKey(quadKey)
-                .withDepth(request.getDepth());
+                .withDepth(request.getDepth())
+                .withAdditionalFields(request.getAdditionalFields());
 
             return queryClient.fetchQuadTreeIndex(
                 quadTreeIndexRequest,
@@ -283,13 +286,18 @@ export class VolatileLayerClient {
             }
         );
 
-        if (partitionsListRepsonse.status && partitionsListRepsonse.status === 400) {
+        if (
+            partitionsListRepsonse.status &&
+            partitionsListRepsonse.status === 400
+        ) {
             return Promise.reject(partitionsListRepsonse);
         }
 
-        const partition = partitionsListRepsonse.partitions && partitionsListRepsonse.partitions.find(element => {
-            return element.partition === partitionId;
-        });
+        const partition =
+            partitionsListRepsonse.partitions &&
+            partitionsListRepsonse.partitions.find(element => {
+                return element.partition === partitionId;
+            });
 
         return partition && partition.dataHandle
             ? partition.dataHandle

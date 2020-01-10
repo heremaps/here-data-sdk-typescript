@@ -17,6 +17,7 @@
  * License-Filename: LICENSE
  */
 
+import { AdditionalFields } from "@here/olp-sdk-dataservice-api";
 import { HRN, QuadKey, validateBillingTag } from "..";
 
 /**
@@ -39,6 +40,7 @@ export class QuadTreeIndexRequest {
     private quadKey?: QuadKey;
     private depth?: number;
     private billingTag?: string;
+    private additionalFields?: AdditionalFields;
 
     /**
      * Constructs the [[QuadTreeIndexRequest]] instance for fetching the quadtree index from the OLP Query Service
@@ -107,6 +109,21 @@ export class QuadTreeIndexRequest {
     }
 
     /**
+     * A setter for the provided additional fields.
+     *
+     * @param additionalFields Array of strings. Array could contain next values "dataSize" | "checksum" | "compressedDataSize | "crc"".
+     * This values could be useful for getPartitions method from versionedLayerClient and volatileLayerClient.
+     *
+     * @returns The updated [[QuadTreeIndexRequest]] instance that you can use to chain methods.
+     */
+    public withAdditionalFields(
+        additionalFields?: AdditionalFields
+    ): QuadTreeIndexRequest {
+        this.additionalFields = additionalFields;
+        return this;
+    }
+
+    /**
      * The configured catalog version for the request.
      *
      * @return The catalog version number.
@@ -168,5 +185,14 @@ export class QuadTreeIndexRequest {
      */
     public getBillingTag(): string | undefined {
         return this.billingTag;
+    }
+
+    /**
+     * Gets the additional fields for the request.
+     *
+     * @return Additional fields.
+     */
+    public getAdditionalFields(): AdditionalFields | undefined {
+        return this.additionalFields;
     }
 }
