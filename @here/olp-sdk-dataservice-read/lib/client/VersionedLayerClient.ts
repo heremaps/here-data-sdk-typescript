@@ -221,6 +221,7 @@ export class VersionedLayerClient {
         return MetadataApi.getPartitions(metaRequestBilder, {
             version,
             layerId: this.layerId,
+            additionalFields: request.getAdditionalFields(),
             billingTag: request.getBillingTag()
         });
     }

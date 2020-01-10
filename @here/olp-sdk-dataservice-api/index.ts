@@ -29,6 +29,8 @@ import * as MetadataApi from "./lib/metadata-api";
 import * as QueryApi from "./lib/query-api";
 import * as VolatileBlobApi from "./lib/volatile-blob-api";
 
+export type AdditionalFields = Array<"dataSize" | "checksum" | "compressedDataSize" | "crc">;
+
 export {
     LookupApi,
     MetadataApi,

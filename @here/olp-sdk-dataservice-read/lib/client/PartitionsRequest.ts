@@ -17,6 +17,7 @@
  * License-Filename: LICENSE
  */
 
+import { AdditionalFields } from "@here/olp-sdk-dataservice-api";
 import { validateBillingTag, validatePartitionsIdsList } from "..";
 
 /**
@@ -26,6 +27,7 @@ export class PartitionsRequest {
     private version?: number;
     private billingTag?: string;
     private partitionIds?: string[];
+    private additionalFields?: AdditionalFields;
 
     /**
      * Gets a layer version for the request.
@@ -92,5 +94,26 @@ export class PartitionsRequest {
      */
     public getPartitionIds(): string[] | undefined {
         return this.partitionIds;
+    }
+
+    /**
+     * A setter for the provided additional fields: dataSize, checksum, compressedDataSize, crc.
+     *
+     * @param additionalFields Array of strings. Array could contain next values "dataSize" | "checksum" | "compressedDataSize".
+     *
+     * @returns The updated [[PartitionsRequest]] instance that you can use to chain methods.
+     */
+    public withAdditionalFields(additionalFields: AdditionalFields): PartitionsRequest {
+        this.additionalFields = additionalFields;
+        return this;
+    }
+
+    /**
+     * Gets additional fields for the request.
+     *
+     * @return The `partitionIds` string.
+     */
+    public getAdditionalFields(): AdditionalFields | undefined {
+        return this.additionalFields;
     }
 }

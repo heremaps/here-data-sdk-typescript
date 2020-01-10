@@ -32,6 +32,7 @@ describe("PartitionsRequest", () => {
     const billingTag = "billingTag";
     const mockedVersion = 42;
     const mockedIds = ["1", "2", "13", "42"];
+    const mockedAdditionalFields = ["dataSize","checksum","compressedDataSize","crc"];
 
     it("Should initialize", () => {
         const partitionsRequest = new PartitionsRequest();
@@ -45,20 +46,24 @@ describe("PartitionsRequest", () => {
         const partitionsRequestWithVersion = partitionsRequest.withVersion(mockedVersion);
         const partitionsRequestWithBillTag = partitionsRequest.withBillingTag(billingTag);
         const partitionsRequestWithIds = partitionsRequest.withPartitionIds(mockedIds);
+        const partitionsAdditionalFields = partitionsRequest.withAdditionalFields(["dataSize","checksum","compressedDataSize","crc"]);
 
         expect(partitionsRequestWithVersion.getVersion()).to.be.equal(mockedVersion);
         expect(partitionsRequestWithBillTag.getBillingTag()).to.be.equal(billingTag);
         expect(partitionsRequestWithIds.getPartitionIds()).to.be.equal(mockedIds);
+        assert.isDefined(partitionsAdditionalFields.getAdditionalFields());
     });
 
     it("Should get parameters with chain", () => {
         const partitionsRequest = new PartitionsRequest()
             .withVersion(mockedVersion)
             .withBillingTag(billingTag)
-            .withPartitionIds(mockedIds);
+            .withPartitionIds(mockedIds)
+            .withAdditionalFields(["dataSize","checksum","compressedDataSize","crc"]);
 
         expect(partitionsRequest.getVersion()).to.be.equal(mockedVersion);
         expect(partitionsRequest.getBillingTag()).to.be.equal(billingTag);
         expect(partitionsRequest.getPartitionIds()).to.be.equal(mockedIds);
+        assert.isDefined(partitionsRequest.getAdditionalFields());
     });
 });

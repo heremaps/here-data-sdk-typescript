@@ -29,7 +29,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("volatileLayerClient", () => {
+describe("VolatileLayerClient", () => {
     let sandbox: sinon.SinonSandbox;
     let getPartitionsStub: sinon.SinonStub;
     let getBlobStub: sinon.SinonStub;
@@ -137,6 +137,41 @@ describe("volatileLayerClient", () => {
         assert.isDefined(partitions);
         expect(partitions).to.be.equal(mockedPartitions);
     });
+
+    it("Should method getPartitions provide data with additionalFields parameter", async () => {
+        const mockedPartitions = {
+            partitions: [
+                {
+                    version: 42,
+                    partition: "42",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+                },
+                {
+                    version: 42,
+                    partition: "42",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+                }
+            ]
+        };
+        getPartitionsStub.callsFake(
+            (builder: any, params: any): Promise<MetadataApi.Partitions> => {
+                return Promise.resolve(mockedPartitions);
+            }
+        );
+
+        const partitionsRequest = new dataServiceRead.PartitionsRequest().withAdditionalFields(
+            ["dataSize", "checksum", "compressedDataSize"]
+        );
+        const partitionsResponse = await volatileLayerClient.getPartitions(
+            partitionsRequest
+        );
+        assert.isDefined(partitionsResponse);
+
+        // check if layer client sends a request for getPartitions with correct params
+        expect(getPartitionsStub.getCalls()[0].args[1].additionalFields[0]).to.be.equal("dataSize");
+        expect(getPartitionsStub.getCalls()[0].args[1].additionalFields[1]).to.be.equal("checksum");
+        expect(getPartitionsStub.getCalls()[0].args[1].additionalFields[2]).to.be.equal("compressedDataSize");
+    });   
 
     it("Should method getPartitions return error without QuadKeyPartitionsRequest", async () => {
         const mockedErrorResponse = "Please provide correct QuadKey";
@@ -382,7 +417,7 @@ describe("volatileLayerClient", () => {
             "mockedLayerId",
             (settings as unknown) as dataServiceRead.OlpClientSettings
         );
-        
+
         const dataRequest = new dataServiceRead.DataRequest().withPartitionId(
             "42"
         );
