@@ -110,17 +110,22 @@ export class VersionedLayerClient {
                     quadKeyPartitionsRequest
                 ).catch(error => Promise.reject(error));
 
-                if (quadTreeIndexResponse.status && quadTreeIndexResponse.status === 400) {
+                if (
+                    quadTreeIndexResponse.status &&
+                    quadTreeIndexResponse.status === 400
+                ) {
                     return Promise.reject(quadTreeIndexResponse);
                 }
 
                 return quadTreeIndexResponse.subQuads
                     ? this.downloadPartition(
-                        quadTreeIndexResponse.subQuads[0].dataHandle,
-                        abortSignal,
-                        dataRequest.getBillingTag()
-                    )
-                    : Promise.reject(`No dataHandle for quadKey ${quadKey}. HRN: ${this.hrn}`);
+                          quadTreeIndexResponse.subQuads[0].dataHandle,
+                          abortSignal,
+                          dataRequest.getBillingTag()
+                      )
+                    : Promise.reject(
+                          `No dataHandle for quadKey ${quadKey}. HRN: ${this.hrn}`
+                      );
             }
         }
 
@@ -186,7 +191,8 @@ export class VersionedLayerClient {
             )
                 .withQuadKey(quadKey)
                 .withVersion(request.getVersion())
-                .withDepth(request.getDepth());
+                .withDepth(request.getDepth())
+                .withAdditionalFields(request.getAdditionalFields());
 
             const forSpecificCatalogVersion = request.getVersion();
             if (forSpecificCatalogVersion) {
@@ -253,13 +259,18 @@ export class VersionedLayerClient {
             }
         ).catch(async error => Promise.reject(error));
 
-        if (partitionsListRepsonse.status && partitionsListRepsonse.status === 400) {
+        if (
+            partitionsListRepsonse.status &&
+            partitionsListRepsonse.status === 400
+        ) {
             return Promise.reject(partitionsListRepsonse);
         }
 
-        const partition = partitionsListRepsonse.partitions && partitionsListRepsonse.partitions.find(element => {
-            return element.partition === partitionId;
-        });
+        const partition =
+            partitionsListRepsonse.partitions &&
+            partitionsListRepsonse.partitions.find(element => {
+                return element.partition === partitionId;
+            });
 
         return partition && partition.dataHandle
             ? partition.dataHandle

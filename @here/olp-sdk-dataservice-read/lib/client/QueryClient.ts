@@ -17,7 +17,11 @@
  * License-Filename: LICENSE
  */
 
-import { MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
+import {
+    AdditionalFields,
+    MetadataApi,
+    QueryApi
+} from "@here/olp-sdk-dataservice-api";
 import {
     HRN,
     isValid,
@@ -110,12 +114,14 @@ export class QueryClient {
             quadKey: string;
             depth: number;
             billingTag?: string;
+            additionalFields?: AdditionalFields;
         } = {
             version: 0,
             layerId,
             depth: subQuadKeysMaxLength,
             quadKey: mortonCodeFromQuadKey(quadKey).toString(),
-            billingTag: request.getBillingTag()
+            billingTag: request.getBillingTag(),
+            additionalFields: request.getAdditionalFields()
         };
 
         if (request.getLayerType() === "volatile") {

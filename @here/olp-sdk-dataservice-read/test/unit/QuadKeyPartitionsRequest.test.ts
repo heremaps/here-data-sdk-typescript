@@ -42,20 +42,44 @@ describe("QuadKeyPartitionsRequest", () => {
         const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest();
 
         assert.isDefined(quadKeyPartitionsRequest);
-        expect(quadKeyPartitionsRequest).be.instanceOf(QuadKeyPartitionsRequest);
+        expect(quadKeyPartitionsRequest).be.instanceOf(
+            QuadKeyPartitionsRequest
+        );
     });
 
     it("Should set parameters", () => {
         const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest();
-        const quadKeyPartitionsRequestWithVersion = quadKeyPartitionsRequest.withVersion(mockedVersion);
-        const quadKeyPartitionsRequestWithDepth = quadKeyPartitionsRequest.withDepth(mockedDepth);
-        const quadKeyPartitionsRequestWithQuadKey = quadKeyPartitionsRequest.withQuadKey(mockedQuadKey);
-        const quadKeyPartitionsRequestWithBillTag = quadKeyPartitionsRequest.withBillingTag(billingTag);
+        const quadKeyPartitionsRequestWithVersion = quadKeyPartitionsRequest.withVersion(
+            mockedVersion
+        );
+        const quadKeyPartitionsRequestWithDepth = quadKeyPartitionsRequest.withDepth(
+            mockedDepth
+        );
+        const quadKeyPartitionsRequestWithQuadKey = quadKeyPartitionsRequest.withQuadKey(
+            mockedQuadKey
+        );
+        const quadKeyPartitionsRequestWithBillTag = quadKeyPartitionsRequest.withBillingTag(
+            billingTag
+        );
+        const quadKeyPartitionsRequestWithAddFields = quadKeyPartitionsRequest.withAdditionalFields(
+            ["dataSize", "checksum", "compressedDataSize", "crc"]
+        );
 
-        expect(quadKeyPartitionsRequestWithVersion.getVersion()).to.be.equal(mockedVersion);
-        expect(quadKeyPartitionsRequestWithDepth.getDepth()).to.be.equal(mockedDepth);
-        expect(quadKeyPartitionsRequestWithQuadKey.getQuadKey()).to.be.equal(mockedQuadKey);
-        expect(quadKeyPartitionsRequestWithBillTag.getBillingTag()).to.be.equal(billingTag);
+        expect(quadKeyPartitionsRequestWithVersion.getVersion()).to.be.equal(
+            mockedVersion
+        );
+        expect(quadKeyPartitionsRequestWithDepth.getDepth()).to.be.equal(
+            mockedDepth
+        );
+        expect(quadKeyPartitionsRequestWithQuadKey.getQuadKey()).to.be.equal(
+            mockedQuadKey
+        );
+        expect(quadKeyPartitionsRequestWithBillTag.getBillingTag()).to.be.equal(
+            billingTag
+        );
+        assert.isDefined(
+            quadKeyPartitionsRequestWithAddFields.getAdditionalFields()
+        );
     });
 
     it("Should get parameters with chain", () => {
@@ -63,11 +87,24 @@ describe("QuadKeyPartitionsRequest", () => {
             .withVersion(mockedVersion)
             .withDepth(mockedDepth)
             .withQuadKey(mockedQuadKey)
-            .withBillingTag(billingTag);
+            .withBillingTag(billingTag)
+            .withAdditionalFields([
+                "dataSize",
+                "checksum",
+                "compressedDataSize",
+                "crc"
+            ]);
 
-        expect(quadKeyPartitionsRequest.getVersion()).to.be.equal(mockedVersion);
+        expect(quadKeyPartitionsRequest.getVersion()).to.be.equal(
+            mockedVersion
+        );
         expect(quadKeyPartitionsRequest.getDepth()).to.be.equal(mockedDepth);
-        expect(quadKeyPartitionsRequest.getQuadKey()).to.be.equal(mockedQuadKey);
-        expect(quadKeyPartitionsRequest.getBillingTag()).to.be.equal(billingTag);
+        expect(quadKeyPartitionsRequest.getQuadKey()).to.be.equal(
+            mockedQuadKey
+        );
+        expect(quadKeyPartitionsRequest.getBillingTag()).to.be.equal(
+            billingTag
+        );
+        assert.isDefined(quadKeyPartitionsRequest.getAdditionalFields());
     });
 });

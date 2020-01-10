@@ -22,7 +22,12 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
-import { MetadataApi, QueryApi, VolatileBlobApi } from "@here/olp-sdk-dataservice-api";
+import {
+    MetadataApi,
+    QueryApi,
+    VolatileBlobApi
+} from "@here/olp-sdk-dataservice-api";
+import { PartitionsRequest } from "../../lib";
 
 chai.use(sinonChai);
 
@@ -129,7 +134,9 @@ describe("VolatileLayerClient", () => {
             }
         );
 
-        const partitionsRequest = new dataServiceRead.PartitionsRequest().withPartitionIds(mockedIds);
+        const partitionsRequest = new dataServiceRead.PartitionsRequest().withPartitionIds(
+            mockedIds
+        );
         const partitions = await volatileLayerClient.getPartitions(
             partitionsRequest
         );
@@ -138,7 +145,7 @@ describe("VolatileLayerClient", () => {
         expect(partitions).to.be.equal(mockedPartitions);
     });
 
-    it("Should method getPartitions provide data with additionalFields parameter", async () => {
+    it("Should layerClient sends a PartitionsRequest for getPartitions with additionalFields params", async () => {
         const mockedPartitions = {
             partitions: [
                 {
@@ -168,16 +175,109 @@ describe("VolatileLayerClient", () => {
         assert.isDefined(partitionsResponse);
 
         // check if layer client sends a request for getPartitions with correct params
-        expect(getPartitionsStub.getCalls()[0].args[1].additionalFields[0]).to.be.equal("dataSize");
-        expect(getPartitionsStub.getCalls()[0].args[1].additionalFields[1]).to.be.equal("checksum");
-        expect(getPartitionsStub.getCalls()[0].args[1].additionalFields[2]).to.be.equal("compressedDataSize");
-    });   
+        expect(
+            getPartitionsStub.getCalls()[0].args[1].additionalFields[0]
+        ).to.be.equal("dataSize");
+        expect(
+            getPartitionsStub.getCalls()[0].args[1].additionalFields[1]
+        ).to.be.equal("checksum");
+        expect(
+            getPartitionsStub.getCalls()[0].args[1].additionalFields[2]
+        ).to.be.equal("compressedDataSize");
+    });
+
+    it("Should layerClient sends a QuadKeyPartitionsRequest for getPartitions with additionalFields params", async () => {
+        const mockedBlobData = new Response("mocked-blob-response");
+        const mockedVersion = {
+            version: 42
+        };
+
+        const mockedQuadKeyTreeData = {
+            subQuads: [
+                {
+                    version: 12,
+                    subQuadKey: "1",
+                    dataHandle: "c9116bb9-7d00-44bf-9b26-b4ab4c274665"
+                }
+            ],
+            parentQuads: [
+                {
+                    version: 12,
+                    partition: "23618403",
+                    dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
+                }
+            ]
+        };
+
+        getQuadTreeIndexStub.callsFake(
+            (builder: any, params: any): Promise<QueryApi.Index> => {
+                return Promise.resolve(mockedQuadKeyTreeData);
+            }
+        );
+        getVersionStub.callsFake(
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve(mockedVersion);
+            }
+        );
+        const mockedPartitions = {
+            partitions: [
+                {
+                    version: 1,
+                    partition: "42",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+                },
+                {
+                    version: 42,
+                    partition: "42",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+                }
+            ]
+        };
+        getPartitionsStub.callsFake(
+            (builder: any, params: any): Promise<MetadataApi.Partitions> => {
+                return Promise.resolve(mockedPartitions);
+            }
+        );
+        getBlobStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockedBlobData);
+            }
+        );
+
+        const quadKeyPartitionsRequest = new dataServiceRead.QuadKeyPartitionsRequest()
+            .withQuadKey(dataServiceRead.quadKeyFromMortonCode("23618403"))
+            .withAdditionalFields([
+                "dataSize",
+                "checksum",
+                "compressedDataSize"
+            ]);
+
+        const partitionsResponse = await volatileLayerClient.getPartitions(
+            quadKeyPartitionsRequest
+        );
+        assert.isDefined(partitionsResponse);
+
+        // check if layer client sends a request for getPartitions with correct params
+        expect(
+            getQuadTreeIndexStub.getCalls()[0].args[1].additionalFields[0]
+        ).to.be.equal("dataSize");
+        expect(
+            getQuadTreeIndexStub.getCalls()[0].args[1].additionalFields[1]
+        ).to.be.equal("checksum");
+        expect(
+            getQuadTreeIndexStub.getCalls()[0].args[1].additionalFields[2]
+        ).to.be.equal("compressedDataSize");
+    });
 
     it("Should method getPartitions return error without QuadKeyPartitionsRequest", async () => {
         const mockedErrorResponse = "Please provide correct QuadKey";
 
         const quadKeyRequest = new dataServiceRead.QuadKeyPartitionsRequest();
-        const partitions = await volatileLayerClient.getPartitions(quadKeyRequest)
+        const partitions = await volatileLayerClient
+            .getPartitions(quadKeyRequest)
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error);
@@ -284,18 +384,18 @@ describe("VolatileLayerClient", () => {
             .withPartitionId("42")
             .withVersion(2);
 
-        const response = await volatileLayerClient.getData(
-            (dataRequest as unknown) as dataServiceRead.DataRequest
-        )
-        .catch(error => {
-            assert.isDefined(error);
-            assert.equal(mockedErrorResponse, error.message);
-        });
+        const response = await volatileLayerClient
+            .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.message);
+            });
     });
 
     it("Should method getData with wrong partitionId parameter and version return error", async () => {
         const mockedBlobData = new Response("mocked-blob-response");
-        const mockedErrorResponse = "No partition dataHandle for partition 42. HRN: hrn:here:data:::live-weather-na";
+        const mockedErrorResponse =
+            "No partition dataHandle for partition 42. HRN: hrn:here:data:::live-weather-na";
         const mockedPartitionsIdData = {
             partitions: [
                 {
@@ -321,12 +421,12 @@ describe("VolatileLayerClient", () => {
             .withPartitionId("42")
             .withVersion(2);
 
-        const response = await volatileLayerClient.getData(
-            (dataRequest as unknown) as dataServiceRead.DataRequest
-        ).catch(error => {
-            assert.isDefined(error);
-            assert.equal(mockedErrorResponse, error);
-        });
+        const response = await volatileLayerClient
+            .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error);
+            });
     });
 
     it("Should method getData provide data with quadKey", async () => {
@@ -358,7 +458,10 @@ describe("VolatileLayerClient", () => {
             }
         );
         getVersionStub.callsFake(
-            (builder: any, params: any): Promise<MetadataApi.VersionResponse> => {
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
                 return Promise.resolve(mockedVersion);
             }
         );
@@ -428,16 +531,15 @@ describe("VolatileLayerClient", () => {
             detail: [
                 {
                     name: "layer",
-                    error: "Layer 'mockedLayerId' is missing in the catalog configuration."
+                    error:
+                        "Layer 'mockedLayerId' is missing in the catalog configuration."
                 }
             ]
         };
 
-        getPartitionsByIdStub.callsFake(
-            (builder: any, params: any): any => {
-                return Promise.resolve(mockedPartitionsIdData);
-            }
-        );
+        getPartitionsByIdStub.callsFake((builder: any, params: any): any => {
+            return Promise.resolve(mockedPartitionsIdData);
+        });
 
         const response = await volatileClient
             .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
@@ -466,7 +568,8 @@ describe("VolatileLayerClient", () => {
             detail: [
                 {
                     name: "layer",
-                    error: "Layer 'mockedLayerId' is missing in the catalog configuration."
+                    error:
+                        "Layer 'mockedLayerId' is missing in the catalog configuration."
                 }
             ]
         };
@@ -476,16 +579,17 @@ describe("VolatileLayerClient", () => {
         };
 
         getVersionStub.callsFake(
-            (builder: any, params: any): Promise<MetadataApi.VersionResponse> => {
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
                 return Promise.resolve(mockedVersion);
             }
         );
 
-        getQuadTreeIndexStub.callsFake(
-            (builder: any, params: any): any => {
-                return Promise.resolve(mockedPartitionsIdData);
-            }
-        );
+        getQuadTreeIndexStub.callsFake((builder: any, params: any): any => {
+            return Promise.resolve(mockedPartitionsIdData);
+        });
 
         const response = await volatileClient
             .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
@@ -494,5 +598,4 @@ describe("VolatileLayerClient", () => {
                 assert.equal(error, mockedPartitionsIdData);
             });
     });
-
 });
