@@ -214,6 +214,7 @@ export class VolatileLayerClient {
         );
         return MetadataApi.getPartitions(metaRequestBilder, {
             layerId: this.layerId,
+            additionalFields: request.getAdditionalFields(),
             billingTag: request.getBillingTag()
         });
     }

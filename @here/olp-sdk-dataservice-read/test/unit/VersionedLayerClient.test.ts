@@ -431,6 +431,68 @@ describe("VersionedLayerClient", () => {
         expect(partitions).to.be.equal(mockedPartitions);
     });
 
+    it("Should method getPartitions provide data with additionalFields parameter", async () => {
+        const mockedVersion = {
+            version: 42
+        };
+        const mockedPartitions = {
+            partitions: [
+                {
+                    version: 1,
+                    partition: "42",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+                },
+                {
+                    version: 42,
+                    partition: "42",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+                }
+            ]
+        };
+
+        getPartitionsStub.callsFake(
+            (builder: any, params: any): Promise<MetadataApi.Partitions> => {
+                return Promise.resolve(mockedPartitions);
+            }
+        );
+
+        getVersionStub.callsFake(
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve(mockedVersion);
+            }
+        );
+
+        const partitionsRequest = new dataServiceRead.PartitionsRequest().withAdditionalFields(
+            ["dataSize", "checksum", "compressedDataSize"]
+        );
+        const partitionsResponse = await versionedLayerClient.getPartitions(
+            partitionsRequest
+        );
+
+        assert.isDefined(partitionsResponse);
+        expect(partitionsResponse).to.be.equal(mockedPartitions);
+        expect(partitionsResponse.partitions[0]).to.be.equal(
+            mockedPartitions.partitions[0]
+        );
+        expect(partitionsResponse.partitions[1]).to.be.equal(
+            mockedPartitions.partitions[1]
+        );
+
+        assert.isDefined(getPartitionsStub.getCalls()[0].args);
+        expect(
+            getPartitionsStub.getCalls()[0].args[1].additionalFields[0]
+        ).to.be.equal("dataSize");
+        expect(
+            getPartitionsStub.getCalls()[0].args[1].additionalFields[1]
+        ).to.be.equal("checksum");
+        expect(
+            getPartitionsStub.getCalls()[0].args[1].additionalFields[2]
+        ).to.be.equal("compressedDataSize");
+    });
+
     it("Should method getPartitions return error without QuadKeyPartitionsRequest", async () => {
         const mockedErrorResponse = "Please provide correct QuadKey";
 
