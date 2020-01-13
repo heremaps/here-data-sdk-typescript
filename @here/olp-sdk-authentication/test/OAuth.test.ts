@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { assert } from "chai";
+import * as chai from "chai";
 import { requestToken, Token, UserAuth } from "../index";
 
 import fetchMock = require("fetch-mock");
@@ -26,6 +26,9 @@ import { loadCredentialsFromFile } from "../lib/loadCredentialsFromFile";
 const REPLY_TIMEOUT_MS = 600;
 const MOCK_CREATED_TIME = 1550777140;
 const MOCK_UPDATED_TIME = 1550777141;
+
+const assert = chai.assert;
+const expect = chai.expect;
 
 describe("oauth-request", () => {
     // requires CONSUMER_KEY and SECRET_KEY env variables, disabled by default
@@ -495,4 +498,45 @@ describe("auth-request-project-scope", () => {
         }
     });
 
+});
+
+describe("expired token refreshing", async () => {
+    const mockedTokenRequester = async (params: any): Promise<Token> => {
+        const mockedToken: Token = {
+            accessToken: `${params.url}-${params.consumerKey}`,
+            expiresIn: 42,
+            tokenType: "fake"
+        };
+        return Promise.resolve(mockedToken);
+    };
+    const userAuth = new UserAuth({
+        env: "here",
+        tokenRequester: mockedTokenRequester,
+        credentials: {
+            accessKeyId: "appId",
+            accessKeyScrt: "keyScrt"
+        }
+    });
+
+    it("Should getToken return the same token for two requests in row", async () => {
+        const token1 = await userAuth.getToken();
+        const token2 = await userAuth.getToken();
+
+        assert.isDefined(token1);
+        assert.isDefined(token2);
+        expect(token1).to.be.equal(token2);
+    });
+
+    it("Should getToken return the different tokens for two requests with delay", async () => {
+        const token1 = await userAuth.getToken();
+
+        setTimeout(async () => {
+            const token2 = await userAuth.getToken();
+            
+            assert.isDefined(token1);
+            assert.isDefined(token2);
+            expect(token1).to.be.not.equal(token2);
+            // tslint:disable-next-line: no-magic-numbers
+        }, 50);
+    });
 });
