@@ -176,7 +176,7 @@ describe("RequestFactory", () => {
                 );
             } catch (error) {
                 expect(error).to.be.equal(
-                    "Error building Request for service: statistics.\nGetting API statistics error: Getting API statistics unknown error"
+                    "Getting API statistics unknown error"
                 );
             }
         });
@@ -250,7 +250,7 @@ describe("RequestFactory", () => {
                 );
             } catch (error) {
                 expect(error).to.be.equal(
-                    "Getting API statistics error: Getting API error: Not Found"
+                    "Getting API error: Not Found"
                 );
             }
         });
@@ -274,7 +274,7 @@ describe("RequestFactory", () => {
                 );
             } catch (error) {
                 expect(error).to.be.equal(
-                    "Getting API statistics error: Getting API statistics unknown error"
+                    "Getting API statistics unknown error"
                 );
             }
         });

@@ -251,7 +251,7 @@ describe("CatalogClient", () => {
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(
-                    "Error getting earliest catalog version: TestError",
+                    "TestError",
                     error
                 );
             });

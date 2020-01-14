@@ -75,9 +75,7 @@ export class RequestFactory {
                       )
             )
             .catch(error =>
-                Promise.reject(
-                    `Error building Request for service: ${serviceName}.\n${error}`
-                )
+                Promise.reject(error)
             );
     }
 
@@ -152,7 +150,7 @@ export class RequestFactory {
                 }
             )
             .catch((error: string) =>
-                Promise.reject(`Getting API ${serviceName} error: ${error}`)
+                Promise.reject(error)
             );
     }
 }

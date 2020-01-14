@@ -94,8 +94,10 @@ export class DataStoreDownloadManager implements DownloadManager {
         try {
             const response = await fetchFunction(url, init);
             // tslint:disable-next-line: no-magic-numbers
-            if (response.status !== 503 || retryCount >= maxRetries) {
-                return response;
+            if (response.status !== 200 && retryCount >= maxRetries) {
+                return Promise.reject({code: response.status, message: response.statusText});
+            } else if (response.status === 200) {
+                return Promise.resolve(response);
             }
         } catch (err) {
             if (
@@ -103,7 +105,8 @@ export class DataStoreDownloadManager implements DownloadManager {
                 (err.hasOwnProperty("name") && err.name === "AbortError") ||
                 retryCount > maxRetries
             ) {
-                return Promise.reject(err);
+                const erroMessage = `Message:${err.message}::Stack:${err.stack}`;
+                return Promise.reject({code: err.code, message: erroMessage});
             }
         }
         return DataStoreDownloadManager.waitFor(

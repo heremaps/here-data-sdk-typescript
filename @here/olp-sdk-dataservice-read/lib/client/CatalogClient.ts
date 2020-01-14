@@ -102,9 +102,7 @@ export class CatalogClient {
 
         const earliestVersion = await MetadataApi.minimumVersion(builder, {
             billingTag: request.getBillingTag()
-        }).catch(err =>
-            Promise.reject(`Error getting earliest catalog version: ${err}`)
-        );
+        }).catch(err => Promise.reject(err));
 
         return Promise.resolve(earliestVersion);
     }
@@ -260,9 +258,7 @@ export class CatalogClient {
             hrn,
             abortSignal
         ).catch((err: Response) =>
-            Promise.reject(
-                `Error retrieving from cache builder for resource "${this.hrn}" and api: "${builderType}.\n${err}"`
-            )
+            Promise.reject(err)
         );
     }
 }
