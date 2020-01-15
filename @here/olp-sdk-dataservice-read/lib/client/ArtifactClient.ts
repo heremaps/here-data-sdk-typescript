@@ -26,7 +26,7 @@ import {
 } from "..";
 
 /**
- * Gets schema metadata and data from the OLP Artifact Service. 
+ * Gets schema metadata and data from the OLP Artifact Service.
  */
 export class ArtifactClient {
     private readonly apiVersion = "v1";

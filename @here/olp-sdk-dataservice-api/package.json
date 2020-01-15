@@ -70,16 +70,5 @@
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
     "typedoc": "^0.15.6"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{ts}": [
-      "prettier --write",
-      "git add"
-    ]
   }
 }
