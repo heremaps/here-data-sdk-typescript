@@ -38,3 +38,4 @@ export * from "./SchemaRequest";
 export * from "./CatalogVersionRequest";
 export * from "./LayerVersionsRequest";
 export * from "./IndexLayerClient";
+export * from "./IndexQueryRequest";
