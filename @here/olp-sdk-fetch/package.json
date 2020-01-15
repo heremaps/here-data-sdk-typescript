@@ -75,16 +75,5 @@
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
     "zlib": "^1.0.5"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{ts}": [
-      "prettier --write",
-      "git add"
-    ]
   }
 }

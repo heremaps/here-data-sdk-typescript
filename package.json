@@ -29,6 +29,17 @@
     "sourceMap": true,
     "instrument": true
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "prettier --write",
+      "git add"
+    ]
+  },
   "scripts": {
     "bootstrap": "lerna bootstrap --use-workspaces",
     "build": "lerna run build",
