@@ -38,7 +38,8 @@
 import { RequestBuilder, RequestOptions, UrlBuilder } from "./RequestBuilder";
 
 export interface DataResponse {
-    data?: MapStringObject[];
+    data?: Index[];
+    error?: string;
 }
 
 export interface Index {

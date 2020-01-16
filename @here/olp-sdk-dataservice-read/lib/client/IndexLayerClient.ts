@@ -17,12 +17,22 @@
  * License-Filename: LICENSE
  */
 
-import { HRN, OlpClientSettings } from "..";
+import { IndexApi } from "@here/olp-sdk-dataservice-api";
+import {
+    ApiName,
+    DataStoreRequestBuilder,
+    HRN,
+    IndexQueryRequest,
+    OlpClientSettings,
+    RequestFactory
+} from "..";
 
 /**
  * Describes a index layer and provides the possibility to get partitions metadata and data.
  */
 export class IndexLayerClient {
+    private readonly apiVersion: string = "v1";
+
     /**
      * Creates the [[IndexLayerClient]] instance.
      *
@@ -36,4 +46,54 @@ export class IndexLayerClient {
         readonly layerId: string,
         readonly settings: OlpClientSettings
     ) {}
+
+    public async getPartitions(
+        request: IndexQueryRequest,
+        abortSignal?: AbortSignal
+    ): Promise<IndexApi.Index[]> {
+        const query = request.getQueryString();
+        if (!query) {
+            return Promise.reject("Please provide correct query");
+        }
+
+        const requestBilder = await this.getRequestBuilder(
+            "index",
+            this.catalogHrn,
+            abortSignal
+        );
+
+        const indexMetadata = await IndexApi.performQuery(requestBilder, {
+            layerID: this.layerId,
+            query,
+            huge: request.getHugeResponse()
+        }).catch(err => Promise.reject(err));
+
+        return indexMetadata.data
+            ? Promise.resolve(indexMetadata.data)
+            : Promise.reject(indexMetadata.error);
+    }
+
+    /**
+     * Fetch baseUrl and create requestBuilder for sending requests to the API Lookup Service.
+     * @param builderType endpoint name is needed to create propriate requestBuilder
+     *
+     * @returns requestBuilder
+     */
+    private async getRequestBuilder(
+        builderType: ApiName,
+        hrn?: HRN,
+        abortSignal?: AbortSignal
+    ): Promise<DataStoreRequestBuilder> {
+        return RequestFactory.create(
+            builderType,
+            this.apiVersion,
+            this.settings,
+            hrn,
+            abortSignal
+        ).catch(err =>
+            Promise.reject(
+                `Error retrieving from cache builder for resource "${this.catalogHrn}" and api: "${builderType}.\n${err}"`
+            )
+        );
+    }
 }
