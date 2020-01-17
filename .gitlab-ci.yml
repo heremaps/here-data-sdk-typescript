@@ -1,9 +1,10 @@
 image: ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}
 
 stages:
+  - performance_test
   - security_test
 
-test_veracode:
+wv_job:
   stage: security_test
   tags:
   - docker-prod
@@ -20,3 +21,25 @@ test_veracode:
     paths:
       - build
     expire_in: 1 year # save our zip for 1 year as job artifacts
+nv_job:
+  stage: performance_test
+  tags:
+  - docker-prod
+  image: ${DOCKER_REGISTRY}/${DOCKER_IMAGE_PERFORMANCE}:${DOCKER_IMAGE_PERFORMANCE_VERSION}
+  script:
+  - $CI_PROJECT_DIR/scripts/linux/nv/gitlab_test_performance.sh
+  only:
+    refs:
+      - master
+      - schedules
+    variables:
+      - $NIGHTLY
+  artifacts:
+    when: always
+    paths:
+      - ./*.gz
+      - ./*.html
+      - cache
+      - heaptrack
+      - reports
+    expire_in: 1 year # save our archives for 1 year as job artifacts
