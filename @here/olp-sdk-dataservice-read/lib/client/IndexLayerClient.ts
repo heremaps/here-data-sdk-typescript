@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { IndexApi } from "@here/olp-sdk-dataservice-api";
+import { BlobApi, IndexApi } from "@here/olp-sdk-dataservice-api";
 import {
     ApiName,
     DataStoreRequestBuilder,
@@ -47,6 +47,17 @@ export class IndexLayerClient {
         readonly settings: OlpClientSettings
     ) {}
 
+    /**
+     * Fetches all partitions metadata from a layer that match a query from the [[IndexQueryRequest]] instance.
+     *
+     * @param IndexQueryRequest The [[IndexQueryRequest]] instance.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @returns A list of metadata for each of the partitions from the requested layer.
+     */
     public async getPartitions(
         request: IndexQueryRequest,
         abortSignal?: AbortSignal
@@ -71,6 +82,37 @@ export class IndexLayerClient {
         return indexMetadata.data
             ? Promise.resolve(indexMetadata.data)
             : Promise.reject(indexMetadata.error);
+    }
+
+    /**
+     * Fetches partition data using data handle.
+     *
+     * @param model The data model of partition metadata.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @return The data from the requested partition.
+     */
+    public async getData(
+        model: IndexApi.Index,
+        abortSignal?: AbortSignal
+    ): Promise<Response> {
+        if (!model.id) {
+            return Promise.reject("No data handle for this partition");
+        }
+
+        const builder = await this.getRequestBuilder(
+            "blob",
+            this.catalogHrn,
+            abortSignal
+        ).catch(err => Promise.reject(err));
+
+        return BlobApi.getBlob(builder, {
+            dataHandle: model.id,
+            layerId: this.layerId
+        }).catch(async error => Promise.reject(error));
     }
 
     /**

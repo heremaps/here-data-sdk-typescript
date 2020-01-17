@@ -22,7 +22,7 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
-import { IndexApi } from "@here/olp-sdk-dataservice-api";
+import { IndexApi, BlobApi } from "@here/olp-sdk-dataservice-api";
 
 chai.use(sinonChai);
 
@@ -31,6 +31,7 @@ const expect = chai.expect;
 
 describe("IndexLayerClient", () => {
     let sandbox: sinon.SinonSandbox;
+    let getBlobStub: sinon.SinonStub;
     let getIndexStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
     let indexLayerClient: dataServiceRead.IndexLayerClient;
@@ -53,6 +54,7 @@ describe("IndexLayerClient", () => {
     });
 
     beforeEach(() => {
+        getBlobStub = sandbox.stub(BlobApi, "getBlob");
         getIndexStub = sandbox.stub(IndexApi, "performQuery");
         getBaseUrlRequestStub = sandbox.stub(
             dataServiceRead.RequestFactory,
@@ -190,5 +192,38 @@ describe("IndexLayerClient", () => {
             });
 
         abortController.abort();
+    });
+
+    it("Should method getData provide data", async () => {
+        const mockedBlobData: Response = new Response("mocked-blob-response");
+        const mockedModel = {
+            id: "8c0e5ac9-b036-4365-8820-dfcba64588fc",
+            size: 111928,
+            checksum: "448a33cd65c47bed1eeb4d72e7fa022c95a41158",
+            timestamp: 1551981674191,
+            hour_from: 1506402000000,
+            tile_id: 377894442,
+            crc: null
+        };
+        getBlobStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockedBlobData);
+            }
+        );
+
+        const response = await indexLayerClient.getData(mockedModel);
+        assert.isDefined(response);
+        expect(getBlobStub.getCalls()[0].args[1].dataHandle).to.be.equal(
+            mockedModel.id
+        );
+    });
+
+    it("Should method getData return Error without parameters", async () => {
+        const mockedErrorResponse = "No data handle for this partition";
+
+        const response = await indexLayerClient.getData({}).catch(error => {
+            assert.isDefined(error);
+            assert.equal(mockedErrorResponse, error);
+        });
     });
 });
