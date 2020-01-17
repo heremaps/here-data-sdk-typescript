@@ -650,4 +650,199 @@ describe("VolatileLayerClient", () => {
       expect(partitions.parentQuads[0].partition).to.be.equal("73982");
     }
   });
+
+  it("Shoud read partitions with additionalFields parameter from PartitionsRequest", async () => {
+    const mockedResponses = new Map();
+
+    const mockedPartitions = {
+      partitions: [
+        {
+          checksum: "291f66029c232400e3403cd6e9cfd36e",
+          compressedDataSize: 1024,
+          dataHandle: "1b2ca68f-d4a0-4379-8120-cd025640510c",
+          dataSize: 1024,
+          crc: "c3f276d7",
+          partition: "314010583"
+        },
+        {
+          checksum: "123f66029c232400e3403cd6e9cfd45b",
+          compressedDataSize: 2084,
+          dataHandle: "1b2ca68f-d4a0-4379-8120-cd025640578e",
+          dataSize: 2084,
+          crc: "c3f2766y",
+          partition: "1000"
+        }
+      ],
+      next: "/uri/to/next/page"
+    };
+
+    // Set the response from lookup api with the info about Metadata service.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ])
+      )
+    );
+
+    // Set the response of mocked partitions with additional fields.
+    mockedResponses.set(
+      `https://metadata.data.api.platform.here.com/metadata/v1/layers/test-layed-id/partitions?additionalFields=dataSize,checksum,compressedDataSize`,
+      new Response(JSON.stringify(mockedPartitions))
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    // Setup Layer Client with new OlpClientSettings.
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+    const layerClient = new VolatileLayerClient(
+      HRN.fromString("hrn:here:data:::test-hrn"),
+      "test-layed-id",
+      settings
+    );
+
+    const requestWithAdditionalFields = new PartitionsRequest().withAdditionalFields(
+      ["dataSize", "checksum", "compressedDataSize"]
+    );
+
+    const partitions = await layerClient.getPartitions(
+      requestWithAdditionalFields
+    );
+
+    expect(partitions.partitions[0].checksum).to.be.equal(
+      mockedPartitions.partitions[0].checksum
+    );
+    expect(partitions.partitions[1].compressedDataSize).to.be.equal(
+      mockedPartitions.partitions[1].compressedDataSize
+    );
+    expect(partitions.partitions[1].dataSize).to.be.equal(
+      mockedPartitions.partitions[1].dataSize
+    );
+  });
+
+  it("Shoud read partitions with additionalFields parameter from QuadKeyPartitionsRequest", async () => {
+    const mockedResponses = new Map();
+
+    const mockedQuadKey = {
+      row: 1,
+      column: 2,
+      level: 3
+    };
+
+    mockedResponses.set(
+      `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
+      new Response(JSON.stringify({ version: 30 }))
+    );
+
+    // Set the response from lookup api with the info about Query API.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/query/v1`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "query",
+            version: "v1",
+            baseURL: "https://query.data.api.platform.here.com/query/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ])
+      )
+    );
+
+    const mockedPartitions = {
+      partitions: [
+        {
+          checksum: "291f66029c232400e3403cd6e9cfd36e",
+          compressedDataSize: 1024,
+          dataHandle: "1b2ca68f-d4a0-4379-8120-cd025640510c",
+          dataSize: 1024,
+          crc: "c3f276d7",
+          partition: "314010583"
+        },
+        {
+          checksum: "123f66029c232400e3403cd6e9cfd45b",
+          compressedDataSize: 2084,
+          dataHandle: "1b2ca68f-d4a0-4379-8120-cd025640578e",
+          dataSize: 2084,
+          crc: "c3f2766y",
+          partition: "1000"
+        }
+      ],
+      next: "/uri/to/next/page"
+    };
+
+    // Set the response from lookup api with the info about Metadata service.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ])
+      )
+    );
+
+    // Set the response of mocked partitions with additional fields.
+    mockedResponses.set(
+      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/quadkeys/70/depths/0?additionalFields=dataSize,checksum,compressedDataSize`,
+      new Response(JSON.stringify(mockedPartitions))
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    // Setup Layer Client with new OlpClientSettings.
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+    const layerClient = new VolatileLayerClient(
+      HRN.fromString("hrn:here:data:::test-hrn"),
+      "test-layed-id",
+      settings
+    );
+
+    const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest();
+    assert.isDefined(quadKeyPartitionsRequest);
+    expect(quadKeyPartitionsRequest).be.instanceOf(QuadKeyPartitionsRequest);
+
+    const quadKeyPartitionsRequestWithQuadKey = quadKeyPartitionsRequest.withQuadKey(
+      mockedQuadKey
+    );
+    const quadKeyPartitionsRequestWithAdditionalFields = quadKeyPartitionsRequest.withAdditionalFields(
+      ["dataSize", "checksum", "compressedDataSize"]
+    );
+
+    const partitions = await layerClient.getPartitions(
+      quadKeyPartitionsRequestWithAdditionalFields
+    );
+
+    assert.isDefined(partitions);
+  });
 });
