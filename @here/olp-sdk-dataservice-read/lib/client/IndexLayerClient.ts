@@ -71,7 +71,7 @@ export class IndexLayerClient {
             "index",
             this.catalogHrn,
             abortSignal
-        );
+        ).catch(err => Promise.reject(err));
 
         const indexMetadata = await IndexApi.performQuery(requestBilder, {
             layerID: this.layerId,
