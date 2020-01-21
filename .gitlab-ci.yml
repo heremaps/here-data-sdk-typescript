@@ -43,3 +43,25 @@ nv_job:
       - heaptrack
       - reports
     expire_in: 1 year # save our archives for 1 year as job artifacts
+wv_job:
+  stage: performance_test_extended
+  tags:
+  - docker-prod
+  image: ${DOCKER_REGISTRY}/${DOCKER_IMAGE_PERFORMANCE}:${DOCKER_IMAGE_PERFORMANCE_VERSION}
+  script:
+  - $CI_PROJECT_DIR/scripts/linux/wv/gitlab_test_performance_extended.sh
+  only:
+    refs:
+      - master
+      - schedules
+    variables:
+      - $WEEKLY
+  artifacts:
+    when: always
+    paths:
+      - ./*.gz
+      - ./*.html
+      - cache
+      - heaptrack
+      - reports
+    expire_in: 1 year # save our archives for 1 year as job artifacts
