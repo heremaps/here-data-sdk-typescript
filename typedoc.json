@@ -5,8 +5,12 @@
     "module": "commonjs",
     "out": "dist/doc",
     "exclude": [
+        "**/index.ts",
+        "**/index.node.ts",
+        "**/index.web.ts",
         "**/node_modules/**",
         "**/test/**/*.ts",
+        "**/tests/**/*.ts",
         "**/dist/**/*.ts",
         "**/scripts/*.ts"
     ],
