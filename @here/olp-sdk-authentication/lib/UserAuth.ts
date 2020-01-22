@@ -186,7 +186,7 @@ export class UserAuth {
      * Retrieves the access token.
      *
      * @return The access token if it is valid, or an error if at least one of the following credentials is not stated:
-     * access key ID or acces key secret.
+     * access key ID or access key secret.
      */
     async getToken(): Promise<string> {
         if (this.tokenIsValid()) {
