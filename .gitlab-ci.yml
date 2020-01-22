@@ -3,8 +3,10 @@ image: ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}
 stages:
   - performance_test
   - security_test
+  - translate_report
+  - deploy
 
-wv_job:
+wv_veracode_job:
   stage: security_test
   tags:
   - docker-prod
@@ -65,3 +67,48 @@ wv_job:
       - heaptrack
       - reports
     expire_in: 1 year # save our archives for 1 year as job artifacts
+    
+    # next stages will run on NV and WK jobs
+
+translate_report:
+  stage: translate_report
+  tags:
+  - docker-prod
+  image: python:3.6
+  when: always
+  before_script:
+    - pip install junit2html
+  script:
+    # - python -m junit2htmlreport --report-matrix reports/index.html reports/*.xml
+    - if [ "$NIGHTLY" == "1" ]; then cat heaptrack_report.html >> reports/index.html; fi
+    - if [ "$WEEKLY" == "1" ]; then cat heaptrack_report.html >> reports/index.html; fi
+    - mkdir -p .public
+    - cp reports/*.html .public/
+  artifacts:
+    paths:
+      - .public
+  only:
+    refs:
+      - master
+      - schedules
+    variables:
+      - $WEEKLY
+      - $NIGHTLY
+
+pages:
+  stage: deploy
+  tags:
+    - docker-prod
+  when: always
+  script: mv .public public
+  artifacts:
+    paths:
+      - public
+    expire_in: 1 year
+  only:
+    refs:
+      - master
+      - schedules
+    variables:
+      - $WEEKLY
+      - $NIGHTLY

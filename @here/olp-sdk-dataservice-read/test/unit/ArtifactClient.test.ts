@@ -31,9 +31,7 @@ const expect = chai.expect;
 
 describe("ArtifactClient", () => {
     let sandbox: sinon.SinonSandbox;
-    let olpClientSettingsStub: sinon.SinonStubbedInstance<
-        dataServiceRead.OlpClientSettings
-    >;
+    let olpClientSettingsStub: sinon.SinonStubbedInstance<dataServiceRead.OlpClientSettings>;
     let getArtifactUsingGETStub: sinon.SinonStub;
     let getSchemaUsingGETStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
@@ -149,7 +147,7 @@ describe("ArtifactClient", () => {
         const response = await artifactClient.getSchemaDetails(
             schemaDetailsRequest
         );
-        assert.isDefined(response);
+        assert.isDefined(!response);
         expect(mockedSchema).be.equal(response);
     });
 
