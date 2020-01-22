@@ -11,3 +11,12 @@ xunit.xml
 app.ts
 .cache/
 .mocha-puppeteer/
+FlameGraph/
+core
+errors.txt
+reports/
+*.gz
+*.zst
+heaptrack/
+heaptrack_report.html
+!tests/utils/mocked-olp-server/*.js
