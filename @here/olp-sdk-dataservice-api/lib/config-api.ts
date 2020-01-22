@@ -37,7 +37,7 @@ import { RequestBuilder, RequestOptions, UrlBuilder } from "./RequestBuilder";
  * List of billing tags a free-form tag which is used for grouping billing records together. If supplied,
  * it must be between 4 - 16 characters, contain only alphanumeric ASCII characters [A-Za-z0-9].
  */
-export interface BillingTags extends Array<string> {}
+export type BillingTags = string[];
 
 export interface ParentQuad {
     /**
@@ -165,7 +165,7 @@ export interface Layer {
      * together. If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII
      * characters `[A-Za-z0-9]`.
      */
-    billingTags?: string[];
+    billingTags?: BillingTags;
     /**
      * Identifies whether the data is compressed.
      */
@@ -229,7 +229,7 @@ export interface Layer {
     /**
      * Some keywords that help to find the catalog when searching in the platform portal.
      */
-    tags?: string[];
+    tags?: Tags;
     /**
      * Properties that describe the volume where the data is physically stored.
      */
@@ -246,7 +246,7 @@ export interface Catalog {
      * Please note that this element is read only and does not exist in CreateCatalog.
      * If posted during catalog creation the value will be ignored.
      */
-    billingTags?: string[];
+    billingTags?: BillingTags;
     coverage?: Coverage;
     /**
      * The creation date and time.
@@ -286,7 +286,7 @@ export interface Catalog {
     /**
      * Some keywords that help to find the catalog when searching in the platform portal.
      */
-    tags: string[];
+    tags: Tags;
     /**
      * The version of the catalog configuration. Every change in this number indicates change in catalog configuration.
      * It is incremented every time you e.g. change catalog parameters, add layers etc.
@@ -419,7 +419,7 @@ export interface CreateCatalog {
     /**
      * Some keywords that help to find the catalog when searching in the platform portal.
      */
-    tags?: string[];
+    tags?: Tags;
     /**
      * The version of the catalog configuration.
      * Every change in this number indicates change in catalog configuration.
@@ -728,7 +728,7 @@ export interface PatchCatalog {
      * Some keywords that help to find the catalog when searching in the platform portal. Field is optional,
      * specify value to replace all list of tags. This field is not removable, null value is not allowed
      */
-    tags?: string[];
+    tags?: Tags;
 }
 
 /**
@@ -740,7 +740,7 @@ export interface PatchLayer {
      * If supplied, it must be between 4 - 16 characters, contain only alphanumeric ASCII characters [A-Za-z0-9].
      * Field is optional, specify value to replace all list of billing tags. This field is not removable, null value is not allowed.
      */
-    billingTags?: string[];
+    billingTags?: BillingTags;
     /**
      * The geographic areas that this layer covers, grouped by administrative divisions. Field is optional,
      * specify value to modify layer coverage. This field is not removable, null value is not allowed
@@ -776,7 +776,7 @@ export interface PatchLayer {
      * Some keywords that help to find the layer when searching in the platform portal. Field is optional,
      * specify value to replace all list of tags. This field is not removable, null value is not allowed
      */
-    tags?: string[];
+    tags?: Tags;
 }
 
 export interface Replication {
@@ -877,7 +877,7 @@ export interface StreamProperties {
 /**
  * Some keywords that help to find the layer when searching in the platform portal.
  */
-export interface Tags extends Array<string> {}
+export type Tags = string[];
 
 /**
  * The expiry time in milliseconds for data in this layer.
