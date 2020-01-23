@@ -18,6 +18,7 @@
  */
 
 export * from "./lib/RequestBuilder";
+export * from "./lib/HttpError";
 
 import * as ArtifactApi from "./lib/artifact-api";
 import * as BlobApi from "./lib/blob-api";
@@ -29,7 +30,9 @@ import * as MetadataApi from "./lib/metadata-api";
 import * as QueryApi from "./lib/query-api";
 import * as VolatileBlobApi from "./lib/volatile-blob-api";
 
-export type AdditionalFields = Array<"dataSize" | "checksum" | "compressedDataSize" | "crc">;
+export type AdditionalFields = Array<
+    "dataSize" | "checksum" | "compressedDataSize" | "crc"
+>;
 
 export {
     LookupApi,
