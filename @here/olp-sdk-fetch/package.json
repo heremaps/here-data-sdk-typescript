@@ -71,7 +71,7 @@
     "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.18.0",
     "typedoc": "^0.15.0",
-    "typescript": "^3.7.4",
+    "typescript": "3.5.3",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
     "zlib": "^1.0.5"
