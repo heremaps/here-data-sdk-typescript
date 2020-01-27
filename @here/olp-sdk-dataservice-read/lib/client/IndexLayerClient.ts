@@ -112,7 +112,7 @@ export class IndexLayerClient {
         return BlobApi.getBlob(builder, {
             dataHandle: model.id,
             layerId: this.layerId
-        }).catch(async error => Promise.reject(error));
+        });
     }
 
     /**
@@ -132,10 +132,6 @@ export class IndexLayerClient {
             this.settings,
             hrn,
             abortSignal
-        ).catch(err =>
-            Promise.reject(
-                `Error retrieving from cache builder for resource "${this.catalogHrn}" and api: "${builderType}.\n${err}"`
-            )
-        );
+        ).catch(err => Promise.reject(err));
     }
 }

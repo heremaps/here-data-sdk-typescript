@@ -17,6 +17,7 @@
  * License-Filename: LICENSE
  */
 
+import { HttpError } from "@here/olp-sdk-dataservice-api";
 import { DownloadManager } from "./DownloadManager";
 
 /** @internal
@@ -95,7 +96,13 @@ export class DataStoreDownloadManager implements DownloadManager {
             const response = await fetchFunction(url, init);
             // tslint:disable-next-line: no-magic-numbers
             if (response.status !== 503 || retryCount >= maxRetries) {
-                return response;
+                if (response.status === 200) {
+                    return Promise.resolve(response);
+                } else {
+                    return Promise.reject(
+                        new HttpError(response.status, response.statusText)
+                    );
+                }
             }
         } catch (err) {
             if (
@@ -174,9 +181,9 @@ export class DataStoreDownloadManager implements DownloadManager {
                 this.onDownloadDone();
                 return response;
             })
-            .catch(err => {
+            .catch(async err => {
                 this.onDownloadDone();
-                throw err;
+                return Promise.reject(err);
             });
     }
     private onDownloadDone() {

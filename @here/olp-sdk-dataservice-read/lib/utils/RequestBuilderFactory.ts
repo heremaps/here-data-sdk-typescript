@@ -74,11 +74,7 @@ export class RequestFactory {
                           `Error getting base url to the service: ${serviceName}`
                       )
             )
-            .catch(error =>
-                Promise.reject(
-                    `Error building Request for service: ${serviceName}.\n${error}`
-                )
-            );
+            .catch(error => Promise.reject(error));
     }
 
     /**
@@ -159,8 +155,6 @@ export class RequestFactory {
                     );
                 }
             )
-            .catch((error: string) =>
-                Promise.reject(`Getting API ${serviceName} error: ${error}`)
-            );
+            .catch(error => Promise.reject(error));
     }
 }

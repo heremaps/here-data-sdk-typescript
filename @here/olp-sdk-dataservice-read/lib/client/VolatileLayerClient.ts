@@ -99,7 +99,7 @@ export class VolatileLayerClient {
                     partitionId,
                     dataRequest.getBillingTag(),
                     abortSignal
-                ).catch((error: Response) => Promise.reject(error));
+                ).catch(error => Promise.reject(error));
                 return this.downloadPartition(
                     partitionIdDataHandle,
                     abortSignal,
@@ -214,7 +214,7 @@ export class VolatileLayerClient {
         const metaRequestBilder = await this.getRequestBuilder(
             "metadata",
             HRN.fromString(this.hrn)
-        );
+        ).catch(error => Promise.reject(error));
         return MetadataApi.getPartitions(metaRequestBilder, {
             layerId: this.layerId,
             additionalFields: request.getAdditionalFields(),
@@ -231,12 +231,12 @@ export class VolatileLayerClient {
             "volatile-blob",
             HRN.fromString(this.hrn),
             abortSignal
-        );
+        ).catch(error => Promise.reject(error));
         return VolatileBlobApi.getVolatileBlob(builder, {
             dataHandle,
             layerId: this.layerId,
             billingTag
-        }).catch(async error => Promise.reject(error));
+        }).catch(error => Promise.reject(error));
     }
 
     /**
@@ -256,10 +256,6 @@ export class VolatileLayerClient {
             this.settings,
             hrn,
             abortSignal
-        ).catch(err =>
-            Promise.reject(
-                `Error retrieving from cache builder for resource "${this.hrn}" and api: "${builderType}.\n${err}"`
-            )
         );
     }
 
@@ -276,7 +272,7 @@ export class VolatileLayerClient {
         const queryRequestBilder = await this.getRequestBuilder(
             "query",
             HRN.fromString(this.hrn)
-        );
+        ).catch(error => Promise.reject(error));
         const partitionsListRepsonse = await QueryApi.getPartitionsById(
             queryRequestBilder,
             {
@@ -284,7 +280,7 @@ export class VolatileLayerClient {
                 partition: [partitionId],
                 billingTag
             }
-        );
+        ).catch(error => Promise.reject(error));
 
         if (
             partitionsListRepsonse.status &&

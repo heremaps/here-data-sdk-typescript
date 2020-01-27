@@ -598,4 +598,25 @@ describe("VolatileLayerClient", () => {
                 assert.equal(error, mockedPartitionsIdData);
             });
     });
+
+    it("Should error be handled 2", async () => {
+        const mockedErrorResponse = "Bad response";
+        const dataRequest = new dataServiceRead.DataRequest().withDataHandle(
+            "moсked-data-handle"
+        );
+
+        getBaseUrlRequestStub.callsFake(() =>
+            Promise.reject({
+                status: 400,
+                statusText: "Bad response"
+            })
+        );
+
+        const response = await volatileLayerClient
+            .getData(dataRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.statusText);
+            });
+    });
 });

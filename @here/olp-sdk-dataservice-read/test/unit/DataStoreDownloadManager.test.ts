@@ -17,9 +17,15 @@
  * License-Filename: LICENSE
  */
 
-import { assert } from "chai";
-import * as sinon from "sinon";
+import sinon = require("sinon");
+import * as chai from "chai";
+import sinonChai = require("sinon-chai");
 import { DataStoreDownloadManager } from "../../lib";
+import { HttpError } from "@here/olp-sdk-dataservice-api";
+
+chai.use(sinonChai);
+const assert = chai.assert;
+const expect = chai.expect;
 
 describe("DataStoreDownloadManager", function() {
     const fakeDataUrl = `https://download.example.url`;
@@ -64,18 +70,19 @@ describe("DataStoreDownloadManager", function() {
         const downloadMgr = new DataStoreDownloadManager(fetchStub, 3);
 
         // Act
-        const downloadResponse = await downloadMgr.download(fakeDataUrl);
-        const data = await downloadResponse.json();
-        // Assert
-        assert(fetchStub.called);
+        const downloadResponse = await downloadMgr
+            .download(fakeDataUrl)
+            .catch(error => {
+                // Assert
+                assert(fetchStub.called);
 
-        // callCount should be 4. (1 first call + 3 retries)
-        assert(fetchStub.callCount === 4);
-        assert(fetchStub.getCall(0).args[0] === fakeDataUrl);
-
-        assert.isFalse(downloadResponse.ok);
-        assert.equal(downloadResponse.status, 503);
-        assert.deepEqual(data, { statusText: "Service unavailable!" });
+                // callCount should be 4. (1 first call + 3 retries)
+                assert(fetchStub.callCount === 4);
+                assert(fetchStub.getCall(0).args[0] === fakeDataUrl);
+                assert.equal(error.status, 503);
+                assert.equal(error.message, "Service unavailable!");
+                expect(error).to.be.instanceOf(HttpError);
+            });
     });
 
     /*

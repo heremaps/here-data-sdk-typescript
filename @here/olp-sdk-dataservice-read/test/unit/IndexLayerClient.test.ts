@@ -106,6 +106,7 @@ describe("IndexLayerClient", () => {
                 }
             ]
         };
+
         getIndexStub.callsFake(
             (builder: any, params: any): Promise<IndexApi.DataResponse> => {
                 return Promise.resolve(mockedIndexResponse);
@@ -250,6 +251,33 @@ describe("IndexLayerClient", () => {
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error);
+            });
+    });
+
+    it("Should base url error be handled", async () => {
+        const mockedModel = {
+            id: "8c0e5ac9-b036-4365-8820-dfcba64588fc",
+            size: 111928,
+            checksum: "448a33cd65c47bed1eeb4d72e7fa022c95a41158",
+            timestamp: 1551981674191,
+            hour_from: 1506402000000,
+            tile_id: 377894442,
+            crc: null
+        };
+        const mockedErrorResponse = "Bad response";
+
+        getBaseUrlRequestStub.callsFake(() =>
+            Promise.reject({
+                status: 400,
+                statusText: "Bad response"
+            })
+        );
+
+        const response = await indexLayerClient
+            .getData(mockedModel)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.statusText);
             });
     });
 });

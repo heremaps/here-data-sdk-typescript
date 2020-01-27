@@ -568,4 +568,25 @@ describe("VersionedLayerClient", () => {
             getQuadTreeIndexStub.getCalls()[0].args[1].additionalFields[2]
         ).to.be.equal("compressedDataSize");
     });
+
+    it("Should error be handled 2", async () => {
+        const mockedErrorResponse = "Bad response";
+        const dataRequest = new dataServiceRead.DataRequest().withDataHandle(
+            "moсked-data-handle"
+        );
+
+        getBaseUrlRequestStub.callsFake(() =>
+            Promise.reject({
+                status: 400,
+                statusText: "Bad response"
+            })
+        );
+
+        const response = await versionedLayerClient
+            .getData(dataRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.statusText);
+            });
+    });
 });
