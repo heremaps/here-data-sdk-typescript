@@ -246,9 +246,12 @@ export class VersionedLayerClient {
         const queryRequestBilder = await this.getRequestBuilder(
             "query",
             HRN.fromString(this.hrn)
-        );
+        ).catch(error => Promise.reject(error));
         const latestVersion =
-            version || (await this.getLatestVersion(billingTag));
+            version ||
+            (await this.getLatestVersion(billingTag).catch(error =>
+                Promise.reject(error)
+            ));
         const partitionsListRepsonse = await QueryApi.getPartitionsById(
             queryRequestBilder,
             {
@@ -257,7 +260,7 @@ export class VersionedLayerClient {
                 partition: [partitionId],
                 billingTag
             }
-        ).catch(async error => Promise.reject(error));
+        ).catch(error => Promise.reject(error));
 
         if (
             partitionsListRepsonse.status &&
@@ -290,15 +293,7 @@ export class VersionedLayerClient {
         const latestVersion = await MetadataApi.latestVersion(builder, {
             startVersion: -1,
             billingTag
-        }).catch(async (error: Response) =>
-            Promise.reject(
-                new Error(
-                    `Metadata Service error: HTTP ${
-                        error.status
-                    }, ${error.statusText || ""}`
-                )
-            )
-        );
+        }).catch(error => Promise.reject(error));
         return latestVersion.version;
     }
 
@@ -311,12 +306,12 @@ export class VersionedLayerClient {
             "blob",
             HRN.fromString(this.hrn),
             abortSignal
-        );
+        ).catch(error => Promise.reject(error));
         return BlobApi.getBlob(builder, {
             dataHandle,
             layerId: this.layerId,
             billingTag
-        }).catch(async error => Promise.reject(error));
+        }).catch(error => Promise.reject(error));
     }
 
     /**
@@ -336,10 +331,6 @@ export class VersionedLayerClient {
             this.settings,
             hrn,
             abortSignal
-        ).catch(err =>
-            Promise.reject(
-                `Error retrieving from cache builder for resource "${this.hrn}" and api: "${builderType}.\n${err}"`
-            )
-        );
+        ).catch(error => Promise.reject(error));
     }
 }
