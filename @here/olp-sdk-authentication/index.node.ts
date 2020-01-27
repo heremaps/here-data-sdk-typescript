@@ -23,3 +23,4 @@ export { OAuthArgs, Token } from "./lib/requestToken_common";
 export * from "./lib/requestToken";
 export * from "./lib/UserAuth";
 export * from "./lib/loadCredentialsFromFile";
+export * from "./lib/HttpError";
