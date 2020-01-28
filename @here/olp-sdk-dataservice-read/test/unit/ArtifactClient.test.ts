@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
-import { ArtifactApi } from "@here/olp-sdk-dataservice-api";
+import { ArtifactApi, HttpError } from "@here/olp-sdk-dataservice-api";
 
 chai.use(sinonChai);
 
@@ -99,6 +99,41 @@ describe("ArtifactClient", () => {
         assert.isDefined(response);
     });
 
+    it("Should method getSchema return HttpError when ArtifactClient API crashes", async () => {
+        const NOT_FOUND_ERROR_CODE = 404;
+        const mockedError = new HttpError(NOT_FOUND_ERROR_CODE, "Not found");
+
+        const mockedSchema: Response = new Response(null, {
+            statusText: "mocked response"
+        });
+        const mockedVersion = {
+            id: "42",
+            url: "http://fake.url"
+        };
+        const artifactClient = new dataServiceRead.ArtifactClient(
+            olpClientSettingsStub as any
+        );
+        assert.isDefined(artifactClient);
+        getArtifactUsingGETStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.reject(mockedError);
+            }
+        );
+
+        const schemaRequest = new dataServiceRead.SchemaRequest().withVariant(
+            mockedVersion
+        );
+
+        const responseSchema = await artifactClient
+            .getSchema(schemaRequest)
+            .catch((err: any) => {
+                assert.isDefined(err);
+                expect(err.status).to.be.equal(NOT_FOUND_ERROR_CODE);
+                expect(err.message).to.be.equal("Not found");
+                expect(err.name).to.be.equal("HttpError");
+            });
+    });
+
     it("Should method getSchema return error without variant data provided", async () => {
         const mockedError: string =
             "Please provide the schema variant by schemaRequest.withVariant()";
@@ -151,9 +186,49 @@ describe("ArtifactClient", () => {
         expect(mockedSchema).be.equal(response);
     });
 
+    it("Should method getSchemaDetails return HttpError when ArtifactClient crashes", async () => {
+        const NOT_FOUND_ERROR_CODE = 404;
+        const mockedError = new HttpError(NOT_FOUND_ERROR_CODE, "Not found");
+
+        const mockedSchema: ArtifactApi.GetSchemaResponse = {
+            variants: [
+                {
+                    id: "42",
+                    url: "https://fake.url"
+                }
+            ]
+        };
+        const artifactClient = new dataServiceRead.ArtifactClient(
+            olpClientSettingsStub as any
+        );
+        assert.isDefined(artifactClient);
+
+        getSchemaUsingGETStub.callsFake(
+            (
+                builder: any,
+                params: any
+            ): Promise<ArtifactApi.GetSchemaResponse> => {
+                return Promise.reject(mockedError);
+            }
+        );
+
+        const schemaDetailsRequest = new dataServiceRead.SchemaDetailsRequest().withSchema(
+            mockedHRN
+        );
+
+        const responseSchema = await artifactClient
+            .getSchemaDetails(schemaDetailsRequest)
+            .catch((err: any) => {
+                assert.isDefined(err);
+                expect(err.status).to.be.equal(NOT_FOUND_ERROR_CODE);
+                expect(err.message).to.be.equal("Not found");
+                expect(err.name).to.be.equal("HttpError");
+            });
+    });
+
     it("Should method getSchemaDetails return error without hrn provided", async () => {
         const mockedError: string =
-            "Please provide the schema HRN by schemaDetailsRequest.withScema()";
+            "Please provide the schema HRN by schemaDetailsRequest.withSchema()";
 
         const artifactClient = new dataServiceRead.ArtifactClient(
             olpClientSettingsStub as any
