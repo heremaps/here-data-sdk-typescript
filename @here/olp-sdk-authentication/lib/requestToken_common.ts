@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import { HttpError } from "..";
+
 /**
  * Platform-specific parts of signing a request using HMAC algorithms.
  */
@@ -168,7 +170,9 @@ export async function requestToken_common(
     const request = await fetch(args.url, requestInit);
 
     if (!request.ok) {
-        throw new Error(request.statusText);
+        return Promise.reject(
+            new HttpError(request.status, request.statusText)
+        );
     }
 
     return request.json();
