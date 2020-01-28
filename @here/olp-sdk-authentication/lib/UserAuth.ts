@@ -17,6 +17,7 @@
  * License-Filename: LICENSE
  */
 
+import { HttpError } from "..";
 import { OAuthArgs, Token } from "./requestToken_common";
 
 /**
@@ -210,12 +211,12 @@ export class UserAuth {
                 secretKey: this.m_credentials.accessKeyScrt,
                 scope: this.m_scope
             })
-            .catch(err => Promise.reject(`Error fetching token: ${err}`));
+            .catch(err => Promise.reject(err));
 
         if (response.accessToken) {
             this.m_accessToken = response.accessToken;
         } else {
-            return Promise.reject("No access token received.");
+            return Promise.reject(response);
         }
 
         this.m_expirationDate = new Date();
@@ -250,10 +251,12 @@ export class UserAuth {
         });
 
         if (!request.ok) {
-            return request.statusText;
+            return Promise.reject(
+                new HttpError(request.status, request.statusText)
+            );
         }
 
-        return true;
+        return Promise.resolve(true);
     }
 
     /**
@@ -274,7 +277,12 @@ export class UserAuth {
         });
 
         if (!request.ok) {
-            throw new Error(`Error fetching user info: ${request.statusText}`);
+            return Promise.reject(
+                new HttpError(
+                    request.status,
+                    `Error fetching user info: ${request.statusText}`
+                )
+            );
         }
 
         return request.json();

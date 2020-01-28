@@ -21,6 +21,7 @@ import * as chai from "chai";
 import { requestToken, Token, UserAuth } from "../index";
 
 import fetchMock = require("fetch-mock");
+import { HttpError } from "../lib/HttpError";
 import { loadCredentialsFromFile } from "../lib/loadCredentialsFromFile";
 
 const REPLY_TIMEOUT_MS = 600;
@@ -95,7 +96,10 @@ describe("oauth-request-offline", () => {
         const credentialsFilePath = "./test/test-credentials.properties";
         const credentials = loadCredentialsFromFile(credentialsFilePath);
 
-        const userAuth = new UserAuth({credentials, tokenRequester: requestToken});
+        const userAuth = new UserAuth({
+            credentials,
+            tokenRequester: requestToken
+        });
 
         try {
             token = await userAuth.getToken();
@@ -119,7 +123,6 @@ describe("oauth-request-offline", () => {
         });
 
         try {
-
             token = await userAuth.getToken();
             assert.isNotEmpty(token);
             assert.equal(mock_token, token);
@@ -150,6 +153,54 @@ describe("oauth-request-offline", () => {
             console.error("Token not validated:", err);
             assert.fail();
         }
+    });
+
+    it("validateAccessTokenFalse", async () => {
+        const userAuth = new UserAuth({
+            credentials: {
+                accessKeyId: mock_id,
+                accessKeyScrt: mock_scrt
+            },
+            tokenRequester: requestToken
+        });
+
+        const responseStatus = 500;
+        const responseText = "Internal Server Error";
+
+        fetchMock.post(
+            "https://account.api.here.com/verify/accessToken",
+            responseStatus
+        );
+
+        await userAuth.validateAccessToken(mock_token).catch(err => {
+            assert.isTrue(err instanceof HttpError);
+            assert.equal(err.status, responseStatus);
+            assert.equal(err.message, responseText);
+        });
+    });
+
+    it("getAccessTokenFalse", async () => {
+        const userAuth = new UserAuth({
+            credentials: {
+                accessKeyId: mock_id,
+                accessKeyScrt: mock_scrt
+            },
+            tokenRequester: requestToken
+        });
+
+        const responseStatus = 401;
+        const responseText = "Unauthorized";
+
+        fetchMock.post(
+            "https://account.api.here.com/oauth2/token",
+            responseStatus
+        );
+
+        await userAuth.getToken().catch(err => {
+            assert.isTrue(err instanceof HttpError);
+            assert.equal(err.status, responseStatus);
+            assert.equal(err.message, responseText);
+        });
     });
 });
 
@@ -479,11 +530,11 @@ describe("auth-request-project-scope", () => {
 
     it("Should scope be present on userAuth", async () => {
         const userAuth = new UserAuth({
-        env: "here-dev",
-        credentials: {
-            accessKeyId: mock_id,
-            accessKeyScrt: mock_scrt
-        },
+            env: "here-dev",
+            credentials: {
+                accessKeyId: mock_id,
+                accessKeyScrt: mock_scrt
+            },
             tokenRequester: mockedTokenRequester,
             scope: mockedScope
         });
@@ -497,7 +548,6 @@ describe("auth-request-project-scope", () => {
             assert.fail();
         }
     });
-
 });
 
 describe("expired token refreshing", async () => {
@@ -532,7 +582,7 @@ describe("expired token refreshing", async () => {
 
         setTimeout(async () => {
             const token2 = await userAuth.getToken();
-            
+
             assert.isDefined(token1);
             assert.isDefined(token2);
             expect(token1).to.be.not.equal(token2);
