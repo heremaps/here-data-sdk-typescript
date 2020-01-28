@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { ArtifactApi } from "@here/olp-sdk-dataservice-api";
+import { ArtifactApi, HttpError } from "@here/olp-sdk-dataservice-api";
 import {
     OlpClientSettings,
     RequestFactory,
@@ -26,7 +26,7 @@ import {
 } from "..";
 
 /**
- * Gets schema metadata and data from the OLP Artifact Service. 
+ * Gets schema metadata and data from the OLP Artifact Service.
  */
 export class ArtifactClient {
     private readonly apiVersion = "v1";
@@ -53,7 +53,7 @@ export class ArtifactClient {
         if (!hrn) {
             return Promise.reject(
                 new Error(
-                    `Please provide the schema HRN by schemaDetailsRequest.withScema()`
+                    `Please provide the schema HRN by schemaDetailsRequest.withSchema()`
                 )
             );
         }
@@ -68,7 +68,7 @@ export class ArtifactClient {
 
         return ArtifactApi.getSchemaUsingGET(request, {
             schemaHrn: hrnStr
-        }).catch(() => Promise.reject(`Cannot get schema details: ${hrnStr}`));
+        }).catch(err => Promise.reject(err));
     }
 
     /**
@@ -93,7 +93,7 @@ export class ArtifactClient {
         ).catch(error => Promise.reject(error));
         const response = await ArtifactApi.getArtifactUsingGET(request, {
             artifactHrn: variant.url
-        }).catch(() => Promise.reject(`Cannot download schema bundle`));
+        }).catch(err => Promise.reject(err));
 
         if (response.status === 200) {
             return response.arrayBuffer();
