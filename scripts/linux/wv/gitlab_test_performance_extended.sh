@@ -20,7 +20,16 @@
 # For core dump backtrace
 ulimit -c unlimited
 
+# Build the SDK
+echo ">>> Building ... >>>"
+npm install -g yarn
+yarn
+yarn bootstrap
+npm run build 
+echo ">>> Building SDK done... >>>"
+
 # Start local server
+echo ">>> Local Server starting for further performance test ... >>>"
 node tests/utils/mocked-olp-server/server.js & SERVER_PID=$!
 
 # Node can start server in 1 second, but not faster.
@@ -36,8 +45,6 @@ do
         set -e
 done
 echo ">>> Local Server started for further performance test ... >>>"
-
-export cache_location="cache"
 
 echo ">>> Start performance tests ... >>>"
 npx tsc --target ES5 tests/performance/longMemoryTest.ts && heaptrack node ./tests/performance/longMemoryTest.js 2>> errors.txt || TEST_FAILURE=1
