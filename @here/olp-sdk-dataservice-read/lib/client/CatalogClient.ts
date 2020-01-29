@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,11 @@
  * License-Filename: LICENSE
  */
 
-import { ConfigApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
+import {
+    ConfigApi,
+    HttpError,
+    MetadataApi
+} from "@here/olp-sdk-dataservice-api";
 import {
     ApiName,
     CatalogVersionRequest,
@@ -75,11 +79,7 @@ export class CatalogClient {
         return ConfigApi.getCatalog(builder, {
             catalogHrn: this.hrn,
             billingTag: request.getBillingTag()
-        }).catch((err: Response) =>
-            Promise.reject(
-                `Can't load catalog configuration. HRN: ${this.hrn}, error: ${err}`
-            )
-        );
+        }).catch(err => Promise.reject(err));
     }
 
     /**
@@ -102,9 +102,7 @@ export class CatalogClient {
 
         const earliestVersion = await MetadataApi.minimumVersion(builder, {
             billingTag: request.getBillingTag()
-        }).catch(err =>
-            Promise.reject(`Error getting earliest catalog version: ${err}`)
-        );
+        }).catch(err => Promise.reject(err));
 
         return Promise.resolve(earliestVersion.version);
     }
@@ -195,10 +193,11 @@ export class CatalogClient {
             HRN.fromString(this.hrn),
             abortSignal
         ).catch(error => Promise.reject(error));
+
         const latestVersion = await MetadataApi.latestVersion(builder, {
             startVersion,
             billingTag: request.getBillingTag()
-        });
+        }).catch(err => Promise.reject(err));
         return Promise.resolve(latestVersion.version);
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,11 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
-import { ConfigApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
+import {
+    ConfigApi,
+    HttpError,
+    MetadataApi
+} from "@here/olp-sdk-dataservice-api";
 
 chai.use(sinonChai);
 
@@ -107,39 +111,42 @@ describe("CatalogClient", () => {
         expect(response).to.be.equal(mockedVersion.version);
     });
 
-    it("Should method getVersions provide data with startVersion and EndVersion parameters", async () => {
-        const mockedVersions: MetadataApi.VersionInfos = {
-            versions: [
-                {
-                    dependencies: [
-                        {
-                            direct: true,
-                            hrn: "mocked:::hrn",
-                            version: 42
-                        }
-                    ],
-                    timestamp: 13,
-                    version: 42
-                }
-            ]
+    it("Should method getLatestVersion return HttpError when API crashes", async () => {
+        const TEST_ERROR_CODE = 404;
+        const mockedError = new HttpError(
+            TEST_ERROR_CODE,
+            "Can not get catalog latest version"
+        );
+
+        const mockedVersion = {
+            version: 42
         };
 
-        getListVersionsStub.callsFake(
-            (builder: any, params: any): Promise<MetadataApi.VersionInfos> => {
-                return Promise.resolve(mockedVersions);
+        getVersionStub.callsFake(
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
+                return Promise.reject(mockedError);
             }
         );
 
-        const catalogRequest = new dataServiceRead.CatalogVersionRequest()
-            .withStartVersion(13)
-            .withEndVersion(42);
-
-        const response = await catalogClient.getVersions(
-            (catalogRequest as unknown) as dataServiceRead.CatalogVersionRequest
+        const catalogRequest = new dataServiceRead.CatalogVersionRequest().withStartVersion(
+            42
         );
 
-        assert.isDefined(response);
-        assert.isTrue(response.versions.length > 0);
+        const response = await catalogClient
+            .getLatestVersion(
+                (catalogRequest as unknown) as dataServiceRead.CatalogVersionRequest
+            )
+            .catch((err: any) => {
+                assert.isDefined(err);
+                expect(err.status).to.be.equal(TEST_ERROR_CODE);
+                expect(err.message).to.be.equal(
+                    "Can not get catalog latest version"
+                );
+                expect(err.name).to.be.equal("HttpError");
+            });
     });
 
     it("Should method getLayerVersions provide data with version parameter", async () => {
@@ -229,15 +236,19 @@ describe("CatalogClient", () => {
         expect(response).to.be.equal(mockedEarliestVersion.version);
     });
 
-    it("Should method getEarliestVersion return error getting earliest catalog version", async () => {
-        const mockedErrorResponse = "TestError";
+    it("Should method getEarliestVersion return HttpError getting earliest catalog version", async () => {
+        const TEST_ERROR_CODE = 404;
+        const mockedError = new HttpError(
+            TEST_ERROR_CODE,
+            "Error getting earliest catalog version"
+        );
 
         getEarliestVersionsStub.callsFake(
             (
                 builder: any,
                 params: any
             ): Promise<MetadataApi.VersionResponse> => {
-                return Promise.reject(mockedErrorResponse);
+                return Promise.reject(mockedError);
             }
         );
 
@@ -247,56 +258,14 @@ describe("CatalogClient", () => {
             .getEarliestVersion(
                 (catalogRequest as unknown) as dataServiceRead.CatalogVersionRequest
             )
-            .catch(error => {
-                assert.isDefined(error);
-                assert.equal(
-                    "Error getting earliest catalog version: TestError",
-                    error
+            .catch(err => {
+                assert.isDefined(err);
+                expect(err.status).to.be.equal(TEST_ERROR_CODE);
+                expect(err.message).to.be.equal(
+                    "Error getting earliest catalog version"
                 );
+                expect(err.name).to.be.equal("HttpError");
             });
-    });
-
-    it("Should method getVersions provide data with startVersion parameters", async () => {
-        const mockedVersions: MetadataApi.VersionInfos = {
-            versions: [
-                {
-                    dependencies: [
-                        {
-                            direct: true,
-                            hrn: "mocked:::hrn",
-                            version: 42
-                        }
-                    ],
-                    timestamp: 13,
-                    version: 42
-                }
-            ]
-        };
-
-        getListVersionsStub.callsFake(
-            (builder: any, params: any): Promise<MetadataApi.VersionInfos> => {
-                return Promise.resolve(mockedVersions);
-            }
-        );
-        getVersionStub.callsFake(
-            (
-                builder: any,
-                params: any
-            ): Promise<MetadataApi.VersionResponse> => {
-                return Promise.resolve({ version: 42 });
-            }
-        );
-
-        const catalogRequest = new dataServiceRead.CatalogVersionRequest().withStartVersion(
-            13
-        );
-
-        const response = await catalogClient.getVersions(
-            (catalogRequest as unknown) as dataServiceRead.CatalogVersionRequest
-        );
-
-        assert.isDefined(response);
-        assert.isTrue(response.versions.length > 0);
     });
 
     it("Should method getCatalog provide data", async () => {
@@ -337,5 +306,151 @@ describe("CatalogClient", () => {
 
         assert.isDefined(response);
         expect(response).to.be.equal(mockedCatalogResponse);
+    });
+
+    it("Should method getCatalog return HttpError when Can not load catalog configuration", async () => {
+        const TEST_ERROR_CODE = 404;
+        const mockedError = new HttpError(
+            TEST_ERROR_CODE,
+            "Can't load catalog configuration"
+        );
+
+        const mockedCatalogResponse: ConfigApi.Catalog = {
+            id: "here-internal-test",
+            hrn: "hrn:here-dev:data:::here-internal-test",
+            name: "here-internal-test",
+            summary: "Internal test for here",
+            description: "Used for internal testing on the staging olp.",
+            tags: [],
+            created: "2018-07-13T20:50:08.425Z",
+            replication: {},
+            layers: [
+                {
+                    id: "hype-test-prefetch",
+                    hrn:
+                        "hrn:here-dev:data:::here-internal-test:hype-test-prefetch",
+                    partitioning: {
+                        tileLevels: [],
+                        scheme: "heretile"
+                    },
+                    contentType: "application/x-protobuf",
+                    layerType: "versioned"
+                }
+            ],
+            version: 3
+        };
+
+        getCatalogStub.callsFake(
+            (builder: any, params: any): Promise<ConfigApi.Catalog> => {
+                return Promise.reject(mockedError);
+            }
+        );
+
+        const response = await catalogClient
+            .getCatalog(new dataServiceRead.CatalogRequest())
+            .catch((err: any) => {
+                assert.isDefined(err);
+                expect(err.status).to.be.equal(TEST_ERROR_CODE);
+                expect(err.message).to.be.equal(
+                    "Can't load catalog configuration"
+                );
+                expect(err.name).to.be.equal("HttpError");
+            });
+    });
+
+    it("Should method getVersions provide data with startVersion and EndVersion parameters", async () => {
+        const mockedVersions: MetadataApi.VersionInfos = {
+            versions: [
+                {
+                    dependencies: [
+                        {
+                            direct: true,
+                            hrn: "mocked:::hrn",
+                            version: 42
+                        }
+                    ],
+                    timestamp: 13,
+                    version: 42
+                }
+            ]
+        };
+
+        getListVersionsStub.callsFake(
+            (builder: any, params: any): Promise<MetadataApi.VersionInfos> => {
+                return Promise.resolve(mockedVersions);
+            }
+        );
+
+        const catalogRequest = new dataServiceRead.CatalogVersionRequest()
+            .withStartVersion(13)
+            .withEndVersion(42);
+
+        const response = await catalogClient.getVersions(
+            (catalogRequest as unknown) as dataServiceRead.CatalogVersionRequest
+        );
+
+        assert.isDefined(response);
+        assert.isTrue(response.versions.length > 0);
+    });
+
+    it("Should method getVersions provide data with startVersion parameters", async () => {
+        const mockedVersions = {
+            versions: [
+                {
+                    dependencies: [
+                        {
+                            direct: true,
+                            hrn: "mocked:::hrn",
+                            version: 42
+                        }
+                    ],
+                    timestamp: 13,
+                    version: 42
+                }
+            ]
+        };
+        getListVersionsStub.callsFake((builder, params) => {
+            return Promise.resolve(mockedVersions);
+        });
+        getVersionStub.callsFake((builder, params) => {
+            return Promise.resolve({ version: 42 });
+        });
+
+        const catalogRequest = new dataServiceRead.CatalogVersionRequest().withStartVersion(
+            13
+        );
+        const response = await catalogClient.getVersions(catalogRequest);
+
+        assert.isDefined(response);
+        assert.isTrue(response.versions.length > 0);
+    });
+
+    it("Should method getVersions return HttpError when API crashes", async () => {
+        const TEST_ERROR_CODE = 404;
+        const mockedError = new HttpError(
+            TEST_ERROR_CODE,
+            "Can't get versions"
+        );
+
+        getVersionStub.callsFake((builder, params) => {
+            return Promise.resolve({ version: 42 });
+        });
+
+        getListVersionsStub.callsFake((builder, params) => {
+            return Promise.reject(mockedError);
+        });
+
+        const catalogRequest = new dataServiceRead.CatalogVersionRequest().withStartVersion(
+            13
+        );
+
+        const response = await catalogClient
+            .getVersions(catalogRequest)
+            .catch(err => {
+                assert.isDefined(err);
+                expect(err.status).to.be.equal(TEST_ERROR_CODE);
+                expect(err.message).to.be.equal("Can't get versions");
+                expect(err.name).to.be.equal("HttpError");
+            });
     });
 });
