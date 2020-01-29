@@ -236,7 +236,7 @@ export class VolatileLayerClient {
             dataHandle,
             layerId: this.layerId,
             billingTag
-        }).catch(error => Promise.reject(error));
+        });
     }
 
     /**

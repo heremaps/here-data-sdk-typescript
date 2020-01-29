@@ -220,10 +220,12 @@ export class VersionedLayerClient {
             "metadata",
             HRN.fromString(this.hrn),
             abortSignal
-        );
+        ).catch(error => Promise.reject(error));
         const version =
             request.getVersion() ||
-            (await this.getLatestVersion(request.getBillingTag()));
+            (await this.getLatestVersion(request.getBillingTag()).catch(error =>
+                Promise.reject(error)
+            ));
         return MetadataApi.getPartitions(metaRequestBilder, {
             version,
             layerId: this.layerId,
@@ -311,7 +313,7 @@ export class VersionedLayerClient {
             dataHandle,
             layerId: this.layerId,
             billingTag
-        }).catch(error => Promise.reject(error));
+        });
     }
 
     /**
@@ -331,6 +333,6 @@ export class VersionedLayerClient {
             this.settings,
             hrn,
             abortSignal
-        ).catch(error => Promise.reject(error));
+        );
     }
 }

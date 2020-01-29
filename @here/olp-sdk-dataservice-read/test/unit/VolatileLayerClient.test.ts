@@ -599,11 +599,15 @@ describe("VolatileLayerClient", () => {
             });
     });
 
-    it("Should error be handled 2", async () => {
+    it("Should baseUrl error be handled", async () => {
         const mockedErrorResponse = "Bad response";
         const dataRequest = new dataServiceRead.DataRequest().withDataHandle(
             "moсked-data-handle"
         );
+        const dataPartitionRequest = new dataServiceRead.DataRequest().withPartitionId(
+            "mocked-id"
+        );
+        const partitionsRrequest = new dataServiceRead.PartitionsRequest();
 
         getBaseUrlRequestStub.callsFake(() =>
             Promise.reject({
@@ -612,8 +616,55 @@ describe("VolatileLayerClient", () => {
             })
         );
 
-        const response = await volatileLayerClient
+        const dataH = await volatileLayerClient
             .getData(dataRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.statusText);
+            });
+
+        const dataP = await volatileLayerClient
+            .getData(dataPartitionRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.statusText);
+            });
+
+        const partitions = await volatileLayerClient
+            .getPartitions(partitionsRrequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.statusText);
+            });
+    });
+
+    it("Should getPartitions with quadKey error be handled", async () => {
+        const mockedErrorResponse = "Bad response";
+        const mockedVersion = {
+            version: 42
+        };
+        const quadRrequest = new dataServiceRead.DataRequest().withQuadKey(
+            dataServiceRead.quadKeyFromMortonCode("23618403")
+        );
+
+        getQuadTreeIndexStub.callsFake(() =>
+            Promise.reject({
+                status: 400,
+                statusText: "Bad response"
+            })
+        );
+
+        getVersionStub.callsFake(
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve(mockedVersion);
+            }
+        );
+
+        const data = await volatileLayerClient
+            .getData(quadRrequest)
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.statusText);
