@@ -569,11 +569,15 @@ describe("VersionedLayerClient", () => {
         ).to.be.equal("compressedDataSize");
     });
 
-    it("Should error be handled 2", async () => {
+    it("Should baseUrl error be handled", async () => {
         const mockedErrorResponse = "Bad response";
-        const dataRequest = new dataServiceRead.DataRequest().withDataHandle(
+        const dataHandleRequest = new dataServiceRead.DataRequest().withDataHandle(
             "moсked-data-handle"
         );
+        const dataPartitionRequest = new dataServiceRead.DataRequest().withPartitionId(
+            "mocked-id"
+        );
+        const partitionsRrequest = new dataServiceRead.PartitionsRequest();
 
         getBaseUrlRequestStub.callsFake(() =>
             Promise.reject({
@@ -582,8 +586,93 @@ describe("VersionedLayerClient", () => {
             })
         );
 
-        const response = await versionedLayerClient
-            .getData(dataRequest)
+        const dataH = await versionedLayerClient
+            .getData(dataHandleRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.statusText);
+            });
+
+        const dataP = await versionedLayerClient
+            .getData(dataPartitionRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.statusText);
+            });
+
+        const partitions = await versionedLayerClient
+            .getPartitions(partitionsRrequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.statusText);
+            });
+    });
+
+    it("Should latestVersion error be handled", async () => {
+        const mockedErrorResponse = "Bad response";
+        const dataPartitionRequest = new dataServiceRead.DataRequest().withPartitionId(
+            "mocked-id"
+        );
+        const partitionsRrequest = new dataServiceRead.PartitionsRequest();
+
+        getVersionStub.callsFake(() =>
+            Promise.reject({
+                status: 400,
+                statusText: "Bad response"
+            })
+        );
+
+        const dataP = await versionedLayerClient
+            .getData(dataPartitionRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.statusText);
+            });
+
+        const partitions = await versionedLayerClient
+            .getPartitions(partitionsRrequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.statusText);
+            });
+
+        getBaseUrlRequestStub.callsFake(() =>
+            Promise.reject({
+                status: 400,
+                statusText: "Bad response"
+            })
+        );
+
+        const partitions1 = await versionedLayerClient
+            .getPartitions(partitionsRrequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.statusText);
+            });
+    });
+
+    it("Should getPartitions with quadKey error be handled", async () => {
+        const mockedErrorResponse = "Bad response";
+        const quadRrequest = new dataServiceRead.DataRequest()
+            .withQuadKey(dataServiceRead.quadKeyFromMortonCode("23618403"))
+            .withVersion(42);
+
+        getVersionStub.callsFake(() =>
+            Promise.reject({
+                status: 400,
+                statusText: "Bad response"
+            })
+        );
+
+        getQuadTreeIndexStub.callsFake(() =>
+            Promise.reject({
+                status: 400,
+                statusText: "Bad response"
+            })
+        );
+
+        const data = await versionedLayerClient
+            .getData(quadRrequest)
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.statusText);
