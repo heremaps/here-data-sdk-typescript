@@ -44,7 +44,7 @@ describe("VolatileLayerClient", () => {
     let getBaseUrlRequestStub: sinon.SinonStub;
     let volatileLayerClient: dataServiceRead.VolatileLayerClient;
     const mockedHRN = dataServiceRead.HRN.fromString(
-        "hrn:here:data:::live-weather-na"
+        "hrn:here:data:::mocked-hrn"
     );
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
@@ -395,7 +395,7 @@ describe("VolatileLayerClient", () => {
     it("Should method getData with wrong partitionId parameter and version return error", async () => {
         const mockedBlobData = new Response("mocked-blob-response");
         const mockedErrorResponse =
-            "No partition dataHandle for partition 42. HRN: hrn:here:data:::live-weather-na";
+            "No partition dataHandle for partition 42. HRN: hrn:here:data:::mocked-hrn";
         const mockedPartitionsIdData = {
             partitions: [
                 {
@@ -425,7 +425,7 @@ describe("VolatileLayerClient", () => {
             .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
             .catch(error => {
                 assert.isDefined(error);
-                assert.equal(mockedErrorResponse, error);
+                assert.equal(mockedErrorResponse, error.message);
             });
     });
 

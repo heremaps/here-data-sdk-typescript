@@ -17,7 +17,12 @@
  * License-Filename: LICENSE
  */
 
-import { BlobApi, MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
+import {
+    BlobApi,
+    HttpError,
+    MetadataApi,
+    QueryApi
+} from "@here/olp-sdk-dataservice-api";
 import {
     ApiName,
     DataRequest,
@@ -280,7 +285,10 @@ export class VersionedLayerClient {
         return partition && partition.dataHandle
             ? partition.dataHandle
             : Promise.reject(
-                  `No partition dataHandle for partition ${partitionId}. HRN: ${this.hrn}`
+                  new HttpError(
+                      404,
+                      `No partition dataHandle for partition ${partitionId}. HRN: ${this.hrn}`
+                  )
               );
     }
 

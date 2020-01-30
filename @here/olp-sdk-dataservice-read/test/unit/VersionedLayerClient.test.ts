@@ -269,6 +269,43 @@ describe("VersionedLayerClient", () => {
             });
     });
 
+    it("Should method getData with wrong partitionId parameter and version return error", async () => {
+        const mockedBlobData = new Response("mocked-blob-response");
+        const mockedErrorResponse =
+            "No partition dataHandle for partition 42. HRN: hrn:here:data:::mocked-hrn";
+        const mockedPartitionsIdData = {
+            partitions: [
+                {
+                    version: 1,
+                    partition: "13",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+                }
+            ]
+        };
+
+        getPartitionsByIdStub.callsFake(
+            (builder: any, params: any): Promise<QueryApi.Partitions> => {
+                return Promise.resolve(mockedPartitionsIdData);
+            }
+        );
+        getBlobStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockedBlobData);
+            }
+        );
+
+        const dataRequest = new dataServiceRead.DataRequest()
+            .withPartitionId("42")
+            .withVersion(2);
+
+        const response = await versionedLayerClient
+            .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.message);
+            });
+    });
+
     it("Should method getData return Error with correct quadKey and wrong version parameter", async () => {
         const dataRequest = new dataServiceRead.DataRequest()
             .withVersion(100500)
