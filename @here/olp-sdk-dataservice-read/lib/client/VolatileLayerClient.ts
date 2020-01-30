@@ -18,6 +18,7 @@
  */
 
 import {
+    HttpError,
     MetadataApi,
     QueryApi,
     VolatileBlobApi
@@ -27,7 +28,6 @@ import {
     DataRequest,
     DataStoreRequestBuilder,
     HRN,
-    mortonCodeFromQuadKey,
     OlpClientSettings,
     PartitionsRequest,
     QuadKeyPartitionsRequest,
@@ -298,7 +298,10 @@ export class VolatileLayerClient {
         return partition && partition.dataHandle
             ? partition.dataHandle
             : Promise.reject(
-                  `No partition dataHandle for partition ${partitionId}. HRN: ${this.hrn}`
+                  new HttpError(
+                      404,
+                      `No partition dataHandle for partition ${partitionId}. HRN: ${this.hrn}`
+                  )
               );
     }
 }
