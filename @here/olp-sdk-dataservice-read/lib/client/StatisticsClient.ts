@@ -68,7 +68,7 @@ export class StatisticsClient {
         ).catch(error => Promise.reject(error));
         return CoverageApi.getDataCoverageSummary(coverageRequestBuilder, {
             layerId
-        }).catch(this.errorHandler);
+        });
     }
 
     /**
@@ -127,17 +127,7 @@ export class StatisticsClient {
             layerId,
             datalevel,
             catalogHRN
-        }).catch(this.errorHandler);
-    }
-
-    private async errorHandler(error: Response) {
-        return Promise.reject(
-            new Error(
-                `Statistic Service error: HTTP ${
-                    error.status
-                }, ${error.statusText || ""}`
-            )
-        );
+        });
     }
 
     private async getRequestBuilder(

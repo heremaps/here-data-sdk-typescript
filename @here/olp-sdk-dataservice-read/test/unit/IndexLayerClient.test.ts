@@ -146,14 +146,16 @@ describe("IndexLayerClient", () => {
     });
 
     it("Should method getPartitions return error without IndexQueryRequest", async () => {
-        const mockedErrorResponse = "Please provide correct query";
+        const mockedErrorResponse = {
+            message: "Please provide correct query"
+        };
 
         const request = new dataServiceRead.IndexQueryRequest();
         const partitions = await indexLayerClient
             .getPartitions(request)
             .catch(error => {
                 assert.isDefined(error);
-                assert.equal(mockedErrorResponse, error);
+                assert.equal(mockedErrorResponse.message, error.message);
             });
     });
 
@@ -243,11 +245,13 @@ describe("IndexLayerClient", () => {
     });
 
     it("Should method getData return Error without parameters", async () => {
-        const mockedErrorResponse = "No data handle for this partition";
+        const mockedErrorResponse = {
+            message: "No data handle for this partition"
+        };
 
         const response = await indexLayerClient.getData({}).catch(error => {
             assert.isDefined(error);
-            assert.equal(mockedErrorResponse, error);
+            assert.equal(mockedErrorResponse.message, error.message);
         });
     });
 

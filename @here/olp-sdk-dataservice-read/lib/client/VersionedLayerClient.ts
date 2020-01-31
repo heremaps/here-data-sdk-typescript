@@ -129,7 +129,9 @@ export class VersionedLayerClient {
                           dataRequest.getBillingTag()
                       )
                     : Promise.reject(
-                          `No dataHandle for quadKey ${quadKey}. HRN: ${this.hrn}`
+                          new Error(
+                              `No dataHandle for quadKey ${quadKey}. HRN: ${this.hrn}`
+                          )
                       );
             }
         }
@@ -184,7 +186,9 @@ export class VersionedLayerClient {
         if (request instanceof QuadKeyPartitionsRequest) {
             const quadKey = request.getQuadKey();
             if (!quadKey) {
-                return Promise.reject("Please provide correct QuadKey");
+                return Promise.reject(
+                    new Error("Please provide correct QuadKey")
+                );
             }
 
             const queryClient = new QueryClient(this.settings);

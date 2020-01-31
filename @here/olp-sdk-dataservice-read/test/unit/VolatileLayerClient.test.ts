@@ -273,14 +273,16 @@ describe("VolatileLayerClient", () => {
     });
 
     it("Should method getPartitions return error without QuadKeyPartitionsRequest", async () => {
-        const mockedErrorResponse = "Please provide correct QuadKey";
+        const mockedErrorResponse = {
+            message: "Please provide correct QuadKey"
+        };
 
         const quadKeyRequest = new dataServiceRead.QuadKeyPartitionsRequest();
         const partitions = await volatileLayerClient
             .getPartitions(quadKeyRequest)
             .catch(error => {
                 assert.isDefined(error);
-                assert.equal(mockedErrorResponse, error);
+                assert.equal(mockedErrorResponse.message, error.message);
             });
     });
 
@@ -499,15 +501,17 @@ describe("VolatileLayerClient", () => {
     });
 
     it("Should method getData return Error without dataRequest parameters", async () => {
-        const mockedErrorResponse =
-            "No data provided. Add dataHandle, partitionId or quadKey to the DataRequest object";
+        const mockedErrorResponse = {
+            message:
+                "No data provided. Add dataHandle, partitionId or quadKey to the DataRequest object"
+        };
         const dataRequest = new dataServiceRead.DataRequest();
 
         const response = await volatileLayerClient
             .getData(dataRequest as any)
             .catch(error => {
                 assert.isDefined(error);
-                assert.equal(mockedErrorResponse, error.message);
+                assert.equal(mockedErrorResponse.message, error.message);
             });
     });
 

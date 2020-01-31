@@ -529,14 +529,16 @@ describe("VersionedLayerClient", () => {
     });
 
     it("Should method getPartitions return error without QuadKeyPartitionsRequest", async () => {
-        const mockedErrorResponse = "Please provide correct QuadKey";
+        const mockedErrorResponse = {
+            message: "Please provide correct QuadKey"
+        };
 
         const quadKeyRequest = new dataServiceRead.QuadKeyPartitionsRequest();
         const partitions = await versionedLayerClient
             .getPartitions(quadKeyRequest)
             .catch(error => {
                 assert.isDefined(error);
-                assert.equal(mockedErrorResponse, error);
+                assert.equal(mockedErrorResponse.message, error.message);
             });
     });
 
