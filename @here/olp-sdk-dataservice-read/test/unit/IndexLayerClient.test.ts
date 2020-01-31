@@ -22,7 +22,7 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
-import { IndexApi, BlobApi } from "@here/olp-sdk-dataservice-api";
+import { HttpError, IndexApi, BlobApi } from "@here/olp-sdk-dataservice-api";
 
 chai.use(sinonChai);
 
@@ -120,6 +120,29 @@ describe("IndexLayerClient", () => {
 
         assert.isDefined(partitions);
         expect(partitions).to.be.equal(mockedIndexResponse.data);
+    });
+
+    it("Should method getPartitions with IndexQueryRequest return HttpError when IndexApi crashes", async () => {
+        const TEST_ERROR_CODE = 404;
+        const mockedHttpError = new HttpError(TEST_ERROR_CODE, "Test Error");
+
+        getIndexStub.callsFake(
+            (builder: any, params: any): Promise<IndexApi.DataResponse> => {
+                return Promise.reject(mockedHttpError);
+            }
+        );
+
+        const request = new dataServiceRead.IndexQueryRequest().withQueryString(
+            "hour_from>0"
+        );
+        const partitions = await indexLayerClient
+            .getPartitions(request)
+            .catch((err: any) => {
+                assert.isDefined(err);
+                expect(err.status).to.be.equal(TEST_ERROR_CODE);
+                expect(err.message).to.be.equal("Test Error");
+                expect(err.name).to.be.equal("HttpError");
+            });
     });
 
     it("Should method getPartitions return error without IndexQueryRequest", async () => {
@@ -278,6 +301,36 @@ describe("IndexLayerClient", () => {
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.statusText);
+            });
+    });
+
+    it("Should HttpError be handled", async () => {
+        const TEST_ERROR_CODE = 404;
+        const mockedError = new HttpError(TEST_ERROR_CODE, "Test Error");
+
+        const mockedModel = {
+            id: "8c0e5ac9-b036-4365-8820-dfcba64588fc",
+            size: 111928,
+            checksum: "448a33cd65c47bed1eeb4d72e7fa022c95a41158",
+            timestamp: 1551981674191,
+            hour_from: 1506402000000,
+            tile_id: 377894442,
+            crc: null
+        };
+
+        getBlobStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.reject(mockedError);
+            }
+        );
+
+        const response = await indexLayerClient
+            .getData(mockedModel)
+            .catch(err => {
+                assert.isDefined(err);
+                expect(err.status).to.be.equal(TEST_ERROR_CODE);
+                expect(err.message).to.be.equal("Test Error");
+                expect(err.name).to.be.equal("HttpError");
             });
     });
 });
