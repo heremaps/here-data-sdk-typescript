@@ -64,7 +64,7 @@ export class IndexLayerClient {
     ): Promise<IndexApi.Index[]> {
         const query = request.getQueryString();
         if (!query) {
-            return Promise.reject("Please provide correct query");
+            return Promise.reject(new Error("Please provide correct query"));
         }
 
         const requestBuilder = await this.getRequestBuilder(
@@ -100,7 +100,9 @@ export class IndexLayerClient {
         abortSignal?: AbortSignal
     ): Promise<Response> {
         if (!model.id) {
-            return Promise.reject("No data handle for this partition");
+            return Promise.reject(
+                new Error("No data handle for this partition")
+            );
         }
 
         const builder = await this.getRequestBuilder(
