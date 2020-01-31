@@ -67,13 +67,13 @@ export class IndexLayerClient {
             return Promise.reject("Please provide correct query");
         }
 
-        const requestBilder = await this.getRequestBuilder(
+        const requestBuilder = await this.getRequestBuilder(
             "index",
             this.catalogHrn,
             abortSignal
         ).catch(err => Promise.reject(err));
 
-        const indexMetadata = await IndexApi.performQuery(requestBilder, {
+        const indexMetadata = await IndexApi.performQuery(requestBuilder, {
             layerID: this.layerId,
             query,
             huge: request.getHugeResponse()
