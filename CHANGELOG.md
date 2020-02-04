@@ -1,3 +1,24 @@
+## v1.2.0 (04/02/2020)
+
+**Common**
+
+* Updated the development dependencies.
+
+**olp-sdk-dataservice-read**
+
+* Added the `IndexLayerClient` class that is used to access index layers on OLP. This class implements the `getPartitions` and `getData` methods.
+* Added the `HttpError` class that extends the `Error` class and adds a status code to HTTP errors.
+* Improved error propagations in all public methods. Now, these methods reject the promises with the `HttpError` instance or `Error` class when errors occur.
+
+**olp-sdk-authentication**
+
+* Added the `HttpError` class that extends the `Error` class and adds a status code to HTTP errors.
+* Improved error propagations in all public methods. Now, these methods reject the promises with the `HttpError` instance or `Error` class when errors occur.
+
+* **Breaking Change** Improved the return type of the `getEarliestVersion` method in `CatalogClient`. It is now the same as the return type of the `getLatestVersion` method.
+* **Breaking Change** Public methods now reject the promises with the `HttpError` instance or `Error` class instead of strings when errors occur.
+
+
 ## v1.1.0 (11/12/2019)
 
 **Common**
@@ -46,7 +67,7 @@
 
 **olp-sdk-authentication**
 
-* Added a possibillity to read credentials from a file when using Node.js.
+* Added a possibility to read credentials from a file using Node.js.
 
 
 ## v0.9.2-beta (28/10/2019)
