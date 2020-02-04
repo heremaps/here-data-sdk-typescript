@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>VersionedLayerClient | @here/olp-sdk-ts</title>
+	<title>IndexLayerClient | @here/olp-sdk-ts</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -52,13 +52,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.html">&quot;olp-sdk-dataservice-read/lib/client/VersionedLayerClient&quot;</a>
+					<a href="../modules/_olp_sdk_dataservice_read_lib_client_indexlayerclient_.html">&quot;olp-sdk-dataservice-read/lib/client/IndexLayerClient&quot;</a>
 				</li>
 				<li>
-					<a href="_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.versionedlayerclient.html">VersionedLayerClient</a>
+					<a href="_olp_sdk_dataservice_read_lib_client_indexlayerclient_.indexlayerclient.html">IndexLayerClient</a>
 				</li>
 			</ul>
-			<h1>Class VersionedLayerClient</h1>
+			<h1>Class IndexLayerClient</h1>
 		</div>
 	</div>
 </header>
@@ -68,7 +68,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Describes a versioned layer and provides the possibility to get partitions metadata and data.</p>
+						<p>Describes a index layer and provides the possibility to get partitions metadata and data.</p>
 					</div>
 				</div>
 			</section>
@@ -76,7 +76,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">VersionedLayerClient</span>
+						<span class="target">IndexLayerClient</span>
 					</li>
 				</ul>
 			</section>
@@ -87,21 +87,22 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.versionedlayerclient.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_indexlayerclient_.indexlayerclient.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.versionedlayerclient.html#layerid" class="tsd-kind-icon">layer<wbr>Id</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.versionedlayerclient.html#settings" class="tsd-kind-icon">settings</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_indexlayerclient_.indexlayerclient.html#cataloghrn" class="tsd-kind-icon">catalog<wbr>Hrn</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_indexlayerclient_.indexlayerclient.html#layerid" class="tsd-kind-icon">layer<wbr>Id</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_indexlayerclient_.indexlayerclient.html#settings" class="tsd-kind-icon">settings</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.versionedlayerclient.html#getdata" class="tsd-kind-icon">get<wbr>Data</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.versionedlayerclient.html#getpartitions" class="tsd-kind-icon">get<wbr>Partitions</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_indexlayerclient_.indexlayerclient.html#getdata" class="tsd-kind-icon">get<wbr>Data</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_indexlayerclient_.indexlayerclient.html#getpartitions" class="tsd-kind-icon">get<wbr>Partitions</a></li>
 							</ul>
 						</section>
 					</div>
@@ -113,18 +114,18 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Versioned<wbr>Layer<wbr>Client<span class="tsd-signature-symbol">(</span>catalogHrn<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_hrn_.hrn.html" class="tsd-signature-type">HRN</a>, layerId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, settings<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_olpclientsettings_.olpclientsettings.html" class="tsd-signature-type">OlpClientSettings</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.versionedlayerclient.html" class="tsd-signature-type">VersionedLayerClient</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Index<wbr>Layer<wbr>Client<span class="tsd-signature-symbol">(</span>catalogHrn<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_hrn_.hrn.html" class="tsd-signature-type">HRN</a>, layerId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, settings<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_olpclientsettings_.olpclientsettings.html" class="tsd-signature-type">OlpClientSettings</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_indexlayerclient_.indexlayerclient.html" class="tsd-signature-type">IndexLayerClient</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/VersionedLayerClient.ts#L44">@here/olp-sdk-dataservice-read/lib/client/VersionedLayerClient.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/IndexLayerClient.ts#L34">@here/olp-sdk-dataservice-read/lib/client/IndexLayerClient.ts:34</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Creates the <a href="_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.versionedlayerclient.html">VersionedLayerClient</a> instance.</p>
+									<p>Creates the <a href="_olp_sdk_dataservice_read_lib_client_indexlayerclient_.indexlayerclient.html">IndexLayerClient</a> instance.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -154,8 +155,8 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.versionedlayerclient.html" class="tsd-signature-type">VersionedLayerClient</a></h4>
-							<p>The <a href="_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.versionedlayerclient.html">VersionedLayerClient</a> instance.</p>
+							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_indexlayerclient_.indexlayerclient.html" class="tsd-signature-type">IndexLayerClient</a></h4>
+							<p>The <a href="_olp_sdk_dataservice_read_lib_client_indexlayerclient_.indexlayerclient.html">IndexLayerClient</a> instance.</p>
 						</li>
 					</ul>
 				</section>
@@ -163,12 +164,27 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="cataloghrn" class="tsd-anchor"></a>
+					<h3>catalog<wbr>Hrn</h3>
+					<div class="tsd-signature tsd-kind-icon">catalog<wbr>Hrn<span class="tsd-signature-symbol">:</span> <a href="_olp_sdk_dataservice_read_lib_hrn_.hrn.html" class="tsd-signature-type">HRN</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/IndexLayerClient.ts#L45">@here/olp-sdk-dataservice-read/lib/client/IndexLayerClient.ts:45</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The HERE Resource Name (HRN) of the catalog from which you want to get partitions metadata and data.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
 					<a name="layerid" class="tsd-anchor"></a>
 					<h3>layer<wbr>Id</h3>
 					<div class="tsd-signature tsd-kind-icon">layer<wbr>Id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/VersionedLayerClient.ts#L57">@here/olp-sdk-dataservice-read/lib/client/VersionedLayerClient.ts:57</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/IndexLayerClient.ts#L46">@here/olp-sdk-dataservice-read/lib/client/IndexLayerClient.ts:46</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -183,7 +199,7 @@
 					<div class="tsd-signature tsd-kind-icon">settings<span class="tsd-signature-symbol">:</span> <a href="_olp_sdk_dataservice_read_lib_client_olpclientsettings_.olpclientsettings.html" class="tsd-signature-type">OlpClientSettings</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/VersionedLayerClient.ts#L59">@here/olp-sdk-dataservice-read/lib/client/VersionedLayerClient.ts:59</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/IndexLayerClient.ts#L47">@here/olp-sdk-dataservice-read/lib/client/IndexLayerClient.ts:47</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -199,26 +215,26 @@
 					<a name="getdata" class="tsd-anchor"></a>
 					<h3>get<wbr>Data</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Data<span class="tsd-signature-symbol">(</span>dataRequest<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_datarequest_.datarequest.html" class="tsd-signature-type">DataRequest</a>, abortSignal<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">AbortSignal</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Data<span class="tsd-signature-symbol">(</span>model<span class="tsd-signature-symbol">: </span><a href="../interfaces/_olp_sdk_dataservice_api_lib_index_api_.index.html" class="tsd-signature-type">Index</a>, abortSignal<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">AbortSignal</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/VersionedLayerClient.ts#L75">@here/olp-sdk-dataservice-read/lib/client/VersionedLayerClient.ts:75</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/IndexLayerClient.ts#L98">@here/olp-sdk-dataservice-read/lib/client/IndexLayerClient.ts:98</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Fetches partition data using one of the following methods: ID, quadkey, or data handle.</p>
+									<p>Fetches partition data using data handle.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>dataRequest: <a href="_olp_sdk_dataservice_read_lib_client_datarequest_.datarequest.html" class="tsd-signature-type">DataRequest</a></h5>
+									<h5>model: <a href="../interfaces/_olp_sdk_dataservice_api_lib_index_api_.index.html" class="tsd-signature-type">Index</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The <a href="_olp_sdk_dataservice_read_lib_client_datarequest_.datarequest.html">DataRequest</a> instance of the configured request parameters.</p>
+										<p>The data model of partition metadata.</p>
 									</div>
 								</li>
 								<li>
@@ -239,28 +255,24 @@
 					<a name="getpartitions" class="tsd-anchor"></a>
 					<h3>get<wbr>Partitions</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Partitions<span class="tsd-signature-symbol">(</span>quadKeyPartitionsRequest<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_quadkeypartitionsrequest_.quadkeypartitionsrequest.html" class="tsd-signature-type">QuadKeyPartitionsRequest</a>, abortSignal<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">AbortSignal</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_dataservice_api_lib_query_api_.index.html" class="tsd-signature-type">Index</a><span class="tsd-signature-symbol">&gt;</span></li>
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Partitions<span class="tsd-signature-symbol">(</span>partitionsRequest<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html" class="tsd-signature-type">PartitionsRequest</a>, abortSignal<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">AbortSignal</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_dataservice_api_lib_metadata_api_.partitions.html" class="tsd-signature-type">Partitions</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Partitions<span class="tsd-signature-symbol">(</span>request<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.indexqueryrequest.html" class="tsd-signature-type">IndexQueryRequest</a>, abortSignal<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">AbortSignal</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_dataservice_api_lib_index_api_.index.html" class="tsd-signature-type">Index</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/VersionedLayerClient.ts#L157">@here/olp-sdk-dataservice-read/lib/client/VersionedLayerClient.ts:157</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/IndexLayerClient.ts#L61">@here/olp-sdk-dataservice-read/lib/client/IndexLayerClient.ts:61</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Fetches partitions metadata from the Query API using a quadkey.</p>
+									<p>Fetches all partitions metadata from a layer that match a query from the <a href="_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.indexqueryrequest.html">IndexQueryRequest</a> instance.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>quadKeyPartitionsRequest: <a href="_olp_sdk_dataservice_read_lib_client_quadkeypartitionsrequest_.quadkeypartitionsrequest.html" class="tsd-signature-type">QuadKeyPartitionsRequest</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The <a href="_olp_sdk_dataservice_read_lib_client_quadkeypartitionsrequest_.quadkeypartitionsrequest.html">QuadKeyPartitionsRequest</a> instance.</p>
-									</div>
+									<h5>request: <a href="_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.indexqueryrequest.html" class="tsd-signature-type">IndexQueryRequest</a></h5>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
@@ -271,42 +283,8 @@
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_dataservice_api_lib_query_api_.index.html" class="tsd-signature-type">Index</a><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>The quadtree index for the requested partitions.</p>
-						</li>
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/VersionedLayerClient.ts#L177">@here/olp-sdk-dataservice-read/lib/client/VersionedLayerClient.ts:177</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Fetches all partitions metadata from a layer using the partition ID from the <a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html">PartitionsRequest</a> instance.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>partitionsRequest: <a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html" class="tsd-signature-type">PartitionsRequest</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The <a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html">PartitionsRequest</a> instance.</p>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>A signal object that allows you to communicate with a request (such as the <code>fetch</code> request)
-										and, if required, abort it using the <code>AbortController</code> object.</p>
-										<p>For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_dataservice_api_lib_metadata_api_.partitions.html" class="tsd-signature-type">Partitions</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_dataservice_api_lib_index_api_.index.html" class="tsd-signature-type">Index</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 							<p>A list of metadata for each of the partitions from the requested layer.</p>
-							<p>If the partition IDs are not set, you get metadata from all of the partitions of the requested layer
-								from the OLP Metadata Service.
-							If the IDs are set, you get data from the OLP Query Service.</p>
 						</li>
 					</ul>
 				</section>
@@ -319,7 +297,7 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Versioned<wbr>Layer<wbr>Client&quot;</a>
+						<a href="../modules/_olp_sdk_dataservice_read_lib_client_indexlayerclient_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Index<wbr>Layer<wbr>Client&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -328,22 +306,25 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.versionedlayerclient.html" class="tsd-kind-icon">Versioned<wbr>Layer<wbr>Client</a>
+						<a href="_olp_sdk_dataservice_read_lib_client_indexlayerclient_.indexlayerclient.html" class="tsd-kind-icon">Index<wbr>Layer<wbr>Client</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.versionedlayerclient.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="_olp_sdk_dataservice_read_lib_client_indexlayerclient_.indexlayerclient.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.versionedlayerclient.html#layerid" class="tsd-kind-icon">layer<wbr>Id</a>
+								<a href="_olp_sdk_dataservice_read_lib_client_indexlayerclient_.indexlayerclient.html#cataloghrn" class="tsd-kind-icon">catalog<wbr>Hrn</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.versionedlayerclient.html#settings" class="tsd-kind-icon">settings</a>
+								<a href="_olp_sdk_dataservice_read_lib_client_indexlayerclient_.indexlayerclient.html#layerid" class="tsd-kind-icon">layer<wbr>Id</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_olp_sdk_dataservice_read_lib_client_indexlayerclient_.indexlayerclient.html#settings" class="tsd-kind-icon">settings</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.versionedlayerclient.html#getdata" class="tsd-kind-icon">get<wbr>Data</a>
+								<a href="_olp_sdk_dataservice_read_lib_client_indexlayerclient_.indexlayerclient.html#getdata" class="tsd-kind-icon">get<wbr>Data</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.versionedlayerclient.html#getpartitions" class="tsd-kind-icon">get<wbr>Partitions</a>
+								<a href="_olp_sdk_dataservice_read_lib_client_indexlayerclient_.indexlayerclient.html#getpartitions" class="tsd-kind-icon">get<wbr>Partitions</a>
 							</li>
 						</ul>
 					</li>

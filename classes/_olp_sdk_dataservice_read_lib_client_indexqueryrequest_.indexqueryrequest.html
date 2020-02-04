@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CatalogsRequest | @here/olp-sdk-ts</title>
+	<title>IndexQueryRequest | @here/olp-sdk-ts</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -52,13 +52,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_olp_sdk_dataservice_read_lib_client_catalogsrequest_.html">&quot;olp-sdk-dataservice-read/lib/client/CatalogsRequest&quot;</a>
+					<a href="../modules/_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.html">&quot;olp-sdk-dataservice-read/lib/client/IndexQueryRequest&quot;</a>
 				</li>
 				<li>
-					<a href="_olp_sdk_dataservice_read_lib_client_catalogsrequest_.catalogsrequest.html">CatalogsRequest</a>
+					<a href="_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.indexqueryrequest.html">IndexQueryRequest</a>
 				</li>
 			</ul>
-			<h1>Class CatalogsRequest</h1>
+			<h1>Class IndexQueryRequest</h1>
 		</div>
 	</div>
 </header>
@@ -68,7 +68,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Prepares information for calls to get catalogs from the OLP Config Service.</p>
+						<p>Prepares information for calls to get partitions metadata from the OLP Index Service.</p>
 					</div>
 				</div>
 			</section>
@@ -76,7 +76,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">CatalogsRequest</span>
+						<span class="target">IndexQueryRequest</span>
 					</li>
 				</ul>
 			</section>
@@ -87,10 +87,10 @@
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_catalogsrequest_.catalogsrequest.html#getbillingtag" class="tsd-kind-icon">get<wbr>Billing<wbr>Tag</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_catalogsrequest_.catalogsrequest.html#getschema" class="tsd-kind-icon">get<wbr>Schema</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_catalogsrequest_.catalogsrequest.html#withbillingtag" class="tsd-kind-icon">with<wbr>Billing<wbr>Tag</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_catalogsrequest_.catalogsrequest.html#withschema" class="tsd-kind-icon">with<wbr>Schema</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.indexqueryrequest.html#gethugeresponse" class="tsd-kind-icon">get<wbr>Huge<wbr>Response</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.indexqueryrequest.html#getquerystring" class="tsd-kind-icon">get<wbr>Query<wbr>String</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.indexqueryrequest.html#withhugeresponse" class="tsd-kind-icon">with<wbr>Huge<wbr>Response</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.indexqueryrequest.html#withquerystring" class="tsd-kind-icon">with<wbr>Query<wbr>String</a></li>
 							</ul>
 						</section>
 					</div>
@@ -99,121 +99,116 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getbillingtag" class="tsd-anchor"></a>
-					<h3>get<wbr>Billing<wbr>Tag</h3>
+					<a name="gethugeresponse" class="tsd-anchor"></a>
+					<h3>get<wbr>Huge<wbr>Response</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Billing<wbr>Tag<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Huge<wbr>Response<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/CatalogsRequest.ts#L68">@here/olp-sdk-dataservice-read/lib/client/CatalogsRequest.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/IndexQueryRequest.ts#L63">@here/olp-sdk-dataservice-read/lib/client/IndexQueryRequest.ts:63</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Gets a billing tag to group billing records together.</p>
+									<p>Gets isHugeResponse property for the request.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span>
+								<span class="tsd-signature-symbol"> | </span>
+								<span class="tsd-signature-type">undefined</span>
+							</h4>
+							<p>The <code>isHugeResponse</code> boolean.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getquerystring" class="tsd-anchor"></a>
+					<h3>get<wbr>Query<wbr>String</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Query<wbr>String<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/IndexQueryRequest.ts#L54">@here/olp-sdk-dataservice-read/lib/client/IndexQueryRequest.ts:54</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets a queryString for the request.</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">undefined</span>
 							</h4>
-							<p>The <code>BillingTag</code> string.</p>
+							<p>The queryString string.</p>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getschema" class="tsd-anchor"></a>
-					<h3>get<wbr>Schema</h3>
+					<a name="withhugeresponse" class="tsd-anchor"></a>
+					<h3>with<wbr>Huge<wbr>Response</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Schema<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+						<li class="tsd-signature tsd-kind-icon">with<wbr>Huge<wbr>Response<span class="tsd-signature-symbol">(</span>isHuge<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.indexqueryrequest.html" class="tsd-signature-type">IndexQueryRequest</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/CatalogsRequest.ts#L34">@here/olp-sdk-dataservice-read/lib/client/CatalogsRequest.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/IndexQueryRequest.ts#L44">@here/olp-sdk-dataservice-read/lib/client/IndexQueryRequest.ts:44</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p> Gets a schema HERE Resource Name (HRN) for the request.</p>
-								</div>
-							</div>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
-								<span class="tsd-signature-symbol"> | </span>
-								<span class="tsd-signature-type">undefined</span>
-							</h4>
-							<p>The schema HRN.</p>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="withbillingtag" class="tsd-anchor"></a>
-					<h3>with<wbr>Billing<wbr>Tag</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">with<wbr>Billing<wbr>Tag<span class="tsd-signature-symbol">(</span>tag<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_catalogsrequest_.catalogsrequest.html" class="tsd-signature-type">CatalogsRequest</a></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/CatalogsRequest.ts#L58">@here/olp-sdk-dataservice-read/lib/client/CatalogsRequest.ts:58</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>An optional free-form tag that is used for grouping billing records together.
-									If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].</p>
+									<p>A setter for the provided isHugeResponse parameter.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>tag: <span class="tsd-signature-type">string</span></h5>
+									<h5>isHuge: <span class="tsd-signature-type">boolean</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The <code>BillingTag</code> string.</p>
+										<p>The boolean parameter shows is the query huge.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_catalogsrequest_.catalogsrequest.html" class="tsd-signature-type">CatalogsRequest</a></h4>
-							<p>The updated <a href="_olp_sdk_dataservice_read_lib_client_catalogsrequest_.catalogsrequest.html">CatalogsRequest</a> instance that you can use to chain methods.</p>
+							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.indexqueryrequest.html" class="tsd-signature-type">IndexQueryRequest</a></h4>
+							<p>The updated <a href="_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.indexqueryrequest.html">IndexQueryRequest</a> instance that you can use to chain methods.</p>
 						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="withschema" class="tsd-anchor"></a>
-					<h3>with<wbr>Schema</h3>
+					<a name="withquerystring" class="tsd-anchor"></a>
+					<h3>with<wbr>Query<wbr>String</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">with<wbr>Schema<span class="tsd-signature-symbol">(</span>schemaHrn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_catalogsrequest_.catalogsrequest.html" class="tsd-signature-type">CatalogsRequest</a></li>
+						<li class="tsd-signature tsd-kind-icon">with<wbr>Query<wbr>String<span class="tsd-signature-symbol">(</span>query<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.indexqueryrequest.html" class="tsd-signature-type">IndexQueryRequest</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/CatalogsRequest.ts#L46">@here/olp-sdk-dataservice-read/lib/client/CatalogsRequest.ts:46</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/IndexQueryRequest.ts#L32">@here/olp-sdk-dataservice-read/lib/client/IndexQueryRequest.ts:32</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Sets a value of a layer schema HERE Resource Name (HRN) that is used in the <code>getCatalogs</code> method of the <a href="_olp_sdk_dataservice_read_lib_client_configclient_.configclient.html">ConfigClient</a> instance.
-										If the schema is set, the <code>getCatalogs</code> method returns catalogs witch have a layer or layers with the specific schema HRN.
-									If the schema is not set, the filter returns all of the catalogs to which you have access.</p>
-								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>schemaHrn: <span class="tsd-signature-type">string</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> query: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The layer schema HRN.</p>
+										<p>An RSQL query to use to retrieve partitions that match the query.
+										The query must use the indexing attributes defined in the index layer.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_catalogsrequest_.catalogsrequest.html" class="tsd-signature-type">CatalogsRequest</a></h4>
-							<p>The updated <a href="_olp_sdk_dataservice_read_lib_client_catalogrequest_.catalogrequest.html">CatalogRequest</a> instance that you can use to chain methods.</p>
+							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.indexqueryrequest.html" class="tsd-signature-type">IndexQueryRequest</a></h4>
+							<p>The updated <a href="_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.indexqueryrequest.html">IndexQueryRequest</a> instance that you can use to chain methods.</p>
 						</li>
 					</ul>
 				</section>
@@ -226,7 +221,7 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/_olp_sdk_dataservice_read_lib_client_catalogsrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Catalogs<wbr>Request&quot;</a>
+						<a href="../modules/_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Index<wbr>Query<wbr>Request&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -235,19 +230,19 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_olp_sdk_dataservice_read_lib_client_catalogsrequest_.catalogsrequest.html" class="tsd-kind-icon">Catalogs<wbr>Request</a>
+						<a href="_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.indexqueryrequest.html" class="tsd-kind-icon">Index<wbr>Query<wbr>Request</a>
 						<ul>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_olp_sdk_dataservice_read_lib_client_catalogsrequest_.catalogsrequest.html#getbillingtag" class="tsd-kind-icon">get<wbr>Billing<wbr>Tag</a>
+								<a href="_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.indexqueryrequest.html#gethugeresponse" class="tsd-kind-icon">get<wbr>Huge<wbr>Response</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_olp_sdk_dataservice_read_lib_client_catalogsrequest_.catalogsrequest.html#getschema" class="tsd-kind-icon">get<wbr>Schema</a>
+								<a href="_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.indexqueryrequest.html#getquerystring" class="tsd-kind-icon">get<wbr>Query<wbr>String</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_olp_sdk_dataservice_read_lib_client_catalogsrequest_.catalogsrequest.html#withbillingtag" class="tsd-kind-icon">with<wbr>Billing<wbr>Tag</a>
+								<a href="_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.indexqueryrequest.html#withhugeresponse" class="tsd-kind-icon">with<wbr>Huge<wbr>Response</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_olp_sdk_dataservice_read_lib_client_catalogsrequest_.catalogsrequest.html#withschema" class="tsd-kind-icon">with<wbr>Schema</a>
+								<a href="_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.indexqueryrequest.html#withquerystring" class="tsd-kind-icon">with<wbr>Query<wbr>String</a>
 							</li>
 						</ul>
 					</li>

@@ -81,7 +81,9 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_dataservice_api_lib_query_api_.index.html#parentquads" class="tsd-kind-icon">parent<wbr>Quads</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_dataservice_api_lib_query_api_.index.html#status" class="tsd-kind-icon">status</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_dataservice_api_lib_query_api_.index.html#subquads" class="tsd-kind-icon">sub<wbr>Quads</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_dataservice_api_lib_query_api_.index.html#title" class="tsd-kind-icon">title</a></li>
 							</ul>
 						</section>
 					</div>
@@ -91,11 +93,11 @@
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="parentquads" class="tsd-anchor"></a>
-					<h3>parent<wbr>Quads</h3>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> parent<wbr>Quads</h3>
 					<div class="tsd-signature tsd-kind-icon">parent<wbr>Quads<span class="tsd-signature-symbol">:</span> <a href="_olp_sdk_dataservice_api_lib_query_api_.parentquad.html" class="tsd-signature-type">ParentQuad</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-api/lib/query-api.ts#L40">olp-sdk-dataservice-api/lib/query-api.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-api/lib/query-api.ts#L40">@here/olp-sdk-dataservice-api/lib/query-api.ts:40</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -105,18 +107,48 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="status" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> status</h3>
+					<div class="tsd-signature tsd-kind-icon">status<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-api/lib/query-api.ts#L49">@here/olp-sdk-dataservice-api/lib/query-api.ts:49</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Error code</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="subquads" class="tsd-anchor"></a>
-					<h3>sub<wbr>Quads</h3>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> sub<wbr>Quads</h3>
 					<div class="tsd-signature tsd-kind-icon">sub<wbr>Quads<span class="tsd-signature-symbol">:</span> <a href="_olp_sdk_dataservice_api_lib_query_api_.subquad.html" class="tsd-signature-type">SubQuad</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-api/lib/query-api.ts#L45">olp-sdk-dataservice-api/lib/query-api.ts:45</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-api/lib/query-api.ts#L45">@here/olp-sdk-dataservice-api/lib/query-api.ts:45</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>Result of the index resource call. For each tile that contains data in the requested quadKey,
 							one element with the respective sub-quad data is contained in the array.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="title" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> title</h3>
+					<div class="tsd-signature tsd-kind-icon">title<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-api/lib/query-api.ts#L54">@here/olp-sdk-dataservice-api/lib/query-api.ts:54</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Error description</p>
 						</div>
 					</div>
 				</section>
@@ -129,7 +161,7 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/_olp_sdk_dataservice_api_lib_query_api_.html">"olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/query-<wbr>api"</a>
+						<a href="../modules/_olp_sdk_dataservice_api_lib_query_api_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/query-<wbr>api&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -144,7 +176,13 @@
 								<a href="_olp_sdk_dataservice_api_lib_query_api_.index.html#parentquads" class="tsd-kind-icon">parent<wbr>Quads</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_olp_sdk_dataservice_api_lib_query_api_.index.html#status" class="tsd-kind-icon">status</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="_olp_sdk_dataservice_api_lib_query_api_.index.html#subquads" class="tsd-kind-icon">sub<wbr>Quads</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_olp_sdk_dataservice_api_lib_query_api_.index.html#title" class="tsd-kind-icon">title</a>
 							</li>
 						</ul>
 					</li>

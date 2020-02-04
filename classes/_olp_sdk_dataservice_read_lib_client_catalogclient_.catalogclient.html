@@ -100,7 +100,9 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_catalogclient_.catalogclient.html#getcatalog" class="tsd-kind-icon">get<wbr>Catalog</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_catalogclient_.catalogclient.html#getearliestversion" class="tsd-kind-icon">get<wbr>Earliest<wbr>Version</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_catalogclient_.catalogclient.html#getlatestversion" class="tsd-kind-icon">get<wbr>Latest<wbr>Version</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_catalogclient_.catalogclient.html#getlayerversions" class="tsd-kind-icon">get<wbr>Layer<wbr>Versions</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_catalogclient_.catalogclient.html#getversions" class="tsd-kind-icon">get<wbr>Versions</a></li>
 							</ul>
 						</section>
@@ -119,7 +121,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L36">olp-sdk-dataservice-read/lib/client/CatalogClient.ts:36</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L41">@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts:41</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -160,7 +162,7 @@
 					<div class="tsd-signature tsd-kind-icon">settings<span class="tsd-signature-symbol">:</span> <a href="_olp_sdk_dataservice_read_lib_client_olpclientsettings_.olpclientsettings.html" class="tsd-signature-type">OlpClientSettings</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L45">olp-sdk-dataservice-read/lib/client/CatalogClient.ts:45</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L50">@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts:50</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -182,7 +184,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L64">olp-sdk-dataservice-read/lib/client/CatalogClient.ts:64</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L69">@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts:69</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -220,6 +222,46 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getearliestversion" class="tsd-anchor"></a>
+					<h3>get<wbr>Earliest<wbr>Version</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Earliest<wbr>Version<span class="tsd-signature-symbol">(</span>request<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_catalogversionrequest_.catalogversionrequest.html" class="tsd-signature-type">CatalogVersionRequest</a>, abortSignal<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">AbortSignal</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L93">@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts:93</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns minimum version for the given catalog. If the catalog doesn&#39;t contain any versions error will be returned.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>request: <a href="_olp_sdk_dataservice_read_lib_client_catalogversionrequest_.catalogversionrequest.html" class="tsd-signature-type">CatalogVersionRequest</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Is <a href="_olp_sdk_dataservice_read_lib_client_catalogversionrequest_.catalogversionrequest.html">CatalogVersionRequest</a> instance and has ((getBillingTag)) method.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>A signal object that allows you to communicate with a request (such as a Fetch)
+											and abort it if required via an AbortController object.
+											@see <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal">https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal</a>
+										@returns A promise of the http response that contains the pminimum version for the given catalog.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="getlatestversion" class="tsd-anchor"></a>
 					<h3>get<wbr>Latest<wbr>Version</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -229,7 +271,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L99">olp-sdk-dataservice-read/lib/client/CatalogClient.ts:99</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L186">@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts:186</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -263,6 +305,49 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getlayerversions" class="tsd-anchor"></a>
+					<h3>get<wbr>Layer<wbr>Versions</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Layer<wbr>Versions<span class="tsd-signature-symbol">(</span>request<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_layerversionsrequest_.layerversionsrequest.html" class="tsd-signature-type">LayerVersionsRequest</a>, abortSignal<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">AbortSignal</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_dataservice_api_lib_metadata_api_.layerversion.html" class="tsd-signature-type">LayerVersion</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L122">@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts:122</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns information about layer versions for the catalog version. It will return array with
+										all catalog layers and latest version for each layer or return error if the catalog does not
+										have any versions or if the version passed in the query parameter does not exist. If a layer
+									does not have any data for the requested version it is excluded from the response.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>request: <a href="_olp_sdk_dataservice_read_lib_client_layerversionsrequest_.layerversionsrequest.html" class="tsd-signature-type">LayerVersionsRequest</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Is <a href="_olp_sdk_dataservice_read_lib_client_layerversionsrequest_.layerversionsrequest.html">LayerVersionsRequest</a> instance and has ((getVersion)) method.
+										Version - catalog version to get all related layers versions. If not defined, then the version will be the latest catalog version.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>A signal object that allows you to communicate with a request (such as a Fetch)
+										and abort it if required via an AbortController object.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_dataservice_api_lib_metadata_api_.layerversion.html" class="tsd-signature-type">LayerVersion</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>A promise of the http response that contains an array with all catalog layers and latest version for each layer.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="getversions" class="tsd-anchor"></a>
 					<h3>get<wbr>Versions</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -272,7 +357,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/9639aad/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L133">olp-sdk-dataservice-read/lib/client/CatalogClient.ts:133</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/d7e9634/@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts#L221">@here/olp-sdk-dataservice-read/lib/client/CatalogClient.ts:221</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -319,7 +404,7 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/_olp_sdk_dataservice_read_lib_client_catalogclient_.html">"olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Catalog<wbr>Client"</a>
+						<a href="../modules/_olp_sdk_dataservice_read_lib_client_catalogclient_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Catalog<wbr>Client&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -340,7 +425,13 @@
 								<a href="_olp_sdk_dataservice_read_lib_client_catalogclient_.catalogclient.html#getcatalog" class="tsd-kind-icon">get<wbr>Catalog</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_olp_sdk_dataservice_read_lib_client_catalogclient_.catalogclient.html#getearliestversion" class="tsd-kind-icon">get<wbr>Earliest<wbr>Version</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_olp_sdk_dataservice_read_lib_client_catalogclient_.catalogclient.html#getlatestversion" class="tsd-kind-icon">get<wbr>Latest<wbr>Version</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_olp_sdk_dataservice_read_lib_client_catalogclient_.catalogclient.html#getlayerversions" class="tsd-kind-icon">get<wbr>Layer<wbr>Versions</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_olp_sdk_dataservice_read_lib_client_catalogclient_.catalogclient.html#getversions" class="tsd-kind-icon">get<wbr>Versions</a>
