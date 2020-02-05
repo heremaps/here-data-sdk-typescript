@@ -1,3 +1,18 @@
+## v1.2.1 (05/02/2020)
+
+**Common**
+
+* Updated the development dependencies.
+
+**olp-sdk-dataservice-read**
+
+* Fixed the crash in `VersionedLayerClient` and `VolatileLayerClient` that happened when a non-existing tile was requested.
+
+**olp-sdk-authentication**
+
+* Reverted the API break in `AuthCredentials`.
+
+
 ## v1.2.0 (04/02/2020)
 
 **Common**
