@@ -603,6 +603,46 @@ describe("VolatileLayerClient", () => {
             });
     });
 
+    it("Should method getData return Error with incorrect quadKey", async () => {
+        const errorMessage =
+            "No dataHandle for quadKey {column: 15, row: 1, level: 5}. HRN: hrn:here:data:::mocked-hrn";
+        const ERROR_STATUS = 204;
+        const mockedQuadKeyTreeData = {
+            subQuads: [],
+            parentQuads: []
+        };
+        const mockedVersion = {
+            version: 42
+        };
+
+        getQuadTreeIndexStub.callsFake(
+            (builder: any, params: any): Promise<QueryApi.Index> => {
+                return Promise.resolve(mockedQuadKeyTreeData);
+            }
+        );
+
+        getVersionStub.callsFake(
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve(mockedVersion);
+            }
+        );
+
+        const dataRequest = new dataServiceRead.DataRequest().withQuadKey(
+            dataServiceRead.quadKeyFromMortonCode("1111")
+        );
+
+        const response = await volatileLayerClient
+            .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(error.message, errorMessage);
+                assert.equal(error.status, ERROR_STATUS);
+            });
+    });
+
     it("Should baseUrl error be handled", async () => {
         const mockedErrorResponse = "Bad response";
         const dataRequest = new dataServiceRead.DataRequest().withDataHandle(

@@ -122,15 +122,17 @@ export class VersionedLayerClient {
                     return Promise.reject(quadTreeIndexResponse);
                 }
 
-                return quadTreeIndexResponse.subQuads
+                return quadTreeIndexResponse.subQuads &&
+                    quadTreeIndexResponse.subQuads.length
                     ? this.downloadPartition(
                           quadTreeIndexResponse.subQuads[0].dataHandle,
                           abortSignal,
                           dataRequest.getBillingTag()
                       )
                     : Promise.reject(
-                          new Error(
-                              `No dataHandle for quadKey ${quadKey}. HRN: ${this.hrn}`
+                          new HttpError(
+                              204,
+                              `No dataHandle for quadKey {column: ${quadKey.column}, row: ${quadKey.row}, level: ${quadKey.level}}. HRN: ${this.hrn}`
                           )
                       );
             }
