@@ -117,7 +117,7 @@ describe("oauth-request-offline", () => {
         const userAuth = new UserAuth({
             credentials: {
                 accessKeyId: mock_id,
-                accessKeyScrt: mock_scrt
+                accessKeySecret: mock_scrt
             },
             tokenRequester: requestToken
         });
@@ -136,7 +136,7 @@ describe("oauth-request-offline", () => {
         const userAuth = new UserAuth({
             credentials: {
                 accessKeyId: mock_id,
-                accessKeyScrt: mock_scrt
+                accessKeySecret: mock_scrt
             },
             tokenRequester: requestToken
         });
@@ -159,7 +159,7 @@ describe("oauth-request-offline", () => {
         const userAuth = new UserAuth({
             credentials: {
                 accessKeyId: mock_id,
-                accessKeyScrt: mock_scrt
+                accessKeySecret: mock_scrt
             },
             tokenRequester: requestToken
         });
@@ -183,7 +183,7 @@ describe("oauth-request-offline", () => {
         const userAuth = new UserAuth({
             credentials: {
                 accessKeyId: mock_id,
-                accessKeyScrt: mock_scrt
+                accessKeySecret: mock_scrt
             },
             tokenRequester: requestToken
         });
@@ -227,7 +227,7 @@ describe("oauth-request-lookupapi", () => {
             env: "here",
             credentials: {
                 accessKeyId: mock_id,
-                accessKeyScrt: mock_scrt
+                accessKeySecret: mock_scrt
             },
             tokenRequester: requestToken
         });
@@ -275,7 +275,7 @@ describe("oauth-request-lookupapi", () => {
             env: "here-dev",
             credentials: {
                 accessKeyId: mock_id,
-                accessKeyScrt: mock_scrt
+                accessKeySecret: mock_scrt
             },
             tokenRequester: requestToken
         });
@@ -323,7 +323,7 @@ describe("oauth-request-lookupapi", () => {
             env: "here-cn",
             credentials: {
                 accessKeyId: mock_id,
-                accessKeyScrt: mock_scrt
+                accessKeySecret: mock_scrt
             },
             tokenRequester: requestToken
         });
@@ -371,7 +371,7 @@ describe("oauth-request-lookupapi", () => {
             env: "here-cn-dev",
             credentials: {
                 accessKeyId: mock_id,
-                accessKeyScrt: mock_scrt
+                accessKeySecret: mock_scrt
             },
             tokenRequester: requestToken
         });
@@ -422,7 +422,7 @@ describe("oauth-request-lookupapi", () => {
             customUrl: "http://localhost/",
             credentials: {
                 accessKeyId: mock_id,
-                accessKeyScrt: mock_scrt
+                accessKeySecret: mock_scrt
             },
             tokenRequester: requestToken
         });
@@ -469,7 +469,7 @@ describe("oauth-request-lookupapi", () => {
         const userAuth = new UserAuth({
             credentials: {
                 accessKeyId: mock_id,
-                accessKeyScrt: mock_scrt
+                accessKeySecret: mock_scrt
             },
             tokenRequester: requestToken
         });
@@ -533,7 +533,7 @@ describe("auth-request-project-scope", () => {
             env: "here-dev",
             credentials: {
                 accessKeyId: mock_id,
-                accessKeyScrt: mock_scrt
+                accessKeySecret: mock_scrt
             },
             tokenRequester: mockedTokenRequester,
             scope: mockedScope
@@ -564,7 +564,7 @@ describe("expired token refreshing", async () => {
         tokenRequester: mockedTokenRequester,
         credentials: {
             accessKeyId: "appId",
-            accessKeyScrt: "keyScrt"
+            accessKeySecret: "keyScrt"
         }
     });
 

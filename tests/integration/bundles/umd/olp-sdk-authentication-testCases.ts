@@ -21,35 +21,35 @@ import assert = require("assert");
 import { requestToken, UserAuth } from "@here/olp-sdk-authentication";
 
 export const OlpSdkAuthenticationTestCases: {
-    it: string;
-    callback: () => void;
+  it: string;
+  callback: () => void;
 }[] = [
-        {
-            it: "UserAuth should be defined",
-            callback: () => {
-                assert(UserAuth !== undefined);
-            }
+  {
+    it: "UserAuth should be defined",
+    callback: () => {
+      assert(UserAuth !== undefined);
+    }
+  },
+  {
+    it: "UserAuth should be initialised",
+    callback: () => {
+      const userAuth = new UserAuth({
+        credentials: {
+          accessKeyId: "mocked-id",
+          accessKeySecret: "mocked-str"
         },
-        {
-            it: "UserAuth should be initialised",
-            callback: () => {
-                const userAuth = new UserAuth({
-                    credentials: {
-                        accessKeyId: "mocked-id",
-                        accessKeyScrt: "mocked-str"
-                    },
-                    tokenRequester: requestToken
-                });
+        tokenRequester: requestToken
+      });
 
-                assert(userAuth.getToken !== undefined);
-                assert(userAuth.getUserInfo !== undefined);
-                assert(userAuth.validateAccessToken !== undefined);
-            }
-        },
-        {
-            it: "requestToken should be defined",
-            callback: () => {
-                assert(requestToken !== undefined);
-            }
-        }
-    ];
+      assert(userAuth.getToken !== undefined);
+      assert(userAuth.getUserInfo !== undefined);
+      assert(userAuth.validateAccessToken !== undefined);
+    }
+  },
+  {
+    it: "requestToken should be defined",
+    callback: () => {
+      assert(requestToken !== undefined);
+    }
+  }
+];

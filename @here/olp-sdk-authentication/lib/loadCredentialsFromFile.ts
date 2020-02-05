@@ -53,7 +53,7 @@ export function loadCredentialsFromFile(path: string): AuthCredentials {
             config.get(configAccessKeyIdValueName),
             configAccessKeyIdValueName
         ),
-        accessKeyScrt: parseValueFromConfig(
+        accessKeySecret: parseValueFromConfig(
             config.get(configAccessKeySecretValueName),
             configAccessKeySecretValueName
         )
