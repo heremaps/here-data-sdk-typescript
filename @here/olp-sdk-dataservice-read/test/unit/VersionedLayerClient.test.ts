@@ -334,6 +334,34 @@ describe("VersionedLayerClient", () => {
             });
     });
 
+    it("Should method getData return Error with incorrect quadKey", async () => {
+        const errorMessage =
+            "No dataHandle for quadKey {column: 15, row: 1, level: 5}. HRN: hrn:here:data:::mocked-hrn";
+        const ERROR_STATUS = 204;
+        const mockedQuadKeyTreeData = {
+            subQuads: [],
+            parentQuads: []
+        };
+
+        getQuadTreeIndexStub.callsFake(
+            (builder: any, params: any): Promise<QueryApi.Index> => {
+                return Promise.resolve(mockedQuadKeyTreeData);
+            }
+        );
+
+        const dataRequest = new dataServiceRead.DataRequest()
+            .withQuadKey(dataServiceRead.quadKeyFromMortonCode("1111"))
+            .withVersion(42);
+
+        const response = await versionedLayerClient
+            .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(error.message, errorMessage);
+                assert.equal(error.status, ERROR_STATUS);
+            });
+    });
+
     it("Should be aborted fetching by abort signal", async () => {
         const mockedBlobData = new Response("mocked-blob-response");
         const mockedPartitionsIdData = {
