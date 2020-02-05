@@ -39,3 +39,4 @@ export * from "./CatalogVersionRequest";
 export * from "./LayerVersionsRequest";
 export * from "./IndexLayerClient";
 export * from "./IndexQueryRequest";
+export * from "./StreamLayerClient";
