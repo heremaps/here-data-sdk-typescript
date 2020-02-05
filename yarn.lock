@@ -2630,9 +2630,9 @@ camelcase@^5.0.0, camelcase@^5.3.1:
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
 
 caniuse-lite@^1.0.30000844:
-  version "1.0.30001024"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001024.tgz#7feb6793fd5c9d7e0d4c01c80321855592a46b73"
-  integrity sha512-LubRSEPpOlKlhZw9wGlLHo8ZVj6ugGU3xGUfLPneNBledSd9lIM5cCGZ9Mz/mMCJUhEt4jZpYteZNVRdJw5FRA==
+  version "1.0.30001025"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001025.tgz#30336a8aca7f98618eb3cf38e35184e13d4e5fe6"
+  integrity sha512-SKyFdHYfXUZf5V85+PJgLYyit27q4wgvZuf8QTOk1osbypcROihMBlx9GRar2/pIcKH2r4OehdlBr9x6PXetAQ==
 
 caseless@~0.12.0:
   version "0.12.0"
@@ -4665,9 +4665,9 @@ growl@1.9.2:
   integrity sha1-Dqd0NxXbjY3ixe3hd14bRayFwC8=
 
 handlebars@^4.4.0, handlebars@^4.7.0:
-  version "4.7.2"
-  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.7.2.tgz#01127b3840156a0927058779482031afe0e730d7"
-  integrity sha512-4PwqDL2laXtTWZghzzCtunQUTLbo31pcCJrd/B/9JP8XbhVzpS5ZXuKqlOzsd1rtcaLo4KqAn8nl8mkknS4MHw==
+  version "4.7.3"
+  resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.7.3.tgz#8ece2797826886cf8082d1726ff21d2a022550ee"
+  integrity sha512-SRGwSYuNfx8DwHD/6InAPzD6RgeruWLT+B8e8a7gGs8FWgHzlExpTFMEq2IA6QpAfOClpKHy6+8IqTjeBCu6Kg==
   dependencies:
     neo-async "^2.6.0"
     optimist "^0.6.1"
@@ -6341,9 +6341,9 @@ marked@^0.8.0:
   integrity sha512-MyUe+T/Pw4TZufHkzAfDj6HarCBWia2y27/bhuYkTaiUnfDYFnCP3KUN+9oM7Wi6JA2rymtVYbQu3spE0GCmxQ==
 
 marko@^4.2.8, marko@^4.4.26:
-  version "4.18.39"
-  resolved "https://registry.yarnpkg.com/marko/-/marko-4.18.39.tgz#167e22076c1044969a3b2b81e6692eca389ec523"
-  integrity sha512-UafLg0Y34NBpzwAYT79TgH9t112wPjS18SmfOB+kcxx2EXqepwut0TJicfRI35RYfKhHV8Fcb5+9iavpACyqJg==
+  version "4.18.40"
+  resolved "https://registry.yarnpkg.com/marko/-/marko-4.18.40.tgz#9dc3b524129adbf1cb299f504ce7c4535b008c5e"
+  integrity sha512-umcze+rnhSvxdqOeP3EQVlv20SlXHIamkZlIOUl7Zk3oxMuUSgl5ekUIFagHyY5mBJ2lz8mb9MuQzjyzc17big==
   dependencies:
     app-module-path "^2.2.0"
     argly "^1.0.0"
@@ -6889,9 +6889,9 @@ node-fetch@^2.2.0, node-fetch@^2.3.0, node-fetch@^2.5.0:
   integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
 
 node-gyp@^5.0.2:
-  version "5.0.7"
-  resolved "https://registry.yarnpkg.com/node-gyp/-/node-gyp-5.0.7.tgz#dd4225e735e840cf2870e4037c2ed9c28a31719e"
-  integrity sha512-K8aByl8OJD51V0VbUURTKsmdswkQQusIvlvmTyhHlIT1hBvaSxzdxpSle857XuXa7uc02UEZx9OR5aDxSWS5Qw==
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/node-gyp/-/node-gyp-5.1.0.tgz#8e31260a7af4a2e2f994b0673d4e0b3866156332"
+  integrity sha512-OUTryc5bt/P8zVgNUmC6xdXiDJxLMAW8cF5tLQOT9E5sOQj+UeQxnnPy74K3CLCa/SOjjBlbuzDLR8ANwA+wmw==
   dependencies:
     env-paths "^2.2.0"
     glob "^7.1.4"
