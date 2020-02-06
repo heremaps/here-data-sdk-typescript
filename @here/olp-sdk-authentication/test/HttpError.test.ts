@@ -38,4 +38,8 @@ describe("HttpErrorTest", () => {
         expect(error.message).to.be.equal("Not found");
         expect(error.name).to.be.equal("HttpError");
     });
+
+    it("HttpError should be identifyable", () => {
+        expect(HttpError.isHttpError(error)).to.be.true;
+    });
 });
