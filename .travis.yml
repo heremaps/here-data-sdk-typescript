@@ -21,4 +21,4 @@ deploy:
     script: $WORKSPACE/scripts/publish-packages.sh
     cleanup: false
     on:
-      tags: false
+       condition: "$TRAVIS_TAG =~ ^v[0-9].[0-9].[0-9]$"
