@@ -67,6 +67,7 @@ describe("VersionedLayerClient", () => {
             dataServiceRead.RequestFactory,
             "getBaseUrl"
         );
+
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
@@ -74,11 +75,23 @@ describe("VersionedLayerClient", () => {
         sandbox.restore();
     });
 
-    it("Shoud be initialised", async () => {
+    it("Shoud be initialized", async () => {
         assert.isDefined(versionedLayerClient);
     });
 
     it("Should method getData provide data with dataHandle parameter", async () => {
+        const mockedVersion = {
+            version: 42
+        };
+        getVersionStub.callsFake(
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve(mockedVersion);
+            }
+        );
+
         const mockedBlobData: Response = new Response("mocked-blob-response");
         getBlobStub.callsFake(
             (builder: any, params: any): Promise<Response> => {
@@ -644,7 +657,7 @@ describe("VersionedLayerClient", () => {
         const dataPartitionRequest = new dataServiceRead.DataRequest().withPartitionId(
             "mocked-id"
         );
-        const partitionsRrequest = new dataServiceRead.PartitionsRequest();
+        const partitionsRequest = new dataServiceRead.PartitionsRequest();
 
         getBaseUrlRequestStub.callsFake(() =>
             Promise.reject({
@@ -668,7 +681,7 @@ describe("VersionedLayerClient", () => {
             });
 
         const partitions = await versionedLayerClient
-            .getPartitions(partitionsRrequest)
+            .getPartitions(partitionsRequest)
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.statusText);
@@ -677,27 +690,11 @@ describe("VersionedLayerClient", () => {
 
     it("Should latestVersion error be handled", async () => {
         const mockedErrorResponse = "Bad response";
-        const dataPartitionRequest = new dataServiceRead.DataRequest().withPartitionId(
-            "mocked-id"
-        );
-        const partitionsRrequest = new dataServiceRead.PartitionsRequest();
 
-        getVersionStub.callsFake(() =>
-            Promise.reject({
-                status: 400,
-                statusText: "Bad response"
-            })
-        );
-
-        const dataP = await versionedLayerClient
-            .getData(dataPartitionRequest)
-            .catch(error => {
-                assert.isDefined(error);
-                assert.equal(mockedErrorResponse, error.statusText);
-            });
+        const partitionsRequest = new dataServiceRead.PartitionsRequest();
 
         const partitions = await versionedLayerClient
-            .getPartitions(partitionsRrequest)
+            .getPartitions(partitionsRequest)
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.statusText);
@@ -711,7 +708,7 @@ describe("VersionedLayerClient", () => {
         );
 
         const partitions1 = await versionedLayerClient
-            .getPartitions(partitionsRrequest)
+            .getPartitions(partitionsRequest)
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.statusText);
