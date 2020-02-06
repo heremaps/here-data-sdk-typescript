@@ -34,8 +34,18 @@ export class HttpError extends Error {
      * @param status
      * @param message
      */
-    constructor(public status: number, public message: string) {
+    constructor(public status: number, message: string) {
         super(message);
         this.name = "HttpError";
+    }
+
+    /**
+     * Returns true if the given error is a HttpError,
+     * false otherwise
+     *
+     * @param error The error object to check
+     */
+    public static isHttpError(error: any): error is HttpError {
+        return error.name === "HttpError";
     }
 }
