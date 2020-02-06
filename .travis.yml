@@ -19,6 +19,6 @@ script: $WORKSPACE/scripts/linux/psv/travis_build_test_psv.sh
 deploy:
   - provider: script
     script: $WORKSPACE/scripts/publish-packages.sh
-    skip_cleanup: true
+    cleanup: false
     on:
-      condition: "$TRAVIS_TAG =~ ^v[0-9].[0-9].[0-9]$"
+      tags: false
