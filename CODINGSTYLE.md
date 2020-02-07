@@ -19,84 +19,87 @@ If you have suggestions, please see our [contribution guidelines](CONTRIBUTING.m
 1. JavaScript/TypeScript is very flexible in many ways, so use them wisely, but try to think in a more C++ way and concepts of `const methods` and `variables`, `private` and `public`. Be careful when passing around objects as they are references.
 1. Use the simplest tool for the job: `function` vs. `object/namespace/module` vs `class`.
 1. Follow еру [SOLID design principles](https://dev.to/samueleresca/solid-principles-using-typescript):
-    - Create classes and functions with **S**ingle responsibility.
-    - Create classes and functions **O**pen for an extension by identifying customization points and Closed for modification by making small parts well-defined and composable.
-    - Create classes that lend to the **L**iskov substitution principle. Use abstract interfaces for dynamic customization points. Preserve interface semantics and invariants, don't strengthen pre-conditions and don't weaken post-conditions.
-    - Create narrow, segregated **I**nterfaces so that the caller doesn't depend on concepts outside of its domain.
-    - Create customization points by accepting **D**ependencies through abstract interfaces. Give dependencies to objects explicitly instead of pulling them implicitly from the inside.
+   - Create classes and functions with **S**ingle responsibility.
+   - Create classes and functions **O**pen for an extension by identifying customization points and Closed for modification by making small parts well-defined and composable.
+   - Create classes that lend to the **L**iskov substitution principle. Use abstract interfaces for dynamic customization points. Preserve interface semantics and invariants, don't strengthen pre-conditions and don't weaken post-conditions.
+   - Create narrow, segregated **I**nterfaces so that the caller doesn't depend on concepts outside of its domain.
+   - Create customization points by accepting **D**ependencies through abstract interfaces. Give dependencies to objects explicitly instead of pulling them implicitly from the inside.
 1. Include responsibility and collaborators within the documentation.
-The responsibility description must be as simple as a single sentence without conjunctions. If it's not expressible like that, it's a hint that such a class has multiple responsibilities. Documentation also includes potential users and dependencies of the class, and it's a connection to them. Check the `Documentation` section below for more details.
+   The responsibility description must be as simple as a single sentence without conjunctions. If it's not expressible like that, it's a hint that such a class has multiple responsibilities. Documentation also includes potential users and dependencies of the class, and it's a connection to them. Check the `Documentation` section below for more details.
 1. Avoid implementation inheritance. Use composition instead.
-Inherit not to reuse but to be reused. Implementation inheritance is usually used to reduce effort, not because it's solving a problem.  It's creating a problem of implicit dependencies and fragile base classes. Specific implementations of an interface should be created from helpers through composition and marked as final to prevent further derivation.
+   Inherit not to reuse but to be reused. Implementation inheritance is usually used to reduce effort, not because it's solving a problem. It's creating a problem of implicit dependencies and fragile base classes. Specific implementations of an interface should be created from helpers through composition and marked as final to prevent further derivation.
 1. Keep interfaces pure by avoiding data members. If an interface has a data member, it's no longer abstract. Derived classes can't get rid of them and need to pay the cost in object size. Keep interfaces narrow and pure.
 1. Keep performance and memory consumption in mind.
-    - Try not to create many temporary objects. Otherwise, the garbage collector kicks in and might freeze the process.
-    - Prefer, for example, an object of arrays over an array of objects.
-    - Prefer *result* and *scratch variables*, for example:
 
-        ```javascript
-        function add( Vector a, Vector b, Vector result) {
-            result.x = a.x + b.x;
-            result.y = a.y + b.y;
-            result.z = a.z + b.z;
-        }
-        ```
+   - Try not to create many temporary objects. Otherwise, the garbage collector kicks in and might freeze the process.
+   - Prefer, for example, an object of arrays over an array of objects.
+   - Prefer _result_ and _scratch variables_, for example:
+
+     ```javascript
+     function add( Vector a, Vector b, Vector result) {
+         result.x = a.x + b.x;
+         result.y = a.y + b.y;
+         result.z = a.z + b.z;
+     }
+     ```
 
 1. Workers run in their context, and every object passed to a worker is a copy and loses all prototype and function information. So all these must be reconstructed on the worker, and it is very time-consuming. Keep in mind that **only** `ArrayBuffer` and `MessagePort` are transferable objects as defined in the specification. Therefore, to communicate with Workers, prefer only to use `ArrayBufferLike`.
 1. Although we are using an object-oriented approach, use it in a TypeScript/JavaScript way.
-    For example, in Type/JavaScript, not everything needs to be a class.  When defining a singleton, use a namespace or module instead of a class, so it cannot be instantiated, and you can provide your create method.
+   For example, in Type/JavaScript, not everything needs to be a class. When defining a singleton, use a namespace or module instead of a class, so it cannot be instantiated, and you can provide your create method.
 1. Avoid adding additional libraries. We want to keep the `SDK` as slim as possible.
 1. Avoid truthy/falsy statements. For information on how to avoid the scary mess of JavaScript truthy and falsy statements, see the [related article](https://www.sitepoint.com/javascript-truthy-falsy/) on SitePoint.
-    - Following such an approach improves safety, the impression that we know what kind of type the operator has, and the impression on the reader that we are not lazy.
-    - When choosing between converting to real Boolean values and using strict equality (===) or inequality (!==) on more complex objects use the former.
 
-    ```typescript
-    if (someNonBooleanVariable !== undefined)
-    ```
+   - Following such an approach improves safety, the impression that we know what kind of type the operator has, and the impression on the reader that we are not lazy.
+   - When choosing between converting to real Boolean values and using strict equality (===) or inequality (!==) on more complex objects use the former.
 
-1. *Do not use `!!` in your code*. The !!_trick_ is just a way to make a truthy operation a boolean one, but the issue with truthiness is *not solved* but *hidden*. Consider the following example:
+   ```typescript
+   if (someNonBooleanVariable !== undefined)
+   ```
 
-    ```typescript
-    let str = undefined
-    !!str // is false even when undefined
+1. _Do not use `!!` in your code_. The !!_trick_ is just a way to make a truthy operation a boolean one, but the issue with truthiness is _not solved_ but _hidden_. Consider the following example:
 
-    let str = ""
-    !!str // is false even when the string has 0 length
+   ```typescript
+   let str = undefined
+   !!str // is false even when undefined
 
-    if (str === undefined || str.length ===0)
-    ```
+   let str = ""
+   !!str // is false even when the string has 0 length
 
-    Here is a way how not to use `!!` (based on [this](https://stackoverflow.com/questions/784929/what-is-the-not-not-operator-in-javascript/1406618#1406618)):
+   if (str === undefined || str.length ===0)
+   ```
 
-    ```typescript
-    // !! is a horribly obscure way to do a type conversion.
-    // ! is NOT.
-    // !true is false,
-    // !false is true
-    // !0 is true, and !1 is false.
+   Here is a way how not to use `!!` (based on [this](https://stackoverflow.com/questions/784929/what-is-the-not-not-operator-in-javascript/1406618#1406618)):
 
-    // So you convert a value to a boolean, then invert it, and then invert it again.
+   ```typescript
+   // !! is a horribly obscure way to do a type conversion.
+   // ! is NOT.
+   // !true is false,
+   // !false is true
+   // !0 is true, and !1 is false.
 
-    // Maximum Obscurity:
-    let val.enabled = !!userId;
-    let this.pauseButton:HTMLElement = new HTMLElement();
+   // So you convert a value to a boolean, then invert it, and then invert it again.
 
-    // Much easier to understand:
-    let val.enabled = (userId != 0);
+   // Maximum Obscurity:
+   let val.enabled = !!userId;
+   let this.pauseButton:HTMLElement = new HTMLElement();
 
-    if (this.pauseButton !== undefined) {
-    // ...
-    }
-    ```
+   // Much easier to understand:
+   let val.enabled = (userId != 0);
+
+   if (this.pauseButton !== undefined) {
+   // ...
+   }
+   ```
 
 1. Usage of "Non-null assertion operator" in the code. Don't use it when declaring members which are not initialized (if needed use optional operator instead: `?`).
 
-    ```typescript
-    // Don't use ! to overcome TypeScript strict initialization rule.
+   ```typescript
+   // Don't use ! to overcome TypeScript strict initialization rule.
 
-    export class FeatureGroup {
-        /* Optional indices */
-        layerIndex!: number[];
+   export class FeatureGroup {
+       /* Optional indices */
+       layerIndex!: number[];
+   ```
 
 
     // Use optional operator instead.
@@ -107,12 +110,14 @@ Inherit not to reuse but to be reused. Implementation inheritance is usually use
 
 1. If form the code logic you are sure the variable is not null at a given point of execution, use `!` locally (as close to the invocation as possible).
 
-    ```typescript
-    // If there is a justified need to use ! operator, keep it as close to the invocation as possible.
-    if (this.storeExtendedTags) {
-        featureGroup.layerIndex![featureGroup.numFeatures] = this.addLayer(env.lookup("$layer")); // Mind the ! near layerIndex.
-    }
-    ```
+   ```typescript
+   // If there is a justified need to use ! operator, keep it as close to the invocation as possible.
+   if (this.storeExtendedTags) {
+     featureGroup.layerIndex![featureGroup.numFeatures] = this.addLayer(
+       env.lookup("$layer")
+     ); // Mind the ! near layerIndex.
+   }
+   ```
 
 1. Prefer the `for` loops over the `forEach` functions. Iterables are nice for the readability of `#reduce`, `#map`, `#filter`, `#find`, and the like, but impact performance by creating a new function.
 1. Use PascalCase for file names.
@@ -131,7 +136,7 @@ Inherit not to reuse but to be reused. Implementation inheritance is usually use
    // !! local const variable should be named like other member variables in camelCase.
    ```
 
-1. User lower-case package names with a dash separator. For example,  `olp-sdk-data-service-read` or `olp-sdk-fetch`.
+1. User lower-case package names with a dash separator. For example, `olp-sdk-data-service-read` or `olp-sdk-fetch`.
 1. Add a lib and a test folder to the package. For example, `mapview/lib` and `mapview/test`
 1. Always declare types as interfaces.
 1. Make sure to differentiate between the two types of interfaces: used as a type and implemented as classes.
@@ -141,10 +146,10 @@ Inherit not to reuse but to be reused. Implementation inheritance is usually use
 
    ```typescript
    export enum BillboardType {
-       None = 0,
-       Spherical = 1,
-       Cylindrical = 2
-   };
+     None = 0,
+     Spherical = 1,
+     Cylindrical = 2
+   }
    ```
 
 1. For Options or Enums related to a class, begin the name with the PascalCase class name. For example, `MapViewOptions`, `enum DecodedTileMessageType`.
@@ -214,9 +219,9 @@ The purpose of a commit message is to summarize the scope and context of a patch
 
    Writing a good commit message is an exercise in stripping unnecessary words and leaving only the bare essence.
 
-1. Use *present tense imperative* to describe what the patch does to the codebase.
+1. Use _present tense imperative_ to describe what the patch does to the codebase.
 
-   For example, use "add" insteadf of "adding" or "added" in the following sentence: "Add function to triangulate a monotone polygon."
+   For example, use "add" instead of "adding" or "added" in the following sentence: "Add function to triangulate a monotone polygon."
 
 1. Insert a blank line between the commit title and the rest of the message.
 
@@ -255,7 +260,7 @@ The purpose of a commit message is to summarize the scope and context of a patch
 
 Example:
 
-```typescript
+````typescript
 /**
  * Instances of `CancellationToken` can be used to cancel an ongoing request.
  *
@@ -299,7 +304,7 @@ Example:
      * @param qnr The tile key to compare to.
      * @returns `true` if this tile key has identical row, column, and level, `false` otherwise.
      */
-```
+````
 
 ## Testing
 
@@ -316,13 +321,13 @@ When reviewing code, please check that the code is in sync with the guidelines. 
 The following tools are used for formating
 
 - [TSLint](https://github.com/Microsoft/vscode-tslint.git)
-    We use a `tslint.json` file inside `mapsdk` to keep the formatting rules we apply.
+  We use a `tslint.json` file inside `mapsdk` to keep the formatting rules we apply.
 
 - [Prettier](https://github.com/prettier/prettier-vscode)
-   It can be used as an extension for Visual Studio Code to help format the code.
+  It can be used as an extension for Visual Studio Code to help format the code.
 
 ### How should I format my code before submitting for review
 
-Before committing your code, make sure you run `tslint` and `prettier` either via command line or within your IDE (for example, in Visual Studio Code, you could use  `Ctrl+Shift+P >Format...`).
+Before committing your code, make sure you run `tslint` and `prettier` either via command line or within your IDE (for example, in Visual Studio Code, you could use `Ctrl+Shift+P >Format...`).
 
 In case you need to change styling for the already merged code, make sure to prepare a separate commit with applied formatting and merge it before merging your changes. (Please apply formatting to the whole directory/module).

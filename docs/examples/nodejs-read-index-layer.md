@@ -141,7 +141,7 @@ To create the `OlpClientSettings` object:
    });
    ```
 
-## <a name="create-IndexlayerClient"></a>Create IndexLayerClient`
+## <a name="create-IndexlayerClient"></a>Create `IndexLayerClient`
 
 You can use the `IndexLayerClient` object to request any data and partition metadata from an [index layer](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/layers.html#index-layers).
 
@@ -180,21 +180,21 @@ To get partition metadata from an index layer:
 
 2. Create the `IndexQueryRequest` object with the RSQL query string and, if the query string is huge, set the `huge` boolean parameter to `true`.
 
-    > Note: The `huge` parameter is optional, and its default value is `false`.
+   > Note: The `huge` parameter is optional, and its default value is `false`.
 
-    ```typescript
-    const request = new IndexQueryRequest()
-        .withQueryString("RSQL string query")
-        .withHugeResponse(true);
-    ```
+   ```typescript
+   const request = new IndexQueryRequest()
+     .withQueryString("RSQL string query")
+     .withHugeResponse(true);
+   ```
 
 3. Call the `GetPartitions` method with the `IndexQueryRequest` parameter.
 
-    ```typescript
-    const partitions = await indexLayerClient.getPartitions(request);
-    ```
+   ```typescript
+   const partitions = await indexLayerClient.getPartitions(request);
+   ```
 
-    You get metadata for all the partitions in the layer.
+   You get metadata for all the partitions in the layer.
 
 In browser and Node.js, to abort requests before they have completed, you can create the `AbortController` object, and then add the `AbortController.signal` property to your requests. For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
 
@@ -208,7 +208,7 @@ const partitions = await indexLayerClient.getPartitions(
 );
 ```
 
-## Get Data from a Index Layer
+## Get Data from an Index Layer
 
 To get data from the index layer:
 
@@ -217,7 +217,7 @@ To get data from the index layer:
 
 2. Call the `GetData` method with the data model that contains the ID property (also used as the data handle).
 
-    > Note: You can find the data model in the partition metadata. For instructions, see [Get Partition Metadata from an Index Layer](#get-partition-metadata-from-an-index-layer).
+   > Note: You can find the data model in the partition metadata. For instructions, see [Get Partition Metadata from an Index Layer](#get-partition-metadata-from-an-index-layer).
 
    ```typescript
    const data = await indexLayerClient.getData(model);
@@ -231,8 +231,5 @@ In browser and Node.js, to abort requests before they have completed, you can cr
 
 ```typescript
 const abortController = new AbortController();
-const data = await indexLayerClient.getData(
-  model,
-  abortController.signal
-);
+const data = await indexLayerClient.getData(model, abortController.signal);
 ```
