@@ -217,7 +217,7 @@ You can get partition metadata using the OLP Query Service only if the partition
 
 For performance reasons, it is best to use the OLP Query Service to get metadata for a specific partition. For batch processes, and to get metadata for many partitions or all partitions in a layer, use the OLP Metadata Service.
 
-To get partition metadata from a voaltile layer:
+To get partition metadata from a volatile layer:
 
 1. Create the `VolatileLayerClient` object.
    For instructions, see [Create VolatileLayerClient](#create-volatilelayerclient).
