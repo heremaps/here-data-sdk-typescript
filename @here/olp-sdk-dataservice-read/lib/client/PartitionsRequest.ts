@@ -30,6 +30,9 @@ export class PartitionsRequest {
     private additionalFields?: AdditionalFields;
 
     /**
+     * @deprecated This method is deprecated and is not used. If you need to set the version, then
+     * initialize the version client with not deprecated constructor, in other case the latest version will be used.
+     *
      * Gets a layer version for the request.
      *
      * @return The layer version number.
@@ -39,6 +42,9 @@ export class PartitionsRequest {
     }
 
     /**
+     * @deprecated This method is deprecated and is not used. If you need to set the version, then
+     * initialize the version client with not deprecated constructor, in other case the latest version will be used.
+     *
      * An optional method that sets the provided layer version.
      * If the layer version is not specified, the last layer version is used.
      *
@@ -103,7 +109,9 @@ export class PartitionsRequest {
      *
      * @returns The updated [[PartitionsRequest]] instance that you can use to chain methods.
      */
-    public withAdditionalFields(additionalFields: AdditionalFields): PartitionsRequest {
+    public withAdditionalFields(
+        additionalFields: AdditionalFields
+    ): PartitionsRequest {
         this.additionalFields = additionalFields;
         return this;
     }

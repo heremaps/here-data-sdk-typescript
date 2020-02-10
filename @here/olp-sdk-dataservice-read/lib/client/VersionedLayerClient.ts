@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,28 +37,74 @@ import {
 } from "..";
 
 /**
+ * Parameters for use to initialize VersionLayerClient.
+ */
+export interface VersionedLayerClientParams {
+    // HRN of the catalog.
+    catalogHrn: HRN;
+    // The ID of the layer.
+    layerId: string;
+    // The [[OlpClientSettings]] instance.
+    settings: OlpClientSettings;
+    // Layer version. If it is not defined, then latest version will be used.
+    version?: number;
+}
+
+/**
  * Describes a versioned layer and provides the possibility to get partitions metadata and data.
  */
 export class VersionedLayerClient {
     private readonly apiVersion: string = "v1";
-    private readonly hrn: string;
+
+    // HRN of the catalog.
+    private hrn: string;
+    // The ID of the layer.
+    private layerId: string;
+    // The [[OlpClientSettings]] instance.
+    private settings: OlpClientSettings;
+    // Layer version.
+    private version?: number;
 
     /**
+     * @deprecated Please use the overloaded constructor of VersionLayerClient.
+     *
      * Creates the [[VersionedLayerClient]] instance.
      *
      * @param catalogHrn The HERE Resource Name (HRN) of the catalog from which you want to get partitions metadata and data.
      * @param layerId The ID of the layer.
      * @param settings The [[OlpClientSettings]] instance.
-     * @return The [[VersionedLayerClient]] instance.
+     */
+    constructor(catalogHrn: HRN, layerId: string, settings: OlpClientSettings);
+
+    /**
+     * Creates the [[VersionedLayerClient]] instance with VersionedLayerClientParams.
+     *
+     * @param params parameters for use to initialize VersionLayerClient.
+     */
+    constructor(params: VersionedLayerClientParams);
+
+    /**
+     * Implementation for handling both constuctors.
      */
     constructor(
-        catalogHrn: HRN,
-        // The ID of the layer.
-        readonly layerId: string,
-        // The [[OlpClientSettings]] instance.
-        readonly settings: OlpClientSettings
+        paramsOrHrn: VersionedLayerClientParams | HRN,
+        layerId?: string,
+        settings?: OlpClientSettings
     ) {
-        this.hrn = catalogHrn.toString();
+        if (paramsOrHrn instanceof HRN) {
+            this.hrn = paramsOrHrn.toString();
+            if (layerId && settings instanceof OlpClientSettings) {
+                this.layerId = layerId;
+                this.settings = settings;
+            } else {
+                throw new Error("Unsupported parameters");
+            }
+        } else {
+            this.hrn = paramsOrHrn.catalogHrn.toString();
+            this.layerId = paramsOrHrn.layerId;
+            this.settings = paramsOrHrn.settings;
+            this.version = paramsOrHrn.version;
+        }
     }
 
     /**
@@ -79,7 +125,12 @@ export class VersionedLayerClient {
         const dataHandle = dataRequest.getDataHandle();
         const partitionId = dataRequest.getPartitionId();
         const quadKey = dataRequest.getQuadKey();
-        const version = dataRequest.getVersion();
+
+        if (this.version === undefined) {
+            this.version = await this.getLatestVersion(
+                dataRequest.getBillingTag()
+            ).catch(error => Promise.reject(error));
+        }
 
         if (
             dataHandle !== undefined ||
@@ -97,7 +148,6 @@ export class VersionedLayerClient {
             if (partitionId) {
                 const partitionIdDataHandle = await this.getDataHandleByPartitionId(
                     partitionId,
-                    version,
                     dataRequest.getBillingTag()
                 ).catch(error => Promise.reject(error));
                 return this.downloadPartition(
@@ -110,7 +160,7 @@ export class VersionedLayerClient {
             if (quadKey) {
                 const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest()
                     .withQuadKey(quadKey)
-                    .withVersion(version);
+                    .withVersion(this.version);
                 const quadTreeIndexResponse = await this.getPartitions(
                     quadKeyPartitionsRequest
                 ).catch(error => Promise.reject(error));
@@ -185,6 +235,11 @@ export class VersionedLayerClient {
         request: QuadKeyPartitionsRequest | PartitionsRequest,
         abortSignal?: AbortSignal
     ): Promise<QueryApi.Index | MetadataApi.Partitions | QueryApi.Partitions> {
+        if (this.version === undefined) {
+            this.version = await this.getLatestVersion(
+                request.getBillingTag()
+            ).catch(error => Promise.reject(error));
+        }
         if (request instanceof QuadKeyPartitionsRequest) {
             const quadKey = request.getQuadKey();
             if (!quadKey) {
@@ -201,14 +256,9 @@ export class VersionedLayerClient {
                 "versioned"
             )
                 .withQuadKey(quadKey)
-                .withVersion(request.getVersion())
+                .withVersion(this.version)
                 .withDepth(request.getDepth())
                 .withAdditionalFields(request.getAdditionalFields());
-
-            const forSpecificCatalogVersion = request.getVersion();
-            if (forSpecificCatalogVersion) {
-                quadTreeIndexRequest.withVersion(forSpecificCatalogVersion);
-            }
 
             return queryClient.fetchQuadTreeIndex(
                 quadTreeIndexRequest,
@@ -232,13 +282,8 @@ export class VersionedLayerClient {
             HRN.fromString(this.hrn),
             abortSignal
         ).catch(error => Promise.reject(error));
-        const version =
-            request.getVersion() ||
-            (await this.getLatestVersion(request.getBillingTag()).catch(error =>
-                Promise.reject(error)
-            ));
         return MetadataApi.getPartitions(metaRequestBilder, {
-            version,
+            version: this.version,
             layerId: this.layerId,
             additionalFields: request.getAdditionalFields(),
             billingTag: request.getBillingTag()
@@ -253,23 +298,19 @@ export class VersionedLayerClient {
      */
     private async getDataHandleByPartitionId(
         partitionId: string,
-        version?: number,
         billingTag?: string
     ): Promise<string> {
         const queryRequestBilder = await this.getRequestBuilder(
             "query",
             HRN.fromString(this.hrn)
         ).catch(error => Promise.reject(error));
-        const latestVersion =
-            version ||
-            (await this.getLatestVersion(billingTag).catch(error =>
-                Promise.reject(error)
-            ));
+
         const partitionsListRepsonse = await QueryApi.getPartitionsById(
             queryRequestBilder,
             {
-                version: `${latestVersion}`,
+                version: `${this.version}`,
                 layerId: this.layerId,
+
                 partition: [partitionId],
                 billingTag
             }
@@ -310,7 +351,7 @@ export class VersionedLayerClient {
             startVersion: -1,
             billingTag
         }).catch(error => Promise.reject(error));
-        return latestVersion.version;
+        return Promise.resolve(latestVersion.version);
     }
 
     private async downloadPartition(

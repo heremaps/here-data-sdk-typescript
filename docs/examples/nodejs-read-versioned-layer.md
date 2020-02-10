@@ -153,13 +153,16 @@ To create the `VersionedLayerClient` object:
 2. Create the `OlpClientSettings` object.
    For instructions, see [Create OlpClientSettings](#create-olpclientsettings).
 
-3. Create the `VersionedLayerClient` object with the HERE Resource Name (HRN) of the catalog that contains the layer, the layer ID, and the OLP client settings from step 2.
+3.  Create an [[VersionedLayerClient]] instance with VersionedLayerClientParams that contains the catalog HRN, the layer ID, the OLP client settings from step 2 and layer version. If layer version is not defined, then latest version will be used.
 
    ```typescript
-   const versionedLayerClient = await new VersionedLayerClient()
-       hrn: "CatalogHRN",
-       layerId: "LayerId",
-       olpClientSettings
+   const versionedLayerClient = new VersionedLayerClient(
+      {
+         catalogHrn: "CatalogHRN",
+         layerId: "LayerId",
+         settings: olpClientSettings,
+         version: 5
+      }
    );
    ```
 
