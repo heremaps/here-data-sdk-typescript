@@ -33,6 +33,9 @@ export class QuadKeyPartitionsRequest {
     private additionalFields?: AdditionalFields;
 
     /**
+     * @deprecated This method is deprecated and is not used. If you need to set the version, then
+     * initialize the version client with not deprecated constructor, in other case the latest version will be used.
+     *
      * The version of the catalog against which you want to run the query.
      * It must be a valid catalog version.
      *
@@ -99,6 +102,9 @@ export class QuadKeyPartitionsRequest {
     }
 
     /**
+     * @deprecated This method is deprecated and is not used. If you need to set the version, then
+     * initialize the version client with not deprecated constructor, in other case the latest version will be used.
+     *
      * The configured catalog version for the request.
      *
      * @return The catalog version number.

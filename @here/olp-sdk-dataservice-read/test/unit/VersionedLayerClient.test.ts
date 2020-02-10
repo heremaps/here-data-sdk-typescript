@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,9 @@ describe("VersionedLayerClient", () => {
     let getVersionStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
     let versionedLayerClient: dataServiceRead.VersionedLayerClient;
+    let versionedLayerClientWithVersion: dataServiceRead.VersionedLayerClient;
+    let versionedLayerClientWithoutVersion: dataServiceRead.VersionedLayerClient;
+    let versionedLayerClientTest: dataServiceRead.VersionedLayerClient;
     const mockedHRN = dataServiceRead.HRN.fromString(
         "hrn:here:data:::mocked-hrn"
     );
@@ -55,6 +58,27 @@ describe("VersionedLayerClient", () => {
             mockedLayerId,
             (settings as unknown) as dataServiceRead.OlpClientSettings
         );
+
+        const versionedLayerClientParams = {
+            catalogHrn: mockedHRN,
+            layerId: mockedLayerId,
+            settings: (settings as unknown) as dataServiceRead.OlpClientSettings,
+            version: 5
+        };
+
+        versionedLayerClientWithVersion = new dataServiceRead.VersionedLayerClient(
+            versionedLayerClientParams
+        );
+
+        const versionedLayerClientParamsWithoutVersion = {
+            catalogHrn: mockedHRN,
+            layerId: mockedLayerId,
+            settings: (settings as unknown) as dataServiceRead.OlpClientSettings
+        };
+
+        versionedLayerClientWithoutVersion = new dataServiceRead.VersionedLayerClient(
+            versionedLayerClientParamsWithoutVersion
+        );
     });
 
     beforeEach(() => {
@@ -67,6 +91,7 @@ describe("VersionedLayerClient", () => {
             dataServiceRead.RequestFactory,
             "getBaseUrl"
         );
+
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
@@ -74,11 +99,50 @@ describe("VersionedLayerClient", () => {
         sandbox.restore();
     });
 
-    it("Shoud be initialised", async () => {
+    it("Shoud be initialized", async () => {
         assert.isDefined(versionedLayerClient);
     });
 
+    it("VersionedLayerClient should throw Error when setted unsuported parameters", async () => {
+        let settings1 = sandbox.createStubInstance(
+            dataServiceRead.OlpClientSettings
+        );
+
+        assert.throws(
+            () => {
+                new dataServiceRead.VersionedLayerClient(
+                    mockedHRN,
+                    "",
+                    (settings1 as unknown) as dataServiceRead.OlpClientSettings
+                );
+            },
+            Error,
+            "Unsupported parameters"
+        );
+    });
+
+    it("VersionedLayerClient instance should be initialized with VersionedLayerClientParams", async () => {
+        assert.isDefined(versionedLayerClientWithVersion);
+        assert.equal(versionedLayerClientWithVersion["version"], 5);
+        assert.equal(
+            versionedLayerClientWithVersion["hrn"],
+            "hrn:here:data:::mocked-hrn"
+        );
+    });
+
     it("Should method getData provide data with dataHandle parameter", async () => {
+        const mockedVersion = {
+            version: 42
+        };
+        getVersionStub.callsFake(
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve(mockedVersion);
+            }
+        );
+
         const mockedBlobData: Response = new Response("mocked-blob-response");
         getBlobStub.callsFake(
             (builder: any, params: any): Promise<Response> => {
@@ -644,7 +708,7 @@ describe("VersionedLayerClient", () => {
         const dataPartitionRequest = new dataServiceRead.DataRequest().withPartitionId(
             "mocked-id"
         );
-        const partitionsRrequest = new dataServiceRead.PartitionsRequest();
+        const partitionsRequest = new dataServiceRead.PartitionsRequest();
 
         getBaseUrlRequestStub.callsFake(() =>
             Promise.reject({
@@ -668,7 +732,7 @@ describe("VersionedLayerClient", () => {
             });
 
         const partitions = await versionedLayerClient
-            .getPartitions(partitionsRrequest)
+            .getPartitions(partitionsRequest)
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.statusText);
@@ -680,9 +744,16 @@ describe("VersionedLayerClient", () => {
         const dataPartitionRequest = new dataServiceRead.DataRequest().withPartitionId(
             "mocked-id"
         );
-        const partitionsRrequest = new dataServiceRead.PartitionsRequest();
+        const partitionsRequest = new dataServiceRead.PartitionsRequest();
 
         getVersionStub.callsFake(() =>
+            Promise.reject({
+                status: 400,
+                statusText: "Bad response"
+            })
+        );
+
+        getBaseUrlRequestStub.callsFake(() =>
             Promise.reject({
                 status: 400,
                 statusText: "Bad response"
@@ -697,21 +768,14 @@ describe("VersionedLayerClient", () => {
             });
 
         const partitions = await versionedLayerClient
-            .getPartitions(partitionsRrequest)
+            .getPartitions(partitionsRequest)
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.statusText);
             });
 
-        getBaseUrlRequestStub.callsFake(() =>
-            Promise.reject({
-                status: 400,
-                statusText: "Bad response"
-            })
-        );
-
         const partitions1 = await versionedLayerClient
-            .getPartitions(partitionsRrequest)
+            .getPartitions(partitionsRequest)
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.statusText);
@@ -744,5 +808,107 @@ describe("VersionedLayerClient", () => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.statusText);
             });
+    });
+
+    it("Should getPartitions error be handled if error getting latest layer version", async () => {
+        getVersionStub.callsFake(() =>
+            Promise.reject({
+                status: 400,
+                statusText: "Bad response"
+            })
+        );
+
+        const layer = new dataServiceRead.VersionedLayerClient({
+            catalogHrn: mockedHRN,
+            layerId: "",
+            settings: {} as any
+        });
+
+        try {
+            await layer.getPartitions({
+                getBillingTag: () => undefined
+            } as any);
+        } catch (error) {
+            if (error.status !== 400) {
+                assert.fail(error.status, 400);
+            }
+
+            if (error.statusText !== "Bad response") {
+                assert.fail(error.statusText, "Bad response");
+            }
+        }
+    });
+
+    it("Should getData error be handled if error getting latest layer version", async () => {
+        getVersionStub.callsFake(() =>
+            Promise.reject({
+                status: 400,
+                statusText: "Bad response"
+            })
+        );
+
+        const layer = new dataServiceRead.VersionedLayerClient({
+            catalogHrn: mockedHRN,
+            layerId: "",
+            settings: {} as any
+        });
+
+        try {
+            await layer.getData({
+                getBillingTag: () => undefined,
+                getDataHandle: () => undefined,
+                getPartitionId: () => undefined,
+                getQuadKey: () => undefined
+            } as any);
+        } catch (error) {
+            if (error.status !== 400) {
+                assert.fail(error.status, 400);
+            }
+
+            if (error.statusText !== "Bad response") {
+                assert.fail(error.statusText, "Bad response");
+            }
+        }
+    });
+
+    it("Should getPartitions fetch menadata with latest layer version if not defined", async () => {
+        getVersionStub.callsFake(() => Promise.resolve({ version: 5 }));
+
+        getPartitionsStub.callsFake((builder, params) => {
+            assert.equal(params.version, 5);
+            return Promise.resolve();
+        });
+
+        const layer = new dataServiceRead.VersionedLayerClient({
+            catalogHrn: mockedHRN,
+            layerId: "",
+            settings: {} as any
+        });
+
+        await layer.getPartitions({
+            getBillingTag: () => undefined,
+            getPartitionIds: () => undefined,
+            getAdditionalFields: () => undefined
+        } as any);
+    });
+
+    it("Should getPartitions fetch menadata with set layer version in constructor", async () => {
+        getPartitionsStub.callsFake((builder, params) => {
+            assert.equal(params.version, 6);
+            return Promise.resolve();
+        });
+
+        const layer = new dataServiceRead.VersionedLayerClient({
+            catalogHrn: mockedHRN,
+            layerId: mockedLayerId,
+            settings: {} as any,
+            version: 6
+        });
+
+        await layer.getPartitions({
+            getBillingTag: () => undefined,
+            getPartitionIds: () => undefined,
+            getAdditionalFields: () => undefined
+        } as any);
     });
 });

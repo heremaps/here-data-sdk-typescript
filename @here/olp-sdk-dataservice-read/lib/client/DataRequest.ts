@@ -92,6 +92,9 @@ export class DataRequest {
     }
 
     /**
+     * @deprecated This method is deprecated and is not used. If you need to set the version, then
+     * initialize the version client with not deprecated constructor, in other case the latest version will be used.
+     *
      * Gets a catalog version for the request.
      *
      * @return The catalog version number.
@@ -101,6 +104,9 @@ export class DataRequest {
     }
 
     /**
+     * @deprecated This method is deprecated and is not used. If you need to set the version, then
+     * initialize the version client with not deprecated constructor, in other case the latest version will be used.
+     *
      * Sets the provided catalog version.
      *
      * @param version The catalog version number.
