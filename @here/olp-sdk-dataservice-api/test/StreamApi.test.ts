@@ -74,10 +74,8 @@ describe("StreamApi", () => {
             subscriptionId: "testSubsId",
             consumerId: "testConsumerId",
             subscriptionProperties: {
-                kafkaConsumerProperties: {
-                    autoCommitIntervalMs: 25,
-                    autoOffsetReset: "earliest"
-                }
+                autoCommitIntervalMs: 25,
+                autoOffsetReset: "earliest"
             }
         });
     });

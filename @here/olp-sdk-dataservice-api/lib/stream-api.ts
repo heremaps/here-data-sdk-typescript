@@ -70,48 +70,8 @@ export interface InlineResponse403 {
     errorDescription?: string;
 }
 
-/**
- * This is the same as [Kafka Consumer properties](https://kafka.apache.org/11/documentation.html#newconsumerconfigs)
- *  with some default values changed.
- */
-export interface KafkaConsumerProperties {
-    /**
-     * Refer to [Kafka Consumer properties](https://kafka.apache.org/11/documentation.html#newconsumerconfigs)
-     */
-    autoCommitIntervalMs?: number;
-    /**
-     * Refer to [Kafka Consumer properties](https://kafka.apache.org/11/documentation.html#newconsumerconfigs)
-     */
-    autoOffsetReset?: AutoOffsetResetEnum;
-    /**
-     * Refer to [Kafka Consumer properties](https://kafka.apache.org/11/documentation.html#newconsumerconfigs)
-     */
-    enableAutoCommit?: boolean;
-    /**
-     * Refer to [Kafka Consumer properties](https://kafka.apache.org/11/documentation.html#newconsumerconfigs)
-     */
-    fetchMaxBytes?: number;
-    /**
-     * Refer to [Kafka Consumer properties](https://kafka.apache.org/11/documentation.html#newconsumerconfigs)
-     */
-    fetchMaxWaitMs?: number;
-    /**
-     * Refer to [Kafka Consumer properties](https://kafka.apache.org/11/documentation.html#newconsumerconfigs)
-     */
-    fetchMinBytes?: number;
-    /**
-     * For applications intending to read in parallel mode belonging to same
-     * 'group.id' the values for 'catalogId, layerId, aid' should also be same
-     */
-    groupId?: string;
-    /**
-     * Refer to [Kafka Consumer properties](https://kafka.apache.org/11/documentation.html#newconsumerconfigs)
-     */
-    maxPartitionFetchBytes?: number;
-    /**
-     * Refer to [Kafka Consumer properties](https://kafka.apache.org/11/documentation.html#newconsumerconfigs)
-     */
-    maxPollRecords?: number;
+export interface ConsumerProperties {
+    [key: string]: string | number | boolean;
 }
 
 export type AutoOffsetResetEnum = "latest" | "earliest" | "none";
@@ -199,10 +159,6 @@ export interface StreamOffset {
      * The offset in the partition of the stream layer.
      */
     offset: number;
-}
-
-export interface SubscriptionProperties {
-    kafkaConsumerProperties?: KafkaConsumerProperties;
 }
 
 /**
@@ -476,7 +432,7 @@ export async function subscribe(
         mode?: "serial" | "parallel";
         subscriptionId?: string;
         consumerId?: string;
-        subscriptionProperties?: SubscriptionProperties;
+        subscriptionProperties?: ConsumerProperties;
     }
 ): Promise<ConsumerSubscribeResponse> {
     const baseUrl = "/layers/{layerId}/subscribe".replace(
@@ -496,7 +452,9 @@ export async function subscribe(
     };
     headers["Content-Type"] = "application/json";
     if (params["subscriptionProperties"] !== undefined) {
-        options.body = JSON.stringify(params["subscriptionProperties"]);
+        options.body = JSON.stringify({
+            kafkaConsumerProperties: params["subscriptionProperties"]
+        });
     }
 
     return builder.request<ConsumerSubscribeResponse>(urlBuilder, options);
