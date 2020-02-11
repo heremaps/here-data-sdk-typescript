@@ -22,8 +22,7 @@
  */
 export class UrlBuilder {
     /**
-     * Static method that creates an URL query string from a key,value paris provided as param
-     *
+     * Static method that creates an URL query string from a key, value pair provided as param     *
      * @param param either a string or a number to be converted.
      */
     static stringifyQuery(values: {
@@ -137,7 +136,10 @@ export abstract class RequestBuilder {
      *
      * @param urlObj the URL to fetch.
      */
-    async requestBlob(urlObj: UrlBuilder, init?: RequestOptions): Promise<Response> {
+    async requestBlob(
+        urlObj: UrlBuilder,
+        init?: RequestOptions
+    ): Promise<Response> {
         return this.downloadBlob(urlObj.url, init);
     }
 
@@ -153,5 +155,8 @@ export abstract class RequestBuilder {
      *
      * @param url The URL to download.
      */
-    abstract downloadBlob(url: string, init?: RequestOptions): Promise<Response>;
+    abstract downloadBlob(
+        url: string,
+        init?: RequestOptions
+    ): Promise<Response>;
 }

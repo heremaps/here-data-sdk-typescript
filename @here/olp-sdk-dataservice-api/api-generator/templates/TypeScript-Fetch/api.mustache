@@ -1,0 +1,104 @@
+{{>licenseInfo}}
+import { UrlBuilder, RequestBuilder, RequestOptions } from './RequestBuilder';
+
+{{#models}}
+{{#model}}
+{{#description}}
+/**
+ * {{{description}}}
+ */
+{{/description}}
+{{^isEnum}}
+export interface {{classname}} {{#parent}}extends {{{parent}}} {{/parent}}{
+{{/isEnum}}
+{{#isEnum}}
+export type {{{classname}}} = {{#allowableValues}}{{#values}}"{{{.}}}"{{^-last}} | {{/-last}}{{/values}}{{/allowableValues}};
+{{/isEnum}}
+{{#vars}}
+{{#description}}
+    /**
+     * {{{description}}}
+     */
+{{/description}}
+    "{{name}}"{{^required}}?{{/required}}: {{#isEnum}}{{{datatypeWithEnum}}}{{/isEnum}}{{^isEnum}}{{{datatype}}}{{/isEnum}};
+{{/vars}}
+{{^isEnum}}
+}
+{{/isEnum}}
+
+{{#hasEnums}}
+{{#vars}}
+{{#isEnum}}
+export type {{{enumName}}} = {{#allowableValues}}{{#values}}"{{{.}}}"{{^-last}} | {{/-last}}{{/values}}{{/allowableValues}};
+{{/isEnum}}
+{{/vars}}
+{{/hasEnums}}
+{{/model}}
+{{/models}}
+
+{{#apiInfo}}
+{{#apis}}
+{{#operations}}
+
+/* ===================================================================
+ * {{classname}}{{#description}}
+ * {{&description}}{{/description}}
+*/
+
+{{#operation}}
+
+/**
+ * {{&notes}}
+ *
+ {{#summary}}
+ * @summary {{&summary}}
+ {{/summary}}
+ {{#allParams}}
+ * @param {{paramName}} {{description}}
+ {{/allParams}}
+ */
+export async function {{nickname}}(
+    builder: RequestBuilder{{#hasParams}}, 
+    params: { {{#allParams}} {{paramName}}{{^required}}?{{/required}}: {{{dataType}}};{{/allParams}} }{{/hasParams}}
+): Promise<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}any{{/returnType}}> {
+    const baseUrl = "{{{path}}}"{{#pathParams}}{{=<% %>=}}
+        .replace("{<%baseName%>}", UrlBuilder.toString(params["<%paramName%>"]))<%={{ }}=%>{{/pathParams}};
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+{{#hasQueryParams}}
+    {{#queryParams}}
+    urlBuilder.appendQuery("{{baseName}}", params["{{paramName}}"]);
+    {{/queryParams}}
+{{/hasQueryParams}}
+
+    const headers: { [header: string]: string; } = {};
+    const options: RequestOptions = {
+        method: "{{httpMethod}}",
+        headers
+    };
+{{#hasFormParams}}
+    headers["Content-Type"] = "application/x-www-form-urlencoded";
+    options.body = UrlBuilder.stringifyQuery({
+        {{#formParams}}
+        "{{baseName}}": params["{{paramName}}"],
+        {{/formParams}}
+    });
+{{/hasFormParams}}
+{{#hasBodyParam}}
+    headers["Content-Type"] = "application/json";
+    {{#bodyParam}}
+    if (params["{{paramName}}"] !== undefined)
+        options.body = JSON.stringify(params["{{paramName}}"]);
+    {{/bodyParam}}
+{{/hasBodyParam}}
+{{#headerParams}}
+    if (params["{{paramName}}"] !== undefined)
+        headers["{{baseName}}"] = params["{{paramName}}"] as string;
+{{/headerParams}}
+
+    return builder.request<{{#returnType}}{{{returnType}}}{{/returnType}}{{^returnType}}any{{/returnType}}>(urlBuilder, options);
+}
+{{/operation}}
+{{/operations}}
+{{/apis}}
+{{/apiInfo}}
