@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,12 @@ class DeferredPromise<T> {
     }
 }
 
+enum STATUS_CODES {
+    Ok = 200,
+    CREATED = 201,
+    SERVICE_UNAVAIBLE = 503
+}
+
 /**
  * An implementation of the [[DownloadManager]] interface requested by the `datastore-api` module
  * for fetching data from the backend or sending requests to the backend.
@@ -94,9 +100,14 @@ export class DataStoreDownloadManager implements DownloadManager {
     ): Promise<Response> {
         try {
             const response = await fetchFunction(url, init);
-            // tslint:disable-next-line: no-magic-numbers
-            if (response.status !== 503 || retryCount >= maxRetries) {
-                if (response.status === 200) {
+            if (
+                response.status !== STATUS_CODES.SERVICE_UNAVAIBLE ||
+                retryCount >= maxRetries
+            ) {
+                if (
+                    response.status === STATUS_CODES.Ok ||
+                    response.status === STATUS_CODES.CREATED
+                ) {
                     return Promise.resolve(response);
                 } else {
                     return Promise.reject(

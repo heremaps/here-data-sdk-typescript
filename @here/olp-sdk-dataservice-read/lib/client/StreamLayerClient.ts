@@ -17,7 +17,15 @@
  * License-Filename: LICENSE
  */
 
-import { HRN, OlpClientSettings } from "..";
+import { StreamApi } from "@here/olp-sdk-dataservice-api";
+import {
+    ApiName,
+    DataStoreRequestBuilder,
+    HRN,
+    OlpClientSettings,
+    RequestFactory
+} from "..";
+import { SubscribeRequest } from "./SubscribeRequest";
 
 export interface StreamLayerClientParams {
     // The HERE Resource Name (HRN) of the catalog from which you want to get partitions metadata and data.
@@ -32,6 +40,7 @@ export interface StreamLayerClientParams {
  * Describes a stream layer.
  */
 export class StreamLayerClient {
+    private readonly apiVersion: string = "v2";
     readonly catalogHrn: HRN;
     readonly layerId: string;
     readonly settings: OlpClientSettings;
@@ -46,5 +55,46 @@ export class StreamLayerClient {
         this.catalogHrn = params.catalogHrn;
         this.layerId = params.layerId;
         this.settings = params.settings;
+    }
+
+    public async subscribe(
+        request: SubscribeRequest,
+        abortSignal?: AbortSignal
+    ): Promise<StreamApi.ConsumerSubscribeResponse> {
+        const builder = await this.getRequestBuilder(
+            "stream",
+            this.catalogHrn,
+            abortSignal
+        ).catch(async error => {
+            return Promise.reject(error);
+        });
+
+        return StreamApi.subscribe(builder, {
+            layerId: this.layerId,
+            mode: request.getMode(),
+            consumerId: request.getConsumerId(),
+            subscriptionId: request.getSubscriptionId(),
+            subscriptionProperties: request.getSubscriptionProperties()
+        });
+    }
+
+    /**
+     * Fetch baseUrl and create requestBuilder for sending requests to the API Lookup Service.
+     * @param builderType endpoint name is needed to create propriate requestBuilder
+     *
+     * @returns requestBuilder
+     */
+    private async getRequestBuilder(
+        builderType: ApiName,
+        hrn?: HRN,
+        abortSignal?: AbortSignal
+    ): Promise<DataStoreRequestBuilder> {
+        return RequestFactory.create(
+            builderType,
+            this.apiVersion,
+            this.settings,
+            hrn,
+            abortSignal
+        );
     }
 }
