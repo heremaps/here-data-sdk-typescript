@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,10 +32,7 @@ async function addBearerToken(
      * @todo fix datastore-api template generator.
      * It sends empty object for headers, but should be Headers object
      */
-    if (
-        init.headers === undefined ||
-        Object.entries(init.headers).length === 0
-    ) {
+    if (init.headers === undefined || !(init.headers instanceof Headers)) {
         init.headers = new Headers();
     }
 

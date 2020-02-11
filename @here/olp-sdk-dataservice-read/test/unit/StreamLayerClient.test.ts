@@ -22,7 +22,8 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
-import { settings } from "cluster";
+import { StreamApi } from "@here/olp-sdk-dataservice-api";
+import { SubscribeRequest } from "../../lib";
 
 chai.use(sinonChai);
 
@@ -31,11 +32,14 @@ const expect = chai.expect;
 
 describe("StreamLayerClient", () => {
     let sandbox: sinon.SinonSandbox;
+    let getBaseUrlRequestStub: sinon.SinonStub;
+    let subscribeStub: sinon.SinonStub;
     let streamLayerClient: dataServiceRead.StreamLayerClient;
     const mockedHRN = dataServiceRead.HRN.fromString(
         "hrn:here:data:::mocked-hrn"
     );
     const mockedLayerId = "mocked-layed-id";
+    const fakeURL = "http://fake-base.url";
 
     before(() => {
         sandbox = sinon.createSandbox();
@@ -50,6 +54,19 @@ describe("StreamLayerClient", () => {
         streamLayerClient = new dataServiceRead.StreamLayerClient(params);
     });
 
+    beforeEach(() => {
+        subscribeStub = sandbox.stub(StreamApi, "subscribe");
+        getBaseUrlRequestStub = sandbox.stub(
+            dataServiceRead.RequestFactory,
+            "getBaseUrl"
+        );
+        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
+    });
+
+    afterEach(() => {
+        sandbox.restore();
+    });
+
     it("Shoud be initialised", async () => {
         assert.isDefined(streamLayerClient);
         expect(streamLayerClient).be.instanceOf(
@@ -60,5 +77,82 @@ describe("StreamLayerClient", () => {
         expect(streamLayerClient.settings).be.instanceOf(
             dataServiceRead.OlpClientSettings
         );
+    });
+
+    it("Should subscribe method post data and return url and id", async () => {
+        const mockResponse = {
+            nodeBaseURL: "https://mock-url/hrn/id",
+            subscriptionId: "-9141392.f96875c-9422-4df4-b5ff-41a4f459"
+        };
+        subscribeStub.callsFake(
+            (
+                builder: any,
+                params: any
+            ): Promise<StreamApi.ConsumerSubscribeResponse> => {
+                return Promise.resolve(mockResponse);
+            }
+        );
+
+        const request = new SubscribeRequest();
+        const subscription = await streamLayerClient.subscribe(request);
+
+        assert.isDefined(subscription);
+        expect(subscription.nodeBaseURL).to.be.equal(mockResponse.nodeBaseURL);
+        expect(subscription.subscriptionId).to.be.equal(
+            mockResponse.subscriptionId
+        );
+    });
+
+    it("Should be aborted fetching by abort signal", async () => {
+        const mockResponse = {
+            nodeBaseURL: "https://mock-url/hrn/id",
+            subscriptionId: "-9141392.f96875c-9422-4df4-b5ff-41a4f459"
+        };
+
+        subscribeStub.callsFake(
+            (
+                builder: any,
+                params: any
+            ): Promise<StreamApi.ConsumerSubscribeResponse> => {
+                return builder.abortSignal.aborted
+                    ? Promise.reject("AbortError")
+                    : Promise.resolve(mockResponse);
+            }
+        );
+
+        const request = new SubscribeRequest();
+        const abortController = new AbortController();
+
+        streamLayerClient
+            .subscribe(
+                (request as unknown) as dataServiceRead.SubscribeRequest,
+                abortController.signal
+            )
+            .then()
+            .catch((err: any) => {
+                assert.strictEqual(err, "AbortError");
+                assert.isTrue(abortController.signal.aborted);
+            });
+
+        abortController.abort();
+    });
+
+    it("Should baseUrl error be handled", async () => {
+        const mockedErrorResponse = "Bad response";
+        const request = new SubscribeRequest();
+
+        getBaseUrlRequestStub.callsFake(() =>
+            Promise.reject({
+                status: 400,
+                statusText: "Bad response"
+            })
+        );
+
+        const subscription = await streamLayerClient
+            .subscribe(request)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.statusText);
+            });
     });
 });
