@@ -38,7 +38,7 @@ export class StatisticsRequest {
     private catalogHrn?: string;
     private layerId?: string;
     private typemap?: CoverageDataType;
-    private dataLevel?: string;
+    private dataLevel?: number;
     private billingTag?: string;
 
     /**
@@ -71,12 +71,19 @@ export class StatisticsRequest {
     /**
      * Gets a tile level for the request.
      *
+     * @return The requested tile level number.
+     */
+    public getDataLevel(): number | undefined;
+
+    /**
+     * Gets a tile level for the request.
+     * @deprecated Please use getDataLevel(): number | undefined
      * @return The requested tile level string.
      */
-    public getDataLevel(): string | undefined {
+    public getDataLevel(): string | undefined;
+    public getDataLevel(): number | string | undefined {
         return this.dataLevel;
     }
-
     /**
      * A setter for the provided catalog HERE Resource Name (HRN).
      *
@@ -114,13 +121,26 @@ export class StatisticsRequest {
     }
 
     /**
-     * A setter for the provided `dataLevel` string.
+     * A setter for the provided `dataLevel`.
      *
-     * @param dataLevel Specify the tile level about which you want to get statistical data.
+     * @param dataLevel By default, assets generated at deepest data level are returned.
+     * Note that assets returned for data levels greater than 11 represent data at data level 11.
      * @returns The updated [[StatisticsRequest]] instance that you can use to chain methods.
      */
-    public withDataLevel(dataLevel: string): StatisticsRequest {
-        this.dataLevel = dataLevel;
+    public withDataLevel(dataLevel: number): StatisticsRequest;
+
+    /**
+     * A setter for the provided `dataLevel` string.
+     *
+     * @deprecated Please set dataLevel as a number
+     * @param dataLevel dataLevel Specify the tile level about which you want to get statistical data.
+     * @returns The updated [[StatisticsRequest]] instance that you can use to chain methods.
+     */
+    // tslint:disable-next-line: unified-signatures
+    public withDataLevel(dataLevel: string): StatisticsRequest;
+
+    public withDataLevel(dataLevel: string | number) {
+        this.dataLevel = Number(dataLevel);
         return this;
     }
 
