@@ -99,9 +99,6 @@ export class StatisticsClient {
         if (typemap === undefined) {
             return Promise.reject(new Error(`No typemap provided`));
         }
-        if (datalevel === undefined) {
-            return Promise.reject(new Error(`No dataLevel provided`));
-        }
         const coverageRequestBuilder = await this.getRequestBuilder(
             catalogHRN
         ).catch(error => Promise.reject(error));

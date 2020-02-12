@@ -30,9 +30,7 @@ const assert = chai.assert;
 
 describe("StatistiscClient", () => {
     let sandbox: sinon.SinonSandbox;
-    let olpClientSettingsStub: sinon.SinonStubbedInstance<
-        dataServiceRead.OlpClientSettings
-    >;
+    let olpClientSettingsStub: sinon.SinonStubbedInstance<dataServiceRead.OlpClientSettings>;
     let getDataCoverageSummaryStub: sinon.SinonStub;
     let getStatisticsBitMapStub: sinon.SinonStub;
     let getStatisticsSizeMapStub: sinon.SinonStub;
@@ -134,10 +132,12 @@ describe("StatistiscClient", () => {
         );
         assert.isDefined(statisticsClient);
 
-        const summaryRequest = new dataServiceRead.SummaryRequest()
-            .withLayerId(mockedLayerId);
+        const summaryRequest = new dataServiceRead.SummaryRequest().withLayerId(
+            mockedLayerId
+        );
 
-        const summary = await statisticsClient.getSummary(summaryRequest)
+        const summary = await statisticsClient
+            .getSummary(summaryRequest)
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.message);
@@ -151,10 +151,12 @@ describe("StatistiscClient", () => {
         );
         assert.isDefined(statisticsClient);
 
-        const summaryRequest = new dataServiceRead.SummaryRequest()
-            .withCatalogHrn(mockedHRN);
+        const summaryRequest = new dataServiceRead.SummaryRequest().withCatalogHrn(
+            mockedHRN
+        );
 
-        const summary = await statisticsClient.getSummary(summaryRequest)
+        const summary = await statisticsClient
+            .getSummary(summaryRequest)
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.message);
@@ -186,7 +188,7 @@ describe("StatistiscClient", () => {
         const statisticBitMapRequest = new dataServiceRead.StatisticsRequest()
             .withCatalogHrn(mockedHRN)
             .withLayerId(mockedLayerId)
-            .withDataLevel("12")
+            .withDataLevel(12)
             .withTypemap(dataServiceRead.CoverageDataType.BITMAP);
 
         const statisticBitMap = await statisticsClient.getStatistics(
@@ -197,7 +199,7 @@ describe("StatistiscClient", () => {
         const statisticSizeMapRequest = new dataServiceRead.StatisticsRequest()
             .withCatalogHrn(mockedHRN)
             .withLayerId(mockedLayerId)
-            .withDataLevel("12")
+            .withDataLevel(12)
             .withTypemap(dataServiceRead.CoverageDataType.SIZEMAP);
 
         const statisticSizeMap = await statisticsClient.getStatistics(
@@ -208,7 +210,7 @@ describe("StatistiscClient", () => {
         const statisticTimeMapRequest = new dataServiceRead.StatisticsRequest()
             .withCatalogHrn(mockedHRN)
             .withLayerId(mockedLayerId)
-            .withDataLevel("12")
+            .withDataLevel(12)
             .withTypemap(dataServiceRead.CoverageDataType.TIMEMAP);
 
         const statisticTimeMap = await statisticsClient.getStatistics(
@@ -226,15 +228,15 @@ describe("StatistiscClient", () => {
 
         const statisticRequest = new dataServiceRead.StatisticsRequest()
             .withLayerId(mockedLayerId)
-            .withDataLevel("12")
+            .withDataLevel(12)
             .withTypemap(dataServiceRead.CoverageDataType.BITMAP);
 
-        const statistic = await statisticsClient.getStatistics(
-            statisticRequest
-        ).catch(error => {
-            assert.isDefined(error);
-            assert.equal(mockedErrorResponse, error.message);
-        });
+        const statistic = await statisticsClient
+            .getStatistics(statisticRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.message);
+            });
     });
 
     it("Should method getStatistics return error if layerId is not provided", async () => {
@@ -246,35 +248,15 @@ describe("StatistiscClient", () => {
 
         const statisticRequest = new dataServiceRead.StatisticsRequest()
             .withCatalogHrn(mockedHRN)
-            .withDataLevel("12")
+            .withDataLevel(12)
             .withTypemap(dataServiceRead.CoverageDataType.BITMAP);
 
-        const statistic = await statisticsClient.getStatistics(
-            statisticRequest
-        ).catch(error => {
-            assert.isDefined(error);
-            assert.equal(mockedErrorResponse, error.message);
-        });
-    });
-
-    it("Should method getStatistics return error if dataLevel is not provided", async () => {
-        const mockedErrorResponse = "No dataLevel provided";
-        const statisticsClient = new dataServiceRead.StatisticsClient(
-            olpClientSettingsStub as any
-        );
-        assert.isDefined(statisticsClient);
-
-        const statisticRequest = new dataServiceRead.StatisticsRequest()
-            .withCatalogHrn(mockedHRN)
-            .withLayerId(mockedLayerId)
-            .withTypemap(dataServiceRead.CoverageDataType.BITMAP);
-
-        const statistic = await statisticsClient.getStatistics(
-            statisticRequest
-        ).catch(error => {
-            assert.isDefined(error);
-            assert.equal(mockedErrorResponse, error.message);
-        });
+        const statistic = await statisticsClient
+            .getStatistics(statisticRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.message);
+            });
     });
 
     it("Should method getStatistics return error if typemap is not provided", async () => {
@@ -287,13 +269,66 @@ describe("StatistiscClient", () => {
         const statisticRequest = new dataServiceRead.StatisticsRequest()
             .withCatalogHrn(mockedHRN)
             .withLayerId(mockedLayerId)
-            .withDataLevel("12");
+            .withDataLevel(12);
 
-        const statistic = await statisticsClient.getStatistics(
-            statisticRequest
-        ).catch(error => {
-            assert.isDefined(error);
-            assert.equal(mockedErrorResponse, error.message);
-        });
+        const statistic = await statisticsClient
+            .getStatistics(statisticRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.message);
+            });
+    });
+
+    it("Should method getStatistics provide data if dataLevel not set", async () => {
+        const mockedStatistics: Response = new Response("mocked-response");
+        const statisticsClient = new dataServiceRead.StatisticsClient(
+            olpClientSettingsStub as any
+        );
+        assert.isDefined(statisticsClient);
+        getStatisticsBitMapStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockedStatistics);
+            }
+        );
+        getStatisticsSizeMapStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockedStatistics);
+            }
+        );
+        getStatisticsTimeMapStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockedStatistics);
+            }
+        );
+
+        const statisticBitMapRequest = new dataServiceRead.StatisticsRequest()
+            .withCatalogHrn(mockedHRN)
+            .withLayerId(mockedLayerId)
+            .withTypemap(dataServiceRead.CoverageDataType.BITMAP);
+
+        const statisticBitMap = await statisticsClient.getStatistics(
+            statisticBitMapRequest
+        );
+        assert.isDefined(statisticBitMap);
+
+        const statisticSizeMapRequest = new dataServiceRead.StatisticsRequest()
+            .withCatalogHrn(mockedHRN)
+            .withLayerId(mockedLayerId)
+            .withTypemap(dataServiceRead.CoverageDataType.SIZEMAP);
+
+        const statisticSizeMap = await statisticsClient.getStatistics(
+            statisticSizeMapRequest
+        );
+        assert.isDefined(statisticSizeMap);
+
+        const statisticTimeMapRequest = new dataServiceRead.StatisticsRequest()
+            .withCatalogHrn(mockedHRN)
+            .withLayerId(mockedLayerId)
+            .withTypemap(dataServiceRead.CoverageDataType.TIMEMAP);
+
+        const statisticTimeMap = await statisticsClient.getStatistics(
+            statisticTimeMapRequest
+        );
+        assert.isDefined(statisticTimeMap);
     });
 });

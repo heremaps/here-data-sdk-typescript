@@ -130,7 +130,7 @@ export async function getDataCoverageAdminAreas(
  */
 export async function getDataCoverageSizeMap(
     builder: RequestBuilder,
-    params: { layerId: string; datalevel: string }
+    params: { layerId: string; datalevel?: number }
 ): Promise<Response> {
     const baseUrl = "/layers/{layerId}/heatmap/size".replace(
         "{layerId}",
@@ -185,7 +185,7 @@ export async function getDataCoverageSummary(
  */
 export async function getDataCoverageTile(
     builder: RequestBuilder,
-    params: { layerId: string; datalevel: string }
+    params: { layerId: string; datalevel?: number }
 ): Promise<Response> {
     const baseUrl = "/layers/{layerId}/tilemap".replace(
         "{layerId}",
@@ -213,7 +213,7 @@ export async function getDataCoverageTile(
  */
 export async function getDataCoverageTimeMap(
     builder: RequestBuilder,
-    params: { layerId: string; datalevel: string; catalogHRN: string }
+    params: { layerId: string; datalevel?: number; catalogHRN: string }
 ): Promise<Response> {
     const baseUrl = "/layers/{layerId}/heatmap/age".replace(
         "{layerId}",
