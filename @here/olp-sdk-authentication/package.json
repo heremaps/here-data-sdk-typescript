@@ -4,7 +4,7 @@
   "description": "Wrapper around the HERE Authentication and Authorization REST API obtaining short-lived access tokens that are used to authenticate requests to HERE services.",
   "main": "index.js",
   "browser": "index.web.js",
-  "typings": "index.web",
+  "typings": "index",
   "directories": {
     "test": "test",
     "lib": "lib"
