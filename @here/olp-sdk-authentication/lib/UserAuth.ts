@@ -72,7 +72,7 @@ export interface UserAuthConfig {
      * When a function imports a function using `import { requestToken }` from "@here/olp-sdk-authentication"`,
      * the code automatically applies to the corresponding function.
      *
-     * The following code is applicable for both the browser and Node.js.
+     * The following code is applicable only for Node.js.
      *
      * @example
      *

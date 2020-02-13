@@ -2,17 +2,17 @@
 
 ## Overview
 
-This repository contains all required methods and classes to request an access token for OAuth authentication.
+This repository contains all methods and classes that are required to request an access token for the OAuth authentication.
 
-## UserAuth
+## `UserAuth`
 
 ### Description
 
-UserAuth class instance is used to obtain client token by providing authentication data.
+You can use the `UserAuth` class instance with your authentication data to get a client access token.
 
 ### Configure
 
-Creating an instance of UserAuth class requires configuration object to be passed to the constructor:
+To create the `UserAuth` class, pass the configuration object to the constructor.
 
 ```typescript
 const auth = new UserAuth(config);
@@ -20,74 +20,83 @@ const auth = new UserAuth(config);
 
 ### Use with Local Authorization
 
-Create an instance of UserAuth class before instantiating any data sources:
+To use the `UserAuth` class with local authorization:
 
-```typescript
-/**
- * A function requestToken is used to obtain the access token.
- *
- * Client can provide own implementation or can use from @here/olp-sdk-authentication.
- *
- * There are two functions that work for browser and NodeJS.
- * UserAuth can use requestToken() from requestToken.web.ts for browser
- * or requestToken() from requestToken.ts for NodeJS.
- *
- * When a function imports a function using import { requestToken } from "@here/olp-sdk-authentication",
- * the code automatically applies the corresponding function that is applicable to access browser or NodeJS.
- *
- * The following code is applicable both for browser and NodeJS.
- */
+1. Create the `UserAuth` class instance before instantiating any data sources.
 
-import { UserAuth, requestToken } from "@here/olp-sdk-authentication";
+    ```typescript
+    /**
+     * The function gets the access token.
+     *
+     * You can provide your own implementation or use one from `@here/olp-sdk-authentication`.
+     *
+     * There are two functions that work for the browser and Node.js.
+     * For the browser, `UserAuth` uses `requestToken()` from requestToken.web.ts.
+     * For Node.js,`UserAuth` uses `requestToken()` from requestToken.ts.
+     *
+     * When a function imports a function using `import { requestToken }` from "@here/olp-sdk-authentication"`,
+     * the code automatically applies to the corresponding function.
+     *
+     * The following code is applicable only for Node.js.
+     */
 
-const userAuth = new UserAuth({
-    env: "here",
-    credentials: {
-        accessKeyId: "replace-with-your-access-key-id",
-        accessKeySecret: "replace-with-your-access-key-secret"
-    },
-    tokenRequester: requestToken
-});
-```
+    import { UserAuth, requestToken } from "@here/olp-sdk-authentication";
 
-Get token:
+    const userAuth = new UserAuth({
+        env: "here",
+        credentials: {
+            accessKeyId: "replace-with-your-access-key-id",
+            accessKeySecret: "replace-with-your-access-key-secret"
+        },
+        tokenRequester: requestToken
+    });
+    ```
 
-```typescript
-const token: string = await userAuth.getToken();
-```
+2. Get the access token.
 
-### Use with Credentials Imported from a File
+    ```typescript
+    const token: string = await userAuth.getToken();
+    ```
 
-Download your **credentials.properties** file from the [OLP website](https://developer.here.com/olp/documentation/access-control/user-guide/topics/get-credentials.html).
-Create an instance of UserAuth class and set the path to the file with credentials:
+### Use with Credentials Imported from a File (Node.js)
 
-```typescript
-import {
-    UserAuth,
-    requestToken,
-    loadCredentialsFromFile
-} from "@here/olp-sdk-authentication";
-const credentials = loadCredentialsFromFile(
-    "replace-with-your-path-to-credentials.properties"
-);
-const userAuth = new UserAuth({ credentials, tokenRequester: requestToken });
-```
+In Node.js, you can use the `UserAuth` class with credentials imported from the **credentials.properties** file.
 
-Notice that your credentials.properties file should match the following format:
+To use the `UserAuth` class with the credentials imported from the file:
 
-```txt
-here.user.id = "your-here-user-id"
-here.client.id = "your-here-client-id"
-here.access.key.id = "your-here-access-key-id"
-here.access.key.secret = "your-here-access-key-secret"
-here.token.endpoint.url = "your-here-token-endpoint-url"
-```
+1. Download your **credentials.properties** file from the [OLP website](https://developer.here.com/olp/documentation/access-control/user-guide/topics/get-credentials.html).
+2. Create the `UserAuth` class instance and set the path to the file with your credentials.
 
-Get token:
+    ```typescript
+    import {
+        UserAuth,
+        requestToken,
+        loadCredentialsFromFile
+    } from "@here/olp-sdk-authentication";
+    const credentials = loadCredentialsFromFile(
+        "replace-with-your-path-to-credentials.properties"
+    );
+    const userAuth = new UserAuth({
+        credentials,
+        tokenRequester: requestToken
+    });
+    ```
 
-```typescript
-const token: string = await userAuth.getToken();
-```
+    Your **credentials.properties** file should match the following format:
+
+    ```txt
+    here.user.id = "your-here-user-id"
+    here.client.id = "your-here-client-id"
+    here.access.key.id = "your-here-access-key-id"
+    here.access.key.secret = "your-here-access-key-secret"
+    here.token.endpoint.url = "your-here-token-endpoint-url"
+    ```
+
+3. Get the access token.
+
+    ```typescript
+    const token: string = await userAuth.getToken();
+    ```
 
 ### Generate a Bundle
 
@@ -99,7 +108,7 @@ To get bundled files with a source map, run:
 npm run bundle
 ```
 
-To get minified version for production, run:
+To get a minified version for production, run:
 
 ```sh
 npm run bundle:prod
@@ -113,7 +122,7 @@ npm run prepublish-bundle
 
 ### Use a Bundle from CDN
 
-Add minified JavaScript file to your `html` and create an object of userAuth:
+Add the minified JavaScript file to your `HTML` and create the `userAuth` object.
 
 ```html
 <!DOCTYPE html>
@@ -142,6 +151,6 @@ Add minified JavaScript file to your `html` and create an object of userAuth:
 
 ## LICENSE
 
-Copyright (C) 2019 HERE Europe B.V.
+Copyright (C) 2019–2020 HERE Europe B.V.
 
 For license details, see the [LICENSE](LICENSE).
