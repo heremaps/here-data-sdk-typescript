@@ -90,19 +90,20 @@ Add minified JavaScript files to your `html` and create an object of userAuth an
                 tokenRequester: requestToken
             });
             /**
-             * Create DatastoreContext with olp-sdk-dataservice-read
+             * Create the `OlpClientSettings` object
              */
-            const context = new DataStoreContext({
-                environment: "here",
+            const olpClientSettings = new OlpClientSettings({
+                environment:
+                "here | here-dev | here-cn | here-cn-dev | http://YourCustomEnvironment",
                 getToken: () => userAuth.getToken()
             });
             /**
-             * Create client to the volatile layer with olp-sdk-dataservice-read
+             * Create client to the volatile layer with VolatileLayerClientParams
              */
             const volatileLayerClient = new VolatileLayerClient({
-                context,
-                hrn: "your-catalog-hrn",
-                layerId: "your-layer-id"
+                    catalogHrn: "CatalogHRN",
+                    layerId: "LayerId",
+                    settings: olpClientSettings
             });
             /**
              * Get some partition from the layer by ID

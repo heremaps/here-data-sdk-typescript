@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,29 +37,69 @@ import {
 } from "..";
 
 /**
+ * Parameters for use to initialize VolatileLayerClient.
+ */
+export interface VolatileLayerClientParams {
+    // HRN of the catalog.
+    catalogHrn: HRN;
+    // The ID of the layer.
+    layerId: string;
+    // The [[OlpClientSettings]] instance.
+    settings: OlpClientSettings;
+}
+
+/**
  * Describes a voaltile layer and provides the possibility to get partitions metadata and data.
  */
 export class VolatileLayerClient {
     private readonly apiVersion: string = "v1";
-    /** The HERE Resource Name (HRN) of the layer. */
-    readonly hrn: string;
+
+    // The HERE Resource Name of the catalog
+    private hrn: string;
+    // The ID of the layer.
+    private layerId: string;
+    // The [[OlpClientSettings]] instance.
+    private settings: OlpClientSettings;
 
     /**
+     * @deprecated Please use the overloaded constructor of VolatileLayerClient.
+     *
      * Creates the [[VolatileLayerClient]] instance.
      *
      * @param catalogHrn The HERE Resource Name of the catalog from which you want to get partitions metadata and data.
      * @param layerId The ID of the layer.
      * @param settings The [[OlpClientSettings]] instance.
-     * @return The [[VolatileLayerClient]] instance.
+     */
+    constructor(catalogHrn: HRN, layerId: string, settings: OlpClientSettings);
+
+    /**
+     * Creates the [[VolatileLayerClient]] instance with VolatileLayerClientParams.
+     *
+     * @param params parameters for use to initialize VolatileLayerClient.
+     */
+    constructor(params: VolatileLayerClientParams);
+
+    /**
+     * Implementation for handling both constuctors.
      */
     constructor(
-        catalogHrn: HRN,
-        // The ID of the layer.
-        readonly layerId: string,
-        // The [[OlpClientSettings]] instance.
-        readonly settings: OlpClientSettings
+        paramsOrHrn: VolatileLayerClientParams | HRN,
+        layerId?: string,
+        settings?: OlpClientSettings
     ) {
-        this.hrn = catalogHrn.toString();
+        if (paramsOrHrn instanceof HRN) {
+            this.hrn = paramsOrHrn.toString();
+            if (layerId && settings instanceof OlpClientSettings) {
+                this.layerId = layerId;
+                this.settings = settings;
+            } else {
+                throw new Error("Unsupported parameters");
+            }
+        } else {
+            this.hrn = paramsOrHrn.catalogHrn.toString();
+            this.layerId = paramsOrHrn.layerId;
+            this.settings = paramsOrHrn.settings;
+        }
     }
 
     /**

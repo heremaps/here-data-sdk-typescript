@@ -153,13 +153,15 @@ To create the `VolatileLayerClient` object:
 2. Create the `OlpClientSettings` object.
    For instructions, see [Create OlpClientSettings](#create-olpclientsettings).
 
-3. Create the `VolatileLayerClient` object with the HERE Resource Name (HRN) of the catalog that contains the layer, the layer ID, and the OLP client settings.
+3. Create the `VolatileLayerClient` object with VolatileLayerClientParams that contains the HERE Resource Name (HRN) of the catalog, the layer ID, and the OLP client settings from step 2.
 
-   ```typescript
-   const volatileLayerClient = await new VolatileLayerClient()
-       hrn: "CatalogHRN",
-       layerId: "LayerId",
-       olpClientSettings
+   ```typescript   
+   const volatileLayerClient = new VolatileLayerClient(
+      {
+         catalogHrn: "CatalogHRN",
+         layerId: "LayerId",
+         settings: olpClientSettings
+      }
    );
    ```
 
