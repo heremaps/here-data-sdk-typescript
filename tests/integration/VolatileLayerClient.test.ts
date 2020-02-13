@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -844,5 +844,25 @@ describe("VolatileLayerClient", () => {
     );
 
     assert.isDefined(partitions);
+  });
+
+  it("Shoud be initialized with VolatileLayerClientParams", async () => {
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+
+    const volatileLayerClientParams = {
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
+      settings: settings
+    };
+    const volatileLayerClient = new VolatileLayerClient(
+      volatileLayerClientParams
+    );
+
+    assert.isDefined(volatileLayerClient);
+    expect(volatileLayerClient).to.be.instanceOf(VolatileLayerClient);
+    assert.equal(volatileLayerClient["hrn"], "hrn:here:data:::test-hrn");
   });
 });

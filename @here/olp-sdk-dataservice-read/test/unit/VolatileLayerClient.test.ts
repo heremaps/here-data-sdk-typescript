@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ describe("VolatileLayerClient", () => {
     let getQuadTreeIndexStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
     let volatileLayerClient: dataServiceRead.VolatileLayerClient;
+    let volatileLayerClientNew: dataServiceRead.VolatileLayerClient;
     const mockedHRN = dataServiceRead.HRN.fromString(
         "hrn:here:data:::mocked-hrn"
     );
@@ -58,6 +59,15 @@ describe("VolatileLayerClient", () => {
             mockedHRN,
             mockedLayerId,
             (settings as unknown) as dataServiceRead.OlpClientSettings
+        );
+
+        const volatileLayerClientParams = {
+            catalogHrn: mockedHRN,
+            layerId: mockedLayerId,
+            settings: (settings as unknown) as dataServiceRead.OlpClientSettings
+        };
+        volatileLayerClientNew = new dataServiceRead.VolatileLayerClient(
+            volatileLayerClientParams
         );
     });
 
@@ -78,7 +88,7 @@ describe("VolatileLayerClient", () => {
         sandbox.restore();
     });
 
-    it("Shoud be initialised", async () => {
+    it("Shoud be initialized", async () => {
         assert.isDefined(volatileLayerClient);
     });
 
@@ -713,5 +723,31 @@ describe("VolatileLayerClient", () => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.statusText);
             });
+    });
+
+    it("VolatileLayerClient instance should be initialized with VolatileLayerClientParams", async () => {
+        assert.isDefined(volatileLayerClientNew);
+        assert.equal(
+            volatileLayerClientNew["hrn"],
+            "hrn:here:data:::mocked-hrn"
+        );
+    });
+
+    it("VolatileLayerClient should throw Error when setted unsuported parameters", async () => {
+        let settings1 = sandbox.createStubInstance(
+            dataServiceRead.OlpClientSettings
+        );
+
+        assert.throws(
+            () => {
+                new dataServiceRead.VolatileLayerClient(
+                    mockedHRN,
+                    "",
+                    (settings1 as unknown) as dataServiceRead.OlpClientSettings
+                );
+            },
+            Error,
+            "Unsupported parameters"
+        );
     });
 });
