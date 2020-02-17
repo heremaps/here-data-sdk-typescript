@@ -153,13 +153,15 @@ To create the `IndexLayerClient` object:
 2. Create the `OlpClientSettings` object.
    For instructions, see [Create OlpClientSettings](#create-olpclientsettings).
 
-3. Create the `IndexLayerClient` object with the HERE Resource Name (HRN) of the catalog that contains the layer, the layer ID, and the OLP client settings from step 2.
+3. Create the `IndexLayerClient` object IndexLayerClientParams that contains the HERE Resource Name (HRN) of the catalog, the layer ID, and the OLP client settings from step 2.
 
    ```typescript
-   const indexLayerClient = await new IndexLayerClient()
-       hrn: "CatalogHRN",
-       layerId: "LayerId",
-       olpClientSettings
+   const indexLayerClient = await new IndexLayerClient(
+      {
+         catalogHrn: "CatalogHRN",
+         layerId: "LayerId",
+         settings: olpClientSettings
+      }
    );
    ```
 
