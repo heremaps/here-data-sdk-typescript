@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +56,7 @@ describe("IndexLayerClient", () => {
     fetchStub.callsFake(fetchMock.fetch());
   });
 
-  it("Shoud be initialised with settings", async () => {
+  it("Shoud be initialized with settings", async () => {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -221,5 +221,23 @@ describe("IndexLayerClient", () => {
 
     assert.isDefined(data);
     expect(fetchStub.callCount).to.be.equal(2);
+  });
+
+  it("Shoud be initialized with IndexLayerClientParams", async () => {
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+
+    const indexLayerClientParams = {
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
+      settings: settings
+    };
+    const indexLayerClient = new IndexLayerClient(indexLayerClientParams);
+
+    assert.isDefined(indexLayerClient);
+    expect(indexLayerClient).to.be.instanceOf(IndexLayerClient);
+    assert.equal(indexLayerClient["hrn"], "hrn:here:data:::test-hrn");
   });
 });

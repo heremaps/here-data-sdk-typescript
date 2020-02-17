@@ -28,12 +28,32 @@ import {
 } from "..";
 
 /**
+ * Parameters for use to initialize IndexLayerClient.
+ */
+export interface IndexLayerClientParams {
+    // HRN of the catalog.
+    catalogHrn: HRN;
+    // The ID of the layer.
+    layerId: string;
+    // The [[OlpClientSettings]] instance.
+    settings: OlpClientSettings;
+}
+
+/**
  * Describes a index layer and provides the possibility to get partitions metadata and data.
  */
 export class IndexLayerClient {
     private readonly apiVersion: string = "v1";
+    // The HERE Resource Name of the catalog
+    private hrn: string;
+    // The ID of the layer.
+    private layerId: string;
+    // The [[OlpClientSettings]] instance.
+    private settings: OlpClientSettings;
 
     /**
+     * @deprecated Please use the overloaded constructor of IndexLayerClient.
+     *
      * Creates the [[IndexLayerClient]] instance.
      *
      * @param catalogHrn The HERE Resource Name (HRN) of the catalog from which you want to get partitions metadata and data.
@@ -41,11 +61,37 @@ export class IndexLayerClient {
      * @param settings The [[OlpClientSettings]] instance.
      * @return The [[IndexLayerClient]] instance.
      */
+    constructor(catalogHrn: HRN, layerId: string, settings: OlpClientSettings);
+
+    /**
+     * Creates the [[IndexLayerClient]] instance with IndexLayerClientParams.
+     *
+     * @param params parameters for use to initialize IndexLayerClient.
+     */
+    constructor(params: IndexLayerClientParams);
+
+    /**
+     * Implementation for handling both constuctors.
+     */
     constructor(
-        readonly catalogHrn: HRN,
-        readonly layerId: string,
-        readonly settings: OlpClientSettings
-    ) {}
+        paramsOrHrn: IndexLayerClientParams | HRN,
+        layerId?: string,
+        settings?: OlpClientSettings
+    ) {
+        if (paramsOrHrn instanceof HRN) {
+            this.hrn = paramsOrHrn.toString();
+            if (layerId && settings instanceof OlpClientSettings) {
+                this.layerId = layerId;
+                this.settings = settings;
+            } else {
+                throw new Error("Unsupported parameters");
+            }
+        } else {
+            this.hrn = paramsOrHrn.catalogHrn.toString();
+            this.layerId = paramsOrHrn.layerId;
+            this.settings = paramsOrHrn.settings;
+        }
+    }
 
     /**
      * Fetches all partitions metadata from a layer that match a query from the [[IndexQueryRequest]] instance.
@@ -69,7 +115,7 @@ export class IndexLayerClient {
 
         const requestBuilder = await this.getRequestBuilder(
             "index",
-            this.catalogHrn,
+            HRN.fromString(this.hrn),
             abortSignal
         ).catch(err => Promise.reject(err));
 
@@ -107,7 +153,7 @@ export class IndexLayerClient {
 
         const builder = await this.getRequestBuilder(
             "blob",
-            this.catalogHrn,
+            HRN.fromString(this.hrn),
             abortSignal
         ).catch(err => Promise.reject(err));
 

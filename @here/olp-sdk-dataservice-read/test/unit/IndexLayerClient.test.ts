@@ -35,6 +35,7 @@ describe("IndexLayerClient", () => {
     let getIndexStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
     let indexLayerClient: dataServiceRead.IndexLayerClient;
+    let indexLayerClientNew: dataServiceRead.IndexLayerClient;
     const mockedHRN = dataServiceRead.HRN.fromString(
         "hrn:here:data:::mocked-hrn"
     );
@@ -50,6 +51,15 @@ describe("IndexLayerClient", () => {
             mockedHRN,
             mockedLayerId,
             (settings as unknown) as dataServiceRead.OlpClientSettings
+        );
+
+        const indexLayerClientParams = {
+            catalogHrn: mockedHRN,
+            layerId: mockedLayerId,
+            settings: (settings as unknown) as dataServiceRead.OlpClientSettings
+        };
+        indexLayerClientNew = new dataServiceRead.IndexLayerClient(
+            indexLayerClientParams
         );
     });
 
@@ -67,7 +77,7 @@ describe("IndexLayerClient", () => {
         sandbox.restore();
     });
 
-    it("Shoud be initialised", async () => {
+    it("Shoud be initialized", async () => {
         assert.isDefined(indexLayerClient);
         expect(indexLayerClient).be.instanceOf(
             dataServiceRead.IndexLayerClient
@@ -336,5 +346,28 @@ describe("IndexLayerClient", () => {
                 expect(err.message).to.be.equal("Test Error");
                 expect(err.name).to.be.equal("HttpError");
             });
+    });
+
+    it("IndexLayerClient instance should be initialized with IndexLayerClientParams", async () => {
+        assert.isDefined(indexLayerClientNew);
+        assert.equal(indexLayerClientNew["hrn"], "hrn:here:data:::mocked-hrn");
+    });
+
+    it("IndexLayerClient should throw Error when setted unsuported parameters", async () => {
+        let settings1 = sandbox.createStubInstance(
+            dataServiceRead.OlpClientSettings
+        );
+
+        assert.throws(
+            () => {
+                new dataServiceRead.IndexLayerClient(
+                    mockedHRN,
+                    "",
+                    (settings1 as unknown) as dataServiceRead.OlpClientSettings
+                );
+            },
+            Error,
+            "Unsupported parameters"
+        );
     });
 });
