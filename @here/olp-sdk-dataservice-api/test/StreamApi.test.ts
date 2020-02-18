@@ -57,16 +57,16 @@ describe("StreamApi", () => {
     });
 
     it("Should subscribe works as expected", async () => {
-        const builder = {
+        const builder = ({
             baseUrl: "http://mocked.url",
-            request: async (urlBuilder: UrlBuilder, options: any) => {
+            requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
                 expect(urlBuilder.url).to.be.equal(
                     "http://mocked.url/layers/mocked-id/subscribe?mode=parallel&subscriptionId=testSubsId&consumerId=testConsumerId"
                 );
                 expect(options.method).to.be.equal("POST");
                 return Promise.resolve();
             }
-        } as RequestBuilder;
+        } as unknown) as RequestBuilder;
 
         await StreamApi.subscribe(builder, {
             layerId: "mocked-id",
@@ -81,16 +81,16 @@ describe("StreamApi", () => {
     });
 
     it("Should consumeData works as expected", async () => {
-        const builder = {
+        const builder = ({
             baseUrl: "http://mocked.url",
-            request: async (urlBuilder: UrlBuilder, options: any) => {
+            requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
                 expect(urlBuilder.url).to.be.equal(
                     "http://mocked.url/layers/mocked-id/partitions?subscriptionId=testSubsId&mode=parallel"
                 );
                 expect(options.method).to.be.equal("GET");
                 return Promise.resolve();
             }
-        } as RequestBuilder;
+        } as unknown) as RequestBuilder;
 
         await StreamApi.consumeData(builder, {
             layerId: "mocked-id",

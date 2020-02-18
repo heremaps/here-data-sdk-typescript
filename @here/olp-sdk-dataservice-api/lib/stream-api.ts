@@ -240,7 +240,7 @@ export async function consumeData(
         mode?: "serial" | "parallel";
         xCorrelationId?: string;
     }
-): Promise<ConsumeDataResponse> {
+): Promise<Response> {
     const baseUrl = "/layers/{layerId}/partitions".replace(
         "{layerId}",
         UrlBuilder.toString(params["layerId"])
@@ -259,7 +259,7 @@ export async function consumeData(
         headers["X-Correlation-Id"] = params["xCorrelationId"] as string;
     }
 
-    return builder.request<ConsumeDataResponse>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }
 
 /**
@@ -434,7 +434,7 @@ export async function subscribe(
         consumerId?: string;
         subscriptionProperties?: ConsumerProperties;
     }
-): Promise<ConsumerSubscribeResponse> {
+): Promise<Response> {
     const baseUrl = "/layers/{layerId}/subscribe".replace(
         "{layerId}",
         UrlBuilder.toString(params["layerId"])
@@ -457,5 +457,5 @@ export async function subscribe(
         });
     }
 
-    return builder.request<ConsumerSubscribeResponse>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }
