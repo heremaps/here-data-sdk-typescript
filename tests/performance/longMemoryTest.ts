@@ -21,7 +21,7 @@ import { getDataMemoryTest } from "./getDataMemoryTest";
 
 getDataMemoryTest({
   requestsPerSecond: 12,
-  runTimeSeconds: 60 * 60 * 10
+  runTimeSeconds: 60 * 60
 }).then(_ => {
   console.log("Long memory test done.");
 });
