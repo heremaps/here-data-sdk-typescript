@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { StreamApi } from "@here/olp-sdk-dataservice-api";
+import { BlobApi, StreamApi } from "@here/olp-sdk-dataservice-api";
 import {
     ApiName,
     DataStoreRequestBuilder,
@@ -200,5 +200,38 @@ export class StreamLayerClient {
             hrn,
             abortSignal
         );
+    }
+
+    /**
+     * Fetches partition data using data handle.
+     *
+     * @param message The message data of partition metadata.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @return The data from the requested partition.
+     */
+    public async getData(
+        message: StreamApi.Message,
+        abortSignal?: AbortSignal
+    ): Promise<Response> {
+        if (!message.metaData || !message.metaData.dataHandle) {
+            return Promise.reject(
+                new Error("No data handle for this partition")
+            );
+        }
+
+        const builder = await this.getRequestBuilder(
+            "blob",
+            this.catalogHrn,
+            abortSignal
+        ).catch(err => Promise.reject(err));
+
+        return BlobApi.getBlob(builder, {
+            dataHandle: message.metaData.dataHandle,
+            layerId: this.layerId
+        });
     }
 }

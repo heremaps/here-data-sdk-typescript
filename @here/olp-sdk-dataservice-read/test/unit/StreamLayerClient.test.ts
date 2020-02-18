@@ -22,7 +22,9 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
-import { StreamApi } from "@here/olp-sdk-dataservice-api";
+
+import { BlobApi, StreamApi, HttpError } from "@here/olp-sdk-dataservice-api";
+import { SubscribeRequest } from "../../lib";
 
 chai.use(sinonChai);
 
@@ -35,6 +37,7 @@ describe("StreamLayerClient", () => {
     let subscribeStub: sinon.SinonStub;
     let pollStub: sinon.SinonStub;
     let commitOffsetsStub: sinon.SinonStub;
+    let getBlobStub: sinon.SinonStub;
     let streamLayerClient: dataServiceRead.StreamLayerClient;
     const mockedHRN = dataServiceRead.HRN.fromString(
         "hrn:here:data:::mocked-hrn"
@@ -56,6 +59,7 @@ describe("StreamLayerClient", () => {
     });
 
     beforeEach(() => {
+        getBlobStub = sandbox.stub(BlobApi, "getBlob");
         subscribeStub = sandbox.stub(StreamApi, "subscribe");
         pollStub = sandbox.stub(StreamApi, "consumeData");
         commitOffsetsStub = sandbox.stub(StreamApi, "commitOffsets");
@@ -70,7 +74,7 @@ describe("StreamLayerClient", () => {
         sandbox.restore();
     });
 
-    it("Shoud be initialised", async () => {
+    it("Shoud be initialized", async () => {
         assert.isDefined(streamLayerClient);
         expect(streamLayerClient).be.instanceOf(
             dataServiceRead.StreamLayerClient
@@ -260,16 +264,169 @@ describe("StreamLayerClient", () => {
         const mockedErrorResponse = "Bad response";
         const request = new dataServiceRead.PollRequest();
 
-        getBaseUrlRequestStub.callsFake(() =>
-            Promise.reject({
-                status: 400,
-                statusText: "Bad response"
-            })
-        );
+        it("Should method getData call API with correct arguments", async () => {
+            const mockedBlobData: Response = new Response(
+                "mocked-blob-response"
+            );
+            const mockedMessage = {
+                metaData: {
+                    partition: "314010583",
+                    checksum: "ff7494d6f17da702862e550c907c0a91",
+                    compressedDataSize: 152417,
+                    dataSize: 250110,
+                    data: "",
+                    dataHandle:
+                        "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAABhQTFRFvb29AACEAP8AhIKEPb5x2m9E5413aFQirhRuvAMqCw+6kE2BVsa8miQaYSKyshxFvhqdzKx8UsPYk9gDEcY1ghZXcPbENtax8g5T+3zHYufF1Lf9HdIZBfNEiKAAAAAElFTkSuQmCC",
+                    timestamp: 1517916706
+                },
+                offset: {
+                    partition: 7,
+                    offset: 38562
+                }
+            };
+            getBlobStub.callsFake(
+                (builder: any, params: any): Promise<Response> => {
+                    return Promise.resolve(mockedBlobData);
+                }
+            );
 
-        const messages = await streamLayerClient.poll(request).catch(error => {
-            assert.isDefined(error);
-            assert.equal(mockedErrorResponse, error.statusText);
+            await streamLayerClient.getData(mockedMessage);
+            expect(getBlobStub.getCalls()[0].args[1].dataHandle).to.be.equal(
+                mockedMessage.metaData.dataHandle
+            );
+        });
+
+        it("Should method getData return Error without parameters", async () => {
+            const mockedMessage = {
+                metaData: {
+                    partition: "314010583"
+                },
+                offset: {
+                    partition: 7,
+                    offset: 38562
+                }
+            };
+
+            const mockedErrorResponse = {
+                message: "No data handle for this partition"
+            };
+
+            await streamLayerClient.getData(mockedMessage).catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse.message, error.message);
+            });
+        });
+
+        it("Should error be handled", async () => {
+            const mockedMessage = {
+                metaData: {
+                    partition: "314010583",
+                    checksum: "ff7494d6f17da702862e550c907c0a91",
+                    compressedDataSize: 152417,
+                    dataSize: 250110,
+                    data: "",
+                    dataHandle:
+                        "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAABhQTFRFvb29AACEAP8AhIKEPb5x2m9E5413aFQirhRuvAMqCw+6kE2BVsa8miQaYSKyshxFvhqdzKx8UsPYk9gDEcY1ghZXcPbENtax8g5T+3zHYufF1Lf9HdIZBfNEiKAAAAAElFTkSuQmCC",
+                    timestamp: 1517916706
+                },
+                offset: {
+                    partition: 7,
+                    offset: 38562
+                }
+            };
+
+            const mockedErrorResponse = "mocked-error";
+
+            getBlobStub.callsFake(
+                (builder: any, params: any): Promise<Response> => {
+                    return Promise.reject("mocked-error");
+                }
+            );
+
+            const response = await streamLayerClient
+                .getData(mockedMessage)
+                .catch(error => {
+                    assert.isDefined(error);
+                    assert.equal(mockedErrorResponse, error);
+                });
+        });
+
+        it("Should base url error be handled", async () => {
+            const mockedMessage = {
+                metaData: {
+                    partition: "314010583",
+                    checksum: "ff7494d6f17da702862e550c907c0a91",
+                    compressedDataSize: 152417,
+                    dataSize: 250110,
+                    data: "",
+                    dataHandle:
+                        "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAABhQTFRFvb29AACEAP8AhIKEPb5x2m9E5413aFQirhRuvAMqCw+6kE2BVsa8miQaYSKyshxFvhqdzKx8UsPYk9gDEcY1ghZXcPbENtax8g5T+3zHYufF1Lf9HdIZBfNEiKAAAAAElFTkSuQmCC",
+                    timestamp: 1517916706
+                },
+                offset: {
+                    partition: 7,
+                    offset: 38562
+                }
+            };
+            const mockedErrorResponse = "Bad response";
+
+            getBaseUrlRequestStub.callsFake(() =>
+                Promise.reject({
+                    status: 400,
+                    statusText: "Bad response"
+                })
+            );
+
+            const messages = await streamLayerClient
+                .poll(request)
+                .catch(error => {
+                    assert.isDefined(error);
+                    assert.equal(mockedErrorResponse, error.statusText);
+                });
+
+            const response = await streamLayerClient
+                .getData(mockedMessage)
+                .catch(error => {
+                    assert.isDefined(error);
+                    assert.equal(mockedErrorResponse, error.statusText);
+                });
+        });
+
+        it("Should HttpError be handled", async () => {
+            const TEST_ERROR_CODE = 404;
+            const mockedError = new HttpError(TEST_ERROR_CODE, "Test Error");
+
+            const mockedMessage = {
+                metaData: {
+                    partition: "314010583",
+                    checksum: "ff7494d6f17da702862e550c907c0a91",
+                    compressedDataSize: 152417,
+                    dataSize: 250110,
+                    data: "",
+                    dataHandle:
+                        "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAABhQTFRFvb29AACEAP8AhIKEPb5x2m9E5413aFQirhRuvAMqCw+6kE2BVsa8miQaYSKyshxFvhqdzKx8UsPYk9gDEcY1ghZXcPbENtax8g5T+3zHYufF1Lf9HdIZBfNEiKAAAAAElFTkSuQmCC",
+                    timestamp: 1517916706
+                },
+                offset: {
+                    partition: 7,
+                    offset: 38562
+                }
+            };
+
+            getBlobStub.callsFake(
+                (builder: any, params: any): Promise<Response> => {
+                    return Promise.reject(mockedError);
+                }
+            );
+
+            const response = await streamLayerClient
+                .getData(mockedMessage)
+                .catch(err => {
+                    assert.isDefined(err);
+                    expect(err.status).to.be.equal(TEST_ERROR_CODE);
+                    expect(err.message).to.be.equal("Test Error");
+                    expect(err.name).to.be.equal("HttpError");
+                });
         });
     });
 });
