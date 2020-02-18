@@ -17,36 +17,19 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-###################################################
-# Following script is for SDK building verification
-###################################################
+# Test the publish process of SDK, by running dry run test
+echo ">>> Testing ... >>>"
 
-# Install main dependencies
-yarn
+# olp-sdk-authentication publish test dry-run
+cd @here/olp-sdk-authentication && npm install && npm publish --dry-run && cd -
 
-# Initialize lerna monorepo with yarn workspaces
-yarn bootstrap
+# olp-sdk-dataservice-read publish test dry-run
+cd @here/olp-sdk-dataservice-read && npm install && npm publish --dry-run && cd -
 
-# Build the project
-npm run build
+# olp-sdk-dataservice-api publish test dry-run
+cd @here/olp-sdk-dataservice-api && npm install && npm publish --dry-run && cd -
 
-# Generate bundles and typedocs
-npm run bundle
-npm run typedoc
+# olp-sdk-fetch publish test dry-run
+cd @here/olp-sdk-fetch && npm install && npm publish --dry-run && cd -
 
-# Check the lints
-npm run lint
-
-# Run tests
-npm run test
-
-# Generate and upload codecov
-npm run codecov && npx codecov
-
-# Integration tests
-npm run integration-test
-
-# Test the generated bundles
-npm run test-generated-bundles
-
-
+echo ">>> Testing SDK done... >>>"

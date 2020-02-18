@@ -30,7 +30,7 @@ echo ">>> Building SDK done... >>>"
 
 # Start local server
 echo ">>> Local Server starting for further performance test ... >>>"
-node tests/utils/mocked-olp-server/server.js & SERVER_PID=$!
+node tests/utils/mocked-olp-server/server.js > /dev/null 2>/dev/null & SERVER_PID=$!
 
 # Node can start server in 1 second, but not faster.
 # Add waiter for server to be started. No other way to solve that.
@@ -80,5 +80,5 @@ ls -la
 
 # Gracefully stop local server
 kill -15 ${SERVER_PID}
-# Waiter for server process to be exited correctly
-wait ${SERVER_PID}
+# Waiter for all processes to be exited correctly
+wait
