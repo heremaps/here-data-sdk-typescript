@@ -130,11 +130,11 @@ describe("RequestFactory", () => {
     describe("create()", () => {
         it("Should return created RequestBuilder with correct base url for platform service", async () => {
             sandbox
-                .stub(dataServiceApi.LookupApi, "platformAPI")
+                .stub(dataServiceApi.LookupApi, "platformAPIList")
                 .callsFake(() =>
                     Promise.resolve([
                         {
-                            api: "test-api",
+                            api: "statistics",
                             version: "v1",
                             baseURL:
                                 "test-base-url-to-platform-service-for-request-builder"
@@ -155,15 +155,12 @@ describe("RequestFactory", () => {
         });
 
         it("Should reject with correct error about base url", async () => {
-            sandbox.stub(dataServiceApi.LookupApi, "platformAPI").callsFake(
+            sandbox.stub(dataServiceApi.LookupApi, "platformAPIList").callsFake(
                 () =>
-                    Promise.resolve([
-                        {
-                            api: "test-api",
-                            version: "v1",
-                            baseURL: undefined
-                        }
-                    ]) as any
+                    Promise.resolve({
+                        status: 204,
+                        title: "No content"
+                    }) as any
             );
 
             const settings = new MockedOlpClientSettings();
@@ -175,9 +172,7 @@ describe("RequestFactory", () => {
                     settings as any
                 );
             } catch (error) {
-                expect(error).to.be.equal(
-                    "Getting API statistics unknown error"
-                );
+                expect(error.message).to.be.equal("No content");
             }
         });
     });
@@ -185,11 +180,11 @@ describe("RequestFactory", () => {
     describe("getBaseUrl()", () => {
         it("Should return correct base url for platform service", async () => {
             sandbox
-                .stub(dataServiceApi.LookupApi, "platformAPI")
+                .stub(dataServiceApi.LookupApi, "platformAPIList")
                 .callsFake(() =>
                     Promise.resolve([
                         {
-                            api: "test-api",
+                            api: "statistics",
                             version: "v1",
                             baseURL: "test-base-url-to-platform-service"
                         }
@@ -206,13 +201,13 @@ describe("RequestFactory", () => {
 
         it("Should return correct base url for resource service", async () => {
             sandbox
-                .stub(dataServiceApi.LookupApi, "resourceAPI")
+                .stub(dataServiceApi.LookupApi, "resourceAPIList")
                 .callsFake(() =>
                     Promise.resolve([
                         {
-                            api: "test-api",
+                            api: "statistics",
                             version: "v1",
-                            baseURL: "test-base-url-to-resource-cervice"
+                            baseURL: "test-base-url-to-resource-service"
                         }
                     ])
                 );
@@ -228,16 +223,16 @@ describe("RequestFactory", () => {
                     service: "here-test-service"
                 }) as any
             );
-            expect(baseUrl).to.be.equal("test-base-url-to-resource-cervice");
+            expect(baseUrl).to.be.equal("test-base-url-to-resource-service");
         });
 
         it("Should reject with correct error message", async () => {
             sandbox
-                .stub(dataServiceApi.LookupApi, "platformAPI")
+                .stub(dataServiceApi.LookupApi, "platformAPIList")
                 .callsFake(() =>
                     Promise.resolve({
                         status: 404,
-                        title: "Not Found",
+                        title: "Service Not Found",
                         detail: []
                     })
                 );
@@ -249,19 +244,37 @@ describe("RequestFactory", () => {
                     settings as any
                 );
             } catch (error) {
-                expect(error).to.be.equal("Getting API error: Not Found");
+                expect(error.message).to.be.equal("Service Not Found");
             }
         });
 
-        it("Should reject with unknown error message", async () => {
+        it("Should reject with correct custom error message", async () => {
             sandbox
-                .stub(dataServiceApi.LookupApi, "platformAPI")
+                .stub(dataServiceApi.LookupApi, "platformAPIList")
+                .callsFake(() => Promise.resolve({}));
+            const settings = new MockedOlpClientSettings();
+            try {
+                await dataServiceRead.RequestFactory.getBaseUrl(
+                    "statistics",
+                    "v1",
+                    settings as any
+                );
+            } catch (error) {
+                expect(error.message).to.be.equal("No content");
+            }
+        });
+
+        it("Should reject with not found error message", async () => {
+            sandbox
+                .stub(dataServiceApi.LookupApi, "platformAPIList")
                 .callsFake(() =>
-                    Promise.resolve({
-                        status: 500,
-                        title: "Internal server error",
-                        detail: []
-                    })
+                    Promise.resolve([
+                        {
+                            api: "metadata",
+                            version: "v1",
+                            baseURL: "test-base-url-to-platform-service"
+                        }
+                    ])
                 );
             const settings = new MockedOlpClientSettings();
             try {
@@ -271,8 +284,38 @@ describe("RequestFactory", () => {
                     settings as any
                 );
             } catch (error) {
-                expect(error).to.be.equal(
-                    "Getting API statistics unknown error"
+                expect(error.status).to.be.equal(404);
+            }
+        });
+
+        it("Should reject with not found error message for hrn", async () => {
+            sandbox
+                .stub(dataServiceApi.LookupApi, "resourceAPIList")
+                .callsFake(() =>
+                    Promise.resolve([
+                        {
+                            api: "metadata",
+                            version: "v1",
+                            baseURL: "test-base-url-to-platform-service"
+                        }
+                    ])
+                );
+            const settings = new MockedOlpClientSettings();
+            try {
+                await dataServiceRead.RequestFactory.getBaseUrl(
+                    "statistics",
+                    "v1",
+                    settings as any,
+                    new MockedHrn({
+                        partition: "here-dev",
+                        resource: "here-test-resource",
+                        service: "here-test-service"
+                    }) as any
+                );
+            } catch (error) {
+                expect(error.status).to.be.equal(404);
+                expect(error.message).to.be.equal(
+                    "No BaseUrl found for statistics, v1 hrn:here-dev:here-test-service:::here-test-resource"
                 );
             }
         });
@@ -280,11 +323,11 @@ describe("RequestFactory", () => {
         it("Should return correct base url for resource service from cache", async () => {
             const resourceApiStub = sandbox.stub(
                 dataServiceApi.LookupApi,
-                "resourceAPI"
+                "resourceAPIList"
             );
             const platformApiStub = sandbox.stub(
                 dataServiceApi.LookupApi,
-                "platformAPI"
+                "platformAPIList"
             );
             const settings = new MockedOlpClientSettings();
             settings.cache.set("statistics-v1", "test-cached-service-url");
