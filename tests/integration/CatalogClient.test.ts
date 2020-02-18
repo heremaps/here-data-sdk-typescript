@@ -75,7 +75,7 @@ describe("CatalogClient", () => {
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
@@ -174,7 +174,7 @@ describe("CatalogClient", () => {
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
@@ -292,7 +292,7 @@ describe("CatalogClient", () => {
     const request = new CatalogVersionRequest();
 
     let versionsResponse = await catalogClient.getVersions(request);
-    
+
     assert.isDefined(versionsResponse);
 
     expect(versionsResponse.versions[0].version).to.be.equal(1);
@@ -309,7 +309,7 @@ describe("CatalogClient", () => {
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis/config/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis`,
       new Response(
         JSON.stringify([
           {
@@ -373,7 +373,7 @@ describe("CatalogClient", () => {
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis/config/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis`,
       new Response(
         JSON.stringify([
           {

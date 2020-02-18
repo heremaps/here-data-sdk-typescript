@@ -72,7 +72,7 @@ describe("ArtifactClient", () => {
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis/artifact/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis`,
       new Response(
         JSON.stringify([
           {
@@ -141,7 +141,9 @@ describe("ArtifactClient", () => {
     // Setup the fetch to use mocked responses.
     fetchMock.withMockedResponses(mockedResponses);
 
-    const request = new SchemaDetailsRequest().withSchema(HRN.fromString("hrn:here:schema:::com.here.schema.mock:test_v2:2.38.0"));
+    const request = new SchemaDetailsRequest().withSchema(
+      HRN.fromString("hrn:here:schema:::com.here.schema.mock:test_v2:2.38.0")
+    );
 
     const response = await artifactClient.getSchemaDetails(request);
 
@@ -154,7 +156,7 @@ describe("ArtifactClient", () => {
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis/artifact/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis`,
       new Response(
         JSON.stringify([
           {

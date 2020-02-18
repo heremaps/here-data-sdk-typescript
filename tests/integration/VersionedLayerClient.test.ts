@@ -101,7 +101,7 @@ describe("VersionedLayerClient", () => {
     const versionedLayerClientParams = {
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
-      settings: settings
+      settings
     };
     const layerClientWithoutVersion = new VersionedLayerClient(
       versionedLayerClientParams
@@ -115,7 +115,7 @@ describe("VersionedLayerClient", () => {
 
     // Set the response from lookup api with the info about Query API.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/query/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
@@ -127,9 +127,24 @@ describe("VersionedLayerClient", () => {
               additionalProp2: "string",
               additionalProp3: "string"
             }
+          },
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://query.data.api.platform.here.com/metadata/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
           }
         ])
       )
+    );
+
+    mockedResponses.set(
+      `https://query.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
+      new Response(JSON.stringify({ version: 128 }))
     );
 
     // Set the response with mocked partitions for IDs 100 and 1000 from Query service
@@ -159,30 +174,6 @@ describe("VersionedLayerClient", () => {
           ]
         })
       )
-    );
-
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "metadata",
-            version: "v1",
-            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ])
-      )
-    );
-
-    // Set the response from Metadata service with the info about latest catalog version.
-    mockedResponses.set(
-      `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 128 }))
     );
 
     // Setup the fetch to use mocked responses.
@@ -221,10 +212,12 @@ describe("VersionedLayerClient", () => {
       expect(partitions.partitions[2]).to.be.undefined;
 
       /**
-       * Check if the count of requests are as expected. Should be called 2 times. One to the lookup service
-       * for the baseURL to the Query service and another one to the query service.
+       * Check if the count of requests are as expected. Should be called 3 times.
+       * One to the lookup service
+       * for the baseURL to the Query service, one for the latest version,
+       * and last one to the query service.
        */
-      expect(fetchStub.callCount).to.be.equal(4);
+      expect(fetchStub.callCount).to.be.equal(3);
     }
   });
 
@@ -233,7 +226,7 @@ describe("VersionedLayerClient", () => {
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
@@ -341,8 +334,10 @@ describe("VersionedLayerClient", () => {
     }
 
     /**
-     * Check if the count of requests are as expected. Should be called 3 times. One to the lookup service
-     * for the baseURL to the Metadata service, the second one to the Metadata service for getting the latest version
+     * Check if the count of requests are as expected.
+     * Should be called 3 times. One to the lookup service
+     * for the baseURL to the Metadata service, the second
+     * one to the Metadata service for getting the latest version
      * of catalog and another one to the metadata service for the partitions metadata.
      */
     expect(fetchStub.callCount).to.be.equal(3);
@@ -355,13 +350,23 @@ describe("VersionedLayerClient", () => {
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/blob/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
             api: "blob",
             version: "v1",
             baseURL: "https://blob.data.api.platform.here.com/blob/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          },
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
             parameters: {
               additionalProp1: "string",
               additionalProp2: "string",
@@ -376,24 +381,6 @@ describe("VersionedLayerClient", () => {
     mockedResponses.set(
       `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/1b2ca68f-d4a0-4379-8120-cd025640510c`,
       new Response(mockedData)
-    );
-
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "metadata",
-            version: "v1",
-            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ])
-      )
     );
 
     // Set the response from Metadata service with the info about latest catalog version.
@@ -419,7 +406,7 @@ describe("VersionedLayerClient", () => {
     const data = await layerClient.getData(request);
 
     assert.isDefined(data);
-    expect(fetchStub.callCount).to.be.equal(4);
+    expect(fetchStub.callCount).to.be.equal(3);
   });
 
   it("Shoud be fetched data with PartitionId", async () => {
@@ -453,9 +440,19 @@ describe("VersionedLayerClient", () => {
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
+          {
+            api: "query",
+            version: "v1",
+            baseURL: "https://query.data.api.platform.here.com/query/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          },
           {
             api: "metadata",
             version: "v1",
@@ -465,39 +462,11 @@ describe("VersionedLayerClient", () => {
               additionalProp2: "string",
               additionalProp3: "string"
             }
-          }
-        ])
-      )
-    );
-
-    // Set the response from lookup api with the info about Metadata service.
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/blob/v1`,
-      new Response(
-        JSON.stringify([
+          },
           {
             api: "blob",
             version: "v1",
             baseURL: "https://blob.data.api.platform.here.com/blob/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ])
-      )
-    );
-
-    // Set the response from lookup api with the info about Query API.
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/query/v1`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "query",
-            version: "v1",
-            baseURL: "https://query.data.api.platform.here.com/query/v1",
             parameters: {
               additionalProp1: "string",
               additionalProp2: "string",
@@ -531,7 +500,7 @@ describe("VersionedLayerClient", () => {
     const data = await layerClient.getData(request);
 
     assert.isDefined(data);
-    expect(fetchStub.callCount).to.be.equal(6);
+    expect(fetchStub.callCount).to.be.equal(4);
   });
 
   it("Shoud be fetched data with PartitionId and version", async () => {
@@ -560,7 +529,7 @@ describe("VersionedLayerClient", () => {
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/blob/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
@@ -572,20 +541,21 @@ describe("VersionedLayerClient", () => {
               additionalProp2: "string",
               additionalProp3: "string"
             }
-          }
-        ])
-      )
-    );
-
-    // Set the response from lookup api with the info about Query API.
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/query/v1`,
-      new Response(
-        JSON.stringify([
+          },
           {
             api: "query",
             version: "v1",
             baseURL: "https://query.data.api.platform.here.com/query/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          },
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
             parameters: {
               additionalProp1: "string",
               additionalProp2: "string",
@@ -600,24 +570,6 @@ describe("VersionedLayerClient", () => {
     mockedResponses.set(
       `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/3C3BE24A341D82321A9BA9075A7EF498.123`,
       new Response(mockedData)
-    );
-
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "metadata",
-            version: "v1",
-            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ])
-      )
     );
 
     // Set the response from Metadata service with the info about latest catalog version.
@@ -645,7 +597,7 @@ describe("VersionedLayerClient", () => {
     const data = await layerClient.getData(request);
 
     assert.isDefined(data);
-    expect(fetchStub.callCount).to.be.equal(6);
+    expect(fetchStub.callCount).to.be.equal(4);
   });
 
   it("Shoud be fetched data with QuadKey", async () => {
@@ -681,7 +633,7 @@ describe("VersionedLayerClient", () => {
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
@@ -693,16 +645,7 @@ describe("VersionedLayerClient", () => {
               additionalProp2: "string",
               additionalProp3: "string"
             }
-          }
-        ])
-      )
-    );
-
-    // Set the response from lookup api with the info about Metadata service.
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/blob/v1`,
-      new Response(
-        JSON.stringify([
+          },
           {
             api: "blob",
             version: "v1",
@@ -712,16 +655,7 @@ describe("VersionedLayerClient", () => {
               additionalProp2: "string",
               additionalProp3: "string"
             }
-          }
-        ])
-      )
-    );
-
-    // Set the response from lookup api with the info about Query API.
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/query/v1`,
-      new Response(
-        JSON.stringify([
+          },
           {
             api: "query",
             version: "v1",
@@ -759,7 +693,7 @@ describe("VersionedLayerClient", () => {
     const data = await layerClient.getData(request);
 
     assert.isDefined(data);
-    expect(fetchStub.callCount).to.be.equal(6);
+    expect(fetchStub.callCount).to.be.equal(4);
   });
 
   it("Shoud be fetched data with QuadKey and Version", async () => {
@@ -790,7 +724,7 @@ describe("VersionedLayerClient", () => {
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/blob/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
@@ -802,20 +736,21 @@ describe("VersionedLayerClient", () => {
               additionalProp2: "string",
               additionalProp3: "string"
             }
-          }
-        ])
-      )
-    );
-
-    // Set the response from lookup api with the info about Query API.
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/query/v1`,
-      new Response(
-        JSON.stringify([
+          },
           {
             api: "query",
             version: "v1",
             baseURL: "https://query.data.api.platform.here.com/query/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          },
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
             parameters: {
               additionalProp1: "string",
               additionalProp2: "string",
@@ -830,24 +765,6 @@ describe("VersionedLayerClient", () => {
     mockedResponses.set(
       `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/c9116bb9-7d00-44bf-9b26-b4ab4c274665`,
       new Response(mockedData)
-    );
-
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "metadata",
-            version: "v1",
-            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ])
-      )
     );
 
     // Set the response from Metadata service with the info about latest catalog version.
@@ -875,7 +792,7 @@ describe("VersionedLayerClient", () => {
     const data = await layerClient.getData(request);
 
     assert.isDefined(data);
-    expect(fetchStub.callCount).to.be.equal(6);
+    expect(fetchStub.callCount).to.be.equal(4);
   });
 
   it("Shoud read partitions metadata by QuadKey for specific VersionLayer", async () => {
@@ -892,13 +809,23 @@ describe("VersionedLayerClient", () => {
 
     // Set the response from lookup api with the info about Query API.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/query/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
             api: "query",
             version: "v1",
             baseURL: "https://query.data.api.platform.here.com/query/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          },
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
             parameters: {
               additionalProp1: "string",
               additionalProp2: "string",
@@ -939,24 +866,6 @@ describe("VersionedLayerClient", () => {
             }
           ]
         })
-      )
-    );
-
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "metadata",
-            version: "v1",
-            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ])
       )
     );
 
@@ -1045,7 +954,7 @@ describe("VersionedLayerClient", () => {
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
@@ -1123,13 +1032,23 @@ describe("VersionedLayerClient", () => {
 
     // Set the response from lookup api with the info about Query API.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/query/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
             api: "query",
             version: "v1",
             baseURL: "https://query.data.api.platform.here.com/query/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          },
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
             parameters: {
               additionalProp1: "string",
               additionalProp2: "string",
@@ -1161,25 +1080,6 @@ describe("VersionedLayerClient", () => {
       ],
       next: "/uri/to/next/page"
     };
-
-    // Set the response from lookup api with the info about Metadata service.
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "metadata",
-            version: "v1",
-            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ])
-      )
-    );
 
     // Set the response of mocked partitions with additional fields.
     mockedResponses.set(

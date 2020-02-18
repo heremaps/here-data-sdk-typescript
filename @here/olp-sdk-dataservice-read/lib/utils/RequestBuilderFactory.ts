@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { LookupApi } from "@here/olp-sdk-dataservice-api";
+import { HttpError, LookupApi } from "@here/olp-sdk-dataservice-api";
 import {
     ApiCacheRepository,
     ApiName,
@@ -59,22 +59,22 @@ export class RequestFactory {
             serviceVersion,
             settings,
             hrn
-        )
-            .then(async (baseUrl: string) =>
-                baseUrl
-                    ? Promise.resolve(
-                          new DataStoreRequestBuilder(
-                              settings.downloadManager,
-                              baseUrl,
-                              settings.token,
-                              abortSignal
-                          )
+        ).then(async (baseUrl: string) =>
+            baseUrl
+                ? Promise.resolve(
+                      new DataStoreRequestBuilder(
+                          settings.downloadManager,
+                          baseUrl,
+                          settings.token,
+                          abortSignal
                       )
-                    : Promise.reject(
+                  )
+                : Promise.reject(
+                      new Error(
                           `Error getting base url to the service: ${serviceName}`
                       )
-            )
-            .catch(error => Promise.reject(error));
+                  )
+        );
     }
 
     /**
@@ -95,6 +95,7 @@ export class RequestFactory {
     ): Promise<string> {
         const apiCache = new ApiCacheRepository(settings.cache, hrn);
         const baseUrl = apiCache.get(serviceName, serviceVersion);
+        const cacheOnlyVersion = "v1";
         if (baseUrl) {
             return Promise.resolve(baseUrl);
         }
@@ -106,55 +107,48 @@ export class RequestFactory {
             settings.token
         );
 
-        const apiService = hrn ? LookupApi.resourceAPI : LookupApi.platformAPI;
-        const params: {
-            api: string;
-            version: string;
-            hrn: string;
-            region?: string | undefined;
-        } = {
-            api: serviceName,
-            version: serviceVersion,
-            hrn: ""
-        };
+        const lookupPromise = hrn
+            ? LookupApi.resourceAPIList(lookUpApiRequest, {
+                  hrn: hrn.toString()
+              })
+            : LookupApi.platformAPIList(lookUpApiRequest);
 
-        if (hrn) {
-            params.hrn = hrn.toString();
-        }
-
-        return apiService(lookUpApiRequest, params)
-            .then(
-                async (
-                    result: LookupApi.API[] | LookupApi.ApiNotFoundError
-                ) => {
-                    if (!(result instanceof Array)) {
-                        if (result.status === 404) {
-                            return Promise.reject(
-                                `Getting API error: ${result.title}`
-                            );
-                        }
-
-                        if (result.error) {
-                            return Promise.reject(
-                                `Getting API error: ${result.error}, ${result.error_description}`
-                            );
-                        }
-                    }
-
-                    if (result instanceof Array && result[0].baseURL) {
-                        apiCache.put(
-                            serviceName,
-                            serviceVersion,
-                            result[0].baseURL
-                        );
-                        return Promise.resolve(result[0].baseURL);
-                    }
-
-                    return Promise.reject(
-                        `Getting API ${serviceName} unknown error`
+        return lookupPromise
+            .then(res => {
+                if (!Array.isArray(res)) {
+                    throw new HttpError(
+                        res.status || 204,
+                        res.title || "No content"
                     );
                 }
-            )
-            .catch(error => Promise.reject(error));
+
+                res.forEach(item => {
+                    if (item.version === cacheOnlyVersion) {
+                        apiCache.put(
+                            item.api as ApiName,
+                            item.version,
+                            item.baseURL
+                        );
+                    }
+                });
+
+                const baseUrlIndex = res.findIndex(
+                    item =>
+                        item.api === serviceName &&
+                        item.version === serviceVersion
+                );
+
+                if (baseUrlIndex === -1) {
+                    throw new HttpError(
+                        404,
+                        `No BaseUrl found for ${serviceName}, ${serviceVersion} ${
+                            hrn ? hrn.toString() : ""
+                        }`
+                    );
+                }
+
+                return res[baseUrlIndex].baseURL;
+            })
+            .catch(err => Promise.reject(err));
     }
 }

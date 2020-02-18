@@ -75,7 +75,7 @@ describe("IndexLayerClient", () => {
 
     // Set the response from lookup api with the info about Index service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/index/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
@@ -181,7 +181,7 @@ describe("IndexLayerClient", () => {
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/blob/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {

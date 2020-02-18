@@ -78,7 +78,7 @@ describe("VolatileLayerClient", () => {
 
     // Set the response from lookup api with the info about Query API.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/query/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
@@ -160,7 +160,8 @@ describe("VolatileLayerClient", () => {
       expect(partitions.partitions[2]).to.be.undefined;
 
       /**
-       * Check if the count of requests are as expected. Should be called 2 times. One to the lookup service
+       * Check if the count of requests are as expected. Should be called 2 times.
+       * One to the lookup service
        * for the baseURL to the Query service and another one to the query service.
        */
       expect(fetchStub.callCount).to.be.equal(2);
@@ -188,13 +189,24 @@ describe("VolatileLayerClient", () => {
 
     // Set the response from lookup api with the info about Query API.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/query/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
             api: "query",
             version: "v1",
             baseURL: "https://query.data.api.platform.here.com/query/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          },
+          {
+            api: "volatile-blob",
+            version: "v1",
+            baseURL:
+              "https://volatile-blob.data.api.platform.here.com/volatile-blob/v1",
             parameters: {
               additionalProp1: "string",
               additionalProp2: "string",
@@ -208,25 +220,6 @@ describe("VolatileLayerClient", () => {
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/partitions?partition=0000042`,
       new Response(JSON.stringify(mockedPartitionsIdData))
-    );
-    // Set the response from lookup api with the info about Metadata service.
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/volatile-blob/v1`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "blob",
-            version: "v1",
-            baseURL:
-              "https://volatile-blob.data.api.platform.here.com/volatile-blob/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ])
-      )
     );
 
     // Set the response of mocked partitions from metadata service.
@@ -253,7 +246,7 @@ describe("VolatileLayerClient", () => {
     const data = await layerClient.getData(request);
 
     assert.isDefined(data);
-    expect(fetchStub.callCount).to.be.equal(4);
+    expect(fetchStub.callCount).to.be.equal(3);
   });
 
   it("Shoud be fetched partitions all metadata", async () => {
@@ -261,7 +254,7 @@ describe("VolatileLayerClient", () => {
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
@@ -345,8 +338,10 @@ describe("VolatileLayerClient", () => {
     }
 
     /**
-     * Check if the count of requests are as expected. Should be called 2 times. One to the lookup service
-     * for the baseURL to the Metadata service and another one to the metadata service for the partitions metadata.
+     * Check if the count of requests are as expected.
+     * Should be called 2 times. One to the lookup service
+     * for the baseURL to the Metadata service and another one
+     * to the metadata service for the partitions metadata.
      */
     expect(fetchStub.callCount).to.be.equal(2);
   });
@@ -358,7 +353,7 @@ describe("VolatileLayerClient", () => {
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/volatile-blob/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
@@ -409,7 +404,7 @@ describe("VolatileLayerClient", () => {
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
@@ -421,25 +416,22 @@ describe("VolatileLayerClient", () => {
               additionalProp2: "string",
               additionalProp3: "string"
             }
-          }
-        ])
-      )
-    );
-
-    mockedResponses.set(
-      `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 42 }))
-    );
-
-    // Set the response from lookup api with the info about Query API.
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/query/v1`,
-      new Response(
-        JSON.stringify([
+          },
           {
             api: "query",
             version: "v1",
             baseURL: "https://query.data.api.platform.here.com/query/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          },
+          {
+            api: "volatile-blob",
+            version: "v1",
+            baseURL:
+              "https://volatile-blob.data.api.platform.here.com/volatile-blob/v1",
             parameters: {
               additionalProp1: "string",
               additionalProp2: "string",
@@ -472,26 +464,6 @@ describe("VolatileLayerClient", () => {
       )
     );
 
-    // Set the response from lookup api with the info about Metadata service.22
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/volatile-blob/v1`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "volatile-blob",
-            version: "v1",
-            baseURL:
-              "https://volatile-blob.data.api.platform.here.com/volatile-blob/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ])
-      )
-    );
-
     // Set the response of mocked partitions from metadata service.
     mockedResponses.set(
       `https://volatile-blob.data.api.platform.here.com/volatile-blob/v1/layers/test-layed-id/data/c9116bb9-7d00-44bf-9b26-b4ab4c274665`,
@@ -500,6 +472,11 @@ describe("VolatileLayerClient", () => {
 
     // Setup the fetch to use mocked responses.
     fetchMock.withMockedResponses(mockedResponses);
+
+    mockedResponses.set(
+      `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
+      new Response(JSON.stringify({ version: 124 }))
+    );
 
     const settings = new OlpClientSettings({
       environment: "here",
@@ -515,7 +492,7 @@ describe("VolatileLayerClient", () => {
     const data = await layerClient.getData(request);
 
     assert.isDefined(data);
-    expect(fetchStub.callCount).to.be.equal(6);
+    expect(fetchStub.callCount).to.be.equal(4);
   });
 
   it("Shoud read partitions metadata by QuadKey for specific VolatileLayer", async () => {
@@ -531,13 +508,23 @@ describe("VolatileLayerClient", () => {
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
             api: "metadata",
             version: "v1",
             baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          },
+          {
+            api: "query",
+            version: "v1",
+            baseURL: "https://query.data.api.platform.here.com/query/v1",
             parameters: {
               additionalProp1: "string",
               additionalProp2: "string",
@@ -551,25 +538,6 @@ describe("VolatileLayerClient", () => {
     mockedResponses.set(
       `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
       new Response(JSON.stringify({ version: 30 }))
-    );
-
-    // Set the response from lookup api with the info about Query API.
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/query/v1`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "query",
-            version: "v1",
-            baseURL: "https://query.data.api.platform.here.com/query/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ])
-      )
     );
 
     // Set the response with mocked partitions for volatile layer
@@ -678,7 +646,7 @@ describe("VolatileLayerClient", () => {
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
@@ -750,13 +718,23 @@ describe("VolatileLayerClient", () => {
 
     // Set the response from lookup api with the info about Query API.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/query/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
       new Response(
         JSON.stringify([
           {
             api: "query",
             version: "v1",
             baseURL: "https://query.data.api.platform.here.com/query/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          },
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
             parameters: {
               additionalProp1: "string",
               additionalProp2: "string",
@@ -788,25 +766,6 @@ describe("VolatileLayerClient", () => {
       ],
       next: "/uri/to/next/page"
     };
-
-    // Set the response from lookup api with the info about Metadata service.
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis/metadata/v1`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "metadata",
-            version: "v1",
-            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ])
-      )
-    );
 
     // Set the response of mocked partitions with additional fields.
     mockedResponses.set(

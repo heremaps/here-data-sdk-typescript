@@ -77,7 +77,7 @@ describe("StatisticsClient", () => {
 
     // Set the response from lookup api
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis/statistics/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis`,
       new Response(
         JSON.stringify([
           {
@@ -176,7 +176,7 @@ describe("StatisticsClient", () => {
 
     // Set the response from lookup api
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis/statistics/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis`,
       new Response(
         JSON.stringify([
           {
@@ -211,7 +211,9 @@ describe("StatisticsClient", () => {
       .withDataLevel("3")
       .withTypemap(CoverageDataType.TIMEMAP);
 
-    const summaryResponse = await statisticsClient.getStatistics(statisticsRequest);
+    const summaryResponse = await statisticsClient.getStatistics(
+      statisticsRequest
+    );
     assert.isDefined(summaryResponse);
     expect(fetchStub.callCount).to.be.equal(2);
   });
@@ -221,7 +223,7 @@ describe("StatisticsClient", () => {
 
     // Set the response from lookup api
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis/statistics/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis`,
       new Response(
         JSON.stringify([
           {
@@ -256,7 +258,9 @@ describe("StatisticsClient", () => {
       .withDataLevel("3")
       .withTypemap(CoverageDataType.SIZEMAP);
 
-    const summaryResponse = await statisticsClient.getStatistics(statisticsRequest);
+    const summaryResponse = await statisticsClient.getStatistics(
+      statisticsRequest
+    );
     assert.isDefined(summaryResponse);
     expect(fetchStub.callCount).to.be.equal(2);
   });
@@ -266,7 +270,7 @@ describe("StatisticsClient", () => {
 
     // Set the response from lookup api
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis/statistics/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis`,
       new Response(
         JSON.stringify([
           {
@@ -301,7 +305,9 @@ describe("StatisticsClient", () => {
       .withDataLevel("3")
       .withTypemap(CoverageDataType.BITMAP);
 
-    const summaryResponse = await statisticsClient.getStatistics(statisticsRequest);
+    const summaryResponse = await statisticsClient.getStatistics(
+      statisticsRequest
+    );
     assert.isDefined(summaryResponse);
     expect(fetchStub.callCount).to.be.equal(2);
   });

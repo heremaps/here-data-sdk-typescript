@@ -73,18 +73,18 @@ describe("configClient", () => {
     const mockedResponses = new Map();
 
     const mockedCatalogsHRN: ConfigApi.CatalogsListResult = {
-        results: {
-            items: [
-                { hrn: "hrn:::test-hrn" },
-                { hrn: "hrn:::test-hrn2" },
-                { hrn: "hrn:::test-hrn3" }
-            ]
-        }
+      results: {
+        items: [
+          { hrn: "hrn:::test-hrn" },
+          { hrn: "hrn:::test-hrn2" },
+          { hrn: "hrn:::test-hrn3" }
+        ]
+      }
     };
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis/config/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis`,
       new Response(
         JSON.stringify([
           {
@@ -120,13 +120,13 @@ describe("configClient", () => {
 
   it("Should fetch the list of catalogs to which you have access filtered by hrn", async () => {
     const mockedResponses = new Map();
-    
+
     const mockedCatalogsFilteredByHRN: ConfigApi.CatalogsListResult = {
-        results: { items: [{ hrn: "hrn:::test-hrn" }] }
+      results: { items: [{ hrn: "hrn:::test-hrn" }] }
     };
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis/config/v1`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis`,
       new Response(
         JSON.stringify([
           {
