@@ -1,10 +1,25 @@
 image: ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}
 
 stages:
+  - post_release_test
   - performance_test
   - security_test
   - translate_report
   - deploy
+
+rv_job:
+  stage: post_release_test
+  tags:
+  - docker-prod
+  image: ${DOCKER_REGISTRY}/${DOCKER_IMAGE_PERFORMANCE}:${DOCKER_IMAGE_PERFORMANCE_VERSION}
+  script:
+  - yarn
+  - yarn bootstrap
+  - npm run build
+  - npm run test-published-bundles
+  when: manual
+  only:
+    - master
 
 wv_veracode_job:
   stage: security_test
@@ -30,6 +45,7 @@ nv_job:
   image: ${DOCKER_REGISTRY}/${DOCKER_IMAGE_PERFORMANCE}:${DOCKER_IMAGE_PERFORMANCE_VERSION}
   script:
   - $CI_PROJECT_DIR/scripts/linux/nv/gitlab_test_performance.sh
+  - $CI_PROJECT_DIR/scripts/linux/nv/gitlab_test_publish_dryrun.sh
   only:
     refs:
       - master
@@ -112,3 +128,5 @@ pages:
     variables:
       - $WEEKLY
       - $NIGHTLY
+
+
