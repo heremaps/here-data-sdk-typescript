@@ -912,3 +912,94 @@ describe("VersionedLayerClient", () => {
         } as any);
     });
 });
+
+describe("VersionedLayerClient with locked version 0 in constructor", () => {
+    let sandbox: sinon.SinonSandbox;
+    let client: dataServiceRead.VersionedLayerClient;
+
+    const mockedCatalogHRH = dataServiceRead.HRN.fromString(
+        "hrn:here:data:::example-catalog"
+    );
+    const mockedSettings = new dataServiceRead.OlpClientSettings({
+        environment: "mocked-env",
+        getToken: () => Promise.resolve("mocked-token")
+    });
+
+    before(() => {
+        sandbox = sinon.createSandbox();
+    });
+
+    beforeEach(() => {
+        client = new dataServiceRead.VersionedLayerClient({
+            settings: mockedSettings,
+            catalogHrn: mockedCatalogHRH,
+            layerId: "mocked-layed-id",
+            version: 0
+        });
+    });
+
+    afterEach(() => {
+        sandbox.restore();
+    });
+
+    it("Versioned layer should be initialised with 0 version", () => {
+        expect(client !== undefined).to.be.true;
+        expect(client["version"]).to.be.equal(0);
+    });
+
+    it("Method getPartitions should call queryClient.fetchQuadTreeIndex with QuadTreeIndexRequest.getVersion() === 0", async () => {
+        const QueryClientStub = sandbox.stub(dataServiceRead, "QueryClient");
+
+        class MockedQueryClient {
+            fetchQuadTreeIndex(
+                request: dataServiceRead.QuadTreeIndexRequest,
+                signal: AbortSignal
+            ) {
+                expect(request.getVersion()).to.be.equal(0);
+            }
+        }
+
+        QueryClientStub.callsFake(
+            (settings: dataServiceRead.OlpClientSettings) => {
+                return new MockedQueryClient();
+            }
+        );
+
+        await client.getPartitions(
+            new dataServiceRead.QuadKeyPartitionsRequest().withQuadKey(
+                dataServiceRead.quadKeyFromMortonCode(1000)
+            )
+        );
+    });
+
+    it("Method getData should not change the version of the layer", async () => {
+        // @ts-ignore
+        class VersionedLayerClientTest extends dataServiceRead.VersionedLayerClient {
+            constructor(params: dataServiceRead.VersionedLayerClientParams) {
+                super(params);
+            }
+
+            /**
+             * @override
+             */
+            private downloadPartition(
+                dataHandle: string,
+                abortSignal?: AbortSignal,
+                billingTag?: string
+            ): Promise<Response> {
+                return Promise.resolve(new Response());
+            }
+        }
+
+        const client = new VersionedLayerClientTest({
+            settings: mockedSettings,
+            catalogHrn: mockedCatalogHRH,
+            layerId: "mocked-layed-id",
+            version: 0
+        });
+        await client.getData(
+            new dataServiceRead.DataRequest().withDataHandle("fake-datahandle")
+        );
+        expect(client["version"]).to.be.equal(0);
+    });
+});
