@@ -44,22 +44,29 @@ export class ConfigClient {
      * If the schema is not set, the filter returns all of the catalogs to which you have access.
      */
     public async getCatalogs(
-        request: CatalogsRequest
+        request?: CatalogsRequest
     ): Promise<ConfigApi.CatalogsListResult> {
         const requestBuilder = await RequestFactory.create(
             "config",
             this.apiVersion,
             this.settings
         ).catch(error => Promise.reject(error));
-        return ConfigApi.getCatalogs(
-            requestBuilder,
-            request.getSchema()
-                ? {
-                      verbose: "true",
-                      schemaHrn: request.getSchema(),
-                      billingTag: request.getBillingTag()
-                  }
-                : { billingTag: request.getBillingTag() }
-        );
+
+        const params: {
+            verbose?: string;
+            schemaHrn?: string;
+            billingTag?: string;
+        } = {};
+
+        if (request) {
+            params.billingTag = request.getBillingTag();
+
+            if (request.getSchema()) {
+                params.verbose = "true";
+                params.schemaHrn = request.getSchema();
+            }
+        }
+
+        return ConfigApi.getCatalogs(requestBuilder, params);
     }
 }
