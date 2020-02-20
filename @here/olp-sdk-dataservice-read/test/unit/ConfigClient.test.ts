@@ -24,25 +24,9 @@ import * as dataServiceRead from "../../lib";
 import { ConfigApi } from "@here/olp-sdk-dataservice-api";
 
 chai.use(sinonChai);
-const assert = chai.assert;
 const expect = chai.expect;
 
 let sandbox: sinon.SinonSandbox;
-
-const mockedCatalogsHRN: ConfigApi.CatalogsListResult = {
-    results: {
-        items: [
-            { hrn: "hrn:::test-hrn" },
-            { hrn: "hrn:::test-hrn2" },
-            { hrn: "hrn:::test-hrn3" }
-        ]
-    }
-};
-
-const mockedCatalogsFilteredByHRN: ConfigApi.CatalogsListResult = {
-    results: { items: [{ hrn: "hrn:::test-hrn" }] }
-};
-
 const settings = {} as any;
 const configClient = new dataServiceRead.ConfigClient(settings);
 
@@ -55,66 +39,70 @@ describe("ConfigClient", () => {
         sandbox
             .stub(dataServiceRead.RequestFactory, "create")
             .callsFake(() => Promise.resolve({} as any));
-
-        sandbox.stub(ConfigApi, "getCatalogs").callsFake((builder, params) => {
-            if (params.schemaHrn) {
-                return Promise.resolve(mockedCatalogsFilteredByHRN);
-            }
-            return Promise.resolve(mockedCatalogsHRN);
-        });
     });
 
     afterEach(() => {
         sandbox.restore();
     });
 
-    it("Should return all catalogs provided filtered by schema HRN.", async () => {
+    it("Should works as expected with empty request.", async () => {
         class MockedCatalogsRequest {
             public getSchema() {
-                return "test-schema-hrn";
+                return undefined;
             }
-
             public getBillingTag() {
                 return undefined;
             }
         }
 
-        const catalogsConfigRequest = new MockedCatalogsRequest();
-        const getCatalogsResponse = await configClient.getCatalogs(
-            catalogsConfigRequest as any
-        );
+        sandbox.stub(ConfigApi, "getCatalogs").callsFake((_, params): any => {
+            expect(params.billingTag === undefined).to.be.true;
+            return Promise.resolve();
+        });
 
-        assert.isDefined(getCatalogsResponse);
-        expect(getCatalogsResponse!.results!.items![0].hrn).to.be.equal(
-            "hrn:::test-hrn"
-        );
-        expect(getCatalogsResponse!.results!.items![1]).to.be.undefined;
+        const catalogsConfigRequest = new MockedCatalogsRequest();
+        await configClient.getCatalogs(catalogsConfigRequest as any);
     });
 
-    it("Should return all catalogs provided without setted filter by schema HRN.", async () => {
+    it("Should works as expected with request with schema and empty billing tag", async () => {
         class MockedCatalogsRequest {
             public getSchema() {
-                return undefined;
+                return "test-schema-string";
             }
             public getBillingTag() {
                 return undefined;
             }
         }
 
-        const catalogsConfigRequest = new MockedCatalogsRequest();
-        const getCatalogsResponse = await configClient.getCatalogs(
-            catalogsConfigRequest as any
-        );
+        sandbox.stub(ConfigApi, "getCatalogs").callsFake((_, params): any => {
+            expect(params.billingTag === undefined).to.be.true;
+            expect(params.schemaHrn === "test-schema-string").to.be.true;
+            expect(params.verbose === "true").to.be.true;
+            return Promise.resolve();
+        });
 
-        assert.isDefined(getCatalogsResponse);
-        expect(getCatalogsResponse!.results!.items![0].hrn).to.be.equal(
-            "hrn:::test-hrn"
-        );
-        expect(getCatalogsResponse!.results!.items![1].hrn).to.be.equal(
-            "hrn:::test-hrn2"
-        );
-        expect(getCatalogsResponse!.results!.items![2].hrn).to.be.equal(
-            "hrn:::test-hrn3"
-        );
+        const catalogsConfigRequest = new MockedCatalogsRequest();
+        await configClient.getCatalogs(catalogsConfigRequest as any);
+    });
+
+    it("Should works as expected with request with schema and with billing tag", async () => {
+        class MockedCatalogsRequest {
+            public getSchema() {
+                return "test-schema-string";
+            }
+            public getBillingTag() {
+                return "test-billing-tag";
+            }
+        }
+
+        sandbox.stub(ConfigApi, "getCatalogs").callsFake((_, params): any => {
+            expect(params.verbose === "true").to.be.true;
+            expect(params.schemaHrn === "test-schema-string").to.be.true;
+            expect(params.billingTag === "test-billing-tag").to.be.true;
+            return Promise.resolve();
+        });
+
+        const catalogsConfigRequest = new MockedCatalogsRequest();
+        await configClient.getCatalogs(catalogsConfigRequest as any);
     });
 });
