@@ -25,7 +25,8 @@ import {
     OlpClientSettings,
     PollRequest,
     RequestFactory,
-    SubscribeRequest
+    SubscribeRequest,
+    UnsubscribeRequest
 } from "..";
 
 export interface StreamLayerClientParams {
@@ -99,9 +100,7 @@ export class StreamLayerClient {
             })
             .catch(err => Promise.reject(err));
 
-        return subscription
-            ? Promise.resolve(subscription)
-            : Promise.reject(new Error("Subscribe error"));
+        return Promise.resolve(subscription.subscriptionId);
     }
 
     /**
@@ -121,6 +120,14 @@ export class StreamLayerClient {
         request: PollRequest,
         abortSignal?: AbortSignal
     ): Promise<StreamApi.Message[]> {
+        if (request.getMode() === "parallel" && !request.getSubscriptionId()) {
+            return Promise.reject(
+                new Error(
+                    "Error: for 'parallel' mode 'subscriptionId' is required."
+                )
+            );
+        }
+
         const builder = await this.getRequestBuilder(
             "stream",
             this.catalogHrn,
@@ -159,6 +166,32 @@ export class StreamLayerClient {
                 )
             );
         }
+    }
+
+    public async unsubscribe(
+        request: UnsubscribeRequest,
+        abortSignal?: AbortSignal
+    ): Promise<Response> {
+        if (request.getMode() === "parallel" && !request.getSubscriptionId()) {
+            return Promise.reject(
+                new Error(
+                    "Error: for 'parallel' mode 'subscriptionId' is required."
+                )
+            );
+        }
+
+        const builder = await this.getRequestBuilder(
+            "stream",
+            this.catalogHrn,
+            abortSignal
+        ).catch(error => Promise.reject(error));
+
+        return StreamApi.deleteSubscription(builder, {
+            layerId: this.layerId,
+            mode: request.getMode(),
+            subscriptionId: request.getSubscriptionId(),
+            xCorrelationId: this.xCorrelationId
+        });
     }
 
     /**

@@ -24,7 +24,7 @@ import sinonChai = require("sinon-chai");
 import * as dataServiceRead from "../../lib";
 
 import { BlobApi, StreamApi, HttpError } from "@here/olp-sdk-dataservice-api";
-import { SubscribeRequest } from "../../lib";
+import { SubscribeRequest, UnsubscribeRequest } from "../../lib";
 
 chai.use(sinonChai);
 
@@ -36,6 +36,7 @@ describe("StreamLayerClient", () => {
     let getBaseUrlRequestStub: sinon.SinonStub;
     let subscribeStub: sinon.SinonStub;
     let pollStub: sinon.SinonStub;
+    let unsubscribeStub: sinon.SinonStub;
     let commitOffsetsStub: sinon.SinonStub;
     let getBlobStub: sinon.SinonStub;
     let streamLayerClient: dataServiceRead.StreamLayerClient;
@@ -63,6 +64,7 @@ describe("StreamLayerClient", () => {
         subscribeStub = sandbox.stub(StreamApi, "subscribe");
         pollStub = sandbox.stub(StreamApi, "consumeData");
         commitOffsetsStub = sandbox.stub(StreamApi, "commitOffsets");
+        unsubscribeStub = sandbox.stub(StreamApi, "deleteSubscription");
         getBaseUrlRequestStub = sandbox.stub(
             dataServiceRead.RequestFactory,
             "getBaseUrl"
@@ -93,7 +95,7 @@ describe("StreamLayerClient", () => {
             headers,
             subscriptionId: "-9141392.f96875c-9422-4df4-b5ff-41a4f459",
             json: function() {
-                return this.subscriptionId;
+                return this;
             }
         };
         subscribeStub.callsFake(
@@ -144,25 +146,6 @@ describe("StreamLayerClient", () => {
             });
 
         abortController.abort();
-    });
-
-    it("Should baseUrl error be handled in the subscribe method", async () => {
-        const mockedErrorResponse = "Bad response";
-        const request = new dataServiceRead.SubscribeRequest();
-
-        getBaseUrlRequestStub.callsFake(() =>
-            Promise.reject({
-                status: 400,
-                statusText: "Bad response"
-            })
-        );
-
-        const subscription = await streamLayerClient
-            .subscribe(request)
-            .catch(error => {
-                assert.isDefined(error);
-                assert.equal(mockedErrorResponse, error.statusText);
-            });
     });
 
     it("Should poll method get data, post offsets and return messages", async () => {
@@ -260,173 +243,245 @@ describe("StreamLayerClient", () => {
         abortController.abort();
     });
 
-    it("Should baseUrl error be handled in the poll method", async () => {
-        const mockedErrorResponse = "Bad response";
-        const request = new dataServiceRead.PollRequest();
+    it("Should method getData call API with correct arguments", async () => {
+        const mockedBlobData: Response = new Response("mocked-blob-response");
+        const mockedMessage = {
+            metaData: {
+                partition: "314010583",
+                checksum: "ff7494d6f17da702862e550c907c0a91",
+                compressedDataSize: 152417,
+                dataSize: 250110,
+                data: "",
+                dataHandle:
+                    "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAABhQTFRFvb29AACEAP8AhIKEPb5x2m9E5413aFQirhRuvAMqCw+6kE2BVsa8miQaYSKyshxFvhqdzKx8UsPYk9gDEcY1ghZXcPbENtax8g5T+3zHYufF1Lf9HdIZBfNEiKAAAAAElFTkSuQmCC",
+                timestamp: 1517916706
+            },
+            offset: {
+                partition: 7,
+                offset: 38562
+            }
+        };
+        getBlobStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockedBlobData);
+            }
+        );
 
-        it("Should method getData call API with correct arguments", async () => {
-            const mockedBlobData: Response = new Response(
-                "mocked-blob-response"
-            );
-            const mockedMessage = {
-                metaData: {
-                    partition: "314010583",
-                    checksum: "ff7494d6f17da702862e550c907c0a91",
-                    compressedDataSize: 152417,
-                    dataSize: 250110,
-                    data: "",
-                    dataHandle:
-                        "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAABhQTFRFvb29AACEAP8AhIKEPb5x2m9E5413aFQirhRuvAMqCw+6kE2BVsa8miQaYSKyshxFvhqdzKx8UsPYk9gDEcY1ghZXcPbENtax8g5T+3zHYufF1Lf9HdIZBfNEiKAAAAAElFTkSuQmCC",
-                    timestamp: 1517916706
-                },
-                offset: {
-                    partition: 7,
-                    offset: 38562
-                }
-            };
-            getBlobStub.callsFake(
-                (builder: any, params: any): Promise<Response> => {
-                    return Promise.resolve(mockedBlobData);
-                }
-            );
+        await streamLayerClient.getData(mockedMessage);
+        expect(getBlobStub.getCalls()[0].args[1].dataHandle).to.be.equal(
+            mockedMessage.metaData.dataHandle
+        );
+    });
 
-            await streamLayerClient.getData(mockedMessage);
-            expect(getBlobStub.getCalls()[0].args[1].dataHandle).to.be.equal(
-                mockedMessage.metaData.dataHandle
-            );
+    it("Should method getData return Error without parameters", async () => {
+        const mockedMessage = {
+            metaData: {
+                partition: "314010583"
+            },
+            offset: {
+                partition: 7,
+                offset: 38562
+            }
+        };
+
+        const mockedErrorResponse = {
+            message: "No data handle for this partition"
+        };
+
+        await streamLayerClient.getData(mockedMessage).catch(error => {
+            assert.isDefined(error);
+            assert.equal(mockedErrorResponse.message, error.message);
         });
+    });
 
-        it("Should method getData return Error without parameters", async () => {
-            const mockedMessage = {
-                metaData: {
-                    partition: "314010583"
-                },
-                offset: {
-                    partition: 7,
-                    offset: 38562
-                }
-            };
+    it("Should error be handled", async () => {
+        const mockedMessage = {
+            metaData: {
+                partition: "314010583",
+                checksum: "ff7494d6f17da702862e550c907c0a91",
+                compressedDataSize: 152417,
+                dataSize: 250110,
+                data: "",
+                dataHandle:
+                    "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAABhQTFRFvb29AACEAP8AhIKEPb5x2m9E5413aFQirhRuvAMqCw+6kE2BVsa8miQaYSKyshxFvhqdzKx8UsPYk9gDEcY1ghZXcPbENtax8g5T+3zHYufF1Lf9HdIZBfNEiKAAAAAElFTkSuQmCC",
+                timestamp: 1517916706
+            },
+            offset: {
+                partition: 7,
+                offset: 38562
+            }
+        };
 
-            const mockedErrorResponse = {
-                message: "No data handle for this partition"
-            };
+        const mockedErrorResponse = "mocked-error";
 
-            await streamLayerClient.getData(mockedMessage).catch(error => {
+        getBlobStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.reject("mocked-error");
+            }
+        );
+
+        const response = await streamLayerClient
+            .getData(mockedMessage)
+            .catch(error => {
                 assert.isDefined(error);
-                assert.equal(mockedErrorResponse.message, error.message);
+                assert.equal(mockedErrorResponse, error);
             });
-        });
+    });
 
-        it("Should error be handled", async () => {
-            const mockedMessage = {
-                metaData: {
-                    partition: "314010583",
-                    checksum: "ff7494d6f17da702862e550c907c0a91",
-                    compressedDataSize: 152417,
-                    dataSize: 250110,
-                    data: "",
-                    dataHandle:
-                        "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAABhQTFRFvb29AACEAP8AhIKEPb5x2m9E5413aFQirhRuvAMqCw+6kE2BVsa8miQaYSKyshxFvhqdzKx8UsPYk9gDEcY1ghZXcPbENtax8g5T+3zHYufF1Lf9HdIZBfNEiKAAAAAElFTkSuQmCC",
-                    timestamp: 1517916706
-                },
-                offset: {
-                    partition: 7,
-                    offset: 38562
-                }
-            };
+    it("Should base url error be handled", async () => {
+        const pollRequest = new dataServiceRead.PollRequest();
+        const subRequest = new dataServiceRead.SubscribeRequest();
+        const deleteRequest = new UnsubscribeRequest();
+        const mockedMessage = {
+            metaData: {
+                partition: "314010583",
+                checksum: "ff7494d6f17da702862e550c907c0a91",
+                compressedDataSize: 152417,
+                dataSize: 250110,
+                data: "",
+                dataHandle:
+                    "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAABhQTFRFvb29AACEAP8AhIKEPb5x2m9E5413aFQirhRuvAMqCw+6kE2BVsa8miQaYSKyshxFvhqdzKx8UsPYk9gDEcY1ghZXcPbENtax8g5T+3zHYufF1Lf9HdIZBfNEiKAAAAAElFTkSuQmCC",
+                timestamp: 1517916706
+            },
+            offset: {
+                partition: 7,
+                offset: 38562
+            }
+        };
+        const mockedErrorResponse = "Bad response";
 
-            const mockedErrorResponse = "mocked-error";
+        getBaseUrlRequestStub.callsFake(() =>
+            Promise.reject({
+                status: 400,
+                statusText: "Bad response"
+            })
+        );
 
-            getBlobStub.callsFake(
-                (builder: any, params: any): Promise<Response> => {
-                    return Promise.reject("mocked-error");
-                }
-            );
+        const subscription = await streamLayerClient
+            .subscribe(subRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.statusText);
+            });
 
-            const response = await streamLayerClient
-                .getData(mockedMessage)
-                .catch(error => {
-                    assert.isDefined(error);
-                    assert.equal(mockedErrorResponse, error);
-                });
-        });
+        const messages = await streamLayerClient
+            .poll(pollRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.statusText);
+            });
 
-        it("Should base url error be handled", async () => {
-            const mockedMessage = {
-                metaData: {
-                    partition: "314010583",
-                    checksum: "ff7494d6f17da702862e550c907c0a91",
-                    compressedDataSize: 152417,
-                    dataSize: 250110,
-                    data: "",
-                    dataHandle:
-                        "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAABhQTFRFvb29AACEAP8AhIKEPb5x2m9E5413aFQirhRuvAMqCw+6kE2BVsa8miQaYSKyshxFvhqdzKx8UsPYk9gDEcY1ghZXcPbENtax8g5T+3zHYufF1Lf9HdIZBfNEiKAAAAAElFTkSuQmCC",
-                    timestamp: 1517916706
-                },
-                offset: {
-                    partition: 7,
-                    offset: 38562
-                }
-            };
-            const mockedErrorResponse = "Bad response";
+        const response = await streamLayerClient
+            .getData(mockedMessage)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.statusText);
+            });
 
-            getBaseUrlRequestStub.callsFake(() =>
-                Promise.reject({
-                    status: 400,
-                    statusText: "Bad response"
-                })
-            );
+        const del = await streamLayerClient
+            .unsubscribe(deleteRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.statusText);
+            });
+    });
 
-            const messages = await streamLayerClient
-                .poll(request)
-                .catch(error => {
-                    assert.isDefined(error);
-                    assert.equal(mockedErrorResponse, error.statusText);
-                });
+    it("Should HttpError be handled", async () => {
+        const TEST_ERROR_CODE = 404;
+        const mockedError = new HttpError(TEST_ERROR_CODE, "Test Error");
 
-            const response = await streamLayerClient
-                .getData(mockedMessage)
-                .catch(error => {
-                    assert.isDefined(error);
-                    assert.equal(mockedErrorResponse, error.statusText);
-                });
-        });
+        const mockedMessage = {
+            metaData: {
+                partition: "314010583",
+                checksum: "ff7494d6f17da702862e550c907c0a91",
+                compressedDataSize: 152417,
+                dataSize: 250110,
+                data: "",
+                dataHandle:
+                    "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAABhQTFRFvb29AACEAP8AhIKEPb5x2m9E5413aFQirhRuvAMqCw+6kE2BVsa8miQaYSKyshxFvhqdzKx8UsPYk9gDEcY1ghZXcPbENtax8g5T+3zHYufF1Lf9HdIZBfNEiKAAAAAElFTkSuQmCC",
+                timestamp: 1517916706
+            },
+            offset: {
+                partition: 7,
+                offset: 38562
+            }
+        };
 
-        it("Should HttpError be handled", async () => {
-            const TEST_ERROR_CODE = 404;
-            const mockedError = new HttpError(TEST_ERROR_CODE, "Test Error");
+        getBlobStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.reject(mockedError);
+            }
+        );
 
-            const mockedMessage = {
-                metaData: {
-                    partition: "314010583",
-                    checksum: "ff7494d6f17da702862e550c907c0a91",
-                    compressedDataSize: 152417,
-                    dataSize: 250110,
-                    data: "",
-                    dataHandle:
-                        "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAABhQTFRFvb29AACEAP8AhIKEPb5x2m9E5413aFQirhRuvAMqCw+6kE2BVsa8miQaYSKyshxFvhqdzKx8UsPYk9gDEcY1ghZXcPbENtax8g5T+3zHYufF1Lf9HdIZBfNEiKAAAAAElFTkSuQmCC",
-                    timestamp: 1517916706
-                },
-                offset: {
-                    partition: 7,
-                    offset: 38562
-                }
-            };
+        const response = await streamLayerClient
+            .getData(mockedMessage)
+            .catch(err => {
+                assert.isDefined(err);
+                expect(err.status).to.be.equal(TEST_ERROR_CODE);
+                expect(err.message).to.be.equal("Test Error");
+                expect(err.name).to.be.equal("HttpError");
+            });
+    });
 
-            getBlobStub.callsFake(
-                (builder: any, params: any): Promise<Response> => {
-                    return Promise.reject(mockedError);
-                }
-            );
+    it("Should unsubscribe be aborted fetching by abort signal", async () => {
+        const mockResponse = ({
+            status: 200
+        } as unknown) as Response;
 
-            const response = await streamLayerClient
-                .getData(mockedMessage)
-                .catch(err => {
-                    assert.isDefined(err);
-                    expect(err.status).to.be.equal(TEST_ERROR_CODE);
-                    expect(err.message).to.be.equal("Test Error");
-                    expect(err.name).to.be.equal("HttpError");
-                });
-        });
+        unsubscribeStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return builder.abortSignal.aborted
+                    ? Promise.reject("AbortError")
+                    : Promise.resolve(mockResponse);
+            }
+        );
+
+        const request = new dataServiceRead.UnsubscribeRequest();
+        const abortController = new AbortController();
+
+        streamLayerClient
+            .unsubscribe(
+                (request as unknown) as dataServiceRead.UnsubscribeRequest,
+                abortController.signal
+            )
+            .then()
+            .catch((err: any) => {
+                assert.strictEqual(err, "AbortError");
+                assert.isTrue(abortController.signal.aborted);
+            });
+
+        abortController.abort();
+    });
+
+    it("Should unsubscribe delete subscription and return OK", async () => {
+        const mockResponse = ({
+            status: 200
+        } as unknown) as Response;
+        unsubscribeStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockResponse);
+            }
+        );
+
+        const request = new dataServiceRead.UnsubscribeRequest();
+        const unsubscription = await streamLayerClient.unsubscribe(request);
+
+        assert.isDefined(unsubscription);
+        expect(unsubscription.status).to.be.equal(mockResponse.status);
+    });
+
+    it("Should unsubscribe return error if mode is parallel and subscriptionId is missed", async () => {
+        const mockError =
+            "Error: for 'parallel' mode 'subscriptionId' is required.";
+
+        const request = new dataServiceRead.UnsubscribeRequest().withMode(
+            "parallel"
+        );
+        const unsubscription = await streamLayerClient
+            .unsubscribe(request)
+            .catch(err => {
+                assert.isDefined(err);
+                expect(err.message).to.be.equal(mockError);
+            });
     });
 });
