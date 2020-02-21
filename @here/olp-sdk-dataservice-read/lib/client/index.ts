@@ -43,3 +43,4 @@ export * from "./StreamLayerClient";
 export * from "./SubscribeRequest";
 export * from "./PollRequest";
 export * from "./UnsubscribeRequest";
+export * from "./SeekRequest";
