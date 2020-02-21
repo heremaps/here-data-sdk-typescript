@@ -22,6 +22,7 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
+import * as dataServiceApi from "@here/olp-sdk-dataservice-api";
 import { BlobApi, MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
 import { Index } from "@here/olp-sdk-dataservice-api/lib/query-api";
 
@@ -942,7 +943,7 @@ describe("VersionedLayerClient with locked version 0 in constructor", () => {
         sandbox.restore();
     });
 
-    it("Versioned layer should be initialised with 0 version", () => {
+    it("Versioned layer should be initialized with 0 version", () => {
         expect(client !== undefined).to.be.true;
         expect(client["version"]).to.be.equal(0);
     });
@@ -1001,5 +1002,69 @@ describe("VersionedLayerClient with locked version 0 in constructor", () => {
             new dataServiceRead.DataRequest().withDataHandle("fake-datahandle")
         );
         expect(client["version"]).to.be.equal(0);
+    });
+
+    it("Method getPartitions should call queryClient.getPartitionsById with PartitionsRequest.getVersion() === 0", async () => {
+        const QueryClientStub = sandbox.stub(dataServiceRead, "QueryClient");
+
+        class MockedQueryClient {
+            getPartitionsById(
+                request: dataServiceRead.PartitionsRequest,
+                signal: AbortSignal
+            ) {
+                expect(request.getVersion()).to.be.equal(0);
+            }
+        }
+
+        QueryClientStub.callsFake(
+            (settings: dataServiceRead.OlpClientSettings) => {
+                return new MockedQueryClient();
+            }
+        );
+
+        await client.getPartitions(
+            new dataServiceRead.PartitionsRequest().withPartitionIds([
+                "test-id1",
+                "test-id2"
+            ])
+        );
+    });
+
+    it("Method getPartitions should call MetadataApi.getPartitions with param version === 0", async () => {
+        // @ts-ignore
+        class VersionedLayerClientTest extends dataServiceRead.VersionedLayerClient {
+            constructor(params: dataServiceRead.VersionedLayerClientParams) {
+                super(params);
+            }
+
+            /**
+             * @override
+             */
+            private getRequestBuilder(
+                builderType: any,
+                hrn?: any,
+                abortSignal?: AbortSignal
+            ): Promise<dataServiceRead.DataStoreRequestBuilder> {
+                return Promise.resolve(new Response()) as any;
+            }
+        }
+
+        const clientOvverided = new VersionedLayerClientTest({
+            settings: mockedSettings,
+            catalogHrn: mockedCatalogHRH,
+            layerId: "mocked-layed-id",
+            version: 0
+        });
+
+        const getPartitionsStub = sandbox.stub(MetadataApi, "getPartitions");
+
+        getPartitionsStub.callsFake((builder, params: any) => {
+            expect(params.version).eqls(0);
+            return Promise.resolve() as any;
+        });
+
+        await clientOvverided.getPartitions(
+            new dataServiceRead.PartitionsRequest()
+        );
     });
 });
