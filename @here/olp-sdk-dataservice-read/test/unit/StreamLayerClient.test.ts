@@ -23,8 +23,12 @@ import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
 
-import { BlobApi, StreamApi, HttpError } from "@here/olp-sdk-dataservice-api";
-import { SubscribeRequest, UnsubscribeRequest } from "../../lib";
+import {
+    BlobApi,
+    StreamApi,
+    HttpError,
+    UrlBuilder
+} from "@here/olp-sdk-dataservice-api";
 
 chai.use(sinonChai);
 
@@ -34,11 +38,13 @@ const expect = chai.expect;
 describe("StreamLayerClient", () => {
     let sandbox: sinon.SinonSandbox;
     let getBaseUrlRequestStub: sinon.SinonStub;
+    let getFactoryRequestStub: sinon.SinonStub;
     let subscribeStub: sinon.SinonStub;
     let pollStub: sinon.SinonStub;
     let unsubscribeStub: sinon.SinonStub;
     let commitOffsetsStub: sinon.SinonStub;
     let getBlobStub: sinon.SinonStub;
+    let seekOffsetsStub: sinon.SinonStub;
     let streamLayerClient: dataServiceRead.StreamLayerClient;
     const mockedHRN = dataServiceRead.HRN.fromString(
         "hrn:here:data:::mocked-hrn"
@@ -65,6 +71,7 @@ describe("StreamLayerClient", () => {
         pollStub = sandbox.stub(StreamApi, "consumeData");
         commitOffsetsStub = sandbox.stub(StreamApi, "commitOffsets");
         unsubscribeStub = sandbox.stub(StreamApi, "deleteSubscription");
+        seekOffsetsStub = sandbox.stub(StreamApi, "seekToOffset");
         getBaseUrlRequestStub = sandbox.stub(
             dataServiceRead.RequestFactory,
             "getBaseUrl"
@@ -331,7 +338,22 @@ describe("StreamLayerClient", () => {
     it("Should base url error be handled", async () => {
         const pollRequest = new dataServiceRead.PollRequest();
         const subRequest = new dataServiceRead.SubscribeRequest();
-        const deleteRequest = new UnsubscribeRequest();
+        const deleteRequest = new dataServiceRead.UnsubscribeRequest();
+        const mockOffsets = {
+            offsets: [
+                {
+                    partition: 1,
+                    offset: 1
+                },
+                {
+                    partition: 2,
+                    offset: 2
+                }
+            ]
+        };
+        const seekRequest = new dataServiceRead.SeekRequest().withSeekOffsets(
+            mockOffsets
+        );
         const mockedMessage = {
             metaData: {
                 partition: "314010583",
@@ -384,6 +406,11 @@ describe("StreamLayerClient", () => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.statusText);
             });
+
+        const seek = await streamLayerClient.seek(seekRequest).catch(error => {
+            assert.isDefined(error);
+            assert.equal(mockedErrorResponse, error.statusText);
+        });
     });
 
     it("Should HttpError be handled", async () => {
@@ -483,5 +510,135 @@ describe("StreamLayerClient", () => {
                 assert.isDefined(err);
                 expect(err.message).to.be.equal(mockError);
             });
+    });
+
+    it("Should seek return error if mode is parallel and subscriptionId is missed", async () => {
+        const mockOffsets = {
+            offsets: [
+                {
+                    partition: 1,
+                    offset: 1
+                },
+                {
+                    partition: 2,
+                    offset: 2
+                }
+            ]
+        };
+        const mockError =
+            "Error: for 'parallel' mode 'subscriptionId' is required.";
+
+        const request = new dataServiceRead.SeekRequest()
+            .withMode("parallel")
+            .withSeekOffsets(mockOffsets);
+        const seek = await streamLayerClient.seek(request).catch(err => {
+            assert.isDefined(err);
+            expect(err.message).to.be.equal(mockError);
+        });
+    });
+
+    it("Should seek return error if offsets are missed", async () => {
+        const mockError = "Error: offsets are required.";
+
+        const request = new dataServiceRead.SeekRequest();
+        const seek = await streamLayerClient.seek(request).catch(err => {
+            assert.isDefined(err);
+            expect(err.message).to.be.equal(mockError);
+        });
+    });
+
+    it("Should seek set offsets and return OK", async () => {
+        const headers = new Headers();
+        headers.append("X-Correlation-Id", "9141392.f96875c-9422-4df4-bdfj");
+        const mockResponse = ({
+            headers,
+            json: function() {
+                return this;
+            },
+            status: 200
+        } as unknown) as Response;
+        const mockOffsets = {
+            offsets: [
+                {
+                    partition: 1,
+                    offset: 1
+                },
+                {
+                    partition: 2,
+                    offset: 2
+                }
+            ]
+        };
+        seekOffsetsStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockResponse);
+            }
+        );
+
+        const request = new dataServiceRead.SeekRequest().withSeekOffsets(
+            mockOffsets
+        );
+        const seek = await streamLayerClient.seek(request);
+
+        assert.isDefined(seek);
+        expect(seek.status).to.be.equal(mockResponse.status);
+    });
+
+    it("Should seek update xCorrelationId", async () => {
+        const xCorrelationId = "9141392.f96875c-9422-4df4-bdfj";
+        const headers = new Headers();
+        headers.append("X-Correlation-Id", xCorrelationId);
+        const mockResponse = ({
+            headers,
+            json: function() {
+                return this;
+            },
+            status: 200
+        } as unknown) as Response;
+        const mockOffsets = {
+            offsets: [
+                {
+                    partition: 1,
+                    offset: 1
+                },
+                {
+                    partition: 2,
+                    offset: 2
+                }
+            ]
+        };
+        seekOffsetsStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockResponse);
+            }
+        );
+
+        const request = new dataServiceRead.SeekRequest().withSeekOffsets(
+            mockOffsets
+        );
+        const seek = await streamLayerClient.seek(request);
+
+        assert.isDefined(seek);
+        expect(seek.status).to.be.equal(mockResponse.status);
+
+        seekOffsetsStub.restore();
+        getFactoryRequestStub = sandbox.stub(
+            dataServiceRead.RequestFactory,
+            "create"
+        );
+
+        getFactoryRequestStub.callsFake(() => {
+            return Promise.resolve(({
+                baseUrl: fakeURL,
+                requestBlob: (urlBuilder: UrlBuilder, params: any) => {
+                    expect(xCorrelationId).to.be.equal(
+                        params.headers["X-Correlation-Id"]
+                    );
+                    return Promise.resolve(mockResponse);
+                }
+            } as unknown) as dataServiceRead.DataStoreRequestBuilder);
+        });
+
+        const seek2 = await streamLayerClient.seek(request);
     });
 });

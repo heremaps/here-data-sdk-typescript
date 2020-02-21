@@ -25,6 +25,7 @@ import {
     OlpClientSettings,
     PollRequest,
     RequestFactory,
+    SeekRequest,
     SubscribeRequest,
     UnsubscribeRequest
 } from "..";
@@ -168,6 +169,15 @@ export class StreamLayerClient {
         }
     }
 
+    /**
+     * Method deletes a subscription to a layer. This operation removes the subscription from the service.
+     *
+     * @param request The [[UnsubscribeRequest]] instance of the configured request parameters.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     */
     public async unsubscribe(
         request: UnsubscribeRequest,
         abortSignal?: AbortSignal
@@ -192,6 +202,93 @@ export class StreamLayerClient {
             subscriptionId: request.getSubscriptionId(),
             xCorrelationId: this.xCorrelationId
         });
+    }
+
+    /**
+     * Fetches partition data using data handle.
+     *
+     * @param message The message data of partition metadata.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @return The data from the requested partition.
+     */
+    public async getData(
+        message: StreamApi.Message,
+        abortSignal?: AbortSignal
+    ): Promise<Response> {
+        if (!message.metaData || !message.metaData.dataHandle) {
+            return Promise.reject(
+                new Error("No data handle for this partition")
+            );
+        }
+
+        const builder = await this.getRequestBuilder(
+            "blob",
+            this.catalogHrn,
+            abortSignal
+        ).catch(err => Promise.reject(err));
+
+        return BlobApi.getBlob(builder, {
+            dataHandle: message.metaData.dataHandle,
+            layerId: this.layerId
+        });
+    }
+
+    /**
+     * Method allows to start reading data from a specified offset.
+     * The message pointer can be moved to any offset in the layer (topic).
+     * Message consumption will start from that offset. Once you seek to an offset,
+     * there is no returning to the initial offset, unless the initial offset is saved.
+     *
+     * @param request The [[SeekRequest]] instance of the configured request parameters.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @returns Messages [[StreamApi.Messages]] from a stream layer
+     */
+    public async seek(request: SeekRequest, abortSignal?: AbortSignal) {
+        const offsetsObject = request.getSeekOffsets();
+        if (
+            !offsetsObject ||
+            !offsetsObject.offsets ||
+            !offsetsObject.offsets.length
+        ) {
+            return Promise.reject(new Error("Error: offsets are required."));
+        }
+
+        if (request.getMode() === "parallel" && !request.getSubscriptionId()) {
+            return Promise.reject(
+                new Error(
+                    "Error: for 'parallel' mode 'subscriptionId' is required."
+                )
+            );
+        }
+
+        const builder = await this.getRequestBuilder(
+            "stream",
+            this.catalogHrn,
+            abortSignal
+        ).catch(error => Promise.reject(error));
+
+        return StreamApi.seekToOffset(builder, {
+            layerId: this.layerId,
+            seekOffsets: offsetsObject,
+            mode: request.getMode(),
+            subscriptionId: request.getSubscriptionId(),
+            xCorrelationId: this.xCorrelationId
+        })
+            .then(async response => {
+                this.xCorrelationId =
+                    response.headers.get("X-Correlation-Id") ||
+                    this.xCorrelationId;
+                return response.json();
+            })
+            .catch(err => Promise.reject(err));
     }
 
     /**
@@ -233,38 +330,5 @@ export class StreamLayerClient {
             hrn,
             abortSignal
         );
-    }
-
-    /**
-     * Fetches partition data using data handle.
-     *
-     * @param message The message data of partition metadata.
-     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
-     * and, if required, abort it using the `AbortController` object.
-     *
-     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
-     *
-     * @return The data from the requested partition.
-     */
-    public async getData(
-        message: StreamApi.Message,
-        abortSignal?: AbortSignal
-    ): Promise<Response> {
-        if (!message.metaData || !message.metaData.dataHandle) {
-            return Promise.reject(
-                new Error("No data handle for this partition")
-            );
-        }
-
-        const builder = await this.getRequestBuilder(
-            "blob",
-            this.catalogHrn,
-            abortSignal
-        ).catch(err => Promise.reject(err));
-
-        return BlobApi.getBlob(builder, {
-            dataHandle: message.metaData.dataHandle,
-            layerId: this.layerId
-        });
     }
 }
