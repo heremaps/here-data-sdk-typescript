@@ -101,16 +101,16 @@ describe("StreamApi", () => {
     });
 
     it("Should seekToOffset works as expected", async () => {
-        const builder = {
+        const builder = ({
             baseUrl: "http://mocked.url",
-            request: async (urlBuilder: UrlBuilder, options: any) => {
+            requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
                 expect(urlBuilder.url).to.be.equal(
                     "http://mocked.url/layers/mocked-id/seek?subscriptionId=testSubsId&mode=parallel"
                 );
                 expect(options.method).to.be.equal("PUT");
                 return Promise.resolve();
             }
-        } as RequestBuilder;
+        } as unknown) as RequestBuilder;
 
         await StreamApi.seekToOffset(builder, {
             layerId: "mocked-id",

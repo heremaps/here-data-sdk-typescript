@@ -404,7 +404,7 @@ export async function seekToOffset(
         headers["X-Correlation-Id"] = params["xCorrelationId"] as string;
     }
 
-    return builder.request<any>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }
 
 /**
