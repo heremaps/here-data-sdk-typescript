@@ -17,9 +17,8 @@
  * License-Filename: LICENSE
  */
 
-import { BlobApi, StreamApi } from "@here/olp-sdk-dataservice-api";
+import { BlobApi, HttpError, StreamApi } from "@here/olp-sdk-dataservice-api";
 import {
-    ApiName,
     DataStoreRequestBuilder,
     HRN,
     OlpClientSettings,
@@ -44,10 +43,13 @@ export interface StreamLayerClientParams {
  */
 export class StreamLayerClient {
     private readonly apiVersion: string = "v2";
-    private xCorrelationId?: string;
-    readonly catalogHrn: HRN;
-    readonly layerId: string;
-    readonly settings: OlpClientSettings;
+
+    protected xCorrelationId?: string;
+    protected subscribtionNodeBaseUrl?: string;
+
+    protected readonly catalogHrn: HRN;
+    protected readonly layerId: string;
+    protected readonly settings: OlpClientSettings;
 
     /**
      * Creates the [[StreamLayerClient]] instance.
@@ -81,27 +83,47 @@ export class StreamLayerClient {
         request: SubscribeRequest,
         abortSignal?: AbortSignal
     ): Promise<string> {
-        const builder = await this.getRequestBuilder(
+        const requestBuilder = await RequestFactory.create(
             "stream",
+            this.apiVersion,
+            this.settings,
             this.catalogHrn,
             abortSignal
         ).catch(error => Promise.reject(error));
 
-        const subscription = await StreamApi.subscribe(builder, {
+        const subscribtionRequestParams = {
             layerId: this.layerId,
             mode: request.getMode(),
             consumerId: request.getConsumerId(),
             subscriptionId: request.getSubscriptionId(),
             subscriptionProperties: request.getSubscriptionProperties()
-        })
-            .then(async response => {
-                this.xCorrelationId =
-                    response.headers.get("X-Correlation-Id") || undefined;
-                return response.json();
-            })
+        };
+
+        const subscriptionResult = await StreamApi.subscribe(
+            requestBuilder,
+            subscribtionRequestParams
+        )
+            .then(
+                async (
+                    res: Response
+                ): Promise<{
+                    nodeBaseURL: string;
+                    subscriptionId: string;
+                    xCorrelationId?: string;
+                }> => {
+                    const xCorrelationId =
+                        res.headers.get("X-Correlation-Id") || undefined;
+                    const responseData = await res.json();
+                    return Promise.resolve({ xCorrelationId, ...responseData });
+                }
+            )
             .catch(err => Promise.reject(err));
 
-        return Promise.resolve(subscription.subscriptionId);
+        // Update xCorrelationId
+        this.xCorrelationId = subscriptionResult.xCorrelationId;
+
+        this.subscribtionNodeBaseUrl = subscriptionResult.nodeBaseURL;
+        return Promise.resolve(subscriptionResult.subscriptionId);
     }
 
     /**
@@ -129,44 +151,86 @@ export class StreamLayerClient {
             );
         }
 
-        const builder = await this.getRequestBuilder(
-            "stream",
-            this.catalogHrn,
-            abortSignal
-        ).catch(error => Promise.reject(error));
+        if (!this.subscribtionNodeBaseUrl) {
+            return Promise.reject(
+                new Error(
+                    `No valid nodeBaseurl provided for the subscribtion id=${request.getSubscriptionId()}, please check your subscribtion`
+                )
+            );
+        }
 
-        const consumeData = await StreamApi.consumeData(builder, {
+        const requestBuilder = new DataStoreRequestBuilder(
+            this.settings.downloadManager,
+            this.subscribtionNodeBaseUrl,
+            this.settings.token,
+            abortSignal
+        );
+
+        const consumeDataParams = {
             layerId: this.layerId,
             mode: request.getMode(),
             subscriptionId: request.getSubscriptionId(),
             xCorrelationId: this.xCorrelationId
-        })
-            .then(async response => {
-                this.xCorrelationId =
-                    response.headers.get("X-Correlation-Id") ||
-                    this.xCorrelationId;
-                return Promise.resolve(response.json());
-            })
+        };
+
+        const consumeResponse = await StreamApi.consumeData(
+            requestBuilder,
+            consumeDataParams
+        )
+            .then(
+                async (
+                    response: Response
+                ): Promise<{
+                    data: StreamApi.Message[];
+                    xCorrelationId?: string;
+                }> => {
+                    const data = await response.json();
+                    return Promise.resolve({
+                        xCorrelationId:
+                            response.headers.get("X-Correlation-Id") ||
+                            undefined,
+                        data: data && data.messages ? data.messages : []
+                    });
+                }
+            )
             .catch(error => Promise.reject(error));
 
-        const offsets = consumeData.messages.reduce((acc: any, x: any) => {
-            acc.push(x.offset);
-            return acc;
-        }, []);
+        // Update xCorrelationId
+        this.xCorrelationId = consumeResponse.xCorrelationId;
 
-        const offsetsCommited = await this.commitOffsets({
-            offsets
-        }).catch(error => Promise.reject(error));
-
-        if (offsetsCommited) {
-            return Promise.resolve(consumeData.messages);
-        } else {
-            return Promise.reject(
-                new Error(
-                    "Poll: commit offsets unsuccessful, error=Offset is not commited"
-                )
+        // Commit offsets
+        const latestOffsets: { [key: string]: number } = consumeResponse.data
+            .map(msg => msg.offset)
+            .reduce(
+                (
+                    acc: { [key: string]: number },
+                    curr: StreamApi.StreamOffset
+                ) => {
+                    acc[curr.partition] =
+                        acc[curr.partition] > curr.offset
+                            ? acc[curr.partition]
+                            : curr.offset;
+                    return acc;
+                },
+                {}
             );
-        }
+
+        await StreamApi.commitOffsets(requestBuilder, {
+            commitOffsets: {
+                offsets: Object.keys(latestOffsets).map(key => ({
+                    partition: +key,
+                    offset: latestOffsets[key]
+                }))
+            },
+            subscriptionId: request.getSubscriptionId(),
+            mode: request.getMode(),
+            layerId: this.layerId,
+            xCorrelationId: this.xCorrelationId
+        }).catch(async error => {
+            console.log(`Commit offsets unsuccessful, error=${error.message}`);
+        });
+
+        return Promise.resolve(consumeResponse.data);
     }
 
     /**
@@ -190,13 +254,23 @@ export class StreamLayerClient {
             );
         }
 
-        const builder = await this.getRequestBuilder(
-            "stream",
-            this.catalogHrn,
-            abortSignal
-        ).catch(error => Promise.reject(error));
+        if (!this.subscribtionNodeBaseUrl) {
+            return Promise.reject(
+                new Error(
+                    `Subscribtion error. No valid nodeBaseurl provided for the subscribtion id=${request.getSubscriptionId()}, 
+                    please check your subscribtion`
+                )
+            );
+        }
 
-        return StreamApi.deleteSubscription(builder, {
+        const requestBuilder = new DataStoreRequestBuilder(
+            this.settings.downloadManager,
+            this.subscribtionNodeBaseUrl,
+            this.settings.token,
+            abortSignal
+        );
+
+        return StreamApi.deleteSubscription(requestBuilder, {
             layerId: this.layerId,
             mode: request.getMode(),
             subscriptionId: request.getSubscriptionId(),
@@ -225,13 +299,15 @@ export class StreamLayerClient {
             );
         }
 
-        const builder = await this.getRequestBuilder(
+        const requestBuilder = await RequestFactory.create(
             "blob",
+            "v1",
+            this.settings,
             this.catalogHrn,
             abortSignal
-        ).catch(err => Promise.reject(err));
+        ).catch(error => Promise.reject(error));
 
-        return BlobApi.getBlob(builder, {
+        return BlobApi.getBlob(requestBuilder, {
             dataHandle: message.metaData.dataHandle,
             layerId: this.layerId
         });
@@ -249,9 +325,12 @@ export class StreamLayerClient {
      *
      * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
      *
-     * @returns Messages [[StreamApi.Messages]] from a stream layer
+     * @returns Response with status 200 if success.
      */
-    public async seek(request: SeekRequest, abortSignal?: AbortSignal) {
+    public async seek(
+        request: SeekRequest,
+        abortSignal?: AbortSignal
+    ): Promise<Response> {
         const offsetsObject = request.getSeekOffsets();
         if (
             !offsetsObject ||
@@ -269,13 +348,23 @@ export class StreamLayerClient {
             );
         }
 
-        const builder = await this.getRequestBuilder(
-            "stream",
-            this.catalogHrn,
-            abortSignal
-        ).catch(error => Promise.reject(error));
+        if (!this.subscribtionNodeBaseUrl) {
+            return Promise.reject(
+                new Error(
+                    `Subscribtion error. No valid nodeBaseurl provided for the subscribtion id=${request.getSubscriptionId()}, 
+                    please check your subscribtion`
+                )
+            );
+        }
 
-        return StreamApi.seekToOffset(builder, {
+        const requestBuilder = new DataStoreRequestBuilder(
+            this.settings.downloadManager,
+            this.subscribtionNodeBaseUrl,
+            this.settings.token,
+            abortSignal
+        );
+
+        return StreamApi.seekToOffset(requestBuilder, {
             layerId: this.layerId,
             seekOffsets: offsetsObject,
             mode: request.getMode(),
@@ -286,49 +375,8 @@ export class StreamLayerClient {
                 this.xCorrelationId =
                     response.headers.get("X-Correlation-Id") ||
                     this.xCorrelationId;
-                return response.json();
+                return response;
             })
             .catch(err => Promise.reject(err));
-    }
-
-    /**
-     *
-     * @param offsets commit the offset of the last message read from each partition
-     * so that your application can resume reading new messages from the correct partition
-     * @param offsets offsets to commit
-     *
-     * @returns OK, offsets committed
-     */
-    private async commitOffsets(offsets: StreamApi.CommitOffsetsRequest) {
-        const builder = await this.getRequestBuilder(
-            "stream",
-            this.catalogHrn
-        ).catch(error => Promise.reject(error));
-
-        return StreamApi.commitOffsets(builder, {
-            commitOffsets: offsets,
-            layerId: this.layerId,
-            xCorrelationId: this.xCorrelationId
-        });
-    }
-
-    /**
-     * Fetch baseUrl and create requestBuilder for sending requests to the API Lookup Service.
-     * @param builderType endpoint name is needed to create propriate requestBuilder
-     *
-     * @returns requestBuilder
-     */
-    private async getRequestBuilder(
-        builderType: ApiName,
-        hrn?: HRN,
-        abortSignal?: AbortSignal
-    ): Promise<DataStoreRequestBuilder> {
-        return RequestFactory.create(
-            builderType,
-            this.apiVersion,
-            this.settings,
-            hrn,
-            abortSignal
-        );
     }
 }

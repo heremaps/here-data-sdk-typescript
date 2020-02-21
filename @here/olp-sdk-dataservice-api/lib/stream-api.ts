@@ -52,12 +52,12 @@ export interface ConsumerSubscribeResponse {
 }
 
 export interface ErrorResponse {
-    title?: string;
-    status?: number;
-    code?: string;
-    cause?: string;
-    action?: string;
-    correlationId?: string;
+    title: string;
+    status: number;
+    code: string;
+    cause: string;
+    action: string;
+    correlationId: string;
 }
 
 export interface InlineResponse401 {
@@ -214,7 +214,6 @@ export async function commitOffsets(
     if (params["xCorrelationId"] !== undefined) {
         headers["X-Correlation-Id"] = params["xCorrelationId"] as string;
     }
-
     return builder.request<any>(urlBuilder, options);
 }
 
@@ -282,7 +281,7 @@ export async function deleteSubscription(
         mode?: "serial" | "parallel";
         xCorrelationId?: string;
     }
-): Promise<any> {
+): Promise<Response> {
     const baseUrl = "/layers/{layerId}/subscribe".replace(
         "{layerId}",
         UrlBuilder.toString(params["layerId"])
@@ -301,7 +300,7 @@ export async function deleteSubscription(
         headers["X-Correlation-Id"] = params["xCorrelationId"] as string;
     }
 
-    return builder.request<any>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }
 
 /**
@@ -381,7 +380,7 @@ export async function seekToOffset(
         mode?: "serial" | "parallel";
         xCorrelationId?: string;
     }
-): Promise<any> {
+): Promise<Response> {
     const baseUrl = "/layers/{layerId}/seek".replace(
         "{layerId}",
         UrlBuilder.toString(params["layerId"])
