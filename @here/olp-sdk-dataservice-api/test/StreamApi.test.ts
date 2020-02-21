@@ -131,12 +131,12 @@ describe("StreamApi", () => {
     it("Should deleteSubscription works as expected", async () => {
         const builder = {
             baseUrl: "http://mocked.url",
-            request: async (urlBuilder: UrlBuilder, options: any) => {
+            requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
                 expect(urlBuilder.url).to.be.equal(
                     "http://mocked.url/layers/mocked-id/subscribe?subscriptionId=testSubsId&mode=parallel"
                 );
                 expect(options.method).to.be.equal("DELETE");
-                return Promise.resolve();
+                return Promise.resolve() as any;
             }
         } as RequestBuilder;
 

@@ -46,7 +46,8 @@
     "test": "lerna run test",
     "test-published-bundles": "cd tests/integration/bundles/umd && tsc && cd - && mocha-puppeteer tests/integration/bundles/umd/olp-sdk-published.test.js --args no-sandbox disable-setuid-sandbox",
     "test-generated-bundles": "cd tests/integration/bundles/umd && tsc && cd - && mocha-puppeteer tests/integration/bundles/umd/olp-sdk-generated.test.js --args no-sandbox disable-setuid-sandbox",
-    "integration-test": "nyc mocha --opts ./tests/integration/mocha.opts > xunit.xml",
+    "integration-test": "nyc mocha --opts ./tests/integration/mocha.opts > ./tests/integration/xunit.xml",
+    "functional-test": "nyc mocha --opts ./tests/functional/mocha.opts",
     "coverage": "lerna run coverage",
     "codecov": "lerna run codecov",
     "lint": "lerna run lint",
@@ -60,6 +61,9 @@
     "lerna": "^3.20.2",
     "mocha-puppeteer": "^0.14.0",
     "typescript": "3.5.3",
-    "codecov": "^3.6.1"
+    "codecov": "^3.6.1",
+    "mockserver-node": "5.9.0",
+    "mockserver-client": "5.9.0",
+    "ts-node": "8.6.2"
   }
 }
