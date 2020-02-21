@@ -149,7 +149,7 @@ describe("VersionedLayerClient", () => {
 
     // Set the response with mocked partitions for IDs 100 and 1000 from Query service
     mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/partitions?partition=100&partition=1000`,
+      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/partitions?partition=100&partition=1000&version=128`,
       new Response(
         JSON.stringify({
           partitions: [

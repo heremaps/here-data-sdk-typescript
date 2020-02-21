@@ -158,9 +158,9 @@ export class VersionedLayerClient {
             }
 
             if (quadKey) {
-                const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest()
-                    .withQuadKey(quadKey)
-                    .withVersion(this.version);
+                const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest().withQuadKey(
+                    quadKey
+                );
                 const quadTreeIndexResponse = await this.getPartitions(
                     quadKeyPartitionsRequest
                 ).catch(error => Promise.reject(error));
@@ -269,6 +269,7 @@ export class VersionedLayerClient {
         if (request.getPartitionIds()) {
             const queryClient = new QueryClient(this.settings);
 
+            request.withVersion(this.version);
             return queryClient.getPartitionsById(
                 request,
                 this.layerId,

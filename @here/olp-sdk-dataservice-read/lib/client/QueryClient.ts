@@ -181,7 +181,7 @@ export class QueryClient {
         return QueryApi.getPartitionsById(requestBuilder, {
             layerId,
             partition: idsList,
-            version: version ? `${version}` : undefined
+            version: version !== undefined ? `${version}` : undefined
         });
     }
 

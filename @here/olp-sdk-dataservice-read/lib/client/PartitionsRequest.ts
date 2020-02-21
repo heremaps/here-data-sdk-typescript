@@ -30,7 +30,7 @@ export class PartitionsRequest {
     private additionalFields?: AdditionalFields;
 
     /**
-     * @deprecated This method is deprecated and is not used. If you need to set the version, then
+     * This method is deprecated and is not used. If you need to set the version, then
      * initialize the version client with not deprecated constructor, in other case the latest version will be used.
      *
      * Gets a layer version for the request.
@@ -42,7 +42,7 @@ export class PartitionsRequest {
     }
 
     /**
-     * @deprecated This method is deprecated and is not used. If you need to set the version, then
+     * This method is deprecated and is not used. If you need to set the version, then
      * initialize the version client with not deprecated constructor, in other case the latest version will be used.
      *
      * An optional method that sets the provided layer version.
