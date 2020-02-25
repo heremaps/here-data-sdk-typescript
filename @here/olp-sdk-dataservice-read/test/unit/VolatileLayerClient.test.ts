@@ -750,4 +750,45 @@ describe("VolatileLayerClient", () => {
             "Unsupported parameters"
         );
     });
+
+    it("Method QueryApi.getPartitionsById should be called with param additionalFields and run getPartitions method with additionalFields", async () => {
+        const QueryClientStub = sandbox.stub(dataServiceRead, "QueryClient");
+
+        const mockedPartitions = {
+            partitions: [
+                {
+                    version: 42,
+                    partition: "42",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123",
+                    dataSize: "754212"
+                }
+            ]
+        };
+
+        class MockedQueryClient {
+            getPartitionsById(
+                request: dataServiceRead.PartitionsRequest,
+                signal: AbortSignal
+            ) {
+                expect(request.getPartitionIds()).contains("23605706");
+                expect(request.getAdditionalFields()).contains("dataSize");
+                return Promise.resolve(mockedPartitions);
+            }
+        }
+
+        QueryClientStub.callsFake(
+            (settings: dataServiceRead.OlpClientSettings) => {
+                return new MockedQueryClient();
+            }
+        );
+
+        const partitionsRequest = new dataServiceRead.PartitionsRequest()
+            .withPartitionIds(["23605706"])
+            .withAdditionalFields(["dataSize"]);
+
+        const partitions = await volatileLayerClientNew.getPartitions(
+            partitionsRequest
+        );
+        expect(partitions).equals(mockedPartitions);
+    });
 });

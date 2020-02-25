@@ -912,6 +912,54 @@ describe("VersionedLayerClient", () => {
             getAdditionalFields: () => undefined
         } as any);
     });
+
+    it("Method QueryApi.getPartitionsById should be called with param additionalFields and run getPartitions method with additionalFields", async () => {
+        const QueryClientStub = sandbox.stub(dataServiceRead, "QueryClient");
+
+        const mockedPartitions = {
+            partitions: [
+                {
+                    version: 41,
+                    partition: "41",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123",
+                    dataSize: "754211"
+                },
+                {
+                    version: 42,
+                    partition: "42",
+                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123",
+                    dataSize: "754212"
+                }
+            ]
+        };
+
+        class MockedQueryClient {
+            getPartitionsById(
+                request: dataServiceRead.PartitionsRequest,
+                signal: AbortSignal
+            ) {
+                expect(request.getVersion()).to.be.equal(5);
+                expect(request.getPartitionIds()).contains("23605706");
+                expect(request.getAdditionalFields()).contains("dataSize");
+                return Promise.resolve(mockedPartitions);
+            }
+        }
+
+        QueryClientStub.callsFake(
+            (settings: dataServiceRead.OlpClientSettings) => {
+                return new MockedQueryClient();
+            }
+        );
+
+        const partitionsRequest = new dataServiceRead.PartitionsRequest()
+            .withPartitionIds(["23605706"])
+            .withAdditionalFields(["dataSize"]);
+
+        const partitions = await versionedLayerClientWithVersion.getPartitions(
+            partitionsRequest
+        );
+        expect(partitions).equals(mockedPartitions);
+    });
 });
 
 describe("VersionedLayerClient with locked version 0 in constructor", () => {
