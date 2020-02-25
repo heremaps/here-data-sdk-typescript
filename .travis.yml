@@ -18,8 +18,8 @@ name: "PSV Linux Build & Test"
 script: $WORKSPACE/scripts/linux/psv/travis_build_test_psv.sh
 deploy:
   - provider: script
-    script: $WORKSPACE/scripts/publish-packages.sh
+    script: echo "Hello publish. Tag is $TRAVIS_TAG"
     cleanup: false
     on:
-       branch: master
-       condition: "$TRAVIS_TAG =~ ^v[0-9].[0-9].[0-9]$"
+       branch: task/olpedge-1539-ci2
+       condition: "$TRAVIS_TAG =~ ^testtag[0-9].[0-9].[0-9]$"
