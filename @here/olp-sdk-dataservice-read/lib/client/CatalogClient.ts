@@ -130,7 +130,6 @@ export class CatalogClient {
         ).catch(error => Promise.reject(error));
         let requestedCatalogVersion = request.getVersion();
 
-        let latestVersionError: any;
         if (!requestedCatalogVersion) {
             const billingtag = request.getBillingTag();
             const catalogVersionRequest = new CatalogVersionRequest();
@@ -139,31 +138,13 @@ export class CatalogClient {
             }
             requestedCatalogVersion = await this.getLatestVersion(
                 catalogVersionRequest
-            ).catch(error => {
-                latestVersionError = error;
-                return undefined;
-            });
-
-            if (!requestedCatalogVersion) {
-                return Promise.reject(
-                    `Failed to get the latest version with error: ${latestVersionError}`
-                );
-            }
+            ).catch(async error => Promise.reject(error));
         }
 
-        let layerVersionsError: any;
         const layerVersions = await MetadataApi.getLayerVersions(builder, {
             version: requestedCatalogVersion,
             billingTag: request.getBillingTag()
-        }).catch(err => {
-            layerVersionsError = err;
-            return undefined;
-        });
-        if (!layerVersions) {
-            return Promise.reject(
-                `Failed to get layerVersions with error: ${layerVersionsError}`
-            );
-        }
+        }).catch(async error => Promise.reject(new Error(error)));
 
         return Promise.resolve(layerVersions.layerVersions);
     }

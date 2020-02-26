@@ -149,6 +149,28 @@ describe("CatalogClient", () => {
             });
     });
 
+    it("Should method getLayerVersions return HttpError when MetadataApi.getLayerVersions crashes", async () => {
+        const testError = "Can not get catalog layer version";
+
+        getLayerVersionsStub.callsFake(
+            (builder: any, params: any): Promise<MetadataApi.LayerVersions> => {
+                return Promise.reject("Can not get catalog layer version");
+            }
+        );
+
+        const catalogRequest = new dataServiceRead.LayerVersionsRequest().withVersion(
+            3
+        );
+        const response = await catalogClient
+            .getLayerVersions(
+                (catalogRequest as unknown) as dataServiceRead.LayerVersionsRequest
+            )
+            .catch((err: any) => {
+                assert.isDefined(err);
+                expect(err.message).to.be.equal(testError);
+            });
+    });
+
     it("Should method getLayerVersions provide data with version parameter", async () => {
         const mockedVersion = {
             layerVersions: [
