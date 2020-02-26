@@ -40,6 +40,8 @@ describe("CatalogClient", () => {
   let fetchStub: sinon.SinonStub;
   let catalogClient: CatalogClient;
   let settings: OlpClientSettings;
+  const headers = new Headers();
+  headers.append("cache-control", "max-age=3600");
 
   before(() => {
     sandbox = sinon.createSandbox();
@@ -88,7 +90,8 @@ describe("CatalogClient", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -148,7 +151,7 @@ describe("CatalogClient", () => {
     // Set the response from Metadata service with the versions info from the catalog.
     mockedResponses.set(
       `https://metadata.data.api.platform.here.com/metadata/v1/versions?startVersion=2&endVersion=4`,
-      new Response(JSON.stringify(mockedVersions))
+      new Response(JSON.stringify(mockedVersions), { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -187,7 +190,8 @@ describe("CatalogClient", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -278,12 +282,12 @@ describe("CatalogClient", () => {
 
     mockedResponses.set(
       `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify(mockedVersions))
+      new Response(JSON.stringify(mockedVersions), { headers })
     );
 
     mockedResponses.set(
       `https://metadata.data.api.platform.here.com/metadata/v1/versions?startVersion=-1`,
-      new Response(JSON.stringify(mockedVersions))
+      new Response(JSON.stringify(mockedVersions), { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -322,7 +326,8 @@ describe("CatalogClient", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -353,7 +358,7 @@ describe("CatalogClient", () => {
     // Set the response from Metadata service with the versions info from the catalog.
     mockedResponses.set(
       `https://config.data.api.platform.here.com/config/v1/catalogs/hrn:here:data:::test-hrn`,
-      new Response(JSON.stringify(mockedCatalogs))
+      new Response(JSON.stringify(mockedCatalogs), { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -386,7 +391,8 @@ describe("CatalogClient", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -417,7 +423,7 @@ describe("CatalogClient", () => {
     // Set the response from Metadata service with the versions info from the catalog.
     mockedResponses.set(
       `https://config.data.api.platform.here.com/config/v1/catalogs/hrn:here:data:::test-hrn`,
-      new Response(JSON.stringify(mockedCatalog))
+      new Response(JSON.stringify(mockedCatalog), { headers })
     );
 
     // Setup the fetch to use mocked responses.

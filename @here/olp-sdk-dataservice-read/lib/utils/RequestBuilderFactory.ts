@@ -27,6 +27,8 @@ import {
     OlpClientSettings
 } from "..";
 
+const MILLISECONDS_IN_SECOND = 1000;
+
 /**
  * A helper utils that makes the `Request` object with the base URLs of the API Lookup Service, token callback, and download manager.
  *
@@ -94,9 +96,12 @@ export class RequestFactory {
         hrn?: HRN
     ): Promise<string> {
         const apiCache = new ApiCacheRepository(settings.cache, hrn);
-        const baseUrl = apiCache.get(serviceName, serviceVersion);
+        const baseUrl = apiCache.get(serviceName, serviceVersion, "api");
+        const cacheMaxAge = apiCache.get(serviceName, serviceVersion, "age");
         const cacheOnlyVersion = "v1";
-        if (baseUrl) {
+        const now = new Date().getTime();
+
+        if (baseUrl && cacheMaxAge && now < parseInt(cacheMaxAge, 10)) {
             return Promise.resolve(baseUrl);
         }
 
@@ -108,13 +113,24 @@ export class RequestFactory {
         );
 
         const lookupPromise = hrn
-            ? LookupApi.resourceAPIList(lookUpApiRequest, {
+            ? LookupApi.getResourceAPIList(lookUpApiRequest, {
                   hrn: hrn.toString()
               })
-            : LookupApi.platformAPIList(lookUpApiRequest);
+            : LookupApi.getPlatformAPIList(lookUpApiRequest);
 
         return lookupPromise
-            .then(res => {
+            .then(async (resp: any) => {
+                let maxAge: number;
+                if (resp.headers) {
+                    const cacheControl = resp.headers.get("cache-control");
+                    if (cacheControl) {
+                        const maxSize = cacheControl.match(/max-age=(\d+)/);
+                        maxAge = maxSize ? parseInt(maxSize[1], 10) : 0;
+                    }
+                }
+
+                const res = await resp.json();
+
                 if (!Array.isArray(res)) {
                     throw new HttpError(
                         res.status || 204,
@@ -127,8 +143,20 @@ export class RequestFactory {
                         apiCache.put(
                             item.api as ApiName,
                             item.version,
-                            item.baseURL
+                            item.baseURL,
+                            "api"
                         );
+                        if (maxAge) {
+                            const time =
+                                new Date().getTime() +
+                                maxAge * MILLISECONDS_IN_SECOND;
+                            apiCache.put(
+                                item.api as ApiName,
+                                item.version,
+                                time.toString(),
+                                "age"
+                            );
+                        }
                     }
                 });
 
