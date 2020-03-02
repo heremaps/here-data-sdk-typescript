@@ -1,6 +1,6 @@
 coverage:
   range: 60..100
-  round: down
+  round: nearest
   precision: 1
   status:
     project:
@@ -16,7 +16,15 @@ coverage:
         paths:
           - ./@here/olp-sdk-fetch
         threshold: 1
+      olp-sdk-dataservice-api:
+        paths:
+          - ./@here/olp-sdk-dataservice-api
+        threshold: 1
 ignore:
   - ./@here/olp-sdk-authentication/test
   - ./@here/olp-sdk-dataservice-read/test
   - ./@here/olp-sdk-fetch/test
+  - ./@here/olp-sdk-dataservice-api/test
+  - tests
+  - scripts
+  - docs
