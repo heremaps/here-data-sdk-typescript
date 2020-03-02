@@ -21,18 +21,18 @@ rv_job:
   only:
     - master
 
-wv_veracode_job:
+wv_security_job:
   stage: security_test
   tags:
   - docker-prod
   script:
-  - $CI_PROJECT_DIR/scripts/veracode/veracodeUpload.sh build/olp-edge-ts.zip OLP_EDGE_CI@here.com
+  - $CI_PROJECT_DIR/scripts/security-scanner/SecurityScannerUpload.sh build/olp-edge-ts.zip OLP_EDGE_CI@here.com
   only:
     refs:
       - master
       - schedules
     variables:
-      - $VERACODE
+      - $SECURITY
   artifacts:
     when: always
     paths:
