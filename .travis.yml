@@ -23,4 +23,4 @@ deploy:
     cleanup: false
     on:
        branch: master
-       condition: (($TRAVIS_EVENT_TYPE = api) AND ($TRAVIS_COMMIT_MESSAGE = "Publish to NPM"))
+       condition: [ $TRAVIS_EVENT_TYPE = api && $TRAVIS_COMMIT_MESSAGE = 'Publish to NPM' ]
