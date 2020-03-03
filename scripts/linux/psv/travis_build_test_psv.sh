@@ -46,6 +46,9 @@ npm run codecov && npx codecov
 # Integration tests
 npm run integration-test
 
+# Functional tests
+npm run functional-test
+
 # Test the generated bundles
 npm run test-generated-bundles
 
