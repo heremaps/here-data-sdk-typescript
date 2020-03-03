@@ -996,6 +996,17 @@ describe("VersionedLayerClient with locked version 0 in constructor", () => {
         expect(client["version"]).to.be.equal(0);
     });
 
+    it("Versioned layer should be initialized with undefined version if user set some version < 0 ", () => {
+        const client = new dataServiceRead.VersionedLayerClient({
+            settings: mockedSettings,
+            catalogHrn: mockedCatalogHRH,
+            layerId: "mocked-layed-id",
+            version: -1
+        });
+        expect(client !== undefined).to.be.true;
+        expect(client["version"]).to.be.equal(undefined);
+    });
+
     it("Method getPartitions should call queryClient.fetchQuadTreeIndex with QuadTreeIndexRequest.getVersion() === 0", async () => {
         const QueryClientStub = sandbox.stub(dataServiceRead, "QueryClient");
 

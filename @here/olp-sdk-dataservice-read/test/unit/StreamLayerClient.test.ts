@@ -270,37 +270,6 @@ describe("StreamLayerClient", () => {
         expect(messages[0].metaData.dataSize).to.be.equal(100500);
     });
 
-    it("Should poll be aborted fetching by abort signal", async () => {
-        const mockResponse = ({
-            metaData: {},
-            offset: {}
-        } as unknown) as Response;
-
-        pollStub.callsFake(
-            (builder: any, params: any): Promise<Response> => {
-                return builder.abortSignal.aborted
-                    ? Promise.reject("AbortError")
-                    : Promise.resolve(mockResponse);
-            }
-        );
-
-        const request = new dataServiceRead.PollRequest();
-        const abortController = new AbortController();
-
-        streamLayerClient
-            .poll(
-                (request as unknown) as dataServiceRead.PollRequest,
-                abortController.signal
-            )
-            .then()
-            .catch((err: any) => {
-                assert.strictEqual(err, "AbortError");
-                assert.isTrue(abortController.signal.aborted);
-            });
-
-        abortController.abort();
-    });
-
     it("Should method getData call API with correct arguments", async () => {
         const mockedBlobData: Response = new Response("mocked-blob-response");
         const mockedMessage = {
