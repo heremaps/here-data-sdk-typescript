@@ -103,7 +103,10 @@ export class VersionedLayerClient {
             this.hrn = paramsOrHrn.catalogHrn.toString();
             this.layerId = paramsOrHrn.layerId;
             this.settings = paramsOrHrn.settings;
-            this.version = paramsOrHrn.version;
+
+            if (paramsOrHrn.version !== undefined && paramsOrHrn.version >= 0) {
+                this.version = paramsOrHrn.version;
+            }
         }
     }
 
