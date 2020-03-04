@@ -1,3 +1,49 @@
+## v1.3.0 (05/03/2020)
+
+**Common**
+
+- Updated dependencies.
+
+The following bugs are fixed:
+- Version "0" was incorrectly handled. It is now fixed.
+- Additional fields were not passed correctly into the request. It is now fixed.
+
+**olp-sdk-fetch**
+
+- Updated `node-fetch` to version 2.6.0.
+
+**olp-sdk-authentication**
+
+- Updated `olp-sdk-fetch` to version 1.3.0.
+
+**olp-sdk-dataservice-api**
+
+- Added functions and models that are generated from the Stream API specification.
+- Added the `isHttpError()` method to the `HttpError` class.
+- Changed `CoverageAPI`. Now, the `dataLevel` parameter is optional.
+
+**olp-sdk-dataservice-read**
+
+- Added the `VersionedLayerClientParams` interface.
+- Deprecated the `VersionedLayerClient` constructor. Instead, use the constructor that creates the `VersionedLayerClient` instance with the help of the `VersionedLayerClientParams` object.
+- Added the `VersionedLayerClient` constructor that creates the `VersionedLayerClient` instance using the `VersionedLayerClientParams` object and lock version.
+- Deprecated the `DataRequest.getVersion()` method.
+- Deprecated the `DataRequest.withVersion()` method.
+- Changed the `VersionedLayerClient.getData` and `VersionedLayerClient.getPartitions` methods. Now, they ignore versions from `DataRequest` and `PartitionsRequest` and use versions from the `VersionedLayerClient` instance. If you initialize `VersionedLayerClient` without any version, on the first call, the latest version is fetched from the service and set in the instance.
+- Added the `SubscribeRequest` class. This is used by `StreamLayerClient.subscribe()`.
+- Deprecated the `StatisticsRequest.withDatalevel()` method with a string parameter and added the `StatisticsRequest.withDatalevel()` method with a number parameter.
+- Changed `StatisticsRequest.getDataLevel()`. Now, it returns one of the following values: string, number, or undefined.
+- Added `StreamLayerClient` and reading support for streamed data using `StreamLayerClient`. Currently, you can subscribe, unsubscribe, and consume messages from a stream layer in a serial or parallel mode. The `poll` method reads messages from a stream layer and commits successfully consumed messages before handing them over to you. With the `seek` method, you can set to start reading messages from a stream layer at any given position.
+- Added the `PollRequest` class. It is used by `StreamLayerClient.poll()`.
+- Added the `UnsubscribeRequest` class. It is used by `StreamLayerClient.unsubscribe()`.
+- Added the `SeekRequest` class. It is used by `StreamLayerClient.seek()`.
+- Deprecated the `VolatileLayerClient`constructor. Instead, use the constructor that creates the `VolatileLayerClient` instance with the help of the `VolatileLayerClientParams` object.
+- Added the `VolatileLayerClient` constructor that creates the `VolatileLayerClient` instance using `VolatileLayerClientClientParams` object.
+- Deprecated the `IndexLayerClient` constructor. Instead, use the constructor that creates the `IndexLayerClientClient` instance with the help of the `IndexLayerClientClientParams` object.
+- Added the `IndexLayerClient` constructor that creates the `IndexLayerClientClient` instance using the `IndexLayerClientClientParams` object.
+- Changed the `LookupAPI.getBaseUrl()` method. Now, you can fetch all URLs in one request instead of fetching each URL separately.
+- Changed the `ConfigClient.getCatalogs()` method. Now, the `request` parameter is optional.
+
 ## v1.2.1 (05/02/2020)
 
 **Common**
