@@ -13,6 +13,7 @@ rv_job:
   - docker-prod
   image: ${DOCKER_REGISTRY}/${DOCKER_IMAGE_PERFORMANCE}:${DOCKER_IMAGE_PERFORMANCE_VERSION}
   script:
+  - npm install -g yarn
   - yarn
   - yarn bootstrap
   - npm run build
