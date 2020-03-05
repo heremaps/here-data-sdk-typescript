@@ -14,13 +14,13 @@ addons:
 branches:
     only:
       - master
-script: $WORKSPACE/scripts/linux/psv/travis_build_test_psv.sh && echo "Event $TRAVIS_EVENT_TYPE, Message $TRAVIS_COMMIT_MESSAGE"
+script: $WORKSPACE/scripts/linux/psv/travis_build_test_psv.sh && env
 name: "PSV Linux Build & Test"
 
 deploy:
   - provider: script
-    script: $WORKSPACE/scripts/publish-packages.sh && echo "Event $TRAVIS_EVENT_TYPE, Message $TRAVIS_COMMIT_MESSAGE"
+    script: $WORKSPACE/scripts/publish-packages.sh
     cleanup: false
     on:
        branch: master
-       condition: [ $TRAVIS_EVENT_TYPE = api && $TRAVIS_COMMIT_MESSAGE = 'Publish to NPM' ]
+       condition: [ $TRAVIS_EVENT_TYPE = api && $allow_publish_npm = true ]
