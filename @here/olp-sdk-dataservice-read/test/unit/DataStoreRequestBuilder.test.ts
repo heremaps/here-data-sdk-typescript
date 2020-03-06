@@ -29,6 +29,87 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
+describe("addBearerToken", () => {
+    const dm = ({
+        download: async (url: string, init?: RequestInit) =>
+            Promise.resolve({ json: () => Promise.resolve(init) })
+    } as unknown) as dataServiceRead.DownloadManager;
+
+    const requestBuilder = new dataServiceRead.DataStoreRequestBuilder(
+        dm,
+        "mocked-base-url",
+        () => Promise.resolve("mocked-token")
+    );
+
+    it("Shoud be added token to the request headers with empty params from the user", async () => {
+        const result: any = await requestBuilder.download("mocked-url");
+        expect(result.headers.get("Authorization")).equals(
+            "Bearer mocked-token"
+        );
+    });
+
+    it("Shoud be added token to the request headers with not empty params from the user", async () => {
+        const result: any = await requestBuilder.download("mocked-url", {
+            body: "test-string"
+        });
+        expect(result.body).equals("test-string");
+        expect(result.headers.get("Authorization")).equals(
+            "Bearer mocked-token"
+        );
+    });
+
+    it("Shoud be added token to the request headers with some headers in params from the user", async () => {
+        const result: any = await requestBuilder.download("mocked-url", {
+            body: "test-string",
+            headers: [
+                ["test-header-from-the-user", "test-header-from-the-user-value"]
+            ]
+        });
+        expect(result.body).equals("test-string");
+        expect(result.headers.get("Authorization")).equals(
+            "Bearer mocked-token"
+        );
+        expect(result.headers.get("test-header-from-the-user")).equals(
+            "test-header-from-the-user-value"
+        );
+    });
+
+    it("Shoud be added token to the request headers with some instance of  Headers in params from the user", async () => {
+        const result: any = await requestBuilder.download("mocked-url", {
+            body: "test-string",
+            headers: new Headers({ "test-header": "test-header-value" })
+        });
+        expect(result.body).equals("test-string");
+        expect(result.headers.get("Authorization")).equals(
+            "Bearer mocked-token"
+        );
+        expect(result.headers.get("test-header")).equals("test-header-value");
+    });
+
+    it("Shoud be added token to the request headers with some empty headers object in params from the user", async () => {
+        const result: any = await requestBuilder.download("mocked-url", {
+            body: "test-string",
+            headers: {}
+        });
+        expect(result.body).equals("test-string");
+        expect(result.headers.get("Authorization")).equals(
+            "Bearer mocked-token"
+        );
+    });
+
+    it("Shoud be added token to the request headers with some not empty headers object in params from the user", async () => {
+        const result: any = await requestBuilder.download("mocked-url", {
+            body: "test-string",
+            headers: { "test-header": "test-header-value" }
+        });
+        expect(result.body).equals("test-string");
+        expect(result.headers.get("Authorization")).equals(
+            "Bearer mocked-token"
+        );
+        expect(result.headers.get("test-header")).equals("test-header-value");
+    });
+});
+
 describe("DataStoreRequestBuilder", () => {
     let sandbox: sinon.SinonSandbox;
     let getBaseUrlRequestStub: sinon.SinonStub;

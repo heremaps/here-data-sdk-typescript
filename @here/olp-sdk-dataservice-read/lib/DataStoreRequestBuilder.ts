@@ -20,26 +20,34 @@
 import { RequestBuilder } from "@here/olp-sdk-dataservice-api";
 import { DownloadManager } from "./DownloadManager";
 
+/**
+ * Adds bearer token to the request headers
+ * @param getBearerToken async function that returns token string.
+ * @param init params to the request. @see RequestInit interface.
+ *
+ * @returns Promise with updated request params (with added token to the headers).
+ */
 async function addBearerToken(
     getBearerToken: () => Promise<string>,
     init?: RequestInit
 ): Promise<RequestInit> {
-    if (init === undefined) {
-        init = {};
-    }
-
-    /**
-     * @todo fix datastore-api template generator.
-     * It sends empty object for headers, but should be Headers object
-     */
-    if (init.headers === undefined || !(init.headers instanceof Headers)) {
-        init.headers = new Headers();
-    }
-
     const token = await getBearerToken();
-    (init.headers as Headers).append("Authorization", "Bearer " + token);
 
-    return init;
+    if (init === undefined) {
+        // if empty RequestInit, just create new one and add Bearer roken to the headers
+        init = {};
+        init.headers = new Headers();
+        init.headers.append("Authorization", "Bearer " + token);
+    } else {
+        // convert init.headers to the Headers if received a plain object
+        const headers = new Headers(init.headers);
+
+        // adding token to the headers
+        headers.append("Authorization", "Bearer " + token);
+        init.headers = headers;
+    }
+
+    return Promise.resolve(init);
 }
 
 /**
