@@ -44,8 +44,6 @@ describe("VolatileLayerClient", () => {
 
   const testHRN = HRN.fromString("hrn:here:data:::test-hrn");
   const testVolatileLayerId = "test-layed-id";
-  const headers = new Headers();
-  headers.append("cache-control", "max-age=3600");
 
   before(() => {
     sandbox = sinon.createSandbox();
@@ -93,8 +91,7 @@ describe("VolatileLayerClient", () => {
               additionalProp3: "string"
             }
           }
-        ]),
-        { headers }
+        ])
       )
     );
 
@@ -123,8 +120,7 @@ describe("VolatileLayerClient", () => {
               version: 2
             }
           ]
-        }),
-        { headers }
+        })
       )
     );
 
@@ -217,20 +213,19 @@ describe("VolatileLayerClient", () => {
               additionalProp3: "string"
             }
           }
-        ]),
-        { headers }
+        ])
       )
     );
 
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/partitions?partition=0000042`,
-      new Response(JSON.stringify(mockedPartitionsIdData), { headers })
+      new Response(JSON.stringify(mockedPartitionsIdData))
     );
 
     // Set the response of mocked partitions from metadata service.
     mockedResponses.set(
       `https://volatile-blob.data.api.platform.here.com/volatile-blob/v1/layers/test-layed-id/data/3C3BE24A341D82321A9BA9075A7EF498.123`,
-      new Response(mockedData, { headers })
+      new Response(mockedData)
     );
 
     // Setup the fetch to use mocked responses.
@@ -272,8 +267,7 @@ describe("VolatileLayerClient", () => {
               additionalProp3: "string"
             }
           }
-        ]),
-        { headers }
+        ])
       )
     );
 
@@ -301,8 +295,7 @@ describe("VolatileLayerClient", () => {
             }
           ],
           next: "/uri/to/next/page"
-        }),
-        { headers }
+        })
       )
     );
 
@@ -374,15 +367,14 @@ describe("VolatileLayerClient", () => {
               additionalProp3: "string"
             }
           }
-        ]),
-        { headers }
+        ])
       )
     );
 
     // Set the response of mocked partitions from metadata service.
     mockedResponses.set(
       `https://volatile-blob.data.api.platform.here.com/volatile-blob/v1/layers/test-layed-id/data/1b2ca68f-d4a0-4379-8120-cd025640510c`,
-      new Response(mockedData, { headers })
+      new Response(mockedData)
     );
 
     // Setup the fetch to use mocked responses.
@@ -446,8 +438,7 @@ describe("VolatileLayerClient", () => {
               additionalProp3: "string"
             }
           }
-        ]),
-        { headers }
+        ])
       )
     );
 
@@ -469,15 +460,14 @@ describe("VolatileLayerClient", () => {
               dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
             }
           ]
-        }),
-        { headers }
+        })
       )
     );
 
     // Set the response of mocked partitions from metadata service.
     mockedResponses.set(
       `https://volatile-blob.data.api.platform.here.com/volatile-blob/v1/layers/test-layed-id/data/c9116bb9-7d00-44bf-9b26-b4ab4c274665`,
-      new Response(mockedData, { headers })
+      new Response(mockedData)
     );
 
     // Setup the fetch to use mocked responses.
@@ -485,7 +475,7 @@ describe("VolatileLayerClient", () => {
 
     mockedResponses.set(
       `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 124 }), { headers })
+      new Response(JSON.stringify({ version: 124 }))
     );
 
     const settings = new OlpClientSettings({
@@ -541,14 +531,13 @@ describe("VolatileLayerClient", () => {
               additionalProp3: "string"
             }
           }
-        ]),
-        { headers }
+        ])
       )
     );
 
     mockedResponses.set(
       `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 30 }), { headers })
+      new Response(JSON.stringify({ version: 30 }))
     );
 
     // Set the response with mocked partitions for volatile layer
@@ -580,8 +569,7 @@ describe("VolatileLayerClient", () => {
               version: 1
             }
           ]
-        }),
-        { headers }
+        })
       )
     );
 
@@ -671,15 +659,14 @@ describe("VolatileLayerClient", () => {
               additionalProp3: "string"
             }
           }
-        ]),
-        { headers }
+        ])
       )
     );
 
     // Set the response of mocked partitions with additional fields.
     mockedResponses.set(
       `https://metadata.data.api.platform.here.com/metadata/v1/layers/test-layed-id/partitions?additionalFields=dataSize,checksum,compressedDataSize`,
-      new Response(JSON.stringify(mockedPartitions), { headers })
+      new Response(JSON.stringify(mockedPartitions))
     );
 
     // Setup the fetch to use mocked responses.
@@ -726,7 +713,7 @@ describe("VolatileLayerClient", () => {
 
     mockedResponses.set(
       `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 30 }), { headers })
+      new Response(JSON.stringify({ version: 30 }))
     );
 
     // Set the response from lookup api with the info about Query API.
@@ -754,8 +741,7 @@ describe("VolatileLayerClient", () => {
               additionalProp3: "string"
             }
           }
-        ]),
-        { headers }
+        ])
       )
     );
 
@@ -784,7 +770,7 @@ describe("VolatileLayerClient", () => {
     // Set the response of mocked partitions with additional fields.
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/quadkeys/70/depths/0?additionalFields=dataSize,checksum,compressedDataSize`,
-      new Response(JSON.stringify(mockedPartitions), { headers })
+      new Response(JSON.stringify(mockedPartitions))
     );
 
     // Setup the fetch to use mocked responses.
