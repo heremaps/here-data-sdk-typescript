@@ -44,12 +44,24 @@ export interface IndexLayerClientParams {
  */
 export class IndexLayerClient {
     private readonly apiVersion: string = "v1";
-    // The HERE Resource Name of the catalog
-    private hrn: string;
-    // The ID of the layer.
-    private layerId: string;
-    // The [[OlpClientSettings]] instance.
-    private settings: OlpClientSettings;
+
+    /**
+     * HRN of the catalog.
+     * @deprecated This field will be marked as private by 08.2020.
+     */
+    hrn: string;
+
+    /**
+     * The ID of the layer.
+     * @deprecated This field will be marked as private by 08.2020.
+     */
+    layerId: string;
+
+    /**
+     * The [[OlpClientSettings]] instance.
+     * @deprecated This field will be marked as private by 08.2020.
+     */
+    settings: OlpClientSettings;
 
     /**
      * @deprecated Please use the overloaded constructor of IndexLayerClient.

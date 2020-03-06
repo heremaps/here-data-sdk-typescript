@@ -56,12 +56,24 @@ export interface VersionedLayerClientParams {
 export class VersionedLayerClient {
     private readonly apiVersion: string = "v1";
 
-    // HRN of the catalog.
-    private hrn: string;
-    // The ID of the layer.
-    private layerId: string;
-    // The [[OlpClientSettings]] instance.
-    private settings: OlpClientSettings;
+    /**
+     * HRN of the catalog.
+     * @deprecated This field will be marked as private by 08.2020.
+     */
+    hrn: string;
+
+    /**
+     * The ID of the layer.
+     * @deprecated This field will be marked as private by 08.2020.
+     */
+    layerId: string;
+
+    /**
+     * The [[OlpClientSettings]] instance.
+     * @deprecated This field will be marked as private by 08.2020.
+     */
+    settings: OlpClientSettings;
+
     // Layer version.
     private version?: number;
 
