@@ -69,17 +69,16 @@ class MockedApiCacheRepository {
         this.hrn = hrn ? hrn.toString() : "plathorm-api";
     }
 
-    public get(service: string, serviceVersion: string, type: string) {
-        return this.cache.get(`${service}-${serviceVersion}-${type}`);
+    public get(service: string, serviceVersion: string) {
+        return this.cache.get(`${service}-${serviceVersion}`);
     }
 
     public put(
         serviceName: string,
         serviceVersion: string,
-        baseURL: string,
-        type: string
+        baseURL: string
     ): boolean {
-        this.cache.set(`${serviceName}-${serviceVersion}-${type}`, baseURL);
+        this.cache.set(`${serviceName}-${serviceVersion}`, baseURL);
         return true;
     }
 }
@@ -130,26 +129,17 @@ describe("RequestFactory", () => {
 
     describe("create()", () => {
         it("Should return created RequestBuilder with correct base url for platform service", async () => {
-            const headers = new Headers();
-            headers.append("cache-control", "max-age=3600");
-            const response = {
-                headers,
-                resp: [
-                    {
-                        api: "statistics",
-                        version: "v1",
-                        baseURL:
-                            "test-base-url-to-platform-service-for-request-builder"
-                    }
-                ],
-                json: function() {
-                    return this.resp;
-                }
-            };
             sandbox
-                .stub(dataServiceApi.LookupApi, "getPlatformAPIList")
+                .stub(dataServiceApi.LookupApi, "platformAPIList")
                 .callsFake(() =>
-                    Promise.resolve((response as unknown) as Response)
+                    Promise.resolve([
+                        {
+                            api: "statistics",
+                            version: "v1",
+                            baseURL:
+                                "test-base-url-to-platform-service-for-request-builder"
+                        }
+                    ])
                 );
 
             const settings = new MockedOlpClientSettings();
@@ -165,18 +155,13 @@ describe("RequestFactory", () => {
         });
 
         it("Should reject with correct error about base url", async () => {
-            sandbox
-                .stub(dataServiceApi.LookupApi, "getPlatformAPIList")
-                .callsFake(
-                    () =>
-                        Promise.resolve({
-                            status: 204,
-                            title: "No content",
-                            json: function() {
-                                return this;
-                            }
-                        }) as any
-                );
+            sandbox.stub(dataServiceApi.LookupApi, "platformAPIList").callsFake(
+                () =>
+                    Promise.resolve({
+                        status: 204,
+                        title: "No content"
+                    }) as any
+            );
 
             const settings = new MockedOlpClientSettings();
 
@@ -194,25 +179,16 @@ describe("RequestFactory", () => {
 
     describe("getBaseUrl()", () => {
         it("Should return correct base url for platform service", async () => {
-            const headers = new Headers();
-            headers.append("cache-control", "max-age=3600");
-            const response = {
-                headers,
-                resp: [
-                    {
-                        api: "statistics",
-                        version: "v1",
-                        baseURL: "test-base-url-to-platform-service"
-                    }
-                ],
-                json: function() {
-                    return this.resp;
-                }
-            };
             sandbox
-                .stub(dataServiceApi.LookupApi, "getPlatformAPIList")
+                .stub(dataServiceApi.LookupApi, "platformAPIList")
                 .callsFake(() =>
-                    Promise.resolve((response as unknown) as Response)
+                    Promise.resolve([
+                        {
+                            api: "statistics",
+                            version: "v1",
+                            baseURL: "test-base-url-to-platform-service"
+                        }
+                    ])
                 );
             const settings = new MockedOlpClientSettings();
             const baseUrl = await dataServiceRead.RequestFactory.getBaseUrl(
@@ -224,25 +200,16 @@ describe("RequestFactory", () => {
         });
 
         it("Should return correct base url for resource service", async () => {
-            const headers = new Headers();
-            headers.append("cache-control", "max-age=3600");
-            const response = {
-                headers,
-                resp: [
-                    {
-                        api: "statistics",
-                        version: "v1",
-                        baseURL: "test-base-url-to-resource-service"
-                    }
-                ],
-                json: function() {
-                    return this.resp;
-                }
-            };
             sandbox
-                .stub(dataServiceApi.LookupApi, "getResourceAPIList")
+                .stub(dataServiceApi.LookupApi, "resourceAPIList")
                 .callsFake(() =>
-                    Promise.resolve((response as unknown) as Response)
+                    Promise.resolve([
+                        {
+                            api: "statistics",
+                            version: "v1",
+                            baseURL: "test-base-url-to-resource-service"
+                        }
+                    ])
                 );
             const settings = new MockedOlpClientSettings();
 
@@ -261,16 +228,13 @@ describe("RequestFactory", () => {
 
         it("Should reject with correct error message", async () => {
             sandbox
-                .stub(dataServiceApi.LookupApi, "getPlatformAPIList")
+                .stub(dataServiceApi.LookupApi, "platformAPIList")
                 .callsFake(() =>
-                    Promise.resolve(({
+                    Promise.resolve({
                         status: 404,
                         title: "Service Not Found",
-                        detail: [],
-                        json: function() {
-                            return this;
-                        }
-                    } as unknown) as Response)
+                        detail: []
+                    })
                 );
             const settings = new MockedOlpClientSettings();
             try {
@@ -286,14 +250,8 @@ describe("RequestFactory", () => {
 
         it("Should reject with correct custom error message", async () => {
             sandbox
-                .stub(dataServiceApi.LookupApi, "getPlatformAPIList")
-                .callsFake(() =>
-                    Promise.resolve(({
-                        json: function() {
-                            return this;
-                        }
-                    } as unknown) as Response)
-                );
+                .stub(dataServiceApi.LookupApi, "platformAPIList")
+                .callsFake(() => Promise.resolve({}));
             const settings = new MockedOlpClientSettings();
             try {
                 await dataServiceRead.RequestFactory.getBaseUrl(
@@ -307,25 +265,16 @@ describe("RequestFactory", () => {
         });
 
         it("Should reject with not found error message", async () => {
-            const headers = new Headers();
-            headers.append("cache-control", "max-age=3600");
-            const response = {
-                headers,
-                resp: [
-                    {
-                        api: "metadata",
-                        version: "v1",
-                        baseURL: "test-base-url-to-platform-service"
-                    }
-                ],
-                json: function() {
-                    return this.resp;
-                }
-            };
             sandbox
-                .stub(dataServiceApi.LookupApi, "getPlatformAPIList")
+                .stub(dataServiceApi.LookupApi, "platformAPIList")
                 .callsFake(() =>
-                    Promise.resolve((response as unknown) as Response)
+                    Promise.resolve([
+                        {
+                            api: "metadata",
+                            version: "v1",
+                            baseURL: "test-base-url-to-platform-service"
+                        }
+                    ])
                 );
             const settings = new MockedOlpClientSettings();
             try {
@@ -340,25 +289,16 @@ describe("RequestFactory", () => {
         });
 
         it("Should reject with not found error message for hrn", async () => {
-            const headers = new Headers();
-            headers.append("cache-control", "max-age=3600");
-            const response = {
-                headers,
-                resp: [
-                    {
-                        api: "metadata",
-                        version: "v1",
-                        baseURL: "test-base-url-to-platform-service"
-                    }
-                ],
-                json: function() {
-                    return this.resp;
-                }
-            };
             sandbox
-                .stub(dataServiceApi.LookupApi, "getResourceAPIList")
+                .stub(dataServiceApi.LookupApi, "resourceAPIList")
                 .callsFake(() =>
-                    Promise.resolve((response as unknown) as Response)
+                    Promise.resolve([
+                        {
+                            api: "metadata",
+                            version: "v1",
+                            baseURL: "test-base-url-to-platform-service"
+                        }
+                    ])
                 );
             const settings = new MockedOlpClientSettings();
             try {
@@ -380,37 +320,19 @@ describe("RequestFactory", () => {
             }
         });
 
-        it("Should return correct base url for resource service from cache while max-age is valid", async () => {
-            const headers = new Headers();
-            headers.append("cache-control", "max-age=2");
-            const response = {
-                headers,
-                resp: [
-                    {
-                        api: "statistics",
-                        version: "v1",
-                        baseURL: "test-base-url-to-resource-service"
-                    }
-                ],
-                json: function() {
-                    return this.resp;
-                }
-            };
+        it("Should return correct base url for resource service from cache", async () => {
             const resourceApiStub = sandbox.stub(
                 dataServiceApi.LookupApi,
-                "getResourceAPIList"
+                "resourceAPIList"
             );
-
-            resourceApiStub.callsFake(() =>
-                Promise.resolve((response as unknown) as Response)
-            );
-            const settings = new MockedOlpClientSettings();
             const platformApiStub = sandbox.stub(
                 dataServiceApi.LookupApi,
-                "getPlatformAPIList"
+                "platformAPIList"
             );
+            const settings = new MockedOlpClientSettings();
+            settings.cache.set("statistics-v1", "test-cached-service-url");
 
-            const baseUrl1 = await dataServiceRead.RequestFactory.getBaseUrl(
+            const baseUrl = await dataServiceRead.RequestFactory.getBaseUrl(
                 "statistics",
                 "v1",
                 settings as any,
@@ -420,40 +342,9 @@ describe("RequestFactory", () => {
                     service: "here-test-service"
                 }) as any
             );
-            expect(resourceApiStub.callCount).to.be.equal(1);
-            expect(baseUrl1).to.be.equal("test-base-url-to-resource-service");
-
-            const baseUrl2 = await dataServiceRead.RequestFactory.getBaseUrl(
-                "statistics",
-                "v1",
-                settings as any,
-                new MockedHrn({
-                    partition: "here-dev",
-                    resource: "here-test-resource",
-                    service: "here-test-service"
-                }) as any
-            );
-
-            expect(resourceApiStub.callCount).to.be.equal(1);
-            expect(baseUrl2).to.be.equal("test-base-url-to-resource-service");
-
-            setTimeout(async () => {
-                const baseUrl3 = await dataServiceRead.RequestFactory.getBaseUrl(
-                    "statistics",
-                    "v1",
-                    settings as any,
-                    new MockedHrn({
-                        partition: "here-dev",
-                        resource: "here-test-resource",
-                        service: "here-test-service"
-                    }) as any
-                );
-
-                expect(resourceApiStub.callCount).to.be.equal(2);
-                expect(baseUrl3).to.be.equal(
-                    "test-base-url-to-resource-service"
-                );
-            }, 3000);
+            expect(baseUrl).to.be.equal("test-cached-service-url");
+            expect(resourceApiStub.callCount).to.be.equal(0);
+            expect(platformApiStub.callCount).to.be.equal(0);
         });
     });
 });

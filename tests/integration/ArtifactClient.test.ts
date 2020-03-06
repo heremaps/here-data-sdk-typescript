@@ -69,8 +69,6 @@ describe("ArtifactClient", () => {
 
   it("Should fetch the schema details", async () => {
     const mockedResponses = new Map();
-    const headers = new Headers();
-    headers.append("cache-control", "max-age=3600");
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
@@ -87,8 +85,7 @@ describe("ArtifactClient", () => {
               additionalProp3: "string"
             }
           }
-        ]),
-        { headers }
+        ])
       )
     );
 
@@ -138,7 +135,7 @@ describe("ArtifactClient", () => {
     // Set the response from Metadata service with the versions info from the catalog.
     mockedResponses.set(
       `https://artifact.data.api.platform.here.com/artifact/v1/schema/hrn:here:schema:::com.here.schema.mock:test_v2:2.38.0`,
-      new Response(JSON.stringify(mockedResponse), { headers })
+      new Response(JSON.stringify(mockedResponse))
     );
 
     // Setup the fetch to use mocked responses.
@@ -156,8 +153,6 @@ describe("ArtifactClient", () => {
 
   it("Should fetch file of the schema", async () => {
     const mockedResponses = new Map();
-    const headers = new Headers();
-    headers.append("cache-control", "max-age=3600");
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
@@ -174,8 +169,7 @@ describe("ArtifactClient", () => {
               additionalProp3: "string"
             }
           }
-        ]),
-        { headers }
+        ])
       )
     );
 
@@ -185,12 +179,12 @@ describe("ArtifactClient", () => {
     // Set the response from Metadata service with the versions info from the catalog.
     mockedResponses.set(
       `https://artifact.data.api.platform.here.com/artifact/v1/artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2`,
-      new Response(mockedResponse, { headers })
+      new Response(mockedResponse)
     );
 
     mockedResponses.set(
       `https://artifact.data.api.platform.here.com/artifact/v1/artifact/hrn:here:artifact:::com.here.schema.fake:100702-v2`,
-      new Response(mockedResponse2, { headers })
+      new Response(mockedResponse2)
     );
 
     // Setup the fetch to use mocked responses.
