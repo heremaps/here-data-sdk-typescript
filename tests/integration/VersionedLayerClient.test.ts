@@ -383,12 +383,6 @@ describe("VersionedLayerClient", () => {
       new Response(mockedData)
     );
 
-    // Set the response from Metadata service with the info about latest catalog version.
-    mockedResponses.set(
-      `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 128 }))
-    );
-
     // Setup the fetch to use mocked responses.
     fetchMock.withMockedResponses(mockedResponses);
 
@@ -406,7 +400,7 @@ describe("VersionedLayerClient", () => {
     const data = await layerClient.getData(request);
 
     assert.isDefined(data);
-    expect(fetchStub.callCount).to.be.equal(3);
+    expect(fetchStub.callCount).to.be.equal(2); // 1 - lookup, 1 - blob
   });
 
   it("Shoud be fetched data with PartitionId", async () => {
@@ -551,16 +545,6 @@ describe("VersionedLayerClient", () => {
               additionalProp2: "string",
               additionalProp3: "string"
             }
-          },
-          {
-            api: "metadata",
-            version: "v1",
-            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
           }
         ])
       )
@@ -570,12 +554,6 @@ describe("VersionedLayerClient", () => {
     mockedResponses.set(
       `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/3C3BE24A341D82321A9BA9075A7EF498.123`,
       new Response(mockedData)
-    );
-
-    // Set the response from Metadata service with the info about latest catalog version.
-    mockedResponses.set(
-      `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 42 }))
     );
 
     // Setup the fetch to use mocked responses.
@@ -597,7 +575,7 @@ describe("VersionedLayerClient", () => {
     const data = await layerClient.getData(request);
 
     assert.isDefined(data);
-    expect(fetchStub.callCount).to.be.equal(4);
+    expect(fetchStub.callCount).to.be.equal(3); // 1 - lookup, 1 - query, 1 - blob
   });
 
   it("Shoud be fetched data with QuadKey", async () => {
@@ -746,16 +724,6 @@ describe("VersionedLayerClient", () => {
               additionalProp2: "string",
               additionalProp3: "string"
             }
-          },
-          {
-            api: "metadata",
-            version: "v1",
-            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
           }
         ])
       )
@@ -765,12 +733,6 @@ describe("VersionedLayerClient", () => {
     mockedResponses.set(
       `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/c9116bb9-7d00-44bf-9b26-b4ab4c274665`,
       new Response(mockedData)
-    );
-
-    // Set the response from Metadata service with the info about latest catalog version.
-    mockedResponses.set(
-      `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 42 }))
     );
 
     // Setup the fetch to use mocked responses.
@@ -792,7 +754,7 @@ describe("VersionedLayerClient", () => {
     const data = await layerClient.getData(request);
 
     assert.isDefined(data);
-    expect(fetchStub.callCount).to.be.equal(4);
+    expect(fetchStub.callCount).to.be.equal(3); // 1 - lookup, 1 - query, 1 - blob
   });
 
   it("Shoud read partitions metadata by QuadKey for specific VersionLayer", async () => {

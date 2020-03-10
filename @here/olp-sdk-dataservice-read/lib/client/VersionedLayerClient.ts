@@ -36,6 +36,8 @@ import {
     RequestFactory
 } from "..";
 
+// tslint:disable: deprecation
+
 /**
  * Parameters for use to initialize VersionLayerClient.
  */
@@ -138,69 +140,85 @@ export class VersionedLayerClient {
         abortSignal?: AbortSignal
     ): Promise<Response> {
         const dataHandle = dataRequest.getDataHandle();
-        const partitionId = dataRequest.getPartitionId();
-        const quadKey = dataRequest.getQuadKey();
 
-        if (this.version === undefined) {
-            this.version = await this.getLatestVersion(
+        if (dataHandle) {
+            return this.downloadPartition(
+                dataHandle,
+                abortSignal,
                 dataRequest.getBillingTag()
-            ).catch(error => Promise.reject(error));
+            );
         }
 
-        if (
-            dataHandle !== undefined ||
-            partitionId !== undefined ||
-            quadKey !== undefined
-        ) {
-            if (dataHandle) {
-                return this.downloadPartition(
-                    dataHandle,
-                    abortSignal,
-                    dataRequest.getBillingTag()
-                );
+        const partitionId = dataRequest.getPartitionId();
+        let usingVersion: number | undefined;
+        const dataRequestVersion = dataRequest.getVersion();
+
+        if (dataRequestVersion !== undefined) {
+            usingVersion = dataRequestVersion;
+        } else {
+            usingVersion = this.version;
+        }
+
+        if (usingVersion === undefined) {
+            // fetch the latest version and lock it to the instance.
+            usingVersion = await this.getLatestVersion(
+                dataRequest.getBillingTag()
+            ).catch(error => Promise.reject(error));
+
+            this.version = usingVersion;
+        }
+
+        if (usingVersion === undefined) {
+            return Promise.reject(
+                new Error(
+                    `Unable to retrieve latest version. Please provide version to the DataRequest or lock version in the constructor`
+                )
+            );
+        }
+
+        if (partitionId) {
+            const partitionIdDataHandle = await this.getDataHandleByPartitionId(
+                partitionId,
+                usingVersion,
+                dataRequest.getBillingTag()
+            ).catch(error => Promise.reject(error));
+            return this.downloadPartition(
+                partitionIdDataHandle,
+                abortSignal,
+                dataRequest.getBillingTag()
+            );
+        }
+
+        const quadKey = dataRequest.getQuadKey();
+        if (quadKey) {
+            const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest()
+                .withQuadKey(quadKey)
+                .withVersion(usingVersion);
+
+            const quadTreeIndexResponse = await this.getPartitions(
+                quadKeyPartitionsRequest
+            ).catch(error => Promise.reject(error));
+
+            if (
+                quadTreeIndexResponse.status &&
+                quadTreeIndexResponse.status === 400
+            ) {
+                return Promise.reject(quadTreeIndexResponse);
             }
 
-            if (partitionId) {
-                const partitionIdDataHandle = await this.getDataHandleByPartitionId(
-                    partitionId,
-                    dataRequest.getBillingTag()
-                ).catch(error => Promise.reject(error));
-                return this.downloadPartition(
-                    partitionIdDataHandle,
-                    abortSignal,
-                    dataRequest.getBillingTag()
-                );
-            }
-
-            if (quadKey) {
-                const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest().withQuadKey(
-                    quadKey
-                );
-                const quadTreeIndexResponse = await this.getPartitions(
-                    quadKeyPartitionsRequest
-                ).catch(error => Promise.reject(error));
-
-                if (
-                    quadTreeIndexResponse.status &&
-                    quadTreeIndexResponse.status === 400
-                ) {
-                    return Promise.reject(quadTreeIndexResponse);
-                }
-
-                return quadTreeIndexResponse.subQuads &&
-                    quadTreeIndexResponse.subQuads.length
-                    ? this.downloadPartition(
-                          quadTreeIndexResponse.subQuads[0].dataHandle,
-                          abortSignal,
-                          dataRequest.getBillingTag()
+            return quadTreeIndexResponse.subQuads &&
+                quadTreeIndexResponse.subQuads.length
+                ? this.downloadPartition(
+                      quadTreeIndexResponse.subQuads[0].dataHandle,
+                      abortSignal,
+                      dataRequest.getBillingTag()
+                  )
+                : Promise.reject(
+                      new HttpError(
+                          204,
+                          `No dataHandle for quadKey {column: ${quadKey.column}, row: ${quadKey.row}, level: ${quadKey.level}}. HRN: ${this.hrn}`
                       )
-                    : Promise.reject(
-                          new HttpError(
-                              204,
-                              `No dataHandle for quadKey {column: ${quadKey.column}, row: ${quadKey.row}, level: ${quadKey.level}}. HRN: ${this.hrn}`
-                          )
-                      );
-            }
+                  );
         }
 
         return Promise.reject(
@@ -250,11 +268,32 @@ export class VersionedLayerClient {
         request: QuadKeyPartitionsRequest | PartitionsRequest,
         abortSignal?: AbortSignal
     ): Promise<QueryApi.Index | MetadataApi.Partitions | QueryApi.Partitions> {
-        if (this.version === undefined) {
-            this.version = await this.getLatestVersion(
+        let usingVersion: number | undefined;
+        const requestVersion = request.getVersion();
+
+        if (requestVersion !== undefined) {
+            usingVersion = requestVersion;
+        } else {
+            usingVersion = this.version;
+        }
+
+        if (usingVersion === undefined) {
+            // fetch the latest version and lock it to the instance.
+            usingVersion = await this.getLatestVersion(
                 request.getBillingTag()
             ).catch(error => Promise.reject(error));
+
+            this.version = usingVersion;
         }
+
+        if (usingVersion === undefined) {
+            return Promise.reject(
+                new Error(
+                    `Unable to retrieve latest version. Please provide version to the Request or lock version in the constructor`
+                )
+            );
+        }
+
         if (request instanceof QuadKeyPartitionsRequest) {
             const quadKey = request.getQuadKey();
             if (!quadKey) {
@@ -271,7 +310,7 @@ export class VersionedLayerClient {
                 "versioned"
             )
                 .withQuadKey(quadKey)
-                .withVersion(this.version)
+                .withVersion(usingVersion)
                 .withDepth(request.getDepth())
                 .withAdditionalFields(request.getAdditionalFields());
 
@@ -284,7 +323,7 @@ export class VersionedLayerClient {
         if (request.getPartitionIds()) {
             const queryClient = new QueryClient(this.settings);
 
-            request.withVersion(this.version);
+            request.withVersion(usingVersion);
             return queryClient.getPartitionsById(
                 request,
                 this.layerId,
@@ -299,7 +338,7 @@ export class VersionedLayerClient {
             abortSignal
         ).catch(error => Promise.reject(error));
         return MetadataApi.getPartitions(metaRequestBilder, {
-            version: this.version,
+            version: usingVersion,
             layerId: this.layerId,
             additionalFields: request.getAdditionalFields(),
             billingTag: request.getBillingTag()
@@ -314,6 +353,7 @@ export class VersionedLayerClient {
      */
     private async getDataHandleByPartitionId(
         partitionId: string,
+        version: number,
         billingTag?: string
     ): Promise<string> {
         const queryRequestBilder = await this.getRequestBuilder(
@@ -324,7 +364,7 @@ export class VersionedLayerClient {
         const partitionsListRepsonse = await QueryApi.getPartitionsById(
             queryRequestBilder,
             {
-                version: `${this.version}`,
+                version: `${version}`,
                 layerId: this.layerId,
 
                 partition: [partitionId],

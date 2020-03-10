@@ -130,7 +130,7 @@ export class CatalogClient {
         ).catch(error => Promise.reject(error));
         let requestedCatalogVersion = request.getVersion();
 
-        if (!requestedCatalogVersion) {
+        if (requestedCatalogVersion === undefined) {
             const billingtag = request.getBillingTag();
             const catalogVersionRequest = new CatalogVersionRequest();
             if (billingtag) {
@@ -168,7 +168,12 @@ export class CatalogClient {
         request: CatalogVersionRequest,
         abortSignal?: AbortSignal
     ): Promise<number> {
-        const startVersion = request.getStartVersion() || -1;
+        let startVersion = request.getStartVersion();
+
+        if (startVersion === undefined) {
+            startVersion = -1;
+        }
+
         const builder = await this.getRequestBuilder(
             "metadata",
             HRN.fromString(this.hrn),
@@ -203,7 +208,12 @@ export class CatalogClient {
         request: CatalogVersionRequest,
         abortSignal?: AbortSignal
     ): Promise<MetadataApi.VersionInfos> {
-        const startVersion = request.getStartVersion() || -1;
+        let startVersion = request.getStartVersion();
+
+        if (startVersion === undefined) {
+            startVersion = -1;
+        }
+
         let endVersion = request.getEndVersion();
         if (endVersion === undefined) {
             endVersion = await this.getLatestVersion(request);
