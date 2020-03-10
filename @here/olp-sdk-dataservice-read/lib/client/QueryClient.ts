@@ -74,9 +74,10 @@ export class QueryClient {
             return Promise.reject("Please provide correct Id of the Layer");
         }
 
-        const catalogVersion =
-            request.getVersion() ||
-            (await this.getCatalogLatestVersion(
+        let catalogVersion = request.getVersion();
+
+        if (catalogVersion === undefined) {
+            catalogVersion = await this.getCatalogLatestVersion(
                 request.getCatalogHrn(),
                 abortSignal,
                 request.getBillingTag()
@@ -84,9 +85,10 @@ export class QueryClient {
                 Promise.reject(
                     `Error getting the last catalog version: ${error}`
                 )
-            ));
+            );
+        }
 
-        if (!catalogVersion && catalogVersion !== 0) {
+        if (catalogVersion === undefined) {
             return Promise.reject(`Please provide correct catalog version`);
         }
 

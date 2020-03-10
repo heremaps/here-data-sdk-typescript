@@ -827,7 +827,8 @@ describe("VersionedLayerClient", () => {
 
         try {
             await layer.getPartitions({
-                getBillingTag: () => undefined
+                getBillingTag: () => undefined,
+                getVersion: () => undefined
             } as any);
         } catch (error) {
             if (error.status !== 400) {
@@ -859,6 +860,7 @@ describe("VersionedLayerClient", () => {
                 getBillingTag: () => undefined,
                 getDataHandle: () => undefined,
                 getPartitionId: () => undefined,
+                getVersion: () => undefined,
                 getQuadKey: () => undefined
             } as any);
         } catch (error) {
@@ -889,7 +891,8 @@ describe("VersionedLayerClient", () => {
         await layer.getPartitions({
             getBillingTag: () => undefined,
             getPartitionIds: () => undefined,
-            getAdditionalFields: () => undefined
+            getAdditionalFields: () => undefined,
+            getVersion: () => undefined
         } as any);
     });
 
@@ -909,7 +912,8 @@ describe("VersionedLayerClient", () => {
         await layer.getPartitions({
             getBillingTag: () => undefined,
             getPartitionIds: () => undefined,
-            getAdditionalFields: () => undefined
+            getAdditionalFields: () => undefined,
+            getVersion: () => undefined
         } as any);
     });
 
