@@ -46,6 +46,7 @@
     "test": "lerna run test",
     "test-published-bundles": "cd tests/integration/bundles/umd && tsc && cd - && mocha-puppeteer tests/integration/bundles/umd/olp-sdk-published.test.js --args no-sandbox disable-setuid-sandbox",
     "test-generated-bundles": "cd tests/integration/bundles/umd && tsc && cd - && mocha-puppeteer tests/integration/bundles/umd/olp-sdk-generated.test.js --args no-sandbox disable-setuid-sandbox",
+    "api-breaks-test": "nyc mocha --opts ./tests/integration/api-breaks/mocha.opts > ./tests/integration/api-breaks/xunit.xml",
     "integration-test": "nyc mocha --opts ./tests/integration/mocha.opts > ./tests/integration/xunit.xml",
     "functional-test": "nyc mocha --opts ./tests/functional/mocha.opts > ./tests/functional/xunit.xml",
     "coverage": "lerna run coverage",
