@@ -19,8 +19,26 @@ name: "PSV Linux Build & Test"
 
 deploy:
   - provider: script
-    script: $WORKSPACE/scripts/publish-packages.sh
+    script: $WORKSPACE/scripts/publish-packages.sh -fetch
     cleanup: false
     on:
        branch: master
-       condition: [ $TRAVIS_EVENT_TYPE = api && $allow_publish_npm = true ]
+       condition: [ $TRAVIS_EVENT_TYPE = api && $allow_publish_npm = true && $allow_publish_fetch = true ]
+  - provider: script
+    script: $WORKSPACE/scripts/publish-packages.sh -api
+    cleanup: false
+    on:
+       branch: master
+       condition: [ $TRAVIS_EVENT_TYPE = api && $allow_publish_npm = true && $allow_publish_api = true ]
+  - provider: script
+    script: $WORKSPACE/scripts/publish-packages.sh -auth
+    cleanup: false
+    on:
+       branch: master
+       condition: [ $TRAVIS_EVENT_TYPE = api && $allow_publish_npm = true && $allow_publish_auth = true ]
+  - provider: script
+    script: $WORKSPACE/scripts/publish-packages.sh -read
+    cleanup: false
+    on:
+       branch: master
+       condition: [ $TRAVIS_EVENT_TYPE = api && $allow_publish_npm = true && $allow_publish_read = true ]

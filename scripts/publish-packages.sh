@@ -22,16 +22,27 @@
 
 echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ~/.npmrc
 
-# olp-sdk-fetch publish
-cd @here/olp-sdk-fetch && npm install && npm publish && cd -
-
-# olp-sdk-dataservice-api publish
-cd @here/olp-sdk-dataservice-api && npm install && npm publish && cd -
-
-# olp-sdk-dataservice-read publish
-cd @here/olp-sdk-dataservice-read && npm install && npm publish && cd -
-
-# olp-sdk-authentication publish
-cd @here/olp-sdk-authentication && npm install && npm publish && cd -
-
+while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+        -fetch)
+        # olp-sdk-fetch publish
+        cd @here/olp-sdk-fetch && npm install && npm publish && cd -
+        ;;
+        -api)
+        # olp-sdk-dataservice-api publish
+        cd @here/olp-sdk-dataservice-api && npm install && npm publish && cd -
+        ;;
+        -auth)
+        # olp-sdk-authentication publish
+        cd @here/olp-sdk-authentication && npm install && npm publish && cd -
+        ;;
+        -read)
+        # olp-sdk-dataservice-read publish
+        cd @here/olp-sdk-dataservice-read && npm install && npm publish && cd -
+        ;;
+    esac
+    # Shift after checking all the cases to get the next option
+    shift
+done
 echo 'Publish done!'
