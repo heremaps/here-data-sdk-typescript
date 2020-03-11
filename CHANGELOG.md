@@ -1,3 +1,11 @@
+## v1.3.1 (11/03/2020)
+
+**olp-sdk-dataservice-read**
+
+- Fixed API breaks in `VersionedLayerClient` and `VolatileLayerClient`.
+- Fixed the incorrectly handled version in `VersionedLayerClient`, `CatalogClient`, and `QueryClient`.
+- Fixed the incorrectly handled headers in `DatastoreRequestBuilder`.
+
 ## v1.3.0 (05/03/2020)
 
 **Common**
