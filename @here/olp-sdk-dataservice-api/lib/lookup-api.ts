@@ -66,7 +66,7 @@ export interface ApiNotFoundError {
     /**
      * Complete details of the error
      */
-    detail?: Array<{name: string, error: string}>;
+    detail?: Array<{ name: string; error: string }>;
     error?: string;
     error_description?: string;
 }
@@ -102,11 +102,14 @@ export async function platformAPI(
 }
 
 /**
+ * @deprecated This method is deprecated and is not used. Please used getPlatformAPIList()
  * Return the list of the platform APIs. This response is valid for the time specified by 'Cache-Control' header.
  *
  * @summary Return the list of the platform APIs.
  */
-export async function platformAPIList(builder: RequestBuilder): Promise<API[] | ApiNotFoundError> {
+export async function platformAPIList(
+    builder: RequestBuilder
+): Promise<API[] | ApiNotFoundError> {
     const baseUrl = "/platform/apis";
 
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
@@ -118,6 +121,27 @@ export async function platformAPIList(builder: RequestBuilder): Promise<API[] | 
     };
 
     return builder.request<API[]>(urlBuilder, options);
+}
+
+/**
+ * Return the list of the platform APIs. This response is valid for the time specified by 'Cache-Control' header.
+ *
+ * @summary Return the list of the platform APIs.
+ */
+export async function getPlatformAPIList(
+    builder: RequestBuilder
+): Promise<Response> {
+    const baseUrl = "/platform/apis";
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.requestBlob(urlBuilder, options);
 }
 
 /* ===================================================================
@@ -156,6 +180,7 @@ export async function resourceAPI(
 }
 
 /**
+ * @deprecated This method is deprecated and is not used. Please used getResourceAPIList()
  * Return the list of APIs for a given resource identified by hrn. This response is valid for the time specified by 'Cache-Control' header.
  *
  * @summary Return the list of APIs for a given resource.
@@ -181,4 +206,32 @@ export async function resourceAPIList(
     };
 
     return builder.request<API[]>(urlBuilder, options);
+}
+
+/**
+ * Return the list of APIs for a given resource identified by hrn. This response is valid for the time specified by 'Cache-Control' header.
+ *
+ * @summary Return the list of APIs for a given resource.
+ * @param hrn The HRN identifying the resource
+ * @param region If you want to look up a specific region for a given resource.
+ */
+export async function getResourceAPIList(
+    builder: RequestBuilder,
+    params: { hrn: string; region?: string }
+): Promise<Response> {
+    const baseUrl = "/resources/{hrn}/apis".replace(
+        "{hrn}",
+        UrlBuilder.toString(params["hrn"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("region", params["region"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.requestBlob(urlBuilder, options);
 }
