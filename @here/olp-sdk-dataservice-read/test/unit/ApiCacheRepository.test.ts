@@ -56,12 +56,17 @@ describe("ApiCacheRepository", () => {
         const operationIsSuccessful = apiCacheRepository.put(
             testServiceApiName,
             testServiceVersion,
-            testServiceUrl
+            testServiceUrl,
+            "api"
         );
 
         expect(operationIsSuccessful).equal(true);
         expect(
-            apiCacheRepository.get(testServiceApiName, testServiceVersion)
+            apiCacheRepository.get(
+                testServiceApiName,
+                testServiceVersion,
+                "api"
+            )
         ).equal(testServiceUrl);
     });
 
@@ -69,22 +74,36 @@ describe("ApiCacheRepository", () => {
         apiCacheRepository.put(
             testServiceApiName2,
             testServiceVersion2,
-            testServiceUrl2
+            testServiceUrl2,
+            "api"
         );
         apiCacheRepository.put(
             testServiceApiName3,
             testServiceVersion3,
-            testServiceUrl3
+            testServiceUrl3,
+            "api"
         );
 
         expect(
-            apiCacheRepository.get(testServiceApiName, testServiceVersion)
+            apiCacheRepository.get(
+                testServiceApiName,
+                testServiceVersion,
+                "api"
+            )
         ).equal(testServiceUrl);
         expect(
-            apiCacheRepository.get(testServiceApiName2, testServiceVersion2)
+            apiCacheRepository.get(
+                testServiceApiName2,
+                testServiceVersion2,
+                "api"
+            )
         ).equal(testServiceUrl2);
         expect(
-            apiCacheRepository.get(testServiceApiName3, testServiceVersion3)
+            apiCacheRepository.get(
+                testServiceApiName3,
+                testServiceVersion3,
+                "api"
+            )
         ).equal(testServiceUrl3);
     });
 });

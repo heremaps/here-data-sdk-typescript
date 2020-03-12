@@ -43,6 +43,9 @@ describe("Handling versions in the requests classes and clients", () => {
   let fetchStub: sinon.SinonStub;
   let settings: OlpClientSettings;
 
+  const headers = new Headers();
+  headers.append("cache-control", "max-age=3600");
+
   before(() => {
     sandbox = sinon.createSandbox();
   });
@@ -80,7 +83,8 @@ describe("Handling versions in the requests classes and clients", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -100,7 +104,7 @@ describe("Handling versions in the requests classes and clients", () => {
 
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=0`,
-      new Response(JSON.stringify(mockedPartitions))
+      new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -145,7 +149,8 @@ describe("Handling versions in the requests classes and clients", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -176,7 +181,7 @@ describe("Handling versions in the requests classes and clients", () => {
 
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0`,
-      new Response(JSON.stringify(mockedPartitions))
+      new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -231,7 +236,8 @@ describe("Handling versions in the requests classes and clients", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -262,12 +268,12 @@ describe("Handling versions in the requests classes and clients", () => {
 
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0`,
-      new Response(JSON.stringify(mockedPartitions))
+      new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
     mockedResponses.set(
       `https://blob.data.api.platform.here.com/blob/v1/layers/topology-geometry/data/1b2ca68f-d4a0-4379-8120-cd025640510c`,
-      new Response(Buffer.alloc(42))
+      new Response(Buffer.alloc(42), { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -322,7 +328,8 @@ describe("Handling versions in the requests classes and clients", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -342,12 +349,12 @@ describe("Handling versions in the requests classes and clients", () => {
 
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=0`,
-      new Response(JSON.stringify(mockedPartitions))
+      new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
     mockedResponses.set(
       `https://blob.data.api.platform.here.com/blob/v1/layers/topology-geometry/data/1b2ca68f-d4a0-4379-8120-cd025640510c`,
-      new Response(Buffer.alloc(42))
+      new Response(Buffer.alloc(42), { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -390,7 +397,8 @@ describe("Handling versions in the requests classes and clients", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -410,7 +418,7 @@ describe("Handling versions in the requests classes and clients", () => {
 
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=142`,
-      new Response(JSON.stringify(mockedPartitions))
+      new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -453,7 +461,8 @@ describe("Handling versions in the requests classes and clients", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -484,7 +493,7 @@ describe("Handling versions in the requests classes and clients", () => {
 
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/23605706/depths/0`,
-      new Response(JSON.stringify(mockedPartitions))
+      new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -539,7 +548,8 @@ describe("Handling versions in the requests classes and clients", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -570,12 +580,12 @@ describe("Handling versions in the requests classes and clients", () => {
 
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/23605706/depths/0`,
-      new Response(JSON.stringify(mockedPartitions))
+      new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
     mockedResponses.set(
       `https://blob.data.api.platform.here.com/blob/v1/layers/topology-geometry/data/1b2ca68f-d4a0-4379-8120-cd025640510c`,
-      new Response(Buffer.alloc(42))
+      new Response(Buffer.alloc(42), { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -628,7 +638,8 @@ describe("Handling versions in the requests classes and clients", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -648,12 +659,12 @@ describe("Handling versions in the requests classes and clients", () => {
 
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=142`,
-      new Response(JSON.stringify(mockedPartitions))
+      new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
     mockedResponses.set(
       `https://blob.data.api.platform.here.com/blob/v1/layers/topology-geometry/data/1b2ca68f-d4a0-4379-8120-cd025640510c`,
-      new Response(Buffer.alloc(42))
+      new Response(Buffer.alloc(42), { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -706,7 +717,8 @@ describe("Handling versions in the requests classes and clients", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -726,12 +738,12 @@ describe("Handling versions in the requests classes and clients", () => {
 
     mockedResponses.set(
       `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 0 }))
+      new Response(JSON.stringify({ version: 0 }), { headers })
     );
 
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=0`,
-      new Response(JSON.stringify(mockedPartitions))
+      new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -785,7 +797,8 @@ describe("Handling versions in the requests classes and clients", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -816,12 +829,12 @@ describe("Handling versions in the requests classes and clients", () => {
 
     mockedResponses.set(
       `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 0 }))
+      new Response(JSON.stringify({ version: 0 }), { headers })
     );
 
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0`,
-      new Response(JSON.stringify(mockedPartitions))
+      new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -887,7 +900,8 @@ describe("Handling versions in the requests classes and clients", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -918,17 +932,17 @@ describe("Handling versions in the requests classes and clients", () => {
 
     mockedResponses.set(
       `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 0 }))
+      new Response(JSON.stringify({ version: 0 }), { headers })
     );
 
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0`,
-      new Response(JSON.stringify(mockedPartitions))
+      new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
     mockedResponses.set(
       `https://blob.data.api.platform.here.com/blob/v1/layers/topology-geometry/data/1b2ca68f-d4a0-4379-8120-cd025640510c`,
-      new Response(Buffer.alloc(42))
+      new Response(Buffer.alloc(42), { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -992,7 +1006,8 @@ describe("Handling versions in the requests classes and clients", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -1012,17 +1027,17 @@ describe("Handling versions in the requests classes and clients", () => {
 
     mockedResponses.set(
       `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 0 }))
+      new Response(JSON.stringify({ version: 0 }), { headers })
     );
 
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=0`,
-      new Response(JSON.stringify(mockedPartitions))
+      new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
     mockedResponses.set(
       `https://blob.data.api.platform.here.com/blob/v1/layers/topology-geometry/data/1b2ca68f-d4a0-4379-8120-cd025640510c`,
-      new Response(Buffer.alloc(42))
+      new Response(Buffer.alloc(42), { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -1066,7 +1081,8 @@ describe("Handling versions in the requests classes and clients", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -1082,7 +1098,8 @@ describe("Handling versions in the requests classes and clients", () => {
             }
           ],
           version: 1
-        })
+        }),
+        { headers }
       )
     );
 
@@ -1125,7 +1142,8 @@ describe("Handling versions in the requests classes and clients", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -1150,7 +1168,8 @@ describe("Handling versions in the requests classes and clients", () => {
               version: 1
             }
           ]
-        })
+        }),
+        { headers }
       )
     );
 
