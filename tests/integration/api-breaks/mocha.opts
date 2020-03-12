@@ -1,0 +1,7 @@
+--require  ts-node/register
+--require source-map-support/register
+--full-trace
+--bail
+--check-leaks
+--reporter xunit
+tests/integration/api-breaks/*.test.ts
