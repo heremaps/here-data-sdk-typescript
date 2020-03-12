@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +21,20 @@ import { HttpError, LookupApi } from "@here/olp-sdk-dataservice-api";
 import {
     ApiCacheRepository,
     ApiName,
+    CacheType,
     DataStoreRequestBuilder,
+    DownloadManager,
+    EnvironmentName,
     getEnvLookUpUrl,
     HRN,
+    KeyValueCache,
     OlpClientSettings
 } from "..";
 
 const MILLISECONDS_IN_SECOND = 1000;
 
 /**
+ * @deprecated This class will be removed after 08.2020. Instead use RequestBuilderFactory class
  * A helper utils that makes the `Request` object with the base URLs of the API Lookup Service, token callback, and download manager.
  *
  * Also, you can use it to get the base URLs of the API Lookup Service.
@@ -178,5 +183,177 @@ export class RequestFactory {
                 return res[baseUrlIndex].baseURL;
             })
             .catch(err => Promise.reject(err));
+    }
+}
+
+export class RequestBuilderFactory {
+    private requestsQueue: Map<string, Promise<Response>> = new Map();
+
+    constructor(
+        private readonly downloadManager: DownloadManager,
+        private readonly token: () => Promise<string>,
+        private cache: KeyValueCache,
+        private readonly environment: EnvironmentName
+    ) {}
+
+    /**
+     * Method for building [[DataStoreRequestBuilder]].
+     *
+     * @param serviceName The name of the service in the API.
+     * @param serviceVersion The version of the service.
+     * @param hrn A HERE Resource Name ([[HRN]]) of the catalog.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @returns The Promise with constructed [[DataStoreRequestBuilder]].
+     */
+    public async getRequestBuilder(
+        serviceName: ApiName,
+        serviceVersion: string,
+        hrn?: HRN,
+        abortSignal?: AbortSignal
+    ): Promise<DataStoreRequestBuilder> {
+        return this.getBaseUrl(
+            serviceName,
+            serviceVersion,
+            hrn
+        ).then(async (baseUrl: string) =>
+            baseUrl
+                ? Promise.resolve(
+                      new DataStoreRequestBuilder(
+                          this.downloadManager,
+                          baseUrl,
+                          this.token,
+                          abortSignal
+                      )
+                  )
+                : Promise.reject(
+                      new Error(
+                          `Error getting base url to the service: ${serviceName}`
+                      )
+                  )
+        );
+    }
+
+    /**
+     * Gets a base URL of the API service that supports caching.
+     *
+     * @param serviceName The name of the API service.
+     * @param serviceVersion The version of the service.
+     * @param hrn The [[HRN]] of the catalog.
+     *
+     * @return The Promise with the base URL of the service.
+     */
+    private async getBaseUrl(
+        serviceName: ApiName,
+        serviceVersion: string,
+        hrn?: HRN
+    ): Promise<string> {
+        const apiCache = new ApiCacheRepository(this.cache, hrn);
+        const baseUrl = apiCache.get(serviceName, serviceVersion, "api");
+        const cacheMaxAge = apiCache.get(serviceName, serviceVersion, "age");
+        const cacheOnlyVersion = "v1";
+        const now = new Date().getTime();
+
+        if (baseUrl && cacheMaxAge && now < parseInt(cacheMaxAge, 10)) {
+            return Promise.resolve(baseUrl);
+        }
+
+        const key = this.createKey(
+            hrn ? hrn.toString() : "platform-api",
+            serviceName,
+            serviceVersion
+        );
+        const queuePromise = this.requestsQueue.get(key);
+
+        const lookUpUrl = getEnvLookUpUrl(this.environment);
+        const lookUpApiRequest = new DataStoreRequestBuilder(
+            this.downloadManager,
+            lookUpUrl,
+            this.token
+        );
+
+        const lookupPromise =
+            queuePromise ||
+            (hrn
+                ? LookupApi.getResourceAPIList(lookUpApiRequest, {
+                      hrn: hrn.toString()
+                  })
+                : LookupApi.getPlatformAPIList(lookUpApiRequest));
+
+        this.requestsQueue.set(key, lookupPromise);
+
+        return lookupPromise
+            .then(async (resp: any) => {
+                let maxAge: number;
+                if (resp.headers) {
+                    const cacheControl = resp.headers.get("cache-control");
+                    if (cacheControl) {
+                        const maxSize = cacheControl.match(/max-age=(\d+)/);
+                        maxAge = maxSize ? parseInt(maxSize[1], 10) : 0;
+                    }
+                }
+
+                const res = await resp.json();
+
+                if (!Array.isArray(res)) {
+                    throw new HttpError(
+                        res.status || 204,
+                        res.title || "No content"
+                    );
+                }
+
+                res.forEach(item => {
+                    if (item.version === cacheOnlyVersion) {
+                        apiCache.put(
+                            item.api as ApiName,
+                            item.version,
+                            item.baseURL,
+                            "api"
+                        );
+                        if (maxAge) {
+                            const time =
+                                new Date().getTime() +
+                                maxAge * MILLISECONDS_IN_SECOND;
+                            apiCache.put(
+                                item.api as ApiName,
+                                item.version,
+                                time.toString(),
+                                "age"
+                            );
+                        }
+                    }
+                });
+
+                this.requestsQueue.delete(key);
+
+                const baseUrlIndex = res.findIndex(
+                    item =>
+                        item.api === serviceName &&
+                        item.version === serviceVersion
+                );
+
+                if (baseUrlIndex === -1) {
+                    throw new HttpError(
+                        404,
+                        `No BaseUrl found for ${serviceName}, ${serviceVersion} ${
+                            hrn ? hrn.toString() : ""
+                        }`
+                    );
+                }
+
+                return res[baseUrlIndex].baseURL;
+            })
+            .catch(err => Promise.reject(err));
+    }
+
+    private createKey(
+        hrn: string,
+        service: string,
+        serviceVersion: string
+    ): string {
+        return `${hrn}::${service}::${serviceVersion}::queue`;
     }
 }

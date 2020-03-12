@@ -22,7 +22,12 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
-import { HttpError, IndexApi, BlobApi } from "@here/olp-sdk-dataservice-api";
+import {
+    HttpError,
+    IndexApi,
+    BlobApi,
+    LookupApi
+} from "@here/olp-sdk-dataservice-api";
 
 chai.use(sinonChai);
 
@@ -33,24 +38,28 @@ describe("IndexLayerClient", () => {
     let sandbox: sinon.SinonSandbox;
     let getBlobStub: sinon.SinonStub;
     let getIndexStub: sinon.SinonStub;
-    let getBaseUrlRequestStub: sinon.SinonStub;
     let indexLayerClient: dataServiceRead.IndexLayerClient;
     let indexLayerClientNew: dataServiceRead.IndexLayerClient;
+    let getResourceAPIListStub: sinon.SinonStub;
     const mockedHRN = dataServiceRead.HRN.fromString(
         "hrn:here:data:::mocked-hrn"
     );
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
+    let headers: Headers;
 
     before(() => {
         sandbox = sinon.createSandbox();
-        let settings = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
-        );
+        headers = new Headers();
+        headers.append("cache-control", "max-age=3600");
+        let settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
         indexLayerClient = new dataServiceRead.IndexLayerClient(
             mockedHRN,
             mockedLayerId,
-            (settings as unknown) as dataServiceRead.OlpClientSettings
+            settings
         );
 
         const indexLayerClientParams = {
@@ -66,11 +75,34 @@ describe("IndexLayerClient", () => {
     beforeEach(() => {
         getBlobStub = sandbox.stub(BlobApi, "getBlob");
         getIndexStub = sandbox.stub(IndexApi, "performQuery");
-        getBaseUrlRequestStub = sandbox.stub(
-            dataServiceRead.RequestFactory,
-            "getBaseUrl"
+        getResourceAPIListStub = sandbox.stub(LookupApi, "getResourceAPIList");
+        getResourceAPIListStub.callsFake(() =>
+            Promise.resolve(
+                new Response(
+                    JSON.stringify([
+                        {
+                            api: "index",
+                            version: "v1",
+                            baseURL:
+                                "https://index.data.api.platform.here.com/index/v1"
+                        },
+                        {
+                            api: "blob",
+                            version: "v1",
+                            baseURL:
+                                "https://blob.data.api.platform.here.com/blob/v1"
+                        },
+                        {
+                            api: "metadata",
+                            version: "v1",
+                            baseURL:
+                                "https://query.data.api.platform.here.com/metadata/v1"
+                        }
+                    ]),
+                    { headers }
+                )
+            )
         );
-        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
     afterEach(() => {
@@ -170,7 +202,6 @@ describe("IndexLayerClient", () => {
     });
 
     it("Should method getPartitions be aborted fetching by abort signal", async () => {
-        const mockedBlobData = new Response("mocked-blob-response");
         const mockedIndexResponse = {
             data: [
                 {
@@ -303,7 +334,16 @@ describe("IndexLayerClient", () => {
         };
         const mockedErrorResponse = "Bad response";
 
-        getBaseUrlRequestStub.callsFake(() =>
+        const settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
+        const indexLayerClient = new dataServiceRead.IndexLayerClient(
+            mockedHRN,
+            mockedLayerId,
+            settings
+        );
+        getResourceAPIListStub.callsFake(() =>
             Promise.reject({
                 status: 400,
                 statusText: "Bad response"

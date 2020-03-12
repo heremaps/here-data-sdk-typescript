@@ -21,24 +21,57 @@ import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 import * as dataServiceRead from "../../lib";
-import { ConfigApi } from "@here/olp-sdk-dataservice-api";
+import { ConfigApi, LookupApi } from "@here/olp-sdk-dataservice-api";
 
 chai.use(sinonChai);
 const expect = chai.expect;
 
-let sandbox: sinon.SinonSandbox;
-const settings = {} as any;
-const configClient = new dataServiceRead.ConfigClient(settings);
-
 describe("ConfigClient", () => {
+    let sandbox: sinon.SinonSandbox;
+    let configClient: dataServiceRead.ConfigClient;
+    let getPlatformAPIListStub: sinon.SinonStub;
+    let headers: Headers;
+
     before(() => {
         sandbox = sinon.createSandbox();
+        headers = new Headers();
+        headers.append("cache-control", "max-age=3600");
+        let settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
+        configClient = new dataServiceRead.ConfigClient(settings);
     });
 
     beforeEach(() => {
-        sandbox
-            .stub(dataServiceRead.RequestFactory, "create")
-            .callsFake(() => Promise.resolve({} as any));
+        getPlatformAPIListStub = sandbox.stub(LookupApi, "getPlatformAPIList");
+        getPlatformAPIListStub.callsFake(() =>
+            Promise.resolve(
+                new Response(
+                    JSON.stringify([
+                        {
+                            api: "config",
+                            version: "v1",
+                            baseURL:
+                                "https://config.data.api.platform.here.com/config/v1"
+                        },
+                        {
+                            api: "blob",
+                            version: "v1",
+                            baseURL:
+                                "https://blob.data.api.platform.here.com/blob/v1"
+                        },
+                        {
+                            api: "metadata",
+                            version: "v1",
+                            baseURL:
+                                "https://query.data.api.platform.here.com/metadata/v1"
+                        }
+                    ]),
+                    { headers }
+                )
+            )
+        );
     });
 
     afterEach(() => {

@@ -27,8 +27,7 @@ import {
     CatalogVersionRequest,
     DataStoreRequestBuilder,
     HRN,
-    OlpClientSettings,
-    RequestFactory
+    OlpClientSettings
 } from "..";
 import { CatalogRequest } from "./CatalogRequest";
 import { LayerVersionsRequest } from "./LayerVersionsRequest";
@@ -247,16 +246,12 @@ export class CatalogClient {
         hrn?: HRN,
         abortSignal?: AbortSignal
     ): Promise<DataStoreRequestBuilder> {
-        return RequestFactory.create(
-            builderType,
-            this.apiVersion,
-            this.settings,
-            hrn,
-            abortSignal
-        ).catch((err: Response) =>
-            Promise.reject(
-                `Error retrieving from cache builder for resource "${this.hrn}" and api: "${builderType}.\n${err}"`
-            )
-        );
+        return this.settings.requestBuilderFactory
+            .getRequestBuilder(builderType, this.apiVersion, hrn, abortSignal)
+            .catch((err: Response) =>
+                Promise.reject(
+                    `Error retrieving from cache builder for resource "${this.hrn}" and api: "${builderType}.\n${err}"`
+                )
+            );
     }
 }

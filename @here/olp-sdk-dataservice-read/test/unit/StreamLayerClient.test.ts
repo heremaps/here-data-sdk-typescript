@@ -25,6 +25,7 @@ import * as dataServiceRead from "../../lib";
 
 import {
     BlobApi,
+    LookupApi,
     StreamApi,
     HttpError,
     UrlBuilder
@@ -66,20 +67,20 @@ class StreamLayerClientTest extends dataServiceRead.StreamLayerClient {
 
 describe("StreamLayerClient", () => {
     let sandbox: sinon.SinonSandbox;
-    let getBaseUrlRequestStub: sinon.SinonStub;
-    let getFactoryRequestStub: sinon.SinonStub;
     let subscribeStub: sinon.SinonStub;
     let pollStub: sinon.SinonStub;
     let unsubscribeStub: sinon.SinonStub;
     let commitOffsetsStub: sinon.SinonStub;
     let getBlobStub: sinon.SinonStub;
     let seekOffsetsStub: sinon.SinonStub;
+    let getResourceAPIListStub: sinon.SinonStub;
     let streamLayerClient: StreamLayerClientTest;
     const mockedHRN = dataServiceRead.HRN.fromString(
         "hrn:here:data:::mocked-hrn"
     );
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
+    const headers = new Headers();
 
     let settings: dataServiceRead.OlpClientSettings;
     let params: {
@@ -90,9 +91,11 @@ describe("StreamLayerClient", () => {
 
     before(() => {
         sandbox = sinon.createSandbox();
-        settings = (sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
-        ) as unknown) as dataServiceRead.OlpClientSettings;
+        headers.append("cache-control", "max-age=3600");
+        settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
         params = {
             catalogHrn: mockedHRN,
             layerId: mockedLayerId,
@@ -108,11 +111,34 @@ describe("StreamLayerClient", () => {
         commitOffsetsStub = sandbox.stub(StreamApi, "commitOffsets");
         unsubscribeStub = sandbox.stub(StreamApi, "deleteSubscription");
         seekOffsetsStub = sandbox.stub(StreamApi, "seekToOffset");
-        getBaseUrlRequestStub = sandbox.stub(
-            dataServiceRead.RequestFactory,
-            "getBaseUrl"
+        getResourceAPIListStub = sandbox.stub(LookupApi, "getResourceAPIList");
+        getResourceAPIListStub.callsFake(() =>
+            Promise.resolve(
+                new Response(
+                    JSON.stringify([
+                        {
+                            api: "stream",
+                            version: "v2",
+                            baseURL:
+                                "https://stream.data.api.platform.here.com/stream/v2"
+                        },
+                        {
+                            api: "blob",
+                            version: "v2",
+                            baseURL:
+                                "https://blob.data.api.platform.here.com/blob/v2"
+                        },
+                        {
+                            api: "metadata",
+                            version: "v2",
+                            baseURL:
+                                "https://query.data.api.platform.here.com/metadata/v2"
+                        }
+                    ]),
+                    { headers }
+                )
+            )
         );
-        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
     afterEach(() => {
@@ -249,13 +275,14 @@ describe("StreamLayerClient", () => {
             }
         );
 
-        let settings = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
-        );
+        let settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
         const params = {
             catalogHrn: mockedHRN,
             layerId: mockedLayerId,
-            settings: (settings as unknown) as dataServiceRead.OlpClientSettings
+            settings
         };
         const subscribtionId = await streamLayerClient.subscribe(
             new dataServiceRead.SubscribeRequest().withMode("serial")
@@ -300,38 +327,6 @@ describe("StreamLayerClient", () => {
         );
     });
 
-    it("Should base url error be handled", async () => {
-        const mockedMessage = {
-            metaData: {
-                partition: "314010583",
-                checksum: "ff7494d6f17da702862e550c907c0a91",
-                compressedDataSize: 152417,
-                dataSize: 250110,
-                data: "",
-                dataHandle:
-                    "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAABhQTFRFvb29AACEAP8AhIKEPb5x2m9E5413aFQirhRuvAMqCw+6kE2BVsa8miQaYSKyshxFvhqdzKx8UsPYk9gDEcY1ghZXcPbENtax8g5T+3zHYufF1Lf9HdIZBfNEiKAAAAAElFTkSuQmCC",
-                timestamp: 1517916706
-            },
-            offset: {
-                partition: 7,
-                offset: 38562
-            }
-        };
-        const mockedErrorResponse = "Bad response";
-
-        getBaseUrlRequestStub.callsFake(() =>
-            Promise.reject({
-                status: 400,
-                statusText: "Bad response"
-            })
-        );
-
-        await streamLayerClient.getData(mockedMessage).catch(error => {
-            assert.isDefined(error);
-            assert.equal(mockedErrorResponse, error.statusText);
-        });
-    });
-
     it("Should method getData return Error without parameters", async () => {
         const mockedMessage = {
             metaData: {
@@ -351,40 +346,6 @@ describe("StreamLayerClient", () => {
             assert.isDefined(error);
             assert.equal(mockedErrorResponse.message, error.message);
         });
-    });
-
-    it("Should error be handled", async () => {
-        const mockedMessage = {
-            metaData: {
-                partition: "314010583",
-                checksum: "ff7494d6f17da702862e550c907c0a91",
-                compressedDataSize: 152417,
-                dataSize: 250110,
-                data: "",
-                dataHandle:
-                    "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAABhQTFRFvb29AACEAP8AhIKEPb5x2m9E5413aFQirhRuvAMqCw+6kE2BVsa8miQaYSKyshxFvhqdzKx8UsPYk9gDEcY1ghZXcPbENtax8g5T+3zHYufF1Lf9HdIZBfNEiKAAAAAElFTkSuQmCC",
-                timestamp: 1517916706
-            },
-            offset: {
-                partition: 7,
-                offset: 38562
-            }
-        };
-
-        const mockedErrorResponse = "mocked-error";
-
-        getBlobStub.callsFake(
-            (builder: any, params: any): Promise<Response> => {
-                return Promise.reject("mocked-error");
-            }
-        );
-
-        const response = await streamLayerClient
-            .getData(mockedMessage)
-            .catch(error => {
-                assert.isDefined(error);
-                assert.equal(mockedErrorResponse, error);
-            });
     });
 
     it("Should HttpError be handled", async () => {
@@ -489,6 +450,38 @@ describe("StreamLayerClient", () => {
                 assert.isDefined(err);
                 expect(err.message).to.be.equal(mockError);
             });
+    });
+
+    it("Should base url error be handled", async () => {
+        const mockedMessage = {
+            metaData: {
+                partition: "314010583",
+                checksum: "ff7494d6f17da702862e550c907c0a91",
+                compressedDataSize: 152417,
+                dataSize: 250110,
+                data: "",
+                dataHandle:
+                    "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwBAMAAAClLOS0AAAABGdBTUEAALGPC/xhBQAAABhQTFRFvb29AACEAP8AhIKEPb5x2m9E5413aFQirhRuvAMqCw+6kE2BVsa8miQaYSKyshxFvhqdzKx8UsPYk9gDEcY1ghZXcPbENtax8g5T+3zHYufF1Lf9HdIZBfNEiKAAAAAElFTkSuQmCC",
+                timestamp: 1517916706
+            },
+            offset: {
+                partition: 7,
+                offset: 38562
+            }
+        };
+        const mockedErrorResponse = "Bad response";
+
+        getResourceAPIListStub.callsFake(() =>
+            Promise.reject({
+                status: 400,
+                statusText: "Bad response"
+            })
+        );
+
+        await streamLayerClient.getData(mockedMessage).catch(error => {
+            assert.isDefined(error);
+            assert.equal(mockedErrorResponse, error.statusText);
+        });
     });
 
     it("Should seek return error if mode is parallel and subscriptionId is missed", async () => {

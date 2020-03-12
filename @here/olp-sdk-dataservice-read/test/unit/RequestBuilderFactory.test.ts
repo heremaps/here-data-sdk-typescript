@@ -24,6 +24,7 @@ import * as dataServiceRead from "../../lib";
 import * as dataServiceApi from "@here/olp-sdk-dataservice-api";
 chai.use(sinonChai);
 const expect = chai.expect;
+const assert = chai.assert;
 
 class MockedHrn {
     constructor(private readonly data: dataServiceRead.HRNData) {}
@@ -95,7 +96,7 @@ class MockedDataStoreRequestBuilder {
 describe("RequestFactory", () => {
     let ApiCacheRepositoryStub: sinon.SinonStub;
     let DataStoreRequestBuilderStub: sinon.SinonStub;
-
+    let getPlatformAPIListStub: sinon.SinonStub;
     let sandbox: sinon.SinonSandbox;
 
     before(() => {
@@ -123,6 +124,11 @@ describe("RequestFactory", () => {
             return new MockedDataStoreRequestBuilder(dm, url, token);
         });
 
+        getPlatformAPIListStub = sandbox.stub(
+            dataServiceApi.LookupApi,
+            "getPlatformAPIList"
+        );
+
         sandbox
             .stub(dataServiceRead, "getEnvLookUpUrl")
             .callsFake(() => "http://fake-lookup.service.url");
@@ -146,11 +152,9 @@ describe("RequestFactory", () => {
                     return this.resp;
                 }
             };
-            sandbox
-                .stub(dataServiceApi.LookupApi, "getPlatformAPIList")
-                .callsFake(() =>
-                    Promise.resolve((response as unknown) as Response)
-                );
+            getPlatformAPIListStub.callsFake(() =>
+                Promise.resolve((response as unknown) as Response)
+            );
 
             const settings = new MockedOlpClientSettings();
             const requestBuilder = await dataServiceRead.RequestFactory.create(
@@ -165,18 +169,16 @@ describe("RequestFactory", () => {
         });
 
         it("Should reject with correct error about base url", async () => {
-            sandbox
-                .stub(dataServiceApi.LookupApi, "getPlatformAPIList")
-                .callsFake(
-                    () =>
-                        Promise.resolve({
-                            status: 204,
-                            title: "No content",
-                            json: function() {
-                                return this;
-                            }
-                        }) as any
-                );
+            getPlatformAPIListStub.callsFake(
+                () =>
+                    Promise.resolve({
+                        status: 204,
+                        title: "No content",
+                        json: function() {
+                            return this;
+                        }
+                    }) as any
+            );
 
             const settings = new MockedOlpClientSettings();
 
@@ -209,11 +211,9 @@ describe("RequestFactory", () => {
                     return this.resp;
                 }
             };
-            sandbox
-                .stub(dataServiceApi.LookupApi, "getPlatformAPIList")
-                .callsFake(() =>
-                    Promise.resolve((response as unknown) as Response)
-                );
+            getPlatformAPIListStub.callsFake(() =>
+                Promise.resolve((response as unknown) as Response)
+            );
             const settings = new MockedOlpClientSettings();
             const baseUrl = await dataServiceRead.RequestFactory.getBaseUrl(
                 "statistics",
@@ -260,18 +260,16 @@ describe("RequestFactory", () => {
         });
 
         it("Should reject with correct error message", async () => {
-            sandbox
-                .stub(dataServiceApi.LookupApi, "getPlatformAPIList")
-                .callsFake(() =>
-                    Promise.resolve(({
-                        status: 404,
-                        title: "Service Not Found",
-                        detail: [],
-                        json: function() {
-                            return this;
-                        }
-                    } as unknown) as Response)
-                );
+            getPlatformAPIListStub.callsFake(() =>
+                Promise.resolve(({
+                    status: 404,
+                    title: "Service Not Found",
+                    detail: [],
+                    json: function() {
+                        return this;
+                    }
+                } as unknown) as Response)
+            );
             const settings = new MockedOlpClientSettings();
             try {
                 await dataServiceRead.RequestFactory.getBaseUrl(
@@ -285,15 +283,13 @@ describe("RequestFactory", () => {
         });
 
         it("Should reject with correct custom error message", async () => {
-            sandbox
-                .stub(dataServiceApi.LookupApi, "getPlatformAPIList")
-                .callsFake(() =>
-                    Promise.resolve(({
-                        json: function() {
-                            return this;
-                        }
-                    } as unknown) as Response)
-                );
+            getPlatformAPIListStub.callsFake(() =>
+                Promise.resolve(({
+                    json: function() {
+                        return this;
+                    }
+                } as unknown) as Response)
+            );
             const settings = new MockedOlpClientSettings();
             try {
                 await dataServiceRead.RequestFactory.getBaseUrl(
@@ -322,11 +318,9 @@ describe("RequestFactory", () => {
                     return this.resp;
                 }
             };
-            sandbox
-                .stub(dataServiceApi.LookupApi, "getPlatformAPIList")
-                .callsFake(() =>
-                    Promise.resolve((response as unknown) as Response)
-                );
+            getPlatformAPIListStub.callsFake(() =>
+                Promise.resolve((response as unknown) as Response)
+            );
             const settings = new MockedOlpClientSettings();
             try {
                 await dataServiceRead.RequestFactory.getBaseUrl(
@@ -405,10 +399,6 @@ describe("RequestFactory", () => {
                 Promise.resolve((response as unknown) as Response)
             );
             const settings = new MockedOlpClientSettings();
-            const platformApiStub = sandbox.stub(
-                dataServiceApi.LookupApi,
-                "getPlatformAPIList"
-            );
 
             const baseUrl1 = await dataServiceRead.RequestFactory.getBaseUrl(
                 "statistics",
@@ -454,6 +444,30 @@ describe("RequestFactory", () => {
                     "test-base-url-to-resource-service"
                 );
             }, 3000);
+        });
+    });
+
+    describe("RequestBuilderFactory", () => {
+        const dm = new dataServiceRead.DataStoreDownloadManager();
+        const token = () => Promise.resolve("mocked-token");
+        const cache = new dataServiceRead.KeyValueCache();
+        const env = "here-env";
+
+        it("Should return created RequestBuilder", async () => {
+            const headers = new Headers();
+            headers.append("cache-control", "max-age=300");
+
+            const requestBuilderFactory = new dataServiceRead.RequestBuilderFactory(
+                dm,
+                token,
+                cache,
+                env
+            );
+
+            assert.isDefined(requestBuilderFactory);
+            expect(requestBuilderFactory).to.be.instanceof(
+                dataServiceRead.RequestBuilderFactory
+            );
         });
     });
 });

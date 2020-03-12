@@ -25,6 +25,7 @@ import * as dataServiceRead from "../../lib";
 import {
     ConfigApi,
     HttpError,
+    LookupApi,
     MetadataApi
 } from "@here/olp-sdk-dataservice-api";
 
@@ -47,17 +48,22 @@ describe("CatalogClient", () => {
     let getListVersionsStub: sinon.SinonStub;
     let getEarliestVersionsStub: sinon.SinonStub;
     let catalogClient: dataServiceRead.CatalogClient;
-    let getBaseUrlRequestStub: sinon.SinonStub;
+    let getResourceAPIListStub: sinon.SinonStub;
+    let getPlatformAPIListStub: sinon.SinonStub;
     const fakeURL = "http://fake-base.url";
     const mockedHRN = dataServiceRead.HRN.fromString(
         "hrn:here:data:::live-weather-na"
     );
+    let headers: Headers;
 
     before(() => {
         sandbox = sinon.createSandbox();
-        let settings = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
-        );
+        headers = new Headers();
+        headers.append("cache-control", "max-age=3600");
+        let settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
         catalogClient = new dataServiceRead.CatalogClient(
             mockedHRN,
             (settings as unknown) as dataServiceRead.OlpClientSettings
@@ -70,11 +76,62 @@ describe("CatalogClient", () => {
         getCatalogStub = sandbox.stub(ConfigApi, "getCatalog");
         getListVersionsStub = sandbox.stub(MetadataApi, "listVersions");
         getEarliestVersionsStub = sandbox.stub(MetadataApi, "minimumVersion");
-        getBaseUrlRequestStub = sandbox.stub(
-            dataServiceRead.RequestFactory,
-            "getBaseUrl"
+        getResourceAPIListStub = sandbox.stub(LookupApi, "getResourceAPIList");
+        getPlatformAPIListStub = sandbox.stub(LookupApi, "getPlatformAPIList");
+        getResourceAPIListStub.callsFake(() =>
+            Promise.resolve(
+                new Response(
+                    JSON.stringify([
+                        {
+                            api: "config",
+                            version: "v1",
+                            baseURL:
+                                "https://config.data.api.platform.here.com/config/v1"
+                        },
+                        {
+                            api: "blob",
+                            version: "v1",
+                            baseURL:
+                                "https://blob.data.api.platform.here.com/blob/v1"
+                        },
+                        {
+                            api: "metadata",
+                            version: "v1",
+                            baseURL:
+                                "https://query.data.api.platform.here.com/metadata/v1"
+                        }
+                    ]),
+                    { headers }
+                )
+            )
         );
-        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
+        getPlatformAPIListStub.callsFake(() =>
+            Promise.resolve(
+                new Response(
+                    JSON.stringify([
+                        {
+                            api: "config",
+                            version: "v1",
+                            baseURL:
+                                "https://config.data.api.platform.here.com/config/v1"
+                        },
+                        {
+                            api: "blob",
+                            version: "v1",
+                            baseURL:
+                                "https://blob.data.api.platform.here.com/blob/v1"
+                        },
+                        {
+                            api: "metadata",
+                            version: "v1",
+                            baseURL:
+                                "https://query.data.api.platform.here.com/metadata/v1"
+                        }
+                    ]),
+                    { headers }
+                )
+            )
+        );
     });
 
     afterEach(() => {
@@ -320,6 +377,16 @@ describe("CatalogClient", () => {
             (builder: any, params: any): Promise<ConfigApi.Catalog> => {
                 return Promise.resolve(mockedCatalogResponse);
             }
+        );
+
+        const settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
+
+        catalogClient = new dataServiceRead.CatalogClient(
+            mockedHRN,
+            (settings as unknown) as dataServiceRead.OlpClientSettings
         );
 
         const response = await catalogClient.getCatalog(

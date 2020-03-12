@@ -32,8 +32,7 @@ import {
     PartitionsRequest,
     QuadKeyPartitionsRequest,
     QuadTreeIndexRequest,
-    QueryClient,
-    RequestFactory
+    QueryClient
 } from "..";
 
 // tslint:disable: deprecation
@@ -438,10 +437,9 @@ export class VersionedLayerClient {
         hrn?: HRN,
         abortSignal?: AbortSignal
     ): Promise<DataStoreRequestBuilder> {
-        return RequestFactory.create(
+        return this.settings.requestBuilderFactory.getRequestBuilder(
             builderType,
             this.apiVersion,
-            this.settings,
             hrn,
             abortSignal
         );

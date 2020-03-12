@@ -23,8 +23,7 @@ import {
     DataStoreRequestBuilder,
     HRN,
     IndexQueryRequest,
-    OlpClientSettings,
-    RequestFactory
+    OlpClientSettings
 } from "..";
 
 /**
@@ -186,12 +185,8 @@ export class IndexLayerClient {
         hrn?: HRN,
         abortSignal?: AbortSignal
     ): Promise<DataStoreRequestBuilder> {
-        return RequestFactory.create(
-            builderType,
-            this.apiVersion,
-            this.settings,
-            hrn,
-            abortSignal
-        ).catch(err => Promise.reject(err));
+        return this.settings.requestBuilderFactory
+            .getRequestBuilder(builderType, this.apiVersion, hrn, abortSignal)
+            .catch(err => Promise.reject(err));
     }
 }

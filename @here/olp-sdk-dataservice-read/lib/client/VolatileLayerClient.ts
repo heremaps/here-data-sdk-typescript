@@ -32,8 +32,7 @@ import {
     PartitionsRequest,
     QuadKeyPartitionsRequest,
     QuadTreeIndexRequest,
-    QueryClient,
-    RequestFactory
+    QueryClient
 } from "..";
 
 /**
@@ -306,10 +305,9 @@ export class VolatileLayerClient {
         hrn?: HRN,
         abortSignal?: AbortSignal
     ): Promise<DataStoreRequestBuilder> {
-        return RequestFactory.create(
+        return this.settings.requestBuilderFactory.getRequestBuilder(
             builderType,
             this.apiVersion,
-            this.settings,
             hrn,
             abortSignal
         );

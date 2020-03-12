@@ -18,7 +18,7 @@
  */
 
 import { ConfigApi } from "@here/olp-sdk-dataservice-api";
-import { CatalogsRequest, OlpClientSettings, RequestFactory } from "..";
+import { CatalogsRequest, OlpClientSettings } from "..";
 
 /**
  * A client for the OLP Config Service.
@@ -46,11 +46,9 @@ export class ConfigClient {
     public async getCatalogs(
         request?: CatalogsRequest
     ): Promise<ConfigApi.CatalogsListResult> {
-        const requestBuilder = await RequestFactory.create(
-            "config",
-            this.apiVersion,
-            this.settings
-        ).catch(error => Promise.reject(error));
+        const requestBuilder = await this.settings.requestBuilderFactory
+            .getRequestBuilder("config", this.apiVersion)
+            .catch(error => Promise.reject(error));
 
         const params: {
             verbose?: string;

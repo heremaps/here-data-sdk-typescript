@@ -18,12 +18,7 @@
  */
 
 import { ArtifactApi, HttpError } from "@here/olp-sdk-dataservice-api";
-import {
-    OlpClientSettings,
-    RequestFactory,
-    SchemaDetailsRequest,
-    SchemaRequest
-} from "..";
+import { OlpClientSettings, SchemaDetailsRequest, SchemaRequest } from "..";
 
 /**
  * Gets schema metadata and data from the OLP Artifact Service.
@@ -60,11 +55,9 @@ export class ArtifactClient {
 
         const hrnStr = hrn.toString();
 
-        const request = await RequestFactory.create(
-            "artifact",
-            this.apiVersion,
-            this.settings
-        ).catch(error => Promise.reject(error));
+        const request = await this.settings.requestBuilderFactory
+            .getRequestBuilder("artifact", this.apiVersion)
+            .catch(error => Promise.reject(error));
 
         return ArtifactApi.getSchemaUsingGET(request, {
             schemaHrn: hrnStr
@@ -86,11 +79,9 @@ export class ArtifactClient {
                 )
             );
         }
-        const request = await RequestFactory.create(
-            "artifact",
-            this.apiVersion,
-            this.settings
-        ).catch(error => Promise.reject(error));
+        const request = await this.settings.requestBuilderFactory
+            .getRequestBuilder("artifact", this.apiVersion)
+            .catch(error => Promise.reject(error));
         const response = await ArtifactApi.getArtifactUsingGET(request, {
             artifactHrn: variant.url
         }).catch(err => Promise.reject(err));

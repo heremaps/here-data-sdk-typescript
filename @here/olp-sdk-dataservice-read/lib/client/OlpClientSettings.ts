@@ -18,7 +18,7 @@
  */
 
 import { DataStoreDownloadManager, DownloadManager, KeyValueCache } from "..";
-import { EnvironmentName } from "../utils";
+import { EnvironmentName, RequestBuilderFactory } from "../utils";
 
 /**
  * Parameters used to construct the [[OlpClientSettings]] class.
@@ -68,6 +68,7 @@ export class OlpClientSettings {
     private getValidToken: () => Promise<string>;
     private env: EnvironmentName;
     private dm: DownloadManager;
+    private requestFactory: RequestBuilderFactory;
 
     /**
      * Creates the [[OlpClientSettings]] instance.
@@ -80,6 +81,12 @@ export class OlpClientSettings {
         this.env = params.environment;
         this.dm = params.dm || new DataStoreDownloadManager();
         this.keyValueCache = new KeyValueCache();
+        this.requestFactory = new RequestBuilderFactory(
+            this.downloadManager,
+            this.token,
+            this.keyValueCache,
+            this.env
+        );
     }
 
     /**
@@ -117,5 +124,9 @@ export class OlpClientSettings {
      */
     get cache(): KeyValueCache {
         return this.keyValueCache;
+    }
+
+    get requestBuilderFactory(): RequestBuilderFactory {
+        return this.requestFactory;
     }
 }

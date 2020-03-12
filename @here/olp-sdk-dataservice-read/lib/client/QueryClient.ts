@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,7 @@ import {
     mortonCodeFromQuadKey,
     OlpClientSettings,
     PartitionsRequest,
-    QuadTreeIndexRequest,
-    RequestFactory
+    QuadTreeIndexRequest
 } from "..";
 
 /**
@@ -92,17 +91,18 @@ export class QueryClient {
             return Promise.reject(`Please provide correct catalog version`);
         }
 
-        const requestBuilder = await RequestFactory.create(
-            "query",
-            this.apiVersion,
-            this.settings,
-            request.getCatalogHrn(),
-            abortSignal
-        ).catch(error =>
-            Promise.reject(
-                `Erorr creating request object for query service: ${error}`
+        const requestBuilder = await this.settings.requestBuilderFactory
+            .getRequestBuilder(
+                "query",
+                this.apiVersion,
+                request.getCatalogHrn(),
+                abortSignal
             )
-        );
+            .catch(error =>
+                Promise.reject(
+                    `Erorr creating request object for query service: ${error}`
+                )
+            );
 
         const subQuadKeysMaxLength = request.getDepth();
 
@@ -168,17 +168,13 @@ export class QueryClient {
             return Promise.reject("Please provide correct partitionIds list");
         }
 
-        const requestBuilder = await RequestFactory.create(
-            "query",
-            this.apiVersion,
-            this.settings,
-            hrn,
-            abortSignal
-        ).catch(error =>
-            Promise.reject(
-                `Erorr creating request object for query service: ${error}`
-            )
-        );
+        const requestBuilder = await this.settings.requestBuilderFactory
+            .getRequestBuilder("query", this.apiVersion, hrn, abortSignal)
+            .catch(error =>
+                Promise.reject(
+                    `Erorr creating request object for query service: ${error}`
+                )
+            );
 
         return QueryApi.getPartitionsById(requestBuilder, {
             layerId,
@@ -196,17 +192,18 @@ export class QueryClient {
         abortSignal?: AbortSignal,
         billingTag?: string
     ): Promise<number> {
-        const request = await RequestFactory.create(
-            "metadata",
-            this.apiVersion,
-            this.settings,
-            catalogHrn,
-            abortSignal
-        ).catch(error =>
-            Promise.reject(
-                `Erorr creating request object for metadata service: ${error}`
+        const request = await this.settings.requestBuilderFactory
+            .getRequestBuilder(
+                "metadata",
+                this.apiVersion,
+                catalogHrn,
+                abortSignal
             )
-        );
+            .catch(error =>
+                Promise.reject(
+                    `Erorr creating request object for metadata service: ${error}`
+                )
+            );
 
         const latestVersion = await MetadataApi.latestVersion(request, {
             startVersion: -1,

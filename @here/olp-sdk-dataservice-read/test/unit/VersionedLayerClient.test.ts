@@ -22,8 +22,12 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
-import * as dataServiceApi from "@here/olp-sdk-dataservice-api";
-import { BlobApi, MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
+import {
+    BlobApi,
+    MetadataApi,
+    QueryApi,
+    LookupApi
+} from "@here/olp-sdk-dataservice-api";
 import { Index } from "@here/olp-sdk-dataservice-api/lib/query-api";
 
 chai.use(sinonChai);
@@ -38,7 +42,7 @@ describe("VersionedLayerClient", () => {
     let getPartitionsByIdStub: sinon.SinonStub;
     let getQuadTreeIndexStub: sinon.SinonStub;
     let getVersionStub: sinon.SinonStub;
-    let getBaseUrlRequestStub: sinon.SinonStub;
+    let getResourceAPIListStub: sinon.SinonStub;
     let versionedLayerClient: dataServiceRead.VersionedLayerClient;
     let versionedLayerClientWithVersion: dataServiceRead.VersionedLayerClient;
     let versionedLayerClientWithoutVersion: dataServiceRead.VersionedLayerClient;
@@ -48,16 +52,19 @@ describe("VersionedLayerClient", () => {
     );
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
+    const headers = new Headers();
 
     before(() => {
         sandbox = sinon.createSandbox();
-        let settings = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
-        );
+        headers.append("cache-control", "max-age=3600");
+        let settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
         versionedLayerClient = new dataServiceRead.VersionedLayerClient(
             mockedHRN,
             mockedLayerId,
-            (settings as unknown) as dataServiceRead.OlpClientSettings
+            settings
         );
 
         const versionedLayerClientParams = {
@@ -88,12 +95,34 @@ describe("VersionedLayerClient", () => {
         getPartitionsByIdStub = sandbox.stub(QueryApi, "getPartitionsById");
         getQuadTreeIndexStub = sandbox.stub(QueryApi, "quadTreeIndex");
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
-        getBaseUrlRequestStub = sandbox.stub(
-            dataServiceRead.RequestFactory,
-            "getBaseUrl"
+        getResourceAPIListStub = sandbox.stub(LookupApi, "getResourceAPIList");
+        getResourceAPIListStub.callsFake(() =>
+            Promise.resolve(
+                new Response(
+                    JSON.stringify([
+                        {
+                            api: "query",
+                            version: "v1",
+                            baseURL:
+                                "https://query.data.api.platform.here.com/query/v1"
+                        },
+                        {
+                            api: "blob",
+                            version: "v1",
+                            baseURL:
+                                "https://blob.data.api.platform.here.com/blob/v1"
+                        },
+                        {
+                            api: "metadata",
+                            version: "v1",
+                            baseURL:
+                                "https://query.data.api.platform.here.com/metadata/v1"
+                        }
+                    ]),
+                    { headers }
+                )
+            )
         );
-
-        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
     afterEach(() => {
@@ -711,7 +740,16 @@ describe("VersionedLayerClient", () => {
         );
         const partitionsRequest = new dataServiceRead.PartitionsRequest();
 
-        getBaseUrlRequestStub.callsFake(() =>
+        let settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
+        versionedLayerClient = new dataServiceRead.VersionedLayerClient(
+            mockedHRN,
+            mockedLayerId,
+            (settings as unknown) as dataServiceRead.OlpClientSettings
+        );
+        getResourceAPIListStub.callsFake(() =>
             Promise.reject({
                 status: 400,
                 statusText: "Bad response"
@@ -747,14 +785,17 @@ describe("VersionedLayerClient", () => {
         );
         const partitionsRequest = new dataServiceRead.PartitionsRequest();
 
-        getVersionStub.callsFake(() =>
-            Promise.reject({
-                status: 400,
-                statusText: "Bad response"
-            })
+        let settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
+        versionedLayerClient = new dataServiceRead.VersionedLayerClient(
+            mockedHRN,
+            mockedLayerId,
+            (settings as unknown) as dataServiceRead.OlpClientSettings
         );
 
-        getBaseUrlRequestStub.callsFake(() =>
+        getVersionStub.callsFake(() =>
             Promise.reject({
                 status: 400,
                 statusText: "Bad response"
@@ -812,6 +853,10 @@ describe("VersionedLayerClient", () => {
     });
 
     it("Should getPartitions error be handled if error getting latest layer version", async () => {
+        const settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
         getVersionStub.callsFake(() =>
             Promise.reject({
                 status: 400,
@@ -822,7 +867,7 @@ describe("VersionedLayerClient", () => {
         const layer = new dataServiceRead.VersionedLayerClient({
             catalogHrn: mockedHRN,
             layerId: "",
-            settings: {} as any
+            settings
         });
 
         try {
@@ -842,6 +887,10 @@ describe("VersionedLayerClient", () => {
     });
 
     it("Should getData error be handled if error getting latest layer version", async () => {
+        const settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
         getVersionStub.callsFake(() =>
             Promise.reject({
                 status: 400,
@@ -852,7 +901,7 @@ describe("VersionedLayerClient", () => {
         const layer = new dataServiceRead.VersionedLayerClient({
             catalogHrn: mockedHRN,
             layerId: "",
-            settings: {} as any
+            settings
         });
 
         try {
@@ -874,6 +923,127 @@ describe("VersionedLayerClient", () => {
         }
     });
 
+    it("Should getRequestBuilder error be handled in the gatData method", async () => {
+        const mockedErrorResponse = "Error getting base url to the service: ";
+        const mockedVersion = {
+            version: 42
+        };
+        let settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
+        versionedLayerClient = new dataServiceRead.VersionedLayerClient(
+            mockedHRN,
+            mockedLayerId,
+            (settings as unknown) as dataServiceRead.OlpClientSettings
+        );
+        getVersionStub.callsFake(
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve(mockedVersion);
+            }
+        );
+
+        getResourceAPIListStub.callsFake(() =>
+            Promise.resolve(
+                new Response(
+                    JSON.stringify([
+                        {
+                            api: "query",
+                            version: "v1"
+                        },
+                        {
+                            api: "blob",
+                            version: "v1"
+                        },
+                        {
+                            api: "metadata",
+                            version: "v1",
+                            baseURL:
+                                "https://metadata.data.api.platform.here.com/metadata/v1"
+                        }
+                    ]),
+                    { headers }
+                )
+            )
+        );
+
+        const mockedBlobData: Response = new Response("mocked-blob-response");
+        getBlobStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockedBlobData);
+            }
+        );
+
+        const dataRequest1 = new dataServiceRead.DataRequest().withDataHandle(
+            "moсked-data-handle"
+        );
+
+        const dataRequest2 = new dataServiceRead.DataRequest().withPartitionId(
+            "42"
+        );
+
+        const response1 = await versionedLayerClient
+            .getData((dataRequest1 as unknown) as dataServiceRead.DataRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse + "blob", error.message);
+            });
+
+        const response2 = await versionedLayerClient
+            .getData((dataRequest2 as unknown) as dataServiceRead.DataRequest)
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse + "query", error.message);
+            });
+    });
+
+    it("Should getRequestBuilder error be handled in the getPartitions method", async () => {
+        const mockedErrorResponse =
+            "Error getting base url to the service: metadata";
+
+        let settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
+        const params = {
+            catalogHrn: mockedHRN,
+            layerId: mockedLayerId,
+            settings,
+            version: 1
+        };
+        versionedLayerClient = new dataServiceRead.VersionedLayerClient(params);
+
+        getResourceAPIListStub.callsFake(() =>
+            Promise.resolve(
+                new Response(
+                    JSON.stringify([
+                        {
+                            api: "metadata",
+                            version: "v1"
+                        }
+                    ]),
+                    { headers }
+                )
+            )
+        );
+
+        const dataRequest = new dataServiceRead.PartitionsRequest().withVersion(
+            1
+        );
+
+        const response = await versionedLayerClient
+            .getPartitions(
+                (dataRequest as unknown) as dataServiceRead.PartitionsRequest
+            )
+            .catch(error => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.message);
+            });
+    });
+
     it("Should getPartitions fetch menadata with latest layer version if not defined", async () => {
         getVersionStub.callsFake(() => Promise.resolve({ version: 5 }));
 
@@ -881,11 +1051,14 @@ describe("VersionedLayerClient", () => {
             assert.equal(params.version, 5);
             return Promise.resolve();
         });
-
+        const settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
         const layer = new dataServiceRead.VersionedLayerClient({
             catalogHrn: mockedHRN,
             layerId: "",
-            settings: {} as any
+            settings
         });
 
         await layer.getPartitions({
@@ -902,10 +1075,14 @@ describe("VersionedLayerClient", () => {
             return Promise.resolve();
         });
 
+        const settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
         const layer = new dataServiceRead.VersionedLayerClient({
             catalogHrn: mockedHRN,
             layerId: mockedLayerId,
-            settings: {} as any,
+            settings,
             version: 6
         });
 

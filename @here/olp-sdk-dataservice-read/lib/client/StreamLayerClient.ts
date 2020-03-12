@@ -23,7 +23,6 @@ import {
     HRN,
     OlpClientSettings,
     PollRequest,
-    RequestFactory,
     SeekRequest,
     SubscribeRequest,
     UnsubscribeRequest
@@ -83,13 +82,14 @@ export class StreamLayerClient {
         request: SubscribeRequest,
         abortSignal?: AbortSignal
     ): Promise<string> {
-        const requestBuilder = await RequestFactory.create(
-            "stream",
-            this.apiVersion,
-            this.settings,
-            this.catalogHrn,
-            abortSignal
-        ).catch(error => Promise.reject(error));
+        const requestBuilder = await this.settings.requestBuilderFactory
+            .getRequestBuilder(
+                "stream",
+                this.apiVersion,
+                this.catalogHrn,
+                abortSignal
+            )
+            .catch(error => Promise.reject(error));
 
         const subscribtionRequestParams = {
             layerId: this.layerId,
@@ -299,13 +299,14 @@ export class StreamLayerClient {
             );
         }
 
-        const requestBuilder = await RequestFactory.create(
-            "blob",
-            "v1",
-            this.settings,
-            this.catalogHrn,
-            abortSignal
-        ).catch(error => Promise.reject(error));
+        const requestBuilder = await this.settings.requestBuilderFactory
+            .getRequestBuilder(
+                "blob",
+                this.apiVersion,
+                this.catalogHrn,
+                abortSignal
+            )
+            .catch(error => Promise.reject(error));
 
         return BlobApi.getBlob(requestBuilder, {
             dataHandle: message.metaData.dataHandle,

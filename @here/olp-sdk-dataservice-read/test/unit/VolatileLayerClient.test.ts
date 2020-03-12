@@ -24,6 +24,7 @@ import sinonChai = require("sinon-chai");
 import * as dataServiceRead from "../../lib";
 import {
     MetadataApi,
+    LookupApi,
     QueryApi,
     VolatileBlobApi
 } from "@here/olp-sdk-dataservice-api";
@@ -41,7 +42,7 @@ describe("VolatileLayerClient", () => {
     let getVersionStub: sinon.SinonStub;
     let getPartitionsByIdStub: sinon.SinonStub;
     let getQuadTreeIndexStub: sinon.SinonStub;
-    let getBaseUrlRequestStub: sinon.SinonStub;
+    let getResourceAPIListStub: sinon.SinonStub;
     let volatileLayerClient: dataServiceRead.VolatileLayerClient;
     let volatileLayerClientNew: dataServiceRead.VolatileLayerClient;
     const mockedHRN = dataServiceRead.HRN.fromString(
@@ -49,12 +50,15 @@ describe("VolatileLayerClient", () => {
     );
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
+    const headers = new Headers();
 
     before(() => {
         sandbox = sinon.createSandbox();
-        let settings = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
-        );
+        headers.append("cache-control", "max-age=3600");
+        let settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
         volatileLayerClient = new dataServiceRead.VolatileLayerClient(
             mockedHRN,
             mockedLayerId,
@@ -77,11 +81,34 @@ describe("VolatileLayerClient", () => {
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
         getPartitionsByIdStub = sandbox.stub(QueryApi, "getPartitionsById");
         getQuadTreeIndexStub = sandbox.stub(QueryApi, "quadTreeIndexVolatile");
-        getBaseUrlRequestStub = sandbox.stub(
-            dataServiceRead.RequestFactory,
-            "getBaseUrl"
+        getResourceAPIListStub = sandbox.stub(LookupApi, "getResourceAPIList");
+        getResourceAPIListStub.callsFake(() =>
+            Promise.resolve(
+                new Response(
+                    JSON.stringify([
+                        {
+                            api: "query",
+                            version: "v1",
+                            baseURL:
+                                "https://query.data.api.platform.here.com/query/v1"
+                        },
+                        {
+                            api: "volatile-blob",
+                            version: "v1",
+                            baseURL:
+                                "https://blob.data.api.platform.here.com/blob/v1"
+                        },
+                        {
+                            api: "metadata",
+                            version: "v1",
+                            baseURL:
+                                "https://query.data.api.platform.here.com/metadata/v1"
+                        }
+                    ]),
+                    { headers }
+                )
+            )
         );
-        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
     afterEach(() => {
@@ -517,6 +544,16 @@ describe("VolatileLayerClient", () => {
         };
         const dataRequest = new dataServiceRead.DataRequest();
 
+        let settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
+        volatileLayerClient = new dataServiceRead.VolatileLayerClient(
+            mockedHRN,
+            mockedLayerId,
+            (settings as unknown) as dataServiceRead.OlpClientSettings
+        );
+
         const response = await volatileLayerClient
             .getData(dataRequest as any)
             .catch(error => {
@@ -526,12 +563,13 @@ describe("VolatileLayerClient", () => {
     });
 
     it("Should method getData return Error with correct partitionId and wrong layerId", async () => {
-        let settings = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
-        );
+        let settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
         const volatileClient = new dataServiceRead.VolatileLayerClient(
             mockedHRN,
-            "mockedLayerId",
+            mockedLayerId,
             (settings as unknown) as dataServiceRead.OlpClientSettings
         );
 
@@ -564,12 +602,13 @@ describe("VolatileLayerClient", () => {
     });
 
     it("Should method getData return Error with correct quadKey and wrong version parameter", async () => {
-        let settings = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
-        );
+        let settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
         const volatileClient = new dataServiceRead.VolatileLayerClient(
             mockedHRN,
-            "mockedLayerId",
+            mockedLayerId,
             (settings as unknown) as dataServiceRead.OlpClientSettings
         );
         const dataRequest = new dataServiceRead.DataRequest().withQuadKey(
@@ -625,6 +664,16 @@ describe("VolatileLayerClient", () => {
             version: 42
         };
 
+        let settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
+        volatileLayerClient = new dataServiceRead.VolatileLayerClient(
+            mockedHRN,
+            mockedLayerId,
+            (settings as unknown) as dataServiceRead.OlpClientSettings
+        );
+
         getQuadTreeIndexStub.callsFake(
             (builder: any, params: any): Promise<QueryApi.Index> => {
                 return Promise.resolve(mockedQuadKeyTreeData);
@@ -663,7 +712,16 @@ describe("VolatileLayerClient", () => {
         );
         const partitionsRrequest = new dataServiceRead.PartitionsRequest();
 
-        getBaseUrlRequestStub.callsFake(() =>
+        let settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
+        volatileLayerClient = new dataServiceRead.VolatileLayerClient(
+            mockedHRN,
+            mockedLayerId,
+            (settings as unknown) as dataServiceRead.OlpClientSettings
+        );
+        getResourceAPIListStub.callsFake(() =>
             Promise.reject({
                 status: 400,
                 statusText: "Bad response"
@@ -699,6 +757,16 @@ describe("VolatileLayerClient", () => {
         };
         const quadRrequest = new dataServiceRead.DataRequest().withQuadKey(
             dataServiceRead.quadKeyFromMortonCode("23618403")
+        );
+
+        let settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
+        const volatileLayerClient = new dataServiceRead.VolatileLayerClient(
+            mockedHRN,
+            mockedLayerId,
+            (settings as unknown) as dataServiceRead.OlpClientSettings
         );
 
         getQuadTreeIndexStub.callsFake(() =>

@@ -22,7 +22,11 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
-import { ArtifactApi, HttpError } from "@here/olp-sdk-dataservice-api";
+import {
+    ArtifactApi,
+    HttpError,
+    LookupApi
+} from "@here/olp-sdk-dataservice-api";
 
 chai.use(sinonChai);
 
@@ -31,35 +35,61 @@ const expect = chai.expect;
 
 describe("ArtifactClient", () => {
     let sandbox: sinon.SinonSandbox;
-    let olpClientSettingsStub: sinon.SinonStubbedInstance<dataServiceRead.OlpClientSettings>;
+    let settings: dataServiceRead.OlpClientSettings;
     let getArtifactUsingGETStub: sinon.SinonStub;
     let getSchemaUsingGETStub: sinon.SinonStub;
-    let getBaseUrlRequestStub: sinon.SinonStub;
+    let getResourceAPIListStub: sinon.SinonStub;
     const mockedHRN = dataServiceRead.HRN.fromString(
         "hrn:here:data:::mocked-hrn"
     );
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
+    let headers: Headers;
 
     before(() => {
         sandbox = sinon.createSandbox();
+        headers = new Headers();
+        headers.append("cache-control", "max-age=3600");
+        settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
     });
 
     beforeEach(() => {
-        olpClientSettingsStub = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
-        );
-        getBaseUrlRequestStub = sandbox.stub(
-            dataServiceRead.RequestFactory,
-            "getBaseUrl"
-        );
         getArtifactUsingGETStub = sandbox.stub(
             ArtifactApi,
             "getArtifactUsingGET"
         );
         getSchemaUsingGETStub = sandbox.stub(ArtifactApi, "getSchemaUsingGET");
-
-        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
+        getResourceAPIListStub = sandbox.stub(LookupApi, "getPlatformAPIList");
+        getResourceAPIListStub.callsFake(() =>
+            Promise.resolve(
+                new Response(
+                    JSON.stringify([
+                        {
+                            api: "query",
+                            version: "v1",
+                            baseURL:
+                                "https://query.data.api.platform.here.com/query/v1"
+                        },
+                        {
+                            api: "artifact",
+                            version: "v1",
+                            baseURL:
+                                "https://artifact.data.api.platform.here.com/artifact/v1"
+                        },
+                        {
+                            api: "metadata",
+                            version: "v1",
+                            baseURL:
+                                "https://query.data.api.platform.here.com/metadata/v1"
+                        }
+                    ]),
+                    { headers }
+                )
+            )
+        );
     });
 
     afterEach(() => {
@@ -67,9 +97,7 @@ describe("ArtifactClient", () => {
     });
 
     it("Shoud be initialised with settings", async () => {
-        const artifactClient = new dataServiceRead.ArtifactClient(
-            olpClientSettingsStub as any
-        );
+        const artifactClient = new dataServiceRead.ArtifactClient(settings);
         assert.isDefined(artifactClient);
     });
 
@@ -81,9 +109,11 @@ describe("ArtifactClient", () => {
             id: "42",
             url: "http://fake.url"
         };
-        const artifactClient = new dataServiceRead.ArtifactClient(
-            olpClientSettingsStub as any
-        );
+        let settings = new dataServiceRead.OlpClientSettings({
+            environment: "mocked-env",
+            getToken: () => Promise.resolve("mocked-token")
+        });
+        const artifactClient = new dataServiceRead.ArtifactClient(settings);
         assert.isDefined(artifactClient);
         getArtifactUsingGETStub.callsFake(
             (builder: any, params: any): Promise<Response> => {
@@ -110,9 +140,7 @@ describe("ArtifactClient", () => {
             id: "42",
             url: "http://fake.url"
         };
-        const artifactClient = new dataServiceRead.ArtifactClient(
-            olpClientSettingsStub as any
-        );
+        const artifactClient = new dataServiceRead.ArtifactClient(settings);
         assert.isDefined(artifactClient);
         getArtifactUsingGETStub.callsFake(
             (builder: any, params: any): Promise<Response> => {
@@ -138,9 +166,7 @@ describe("ArtifactClient", () => {
         const mockedError: string =
             "Please provide the schema variant by schemaRequest.withVariant()";
 
-        const artifactClient = new dataServiceRead.ArtifactClient(
-            olpClientSettingsStub as any
-        );
+        const artifactClient = new dataServiceRead.ArtifactClient(settings);
         assert.isDefined(artifactClient);
 
         const schemaRequest = new dataServiceRead.SchemaRequest();
@@ -162,9 +188,7 @@ describe("ArtifactClient", () => {
                 }
             ]
         };
-        const artifactClient = new dataServiceRead.ArtifactClient(
-            olpClientSettingsStub as any
-        );
+        const artifactClient = new dataServiceRead.ArtifactClient(settings);
         assert.isDefined(artifactClient);
         getSchemaUsingGETStub.callsFake(
             (
@@ -198,9 +222,7 @@ describe("ArtifactClient", () => {
                 }
             ]
         };
-        const artifactClient = new dataServiceRead.ArtifactClient(
-            olpClientSettingsStub as any
-        );
+        const artifactClient = new dataServiceRead.ArtifactClient(settings);
         assert.isDefined(artifactClient);
 
         getSchemaUsingGETStub.callsFake(
@@ -230,9 +252,7 @@ describe("ArtifactClient", () => {
         const mockedError: string =
             "Please provide the schema HRN by schemaDetailsRequest.withSchema()";
 
-        const artifactClient = new dataServiceRead.ArtifactClient(
-            olpClientSettingsStub as any
-        );
+        const artifactClient = new dataServiceRead.ArtifactClient(settings);
         assert.isDefined(artifactClient);
 
         const schemaDetailsRequest = new dataServiceRead.SchemaDetailsRequest();
