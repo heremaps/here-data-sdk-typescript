@@ -44,6 +44,8 @@ describe("VersionedLayerClient", () => {
 
   const testHRN = HRN.fromString("hrn:here:data:::test-hrn");
   const testLayerId = "test-layed-id";
+  const headers = new Headers();
+  headers.append("cache-control", "max-age=3600");
 
   before(() => {
     sandbox = sinon.createSandbox();
@@ -138,13 +140,14 @@ describe("VersionedLayerClient", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
     mockedResponses.set(
       `https://query.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 128 }))
+      new Response(JSON.stringify({ version: 128 }), { headers })
     );
 
     // Set the response with mocked partitions for IDs 100 and 1000 from Query service
@@ -172,7 +175,8 @@ describe("VersionedLayerClient", () => {
               version: 2
             }
           ]
-        })
+        }),
+        { headers }
       )
     );
 
@@ -239,14 +243,15 @@ describe("VersionedLayerClient", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
     // Set the response from Metadata service with the info about latest catalog version.
     mockedResponses.set(
       `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 128 }))
+      new Response(JSON.stringify({ version: 128 }), { headers })
     );
 
     // Set the response of mocked partitions from metadata service.
@@ -293,7 +298,8 @@ describe("VersionedLayerClient", () => {
             }
           ],
           next: "/uri/to/next/page"
-        })
+        }),
+        { headers }
       )
     );
 
@@ -373,14 +379,15 @@ describe("VersionedLayerClient", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
     // Set the response of mocked partitions from metadata service.
     mockedResponses.set(
       `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/1b2ca68f-d4a0-4379-8120-cd025640510c`,
-      new Response(mockedData)
+      new Response(mockedData, { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -424,12 +431,12 @@ describe("VersionedLayerClient", () => {
 
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/partitions?partition=0000042&version=42`,
-      new Response(JSON.stringify(mockedPartitionsIdData))
+      new Response(JSON.stringify(mockedPartitionsIdData), { headers })
     );
 
     mockedResponses.set(
       `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 42 }))
+      new Response(JSON.stringify({ version: 42 }), { headers })
     );
 
     // Set the response from lookup api with the info about Metadata service.
@@ -467,14 +474,15 @@ describe("VersionedLayerClient", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
     // Set the response of mocked partitions from metadata service.
     mockedResponses.set(
       `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/3C3BE24A341D82321A9BA9075A7EF498.123`,
-      new Response(mockedData)
+      new Response(mockedData, { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -518,7 +526,7 @@ describe("VersionedLayerClient", () => {
 
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/partitions?partition=0000042&version=42`,
-      new Response(JSON.stringify(mockedPartitionsIdData))
+      new Response(JSON.stringify(mockedPartitionsIdData), { headers })
     );
 
     // Set the response from lookup api with the info about Metadata service.
@@ -546,14 +554,15 @@ describe("VersionedLayerClient", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
     // Set the response of mocked partitions from metadata service.
     mockedResponses.set(
       `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/3C3BE24A341D82321A9BA9075A7EF498.123`,
-      new Response(mockedData)
+      new Response(mockedData, { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -601,12 +610,12 @@ describe("VersionedLayerClient", () => {
 
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/versions/42/quadkeys/23618403/depths/0`,
-      new Response(JSON.stringify(mockedQuadKeyTreeData))
+      new Response(JSON.stringify(mockedQuadKeyTreeData), { headers })
     );
 
     mockedResponses.set(
       `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 42 }))
+      new Response(JSON.stringify({ version: 42 }), { headers })
     );
 
     // Set the response from lookup api with the info about Metadata service.
@@ -644,14 +653,15 @@ describe("VersionedLayerClient", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
     // Set the response of mocked partitions from metadata service.
     mockedResponses.set(
       `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/c9116bb9-7d00-44bf-9b26-b4ab4c274665`,
-      new Response(mockedData)
+      new Response(mockedData, { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -697,7 +707,7 @@ describe("VersionedLayerClient", () => {
 
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/versions/42/quadkeys/23618403/depths/0`,
-      new Response(JSON.stringify(mockedQuadKeyTreeData))
+      new Response(JSON.stringify(mockedQuadKeyTreeData), { headers })
     );
 
     // Set the response from lookup api with the info about Metadata service.
@@ -725,14 +735,15 @@ describe("VersionedLayerClient", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
     // Set the response of mocked partitions from metadata service.
     mockedResponses.set(
       `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/c9116bb9-7d00-44bf-9b26-b4ab4c274665`,
-      new Response(mockedData)
+      new Response(mockedData, { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -794,7 +805,8 @@ describe("VersionedLayerClient", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -827,13 +839,14 @@ describe("VersionedLayerClient", () => {
               version: 1
             }
           ]
-        })
+        }),
+        { headers }
       )
     );
 
     mockedResponses.set(
       `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1&billingTag=billingTag`,
-      new Response(JSON.stringify({ version: 42 }))
+      new Response(JSON.stringify({ version: 42 }), { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -929,20 +942,21 @@ describe("VersionedLayerClient", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
     // Set the response from Metadata service with the info about latest catalog version.
     mockedResponses.set(
       `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 30 }))
+      new Response(JSON.stringify({ version: 30 }), { headers })
     );
 
     // Set the response of mocked partitions with additional fields.
     mockedResponses.set(
       `https://metadata.data.api.platform.here.com/metadata/v1/layers/test-layed-id/partitions?version=30&additionalFields=dataSize,checksum,compressedDataSize`,
-      new Response(JSON.stringify(mockedPartitions))
+      new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
     // Setup the fetch to use mocked responses.
@@ -989,7 +1003,7 @@ describe("VersionedLayerClient", () => {
 
     mockedResponses.set(
       `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 30 }))
+      new Response(JSON.stringify({ version: 30 }), { headers })
     );
 
     // Set the response from lookup api with the info about Query API.
@@ -1017,7 +1031,8 @@ describe("VersionedLayerClient", () => {
               additionalProp3: "string"
             }
           }
-        ])
+        ]),
+        { headers }
       )
     );
 
@@ -1046,7 +1061,7 @@ describe("VersionedLayerClient", () => {
     // Set the response of mocked partitions with additional fields.
     mockedResponses.set(
       `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/versions/30/quadkeys/70/depths/0?additionalFields=dataSize,checksum,compressedDataSize`,
-      new Response(JSON.stringify(mockedPartitions))
+      new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
     // Setup the fetch to use mocked responses.

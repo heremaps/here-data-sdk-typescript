@@ -38,6 +38,11 @@ export type ApiName =
     | "volatile-blob";
 
 /**
+ * The list of the types could be saved in the cache.
+ */
+export type CacheType = "api" | "age";
+
+/**
  * Caches the base URLs of the API using a key-value pair.
  * The key format is `<hrn>::<service_name>::<serviceVersion>::api`.
  */
@@ -46,7 +51,7 @@ export class ApiCacheRepository {
 
     /**
      * Generates the [[ApiCacheRepository]] instance.
-     * 
+     *
      * @param cache The [[KeyValueCache]] instance.
      * @param hrn The HERE Resource Name (HRN) for which you want to use the [[ApiCacheRepository]] instance.
      * @return The [[ApiCacheRepository]] instance.
@@ -57,7 +62,7 @@ export class ApiCacheRepository {
 
     /**
      * Stores a key-value pair in the cache.
-     * 
+     *
      * @param service The name of the API service for which you need the key-value pair.
      * @param serviceVersion The version of the service.
      * @param serviceUrl The base URL of the service.
@@ -66,29 +71,35 @@ export class ApiCacheRepository {
     public put(
         service: ApiName,
         serviceVersion: string,
-        serviceUrl: string
+        serviceUrl: string,
+        type: CacheType
     ): boolean {
-        const key = this.createKey(this.hrn, service, serviceVersion);
+        const key = this.createKey(this.hrn, service, serviceVersion, type);
         return this.cache.put(key, serviceUrl);
     }
 
     /**
      * Gets a base URL from the cache.
-     * 
+     *
      * @param service The name of the API service for which you want to get the base URL.
      * @param serviceVersion The service version.
      * @return The base URL of the service, or undefined if the base URL does not exist.
      */
-    public get(service: string, serviceVersion: string): string | undefined {
-        const key = this.createKey(this.hrn, service, serviceVersion);
+    public get(
+        service: string,
+        serviceVersion: string,
+        type: CacheType
+    ): string | undefined {
+        const key = this.createKey(this.hrn, service, serviceVersion, type);
         return this.cache.get(key);
     }
 
     private createKey(
         hrn: string,
         service: string,
-        serviceVersion: string
+        serviceVersion: string,
+        type: CacheType
     ): string {
-        return hrn + "::" + service + "::" + serviceVersion + "::api";
+        return `${hrn}::${service}::${serviceVersion}::${type}`;
     }
 }
