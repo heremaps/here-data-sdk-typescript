@@ -29,6 +29,7 @@ import {
   CoverageDataType
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "./FetchMock";
+import { LIB_VERSION } from "@here/olp-sdk-dataservice-read/lib.version";
 
 chai.use(sinonChai);
 
@@ -310,5 +311,57 @@ describe("StatisticsClient", () => {
     );
     assert.isDefined(summaryResponse);
     expect(fetchStub.callCount).to.be.equal(2);
+  });
+
+  it("Should user-agent be added to the each request", async () => {
+    const mockedResponses = new Map();
+
+    // Set the response from lookup api
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "statistics",
+            version: "v1",
+            baseURL:
+              "https://statistics.data.api.platform.here.com/statistics/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ])
+      )
+    );
+
+    // Set the response from Statistics service with the statistics info.
+    const mockedData = Buffer.alloc(42);
+
+    mockedResponses.set(
+      `https://statistics.data.api.platform.here.com/statistics/v1/layers/mocked-layed-id/heatmap/age?datalevel=3&catalogHRN=hrn%3Ahere%3Adata%3A%3A%3Amocked-hrn`,
+      new Response(JSON.stringify(mockedData))
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    const statisticsRequest = new StatisticsRequest()
+      .withCatalogHrn(mockedHRN)
+      .withLayerId(mockedLayerId)
+      .withDataLevel("3")
+      .withTypemap(CoverageDataType.TIMEMAP);
+
+    const summaryResponse = await statisticsClient.getStatistics(
+      statisticsRequest
+    );
+    assert.isDefined(summaryResponse);
+    expect(fetchStub.callCount).to.be.equal(2);
+    const calls = fetchStub.getCalls();
+    calls.forEach(call => {
+      const callHeaders = call.args[1].headers;
+      expect(callHeaders.get("User-Agent")).equals(`OLP-TS-SDK/${LIB_VERSION}`);
+    });
   });
 });

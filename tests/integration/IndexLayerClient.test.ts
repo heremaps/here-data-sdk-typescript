@@ -28,6 +28,7 @@ import {
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "./FetchMock";
 import { Buffer } from "buffer";
+import { LIB_VERSION } from "@here/olp-sdk-dataservice-read/lib.version";
 
 chai.use(sinonChai);
 
@@ -239,5 +240,67 @@ describe("IndexLayerClient", () => {
     assert.isDefined(indexLayerClient);
     expect(indexLayerClient).to.be.instanceOf(IndexLayerClient);
     assert.equal(indexLayerClient["hrn"], "hrn:here:data:::test-hrn");
+  });
+
+  it("Should user-agent be added to the each request", async () => {
+    const mockedResponses = new Map();
+    const mockedData = Buffer.alloc(42);
+    const mockedModel = {
+      id: "8c0e5ac9-b036-4365-8820-dfcba64588fc",
+      size: 111928,
+      checksum: "448a33cd65c47bed1eeb4d72e7fa022c95a41158",
+      timestamp: 1551981674191,
+      hour_from: 1506402000000,
+      tile_id: 377894442,
+      crc: null
+    };
+
+    // Set the response from lookup api with the info about Metadata service.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "blob",
+            version: "v1",
+            baseURL: "https://blob.data.api.platform.here.com/blob/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ])
+      )
+    );
+
+    // Set the response of mocked partitions from metadata service.
+    mockedResponses.set(
+      `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/8c0e5ac9-b036-4365-8820-dfcba64588fc`,
+      new Response(mockedData)
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+    const indexClient = new IndexLayerClient(
+      HRN.fromString("hrn:here:data:::test-hrn"),
+      "test-layed-id",
+      settings
+    );
+
+    const data = await indexClient.getData(mockedModel);
+
+    assert.isDefined(data);
+    expect(fetchStub.callCount).to.be.equal(2);
+    const calls = fetchStub.getCalls();
+    calls.forEach(call => {
+      const callHeaders = call.args[1].headers;
+      expect(callHeaders.get("User-Agent")).equals(`OLP-TS-SDK/${LIB_VERSION}`);
+    });
   });
 });
