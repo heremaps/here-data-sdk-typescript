@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
  */
 
 import { HttpError } from "..";
+import { LIB_VERSION } from "../lib.version";
 import { OAuthArgs, Token } from "./requestToken_common";
 
 /**
@@ -241,7 +242,8 @@ export class UserAuth {
 
         const headers = new Headers({
             Authorization: "Bearer " + token,
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "User-Agent": `OLP-TS-SDK/${LIB_VERSION}`
         });
 
         const request = await fetch(this.m_apiUrl + "verify/accessToken", {
@@ -268,7 +270,8 @@ export class UserAuth {
     async getUserInfo(userToken: string): Promise<UserInfo> {
         const headers = new Headers({
             Authorization: "Bearer " + userToken,
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "User-Agent": `OLP-TS-SDK/${LIB_VERSION}`
         });
 
         const request = await fetch(this.m_apiUrl + "user/me", {

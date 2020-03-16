@@ -31,6 +31,7 @@ import {
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "./FetchMock";
 import { Buffer } from "buffer";
+import { LIB_VERSION } from "@here/olp-sdk-dataservice-read/lib.version";
 
 chai.use(sinonChai);
 
@@ -837,5 +838,62 @@ describe("VolatileLayerClient", () => {
     assert.isDefined(volatileLayerClient);
     expect(volatileLayerClient).to.be.instanceOf(VolatileLayerClient);
     assert.equal(volatileLayerClient["hrn"], "hrn:here:data:::test-hrn");
+  });
+
+  it("Should user-agent be added to the each request", async () => {
+    const mockedResponses = new Map();
+    const mockedDataHandle = "1b2ca68f-d4a0-4379-8120-cd025640510c";
+    const mockedData = Buffer.alloc(42);
+
+    // Set the response from lookup api with the info about Metadata service.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "volatile-blob",
+            version: "v1",
+            baseURL:
+              "https://volatile-blob.data.api.platform.here.com/volatile-blob/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ]),
+        { headers }
+      )
+    );
+
+    // Set the response of mocked partitions from metadata service.
+    mockedResponses.set(
+      `https://volatile-blob.data.api.platform.here.com/volatile-blob/v1/layers/test-layed-id/data/1b2ca68f-d4a0-4379-8120-cd025640510c`,
+      new Response(mockedData, { headers })
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+    const layerClient = new VolatileLayerClient(
+      testHRN,
+      testVolatileLayerId,
+      settings
+    );
+    const request = new DataRequest().withDataHandle(mockedDataHandle);
+
+    const data = await layerClient.getData(request);
+
+    assert.isDefined(data);
+    expect(fetchStub.callCount).to.be.equal(2);
+    const calls = fetchStub.getCalls();
+    calls.forEach(call => {
+      const callHeaders = call.args[1].headers;
+      expect(callHeaders.get("User-Agent")).equals(`OLP-TS-SDK/${LIB_VERSION}`);
+    });
   });
 });

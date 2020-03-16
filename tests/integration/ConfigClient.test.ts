@@ -30,6 +30,7 @@ import {
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "./FetchMock";
 import { ConfigApi } from "@here/olp-sdk-dataservice-api";
+import { LIB_VERSION } from "@here/olp-sdk-dataservice-read/lib.version";
 
 chai.use(sinonChai);
 
@@ -158,5 +159,59 @@ describe("configClient", () => {
 
     assert.isDefined(response);
     expect(fetchStub.callCount).to.be.equal(2);
+  });
+
+  it("Should user-agent be added to the each request", async () => {
+    const mockedResponses = new Map();
+
+    const mockedCatalogsHRN: ConfigApi.CatalogsListResult = {
+      results: {
+        items: [
+          { hrn: "hrn:::test-hrn" },
+          { hrn: "hrn:::test-hrn2" },
+          { hrn: "hrn:::test-hrn3" }
+        ]
+      }
+    };
+
+    // Set the response from lookup api with the info about Metadata service.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "config",
+            version: "v1",
+            baseURL: "https://config.data.api.platform.here.com/config/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ])
+      )
+    );
+
+    // Set the response from Metadata service with the versions info from the catalog.
+    mockedResponses.set(
+      `https://config.data.api.platform.here.com/config/v1/catalogs`,
+      new Response(JSON.stringify(mockedCatalogsHRN))
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    const request = new CatalogsRequest();
+
+    const response = await configClient.getCatalogs(request);
+
+    assert.isDefined(response);
+    expect(fetchStub.callCount).to.be.equal(2);
+    const calls = fetchStub.getCalls();
+    calls.forEach(call => {
+      const callHeaders = call.args[1].headers;
+      expect(callHeaders.get("User-Agent")).equals(`OLP-TS-SDK/${LIB_VERSION}`);
+    });
   });
 });

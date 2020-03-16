@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import {
   CatalogRequest
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "./FetchMock";
+import { LIB_VERSION } from "@here/olp-sdk-dataservice-read/lib.version";
 
 chai.use(sinonChai);
 
@@ -371,6 +372,69 @@ describe("CatalogClient", () => {
     assert.isDefined(response);
 
     expect(fetchStub.callCount).to.be.equal(2);
+  });
+
+  it("Should fetch the configuration of all catalogs 2", async () => {
+    const mockedResponses = new Map();
+
+    // Set the response from lookup api with the info about Metadata service.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "config",
+            version: "v1",
+            baseURL: "https://config.data.api.platform.here.com/config/v1"
+          }
+        ]),
+        { headers }
+      )
+    );
+
+    const mockedCatalogs = {
+      id: "here-internal-test",
+      hrn: "hrn:here-dev:data:::here-internal-test",
+      name: "here-internal-test",
+      summary: "Internal test for here",
+      description: "Used for internal testing on the staging olp.",
+      tags: [],
+      created: "2018-07-13T20:50:08.425Z",
+      replication: {},
+      layers: [
+        {
+          id: "mocked-layed-id",
+          hrn: "hrn:here-dev:data:::here-internal-test:hype-test-prefetch",
+          partitioning: {
+            tileLevels: [],
+            scheme: "heretile"
+          },
+          contentType: "application/x-protobuf",
+          layerType: "versioned"
+        }
+      ],
+      version: 3
+    };
+
+    // Set the response from Metadata service with the versions info from the catalog.
+    mockedResponses.set(
+      `https://config.data.api.platform.here.com/config/v1/catalogs/hrn:here:data:::test-hrn`,
+      new Response(JSON.stringify(mockedCatalogs), { headers })
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    const request = new CatalogRequest();
+
+    let response = await catalogClient.getCatalog(request);
+
+    assert.isDefined(response);
+    const calls = fetchStub.getCalls();
+    calls.forEach(call => {
+      const callHeaders = call.args[1].headers;
+      expect(callHeaders.get("User-Agent")).equals(`OLP-TS-SDK/${LIB_VERSION}`);
+    });
   });
 
   it("Should read the full catalog configuration for the requested catalog", async () => {

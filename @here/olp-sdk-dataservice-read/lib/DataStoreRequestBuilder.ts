@@ -18,6 +18,7 @@
  */
 
 import { RequestBuilder } from "@here/olp-sdk-dataservice-api";
+import { LIB_VERSION } from "../lib.version";
 import { DownloadManager } from "./DownloadManager";
 
 /**
@@ -48,6 +49,32 @@ async function addBearerToken(
     }
 
     return Promise.resolve(init);
+}
+
+/**
+ * Adds user-agent to the request headers
+ * @param init params to the request. @see RequestInit interface.
+ *
+ * @returns Promise with updated request params (with added user-agent to the headers).
+ */
+function addUserAgent(init?: RequestInit): RequestInit {
+    const USER_AGENT = `OLP-TS-SDK/${LIB_VERSION}`;
+
+    if (init === undefined) {
+        // if empty RequestInit, just create new one and add user-agent to the headers
+        init = {};
+        init.headers = new Headers();
+        init.headers.append("User-Agent", USER_AGENT);
+    } else {
+        // convert init.headers to the Headers if received a plain object
+        const headers = new Headers(init.headers);
+
+        // adding user-agent to the headers
+        headers.append("User-Agent", USER_AGENT);
+        init.headers = headers;
+    }
+
+    return init;
 }
 
 /**
@@ -87,6 +114,7 @@ export class DataStoreRequestBuilder extends RequestBuilder {
      */
     async download<T>(url: string, init?: RequestInit): Promise<T> {
         let options = await this.addBearerToken(init);
+        options = this.addUserAgent(options);
         if (this.abortSignal) {
             options = {
                 ...options,
@@ -108,6 +136,7 @@ export class DataStoreRequestBuilder extends RequestBuilder {
      */
     async downloadBlob(url: string, init?: RequestInit): Promise<Response> {
         let options = await this.addBearerToken(init);
+        options = this.addUserAgent(options);
         if (this.abortSignal) {
             options = {
                 ...options,
@@ -121,6 +150,10 @@ export class DataStoreRequestBuilder extends RequestBuilder {
 
     private async addBearerToken(init?: RequestInit): Promise<RequestInit> {
         return addBearerToken(this.getBearerToken, init);
+    }
+
+    private addUserAgent(init?: RequestInit): RequestInit {
+        return addUserAgent(init);
     }
 
     private addAbortSignal(init?: RequestInit): RequestInit {

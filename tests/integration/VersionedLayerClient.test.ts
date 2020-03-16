@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import {
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "./FetchMock";
 import { Buffer } from "buffer";
+import { LIB_VERSION } from "@here/olp-sdk-dataservice-read/lib.version";
 
 chai.use(sinonChai);
 
@@ -1094,5 +1095,71 @@ describe("VersionedLayerClient", () => {
     );
 
     assert.isDefined(partitions);
+  });
+
+  it("Should user-agent be added to the each request", async () => {
+    const mockedResponses = new Map();
+    const mockedDataHandle = "1b2ca68f-d4a0-4379-8120-cd025640510c";
+    const mockedData = Buffer.alloc(42);
+
+    // Set the response from lookup api with the info about Metadata service.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "blob",
+            version: "v1",
+            baseURL: "https://blob.data.api.platform.here.com/blob/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          },
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ]),
+        { headers }
+      )
+    );
+
+    // Set the response of mocked partitions from metadata service.
+    mockedResponses.set(
+      `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/1b2ca68f-d4a0-4379-8120-cd025640510c`,
+      new Response(mockedData, { headers })
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+    const layerClient = new VersionedLayerClient(
+      testHRN,
+      testLayerId,
+      settings
+    );
+    const request = new DataRequest().withDataHandle(mockedDataHandle);
+
+    const data = await layerClient.getData(request);
+
+    assert.isDefined(data);
+    expect(fetchStub.callCount).to.be.equal(2); // 1 - lookup, 1 - blob
+    const calls = fetchStub.getCalls();
+    calls.forEach(call => {
+      const callHeaders = call.args[1].headers;
+      expect(callHeaders.get("User-Agent")).equals(`OLP-TS-SDK/${LIB_VERSION}`);
+    });
   });
 });
