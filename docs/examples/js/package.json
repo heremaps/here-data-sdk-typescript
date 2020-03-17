@@ -1,0 +1,17 @@
+{
+  "name": "examples-js",
+  "version": "1.0.0",
+  "description": "JS examples for HERE OLP SDK for TypeScript",
+  "author": {
+    "name": "HERE Europe B.V.",
+    "url": "https://here.com"
+  },
+  "license": "Apache-2.0",
+  "private": true,
+  "scripts": {
+    "start": "lite-server"
+  },
+  "devDependencies": {
+    "lite-server": "2.5.4"
+  }
+}
