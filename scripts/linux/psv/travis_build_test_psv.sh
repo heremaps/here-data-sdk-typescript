@@ -50,6 +50,4 @@ npm run integration-test
 npm run functional-test
 
 # Test the generated bundles
-npm run test-generated-bundles
-
-
+npm run http-server-testing-bundles & npm run test-generated-bundles

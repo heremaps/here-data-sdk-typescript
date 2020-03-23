@@ -17,13 +17,30 @@
  * License-Filename: LICENSE
  */
 
-import { jsLoaderFactory } from "./utils";
 import { OlpSdkDataserviceApiTestCases } from "./olp-sdk-dataservice-api-testCases";
 import { OlpSdkAuthenticationTestCases } from "./olp-sdk-authentication-testCases";
 import { OlpSdkDataserviceReadTestCases } from "./olp-sdk-dataservice-read-testCases";
 
-describe("Test published olp-edge-datastore-api", () => {
-  before(jsLoaderFactory({url: "https://unpkg.com/@here/olp-sdk-dataservice-api/bundle.umd.min.js"}));
+const puppeteer = require("puppeteer");
+
+let browser: any;
+let page: any;
+
+describe("Test published olp-edge-datastore-api", async () => {
+  before(async () => {
+    browser = await puppeteer.launch({
+      args: ["no-sandbox", "disable-setuid-sandbox"]
+    });
+    page = await browser.newPage();
+    await page.addScriptTag({
+      url: "https://unpkg.com/@here/olp-sdk-dataservice-api/bundle.umd.min.js"
+    });
+    await page.goto("http://127.0.0.1:8080", { waitUntil: "networkidle2" });
+  });
+
+  after(async () => {
+    await browser.close();
+  });
 
   OlpSdkDataserviceApiTestCases.forEach(testCase => {
     it(testCase.it, testCase.callback);
@@ -31,7 +48,20 @@ describe("Test published olp-edge-datastore-api", () => {
 });
 
 describe("Test published olp-edge-datastore-read", () => {
-  before(jsLoaderFactory({url: "https://unpkg.com/@here/olp-sdk-dataservice-read/bundle.umd.min.js"}));
+  before(async () => {
+    browser = await puppeteer.launch({
+      args: ["no-sandbox", "disable-setuid-sandbox"]
+    });
+    page = await browser.newPage();
+    await page.addScriptTag({
+      url: "https://unpkg.com/@here/olp-sdk-dataservice-read/bundle.umd.min.js"
+    });
+    await page.goto("http://127.0.0.1:8080", { waitUntil: "networkidle2" });
+  });
+
+  after(async () => {
+    await browser.close();
+  });
 
   OlpSdkDataserviceReadTestCases.forEach(testCase => {
     it(testCase.it, testCase.callback);
@@ -39,7 +69,20 @@ describe("Test published olp-edge-datastore-read", () => {
 });
 
 describe("Test published olp-sdk-authentication", () => {
-  before(jsLoaderFactory({url: "https://unpkg.com/@here/olp-sdk-authentication/bundle.umd.min.js"}));
+  before(async () => {
+    browser = await puppeteer.launch({
+      args: ["no-sandbox", "disable-setuid-sandbox"]
+    });
+    page = await browser.newPage();
+    await page.addScriptTag({
+      url: "https://unpkg.com/@here/olp-sdk-authentication/bundle.umd.min.js"
+    });
+    await page.goto("http://127.0.0.1:8080", { waitUntil: "networkidle2" });
+  });
+
+  after(async () => {
+    await browser.close();
+  });
 
   OlpSdkAuthenticationTestCases.forEach(testCase => {
     it(testCase.it, testCase.callback);
