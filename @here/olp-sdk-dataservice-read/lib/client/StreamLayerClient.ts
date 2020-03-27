@@ -215,7 +215,7 @@ export class StreamLayerClient {
                 {}
             );
 
-        await StreamApi.commitOffsets(requestBuilder, {
+        await StreamApi.doCommitOffsets(requestBuilder, {
             commitOffsets: {
                 offsets: Object.keys(latestOffsets).map(key => ({
                     partition: +key,

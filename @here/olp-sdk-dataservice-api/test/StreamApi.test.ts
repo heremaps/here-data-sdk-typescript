@@ -40,7 +40,37 @@ describe("StreamApi", () => {
             }
         } as RequestBuilder;
 
+        // tslint:disable-next-line: deprecation
         await StreamApi.commitOffsets(builder, {
+            layerId: "mocked-id",
+            subscriptionId: "test-subscriptionId",
+            xCorrelationId: "test-xCorrelationId",
+            mode: "serial",
+            commitOffsets: {
+                offsets: [
+                    {
+                        partition: 25,
+                        offset: 3
+                    }
+                ]
+            }
+        });
+    });
+
+    it("Should doCommitOffsets works as expected", async () => {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/layers/mocked-id/offsets?subscriptionId=test-subscriptionId&mode=serial"
+                );
+                expect(options.method).to.be.equal("PUT");
+                return Promise.resolve() as any;
+            }
+        } as RequestBuilder;
+
+        // tslint:disable-next-line: deprecation
+        await StreamApi.doCommitOffsets(builder, {
             layerId: "mocked-id",
             subscriptionId: "test-subscriptionId",
             xCorrelationId: "test-xCorrelationId",
