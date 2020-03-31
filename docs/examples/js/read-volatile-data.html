@@ -26,13 +26,13 @@
     <script src="https://unpkg.com/@here/olp-sdk-authentication/bundle.umd.min.js"></script>
     <script src="https://unpkg.com/@here/olp-sdk-dataservice-api/bundle.umd.min.js"></script>
     <script src="https://unpkg.com/@here/olp-sdk-dataservice-read/bundle.umd.min.js"></script>
+    <script src="config.js"></script>
     <script>
         const userAuth = new UserAuth({
             env: "here",
             credentials: {
-                accessKeyId: "6-Z_4D2Egm-xxWjAOA6UPQ",
-                accessKeySecret: "cd8mk0uGZhhRjSi1J6D8qRt3sI5VjF0hXxyNLFEO5uiCYiKtWlnW0IGIECRsRK-YRSBSuyvZp-AB8fZwz_wrXg"
-            },
+                accessKeyId: ExampleAppConfig.accessKeyId,
+                accessKeySecret: ExampleAppConfig.accessKeySecret,
             tokenRequester: requestToken
         });
 
@@ -42,8 +42,8 @@
         });
 
         const layerClient = new VolatileLayerClient({
-            catalogHrn: HRN.fromString("hrn:here:data::olp-here:weather-forecast"),
-            layerId: "weather-event-forecast",
+            catalogHrn: HRN.fromString(ExampleAppConfig.catalogHrn),
+            layerId: ExampleAppConfig.volatileLayerId,
             settings
         });
 

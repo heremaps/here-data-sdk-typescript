@@ -24,12 +24,13 @@
     <script src="https://unpkg.com/@here/olp-sdk-authentication/bundle.umd.min.js"></script>
     <script src="https://unpkg.com/@here/olp-sdk-dataservice-api/bundle.umd.min.js"></script>
     <script src="https://unpkg.com/@here/olp-sdk-dataservice-read/bundle.umd.min.js"></script>
+    <script src="config.js"></script>
     <script>
         const userAuth = new UserAuth({
             env: "here",
             credentials: {
-                accessKeyId: "your-app-id",
-                accessKeySecret: "your-app-secret"
+                accessKeyId: ExampleAppConfig.accessKeyId,
+                accessKeySecret: ExampleAppConfig.accessKeySecret
             },
             tokenRequester: requestToken
         });
@@ -40,8 +41,8 @@
         });
 
         const layerClient = new StreamLayerClient({
-            catalogHrn: HRN.fromString("your-hrn"),
-            layerId: "your-layer-id",
+            catalogHrn: HRN.fromString(ExampleAppConfig.catalogHrn),
+            layerId: ExampleAppConfig.streamLayerId,
             settings
         });
 
