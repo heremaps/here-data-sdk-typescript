@@ -44,7 +44,7 @@
     "bootstrap": "lerna bootstrap --use-workspaces",
     "build": "lerna run build",
     "test": "lerna run test",
-    "http-server-testing-bundles": "http-server tests/integration/bundles/umd/static", 
+    "http-server-testing-bundles": "serve -l tcp://localhost:8080 tests/integration/bundles/umd/static", 
     "test-published-bundles": "cd tests/integration/bundles/umd && tsc && cd - && mocha --timeout 5000 tests/integration/bundles/umd/olp-sdk-published.test.js",
     "test-generated-bundles": "cd tests/integration/bundles/umd && tsc && cd - && mocha --timeout 5000 tests/integration/bundles/umd/olp-sdk-generated.test.js",
     "api-breaks-test": "nyc mocha --opts ./tests/integration/api-breaks/mocha.opts > ./tests/integration/api-breaks/xunit.xml",
@@ -70,6 +70,6 @@
     "puppeteer-to-istanbul": "^1.2.2",
     "nyc": "^15.0.0",
     "mocha": "^7.1.1",
-    "http-server": "^0.12.1"
+    "serve": "^11.3.0"
   }
 }
