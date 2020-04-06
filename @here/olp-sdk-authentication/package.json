@@ -5,6 +5,7 @@
   "main": "index.js",
   "browser": "index.web.js",
   "typings": "index",
+  "bin": "oauth-requester",
   "directories": {
     "test": "test",
     "lib": "lib"
