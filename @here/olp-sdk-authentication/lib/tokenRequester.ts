@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import * as fs from "fs";
+import * as os from "os";
 import { requestToken } from "./requestToken";
 
 /*
@@ -30,15 +32,47 @@ const MINS_PER_HOUR = 60;
 const SECS_PER_MIN = 60;
 
 const args = process.argv.slice(2);
-if (args.length !== ARG_COUNT) {
+
+let url = "";
+let consumerKey = "";
+let secretKey = "";
+
+function getProperty(property: string, config: string): string {
+    const re = new RegExp(`^\\s*${property}\\s*=\\s*(.*)$`, "m");
+    const matches = config.match(re);
+    if (matches === null) {
+        console.error(`Property ${property} not found in config!`);
+        process.exit(1);
+    }
+    return matches![1];
+}
+
+if (args[0] === undefined || args[0] === "--config") {
+    const configFile =
+        args[0] === undefined
+            ? `${os.homedir}/.here/credentials.properties`
+            : args[1];
+    const config = fs.readFileSync(configFile, "utf8");
+    url = getProperty("here\\.token\\.endpoint\\.url", config);
+    consumerKey = getProperty("here\\.access\\.key\\.id", config);
+    secretKey = getProperty("here\\.access\\.key\\.secret", config);
+} else if (args.length === ARG_COUNT) {
+    url = args[0];
+    consumerKey = args[1];
+    secretKey = args[2];
+} else {
     console.error("Usage: [server] [consumer key] [secret key]");
+    console.error("Usage: [--config <filename>]");
+    console.error(
+        "<filename> : defaults to $HOME/.here/credentials.properties"
+    );
     process.exit(1);
 }
 
 requestToken({
-    url: args[0],
-    consumerKey: args[1],
-    secretKey: args[2],
+    url,
+    consumerKey,
+    secretKey,
     expiresIn: HOURS_PER_DAY * MINS_PER_HOUR * SECS_PER_MIN
 })
     // tslint:disable-next-line:no-console
