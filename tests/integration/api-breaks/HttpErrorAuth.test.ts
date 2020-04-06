@@ -20,24 +20,14 @@
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import { HttpError } from "@here/olp-sdk-dataservice-api";
+import { HttpError } from "@here/olp-sdk-authentication";
 
 chai.use(sinonChai);
 
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("HttpError", () => {
-  class HttpErrorTest extends HttpError {
-    constructor(status: number, message: string) {
-      super(status, message);
-    }
-
-    isHttpError(error: any): error is HttpError {
-      return error.name === "HttpError";
-    }
-  }
-
+describe("Authentication HttpError", () => {
   it("Shoud be initialized with arguments", async () => {
     const testError = new HttpError(101, "Test Error");
     assert.isDefined(testError);
@@ -45,13 +35,6 @@ describe("HttpError", () => {
     expect(testError).to.be.instanceOf(HttpError);
     assert.isDefined(testError.status);
     assert.isDefined(testError.message);
-  });
-
-  it("Test isHttpError method with HttpError", async () => {
-    const testError = new HttpErrorTest(101, "Test Error");
-
-    const response = testError.isHttpError(testError);
-    assert.isDefined(response);
   });
 
   it("Test isHttpError method with HttpError", async () => {
