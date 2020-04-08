@@ -14,9 +14,15 @@ addons:
 branches:
     only:
       - master
-script: $WORKSPACE/scripts/linux/psv/travis_build_test_psv.sh && env
-name: "PSV Linux Build & Test"
-
+matrix:
+  include:
+  - language: node_js
+    name: "PSV Linux Build & Test"
+    script: $WORKSPACE/scripts/linux/psv/travis_build_test_psv.sh && env
+  - language: minimal
+    name: "PSV Commit checker script"
+    script: $WORKSPACE/scripts/misc/commit_checker.sh
+    if: type = pull_request
 deploy:
   - provider: script
     script: $WORKSPACE/scripts/publish-packages.sh -fetch
