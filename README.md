@@ -34,7 +34,7 @@ We try to develop and maintain our API in a way that preserves its compatibility
 
 For more information on Data API, see its [Developer Guide](https://developer.here.com/olp/documentation/data-api/data_dev_guide/index.html) and [API Reference](https://developer.here.com/olp/documentation/data-api/api-reference.html).
 
-When new API is introduced in OLP SDK for TypeScript, the old one is not deleted straight away. The standard deprecation time is 6 months. It gives you time to switch to new code. All of the deprecated methods, functions, and parameters are documented in the OLP SDK for TypeScript [API Reference](https://developer.here.com/olp/documentation/sdk-cpp/api_reference/index.html) and [changelog](CHANGELOG.md).
+When new API is introduced in OLP SDK for TypeScript, the old one is not deleted straight away. The standard deprecation time is 6 months. It gives you time to switch to new code. All of the deprecated methods, functions, and parameters are documented in the OLP SDK for TypeScript [API Reference](https://developer.here.com/olp/documentation/sdk-typescript/api_reference/index.html) and [changelog](CHANGELOG.md).
 
 ## About This Repository
 
