@@ -19,3 +19,4 @@
 
 export * from "./ApiCacheRepository";
 export * from "./KeyValueCache";
+export * from "./LRUCache";
