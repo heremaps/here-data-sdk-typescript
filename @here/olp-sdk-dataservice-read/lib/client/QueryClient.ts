@@ -31,6 +31,8 @@ import {
     QuadTreeIndexRequest,
     RequestFactory
 } from "..";
+import { MetadataCacheRepository } from "../cache/MetadataCacheRepository";
+import { FetchOptions } from "./FetchOptions";
 
 /**
  * A client for the OLP Query Service that provides a way to get information (metadata)
@@ -168,6 +170,21 @@ export class QueryClient {
             return Promise.reject("Please provide correct partitionIds list");
         }
 
+        const cache = new MetadataCacheRepository(this.settings.cache);
+        if (request.getFetchOption() !== FetchOptions.OnlineOnly) {
+            const cachedPartitions = cache.get(
+                request,
+                hrn.toString(),
+                layerId
+            );
+
+            if (cachedPartitions) {
+                return Promise.resolve({
+                    partitions: cachedPartitions
+                });
+            }
+        }
+
         const requestBuilder = await RequestFactory.create(
             "query",
             this.apiVersion,
@@ -180,12 +197,34 @@ export class QueryClient {
             )
         );
 
-        return QueryApi.getPartitionsById(requestBuilder, {
+        const medatada = await QueryApi.getPartitionsById(requestBuilder, {
             layerId,
+
             partition: idsList,
             additionalFields: request.getAdditionalFields(),
             version: version !== undefined ? `${version}` : undefined
-        });
+        }).catch(err => Promise.reject(err));
+
+        if (
+            request.getFetchOption() !== FetchOptions.OnlineOnly &&
+            medatada &&
+            medatada.partitions &&
+            medatada.partitions.length
+        ) {
+            const partitions: MetadataApi.Partition[] = medatada.partitions.map(
+                partition => ({
+                    checksum: partition.checksum,
+                    compressedDataSize: partition.compressedDataSize,
+                    dataHandle: partition.dataHandle || "",
+                    dataSize: partition.dataSize,
+                    partition: partition.partition,
+                    version: partition.version
+                })
+            );
+            cache.put(request, hrn.toString(), layerId, partitions);
+        }
+
+        return Promise.resolve(medatada);
     }
 
     /**

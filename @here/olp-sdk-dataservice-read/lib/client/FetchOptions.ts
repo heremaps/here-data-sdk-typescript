@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,23 @@
  * License-Filename: LICENSE
  */
 
-export * from "./ApiCacheRepository";
-export * from "./MetadataCacheRepository";
-export * from "./KeyValueCache";
-export * from "./LRUCache";
+/**
+ * Enum the fetch option that controls how requests are handled.
+ */
+export enum FetchOptions {
+    /**
+     * A default option. Queries the network if the requested resource is not
+     * found in the cache.
+     */
+    OnlineIfNotFound,
+
+    /**
+     * Skips cache lookups and queries the network right away.
+     */
+    OnlineOnly,
+
+    /**
+     * Returns immediately if a cache lookup fails.
+     */
+    CacheOnly
+}

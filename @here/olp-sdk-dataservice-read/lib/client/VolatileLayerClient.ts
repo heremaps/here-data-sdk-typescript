@@ -28,6 +28,7 @@ import {
     DataRequest,
     DataStoreRequestBuilder,
     HRN,
+    MetadataCacheRepository,
     OlpClientSettings,
     PartitionsRequest,
     QuadKeyPartitionsRequest,
@@ -35,6 +36,9 @@ import {
     QueryClient,
     RequestFactory
 } from "..";
+import { FetchOptions } from "./FetchOptions";
+
+// tslint:disable: deprecation
 
 /**
  * Parameters for use to initialize VolatileLayerClient.
@@ -267,15 +271,42 @@ export class VolatileLayerClient {
             );
         }
 
+        const cache = new MetadataCacheRepository(this.settings.cache);
+
+        if (request.getFetchOption() !== FetchOptions.OnlineOnly) {
+            const partitions = cache.get(
+                request,
+                this.hrn.toString(),
+                this.layerId
+            );
+            if (partitions) {
+                return Promise.resolve({ partitions });
+            }
+        }
+
         const metaRequestBilder = await this.getRequestBuilder(
             "metadata",
             HRN.fromString(this.hrn)
         ).catch(error => Promise.reject(error));
-        return MetadataApi.getPartitions(metaRequestBilder, {
+
+        const metadata = await MetadataApi.getPartitions(metaRequestBilder, {
             layerId: this.layerId,
             additionalFields: request.getAdditionalFields(),
             billingTag: request.getBillingTag()
-        });
+        }).catch(error => Promise.reject(error));
+
+        if (
+            request.getFetchOption() !== FetchOptions.OnlineOnly &&
+            metadata.partitions.length
+        ) {
+            cache.put(
+                request,
+                this.hrn.toString(),
+                this.layerId,
+                metadata.partitions
+            );
+        }
+        return Promise.resolve(metadata);
     }
 
     private async downloadPartition(

@@ -29,17 +29,17 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("StatistiscClient", () => {
+describe("QueryClient", () => {
     let sandbox: sinon.SinonSandbox;
     let getVersionStub: sinon.SinonStub;
     let getPartitionsByIdStub: sinon.SinonStub;
     let quadTreeIndexVolatileStub: sinon.SinonStub;
-    let olpClientSettingsStub: sinon.SinonStubbedInstance<
-        dataServiceRead.OlpClientSettings
-    >;
+    let olpClientSettingsStub: sinon.SinonStubbedInstance<dataServiceRead.OlpClientSettings>;
 
     let getBaseUrlRequestStub: sinon.SinonStub;
-    const mockedHRN = dataServiceRead.HRN.fromString("hrn:here:data:::mocked-hrn");
+    const mockedHRN = dataServiceRead.HRN.fromString(
+        "hrn:here:data:::mocked-hrn"
+    );
     const mockedLayerId = "mocked-layed-id";
     const mockedLayerType = "volatile";
     const fakeURL = "http://fake-base.url";
@@ -57,7 +57,10 @@ describe("StatistiscClient", () => {
         olpClientSettingsStub = sandbox.createStubInstance(
             dataServiceRead.OlpClientSettings
         );
-        quadTreeIndexVolatileStub = sandbox.stub(QueryApi, "quadTreeIndexVolatile");
+        quadTreeIndexVolatileStub = sandbox.stub(
+            QueryApi,
+            "quadTreeIndexVolatile"
+        );
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
         getPartitionsByIdStub = sandbox.stub(QueryApi, "getPartitionsById");
         getBaseUrlRequestStub = sandbox.stub(
@@ -111,9 +114,13 @@ describe("StatistiscClient", () => {
             mockedHRN,
             mockedLayerId,
             mockedLayerType
-        ).withQuadKey(mockedQuadKey).withVersion(42);
+        )
+            .withQuadKey(mockedQuadKey)
+            .withVersion(42);
 
-        const response = await queryClient.fetchQuadTreeIndex(quadTreeIndexRequest)
+        const response = await queryClient.fetchQuadTreeIndex(
+            quadTreeIndexRequest
+        );
 
         assert.isDefined(response);
         expect(response).to.be.equal(mockedQuadKeyTreeData);
@@ -132,7 +139,8 @@ describe("StatistiscClient", () => {
             mockedLayerType
         );
 
-        const result = await queryClient.fetchQuadTreeIndex(quadTreeIndexRequest)
+        const result = await queryClient
+            .fetchQuadTreeIndex(quadTreeIndexRequest)
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error);
@@ -152,7 +160,8 @@ describe("StatistiscClient", () => {
             mockedLayerType
         ).withQuadKey(mockedQuadKey);
 
-        const result = await queryClient.fetchQuadTreeIndex(quadTreeIndexRequest)
+        const result = await queryClient
+            .fetchQuadTreeIndex(quadTreeIndexRequest)
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error);
@@ -167,8 +176,11 @@ describe("StatistiscClient", () => {
         assert.isDefined(queryClient);
 
         getVersionStub.callsFake(
-            (builder: any, params: any): Promise<MetadataApi.VersionResponse> => {
-                return Promise.resolve({version: NaN});
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve({ version: NaN });
             }
         );
 
@@ -178,7 +190,8 @@ describe("StatistiscClient", () => {
             mockedLayerType
         ).withQuadKey(mockedQuadKey);
 
-        const result = await queryClient.fetchQuadTreeIndex(quadTreeIndexRequest)
+        const result = await queryClient
+            .fetchQuadTreeIndex(quadTreeIndexRequest)
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error);
@@ -194,7 +207,10 @@ describe("StatistiscClient", () => {
         assert.isDefined(queryClient);
 
         getVersionStub.callsFake(
-            (builder: any, params: any): Promise<MetadataApi.VersionResponse> => {
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
                 return Promise.reject(mockedError);
             }
         );
@@ -205,7 +221,8 @@ describe("StatistiscClient", () => {
             mockedLayerType
         ).withQuadKey(mockedQuadKey);
 
-        const result = await queryClient.fetchQuadTreeIndex(quadTreeIndexRequest)
+        const result = await queryClient
+            .fetchQuadTreeIndex(quadTreeIndexRequest)
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error);
@@ -219,20 +236,24 @@ describe("StatistiscClient", () => {
             "hrn:here:data:::mocked-hrn"
         );
         const mockedPartitionsResponse = {
-            "partitions": [
+            partitions: [
                 {
-                "checksum": "291f66029c232400e3403cd6e9cfd36e",
-                "compressedDataSize": 1024,
-                "dataHandle": "1b2ca68f-d4a0-4379-8120-cd025640510c",
-                "dataSize": 1024,
-                "crc": "c3f276d7",
-                "partition": "314010583",
-                "version": 2
+                    checksum: "291f66029c232400e3403cd6e9cfd36e",
+                    compressedDataSize: 1024,
+                    dataHandle: "1b2ca68f-d4a0-4379-8120-cd025640510c",
+                    dataSize: 1024,
+                    crc: "c3f276d7",
+                    partition: "314010583",
+                    version: 2
                 }
             ]
         };
+
         const queryClient = new dataServiceRead.QueryClient(
-            olpClientSettingsStub as any
+            new dataServiceRead.OlpClientSettings({
+                environment: "mocked-env",
+                getToken: () => Promise.resolve("Mocked-token")
+            })
         );
         assert.isDefined(queryClient);
 
@@ -269,11 +290,8 @@ describe("StatistiscClient", () => {
 
         const partitionsRequest = new dataServiceRead.PartitionsRequest();
 
-        const response = await queryClient.getPartitionsById(
-                partitionsRequest,
-                mockedLayerId,
-                mockedHRN
-            )
+        const response = await queryClient
+            .getPartitionsById(partitionsRequest, mockedLayerId, mockedHRN)
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error);

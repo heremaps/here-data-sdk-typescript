@@ -17,18 +17,20 @@
  * License-Filename: LICENSE
  */
 
+import { LRUCache } from "./LRUCache";
+
 /**
  * An in-memory caching instance. All the repository instances use it for reading or caching information.
  */
 export class KeyValueCache {
-    private readonly cache: Map<string, string>;
+    private readonly cache: LRUCache<string, string>;
     /**
      * Cerates the `KeyValueCache` instance.
      *
      * @return The `KeyValueCache` instance.
      */
     constructor() {
-        this.cache = new Map();
+        this.cache = new LRUCache();
     }
 
     /**
@@ -39,7 +41,12 @@ export class KeyValueCache {
      * @return True if the operation is successful, false otherwise.
      */
     public put(key: string, value: string): boolean {
-        return this.cache.set(key, value).has(key);
+        try {
+            this.cache.set(key, value);
+            return true;
+        } catch (error) {
+            return false;
+        }
     }
 
     /**
