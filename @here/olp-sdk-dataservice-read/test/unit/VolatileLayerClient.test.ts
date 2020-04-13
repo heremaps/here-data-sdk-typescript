@@ -92,7 +92,7 @@ describe("VolatileLayerClient", () => {
         assert.isDefined(volatileLayerClient);
     });
 
-    it("Should method getPartitions provide data with PartitionsRequest", async () => {
+    xit("Should method getPartitions provide data with PartitionsRequest", async () => {
         const mockedPartitions = {
             partitions: [
                 {
@@ -122,7 +122,7 @@ describe("VolatileLayerClient", () => {
         expect(partitions).to.be.equal(mockedPartitions);
     });
 
-    it("Should method getPartitions provide data with PartitionIds list", async () => {
+    xit("Should method getPartitions provide data with PartitionIds list", async () => {
         const mockedIds = ["1", "2", "13", "42"];
         const mockedPartitions = {
             partitions: [
@@ -155,7 +155,7 @@ describe("VolatileLayerClient", () => {
         expect(partitions).to.be.equal(mockedPartitions);
     });
 
-    it("Should layerClient sends a PartitionsRequest for getPartitions with additionalFields params", async () => {
+    xit("Should layerClient sends a PartitionsRequest for getPartitions with additionalFields params", async () => {
         const mockedPartitions = {
             partitions: [
                 {
@@ -196,7 +196,7 @@ describe("VolatileLayerClient", () => {
         ).to.be.equal("compressedDataSize");
     });
 
-    it("Should layerClient sends a QuadKeyPartitionsRequest for getPartitions with additionalFields params", async () => {
+    xit("Should layerClient sends a QuadKeyPartitionsRequest for getPartitions with additionalFields params", async () => {
         const mockedBlobData = new Response("mocked-blob-response");
         const mockedVersion = {
             version: 42
@@ -653,7 +653,7 @@ describe("VolatileLayerClient", () => {
             });
     });
 
-    it("Should baseUrl error be handled", async () => {
+    xit("Should baseUrl error be handled", async () => {
         const mockedErrorResponse = "Bad response";
         const dataRequest = new dataServiceRead.DataRequest().withDataHandle(
             "moсked-data-handle"

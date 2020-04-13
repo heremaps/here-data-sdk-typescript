@@ -19,6 +19,7 @@
 
 import { AdditionalFields } from "@here/olp-sdk-dataservice-api";
 import { validateBillingTag, validatePartitionsIdsList } from "..";
+import { FetchOptions } from "./FetchOptions";
 
 /**
  * Prepares information for calls to get partitions metadata from the OLP Metadata Service.
@@ -28,6 +29,7 @@ export class PartitionsRequest {
     private billingTag?: string;
     private partitionIds?: string[];
     private additionalFields?: AdditionalFields;
+    private fetchOption = FetchOptions.OnlineIfNotFound;
 
     /**
      * This method is deprecated and is not used. If you need to set the version, then
@@ -123,5 +125,32 @@ export class PartitionsRequest {
      */
     public getAdditionalFields(): AdditionalFields | undefined {
         return this.additionalFields;
+    }
+
+    /**
+     * Sets the fetch option that you can use to set the source from
+     * which data should be fetched.
+     *
+     * @see `getFetchOption()` for information on usage and format.
+     *
+     * @param option The `FetchOption` enum.
+     *
+     * @return A reference to the updated `PartitionsRequest` instance.
+     */
+    public withFetchOption(option: FetchOptions): PartitionsRequest {
+        this.fetchOption = option;
+        return this;
+    }
+
+    /**
+     * Gets the fetch option that controls how requests are handled.
+     *
+     * The default option is `OnlineIfNotFound` that queries the network if
+     * the requested resource is not in the cache.
+     *
+     * @return The fetch option.
+     */
+    public getFetchOption(): FetchOptions {
+        return this.fetchOption;
     }
 }

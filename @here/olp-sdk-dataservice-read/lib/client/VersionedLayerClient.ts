@@ -35,6 +35,8 @@ import {
     QueryClient,
     RequestFactory
 } from "..";
+import { MetadataCacheRepository } from "../cache";
+import { FetchOptions } from "./FetchOptions";
 
 // tslint:disable: deprecation
 
@@ -332,17 +334,43 @@ export class VersionedLayerClient {
             );
         }
 
+        const cache = new MetadataCacheRepository(this.settings.cache);
+        if (request.getFetchOption() !== FetchOptions.OnlineOnly) {
+            const partitions = cache.get(
+                request,
+                this.hrn.toString(),
+                this.layerId
+            );
+            if (partitions) {
+                return Promise.resolve({ partitions });
+            }
+        }
+
         const metaRequestBilder = await this.getRequestBuilder(
             "metadata",
             HRN.fromString(this.hrn),
             abortSignal
         ).catch(error => Promise.reject(error));
-        return MetadataApi.getPartitions(metaRequestBilder, {
+
+        const metadata = await MetadataApi.getPartitions(metaRequestBilder, {
             version: usingVersion,
             layerId: this.layerId,
             additionalFields: request.getAdditionalFields(),
             billingTag: request.getBillingTag()
-        });
+        }).catch(error => Promise.reject(error));
+
+        if (
+            request.getFetchOption() !== FetchOptions.OnlineOnly &&
+            metadata.partitions.length
+        ) {
+            cache.put(
+                request,
+                this.hrn.toString(),
+                this.layerId,
+                metadata.partitions
+            );
+        }
+        return Promise.resolve(metadata);
     }
 
     /**
