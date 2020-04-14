@@ -45,3 +45,4 @@ export * from "./PollRequest";
 export * from "./UnsubscribeRequest";
 export * from "./SeekRequest";
 export * from "./FetchOptions";
+export * from "./TileRequest";

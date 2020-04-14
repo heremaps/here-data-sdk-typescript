@@ -23,3 +23,4 @@ export * from "./getEnvLookupUrl";
 export * from "./validateBillingTag";
 export * from "./validatePartitionsIdsList";
 export * from "./getDataSizeUtil";
+export * from "./getTile";
