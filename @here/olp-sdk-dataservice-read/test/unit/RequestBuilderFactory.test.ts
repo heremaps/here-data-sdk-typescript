@@ -380,7 +380,7 @@ describe("RequestFactory", () => {
             }
         });
 
-        xit("Should return correct base url for resource service from cache while max-age is valid", async () => {
+        it("Should return correct base url for resource service from cache while max-age is valid", async () => {
             const headers = new Headers();
             headers.append("cache-control", "max-age=2");
             const response = {

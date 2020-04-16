@@ -52,19 +52,20 @@ describe("VolatileLayerClient", () => {
 
     before(() => {
         sandbox = sinon.createSandbox();
-        let settings = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
-        );
+        let settings = new dataServiceRead.OlpClientSettings({
+            environment: "here",
+            getToken: () => Promise.resolve("token")
+        });
         volatileLayerClient = new dataServiceRead.VolatileLayerClient(
             mockedHRN,
             mockedLayerId,
-            (settings as unknown) as dataServiceRead.OlpClientSettings
+            settings
         );
 
         const volatileLayerClientParams = {
             catalogHrn: mockedHRN,
             layerId: mockedLayerId,
-            settings: (settings as unknown) as dataServiceRead.OlpClientSettings
+            settings
         };
         volatileLayerClientNew = new dataServiceRead.VolatileLayerClient(
             volatileLayerClientParams
@@ -92,7 +93,7 @@ describe("VolatileLayerClient", () => {
         assert.isDefined(volatileLayerClient);
     });
 
-    xit("Should method getPartitions provide data with PartitionsRequest", async () => {
+    it("Should method getPartitions provide data with PartitionsRequest", async () => {
         const mockedPartitions = {
             partitions: [
                 {
@@ -122,7 +123,7 @@ describe("VolatileLayerClient", () => {
         expect(partitions).to.be.equal(mockedPartitions);
     });
 
-    xit("Should method getPartitions provide data with PartitionIds list", async () => {
+    it("Should method getPartitions provide data with PartitionIds list", async () => {
         const mockedIds = ["1", "2", "13", "42"];
         const mockedPartitions = {
             partitions: [
@@ -196,7 +197,7 @@ describe("VolatileLayerClient", () => {
         ).to.be.equal("compressedDataSize");
     });
 
-    xit("Should layerClient sends a QuadKeyPartitionsRequest for getPartitions with additionalFields params", async () => {
+    it("Should layerClient sends a QuadKeyPartitionsRequest for getPartitions with additionalFields params", async () => {
         const mockedBlobData = new Response("mocked-blob-response");
         const mockedVersion = {
             version: 42
@@ -653,7 +654,7 @@ describe("VolatileLayerClient", () => {
             });
     });
 
-    xit("Should baseUrl error be handled", async () => {
+    it("Should baseUrl error be handled", async () => {
         const mockedErrorResponse = "Bad response";
         const dataRequest = new dataServiceRead.DataRequest().withDataHandle(
             "moсked-data-handle"

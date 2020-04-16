@@ -44,3 +44,4 @@ export * from "./SubscribeRequest";
 export * from "./PollRequest";
 export * from "./UnsubscribeRequest";
 export * from "./SeekRequest";
+export * from "./FetchOptions";
