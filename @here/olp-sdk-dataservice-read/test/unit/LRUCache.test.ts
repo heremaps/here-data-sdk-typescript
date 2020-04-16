@@ -117,6 +117,13 @@ describe("LRUCache", function() {
         assert.strictEqual(cache.getSize(), 16);
         assert.strictEqual(cache.getCapacity(), 3145728);
         assert.strictEqual(cache.has(1), true);
+
+        const cache2 = new LRUCache<string, any>();
+        cache2.set("key", {
+            num: 42,
+            hasBool: true
+        });
+        assert.equal(cache.getSize(), 16);
     });
 
     it("internalIntegrity", function() {

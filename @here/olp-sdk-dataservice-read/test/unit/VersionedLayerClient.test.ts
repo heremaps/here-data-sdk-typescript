@@ -51,19 +51,20 @@ describe("VersionedLayerClient", () => {
 
     before(() => {
         sandbox = sinon.createSandbox();
-        let settings = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
-        );
+        let settings = new dataServiceRead.OlpClientSettings({
+            environment: "here",
+            getToken: () => Promise.resolve("token")
+        });
         versionedLayerClient = new dataServiceRead.VersionedLayerClient(
             mockedHRN,
             mockedLayerId,
-            (settings as unknown) as dataServiceRead.OlpClientSettings
+            settings
         );
 
         const versionedLayerClientParams = {
             catalogHrn: mockedHRN,
             layerId: mockedLayerId,
-            settings: (settings as unknown) as dataServiceRead.OlpClientSettings,
+            settings,
             version: 5
         };
 
@@ -74,7 +75,7 @@ describe("VersionedLayerClient", () => {
         const versionedLayerClientParamsWithoutVersion = {
             catalogHrn: mockedHRN,
             layerId: mockedLayerId,
-            settings: (settings as unknown) as dataServiceRead.OlpClientSettings
+            settings
         };
 
         versionedLayerClientWithoutVersion = new dataServiceRead.VersionedLayerClient(
@@ -472,7 +473,7 @@ describe("VersionedLayerClient", () => {
         abortController.abort();
     });
 
-    xit("Should method getPartitions provide data with PartitionsRequest", async () => {
+    it("Should method getPartitions provide data with PartitionsRequest", async () => {
         const mockedVersion = {
             version: 42
         };
@@ -514,7 +515,7 @@ describe("VersionedLayerClient", () => {
         expect(partitions).to.be.equal(mockedPartitions);
     });
 
-    xit("Should method getPartitions provide data with PartitionIds list", async () => {
+    it("Should method getPartitions provide data with PartitionIds list", async () => {
         const mockedIds = ["1", "2", "13", "42"];
         const mockedVersion = {
             version: 42
@@ -701,7 +702,7 @@ describe("VersionedLayerClient", () => {
         ).to.be.equal("compressedDataSize");
     });
 
-    xit("Should baseUrl error be handled", async () => {
+    it("Should baseUrl error be handled", async () => {
         const mockedErrorResponse = "Bad response";
         const dataHandleRequest = new dataServiceRead.DataRequest().withDataHandle(
             "moсked-data-handle"
@@ -740,7 +741,7 @@ describe("VersionedLayerClient", () => {
             });
     });
 
-    xit("Should latestVersion error be handled", async () => {
+    it("Should latestVersion error be handled", async () => {
         const mockedErrorResponse = "Bad response";
         const dataPartitionRequest = new dataServiceRead.DataRequest().withPartitionId(
             "mocked-id"
@@ -874,7 +875,7 @@ describe("VersionedLayerClient", () => {
         }
     });
 
-    xit("Should getPartitions fetch menadata with latest layer version if not defined", async () => {
+    it("Should getPartitions fetch menadata with latest layer version if not defined", async () => {
         getVersionStub.callsFake(() => Promise.resolve({ version: 5 }));
 
         getPartitionsStub.callsFake((builder, params) => {
@@ -892,11 +893,12 @@ describe("VersionedLayerClient", () => {
             getBillingTag: () => undefined,
             getPartitionIds: () => undefined,
             getAdditionalFields: () => undefined,
-            getVersion: () => undefined
+            getVersion: () => undefined,
+            getFetchOption: () => dataServiceRead.FetchOptions.OnlineOnly
         } as any);
     });
 
-    xit("Should getPartitions fetch menadata with set layer version in constructor", async () => {
+    it("Should getPartitions fetch menadata with set layer version in constructor", async () => {
         getPartitionsStub.callsFake((builder, params) => {
             assert.equal(params.version, 6);
             return Promise.resolve();
@@ -913,7 +915,8 @@ describe("VersionedLayerClient", () => {
             getBillingTag: () => undefined,
             getPartitionIds: () => undefined,
             getAdditionalFields: () => undefined,
-            getVersion: () => undefined
+            getVersion: () => undefined,
+            getFetchOption: () => dataServiceRead.FetchOptions.OnlineOnly
         } as any);
     });
 
@@ -1093,7 +1096,7 @@ describe("VersionedLayerClient with locked version 0 in constructor", () => {
         );
     });
 
-    xit("Method getPartitions should call MetadataApi.getPartitions with param version === 0", async () => {
+    it("Method getPartitions should call MetadataApi.getPartitions with param version === 0", async () => {
         // @ts-ignore
         class VersionedLayerClientTest extends dataServiceRead.VersionedLayerClient {
             constructor(params: dataServiceRead.VersionedLayerClientParams) {
@@ -1123,7 +1126,7 @@ describe("VersionedLayerClient with locked version 0 in constructor", () => {
 
         getPartitionsStub.callsFake((builder, params: any) => {
             expect(params.version).eqls(0);
-            return Promise.resolve() as any;
+            return Promise.resolve({ partitions: [] }) as any;
         });
 
         await clientOvverided.getPartitions(
