@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -119,5 +119,25 @@ describe("DataStoreDownloadManager", function() {
             fetchStub.getCall(MAX_PARALLEL_DOWNLOADS - 1).args[0] ===
                 fakeDataUrl
         );
+    });
+
+    it("Aborting request", async function() {
+        const mockedFetch = async (
+            input: RequestInfo,
+            init?: any
+        ): Promise<Response> => {
+            return !init.signal.aborted
+                ? Promise.resolve(new Response())
+                : Promise.reject(`aborted`);
+        };
+        const dm = new DataStoreDownloadManager(mockedFetch, 1);
+        const abortController = new AbortController();
+
+        abortController.abort();
+        await dm
+            .download(fakeDataUrl, { signal: abortController.signal })
+            .catch(error => {
+                return assert.equal(error, "aborted");
+            });
     });
 });
