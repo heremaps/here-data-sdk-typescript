@@ -50,6 +50,26 @@ describe("VolatileLayerClient", () => {
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
 
+    const mockedPartitionsAddFields = {
+        partitions: [
+            {
+                version: 1,
+                partition: "42",
+                dataHandle: "mocked-datahandle",
+                dataSize: 123124,
+                checksum: "100500",
+                compressedDataSize: 42
+            },
+            {
+                version: 42,
+                partition: "13",
+                dataHandle: "another-mocked-datahandle",
+                dataSize: 100500,
+                checksum: "123124"
+            }
+        ]
+    };
+
     before(() => {
         sandbox = sinon.createSandbox();
         let settings = new dataServiceRead.OlpClientSettings({
@@ -156,29 +176,15 @@ describe("VolatileLayerClient", () => {
         expect(partitions).to.be.equal(mockedPartitions);
     });
 
-    xit("Should layerClient sends a PartitionsRequest for getPartitions with additionalFields params", async () => {
-        const mockedPartitions = {
-            partitions: [
-                {
-                    version: 42,
-                    partition: "42",
-                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
-                },
-                {
-                    version: 42,
-                    partition: "42",
-                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
-                }
-            ]
-        };
+    it("Should layerClient sends a PartitionsRequest for getPartitions with additionalFields params", async () => {
         getPartitionsStub.callsFake(
             (builder: any, params: any): Promise<MetadataApi.Partitions> => {
-                return Promise.resolve(mockedPartitions);
+                return Promise.resolve(mockedPartitionsAddFields);
             }
         );
 
         const partitionsRequest = new dataServiceRead.PartitionsRequest().withAdditionalFields(
-            ["dataSize", "checksum", "compressedDataSize"]
+            ["dataSize", "checksum"]
         );
         const partitionsResponse = await volatileLayerClient.getPartitions(
             partitionsRequest
@@ -192,9 +198,46 @@ describe("VolatileLayerClient", () => {
         expect(
             getPartitionsStub.getCalls()[0].args[1].additionalFields[1]
         ).to.be.equal("checksum");
-        expect(
-            getPartitionsStub.getCalls()[0].args[1].additionalFields[2]
-        ).to.be.equal("compressedDataSize");
+    });
+
+    it("Should layerClient sends a PartitionsRequest for getPartitions with additionalFields params and get cached data", async () => {
+        const partitionsRequest = new dataServiceRead.PartitionsRequest().withAdditionalFields(
+            ["dataSize", "checksum"]
+        );
+        const partitionsResponse = await volatileLayerClient.getPartitions(
+            partitionsRequest
+        );
+        assert.isDefined(partitionsResponse);
+
+        expect(partitionsResponse.partitions[0].dataHandle).to.be.equal(
+            mockedPartitionsAddFields.partitions[0].dataHandle
+        );
+        expect(partitionsResponse.partitions[1].dataHandle).to.be.equal(
+            mockedPartitionsAddFields.partitions[1].dataHandle
+        );
+    });
+
+    it("Should layerClient sends a PartitionsRequest for getPartitions with extra additionalFields params, check cached data and get new metadata", async () => {
+        getPartitionsStub.callsFake(
+            (builder: any, params: any): Promise<MetadataApi.Partitions> => {
+                return Promise.resolve(mockedPartitionsAddFields);
+            }
+        );
+
+        const partitionsRequest = new dataServiceRead.PartitionsRequest().withAdditionalFields(
+            ["dataSize", "checksum", "compressedDataSize"]
+        );
+        const partitionsResponse = await volatileLayerClient.getPartitions(
+            partitionsRequest
+        );
+
+        assert.isDefined(partitionsResponse);
+        expect(partitionsResponse.partitions[0].dataHandle).to.be.equal(
+            mockedPartitionsAddFields.partitions[0].dataHandle
+        );
+        expect(partitionsResponse.partitions[1].dataHandle).to.be.equal(
+            mockedPartitionsAddFields.partitions[1].dataHandle
+        );
     });
 
     it("Should layerClient sends a QuadKeyPartitionsRequest for getPartitions with additionalFields params", async () => {
