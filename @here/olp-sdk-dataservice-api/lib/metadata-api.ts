@@ -111,6 +111,12 @@ export interface Partition {
      * For volatile partitions this will always be -1
      */
     version: number;
+    /**
+     * Optional value for the CRC of the partition data in bytes.
+     * The response only includes the data size if crc was specified in the additionalFields query parameter,
+     * and if crc was specified in the partition metadata when it was published.
+     */
+    crc?: string;
 }
 
 /**

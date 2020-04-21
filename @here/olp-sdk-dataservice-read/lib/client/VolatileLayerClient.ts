@@ -280,7 +280,30 @@ export class VolatileLayerClient {
                 this.layerId
             );
             if (partitions) {
-                return Promise.resolve({ partitions });
+                const additionalFields = request.getAdditionalFields();
+                let existFields;
+                if (additionalFields) {
+                    existFields = additionalFields.filter(
+                        (
+                            field:
+                                | "dataSize"
+                                | "checksum"
+                                | "compressedDataSize"
+                                | "crc"
+                        ) => {
+                            return partitions.every(
+                                partition => partition[field] !== undefined
+                            );
+                        }
+                    );
+                }
+                if (
+                    !additionalFields ||
+                    !existFields ||
+                    additionalFields.length === existFields.length
+                ) {
+                    return Promise.resolve({ partitions });
+                }
             }
         }
 

@@ -48,6 +48,25 @@ describe("VersionedLayerClient", () => {
     );
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
+    const mockedPartitionsAddFields = {
+        partitions: [
+            {
+                version: 1,
+                partition: "42",
+                dataHandle: "mocked-datahandle",
+                dataSize: 123124,
+                checksum: "100500",
+                compressedDataSize: 42
+            },
+            {
+                version: 42,
+                partition: "13",
+                dataHandle: "another-mocked-datahandle",
+                dataSize: 100500,
+                checksum: "123124"
+            }
+        ]
+    };
 
     before(() => {
         sandbox = sinon.createSandbox();
@@ -560,28 +579,76 @@ describe("VersionedLayerClient", () => {
         expect(partitions).to.be.equal(mockedPartitions);
     });
 
-    xit("Should layerClient sends a PartitionsRequest for getPartitions with additionalFields params", async () => {
+    it("Should layerClient sends a PartitionsRequest for getPartitions with additionalFields params", async () => {
         const mockedVersion = {
             version: 42
-        };
-        const mockedPartitions = {
-            partitions: [
-                {
-                    version: 1,
-                    partition: "42",
-                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
-                },
-                {
-                    version: 42,
-                    partition: "42",
-                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
-                }
-            ]
         };
 
         getPartitionsStub.callsFake(
             (builder: any, params: any): Promise<MetadataApi.Partitions> => {
-                return Promise.resolve(mockedPartitions);
+                return Promise.resolve(mockedPartitionsAddFields);
+            }
+        );
+
+        getVersionStub.callsFake(
+            (
+                builder: any,
+                params: any
+            ): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve(mockedVersion);
+            }
+        );
+
+        const partitionsRequest = new dataServiceRead.PartitionsRequest().withAdditionalFields(
+            ["dataSize", "checksum"]
+        );
+        const partitionsResponse = await versionedLayerClient.getPartitions(
+            partitionsRequest
+        );
+
+        assert.isDefined(partitionsResponse);
+        expect(partitionsResponse).to.be.equal(mockedPartitionsAddFields);
+        expect(partitionsResponse.partitions[0]).to.be.equal(
+            mockedPartitionsAddFields.partitions[0]
+        );
+        expect(partitionsResponse.partitions[1]).to.be.equal(
+            mockedPartitionsAddFields.partitions[1]
+        );
+
+        assert.isDefined(getPartitionsStub.getCalls()[0].args);
+        expect(
+            getPartitionsStub.getCalls()[0].args[1].additionalFields[0]
+        ).to.be.equal("dataSize");
+        expect(
+            getPartitionsStub.getCalls()[0].args[1].additionalFields[1]
+        ).to.be.equal("checksum");
+    });
+
+    it("Should layerClient sends a PartitionsRequest for getPartitions with additionalFields params and get cached data", async () => {
+        const partitionsRequest = new dataServiceRead.PartitionsRequest().withAdditionalFields(
+            ["dataSize", "checksum"]
+        );
+        const partitionsResponse = await versionedLayerClient.getPartitions(
+            partitionsRequest
+        );
+
+        assert.isDefined(partitionsResponse);
+        expect(partitionsResponse.partitions[0].dataHandle).to.be.equal(
+            mockedPartitionsAddFields.partitions[0].dataHandle
+        );
+        expect(partitionsResponse.partitions[1].dataHandle).to.be.equal(
+            mockedPartitionsAddFields.partitions[1].dataHandle
+        );
+    });
+
+    it("Should layerClient sends a PartitionsRequest for getPartitions with extra additionalFields params, check cached data and get new metadata", async () => {
+        const mockedVersion = {
+            version: 42
+        };
+
+        getPartitionsStub.callsFake(
+            (builder: any, params: any): Promise<MetadataApi.Partitions> => {
+                return Promise.resolve(mockedPartitionsAddFields);
             }
         );
 
@@ -602,24 +669,12 @@ describe("VersionedLayerClient", () => {
         );
 
         assert.isDefined(partitionsResponse);
-        expect(partitionsResponse).to.be.equal(mockedPartitions);
-        expect(partitionsResponse.partitions[0]).to.be.equal(
-            mockedPartitions.partitions[0]
+        expect(partitionsResponse.partitions[0].dataHandle).to.be.equal(
+            mockedPartitionsAddFields.partitions[0].dataHandle
         );
-        expect(partitionsResponse.partitions[1]).to.be.equal(
-            mockedPartitions.partitions[1]
+        expect(partitionsResponse.partitions[1].dataHandle).to.be.equal(
+            mockedPartitionsAddFields.partitions[1].dataHandle
         );
-
-        assert.isDefined(getPartitionsStub.getCalls()[0].args);
-        expect(
-            getPartitionsStub.getCalls()[0].args[1].additionalFields[0]
-        ).to.be.equal("dataSize");
-        expect(
-            getPartitionsStub.getCalls()[0].args[1].additionalFields[1]
-        ).to.be.equal("checksum");
-        expect(
-            getPartitionsStub.getCalls()[0].args[1].additionalFields[2]
-        ).to.be.equal("compressedDataSize");
     });
 
     it("Should method getPartitions return error without QuadKeyPartitionsRequest", async () => {
