@@ -68,4 +68,32 @@ export class KeyValueCache {
     public remove(key: string): boolean {
         return this.cache.delete(key);
     }
+
+    /**
+     * Clears the cache and removes all stored key-value pairs.
+     */
+    public clear(): void {
+        this.cache.clear();
+    }
+
+    /**
+     * Resets the capacity of this cache. If `newCapacity` is smaller than the current cache size,
+     * all items will be evicted until the cache shrinks to `newCapacity`.
+     *
+     * @param newCapacity The new capacity of this cache.
+     */
+    public setCapacity(newCapacity: number): void {
+        this.cache.setCapacity(newCapacity);
+    }
+
+    /**
+     * Returns the maximum capacity of the cache, i.e. the maximum number of elements this cache
+     * can contain or the total amount of memory that may be consumed by cache if element size
+     * function was specified in cache c-tor.
+     *
+     * @returns The capacity of the cache.
+     */
+    public getCapacity(): number {
+        return this.cache.getCapacity();
+    }
 }
