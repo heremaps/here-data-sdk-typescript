@@ -93,21 +93,20 @@ export class ArtifactClient {
         ).catch(error => Promise.reject(error));
         const response = await ArtifactApi.getArtifactUsingGET(request, {
             artifactHrn: variant.url
-        }).catch(err => Promise.reject(err));
-
-        if (response.status === 200) {
-            return response.arrayBuffer();
-        }
-
-        const messages: { [key: number]: string } = {
-            401: "You are not authorized to view the schema",
-            403: "Accessing the schema is forbidden",
-            404: "The schema was not found",
-            500: "Internal server error"
-        };
-        const message = response.statusText || messages[response.status];
-        return Promise.reject(
-            `Artifact Service error: HTTP ${response.status}: ${message}`
-        );
+        }).catch(async error => {
+            const messages: { [key: number]: string } = {
+                401: "You are not authorized to view the schema",
+                403: "Accessing the schema is forbidden",
+                404: "The schema was not found",
+                500: "Internal server error"
+            };
+            const message = error.statusText || messages[error.status];
+            return Promise.reject(
+                new Error(
+                    `Artifact Service error: HTTP ${error.status}: ${message}`
+                )
+            );
+        });
+        return response.arrayBuffer();
     }
 }

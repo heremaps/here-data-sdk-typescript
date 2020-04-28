@@ -27,7 +27,8 @@ import {
   PartitionsRequest,
   DataRequest,
   quadKeyFromMortonCode,
-  QuadKeyPartitionsRequest
+  QuadKeyPartitionsRequest,
+  FetchOptions
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "./FetchMock";
 import { Buffer } from "buffer";
@@ -62,7 +63,7 @@ describe("VersionedLayerClient", () => {
     fetchStub.callsFake(fetchMock.fetch());
   });
 
-  it("Shoud be initialised with settings", async () => {
+  it("Shoud be initialized with settings", async () => {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -76,7 +77,23 @@ describe("VersionedLayerClient", () => {
     expect(layerClient).to.be.instanceOf(VersionedLayerClient);
   });
 
-  it("Shoud be initialised with VersionedLayerClientParams with version", async () => {
+  it("Shoud be initialization error be handled", async () => {
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+    try {
+      const layerClient = new VersionedLayerClient(
+        HRN.fromString("hrn:here:data:::test-hrn"),
+        "",
+        settings
+      );
+    } catch (error) {
+      expect(error.message).equal("Unsupported parameters");
+    }
+  });
+
+  it("Shoud be initialized with VersionedLayerClientParams with version", async () => {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -322,9 +339,7 @@ describe("VersionedLayerClient", () => {
     const request = new PartitionsRequest();
 
     // Send request for partitions metadata.
-    const partitions = await layerClient.getPartitions(request).catch(error => {
-      console.log(`Error getting partitions: ${error}`);
-    });
+    const partitions = await layerClient.getPartitions(request);
 
     // Check if partitions fetched succesful.
     assert.isDefined(partitions);
@@ -950,13 +965,13 @@ describe("VersionedLayerClient", () => {
 
     // Set the response from Metadata service with the info about latest catalog version.
     mockedResponses.set(
-      `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
+      `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1&billingTag=billing-tag`,
       new Response(JSON.stringify({ version: 30 }), { headers })
     );
 
     // Set the response of mocked partitions with additional fields.
     mockedResponses.set(
-      `https://metadata.data.api.platform.here.com/metadata/v1/layers/test-layed-id/partitions?version=30&additionalFields=dataSize,checksum,compressedDataSize`,
+      `https://metadata.data.api.platform.here.com/metadata/v1/layers/test-layed-id/partitions?version=30&additionalFields=dataSize,checksum,compressedDataSize&billingTag=billing-tag`,
       new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
@@ -974,9 +989,10 @@ describe("VersionedLayerClient", () => {
       settings
     );
 
-    const requestWithAdditionalFields = new PartitionsRequest().withAdditionalFields(
-      ["dataSize", "checksum", "compressedDataSize"]
-    );
+    const requestWithAdditionalFields = new PartitionsRequest()
+      .withAdditionalFields(["dataSize", "checksum", "compressedDataSize"])
+      .withFetchOption(FetchOptions.OnlineIfNotFound)
+      .withBillingTag("billing-tag");
 
     const partitions = await layerClient.getPartitions(
       requestWithAdditionalFields

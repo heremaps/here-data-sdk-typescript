@@ -127,10 +127,9 @@ describe("ArtifactClient", () => {
         const responseSchema = await artifactClient
             .getSchema(schemaRequest)
             .catch((err: any) => {
-                assert.isDefined(err);
-                expect(err.status).to.be.equal(NOT_FOUND_ERROR_CODE);
-                expect(err.message).to.be.equal("Not found");
-                expect(err.name).to.be.equal("HttpError");
+                expect(err.message).equal(
+                    "Artifact Service error: HTTP 404: The schema was not found"
+                );
             });
     });
 
