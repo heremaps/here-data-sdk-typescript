@@ -106,9 +106,8 @@ export class LRUCache<Key, Value> {
     }
 
     /**
-     * Returns the maximum capacity of the cache, i.e. the maximum number of elements this cache
-     * can contain or the total amount of memory that may be consumed by cache if element size
-     * function was specified in cache c-tor.
+     * Returns the maximum capacity of the cache, i.e.
+     * the total amount of memory that may be consumed by cache in MB
      *
      * @returns The capacity of the cache.
      */
@@ -140,7 +139,7 @@ export class LRUCache<Key, Value> {
      * Resets the capacity of this cache. If `newCapacity` is smaller than the current cache size,
      * all items will be evicted until the cache shrinks to `newCapacity`.
      *
-     * @param newCapacity The new capacity of this cache.
+     * @param newCapacity The new capacity of this cache in MB.
      */
     setCapacity(newCapacity: number): void {
         this.maxCapacity = newCapacity * BYTES_IN_MB;

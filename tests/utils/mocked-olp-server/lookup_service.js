@@ -29,7 +29,6 @@ function serviceBaseUrl(service) {
 
 function generatePlatformApiResponse(request) {
     const service = request[1]
-    const version = request[2]
     const api = {
         "api" : service,
         "version" : "v1",
@@ -41,15 +40,21 @@ function generatePlatformApiResponse(request) {
 
 function generateResourceApiResponse(request) {
     const hrn = request[1]
-    const service = request[2]
-    const version = request[3]
-    const api = {
-        "api" : service,
-        "version" : version,
-        "baseURL" : "http://localhost:3000" + serviceBaseUrl(service) + "/" + version + "/catalogs/" + hrn,
-        "parameters" : {}
-    }
-    return [api]
+
+    const apis = [];
+    Object.keys(services).forEach(service => {
+        const api = {
+            "api" : service,
+            "version" : "v1",
+            "baseURL" : "http://localhost:3000" + serviceBaseUrl(service) + "/v1/catalogs/" + hrn,
+            "parameters" : {}
+        }
+
+        apis.push(api);
+    });
+
+   
+    return apis
 }
 
 const methods = [
@@ -58,7 +63,7 @@ const methods = [
     handler: generatePlatformApiResponse
 },
 {
-    regex: /lookup\/v1\/resources\/(.+)\/apis\/(.+)\/(.+)$/,
+    regex: /lookup\/v1\/resources\/(.+)\/apis$/,
     handler: generateResourceApiResponse
 }
 ]

@@ -80,20 +80,28 @@ export class KeyValueCache {
      * Resets the capacity of this cache. If `newCapacity` is smaller than the current cache size,
      * all items will be evicted until the cache shrinks to `newCapacity`.
      *
-     * @param newCapacity The new capacity of this cache.
+     * @param newCapacity The new capacity of this cache in MB.
      */
     public setCapacity(newCapacity: number): void {
         this.cache.setCapacity(newCapacity);
     }
 
     /**
-     * Returns the maximum capacity of the cache, i.e. the maximum number of elements this cache
-     * can contain or the total amount of memory that may be consumed by cache if element size
-     * function was specified in cache c-tor.
+     * Returns the maximum capacity of the cache, i.e.
+     * the total amount of memory that may be consumed by cache in MB
      *
      * @returns The capacity of the cache.
      */
     public getCapacity(): number {
         return this.cache.getCapacity();
+    }
+
+    /**
+     * The size of the cache, i.e. the sum of all the sizes of all the objects in the cache.
+     *
+     * @returns The size of the cache.
+     */
+    getSize(): number {
+        return this.cache.getSize();
     }
 }

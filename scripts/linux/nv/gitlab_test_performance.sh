@@ -49,7 +49,11 @@ echo ">>> Local Server started for further performance test ... >>>"
 echo ">>> Start performance tests ... >>>"
 
 npx tsc --target ES5 tests/performance/shortMemoryTest.ts && heaptrack node ./tests/performance/shortMemoryTest.js 2>> errors.txt || TEST_FAILURE=1
-mv heaptrack.node.*.gz short_test.gz
+mv heaptrack.node.* short_test.gz
+
+npx tsc --target ES5 tests/performance/shortCacheInMemoryTest.ts && heaptrack node ./tests/performance/shortCacheInMemoryTest.js 2>> errors.txt || TEST_FAILURE=1
+mv heaptrack.node.* short_cacheInMemory_test.gz
+
 echo ">>> Finished performance tests . >>>"
 
 if [[ ${TEST_FAILURE} == 1 ]]; then
@@ -75,6 +79,16 @@ heaptrack_print --print-leaks \
     cat reports/heaptrack/flamegraph_short_test.svg >> heaptrack_report.html
 
 cp heaptrack_report.html reports
+
+heaptrack_print --print-leaks \
+      --print-flamegraph heaptrack/flamegraph_short_cacheInMemory_test.data \
+      --file short_cacheInMemory_test.gz > reports/heaptrack/report_cacheInMemory_short_test.txt
+    # Pretty graph generation
+    ./FlameGraph/flamegraph.pl --title="Flame Graph: short_test" heaptrack/flamegraph_short_cacheInMemory_test.data > reports/heaptrack/flamegraph_short_cacheInMemory_test.svg
+    cat reports/heaptrack/flamegraph_short_cacheInMemory_test.svg >> heaptrack_cacheInMemory_report.html
+
+cp heaptrack_cacheInMemory_report.html reports
+
 ls -la heaptrack
 ls -la
 

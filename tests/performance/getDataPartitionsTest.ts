@@ -21,12 +21,12 @@ import {
   OlpClientSettings,
   VersionedLayerClient,
   HRN,
-  DataRequest
+  PartitionsRequest
 } from "@here/olp-sdk-dataservice-read";
 
 import { getSleepPeriod, sleep, TestParams } from "./utils";
 
-export async function getDataMemoryTest(params: TestParams) {
+export async function getPartitionsMemoryTest(params: TestParams) {
   const settings = new OlpClientSettings({
     environment: "http://localhost:3000/lookup-service/lookup/v1",
     getToken: () => Promise.resolve("mocked-token")
@@ -46,18 +46,16 @@ export async function getDataMemoryTest(params: TestParams) {
     settings
   );
 
-  const dataRequest = new DataRequest();
+  const partitionsRequest = new PartitionsRequest();
 
   while (endTimestamp > new Date()) {
     countSentRequests++;
     console.info(`>>> Sending request: ${countSentRequests} <<<`);
 
     layerClient
-      .getData(dataRequest.withPartitionId(`${countSentRequests}`))
-      .then(res => {
-        res.blob().then(data => {
-          console.log(data);
-        });
+      .getPartitions(partitionsRequest)
+      .then(metadata => {
+        console.log("Metadata:\n" + JSON.stringify(metadata));
         countSuccessRequests++;
       })
       .catch(_ => {
