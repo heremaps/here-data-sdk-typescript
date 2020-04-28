@@ -47,8 +47,13 @@ done
 echo ">>> Local Server started for further performance test ... >>>"
 
 echo ">>> Start performance tests ... >>>"
+
 npx tsc --target ES5 tests/performance/longMemoryTest.ts && heaptrack node ./tests/performance/longMemoryTest.js 2>> errors.txt || TEST_FAILURE=1
-mv heaptrack.node.*.gz short_test.gz
+mv heaptrack.node.* long_test.gz
+
+npx tsc --target ES5 tests/performance/longCacheInMemoryTest.ts && heaptrack node ./tests/performance/longCacheInMemoryTest.js 2>> errors.txt || TEST_FAILURE=1
+mv heaptrack.node.* long_cacheInMemory_test.gz
+
 echo ">>> Finished performance tests . >>>"
 
 if [[ ${TEST_FAILURE} == 1 ]]; then
@@ -67,13 +72,24 @@ mkdir heaptrack
 git clone --depth=1 https://github.com/brendangregg/FlameGraph
 
 heaptrack_print --print-leaks \
-      --print-flamegraph heaptrack/flamegraph_short_test.data \
-      --file short_test.gz > reports/heaptrack/report_short_test.txt
+      --print-flamegraph heaptrack/flamegraph_long_test.data \
+      --file long_test.gz > reports/heaptrack/report_long_test.txt
     # Pretty graph generation
-    ./FlameGraph/flamegraph.pl --title="Flame Graph: short_test" heaptrack/flamegraph_short_test.data > reports/heaptrack/flamegraph_short_test.svg
-    cat reports/heaptrack/flamegraph_short_test.svg >> heaptrack_report.html
+    ./FlameGraph/flamegraph.pl --title="Flame Graph: long_test" heaptrack/flamegraph_long_test.data > reports/heaptrack/flamegraph_long_test.svg
+    cat reports/heaptrack/flamegraph_long_test.svg >> heaptrack_report.html
 
 cp heaptrack_report.html reports
+
+heaptrack_print --print-leaks \
+      --print-flamegraph heaptrack/flamegraph_long_cacheInMemory_test.data \
+      --file long_cacheInMemory_test.gz > reports/heaptrack/report_long_cacheInMemory_test.txt
+    # Pretty graph generation
+    ./FlameGraph/flamegraph.pl --title="Flame Graph: long_cacheInMemory_test" heaptrack/flamegraph_long_cacheInMemory_test.data > reports/heaptrack/flamegraph_long_cacheInMemory_test.svg
+    cat reports/heaptrack/flamegraph_long_cacheInMemory_test.svg >> heaptrack_cacheInMemory_report.html
+
+cp heaptrack_cacheInMemory_report.html reports
+
+
 ls -la heaptrack
 ls -la
 
