@@ -25,7 +25,8 @@ import {
   HRN,
   CatalogVersionRequest,
   CatalogClient,
-  CatalogRequest
+  CatalogRequest,
+  LayerVersionsRequest
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "./FetchMock";
 import { LIB_VERSION } from "@here/olp-sdk-dataservice-read/lib.version";
@@ -486,14 +487,14 @@ describe("CatalogClient", () => {
 
     // Set the response from Metadata service with the versions info from the catalog.
     mockedResponses.set(
-      `https://config.data.api.platform.here.com/config/v1/catalogs/hrn:here:data:::test-hrn`,
+      `https://config.data.api.platform.here.com/config/v1/catalogs/hrn:here:data:::test-hrn?billingTag=billingTag`,
       new Response(JSON.stringify(mockedCatalog), { headers })
     );
 
     // Setup the fetch to use mocked responses.
     fetchMock.withMockedResponses(mockedResponses);
 
-    const catalogRequest = new CatalogRequest();
+    const catalogRequest = new CatalogRequest().withBillingTag("billingTag");
     let catalogConfig = await catalogClient.getCatalog(catalogRequest);
 
     assert.isDefined(catalogConfig);
@@ -515,5 +516,135 @@ describe("CatalogClient", () => {
     assert.isDefined(catalogConfig.replication);
 
     expect(fetchStub.callCount).to.be.equal(2);
+  });
+
+  it("Should getEarliestVersion() return version", async () => {
+    const mockedResponses = new Map();
+
+    // Set the response from lookup api with the info about Metadata service.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ]),
+        { headers }
+      )
+    );
+
+    mockedResponses.set(
+      "https://metadata.data.api.platform.here.com/metadata/v1/versions/minimum",
+      new Response(JSON.stringify({ version: 42 }))
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    const request = new CatalogVersionRequest();
+
+    let version = await catalogClient.getEarliestVersion(request);
+
+    assert.isDefined(version);
+    expect(version).to.be.equal(42);
+  });
+
+  it("Should getLayerVersions() with latest version return layer version", async () => {
+    const mockedResponses = new Map();
+    const mockedResponse = {
+      version: 42,
+      layerVersions: [1, 2, 3]
+    };
+
+    // Set the response from lookup api with the info about Metadata service.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ]),
+        { headers }
+      )
+    );
+
+    mockedResponses.set(
+      "https://metadata.data.api.platform.here.com/metadata/v1/layerVersions?version=42",
+      new Response(JSON.stringify(mockedResponse))
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    const request = new LayerVersionsRequest().withVersion(42);
+
+    let versions = await catalogClient.getLayerVersions(request);
+
+    assert.isDefined(versions);
+    expect(versions.length).to.be.equal(mockedResponse.layerVersions.length);
+  });
+
+  it("Should getLayerVersions() without latest version return layer version", async () => {
+    const mockedResponses = new Map();
+    const mockedResponse = {
+      version: 42,
+      layerVersions: [1, 2, 3]
+    };
+
+    // Set the response from lookup api with the info about Metadata service.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ]),
+        { headers }
+      )
+    );
+
+    mockedResponses.set(
+      "https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1&billingTag=billingTag",
+      new Response(JSON.stringify({ version: 42 }))
+    );
+
+    mockedResponses.set(
+      "https://metadata.data.api.platform.here.com/metadata/v1/layerVersions?version=42&billingTag=billingTag",
+      new Response(JSON.stringify(mockedResponse))
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    const request = new LayerVersionsRequest().withBillingTag("billingTag");
+
+    let versions = await catalogClient.getLayerVersions(request);
+
+    assert.isDefined(versions);
+    expect(versions.length).to.be.equal(mockedResponse.layerVersions.length);
   });
 });

@@ -257,8 +257,7 @@ export class StreamLayerClient {
         if (!this.subscribtionNodeBaseUrl) {
             return Promise.reject(
                 new Error(
-                    `Subscribtion error. No valid nodeBaseurl provided for the subscribtion id=${request.getSubscriptionId()}, 
-                    please check your subscribtion`
+                    `Subscribtion error. No valid nodeBaseurl provided for the subscribtion id=${request.getSubscriptionId()}, please check your subscribtion`
                 )
             );
         }
@@ -351,8 +350,7 @@ export class StreamLayerClient {
         if (!this.subscribtionNodeBaseUrl) {
             return Promise.reject(
                 new Error(
-                    `Subscribtion error. No valid nodeBaseurl provided for the subscribtion id=${request.getSubscriptionId()}, 
-                    please check your subscribtion`
+                    `Subscribtion error. No valid nodeBaseurl provided for the subscribtion id=${request.getSubscriptionId()}, please check your subscribtion`
                 )
             );
         }

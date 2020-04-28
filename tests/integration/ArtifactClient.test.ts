@@ -29,6 +29,7 @@ import {
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "./FetchMock";
 import { LIB_VERSION } from "@here/olp-sdk-dataservice-read/lib.version";
+import { HttpError } from "@here/olp-sdk-dataservice-api/lib/HttpError";
 
 chai.use(sinonChai);
 
@@ -155,6 +156,28 @@ describe("ArtifactClient", () => {
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
+  it("Should getSchemaDetails() handle errors", async () => {
+    const request = new SchemaDetailsRequest().withBillingTag("billing-tag");
+
+    const response = await artifactClient
+      .getSchemaDetails(request)
+      .catch(error => {
+        expect(error.message).equal(
+          "Please provide the schema HRN by schemaDetailsRequest.withSchema()"
+        );
+      });
+  });
+
+  it("Should getSchema() handle errors", async () => {
+    const request = new SchemaRequest();
+
+    const response = await artifactClient.getSchema(request).catch(error => {
+      expect(error.message).equal(
+        "Please provide the schema variant by schemaRequest.withVariant()"
+      );
+    });
+  });
+
   it("Should fetch file of the schema", async () => {
     const mockedResponses = new Map();
     const headers = new Headers();
@@ -216,6 +239,56 @@ describe("ArtifactClient", () => {
     assert.isDefined(response2);
     expect(response2.byteLength).to.be.equal(50);
     expect(fetchStub.callCount).to.be.equal(3);
+  });
+
+  it("Should getSchema() handle 400 error", async () => {
+    const mockedResponses = new Map();
+    const headers = new Headers();
+    headers.append("cache-control", "max-age=3600");
+
+    // Set the response from lookup api with the info about Metadata service.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "artifact",
+            version: "v1",
+            baseURL: "https://artifact.data.api.platform.here.com/artifact/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ]),
+        { headers }
+      )
+    );
+
+    const mockedResponse = Buffer.alloc(42);
+
+    // Set the response from Metadata service with the versions info from the catalog.
+    mockedResponses.set(
+      `https://artifact.data.api.platform.here.com/artifact/v1/artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2`,
+      new HttpError(500, "Internal server error")
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    const request = new SchemaRequest()
+      .withVariant({
+        id: "doc",
+        url: "artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2"
+      })
+      .withBillingTag("billing-tag");
+
+    const response = await artifactClient.getSchema(request).catch(error => {
+      expect(error.message).equal(
+        "Artifact Service error: HTTP 500: Internal server error"
+      );
+    });
   });
 
   it("Should user-agent be added to the each request", async () => {

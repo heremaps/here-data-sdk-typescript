@@ -76,6 +76,22 @@ describe("VolatileLayerClient", () => {
     expect(layerClient).to.be.instanceOf(VolatileLayerClient);
   });
 
+  it("Shoud be initialization error be handled", async () => {
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+    try {
+      const layerClient = new VolatileLayerClient(
+        HRN.fromString("hrn:here:data:::test-hrn"),
+        "",
+        settings
+      );
+    } catch (error) {
+      expect(error.message).equal("Unsupported parameters");
+    }
+  });
+
   it("Shoud be fetched partitions metadata for specific IDs", async () => {
     const mockedResponses = new Map();
 

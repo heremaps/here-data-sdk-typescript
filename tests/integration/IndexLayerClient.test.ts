@@ -57,7 +57,7 @@ describe("IndexLayerClient", () => {
     fetchStub.callsFake(fetchMock.fetch());
   });
 
-  it("Shoud be initialized with settings", async () => {
+  it("Should be initialized with settings", async () => {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -71,7 +71,23 @@ describe("IndexLayerClient", () => {
     expect(indexClient).to.be.instanceOf(IndexLayerClient);
   });
 
-  it("Shoud be fetched partitions all metadata", async () => {
+  it("Should initialization error be handled", () => {
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+    try {
+      const indexClient = new IndexLayerClient(
+        HRN.fromString("hrn:here:data:::test-hrn"),
+        "",
+        settings
+      );
+    } catch (error) {
+      expect(error.message).equal("Unsupported parameters");
+    }
+  });
+
+  it("Should be fetched partitions all metadata", async () => {
     const mockedResponses = new Map();
 
     // Set the response from lookup api with the info about Index service.
@@ -149,9 +165,7 @@ describe("IndexLayerClient", () => {
     const request = new IndexQueryRequest().withQueryString("hour_from>0");
 
     // Send request for partitions metadata.
-    const data = await indexClient.getPartitions(request).catch(error => {
-      console.log(`Error getting partitions: ${error}`);
-    });
+    const data = await indexClient.getPartitions(request);
 
     // Check if partitions fetched succesful.
     assert.isDefined(data);
@@ -167,7 +181,38 @@ describe("IndexLayerClient", () => {
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
-  it("Shoud be fetched data with dataHandle", async () => {
+  it("Should getPartitions() method handle errors", async () => {
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+    const indexClient = new IndexLayerClient(
+      HRN.fromString("hrn:here:data:::test-hrn"),
+      "test-layed-id",
+      settings
+    );
+    const request = new IndexQueryRequest().withHugeResponse(true);
+    const response = indexClient.getPartitions(request).catch(error => {
+      expect(error.message).equal("Please provide correct query");
+    });
+  });
+
+  it("Should getData() method handle errors", async () => {
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+    const indexClient = new IndexLayerClient(
+      HRN.fromString("hrn:here:data:::test-hrn"),
+      "test-layed-id",
+      settings
+    );
+    const response = indexClient.getData({}).catch(error => {
+      expect(error.message).equal("No data handle for this partition");
+    });
+  });
+
+  it("Should be fetched data with dataHandle", async () => {
     const mockedResponses = new Map();
     const mockedData = Buffer.alloc(42);
     const mockedModel = {
@@ -224,7 +269,7 @@ describe("IndexLayerClient", () => {
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
-  it("Shoud be initialized with IndexLayerClientParams", async () => {
+  it("Should be initialized with IndexLayerClientParams", async () => {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")

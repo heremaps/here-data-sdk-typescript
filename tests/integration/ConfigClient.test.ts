@@ -104,14 +104,14 @@ describe("configClient", () => {
 
     // Set the response from Metadata service with the versions info from the catalog.
     mockedResponses.set(
-      `https://config.data.api.platform.here.com/config/v1/catalogs`,
+      `https://config.data.api.platform.here.com/config/v1/catalogs?billingTag=billing-tag`,
       new Response(JSON.stringify(mockedCatalogsHRN))
     );
 
     // Setup the fetch to use mocked responses.
     fetchMock.withMockedResponses(mockedResponses);
 
-    const request = new CatalogsRequest();
+    const request = new CatalogsRequest().withBillingTag("billing-tag");
 
     const response = await configClient.getCatalogs(request);
 
