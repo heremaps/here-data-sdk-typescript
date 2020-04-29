@@ -152,9 +152,10 @@ export class VolatileLayerClient {
             if (partitionId) {
                 const partitionIdDataHandle = await this.getDataHandleByPartitionId(
                     partitionId,
-                    dataRequest.getBillingTag(),
-                    abortSignal
+                    dataRequest.getFetchOption(),
+                    dataRequest.getBillingTag()
                 ).catch(error => Promise.reject(error));
+
                 return this.downloadPartition(
                     partitionIdDataHandle,
                     abortSignal,
@@ -370,43 +371,35 @@ export class VolatileLayerClient {
     }
 
     /**
-     * Fetches and returns partition metadata.
+     * Fetch and returns partition metadata
      * @param partitionId The name of the partition to fetch.
+     * @param fetchOption The option of caching (online only or return from cache if exist)
      * @returns A promise of partition metadata which used to get partition data
      */
     private async getDataHandleByPartitionId(
         partitionId: string,
-        billingTag?: string,
-        abortSignal?: AbortSignal
+        fetchOption: FetchOptions,
+        billingTag?: string
     ): Promise<string> {
-        const queryRequestBilder = await this.getRequestBuilder(
-            "query",
-            HRN.fromString(this.hrn)
-        ).catch(error => Promise.reject(error));
-        const partitionsListRepsonse = await QueryApi.getPartitionsById(
-            queryRequestBilder,
-            {
-                layerId: this.layerId,
-                partition: [partitionId],
-                billingTag
-            }
-        ).catch(error => Promise.reject(error));
+        const queryClient = new QueryClient(this.settings);
 
-        if (
-            partitionsListRepsonse.status &&
-            partitionsListRepsonse.status === 400
-        ) {
-            return Promise.reject(partitionsListRepsonse);
+        const partitionsRequest = new PartitionsRequest()
+            .withPartitionIds([partitionId])
+            .withFetchOption(fetchOption);
+
+        if (billingTag) {
+            partitionsRequest.withBillingTag(billingTag);
         }
 
-        const partition =
-            partitionsListRepsonse.partitions &&
-            partitionsListRepsonse.partitions.find(element => {
-                return element.partition === partitionId;
-            });
-
-        return partition && partition.dataHandle
-            ? partition.dataHandle
+        const metadata = await queryClient.getPartitionsById(
+            partitionsRequest,
+            this.layerId,
+            HRN.fromString(this.hrn)
+        );
+        return metadata.partitions &&
+            metadata.partitions[0] &&
+            metadata.partitions[0].dataHandle
+            ? metadata.partitions[0].dataHandle
             : Promise.reject(
                   new HttpError(
                       404,
