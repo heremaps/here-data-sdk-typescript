@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { QuadKey, validateBillingTag } from "..";
+import { FetchOptions, QuadKey, validateBillingTag } from "..";
 
 /**
  *  Prepares information for calls to get data from the OLP Blob Service.
@@ -28,6 +28,7 @@ export class DataRequest {
     private quadKey?: QuadKey;
     private version?: number;
     private billingTag?: string;
+    private fetchOption = FetchOptions.OnlineIfNotFound;
 
     /**
      * Gets a data handle for the request.
@@ -72,6 +73,10 @@ export class DataRequest {
     }
 
     /**
+     * @deprecated This method will be removed by 10.2020. Please use [[getTie]] function
+     * if you need to get data by QuadKey.
+     * Or you can use [getPartitions] method for getting datahandle by QuadKey
+     *
      * Gets a quadkey for the request.
      *
      * @return The [[QuadKey]] object.
@@ -81,6 +86,10 @@ export class DataRequest {
     }
 
     /**
+     * @deprecated This method will be removed by 10.2020. Please use [[getTie]] function
+     * if you need to get data by QuadKey.
+     * Or you can use [getPartitions] method for getting datahandle by QuadKey
+     *
      * Sets the provided quadkey.
      *
      * @param quadKey The [[QuadKey]] object.
@@ -137,5 +146,32 @@ export class DataRequest {
      */
     public getBillingTag(): string | undefined {
         return this.billingTag;
+    }
+
+    /**
+     * Sets the fetch option that you can use to set the source from
+     * which data should be fetched.
+     *
+     * @see `getFetchOption()` for information on usage and format.
+     *
+     * @param option The `FetchOption` enum.
+     *
+     * @return A reference to the updated `DataRequest` instance.
+     */
+    public withFetchOption(option: FetchOptions): DataRequest {
+        this.fetchOption = option;
+        return this;
+    }
+
+    /**
+     * Gets the fetch option that controls how requests are handled.
+     *
+     * The default option is `OnlineIfNotFound` that queries the network if
+     * the requested resource is not in the cache.
+     *
+     * @return The fetch option.
+     */
+    public getFetchOption(): FetchOptions {
+        return this.fetchOption;
     }
 }

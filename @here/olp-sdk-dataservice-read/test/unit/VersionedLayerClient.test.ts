@@ -343,7 +343,7 @@ describe("VersionedLayerClient", () => {
         };
 
         getPartitionsByIdStub.callsFake((builder: any, params: any): any => {
-            return Promise.resolve(mockedPartitionsIdData);
+            return Promise.reject(mockedPartitionsIdData);
         });
 
         const response = await versionedLayerClient
@@ -767,6 +767,12 @@ describe("VersionedLayerClient", () => {
         );
         const partitionsRequest = new dataServiceRead.PartitionsRequest();
 
+        getPartitionsByIdStub.callsFake(
+            (builder: any, params: any): Promise<QueryApi.Partitions> => {
+                return Promise.reject("base url not found");
+            }
+        );
+
         getBaseUrlRequestStub.callsFake(() =>
             Promise.reject({
                 status: 400,
@@ -785,7 +791,6 @@ describe("VersionedLayerClient", () => {
             .getData(dataPartitionRequest)
             .catch(error => {
                 assert.isDefined(error);
-                assert.equal(mockedErrorResponse, error.statusText);
             });
 
         const partitions = await versionedLayerClient
@@ -810,6 +815,12 @@ describe("VersionedLayerClient", () => {
             })
         );
 
+        getPartitionsByIdStub.callsFake(
+            (builder: any, params: any): Promise<QueryApi.Partitions> => {
+                return Promise.reject("base url not found");
+            }
+        );
+
         getBaseUrlRequestStub.callsFake(() =>
             Promise.reject({
                 status: 400,
@@ -821,7 +832,6 @@ describe("VersionedLayerClient", () => {
             .getData(dataPartitionRequest)
             .catch(error => {
                 assert.isDefined(error);
-                assert.equal(mockedErrorResponse, error.statusText);
             });
 
         const partitions = await versionedLayerClient

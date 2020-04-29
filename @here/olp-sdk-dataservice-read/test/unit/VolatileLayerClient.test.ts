@@ -393,98 +393,6 @@ describe("VolatileLayerClient", () => {
         assert.isTrue(response.ok);
     });
 
-    it("Should method getData provide data with partitionId parameter and version", async () => {
-        const mockedBlobData = new Response("mocked-blob-response");
-        const mockedPartitionsIdData = {
-            partitions: [
-                {
-                    version: 1,
-                    partition: "42",
-                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
-                }
-            ]
-        };
-
-        getPartitionsByIdStub.callsFake(
-            (builder: any, params: any): Promise<QueryApi.Partitions> => {
-                return Promise.resolve(mockedPartitionsIdData);
-            }
-        );
-        getBlobStub.callsFake(
-            (builder: any, params: any): Promise<Response> => {
-                return Promise.resolve(mockedBlobData);
-            }
-        );
-
-        const dataRequest = new dataServiceRead.DataRequest()
-            .withPartitionId("42")
-            .withVersion(2);
-
-        const response = await volatileLayerClient.getData(
-            (dataRequest as unknown) as dataServiceRead.DataRequest
-        );
-        assert.isDefined(response);
-        assert.isTrue(response.ok);
-    });
-
-    it("Should method getData with partitionId parameter and version return error", async () => {
-        const mockedErrorResponse = "some error";
-
-        getPartitionsByIdStub.callsFake(
-            (builder: any, params: any): Promise<QueryApi.Partitions> => {
-                throw new Error(mockedErrorResponse);
-            }
-        );
-
-        const dataRequest = new dataServiceRead.DataRequest()
-            .withPartitionId("42")
-            .withVersion(2);
-
-        const response = await volatileLayerClient
-            .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
-            .catch(error => {
-                assert.isDefined(error);
-                assert.equal(mockedErrorResponse, error.message);
-            });
-    });
-
-    it("Should method getData with wrong partitionId parameter and version return error", async () => {
-        const mockedBlobData = new Response("mocked-blob-response");
-        const mockedErrorResponse =
-            "No partition dataHandle for partition 42. HRN: hrn:here:data:::mocked-hrn";
-        const mockedPartitionsIdData = {
-            partitions: [
-                {
-                    version: 1,
-                    partition: "13",
-                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
-                }
-            ]
-        };
-
-        getPartitionsByIdStub.callsFake(
-            (builder: any, params: any): Promise<QueryApi.Partitions> => {
-                return Promise.resolve(mockedPartitionsIdData);
-            }
-        );
-        getBlobStub.callsFake(
-            (builder: any, params: any): Promise<Response> => {
-                return Promise.resolve(mockedBlobData);
-            }
-        );
-
-        const dataRequest = new dataServiceRead.DataRequest()
-            .withPartitionId("42")
-            .withVersion(2);
-
-        const response = await volatileLayerClient
-            .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
-            .catch(error => {
-                assert.isDefined(error);
-                assert.equal(mockedErrorResponse, error.message);
-            });
-    });
-
     it("Should method getData provide data with quadKey", async () => {
         const mockedBlobData = new Response("mocked-blob-response");
         const mockedVersion = {
@@ -596,64 +504,13 @@ describe("VolatileLayerClient", () => {
         };
 
         getPartitionsByIdStub.callsFake((builder: any, params: any): any => {
-            return Promise.resolve(mockedPartitionsIdData);
+            return Promise.reject(mockedPartitionsIdData);
         });
 
         const response = await volatileClient
             .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
             .catch(error => {
                 assert.isDefined(error);
-                assert.equal(error, mockedPartitionsIdData);
-            });
-    });
-
-    it("Should method getData return Error with correct quadKey and wrong version parameter", async () => {
-        let settings = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
-        );
-        const volatileClient = new dataServiceRead.VolatileLayerClient(
-            mockedHRN,
-            "mockedLayerId",
-            (settings as unknown) as dataServiceRead.OlpClientSettings
-        );
-        const dataRequest = new dataServiceRead.DataRequest().withQuadKey(
-            dataServiceRead.quadKeyFromMortonCode("23618403")
-        );
-
-        const mockedPartitionsIdData = {
-            status: 400,
-            title: "Bad request",
-            detail: [
-                {
-                    name: "layer",
-                    error:
-                        "Layer 'mockedLayerId' is missing in the catalog configuration."
-                }
-            ]
-        };
-
-        const mockedVersion = {
-            version: 42
-        };
-
-        getVersionStub.callsFake(
-            (
-                builder: any,
-                params: any
-            ): Promise<MetadataApi.VersionResponse> => {
-                return Promise.resolve(mockedVersion);
-            }
-        );
-
-        getQuadTreeIndexStub.callsFake((builder: any, params: any): any => {
-            return Promise.resolve(mockedPartitionsIdData);
-        });
-
-        const response = await volatileClient
-            .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
-            .catch(error => {
-                assert.isDefined(error);
-                assert.equal(error, mockedPartitionsIdData);
             });
     });
 
@@ -714,6 +571,12 @@ describe("VolatileLayerClient", () => {
             })
         );
 
+        getPartitionsByIdStub.callsFake(
+            (builder: any, params: any): Promise<QueryApi.Partitions> => {
+                return Promise.reject("base url not found");
+            }
+        );
+
         const dataH = await volatileLayerClient
             .getData(dataRequest)
             .catch(error => {
@@ -725,7 +588,6 @@ describe("VolatileLayerClient", () => {
             .getData(dataPartitionRequest)
             .catch(error => {
                 assert.isDefined(error);
-                assert.equal(mockedErrorResponse, error.statusText);
             });
 
         const partitions = await volatileLayerClient
@@ -738,9 +600,7 @@ describe("VolatileLayerClient", () => {
 
     it("Should getPartitions with quadKey error be handled", async () => {
         const mockedErrorResponse = "Bad response";
-        const mockedVersion = {
-            version: 42
-        };
+
         const quadRrequest = new dataServiceRead.DataRequest().withQuadKey(
             dataServiceRead.quadKeyFromMortonCode("23618403")
         );
@@ -752,20 +612,10 @@ describe("VolatileLayerClient", () => {
             })
         );
 
-        getVersionStub.callsFake(
-            (
-                builder: any,
-                params: any
-            ): Promise<MetadataApi.VersionResponse> => {
-                return Promise.resolve(mockedVersion);
-            }
-        );
-
         const data = await volatileLayerClient
             .getData(quadRrequest)
             .catch(error => {
                 assert.isDefined(error);
-                assert.equal(mockedErrorResponse, error.statusText);
             });
     });
 
