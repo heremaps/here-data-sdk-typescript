@@ -73,7 +73,7 @@ export class DataRequest {
     }
 
     /**
-     * @deprecated This method will be removed by 10.2020. Please use [[getTie]] function
+     * @deprecated This method will be removed by 10.2020. Please use [[getTile]] function
      * if you need to get data by QuadKey.
      * Or you can use [getPartitions] method for getting datahandle by QuadKey
      *
@@ -86,7 +86,7 @@ export class DataRequest {
     }
 
     /**
-     * @deprecated This method will be removed by 10.2020. Please use [[getTie]] function
+     * @deprecated This method will be removed by 10.2020. Please use [[getTile]] function
      * if you need to get data by QuadKey.
      * Or you can use [getPartitions] method for getting datahandle by QuadKey
      *

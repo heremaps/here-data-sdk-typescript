@@ -84,9 +84,10 @@ export async function getTile(
         partitionId
     ]);
 
+    const blobType = layerType === "versioned" ? "blob" : "volatile-blob";
     const queryClient = new QueryClient(settings);
     const blobRequestBuilder = await RequestFactory.create(
-        "blob",
+        blobType,
         "v1",
         settings,
         catalogHrn,
