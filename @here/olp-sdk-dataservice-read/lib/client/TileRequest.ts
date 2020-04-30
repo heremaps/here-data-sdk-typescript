@@ -80,14 +80,14 @@ export class TileRequest {
      * If version was not provided, the latest version will be fetching and using.
      */
     public async getCatalogVersion(): Promise<number> {
-        if (this.catalogVersion) {
+        if (this.catalogVersion !== undefined) {
             return Promise.resolve(this.catalogVersion);
         }
 
         this.catalogVersion = await this.getCatalogLatestVersion().catch(err =>
             Promise.reject(err)
         );
-        return this.catalogVersion
+        return this.catalogVersion !== undefined
             ? Promise.resolve(this.catalogVersion)
             : Promise.reject(
                   new Error("Error getting the latest version of catalog")
