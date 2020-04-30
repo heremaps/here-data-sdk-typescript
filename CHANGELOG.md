@@ -1,3 +1,28 @@
+## v1.4.0 (30/04/2020)
+
+**olp-sdk-authentication**
+
+- Updated `olp-sdk-fetch` to version 1.4.0.
+
+**olp-sdk-dataservice-api**
+
+- Deprecated the `commitOffsets` function from `stream-api.ts`. It will be removed by 09.2020. Use the `doCommitOffsets` function instead.
+
+**olp-sdk-fetch**
+
+- Updated dependencies.
+
+**olp-sdk-dataservice-read**
+
+- Added the `LRUCache` class.
+- Replaced `Map` with `LRUCache` in `KeyValueCache`. The default LRU cache capacity is 2 MB.
+- Added metadata caching to the `getPartitions` and `getData` methods in `VersionedLayerClient` and `VolatileLayerClient`.
+- Added the `getSize`, `setCapacity`, and `getCapacity` methods to `KeyValueCache`. You can use these methods to perform the following actions with the LRU cache instance: retrieve the current size, set a new size, and retrieve the total capacity.
+- Deprecated the `getQuadKey` and `withQuadKey` methods in `DataRequest`. Both methods will be removed by 10.2020. Use the `getTile` function instead.
+- Added the `getTile` helper function for retrieving binary data of a versioned or volatile layer using a tile key. This function will optimize the metadata caching by requesting a quadtree with depth 4. This way, all the following requests within the same quadtree will benefit from the already cached metadata.
+- Added the `withFetchOption` and `getFetchOption` methods to `DataRequest` and `PartitionsRequest`. You can use these methods to define how and from where to retrieve data and metadata. Possible options are `OnlineIfNotFound`, and `OnlineOnly`.
+- Updated `olp-sdk-fetch` to version 1.4.0.
+
 ## v1.3.1 (11/03/2020)
 
 **olp-sdk-dataservice-read**
