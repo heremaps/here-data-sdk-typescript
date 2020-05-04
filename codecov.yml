@@ -12,6 +12,10 @@ coverage:
         paths:
           - ./@here/olp-sdk-dataservice-read
         threshold: 1
+      dataservice-write:
+        paths:
+          - ./@here/olp-sdk-dataservice-write
+        threshold: 1
       olp-sdk-fetch:
         paths:
           - ./@here/olp-sdk-fetch
@@ -25,6 +29,7 @@ ignore:
   - ./@here/olp-sdk-dataservice-read/test
   - ./@here/olp-sdk-fetch/test
   - ./@here/olp-sdk-dataservice-api/test
+  - ./@here/olp-sdk-dataservice-write/test
   - tests
   - scripts
   - docs

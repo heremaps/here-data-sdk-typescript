@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 #
-# Copyright (C) 2019 HERE Europe B.V.
+# Copyright (C) 2019-2020 HERE Europe B.V.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,5 +31,8 @@ cd @here/olp-sdk-dataservice-api && npm install && npm publish --dry-run && cd -
 
 # olp-sdk-fetch publish test dry-run
 cd @here/olp-sdk-fetch && npm install && npm publish --dry-run && cd -
+
+# olp-sdk-dataservice-write publish test dry-run
+cd @here/olp-sdk-dataservice-write && npm install && npm publish --dry-run && cd -
 
 echo ">>> Testing SDK done... >>>"
