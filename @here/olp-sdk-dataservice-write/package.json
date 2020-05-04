@@ -1,0 +1,80 @@
+{
+  "name": "@here/olp-sdk-dataservice-write",
+  "version": "1.0.0",
+  "description": "Wrapper around a subset of the HERE Open Location Platform Data REST API related to writing data to OLP catalogs",
+  "main": "index.js",
+  "browser": "index.web.js",
+  "typings": "index.web",
+  "directories": {
+    "test": "test",
+    "lib": "lib"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
+    "test": "mocha > xunit.xml",
+    "coverage": "nyc mocha > xunit.xml",
+    "codecov": "npm run coverage && nyc report --reporter=lcov",
+    "prepare": "tsc --sourceMap false && npm run bundle",
+    "webpack": "webpack",
+    "bundle": "npm run bundle:dev && npm run bundle:prod",
+    "bundle:prod": "webpack --env.NODE_ENV=production",
+    "bundle:dev": "webpack --env.NODE_ENV=development"
+  },
+  "nyc": {
+    "include": [
+      "lib/**/*.ts",
+      "lib/**/*.js"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text",
+      "html"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:heremaps/here-olp-sdk-typescript.git",
+    "directory": "@here/olp-sdk-dataservice-write"
+  },
+  "author": {
+    "name": "HERE Europe B.V.",
+    "url": "https://here.com"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@here/olp-sdk-fetch": "1.4.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.7",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^13.1.2",
+    "@types/sinon": "7.0.3",
+    "@types/sinon-chai": "^3.2.3",
+    "awesome-typescript-loader": "^5.2.1",
+    "chai": "^4.2.0",
+    "glob": "^7.1.6",
+    "husky": "^3.1.0",
+    "lint-staged": "^9.5.0",
+    "mocha": "^6.2.2",
+    "nyc": "^15.0.0",
+    "prettier": "^1.19.1",
+    "sinon": "7.4.2",
+    "sinon-chai": "^3.4.0",
+    "source-map-support": "^0.5.16",
+    "ts-node": "^8.5.4",
+    "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typedoc": "^0.15.0",
+    "typescript": "3.5.3",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  }
+}

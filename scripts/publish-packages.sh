@@ -1,6 +1,6 @@
 #!/bin/bash -e
 #
-# Copyright (C) 2019 HERE Europe B.V.
+# Copyright (C) 2019-2020 HERE Europe B.V.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,6 +40,10 @@ while [[ $# -gt 0 ]]; do
         -read)
         # olp-sdk-dataservice-read publish
         cd @here/olp-sdk-dataservice-read && npm install && npm publish && cd -
+        ;;
+        -write)
+        # olp-sdk-dataservice-write publish
+        cd @here/olp-sdk-dataservice-write && npm install && npm publish && cd -
         ;;
     esac
     # Shift after checking all the cases to get the next option
