@@ -1,6 +1,6 @@
-# HERE OLP SDK for TypeScript
+# HERE Data SDK for TypeScript
 
-The HERE OLP SDK for TypeScript is a TypeScript client for the <a href="https://platform.here.com" target="_blank">HERE Open Location Platform</a>.
+The HERE Data SDK for TypeScript is a TypeScript client for the <a href="https://platform.here.com" target="_blank">HERE platform</a>.
 
 ## Health Сheck
 
@@ -16,31 +16,31 @@ The HERE OLP SDK for TypeScript is a TypeScript client for the <a href="https://
 
 ## Why Use
 
-The Open Location Platform (OLP) SDK for TypeScript provides support for the core HERE OLP use cases. The SDK is intended to save your time and effort on using OLP REST APIs. It provides a set of stable APIs that simplify complex OLP operations and keeps up to date with the latest OLP REST API changes.
+The HERE Data SDK for TypeScript provides support for the core HERE platform use cases. The SDK is intended to save your time and effort on using HERE REST APIs. It provides a set of stable APIs that simplify complex platform operations and keeps up to date with the latest HERE REST API changes.
 
-The OLP SDK for TypeScrypt is a modern, lightweight, and modular SDK with minimal dependencies targeted towards a wide range of hardware platforms from embedded devices to desktops.
+The Data SDK for TypeScrypt is a modern, lightweight, and modular SDK with minimal dependencies targeted towards a wide range of hardware platforms from embedded devices to desktops.
 
 This SDK lets you:
 
-- Authenticate to HERE OLP using client credentials
+- Authenticate to the HERE platform using client credentials
 - Read catalog and partition metadata
-- Retrieve data from versioned and volatile layers of OLP catalogs
+- Retrieve data from layers
 
-Additionally, the SDK includes classes for work with geospatial tiling schemes that are used by most OLP catalog layers.
+Additionally, the SDK includes classes for work with geospatial tiling schemes that are used by most platform catalog layers.
 
 ## Backward Compatibility
 
-We try to develop and maintain our API in a way that preserves its compatibility with the existing applications. Changes in OLP SDK for TypeScript are greatly influenced by the Data API development. Data API introduces breaking changes 6 months in advance. Therefore, you may need to migrate to a new version of OLP SDK for TypeScript every half a year.
+We try to develop and maintain our API in a way that preserves its compatibility with the existing applications. Changes in the Data SDK for TypeScript are greatly influenced by the Data API development. Data API introduces breaking changes 6 months in advance. Therefore, you may need to migrate to a new version of the Data SDK for TypeScript every half a year.
 
 For more information on Data API, see its <a href="https://developer.here.com/olp/documentation/data-api/data_dev_guide/index.html" target="_blank">Developer Guide</a> and <a href="https://developer.here.com/olp/documentation/data-api/api-reference.html" target="_blank">API Reference</a>.
 
-When new API is introduced in OLP SDK for TypeScript, the old one is not deleted straight away. The standard API deprecation time is 6 months. It gives you time to switch to new code. However, we do not provide ABI backward compatibility.
+When new API is introduced in the Data SDK for TypeScript, the old one is not deleted straight away. The standard API deprecation time is 6 months. It gives you time to switch to new code. However, we do not provide ABI backward compatibility.
 
-All of the deprecated methods, functions, and parameters are documented in the OLP SDK for TypeScript <a href="https://developer.here.com/olp/documentation/sdk-typescript/api_reference/index.html"  target="_blank">API Reference</a> and <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/master/CHANGELOG.md" target="_blank">changelog</a>.
+All of the deprecated methods, functions, and parameters are documented in the Data SDK for TypeScript <a href="https://developer.here.com/olp/documentation/sdk-typescript/api_reference/index.html"  target="_blank">API Reference</a> and <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/master/CHANGELOG.md" target="_blank">changelog</a>.
 
 ## About This Repository
 
-The OLP SDK for TypeScript repository is a monorepo that contains the core components of the OLP SDK organized in the NPM workspace.
+The HERE Data SDK for TypeScript repository is a monorepo that contains the core components of the platform SDK organized in the NPM workspace.
 
 All components can be used stand-alone and are in the <a href="https://github.com/heremaps/here-olp-sdk-typescript/tree/master/%40here" target="_blank">@here</a> subdirectory.
 
@@ -65,13 +65,13 @@ https://unpkg.com/@here/olp-sdk-dataservice-read/bundle.umd.min.js
 https://unpkg.com/@here/olp-sdk-fetch/bundle.umd.min.js
 ```
 
-To learn how to use the HERE OLP SDK for TypeScript, see the <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/master/docs/GettingStartedGuide.md" target="_blank">Getting Started Guide</a>.
+To learn how to use the Data SDK for TypeScript, see the <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/master/docs/GettingStartedGuide.md" target="_blank">Getting Started Guide</a>.
 
 ## Development
 
 ### Dependencies
 
-The HERE OLP SDK for TypeScript has the following dependencies:
+The HERE Data SDK for TypeScript has the following dependencies:
 
 - npm 6.0.0+ (for installation instructions, see <a href="https://www.npmjs.com/" target="_blank">npm</a>)
 - Node.js 10+ (for installation instructions, see <a href="http://nodejs.org" target="_blank">Node.js</a>)

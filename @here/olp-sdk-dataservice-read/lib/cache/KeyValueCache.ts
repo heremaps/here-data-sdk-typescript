@@ -20,7 +20,9 @@
 import { LRUCache } from "./LRUCache";
 
 /**
- * An in-memory caching instance. All the repository instances use it for reading or caching information.
+ * An in-memory caching instance.
+ * 
+ * All the repository instances use it for reading or caching information.
  */
 export class KeyValueCache {
     private readonly cache: LRUCache<string, string>;
@@ -38,7 +40,7 @@ export class KeyValueCache {
      *
      * @param key The key for this value.
      * @param value The value of the string type.
-     * @return True if the operation is successful, false otherwise.
+     * @return True if the operation is successful; false otherwise.
      */
     public put(key: string, value: string): boolean {
         try {
@@ -63,7 +65,7 @@ export class KeyValueCache {
      * Removes a key-value pair from the cache.
      *
      * @param key The key for the value that you want to remove from the cache.
-     * @return True if the operation is successful, false otherwise.
+     * @return True if the operation is successful; false otherwise.
      */
     public remove(key: string): boolean {
         return this.cache.delete(key);
@@ -77,8 +79,10 @@ export class KeyValueCache {
     }
 
     /**
-     * Resets the capacity of this cache. If `newCapacity` is smaller than the current cache size,
-     * all items will be evicted until the cache shrinks to `newCapacity`.
+     * Resets the capacity of this cache.
+     * 
+     * If `newCapacity` is smaller than the current cache size,
+     * all items are evicted until the cache shrinks to `newCapacity`.
      *
      * @param newCapacity The new capacity of this cache in MB.
      */
@@ -87,8 +91,8 @@ export class KeyValueCache {
     }
 
     /**
-     * Returns the maximum capacity of the cache, i.e.
-     * the total amount of memory that may be consumed by cache in MB
+     * The maximum capacity of the cache
+     * that is the total amount of memory that can be consumed by the cache in MB.
      *
      * @returns The capacity of the cache.
      */
@@ -97,7 +101,8 @@ export class KeyValueCache {
     }
 
     /**
-     * The size of the cache, i.e. the sum of all the sizes of all the objects in the cache.
+     * The size of the cache
+     * that is the sum of all the sizes of all the objects in the cache.
      *
      * @returns The size of the cache.
      */

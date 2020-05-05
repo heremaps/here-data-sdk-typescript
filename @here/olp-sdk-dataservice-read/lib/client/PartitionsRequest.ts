@@ -22,7 +22,7 @@ import { validateBillingTag, validatePartitionsIdsList } from "..";
 import { FetchOptions } from "./FetchOptions";
 
 /**
- * Prepares information for calls to get partitions metadata from the OLP Metadata Service.
+ * Prepares information for calls to get partitions metadata from the HERE Metadata Service.
  */
 export class PartitionsRequest {
     private version?: number;
@@ -32,8 +32,8 @@ export class PartitionsRequest {
     private fetchOption = FetchOptions.OnlineIfNotFound;
 
     /**
-     * This method is deprecated and is not used. If you need to set the version, then
-     * initialize the version client with not deprecated constructor, in other case the latest version will be used.
+     * This method is deprecated and is not used. If you need to set the version,
+     * initialize the version client with the new constructor. Otherwise, the latest version will be used.
      *
      * Gets a layer version for the request.
      *
@@ -44,8 +44,8 @@ export class PartitionsRequest {
     }
 
     /**
-     * This method is deprecated and is not used. If you need to set the version, then
-     * initialize the version client with not deprecated constructor, in other case the latest version will be used.
+     * This method is deprecated and is not used. If you need to set the version,
+     * initialize the version client with the new constructor. Otherwise, the latest version will be used.
      *
      * An optional method that sets the provided layer version.
      * If the layer version is not specified, the last layer version is used.
@@ -61,7 +61,7 @@ export class PartitionsRequest {
     /**
      * An optional free-form tag that is used for grouping billing records together.
      *
-     * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
+     * If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].
      *
      * @param tag The `BillingTag` string.
      * @return The updated [[PartitionsRequest]] instance that you can use to chain methods.
@@ -81,9 +81,9 @@ export class PartitionsRequest {
     }
 
     /**
-     * A setter for the provided partition IDs.
+     * Sets the provided partition IDs.
      *
-     * @param ids The ID of partitions from which you want to get metadata.
+     * @param ids The IDs of partitions from which you want to get metadata.
      *
      * The required quantity is between 1 and 100.
      * If partition IDs are not provided, all partitions are retrieved.
@@ -105,9 +105,10 @@ export class PartitionsRequest {
     }
 
     /**
-     * A setter for the provided additional fields: dataSize, checksum, compressedDataSize, crc.
+     * Sets the provided additional fields: `dataSize`, `checksum`, `compressedDataSize`, and `crc`.
      *
-     * @param additionalFields Array of strings. Array could contain next values "dataSize" | "checksum" | "compressedDataSize".
+     * @param additionalFields The array of strings.
+     * The array can contain the following values: `dataSize`, `checksum`, `compressedDataSize`, and `crc`.
      *
      * @returns The updated [[PartitionsRequest]] instance that you can use to chain methods.
      */
@@ -151,7 +152,7 @@ export class PartitionsRequest {
     /**
      * Gets the fetch option that controls how requests are handled.
      *
-     * The default option is `OnlineIfNotFound` that queries the network if
+     * The default option is `OnlineIfNotFound`. It queries the network if
      * the requested resource is not in the cache.
      *
      * @return The fetch option.

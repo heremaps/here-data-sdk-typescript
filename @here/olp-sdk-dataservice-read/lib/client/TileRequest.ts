@@ -28,7 +28,7 @@ import {
 import { OlpClientSettings } from "./OlpClientSettings";
 
 /**
- * Parameters for getting Tile.
+ * Parameters used to get a tile.
  */
 export interface TileRequestParams {
     catalogHrn: HRN;
@@ -39,22 +39,22 @@ export interface TileRequestParams {
 }
 
 /**
- * Prepares information for calls to get Tile blob data by the Tile key.
+ * Prepares information for calls to get the tile blob data by the tile key.
  *
  * This class works only with versioned and volatile layers where the partitioning scheme is HERE Tile.
  *
- * You can initialize request class once for specific catalog, layer and version (@see [[TileRequestParams]])
- * and use many times for getting tile.
+ * You can initialize the request class once for a specific catalog, layer, and version (@see [[TileRequestParams]])
+ * and use it many times to get the a tile.
  *
  * @example
  *
  * ```
  *  const params: TileRequestParams = {
- *       settings: "% your OlpClientSettings instance % ",
- *       catalogHrn: "% HRN instance of your catalog %",
- *       layerId: "% Id of your layer %",
+ *       settings: "% your `OlpClientSettings` instance % ",
+ *       catalogHrn: "% the HRN instance of your catalog %",
+ *       layerId: "% your layer ID %",
  *       layerType: "% versioned or volatile %",
- *       catalogVersion: "% the version of catalog, the latest version will be using by default for versioned layer %"
+ *       catalogVersion: "% the catalog version; for versioned layers, the latest version is used by default %"
  *   }
  *
  *  const request = new TileRequest(params);
@@ -76,8 +76,10 @@ export class TileRequest {
     }
 
     /**
-     * Returns the provided by the [[TileRequestParams]] catalog version.
-     * If version was not provided, the latest version will be fetching and using.
+     * Gets the catalog version provided by the [[TileRequestParams]].
+     * 
+     * @return The catalog version provided by the [[TileRequestParams]].
+     * If this version was not provided, the latest version is fetched and used.
      */
     public async getCatalogVersion(): Promise<number> {
         if (this.catalogVersion !== undefined) {
@@ -95,7 +97,9 @@ export class TileRequest {
     }
 
     /**
-     * Returns [[TileRequestParams]]
+     * Gets the tile request parameters.
+     * 
+     * @return The [[TileRequestParams]] instance.
      */
     public getParams(): TileRequestParams {
         return this.params;
@@ -115,7 +119,7 @@ export class TileRequest {
     /**
      * An optional free-form tag that is used for grouping billing records together.
      *
-     * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
+     * If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].
      *
      * @param tag The `BillingTag` string.
      * @return The updated [[TileRequest]] instance that you can use to chain methods.
@@ -128,7 +132,7 @@ export class TileRequest {
     /**
      * Gets the configured [[QuadKey]] object for the request.
      *
-     * @return The the configured [[QuadKey]] object.
+     * @return The configured [[QuadKey]] object.
      */
     public getTileKey(): QuadKey | undefined {
         return this.quadKey;
@@ -161,7 +165,7 @@ export class TileRequest {
     /**
      * Gets the fetch option that controls how requests are handled.
      *
-     * The default option is `OnlineIfNotFound` that queries the network if
+     * The default option is `OnlineIfNotFound`. It queries the network if
      * the requested resource is not in the cache.
      *
      * @return The fetch option.
@@ -171,7 +175,9 @@ export class TileRequest {
     }
 
     /**
-     * Gets the latest available catalog version
+     * Gets the latest available catalog version.
+     * 
+     * @return The latest available catalog version.
      */
     private async getCatalogLatestVersion(): Promise<number> {
         const request = await RequestFactory.create(

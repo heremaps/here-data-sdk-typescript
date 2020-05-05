@@ -29,28 +29,29 @@ import {
 } from "..";
 
 /**
- * Gets the tile by the key (A geometric area represented as a HERE tile).
+ * Gets the tile by the key.
+ * 
+ * The tile is a geometric area represented as a HERE tile.
+ * The quadtree metadata fetches the blob of needed tile from the HERE Query Service,
+ * then caches it, and returns to the user.
+ * To disable caching of metadata use `request.withFetchOption(FetchOptions.OnlineOnly)`.
  *
- * The quadTree metadata fetch from the Query service,
- * then caches and returns to the user the blob of needed tile.
- * To disable caching of metadata use request.withFetchOption(FetchOptions.OnlineOnly).
+ * @param rq Requests the [[TileRequest]] instance with the configured parameters.
+ * @see [[TileRequest]]
  *
- * @param rq Request instance with configured params. @see [[TileRequest]]
- *
- * @param abortSignal a signal object that allows you to communicate with a request (such as the `fetch` request)
+ * @param abortSignal The signal object that allows you to communicate with a request (such as the `fetch` request)
  * and, if required, abort it using the `AbortController` object.
- *
- * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+ * @see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
  *
  * @example
  *
  * ```
  *  const params: TileRequestParams = {
- *       settings: "% your OlpClientSettings instance % ",
- *       catalogHrn: "% HRN instance of your catalog %",
- *       layerId: "% Id of your layer %",
+ *       settings: "% your `OlpClientSettings` instance % ",
+ *       catalogHrn: "% the HRN instance of your catalog %",
+ *       layerId: "% your layer ID %",
  *       layerType: "% versioned or volatile %",
- *       catalogVersion: "% the version of catalog, the latest version will be using by default for versioned layer %"
+ *       catalogVersion: "% the catalog version; for versioned layers, the latest version is used by default %"
  *   }
  *
  *  const request = new TileRequest(params);
@@ -60,7 +61,7 @@ import {
  *
  * ```
  *
- * @returns Response with blob of the tile
+ * @returns The blob of the tile.
  */
 export async function getTile(
     rq: TileRequest,

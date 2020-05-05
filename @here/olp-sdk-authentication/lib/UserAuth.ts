@@ -24,7 +24,7 @@ import { OAuthArgs, Token } from "./requestToken_common";
 /**
  * User credentials.
  *
- * Download the file with credentials from the [Open Location Platform (OLP) portal](https://account.here.com/).
+ * Download the file with credentials from the [HERE portal](https://account.here.com/).
  * The downloaded **credentials.properties** file contains the access key ID and access key secret needed to get the access token.
  * You can also use the access key ID and access key secret for authentication.
  */
@@ -32,13 +32,13 @@ export interface AuthCredentials {
     /**
      * Your access key ID.
      *
-     * Find the access key ID in the **credentials.properties** file downloaded from the OLP Portal.
+     * Find the access key ID in the **credentials.properties** file downloaded from the HERE portal.
      */
     accessKeyId?: string;
     /**
      * Your access key secret.
      *
-     * Find the access key secret in the **credentials.properties** file downloaded from the OLP Portal.
+     * Find the access key secret in the **credentials.properties** file downloaded from the HERE portal.
      */
     accessKeySecret?: string;
 }
