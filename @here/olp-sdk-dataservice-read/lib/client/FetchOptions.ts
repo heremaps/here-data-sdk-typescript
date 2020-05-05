@@ -18,7 +18,7 @@
  */
 
 /**
- * Enum the fetch option that controls how requests are handled.
+ * Enumerates the fetch option that controls how requests are handled.
  */
 export enum FetchOptions {
     /**

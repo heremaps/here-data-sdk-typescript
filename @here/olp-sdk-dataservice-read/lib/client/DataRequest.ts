@@ -20,7 +20,7 @@
 import { FetchOptions, QuadKey, validateBillingTag } from "..";
 
 /**
- *  Prepares information for calls to get data from the OLP Blob Service.
+ *  Prepares information for calls to get data from the HERE Blob Service.
  */
 export class DataRequest {
     private dataHandle?: string;
@@ -74,8 +74,8 @@ export class DataRequest {
 
     /**
      * @deprecated This method will be removed by 10.2020. Please use [[getTile]] function
-     * if you need to get data by QuadKey.
-     * Or you can use [getPartitions] method for getting datahandle by QuadKey
+     * if you need to get data using a quadkey.
+     * You can also use the [[getPartitions]] method to get datahandle using a quadkey.
      *
      * Gets a quadkey for the request.
      *
@@ -87,8 +87,8 @@ export class DataRequest {
 
     /**
      * @deprecated This method will be removed by 10.2020. Please use [[getTile]] function
-     * if you need to get data by QuadKey.
-     * Or you can use [getPartitions] method for getting datahandle by QuadKey
+     * if you need to get data using a quadkey.
+     * You can also use the [[getPartitions]] method to get datahandle using a quadkey.
      *
      * Sets the provided quadkey.
      *
@@ -101,8 +101,8 @@ export class DataRequest {
     }
 
     /**
-     * @deprecated This method is deprecated and is not used. If you need to set the version, then
-     * initialize the version client with not deprecated constructor, in other case the latest version will be used.
+     * @deprecated This method is deprecated and is not used. If you need to set the version,
+     * initialize the version client with the new constructor. Otherwise, the latest version will be used.
      *
      * Gets a catalog version for the request.
      *
@@ -113,8 +113,8 @@ export class DataRequest {
     }
 
     /**
-     * @deprecated This method is deprecated and is not used. If you need to set the version, then
-     * initialize the version client with not deprecated constructor, in other case the latest version will be used.
+     * @deprecated This method is deprecated and is not used. If you need to set the version,
+     * initialize the version client with the new constructor. Otherwise, the latest version will be used.
      *
      * Sets the provided catalog version.
      *
@@ -129,7 +129,7 @@ export class DataRequest {
     /**
      * An optional free-form tag that is used for grouping billing records together.
      *
-     * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
+     * If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].
      *
      * @param tag The `BillingTag` string.
      * @return The updated [[DataRequest]] instance that you can use to chain methods.
@@ -166,7 +166,7 @@ export class DataRequest {
     /**
      * Gets the fetch option that controls how requests are handled.
      *
-     * The default option is `OnlineIfNotFound` that queries the network if
+     * The default option is `OnlineIfNotFound`. It queries the network if
      * the requested resource is not in the cache.
      *
      * @return The fetch option.
