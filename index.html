@@ -8,7 +8,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
-
 <body>
 <header>
 	<div class="tsd-page-toolbar">
@@ -61,10 +60,10 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<a href="#here-olp-sdk-for-typescript" id="here-olp-sdk-for-typescript" style="color: inherit; text-decoration: none;">
-					<h1>HERE OLP SDK for TypeScript</h1>
+				<a href="#here-data-sdk-for-typescript" id="here-data-sdk-for-typescript" style="color: inherit; text-decoration: none;">
+					<h1>HERE Data SDK for TypeScript</h1>
 				</a>
-				<p>The HERE OLP SDK for TypeScript is a TypeScript client for the <a href="https://platform.here.com" target="_blank">HERE Open Location Platform</a>.</p>
+				<p>The HERE Data SDK for TypeScript is a TypeScript client for the <a href="https://platform.here.com" target="_blank">HERE platform</a>.</p>
 				<a href="#health-сheck" id="health-сheck" style="color: inherit; text-decoration: none;">
 					<h2>Health Сheck</h2>
 				</a>
@@ -92,19 +91,26 @@
 				<a href="#why-use" id="why-use" style="color: inherit; text-decoration: none;">
 					<h2>Why Use</h2>
 				</a>
-				<p>The Open Location Platform (OLP) SDK for TypeScript provides support for the core HERE OLP use cases. The SDK is intended to save your time and effort on using OLP REST APIs. It provides a set of stable APIs that simplify complex OLP operations and keeps up to date with the latest OLP REST API changes.</p>
-				<p>The OLP SDK for TypeScrypt is a modern, lightweight, and modular SDK with minimal dependencies targeted towards a wide range of hardware platforms from embedded devices to desktops.</p>
+				<p>The HERE Data SDK for TypeScript provides support for the core HERE platform use cases. The SDK is intended to save your time and effort on using HERE REST APIs. It provides a set of stable APIs that simplify complex platform operations and keeps up to date with the latest HERE REST API changes.</p>
+				<p>The Data SDK for TypeScrypt is a modern, lightweight, and modular SDK with minimal dependencies targeted towards a wide range of hardware platforms from embedded devices to desktops.</p>
 				<p>This SDK lets you:</p>
 				<ul>
-					<li>Authenticate to HERE OLP using client credentials</li>
+					<li>Authenticate to the HERE platform using client credentials</li>
 					<li>Read catalog and partition metadata</li>
-					<li>Retrieve data from versioned and volatile layers of OLP catalogs</li>
+					<li>Retrieve data from layers</li>
 				</ul>
-				<p>Additionally, the SDK includes classes for work with geospatial tiling schemes that are used by most OLP catalog layers.</p>
+				<p>Additionally, the SDK includes classes for work with geospatial tiling schemes that are used by most platform catalog layers.</p>
+				<a href="#backward-compatibility" id="backward-compatibility" style="color: inherit; text-decoration: none;">
+					<h2>Backward Compatibility</h2>
+				</a>
+				<p>We try to develop and maintain our API in a way that preserves its compatibility with the existing applications. Changes in the Data SDK for TypeScript are greatly influenced by the Data API development. Data API introduces breaking changes 6 months in advance. Therefore, you may need to migrate to a new version of the Data SDK for TypeScript every half a year.</p>
+				<p>For more information on Data API, see its <a href="https://developer.here.com/olp/documentation/data-api/data_dev_guide/index.html" target="_blank">Developer Guide</a> and <a href="https://developer.here.com/olp/documentation/data-api/api-reference.html" target="_blank">API Reference</a>.</p>
+				<p>When new API is introduced in the Data SDK for TypeScript, the old one is not deleted straight away. The standard API deprecation time is 6 months. It gives you time to switch to new code. However, we do not provide ABI backward compatibility.</p>
+				<p>All of the deprecated methods, functions, and parameters are documented in the Data SDK for TypeScript <a href="https://developer.here.com/olp/documentation/sdk-typescript/api_reference/index.html"  target="_blank">API Reference</a> and <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/master/CHANGELOG.md" target="_blank">changelog</a>.</p>
 				<a href="#about-this-repository" id="about-this-repository" style="color: inherit; text-decoration: none;">
 					<h2>About This Repository</h2>
 				</a>
-				<p>The OLP SDK for TypeScript repository is a monorepo that contains the core components of the OLP SDK organized in the NPM workspace.</p>
+				<p>The HERE Data SDK for TypeScript repository is a monorepo that contains the core components of the platform SDK organized in the NPM workspace.</p>
 				<p>All components can be used stand-alone and are in the <a href="https://github.com/heremaps/here-olp-sdk-typescript/tree/master/%40here" target="_blank">@here</a> subdirectory.</p>
 				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
 					<h2>Installation</h2>
@@ -118,14 +124,14 @@ npm install @here/olp-sdk-dataservice-api</code></pre>
 				<pre><code>http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com</span>/@here/olp-sdk-authentication/bundle.umd.<span class="hljs-built_in">min</span>.js
 http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com</span>/@here/olp-sdk-dataservice-api/bundle.umd.<span class="hljs-built_in">min</span>.js
 http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com</span>/@here/olp-sdk-dataservice-<span class="hljs-keyword">read</span>/bundle.umd.<span class="hljs-built_in">min</span>.js
-http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com</span>/@here/olp-sdk-fetch/bundle.umd.<span class="hljs-built_in">min</span>.js</code></pre><p>To learn how to use the HERE OLP SDK for TypeScript, see the <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/master/docs/GettingStartedGuide.md" target="_blank">Getting Started Guide</a>.</p>
+http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com</span>/@here/olp-sdk-fetch/bundle.umd.<span class="hljs-built_in">min</span>.js</code></pre><p>To learn how to use the Data SDK for TypeScript, see the <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/master/docs/GettingStartedGuide.md" target="_blank">Getting Started Guide</a>.</p>
 				<a href="#development" id="development" style="color: inherit; text-decoration: none;">
 					<h2>Development</h2>
 				</a>
 				<a href="#dependencies" id="dependencies" style="color: inherit; text-decoration: none;">
 					<h3>Dependencies</h3>
 				</a>
-				<p>The HERE OLP SDK for TypeScript has the following dependencies:</p>
+				<p>The HERE Data SDK for TypeScript has the following dependencies:</p>
 				<ul>
 					<li>npm 6.0.0+ (for installation instructions, see <a href="https://www.npmjs.com/" target="_blank">npm</a>)</li>
 					<li>Node.js 10+ (for installation instructions, see <a href="http://nodejs.org" target="_blank">Node.js</a>)</li>
@@ -192,6 +198,9 @@ http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com<
 						<a href="globals.html"><em>Globals</em></a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="modules/_olp_sdk_authentication_lib_version_.html">&quot;olp-<wbr>sdk-<wbr>authentication/lib.version&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="modules/_olp_sdk_authentication_lib_httperror_.html">&quot;olp-<wbr>sdk-<wbr>authentication/lib/<wbr>Http<wbr>Error&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -249,6 +258,9 @@ http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com<
 						<a href="modules/_olp_sdk_dataservice_api_lib_volatile_blob_api_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/volatile-<wbr>blob-<wbr>api&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="modules/_olp_sdk_dataservice_read_lib_version_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib.version&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="modules/_olp_sdk_dataservice_read_lib_datastoredownloadmanager_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/<wbr>Data<wbr>Store<wbr>Download<wbr>Manager&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -265,6 +277,12 @@ http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com<
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_olp_sdk_dataservice_read_lib_cache_keyvaluecache_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/cache/<wbr>Key<wbr>Value<wbr>Cache&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_olp_sdk_dataservice_read_lib_cache_lrucache_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/cache/LRUCache&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_olp_sdk_dataservice_read_lib_cache_metadatacacherepository_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/cache/<wbr>Metadata<wbr>Cache<wbr>Repository&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_olp_sdk_dataservice_read_lib_client_artifactclient_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Artifact<wbr>Client&quot;</a>
@@ -286,6 +304,9 @@ http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com<
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_olp_sdk_dataservice_read_lib_client_datarequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Data<wbr>Request&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_olp_sdk_dataservice_read_lib_client_fetchoptions_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Fetch<wbr>Options&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_olp_sdk_dataservice_read_lib_client_indexlayerclient_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Index<wbr>Layer<wbr>Client&quot;</a>
@@ -339,6 +360,9 @@ http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com<
 						<a href="modules/_olp_sdk_dataservice_read_lib_client_summaryrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Summary<wbr>Request&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="modules/_olp_sdk_dataservice_read_lib_client_tilerequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Tile<wbr>Request&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="modules/_olp_sdk_dataservice_read_lib_client_unsubscriberequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Unsubscribe<wbr>Request&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -354,7 +378,13 @@ http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com<
 						<a href="modules/_olp_sdk_dataservice_read_lib_utils_requestbuilderfactory_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/utils/<wbr>Request<wbr>Builder<wbr>Factory&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="modules/_olp_sdk_dataservice_read_lib_utils_getdatasizeutil_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/utils/get<wbr>Data<wbr>Size<wbr>Util&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="modules/_olp_sdk_dataservice_read_lib_utils_getenvlookupurl_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/utils/get<wbr>Env<wbr>Lookup<wbr>Url&quot;</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_olp_sdk_dataservice_read_lib_utils_gettile_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/utils/get<wbr>Tile&quot;</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_olp_sdk_dataservice_read_lib_utils_validatebillingtag_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/utils/validate<wbr>Billing<wbr>Tag&quot;</a>

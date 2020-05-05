@@ -68,7 +68,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Prepares information for calls to get partitions metadata from the OLP Metadata Service.</p>
+						<p>Prepares information for calls to get partitions metadata from the HERE Metadata Service.</p>
 					</div>
 				</div>
 			</section>
@@ -89,10 +89,12 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html#getadditionalfields" class="tsd-kind-icon">get<wbr>Additional<wbr>Fields</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html#getbillingtag" class="tsd-kind-icon">get<wbr>Billing<wbr>Tag</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html#getfetchoption" class="tsd-kind-icon">get<wbr>Fetch<wbr>Option</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html#getpartitionids" class="tsd-kind-icon">get<wbr>Partition<wbr>Ids</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html#getversion" class="tsd-kind-icon">get<wbr>Version</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html#withadditionalfields" class="tsd-kind-icon">with<wbr>Additional<wbr>Fields</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html#withbillingtag" class="tsd-kind-icon">with<wbr>Billing<wbr>Tag</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html#withfetchoption" class="tsd-kind-icon">with<wbr>Fetch<wbr>Option</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html#withpartitionids" class="tsd-kind-icon">with<wbr>Partition<wbr>Ids</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html#withversion" class="tsd-kind-icon">with<wbr>Version</a></li>
 							</ul>
@@ -112,7 +114,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/999adbb/@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts#L124">@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts:124</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts#L133">@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts:133</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -138,7 +140,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/999adbb/@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts#L77">@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts:77</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts#L79">@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts:79</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -155,6 +157,31 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getfetchoption" class="tsd-anchor"></a>
+					<h3>get<wbr>Fetch<wbr>Option</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Fetch<wbr>Option<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/_olp_sdk_dataservice_read_lib_client_fetchoptions_.fetchoptions.html" class="tsd-signature-type">FetchOptions</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts#L160">@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts:160</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets the fetch option that controls how requests are handled.</p>
+								</div>
+								<p>The default option is <code>OnlineIfNotFound</code>. It queries the network if
+								the requested resource is not in the cache.</p>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="../enums/_olp_sdk_dataservice_read_lib_client_fetchoptions_.fetchoptions.html" class="tsd-signature-type">FetchOptions</a></h4>
+							<p>The fetch option.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="getpartitionids" class="tsd-anchor"></a>
 					<h3>get<wbr>Partition<wbr>Ids</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -164,7 +191,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/999adbb/@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts#L101">@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts:101</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts#L103">@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts:103</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -190,13 +217,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/999adbb/@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts#L40">@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts#L42">@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts:42</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>This method is deprecated and is not used. If you need to set the version, then
-									initialize the version client with not deprecated constructor, in other case the latest version will be used.</p>
+									<p>This method is deprecated and is not used. If you need to set the version,
+									initialize the version client with the new constructor. Otherwise, the latest version will be used.</p>
 								</div>
 								<p>Gets a layer version for the request.</p>
 							</div>
@@ -218,12 +245,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/999adbb/@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts#L112">@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts:112</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts#L115">@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts:115</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>A setter for the provided additional fields: dataSize, checksum, compressedDataSize, crc.</p>
+									<p>Sets the provided additional fields: <code>dataSize</code>, <code>checksum</code>, <code>compressedDataSize</code>, and <code>crc</code>.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -231,7 +258,8 @@
 								<li>
 									<h5>additionalFields: <span class="tsd-signature-type">AdditionalFields</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>Array of strings. Array could contain next values &quot;dataSize&quot; | &quot;checksum&quot; | &quot;compressedDataSize&quot;.</p>
+										<p>The array of strings.
+										The array can contain the following values: <code>dataSize</code>, <code>checksum</code>, <code>compressedDataSize</code>, and <code>crc</code>.</p>
 									</div>
 								</li>
 							</ul>
@@ -250,14 +278,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/999adbb/@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts#L67">@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts:67</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts#L69">@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts:69</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>An optional free-form tag that is used for grouping billing records together.</p>
 								</div>
-								<p>If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].</p>
+								<p>If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -274,6 +302,44 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="withfetchoption" class="tsd-anchor"></a>
+					<h3>with<wbr>Fetch<wbr>Option</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">with<wbr>Fetch<wbr>Option<span class="tsd-signature-symbol">(</span>option<span class="tsd-signature-symbol">: </span><a href="../enums/_olp_sdk_dataservice_read_lib_client_fetchoptions_.fetchoptions.html" class="tsd-signature-type">FetchOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html" class="tsd-signature-type">PartitionsRequest</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts#L147">@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts:147</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Sets the fetch option that you can use to set the source from
+									which data should be fetched.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>see</dt>
+									<dd><p><code>getFetchOption()</code> for information on usage and format.</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>option: <a href="../enums/_olp_sdk_dataservice_read_lib_client_fetchoptions_.fetchoptions.html" class="tsd-signature-type">FetchOptions</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The <code>FetchOption</code> enum.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html" class="tsd-signature-type">PartitionsRequest</a></h4>
+							<p>A reference to the updated <code>PartitionsRequest</code> instance.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="withpartitionids" class="tsd-anchor"></a>
 					<h3>with<wbr>Partition<wbr>Ids</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -283,12 +349,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/999adbb/@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts#L91">@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts:91</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts#L93">@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts:93</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>A setter for the provided partition IDs.</p>
+									<p>Sets the provided partition IDs.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -296,7 +362,7 @@
 								<li>
 									<h5>ids: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The ID of partitions from which you want to get metadata.</p>
+										<p>The IDs of partitions from which you want to get metadata.</p>
 										<p>The required quantity is between 1 and 100.
 											If partition IDs are not provided, all partitions are retrieved.
 										If the quantity of partition IDs is less than 1 (empty array) or more than 100, an error is thrown.</p>
@@ -318,13 +384,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/999adbb/@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts#L54">@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts:54</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts#L56">@here/olp-sdk-dataservice-read/lib/client/PartitionsRequest.ts:56</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>This method is deprecated and is not used. If you need to set the version, then
-									initialize the version client with not deprecated constructor, in other case the latest version will be used.</p>
+									<p>This method is deprecated and is not used. If you need to set the version,
+									initialize the version client with the new constructor. Otherwise, the latest version will be used.</p>
 								</div>
 								<p>An optional method that sets the provided layer version.
 								If the layer version is not specified, the last layer version is used.</p>
@@ -370,6 +436,9 @@
 								<a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html#getbillingtag" class="tsd-kind-icon">get<wbr>Billing<wbr>Tag</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html#getfetchoption" class="tsd-kind-icon">get<wbr>Fetch<wbr>Option</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html#getpartitionids" class="tsd-kind-icon">get<wbr>Partition<wbr>Ids</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -380,6 +449,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html#withbillingtag" class="tsd-kind-icon">with<wbr>Billing<wbr>Tag</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html#withfetchoption" class="tsd-kind-icon">with<wbr>Fetch<wbr>Option</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html#withpartitionids" class="tsd-kind-icon">with<wbr>Partition<wbr>Ids</a>

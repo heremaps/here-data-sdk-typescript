@@ -89,6 +89,7 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_dataservice_api_lib_metadata_api_.partition.html#checksum" class="tsd-kind-icon">checksum</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_dataservice_api_lib_metadata_api_.partition.html#compresseddatasize" class="tsd-kind-icon">compressed<wbr>Data<wbr>Size</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_dataservice_api_lib_metadata_api_.partition.html#crc" class="tsd-kind-icon">crc</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_dataservice_api_lib_metadata_api_.partition.html#datahandle" class="tsd-kind-icon">data<wbr>Handle</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_dataservice_api_lib_metadata_api_.partition.html#datasize" class="tsd-kind-icon">data<wbr>Size</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="_olp_sdk_dataservice_api_lib_metadata_api_.partition.html#partition" class="tsd-kind-icon">partition</a></li>
@@ -106,7 +107,7 @@
 					<div class="tsd-signature tsd-kind-icon">checksum<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/999adbb/@here/olp-sdk-dataservice-api/lib/metadata-api.ts#L84">@here/olp-sdk-dataservice-api/lib/metadata-api.ts:84</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-api/lib/metadata-api.ts#L84">@here/olp-sdk-dataservice-api/lib/metadata-api.ts:84</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -125,7 +126,7 @@
 					<div class="tsd-signature tsd-kind-icon">compressed<wbr>Data<wbr>Size<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/999adbb/@here/olp-sdk-dataservice-api/lib/metadata-api.ts#L90">@here/olp-sdk-dataservice-api/lib/metadata-api.ts:90</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-api/lib/metadata-api.ts#L90">@here/olp-sdk-dataservice-api/lib/metadata-api.ts:90</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -137,12 +138,29 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="crc" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> crc</h3>
+					<div class="tsd-signature tsd-kind-icon">crc<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-api/lib/metadata-api.ts#L119">@here/olp-sdk-dataservice-api/lib/metadata-api.ts:119</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Optional value for the CRC of the partition data in bytes.
+								The response only includes the data size if crc was specified in the additionalFields query parameter,
+							and if crc was specified in the partition metadata when it was published.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="datahandle" class="tsd-anchor"></a>
 					<h3>data<wbr>Handle</h3>
 					<div class="tsd-signature tsd-kind-icon">data<wbr>Handle<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/999adbb/@here/olp-sdk-dataservice-api/lib/metadata-api.ts#L96">@here/olp-sdk-dataservice-api/lib/metadata-api.ts:96</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-api/lib/metadata-api.ts#L96">@here/olp-sdk-dataservice-api/lib/metadata-api.ts:96</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -159,7 +177,7 @@
 					<div class="tsd-signature tsd-kind-icon">data<wbr>Size<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/999adbb/@here/olp-sdk-dataservice-api/lib/metadata-api.ts#L102">@here/olp-sdk-dataservice-api/lib/metadata-api.ts:102</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-api/lib/metadata-api.ts#L102">@here/olp-sdk-dataservice-api/lib/metadata-api.ts:102</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -176,7 +194,7 @@
 					<div class="tsd-signature tsd-kind-icon">partition<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/999adbb/@here/olp-sdk-dataservice-api/lib/metadata-api.ts#L108">@here/olp-sdk-dataservice-api/lib/metadata-api.ts:108</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-api/lib/metadata-api.ts#L108">@here/olp-sdk-dataservice-api/lib/metadata-api.ts:108</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -193,7 +211,7 @@
 					<div class="tsd-signature tsd-kind-icon">version<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/999adbb/@here/olp-sdk-dataservice-api/lib/metadata-api.ts#L113">@here/olp-sdk-dataservice-api/lib/metadata-api.ts:113</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-api/lib/metadata-api.ts#L113">@here/olp-sdk-dataservice-api/lib/metadata-api.ts:113</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -234,6 +252,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="_olp_sdk_dataservice_api_lib_metadata_api_.partition.html#compresseddatasize" class="tsd-kind-icon">compressed<wbr>Data<wbr>Size</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="_olp_sdk_dataservice_api_lib_metadata_api_.partition.html#crc" class="tsd-kind-icon">crc</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="_olp_sdk_dataservice_api_lib_metadata_api_.partition.html#datahandle" class="tsd-kind-icon">data<wbr>Handle</a>
