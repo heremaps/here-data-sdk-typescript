@@ -207,7 +207,7 @@ export class UserAuth {
 
         const response = await this.config
             .tokenRequester({
-                url: this.m_apiUrl + "oauth2/token",
+                url: this.config.customUrl || this.m_apiUrl + "oauth2/token",
                 consumerKey: this.m_credentials.accessKeyId,
                 secretKey: this.m_credentials.accessKeySecret,
                 scope: this.m_scope

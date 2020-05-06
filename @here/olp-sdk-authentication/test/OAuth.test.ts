@@ -548,6 +548,33 @@ describe("auth-request-project-scope", () => {
             assert.fail();
         }
     });
+
+    it("Should customUrl be present in getToken request", async () => {
+        const mockedUrl = "https://example.com/my/custom/url";
+        const mockedTokenRequest = async (params: any): Promise<Token> => {
+            assert.strictEqual(params.url, mockedUrl);
+            return Promise.resolve(mockedToken);
+        };
+
+        const userAuth = new UserAuth({
+            env: "here-dev",
+            credentials: {
+                accessKeyId: mock_id,
+                accessKeySecret: mock_scrt
+            },
+            tokenRequester: mockedTokenRequest,
+            customUrl: mockedUrl
+        });
+
+        try {
+            token = await userAuth.getToken();
+            assert.isNotEmpty(token);
+            assert.equal(mockedToken.accessToken, token);
+        } catch (err) {
+            console.error("Token not retrieved:", err);
+            assert.fail();
+        }
+    });
 });
 
 describe("expired token refreshing", async () => {
