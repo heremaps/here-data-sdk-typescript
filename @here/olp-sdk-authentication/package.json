@@ -41,7 +41,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@github.com:heremaps/here-olp-sdk-typescript.git"
+    "url": "ssh://git@github.com:heremaps/here-data-sdk-typescript.git"
   },
   "author": {
     "name": "HERE Europe B.V.",

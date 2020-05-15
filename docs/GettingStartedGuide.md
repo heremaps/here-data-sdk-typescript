@@ -41,7 +41,7 @@ The OLP SDK for TypeScript package contains four independent modules that focus 
 
 ## Reference Documentation
 
-The API reference documentation for the HERE OLP SDK for Typescript is available on our [GitHub Pages](https://heremaps.github.io/here-olp-sdk-typescript/).
+The API reference documentation for the HERE OLP SDK for Typescript is available on our [GitHub Pages](https://heremaps.github.io/here-data-sdk-typescript/).
 
 ## <a name="examples"></a> Examples
 

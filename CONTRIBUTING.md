@@ -1,4 +1,4 @@
-The team behind [OLP SDK for TypeScript](https://github.com/heremaps/here-olp-sdk-typescript) gratefully accepts contributions via [pull requests](https://help.github.com/articles/about-pull-requests/) filed against the [GitHub project](https://github.com/heremaps/harp.gl/pulls). As part of filing a pull request, we ask you to sign off the [Developer Certificate of Origin](https://developercertificate.org/) (DCO).
+The team behind [OLP SDK for TypeScript](https://github.com/heremaps/here-data-sdk-typescript) gratefully accepts contributions via [pull requests](https://help.github.com/articles/about-pull-requests/) filed against the [GitHub project](https://github.com/heremaps/here-data-sdk-typescript/pulls). As part of filing a pull request, we ask you to sign off the [Developer Certificate of Origin](https://developercertificate.org/) (DCO).
 
 To maintain a high software quality standard, we strongly prefer contributions to follow these rules:
 

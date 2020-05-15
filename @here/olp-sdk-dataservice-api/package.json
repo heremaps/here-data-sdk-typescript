@@ -39,7 +39,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@github.com:heremaps/here-olp-sdk-typescript.git",
+    "url": "ssh://git@github.com:heremaps/here-data-sdk-typescript.git",
     "directory": "@here/olp-sdk-dataservice-api"
   },
   "author": {
