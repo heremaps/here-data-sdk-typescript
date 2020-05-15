@@ -32,13 +32,19 @@ import {
 } from "@here/olp-sdk-dataservice-api";
 import {
     DataRequest,
+    fetchQuadTreeIndex,
     MetadataCacheRepository,
+    mortonCodeFromQuadKey,
     PartitionsRequest,
     QuadKeyPartitionsRequest,
     QuadTreeIndexRequest,
     QueryClient,
-    RequestFactory
+    RequestFactory,
+    TileRequest
 } from "..";
+import { getTile } from "../utils";
+
+// tslint:disable: deprecation
 
 /**
  * Parameters for use to initialize VolatileLayerClient.
@@ -118,6 +124,33 @@ export class VolatileLayerClient {
     }
 
     /**
+     * Fetches data of a tile or its closest ancestor.
+     *
+     * @param request The `TileRequest` instance that contains a complete set
+     * of request parameters.
+     *
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * @returns The data from the requested partition or its closest ancestor.
+     */
+    async getAggregatedData(
+        request: TileRequest,
+        abortSignal?: AbortSignal
+    ): Promise<Response> {
+        return getTile(
+            request,
+            {
+                catalogHrn: HRN.fromString(this.hrn),
+                layerId: this.layerId,
+                layerType: "volatile",
+                settings: this.settings
+            },
+            abortSignal
+        );
+    }
+
+    /**
      * Fetches partition data using one of the following methods: ID, quadkey, or data handle.
      *
      * @param dataRequest The [[DataRequest]] instance of the configured request parameters.
@@ -164,29 +197,40 @@ export class VolatileLayerClient {
             }
 
             if (quadKey) {
-                const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest().withQuadKey(
-                    quadKey
+                const mortonCode = `${mortonCodeFromQuadKey(quadKey)}`;
+                const noContentError = new HttpError(
+                    204,
+                    `No dataHandle for quadKey {column: ${quadKey.column}, row: ${quadKey.row}, level: ${quadKey.level}}. HRN: ${this.hrn}`
                 );
-                const quadTreeIndex = await this.getPartitions(
-                    quadKeyPartitionsRequest
-                ).catch(error => Promise.reject(error));
 
-                if (quadTreeIndex.status && quadTreeIndex.status === 400) {
-                    return Promise.reject(quadTreeIndex);
+                const quadTreeIndexResponse = await fetchQuadTreeIndex({
+                    catalogHrn: HRN.fromString(this.hrn),
+                    fetchOptions: dataRequest.getFetchOption(),
+                    layerId: this.layerId,
+                    layerType: "volatile",
+                    quadKey,
+                    settings: this.settings,
+                    abortSignal,
+                    billingTag: dataRequest.getBillingTag()
+                });
+
+                if (!quadTreeIndexResponse.subQuads) {
+                    return Promise.reject(noContentError);
                 }
 
-                return quadTreeIndex.subQuads && quadTreeIndex.subQuads.length
-                    ? this.downloadPartition(
-                          quadTreeIndex.subQuads[0].dataHandle,
-                          abortSignal,
-                          dataRequest.getBillingTag()
-                      )
-                    : Promise.reject(
-                          new HttpError(
-                              204,
-                              `No dataHandle for quadKey {column: ${quadKey.column}, row: ${quadKey.row}, level: ${quadKey.level}}. HRN: ${this.hrn}`
-                          )
-                      );
+                const subQuad = quadTreeIndexResponse.subQuads.find(
+                    item => item.subQuadKey === mortonCode
+                );
+
+                if (!subQuad) {
+                    return Promise.reject(noContentError);
+                }
+
+                return this.downloadPartition(
+                    subQuad.dataHandle,
+                    abortSignal,
+                    dataRequest.getBillingTag()
+                );
             }
         }
 

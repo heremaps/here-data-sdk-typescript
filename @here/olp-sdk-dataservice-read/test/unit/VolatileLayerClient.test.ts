@@ -403,14 +403,14 @@ describe("VolatileLayerClient", () => {
             subQuads: [
                 {
                     version: 12,
-                    subQuadKey: "1",
+                    subQuadKey: "23618403",
                     dataHandle: "c9116bb9-7d00-44bf-9b26-b4ab4c274665"
                 }
             ],
             parentQuads: [
                 {
                     version: 12,
-                    partition: "23618403",
+                    partition: "2361840300",
                     dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
                 }
             ]

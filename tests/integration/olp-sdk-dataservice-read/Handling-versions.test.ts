@@ -260,14 +260,14 @@ describe("Handling versions in the requests classes and clients", () => {
           compressedDataSize: 200,
           dataHandle: "1b2ca68f-d4a0-4379-8120-cd025640510c",
           dataSize: 1024,
-          subQuadKey: "string",
+          subQuadKey: "23605706",
           version: 1
         }
       ]
     };
 
     mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0`,
+      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/92209/depths/4`,
       new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
@@ -297,7 +297,7 @@ describe("Handling versions in the requests classes and clients", () => {
 
     expect(callsToApi.length).equals(3); // 1 - lookup api, 1 - the Query API, 1 - blob API
     expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0"
+      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/92209/depths/4"
     );
   });
 
@@ -572,14 +572,14 @@ describe("Handling versions in the requests classes and clients", () => {
           compressedDataSize: 200,
           dataHandle: "1b2ca68f-d4a0-4379-8120-cd025640510c",
           dataSize: 1024,
-          subQuadKey: "string",
+          subQuadKey: "23605706",
           version: 1
         }
       ]
     };
 
     mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/23605706/depths/0`,
+      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/92209/depths/4`,
       new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
@@ -607,7 +607,7 @@ describe("Handling versions in the requests classes and clients", () => {
 
     expect(callsToApi.length).equals(3); // 1 - lookup api, 1 - the Query API, 1 - blob API
     expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/23605706/depths/0"
+      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/92209/depths/4"
     );
   });
 
@@ -924,7 +924,7 @@ describe("Handling versions in the requests classes and clients", () => {
           compressedDataSize: 200,
           dataHandle: "1b2ca68f-d4a0-4379-8120-cd025640510c",
           dataSize: 1024,
-          subQuadKey: "string",
+          subQuadKey: "23605706",
           version: 1
         }
       ]
@@ -936,7 +936,7 @@ describe("Handling versions in the requests classes and clients", () => {
     );
 
     mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0`,
+      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/92209/depths/4`,
       new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
@@ -965,7 +965,7 @@ describe("Handling versions in the requests classes and clients", () => {
 
     expect(client["version"]).equals(0);
     expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0"
+      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/92209/depths/4"
     );
   });
 

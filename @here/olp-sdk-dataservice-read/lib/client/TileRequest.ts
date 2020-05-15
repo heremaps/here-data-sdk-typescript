@@ -20,11 +20,11 @@
 import {
     FetchOptions,
     HRN,
-    OlpClientSettings,
-    RequestFactory
+    OlpClientSettings
 } from "@here/olp-sdk-core";
-import { MetadataApi } from "@here/olp-sdk-dataservice-api";
 import { QuadKey, validateBillingTag } from "..";
+
+// tslint:disable: deprecation
 
 /**
  * Parameters used to get a tile.
@@ -34,6 +34,10 @@ export interface TileRequestParams {
     settings: OlpClientSettings;
     layerId: string;
     layerType: "versioned" | "volatile";
+
+    /**
+     * @deprecated This parameter will be removed by 10.2020. Please use withCatalogVersion().
+     */
     catalogVersion?: number;
 }
 
@@ -52,8 +56,7 @@ export interface TileRequestParams {
  *       settings: "% your `OlpClientSettings` instance % ",
  *       catalogHrn: "% the HRN instance of your catalog %",
  *       layerId: "% your layer ID %",
- *       layerType: "% versioned or volatile %",
- *       catalogVersion: "% the catalog version; for versioned layers, the latest version is used by default %"
+ *       layerType: "% versioned or volatile %"
  *   }
  *
  *  const request = new TileRequest(params);
@@ -70,29 +73,25 @@ export class TileRequest {
     private fetchOption = FetchOptions.OnlineIfNotFound;
     private catalogVersion?: number;
 
-    constructor(private readonly params: TileRequestParams) {
-        this.catalogVersion = params.catalogVersion;
+    /**
+     * @deprecated This parameter will be removed by 10.2020.
+     * Please set parrams to the getTile function directly as a second argument.
+     *
+     * @param params Parameters for TileRequest
+     */
+    constructor(private params?: TileRequestParams) {
+        if (params && params.catalogVersion !== undefined) {
+            this.catalogVersion = params.catalogVersion;
+        }
     }
 
     /**
      * Gets the catalog version provided by the [[TileRequestParams]].
      *
      * @return The catalog version provided by the [[TileRequestParams]].
-     * If this version was not provided, the latest version is fetched and used.
      */
-    public async getCatalogVersion(): Promise<number> {
-        if (this.catalogVersion !== undefined) {
-            return Promise.resolve(this.catalogVersion);
-        }
-
-        this.catalogVersion = await this.getCatalogLatestVersion().catch(err =>
-            Promise.reject(err)
-        );
-        return this.catalogVersion !== undefined
-            ? Promise.resolve(this.catalogVersion)
-            : Promise.reject(
-                  new Error("Error getting the latest version of catalog")
-              );
+    public async getCatalogVersion(): Promise<number | undefined> {
+        return Promise.resolve(this.catalogVersion);
     }
 
     /**
@@ -100,8 +99,19 @@ export class TileRequest {
      *
      * @return The [[TileRequestParams]] instance.
      */
-    public getParams(): TileRequestParams {
+    public getParams(): TileRequestParams | undefined {
         return this.params;
+    }
+
+    /**
+     * Sets the catalogVersion.
+     * The latest version will be used for versioned layer if not set.
+     *
+     * @return The [[TileRequestParams]] instance.
+     */
+    public withCatalogVersion(version: number) {
+        this.catalogVersion = version;
+        return this;
     }
 
     /**
@@ -171,29 +181,5 @@ export class TileRequest {
      */
     public getFetchOption(): FetchOptions {
         return this.fetchOption;
-    }
-
-    /**
-     * Gets the latest available catalog version.
-     *
-     * @return The latest available catalog version.
-     */
-    private async getCatalogLatestVersion(): Promise<number> {
-        const request = await RequestFactory.create(
-            "metadata",
-            "v1",
-            this.params.settings,
-            this.params.catalogHrn
-        ).catch(error =>
-            Promise.reject(
-                `Erorr creating request object for metadata service: ${error}`
-            )
-        );
-
-        const latestVersion = await MetadataApi.latestVersion(request, {
-            startVersion: -1
-        }).catch(error => Promise.reject(error));
-
-        return Promise.resolve(latestVersion.version);
     }
 }

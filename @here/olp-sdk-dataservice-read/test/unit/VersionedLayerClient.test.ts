@@ -270,14 +270,14 @@ describe("VersionedLayerClient", () => {
             subQuads: [
                 {
                     version: 12,
-                    subQuadKey: "1",
+                    subQuadKey: "23618403",
                     dataHandle: "c9116bb9-7d00-44bf-9b26-b4ab4c274665"
                 }
             ],
             parentQuads: [
                 {
                     version: 12,
-                    partition: "23618403",
+                    partition: "23618403999",
                     dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
                 }
             ]
@@ -316,7 +316,7 @@ describe("VersionedLayerClient", () => {
     it("Should method getData return Error without dataRequest parameters", async () => {
         const mockedErrorResponse =
             "No data provided. Add dataHandle, partitionId or quadKey to the DataRequest object";
-        const dataRequest = new dataServiceRead.DataRequest();
+        const dataRequest = new dataServiceRead.DataRequest().withVersion(999);
 
         const response = await versionedLayerClient
             .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
@@ -408,7 +408,7 @@ describe("VersionedLayerClient", () => {
         };
 
         getQuadTreeIndexStub.callsFake((builder: any, params: any): any => {
-            return Promise.resolve(mockedPartitionsIdData);
+            return Promise.reject(mockedPartitionsIdData);
         });
 
         const response = await versionedLayerClient

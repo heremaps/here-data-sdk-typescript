@@ -611,21 +611,21 @@ describe("VersionedLayerClient", () => {
       subQuads: [
         {
           version: 12,
-          subQuadKey: "1",
+          subQuadKey: "23618403",
           dataHandle: "c9116bb9-7d00-44bf-9b26-b4ab4c274665"
         }
       ],
       parentQuads: [
         {
           version: 12,
-          partition: "23618403",
+          partition: "23618403999",
           dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
         }
       ]
     };
 
     mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/versions/42/quadkeys/23618403/depths/0`,
+      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/versions/42/quadkeys/92259/depths/4`,
       new Response(JSON.stringify(mockedQuadKeyTreeData), { headers })
     );
 
@@ -708,21 +708,21 @@ describe("VersionedLayerClient", () => {
       subQuads: [
         {
           version: 12,
-          subQuadKey: "1",
+          subQuadKey: "23618403",
           dataHandle: "c9116bb9-7d00-44bf-9b26-b4ab4c274665"
         }
       ],
       parentQuads: [
         {
           version: 12,
-          partition: "23618403",
+          partition: "23618403999",
           dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
         }
       ]
     };
 
     mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/versions/42/quadkeys/23618403/depths/0`,
+      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/versions/42/quadkeys/92259/depths/4`,
       new Response(JSON.stringify(mockedQuadKeyTreeData), { headers })
     );
 
