@@ -83,7 +83,7 @@ export interface Message {
 export interface Metadata {
     /**
      * A key that specifies which
-     * [Partition](https://developer.here.com/olp/documentation/data-user-guide/shared_content/topics/olp/concepts/partitions.html)
+     * [Partition](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/partitions.html)
      * the content is related to. This is provided by the user while producing to the stream layer.
      * The maximum length of the partition key is 500 characters.
      */
@@ -152,7 +152,7 @@ export type KafkaProtocolVersionEnum = "0.10";
 export interface StreamOffset {
     /**
      * The partition of the stream layer for which this offset applies. It is not the same as
-     * [Partitions object](https://developer.here.com/olp/documentation/data-user-guide/shared_content/topics/olp/concepts/partitions.html).
+     * [Partitions object](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/partitions.html).
      */
     partition: number;
     /**
@@ -182,7 +182,7 @@ export interface StreamOffset {
  * @param subscriptionId The subscriptionId received in the response of the /subscribe request (required if mode&#x3D;parallel).
  * @param mode The subscription mode of this subscriptionId (as provided in /subscribe POST API).
  * @param xCorrelationId The correlation-id (value of Response Header &#39;X-Correlation-Id&#39;) from prior step in process.
- *  See the [API Reference](https://developer.here.com/olp/documentation/data-store/api-reference.html) for the &#x60;stream&#x60; API
+ *  See the [API Reference](https://developer.here.com/olp/documentation/data-api/api-reference.html) for the &#x60;stream&#x60; API
  */
 export async function commitOffsets(
     builder: RequestBuilder,
@@ -233,7 +233,7 @@ export async function commitOffsets(
  * @param subscriptionId The subscriptionId received in the response of the /subscribe request (required if mode&#x3D;parallel).
  * @param mode The subscription mode of this subscriptionId (as provided in /subscribe POST API).
  * @param xCorrelationId The correlation-id (value of Response Header &#39;X-Correlation-Id&#39;) from prior step in process.
- *  See the [API Reference](https://developer.here.com/olp/documentation/data-store/api-reference.html) for the &#x60;stream&#x60; API
+ *  See the [API Reference](https://developer.here.com/olp/documentation/data-api/api-reference.html) for the &#x60;stream&#x60; API
  */
 export async function doCommitOffsets(
     builder: RequestBuilder,
@@ -281,7 +281,7 @@ export async function doCommitOffsets(
  * @param subscriptionId The subscriptionId received in the response of the /subscribe request (required if mode&#x3D;parallel).
  * @param mode The subscription mode of this subscriptionId (as provided in /subscribe POST API).
  * @param xCorrelationId The correlation-id (value of Response Header &#39;X-Correlation-Id&#39;) from prior step in process.
- * See the [API Reference](https://developer.here.com/olp/documentation/data-store/api-reference.html) for the &#x60;stream&#x60; API
+ * See the [API Reference](https://developer.here.com/olp/documentation/data-api/api-reference.html) for the &#x60;stream&#x60; API
  */
 export async function consumeData(
     builder: RequestBuilder,
@@ -464,17 +464,17 @@ export async function seekToOffset(
  * one unit of parallelism currently equals 1 MBps inbound or 2 MBps outbound, whichever is greater, rounded up to the nearest integer.
  * The number of subscriptions within the same group cannot exceed the parallelism allowed.
  * For more details see
- * [Get Data from a Stream Layer](https://developer.here.com/olp/documentation/data-store/data_dev_guide/rest/getting-data-stream.html).
+ * [Get Data from a Stream Layer](https://developer.here.com/olp/documentation/data-api/data_dev_guide/rest/getting-data-stream.html).
  *
  * @summary Enable message consumption from a specific stream layer.
  * @param layerId The ID of the stream layer.
  * @param mode Specifies whether to use serial or parallel subscription mode. For more details see
- * [Get Data from a Stream Layer](https://developer.here.com/olp/documentation/data-store/data_dev_guide/rest/getting-data-stream.html).
+ * [Get Data from a Stream Layer](https://developer.here.com/olp/documentation/data-api/data_dev_guide/rest/getting-data-stream.html).
  * @param subscriptionId Include this parameter if you want to look up the &#x60;nodeBaseURL&#x60; for a given subscriptionId.
  * @param consumerId The ID to use to identify this consumer. It must be unique within the consumer group.
  * If you do not provide one, the system will generate one.
  * @param subscriptionProperties One or more Kafka Consumer properties to use for this subscription. For more information, see
- * [Get Data from a Stream Layer](https://developer.here.com/olp/documentation/data-store/data_dev_guide/rest/getting-data-stream.html).
+ * [Get Data from a Stream Layer](https://developer.here.com/olp/documentation/data-api/data_dev_guide/rest/getting-data-stream.html).
  */
 export async function subscribe(
     builder: RequestBuilder,

@@ -20,7 +20,7 @@
 import { validateBillingTag } from "..";
 
 /**
- * Prepares information for calls to get catalog metadata from the OLP Config Service.
+ * Prepares information for calls to get catalog metadata from the platform Config Service.
  */
 export class CatalogRequest {
     private billingTag?: string;

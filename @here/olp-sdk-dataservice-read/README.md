@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository contains the complete source code for the HERE OLP SDK for TypeScript Dataservice Read `@here/olp-sdk-dataservice-read` project. `olp-sdk-dataservice-read` is a TypeScript library that will fetch request Layer and Partition data from the OLP catalogs.
+This repository contains the complete source code for the HERE Data SDK for TypeScript Dataservice Read `@here/olp-sdk-dataservice-read` project. `olp-sdk-dataservice-read` is a TypeScript library that will fetch request Layer and Partition data from the HERE platform catalogs.
 
 ## Directory Layout
 

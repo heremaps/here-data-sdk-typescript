@@ -20,7 +20,7 @@
 import { HRN, validateBillingTag } from "..";
 
 /**
- * A map type that is supported by the OLP Statistics Service.
+ * A map type that is supported by the platform Statistics Service.
  */
 export enum CoverageDataType {
     /** Represents the availability of data in partitions. */
@@ -32,7 +32,7 @@ export enum CoverageDataType {
 }
 
 /**
- *  Prepares information for calls to get statistics from the OLP Statistics Service.
+ *  Prepares information for calls to get statistics from the platform Statistics Service.
  */
 export class StatisticsRequest {
     private catalogHrn?: string;
@@ -60,7 +60,7 @@ export class StatisticsRequest {
     }
 
     /**
-     * Gets a map type that is supported by the OLP Statistics Service.
+     * Gets a map type that is supported by the platform Statistics Service.
      *
      * @return The requested map type.
      */

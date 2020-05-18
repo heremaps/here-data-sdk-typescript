@@ -1,4 +1,4 @@
-# Here Data SDK Core Library
+# HERE Data SDK Core Library
 
 ## Overview
 

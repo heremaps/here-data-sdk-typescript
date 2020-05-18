@@ -20,7 +20,7 @@
 import { validateBillingTag } from "..";
 
 /**
- * Prepares information for calls to get catalogs from the OLP Config Service.
+ * Prepares information for calls to get catalogs from the platform Config Service.
  */
 export class CatalogsRequest {
     private schemaHrn?: string;

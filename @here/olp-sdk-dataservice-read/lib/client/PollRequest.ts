@@ -18,7 +18,7 @@
  */
 
 /**
- * Prepares information for calls to the OLP Stream Service.
+ * Prepares information for calls to the platform Stream Service.
  */
 export class PollRequest {
     private mode?: "serial" | "parallel";

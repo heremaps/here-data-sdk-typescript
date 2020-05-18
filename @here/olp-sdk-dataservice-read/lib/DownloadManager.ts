@@ -18,7 +18,7 @@
  */
 
 /**
- * It's an interface for `@here/olp-sdk-dataservice-api` that is used to send requests to OLP services.
+ * It's an interface for `@here/olp-sdk-dataservice-api` that is used to send requests to platform services.
  * [[DataStoreRequestBuilder]] has its own default implementation of the download manager.
  * If you want to use your download manager, you can implement this interface, and then set your download manager.
  *

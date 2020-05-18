@@ -19,7 +19,7 @@
 
 /**
  * Statistics API
- * API to retrieve statistics for the data coverage of the OLP catalogs.
+ * API to retrieve statistics for the data coverage of the HERE platform catalogs.
  *  It shows where data exists, freshness of the data and other statistics
  *
  * OpenAPI spec version: 2.0.0

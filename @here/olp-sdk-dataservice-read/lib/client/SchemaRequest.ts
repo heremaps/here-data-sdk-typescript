@@ -21,7 +21,7 @@ import { ArtifactApi } from "@here/olp-sdk-dataservice-api";
 import { validateBillingTag } from "..";
 
 /**
- * Prepares information for calls to the OLP Artifact Service.
+ * Prepares information for calls to the platform Artifact Service.
  */
 export class SchemaRequest {
     private variant?: ArtifactApi.Variant;

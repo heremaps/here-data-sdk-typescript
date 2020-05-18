@@ -1,12 +1,12 @@
 # Read from a Volatile Layer
 
-This example shows how to retrieve partition metadata and partition data from a volatile layer on Node.js using the OLP SDK for TypeScript.
+This example shows how to retrieve partition metadata and partition data from a volatile layer on Node.js using the HERE Data SDK for TypeScript.
 
 ## Build and Run an Application on Node.js
 
 Before you build an application, make sure that you installed all of the dependencies. For more information on the dependencies, see the [related section](../../README.md#Dependencies) in the README file.
 
-To build and run an application on Node.js:
+**To build and run an application on Node.js:**
 
 1. Create an npm project.
 
@@ -63,13 +63,15 @@ After a successful run, the console displays the following message:
 App works!
 ```
 
-## <a name="authenticate-using-client-credentials"></a>Authenticate to HERE OLP Using Client Credentials
+## <a name="authenticate-using-client-credentials"></a>Authenticate to the HERE Platform Using Client Credentials
 
-To authenticate with the Open Location Platform (OLP), you must get platform credentials that contain the access key ID and access key secret.
+To authenticate with the HERE platform, you must get platform credentials that contain the access key ID and access key secret.
 
-To authenticate using client credentials:
+**To authenticate using client credentials:**
 
-1. Get your platform credentials. For instructions, see the [Get Credentials](https://developer.here.com/olp/documentation/access-control/user-guide/topics/get-credentials.html) section in the Terms and Permissions User Guide.
+1. Get your platform credentials.
+
+   For instructions, see the [Get Credentials](https://developer.here.com/olp/documentation/access-control/user-guide/topics/get-credentials.html) section in the Terms and Permissions User Guide.
 
    You get the `credentials.properties` file.
 
@@ -109,7 +111,7 @@ To authenticate using client credentials:
    });
    ```
 
-5. Get the OAuth 2.0 token from OLP using the `getToken` method.
+5. Get the OAuth 2.0 token from the HERE platform using the `getToken` method.
 
    ```typescript
    const token: string = await userAuth.getToken();
@@ -119,11 +121,11 @@ You can use the `UserAuth` instance to create the `OlpClientSettings` object.
 
 ## <a name="create-olpclientsettings"></a>Create `OlpClientSettings`
 
-You need to create the `OlpClientSettings` object to get catalog and partition metadata, as well as layer data from the Open Location Platform (OLP).
+You need to create the `OlpClientSettings` object to get catalog and partition metadata, as well as layer data from the HERE platform.
 
-To create the `OlpClientSettings` object:
+**To create the `OlpClientSettings` object:**
 
-1. [Authenticate](#authenticate-using-client-credentials) to the Open Location Platform (OLP).
+1. [Authenticate](#authenticate-using-client-credentials) to the HERE platform.
 
 2. Import the `OlpClientSettings` class from the `olp-sdk-dataservice-read` module.
 
@@ -145,15 +147,17 @@ To create the `OlpClientSettings` object:
 
 You can use the `VolatileLayerClient` object to get the latest published data and partition metadata from a [volatile layer](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/layers.html#volatile-layers).
 
-To create the `VolatileLayerClient` object:
+**To create the `VolatileLayerClient` object:**
 
 1. Get an access key ID and access key secret.
-   For instructions, see [Authenticate to HERE OLP Using Client Credentials](#authenticate-using-client-credentials).
+
+   For instructions, see [Authenticate to the HERE Platform Using Client Credentials](#authenticate-using-client-credentials).
 
 2. Create the `OlpClientSettings` object.
+
    For instructions, see [Create OlpClientSettings](#create-olpclientsettings).
 
-3. Create the `VolatileLayerClient` object with VolatileLayerClientParams that contains the HERE Resource Name (HRN) of the catalog, the layer ID, and the OLP client settings from step 2.
+3. Create the `VolatileLayerClient` object with VolatileLayerClientParams that contains the HERE Resource Name (HRN) of the catalog, the layer ID, and the platform client settings from step 2.
 
    ```typescript   
    const volatileLayerClient = new VolatileLayerClient(
@@ -167,9 +171,10 @@ To create the `VolatileLayerClient` object:
 
 ## Get Data from a Volatile Layer
 
-To get data from the volatile layer:
+**To get data from the volatile layer:**
 
 1. Create the `VolatileLayerClient` object.
+
    For instructions, see [Create VolatileLayerClient](#create-volatilelayerclient).
 
 2. Create the `DataRequest` object with the partition ID.
@@ -212,21 +217,22 @@ Partition metadata from a volatile layer consists of the following information a
 
 You can get partition metadata in one of the following ways:
 
-- Using the OLP Metadata Service
-- Using the OLP Query Service
+- Using the platform Metadata Service
+- Using the platform Query Service
 
-You can get partition metadata using the OLP Query Service only if the partition has the HERE tile scheme. For more information on the HERE tile scheme, see [Partitions](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/partitions.html).
+You can get partition metadata using the platform Query Service only if the partition has the HERE tile scheme. For more information on the HERE tile scheme, see [Partitions](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/partitions.html).
 
-For performance reasons, it is best to use the OLP Query Service to get metadata for a specific partition. For batch processes, and to get metadata for many partitions or all partitions in a layer, use the OLP Metadata Service.
+For performance reasons, it is best to use the platform Query Service to get metadata for a specific partition. For batch processes, and to get metadata for many partitions or all partitions in a layer, use the platform Metadata Service.
 
-To get partition metadata from a volatile layer:
+**To get partition metadata from a volatile layer:**
 
 1. Create the `VolatileLayerClient` object.
+
    For instructions, see [Create VolatileLayerClient](#create-volatilelayerclient).
 
 2. Do one of the following:
 
-   - (For partitions with the HERE tile scheme) To get partition metadata using the OLP Metadata Service:
+   - (For partitions with the HERE tile scheme) To get partition metadata using the platform Metadata Service:
 
      1. Create the `QuadKeyPartitionsRequest` object with the quadkey and the number of child partitions (from 0 to 4).
 
@@ -247,7 +253,7 @@ To get partition metadata from a volatile layer:
 
      You get the quadkey tree index with metadata for the requested partition and its parent and children partitions.
 
-   - To get partition metadata using the OLP Metadata Service:
+   - To get partition metadata using the platform Metadata Service:
 
      1. Create the `PartitionsRequest` object.
 

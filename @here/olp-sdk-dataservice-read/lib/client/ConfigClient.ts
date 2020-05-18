@@ -21,7 +21,7 @@ import { ConfigApi } from "@here/olp-sdk-dataservice-api";
 import { CatalogsRequest, OlpClientSettings, RequestFactory } from "..";
 
 /**
- * A client for the OLP Config Service.
+ * A client for the platform Config Service.
  */
 export class ConfigClient {
     private readonly apiVersion = "v1";
