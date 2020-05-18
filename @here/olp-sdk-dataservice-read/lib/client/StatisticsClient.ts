@@ -29,7 +29,7 @@ import {
 } from "..";
 
 /**
- * A client for the OLP Statistics Service.
+ * A client for the platform Statistics Service.
  */
 export class StatisticsClient {
     private readonly apiVersion: string = "v1";
@@ -44,7 +44,7 @@ export class StatisticsClient {
     constructor(private readonly settings: OlpClientSettings) {}
 
     /**
-     * Fetches and returns a layer summary from the OLP Statistics Service.
+     * Fetches and returns a layer summary from the platform Statistics Service.
      *
      * @param summaryRequest Parameters that are needed to fetch the layer summary.
      * Includes [[catalogHrn]] and [[layerId]].

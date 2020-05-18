@@ -20,7 +20,7 @@
 import { StreamApi } from "@here/olp-sdk-dataservice-api";
 
 /**
- * Prepares information for calls to the OLP Stream Service.
+ * Prepares information for calls to the platform Stream Service.
  */
 export class SeekRequest {
     private mode?: "serial" | "parallel";

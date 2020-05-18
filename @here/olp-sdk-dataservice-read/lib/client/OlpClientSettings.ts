@@ -61,7 +61,7 @@ export interface OlpClientSettingsParams {
 }
 
 /**
- * Сonfigures the behaviour of the OLP clients (for example, [[CatalogClient]] or [[VersionedLayerClient]]).
+ * Сonfigures the behaviour of the platform clients (for example, [[CatalogClient]] or [[VersionedLayerClient]]).
  */
 export class OlpClientSettings {
     private keyValueCache: KeyValueCache;

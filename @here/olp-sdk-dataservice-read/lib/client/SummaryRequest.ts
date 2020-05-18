@@ -20,7 +20,7 @@
 import { HRN, validateBillingTag } from "..";
 
 /**
- * Prepares information for calls to get a summary from the OLP Statistics Service.
+ * Prepares information for calls to get a summary from the platform Statistics Service.
  */
 export class SummaryRequest {
     private catalogHrn?: string;

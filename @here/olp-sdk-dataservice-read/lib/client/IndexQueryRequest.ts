@@ -18,7 +18,7 @@
  */
 
 /**
- * Prepares information for calls to get partitions metadata from the OLP Index Service.
+ * Prepares information for calls to get partitions metadata from the platform Index Service.
  */
 export class IndexQueryRequest {
     private queryString?: string;

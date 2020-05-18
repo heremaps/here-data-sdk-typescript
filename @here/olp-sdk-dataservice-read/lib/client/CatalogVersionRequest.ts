@@ -20,7 +20,7 @@
 import { validateBillingTag } from "..";
 
 /**
- * Prepares information for calls to the OLP Artifact Service.
+ * Prepares information for calls to the platform Artifact Service.
  */
 export class CatalogVersionRequest {
     private startVersion?: number;

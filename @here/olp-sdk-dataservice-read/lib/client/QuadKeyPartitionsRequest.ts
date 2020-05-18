@@ -21,7 +21,7 @@ import { AdditionalFields } from "@here/olp-sdk-dataservice-api";
 import { QuadKey, QuadTreeIndexDepth, validateBillingTag } from "..";
 
 /**
- * Prepares information for calls to get quadtree metadata from the OLP Query Service.
+ * Prepares information for calls to get quadtree metadata from the platform Query Service.
  *
  * This class works only with versioned and volatile layers where the partitioning scheme is HERE Tile.
  */

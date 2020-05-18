@@ -21,7 +21,7 @@ import { HRN } from "../HRN";
 import { KeyValueCache } from "./KeyValueCache";
 
 /**
- * The list of the API endpoints names that the Open Location Platform (OLP) SDK for Typescript uses.
+ * The list of the API endpoints names that the HERE Data SDK for TypeScript uses.
  */
 export type ApiName =
     | "config"

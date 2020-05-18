@@ -26,13 +26,13 @@ import {
 } from "..";
 
 /**
- * Gets schema metadata and data from the OLP Artifact Service.
+ * Gets schema metadata and data from the platform Artifact Service.
  */
 export class ArtifactClient {
     private readonly apiVersion = "v1";
 
     /**
-     * Constructs a new client to work with schemas data in the OLP Artifact Service.
+     * Constructs a new client to work with schemas data in the platform Artifact Service.
      *
      * @param settings The [[OlpClientSettings]] instance.
      * @return The [[ArtifactClient]] instance.

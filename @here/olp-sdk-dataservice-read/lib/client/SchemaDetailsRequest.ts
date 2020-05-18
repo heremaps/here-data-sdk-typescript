@@ -20,7 +20,7 @@
 import { HRN, validateBillingTag } from "..";
 
 /**
- * Prepares information for calls to the OLP Artifact Service.
+ * Prepares information for calls to the platform Artifact Service.
  */
 export class SchemaDetailsRequest {
     private schemaHrn?: HRN;

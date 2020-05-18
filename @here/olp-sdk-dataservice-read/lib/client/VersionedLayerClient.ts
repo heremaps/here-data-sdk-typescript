@@ -259,8 +259,8 @@ export class VersionedLayerClient {
      * @returns A list of metadata for each of the partitions from the requested layer.
      *
      * If the partition IDs are not set, you get metadata from all of the partitions of the requested layer
-     * from the OLP Metadata Service.
-     * If the IDs are set, you get data from the OLP Query Service.
+     * from the platform Metadata Service.
+     * If the IDs are set, you get data from the platform Query Service.
      */
     async getPartitions(
         partitionsRequest: PartitionsRequest,

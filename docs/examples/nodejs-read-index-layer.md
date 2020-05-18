@@ -1,12 +1,12 @@
 # Read from an Index Layer
 
-This example shows how to retrieve partition metadata and partition data from an index layer on Node.js using the OLP SDK for TypeScript.
+This example shows how to retrieve partition metadata and partition data from an index layer on Node.js using the HERE Data SDK for TypeScript.
 
 ## Build and Run an Application on Node.js
 
 Before you build an application, make sure that you installed all of the dependencies. For more information on the dependencies, see the [related section](../../README.md#Dependencies) in the README file.
 
-To build and run an application on Node.js:
+**To build and run an application on Node.js:**
 
 1. Create an npm project.
 
@@ -63,13 +63,15 @@ After a successful run, the console displays the following message:
 App works!
 ```
 
-## <a name="authenticate-using-client-credentials"></a>Authenticate to HERE OLP Using Client Credentials
+## <a name="authenticate-using-client-credentials"></a>Authenticate to the HERE Platform Using Client Credentials
 
-To authenticate with the Open Location Platform (OLP), you must get platform credentials that contain the access key ID and access key secret.
+To authenticate with the HERE platform, you must get platform credentials that contain the access key ID and access key secret.
 
-To authenticate using client credentials:
+**To authenticate using client credentials:**
 
-1. Get your platform credentials. For instructions, see the [Get Credentials](https://developer.here.com/olp/documentation/access-control/user-guide/topics/get-credentials.html) section in the Terms and Permissions User Guide.
+1. Get your platform credentials.
+
+   For instructions, see the [Get Credentials](https://developer.here.com/olp/documentation/access-control/user-guide/topics/get-credentials.html) section in the Terms and Permissions User Guide.
 
    You get the `credentials.properties` file.
 
@@ -109,7 +111,7 @@ To authenticate using client credentials:
    });
    ```
 
-5. Get the OAuth 2.0 token from OLP using the `getToken` method.
+5. Get the OAuth 2.0 token from the HERE platform using the `getToken` method.
 
    ```typescript
    const token: string = await userAuth.getToken();
@@ -119,11 +121,11 @@ You can use the `UserAuth` instance to create the `OlpClientSettings` object.
 
 ## <a name="create-olpclientsettings"></a>Create `OlpClientSettings`
 
-You need to create the `OlpClientSettings` object to get catalog and partition metadata, as well as layer data from the Open Location Platform (OLP).
+You need to create the `OlpClientSettings` object to get catalog and partition metadata, as well as layer data from the HERE platform.
 
-To create the `OlpClientSettings` object:
+**To create the `OlpClientSettings` object:**
 
-1. [Authenticate](#authenticate-using-client-credentials) to the Open Location Platform (OLP).
+1. [Authenticate](#authenticate-using-client-credentials) to the HERE platform.
 
 2. Import the `OlpClientSettings` class from the `olp-sdk-dataservice-read` module.
 
@@ -145,15 +147,17 @@ To create the `OlpClientSettings` object:
 
 You can use the `IndexLayerClient` object to request any data and partition metadata from an [index layer](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/layers.html#index-layers).
 
-To create the `IndexLayerClient` object:
+**To create the `IndexLayerClient` object:**
 
 1. Get an access key ID and access key secret.
-   For instructions, see [Authenticate to HERE OLP Using Client Credentials](#authenticate-using-client-credentials).
+
+   For instructions, see [Authenticate to the HERE Platform Using Client Credentials](#authenticate-using-client-credentials).
 
 2. Create the `OlpClientSettings` object.
+
    For instructions, see [Create OlpClientSettings](#create-olpclientsettings).
 
-3. Create the `IndexLayerClient` object IndexLayerClientParams that contains the HERE Resource Name (HRN) of the catalog, the layer ID, and the OLP client settings from step 2.
+3. Create the `IndexLayerClient` object IndexLayerClientParams that contains the HERE Resource Name (HRN) of the catalog, the layer ID, and the platform client settings from step 2.
 
    ```typescript
    const indexLayerClient = await new IndexLayerClient(
@@ -175,9 +179,10 @@ Partition metadata from an index layer consists of the following information abo
 - Metadata
 - Timestamp
 
-To get partition metadata from an index layer:
+**To get partition metadata from an index layer:**
 
 1. Create the `IndexLayerClient` object.
+
    For instructions, see [Create IndexLayerClient](#create-IndexlayerClient).
 
 2. Create the `IndexQueryRequest` object with the RSQL query string and, if the query string is huge, set the `huge` boolean parameter to `true`.
@@ -212,9 +217,10 @@ const partitions = await indexLayerClient.getPartitions(
 
 ## Get Data from an Index Layer
 
-To get data from the index layer:
+**To get data from the index layer:**
 
 1. Create the `IndexLayerClient` object.
+
    For instructions, see [Create IndexLayerClient](#create-IndexlayerClient).
 
 2. Call the `GetData` method with the data model that contains the ID property (also used as the data handle).

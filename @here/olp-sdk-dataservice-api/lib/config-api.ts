@@ -263,7 +263,7 @@ export interface Catalog {
     hrn: string;
     /**
      * The ID to use when referring to this catalog programmatically.
-     * Catalog IDs must be unique across all catalogs in the Open Location Platform.
+     * Catalog IDs must be unique across all catalogs in the HERE platform.
      * Do not put private information in the catalog ID. The catalog ID forms a portion of the catalog's HERE Resource Name (HRN),
      * and HRNs are visible to other users.
      */
@@ -396,7 +396,7 @@ export interface CreateCatalog {
     description: string;
     /**
      * The ID to use when referring to this catalog programmatically.
-     * Catalog IDs must be unique across all catalogs in the Open Location Platform.
+     * Catalog IDs must be unique across all catalogs in the HERE platform.
      * Do not put private information in the catalog ID. The catalog ID forms a portion of the catalog's HERE Resource Name (HRN),
      * and HRNs are visible to other users.
      * Only lowercase alphanumeric characters (a-z), digits (0-9) and dash (-) are allowed in a catalog ID.
@@ -531,7 +531,7 @@ export type DeprecatedPartitioningScheme = "generic" | "heretile";
  * The digest algorithm used to calculate the checksum for the partitions in this layer.
  * If specified, you can assume that all partitions in the layer, at every version, were calculated using this algorithm.
  * Note that it is the responsibility of the data publisher to use this algorithm to calculate partition checksums.
- * OLP does not verify that the specified algorithm was actually used.
+ * The HERE platform does not verify that the specified algorithm was actually used.
  */
 export type Digest = "MD5" | "SHA-1" | "SHA-256";
 
