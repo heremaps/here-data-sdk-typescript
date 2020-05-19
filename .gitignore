@@ -6,6 +6,7 @@ coverage
 .nyc_output
 xunit.xml
 *.js
+!webpack.config.js
 *.d.ts
 *.js.map
 app.ts

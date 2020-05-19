@@ -9,3 +9,4 @@ xunit.xml
 *.d.ts
 *.js.map
 app.ts
+!webpack.config.js
