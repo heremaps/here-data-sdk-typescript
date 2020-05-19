@@ -17,17 +17,78 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
+import { assert } from "chai";
+import { LRUCache } from "@here/olp-sdk-core";
 
 describe("LRU", () => {
-    it("Should initialize", () => {
-        const test = true;
-        expect(test).be.equal(true);
+    it("set", () => {
+        const cache = new LRUCache(3);
+        cache.set(1, 1);
+        cache.set(2, 2);
+        cache.set(3, 3);
+
+        assert.strictEqual(cache.get(1), 1);
+        assert.strictEqual(cache.get(2), 2);
+        assert.strictEqual(cache.get(3), 3);
+    });
+
+    it("get", () => {
+        const cache = new LRUCache<number, number>(3);
+        assert.strictEqual(cache.get(1), undefined);
+        assert.strictEqual(cache.get(2), undefined);
+        cache.set(1, 1);
+        cache.set(2, 2);
+        assert.strictEqual(cache.get(1), 1);
+        assert.strictEqual(cache.get(2), 2);
+        assert.strictEqual(cache.get(0), undefined);
+        assert.strictEqual(cache.get(3), undefined);
+    });
+
+    it("overflow", () => {
+        const cache = new LRUCache(3);
+        cache.set(1, 1);
+        cache.set(2, 2);
+        cache.set(3, 3);
+        cache.set(4, 4);
+
+        assert.strictEqual(cache.get(1), undefined);
+        assert.strictEqual(cache.get(2), 2);
+        assert.strictEqual(cache.get(3), 3);
+        assert.strictEqual(cache.get(4), 4);
+    });
+
+    it("clear", () => {
+        const cache = new LRUCache(3);
+        cache.set(1, 1);
+        cache.set(2, 2);
+        cache.clear();
+
+        assert.strictEqual(cache.get(1), undefined);
+        assert.strictEqual(cache.get(2), undefined);
+    });
+
+    it("resize", () => {
+        const cache = new LRUCache<number, number>(2);
+
+        cache.set(1, 1);
+        cache.set(2, 2);
+
+        assert.strictEqual(cache.getSize(), 2);
+        assert.strictEqual(cache.getCapacity(), 2);
+
+        cache.setCapacity(1);
+        assert.strictEqual(cache.getCapacity(), 1);
+        assert.strictEqual(cache.getSize(), 1);
+
+        assert.isFalse(cache.has(1));
+        assert.isTrue(cache.has(2));
+
+        cache.setCapacity(2);
+        cache.set(1, 1);
+
+        assert.strictEqual(cache.getCapacity(), 2);
+        assert.strictEqual(cache.getSize(), 2);
+        assert.isTrue(cache.has(1));
+        assert.isTrue(cache.has(2));
     });
 });

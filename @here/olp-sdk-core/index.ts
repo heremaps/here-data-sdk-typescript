@@ -19,3 +19,5 @@
 
 // tslint:disable-next-line: no-import-side-effect
 import "@here/olp-sdk-fetch";
+
+export * from "./lib";
