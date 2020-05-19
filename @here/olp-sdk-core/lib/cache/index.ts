@@ -17,4 +17,4 @@
  * License-Filename: LICENSE
  */
 
-export * from "./lib";
+export * from "./LRUCache";
