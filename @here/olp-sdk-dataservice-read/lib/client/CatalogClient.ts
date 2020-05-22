@@ -138,7 +138,15 @@ export class CatalogClient {
             }
             requestedCatalogVersion = await this.getLatestVersion(
                 catalogVersionRequest
-            ).catch(async error => Promise.reject(error));
+            ).catch(error => Promise.reject(error));
+        }
+
+        if (requestedCatalogVersion === undefined) {
+            return Promise.reject(
+                new Error(
+                    "Please set version with LayerVersionsRequest.withVersion() method."
+                )
+            );
         }
 
         const layerVersions = await MetadataApi.getLayerVersions(builder, {
