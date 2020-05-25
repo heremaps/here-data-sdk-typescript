@@ -17,4 +17,4 @@
  * License-Filename: LICENSE
  */
 
-export * from "./HelloWorld";
+export * from "./client";

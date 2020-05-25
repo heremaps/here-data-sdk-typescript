@@ -28,9 +28,9 @@ import {
   HRN,
   CatalogsRequest
 } from "@here/olp-sdk-dataservice-read";
-import { FetchMock } from "./FetchMock";
+import { FetchMock } from "../FetchMock";
 import { ConfigApi } from "@here/olp-sdk-dataservice-api";
-import { LIB_VERSION } from "@here/olp-sdk-dataservice-read/lib.version";
+import { LIB_VERSION } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 

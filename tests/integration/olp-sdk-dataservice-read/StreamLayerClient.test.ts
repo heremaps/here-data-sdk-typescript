@@ -29,7 +29,7 @@ import {
   UnsubscribeRequest,
   SeekRequest
 } from "@here/olp-sdk-dataservice-read";
-import { FetchMock } from "./FetchMock";
+import { FetchMock } from "../FetchMock";
 import { Buffer } from "buffer";
 import { Message } from "@here/olp-sdk-dataservice-api/lib/stream-api";
 

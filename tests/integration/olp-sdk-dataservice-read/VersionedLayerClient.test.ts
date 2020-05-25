@@ -21,30 +21,31 @@ import * as sinon from "sinon";
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 import {
-  VolatileLayerClient,
+  VersionedLayerClient,
   OlpClientSettings,
   HRN,
   PartitionsRequest,
   DataRequest,
   quadKeyFromMortonCode,
-  QuadKeyPartitionsRequest
+  QuadKeyPartitionsRequest,
+  FetchOptions
 } from "@here/olp-sdk-dataservice-read";
-import { FetchMock } from "./FetchMock";
+import { FetchMock } from "../FetchMock";
 import { Buffer } from "buffer";
-import { LIB_VERSION } from "@here/olp-sdk-dataservice-read/lib.version";
+import { LIB_VERSION } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("VolatileLayerClient", () => {
+describe("VersionedLayerClient", () => {
   let fetchMock: FetchMock;
   let sandbox: sinon.SinonSandbox;
   let fetchStub: sinon.SinonStub;
 
   const testHRN = HRN.fromString("hrn:here:data:::test-hrn");
-  const testVolatileLayerId = "test-layed-id";
+  const testLayerId = "test-layed-id";
   const headers = new Headers();
   headers.append("cache-control", "max-age=3600");
 
@@ -67,13 +68,13 @@ describe("VolatileLayerClient", () => {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VolatileLayerClient(
+    const layerClient = new VersionedLayerClient(
       HRN.fromString("hrn:here:data:::test-hrn"),
       "test-layed-id",
       settings
     );
     assert.isDefined(layerClient);
-    expect(layerClient).to.be.instanceOf(VolatileLayerClient);
+    expect(layerClient).to.be.instanceOf(VersionedLayerClient);
   });
 
   it("Shoud be initialization error be handled", async () => {
@@ -82,7 +83,7 @@ describe("VolatileLayerClient", () => {
       getToken: () => Promise.resolve("test-token-string")
     });
     try {
-      const layerClient = new VolatileLayerClient(
+      const layerClient = new VersionedLayerClient(
         HRN.fromString("hrn:here:data:::test-hrn"),
         "",
         settings
@@ -90,6 +91,43 @@ describe("VolatileLayerClient", () => {
     } catch (error) {
       expect(error.message).equal("Unsupported parameters");
     }
+  });
+
+  it("Shoud be initialized with VersionedLayerClientParams with version", async () => {
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+
+    const versionedLayerClientParams = {
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
+      settings: settings,
+      version: 5
+    };
+    const layerClientWithVersion = new VersionedLayerClient(
+      versionedLayerClientParams
+    );
+    assert.isDefined(layerClientWithVersion);
+    expect(layerClientWithVersion).to.be.instanceOf(VersionedLayerClient);
+  });
+
+  it("Shoud be initialised with VersionedLayerClientParams without version", async () => {
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+
+    const versionedLayerClientParams = {
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
+      settings
+    };
+    const layerClientWithoutVersion = new VersionedLayerClient(
+      versionedLayerClientParams
+    );
+    assert.isDefined(layerClientWithoutVersion);
+    expect(layerClientWithoutVersion).to.be.instanceOf(VersionedLayerClient);
   });
 
   it("Shoud be fetched partitions metadata for specific IDs", async () => {
@@ -109,15 +147,30 @@ describe("VolatileLayerClient", () => {
               additionalProp2: "string",
               additionalProp3: "string"
             }
+          },
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://query.data.api.platform.here.com/metadata/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
           }
         ]),
         { headers }
       )
     );
 
+    mockedResponses.set(
+      `https://query.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
+      new Response(JSON.stringify({ version: 128 }), { headers })
+    );
+
     // Set the response with mocked partitions for IDs 100 and 1000 from Query service
     mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/partitions?partition=100&partition=1000`,
+      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/partitions?partition=100&partition=1000&version=128`,
       new Response(
         JSON.stringify({
           partitions: [
@@ -153,7 +206,7 @@ describe("VolatileLayerClient", () => {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VolatileLayerClient(
+    const layerClient = new VersionedLayerClient(
       HRN.fromString("hrn:here:data:::test-hrn"),
       "test-layed-id",
       settings
@@ -181,94 +234,13 @@ describe("VolatileLayerClient", () => {
       expect(partitions.partitions[2]).to.be.undefined;
 
       /**
-       * Check if the count of requests are as expected. Should be called 2 times.
+       * Check if the count of requests are as expected. Should be called 3 times.
        * One to the lookup service
-       * for the baseURL to the Query service and another one to the query service.
+       * for the baseURL to the Query service, one for the latest version,
+       * and last one to the query service.
        */
-      expect(fetchStub.callCount).to.be.equal(2);
+      expect(fetchStub.callCount).to.be.equal(3);
     }
-  });
-
-  it("Shoud be fetched data with PartitionId", async () => {
-    const mockedResponses = new Map();
-    const mockedPartitionId = "0000042";
-    const mockedData = Buffer.alloc(42);
-    const mockedPartitionsIdData = {
-      partitions: [
-        {
-          version: 1,
-          partition: "0000042",
-          dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
-        },
-        {
-          version: 42,
-          partition: "0000019",
-          dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
-        }
-      ]
-    };
-
-    // Set the response from lookup api with the info about Query API.
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "query",
-            version: "v1",
-            baseURL: "https://query.data.api.platform.here.com/query/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          },
-          {
-            api: "volatile-blob",
-            version: "v1",
-            baseURL:
-              "https://volatile-blob.data.api.platform.here.com/volatile-blob/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ]),
-        { headers }
-      )
-    );
-
-    mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/partitions?partition=0000042`,
-      new Response(JSON.stringify(mockedPartitionsIdData), { headers })
-    );
-
-    // Set the response of mocked partitions from metadata service.
-    mockedResponses.set(
-      `https://volatile-blob.data.api.platform.here.com/volatile-blob/v1/layers/test-layed-id/data/3C3BE24A341D82321A9BA9075A7EF498.123`,
-      new Response(mockedData, { headers })
-    );
-
-    // Setup the fetch to use mocked responses.
-    fetchMock.withMockedResponses(mockedResponses);
-
-    const settings = new OlpClientSettings({
-      environment: "here",
-      getToken: () => Promise.resolve("test-token-string")
-    });
-    const layerClient = new VolatileLayerClient(
-      testHRN,
-      testVolatileLayerId,
-      settings
-    );
-
-    const request = new DataRequest().withPartitionId(mockedPartitionId);
-
-    const data = await layerClient.getData(request);
-
-    assert.isDefined(data);
-    expect(fetchStub.callCount).to.be.equal(3);
   });
 
   it("Shoud be fetched partitions all metadata", async () => {
@@ -294,9 +266,15 @@ describe("VolatileLayerClient", () => {
       )
     );
 
+    // Set the response from Metadata service with the info about latest catalog version.
+    mockedResponses.set(
+      `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
+      new Response(JSON.stringify({ version: 128 }), { headers })
+    );
+
     // Set the response of mocked partitions from metadata service.
     mockedResponses.set(
-      `https://metadata.data.api.platform.here.com/metadata/v1/layers/test-layed-id/partitions`,
+      `https://metadata.data.api.platform.here.com/metadata/v1/layers/test-layed-id/partitions?version=128`,
       new Response(
         JSON.stringify({
           partitions: [
@@ -306,7 +284,8 @@ describe("VolatileLayerClient", () => {
               dataHandle: "1b2ca68f-d4a0-4379-8120-cd025640510c",
               dataSize: 1024,
               crc: "c3f276d7",
-              partition: "314010583"
+              partition: "314010583",
+              version: 1
             },
             {
               checksum: "123f66029c232400e3403cd6e9cfd45b",
@@ -314,7 +293,26 @@ describe("VolatileLayerClient", () => {
               dataHandle: "1b2ca68f-d4a0-4379-8120-cd025640578e",
               dataSize: 2084,
               crc: "c3f2766y",
-              partition: "1000"
+              partition: "1000",
+              version: 2
+            },
+            {
+              checksum: "123f66029c232400e3403cd6e9cfd345",
+              compressedDataSize: 2084,
+              dataHandle: "1b2ca68f-d4a0-4379-8120-cd0256405444",
+              dataSize: 2084,
+              crc: "c3f2766y",
+              partition: "1000",
+              version: 2
+            },
+            {
+              checksum: "123f66029c232400e3403cd6e9cfd234",
+              compressedDataSize: 2084,
+              dataHandle: "1b2ca68f-d4a0-4379-8120-cd0256405555",
+              dataSize: 2084,
+              crc: "c3f2766y",
+              partition: "1000",
+              version: 2
             }
           ],
           next: "/uri/to/next/page"
@@ -331,7 +329,7 @@ describe("VolatileLayerClient", () => {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VolatileLayerClient(
+    const layerClient = new VersionedLayerClient(
       HRN.fromString("hrn:here:data:::test-hrn"),
       "test-layed-id",
       settings
@@ -341,36 +339,33 @@ describe("VolatileLayerClient", () => {
     const request = new PartitionsRequest();
 
     // Send request for partitions metadata.
-    const partitions = await layerClient.getPartitions(request).catch(error => {
-      console.log(`Error getting partitions: ${error}`);
-    });
+    const partitions = await layerClient.getPartitions(request);
 
     // Check if partitions fetched succesful.
     assert.isDefined(partitions);
 
-    // Check if partitions returns as expected.
     if (partitions) {
+      // Check if partitions returns as expected.
       expect(partitions.partitions[0].dataHandle).to.be.equal(
         "1b2ca68f-d4a0-4379-8120-cd025640510c"
       );
       expect(partitions.partitions[1].dataHandle).to.be.equal(
         "1b2ca68f-d4a0-4379-8120-cd025640578e"
       );
-      expect(partitions.partitions[0].partition).to.be.equal("314010583");
-      expect(partitions.partitions[1].partition).to.be.equal("1000");
-      expect(partitions.partitions.length).to.be.equal(2);
+      expect(partitions.partitions.length).to.be.equal(4);
     }
 
     /**
      * Check if the count of requests are as expected.
-     * Should be called 2 times. One to the lookup service
-     * for the baseURL to the Metadata service and another one
-     * to the metadata service for the partitions metadata.
+     * Should be called 3 times. One to the lookup service
+     * for the baseURL to the Metadata service, the second
+     * one to the Metadata service for getting the latest version
+     * of catalog and another one to the metadata service for the partitions metadata.
      */
-    expect(fetchStub.callCount).to.be.equal(2);
+    expect(fetchStub.callCount).to.be.equal(3);
   });
 
-  it("Shoud read data with dataHandle", async () => {
+  it("Shoud be fetched data with dataHandle", async () => {
     const mockedResponses = new Map();
     const mockedDataHandle = "1b2ca68f-d4a0-4379-8120-cd025640510c";
     const mockedData = Buffer.alloc(42);
@@ -381,10 +376,19 @@ describe("VolatileLayerClient", () => {
       new Response(
         JSON.stringify([
           {
-            api: "volatile-blob",
+            api: "blob",
             version: "v1",
-            baseURL:
-              "https://volatile-blob.data.api.platform.here.com/volatile-blob/v1",
+            baseURL: "https://blob.data.api.platform.here.com/blob/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          },
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
             parameters: {
               additionalProp1: "string",
               additionalProp2: "string",
@@ -398,7 +402,7 @@ describe("VolatileLayerClient", () => {
 
     // Set the response of mocked partitions from metadata service.
     mockedResponses.set(
-      `https://volatile-blob.data.api.platform.here.com/volatile-blob/v1/layers/test-layed-id/data/1b2ca68f-d4a0-4379-8120-cd025640510c`,
+      `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/1b2ca68f-d4a0-4379-8120-cd025640510c`,
       new Response(mockedData, { headers })
     );
 
@@ -409,9 +413,9 @@ describe("VolatileLayerClient", () => {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VolatileLayerClient(
+    const layerClient = new VersionedLayerClient(
       testHRN,
-      testVolatileLayerId,
+      testLayerId,
       settings
     );
     const request = new DataRequest().withDataHandle(mockedDataHandle);
@@ -419,13 +423,216 @@ describe("VolatileLayerClient", () => {
     const data = await layerClient.getData(request);
 
     assert.isDefined(data);
-    expect(fetchStub.callCount).to.be.equal(2);
+    expect(fetchStub.callCount).to.be.equal(2); // 1 - lookup, 1 - blob
+  });
+
+  it("Shoud be fetched data with PartitionId", async () => {
+    const mockedResponses = new Map();
+    const mockedPartitionId = "0000042";
+    const mockedData = Buffer.alloc(42);
+    const mockedPartitionsIdData = {
+      partitions: [
+        {
+          version: 1,
+          partition: "0000042",
+          dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+        },
+        {
+          version: 42,
+          partition: "0000013",
+          dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+        }
+      ]
+    };
+
+    mockedResponses.set(
+      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/partitions?partition=0000042&version=42`,
+      new Response(JSON.stringify(mockedPartitionsIdData), { headers })
+    );
+
+    mockedResponses.set(
+      `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
+      new Response(JSON.stringify({ version: 42 }), { headers })
+    );
+
+    // Set the response from lookup api with the info about Metadata service.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "query",
+            version: "v1",
+            baseURL: "https://query.data.api.platform.here.com/query/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          },
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          },
+          {
+            api: "blob",
+            version: "v1",
+            baseURL: "https://blob.data.api.platform.here.com/blob/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ]),
+        { headers }
+      )
+    );
+
+    // Set the response of mocked partitions from metadata service.
+    mockedResponses.set(
+      `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/3C3BE24A341D82321A9BA9075A7EF498.123`,
+      new Response(mockedData, { headers })
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+    const layerClient = new VersionedLayerClient(
+      testHRN,
+      testLayerId,
+      settings
+    );
+    const request = new DataRequest().withPartitionId(mockedPartitionId);
+
+    const data = await layerClient.getData(request);
+
+    assert.isDefined(data);
+    expect(fetchStub.callCount).to.be.equal(4);
+  });
+
+  it("Shoud be fetched data with PartitionId and version", async () => {
+    const mockedResponses = new Map();
+    const mockedPartitionId = "0000042";
+    const mockedData = Buffer.alloc(42);
+    const mockedPartitionsIdData = {
+      partitions: [
+        {
+          version: 1,
+          partition: "0000042",
+          dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+        },
+        {
+          version: 42,
+          partition: "0000013",
+          dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
+        }
+      ]
+    };
+
+    mockedResponses.set(
+      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/partitions?partition=0000042&version=42`,
+      new Response(JSON.stringify(mockedPartitionsIdData), { headers })
+    );
+
+    // Set the response from lookup api with the info about Metadata service.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "blob",
+            version: "v1",
+            baseURL: "https://blob.data.api.platform.here.com/blob/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          },
+          {
+            api: "query",
+            version: "v1",
+            baseURL: "https://query.data.api.platform.here.com/query/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ]),
+        { headers }
+      )
+    );
+
+    // Set the response of mocked partitions from metadata service.
+    mockedResponses.set(
+      `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/3C3BE24A341D82321A9BA9075A7EF498.123`,
+      new Response(mockedData, { headers })
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+    const layerClient = new VersionedLayerClient(
+      testHRN,
+      testLayerId,
+      settings
+    );
+    const request = new DataRequest()
+      .withPartitionId(mockedPartitionId)
+      .withVersion(42);
+
+    const data = await layerClient.getData(request);
+
+    assert.isDefined(data);
+    expect(fetchStub.callCount).to.be.equal(3); // 1 - lookup, 1 - query, 1 - blob
   });
 
   it("Shoud be fetched data with QuadKey", async () => {
     const mockedResponses = new Map();
     const mockedQuadKey = quadKeyFromMortonCode("23618403");
     const mockedData = Buffer.alloc(42);
+    const mockedQuadKeyTreeData = {
+      subQuads: [
+        {
+          version: 12,
+          subQuadKey: "1",
+          dataHandle: "c9116bb9-7d00-44bf-9b26-b4ab4c274665"
+        }
+      ],
+      parentQuads: [
+        {
+          version: 12,
+          partition: "23618403",
+          dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
+        }
+      ]
+    };
+
+    mockedResponses.set(
+      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/versions/42/quadkeys/23618403/depths/0`,
+      new Response(JSON.stringify(mockedQuadKeyTreeData), { headers })
+    );
+
+    mockedResponses.set(
+      `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
+      new Response(JSON.stringify({ version: 42 }), { headers })
+    );
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
@@ -443,9 +650,9 @@ describe("VolatileLayerClient", () => {
             }
           },
           {
-            api: "query",
+            api: "blob",
             version: "v1",
-            baseURL: "https://query.data.api.platform.here.com/query/v1",
+            baseURL: "https://blob.data.api.platform.here.com/blob/v1",
             parameters: {
               additionalProp1: "string",
               additionalProp2: "string",
@@ -453,10 +660,9 @@ describe("VolatileLayerClient", () => {
             }
           },
           {
-            api: "volatile-blob",
+            api: "query",
             version: "v1",
-            baseURL:
-              "https://volatile-blob.data.api.platform.here.com/volatile-blob/v1",
+            baseURL: "https://query.data.api.platform.here.com/query/v1",
             parameters: {
               additionalProp1: "string",
               additionalProp2: "string",
@@ -468,50 +674,22 @@ describe("VolatileLayerClient", () => {
       )
     );
 
-    mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/quadkeys/23618403/depths/0`,
-      new Response(
-        JSON.stringify({
-          subQuads: [
-            {
-              version: 12,
-              subQuadKey: "1",
-              dataHandle: "c9116bb9-7d00-44bf-9b26-b4ab4c274665"
-            }
-          ],
-          parentQuads: [
-            {
-              version: 12,
-              partition: "23618403",
-              dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
-            }
-          ]
-        }),
-        { headers }
-      )
-    );
-
     // Set the response of mocked partitions from metadata service.
     mockedResponses.set(
-      `https://volatile-blob.data.api.platform.here.com/volatile-blob/v1/layers/test-layed-id/data/c9116bb9-7d00-44bf-9b26-b4ab4c274665`,
+      `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/c9116bb9-7d00-44bf-9b26-b4ab4c274665`,
       new Response(mockedData, { headers })
     );
 
     // Setup the fetch to use mocked responses.
     fetchMock.withMockedResponses(mockedResponses);
 
-    mockedResponses.set(
-      `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 124 }), { headers })
-    );
-
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VolatileLayerClient(
+    const layerClient = new VersionedLayerClient(
       testHRN,
-      testVolatileLayerId,
+      testLayerId,
       settings
     );
     const request = new DataRequest().withQuadKey(mockedQuadKey);
@@ -522,16 +700,31 @@ describe("VolatileLayerClient", () => {
     expect(fetchStub.callCount).to.be.equal(4);
   });
 
-  it("Shoud read partitions metadata by QuadKey for specific VolatileLayer", async () => {
+  it("Shoud be fetched data with QuadKey and Version", async () => {
     const mockedResponses = new Map();
-
-    const billingTag = "billingTag";
-    const mockedDepth = 3;
-    const mockedQuadKey = {
-      row: 1,
-      column: 2,
-      level: 3
+    const mockedQuadKey = quadKeyFromMortonCode("23618403");
+    const mockedData = Buffer.alloc(42);
+    const mockedQuadKeyTreeData = {
+      subQuads: [
+        {
+          version: 12,
+          subQuadKey: "1",
+          dataHandle: "c9116bb9-7d00-44bf-9b26-b4ab4c274665"
+        }
+      ],
+      parentQuads: [
+        {
+          version: 12,
+          partition: "23618403",
+          dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
+        }
+      ]
     };
+
+    mockedResponses.set(
+      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/versions/42/quadkeys/23618403/depths/0`,
+      new Response(JSON.stringify(mockedQuadKeyTreeData), { headers })
+    );
 
     // Set the response from lookup api with the info about Metadata service.
     mockedResponses.set(
@@ -539,9 +732,9 @@ describe("VolatileLayerClient", () => {
       new Response(
         JSON.stringify([
           {
-            api: "metadata",
+            api: "blob",
             version: "v1",
-            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
+            baseURL: "https://blob.data.api.platform.here.com/blob/v1",
             parameters: {
               additionalProp1: "string",
               additionalProp2: "string",
@@ -563,14 +756,79 @@ describe("VolatileLayerClient", () => {
       )
     );
 
+    // Set the response of mocked partitions from metadata service.
     mockedResponses.set(
-      `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1`,
-      new Response(JSON.stringify({ version: 30 }), { headers })
+      `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/c9116bb9-7d00-44bf-9b26-b4ab4c274665`,
+      new Response(mockedData, { headers })
     );
 
-    // Set the response with mocked partitions for volatile layer
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+    const layerClient = new VersionedLayerClient(
+      testHRN,
+      testLayerId,
+      settings
+    );
+    const request = new DataRequest()
+      .withQuadKey(mockedQuadKey)
+      .withVersion(42);
+
+    const data = await layerClient.getData(request);
+
+    assert.isDefined(data);
+    expect(fetchStub.callCount).to.be.equal(3); // 1 - lookup, 1 - query, 1 - blob
+  });
+
+  it("Shoud read partitions metadata by QuadKey for specific VersionLayer", async () => {
+    const mockedResponses = new Map();
+
+    const billingTag = "billingTag";
+    const mockedVersion = 42;
+    const mockedDepth = 3;
+    const mockedQuadKey = {
+      row: 1,
+      column: 2,
+      level: 3
+    };
+
+    // Set the response from lookup api with the info about Query API.
     mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/quadkeys/70/depths/3`,
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "query",
+            version: "v1",
+            baseURL: "https://query.data.api.platform.here.com/query/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          },
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ]),
+        { headers }
+      )
+    );
+
+    // Set the response with mocked partitions
+    mockedResponses.set(
+      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/versions/42/quadkeys/70/depths/3`,
       new Response(
         JSON.stringify({
           parentQuads: [
@@ -602,6 +860,11 @@ describe("VolatileLayerClient", () => {
       )
     );
 
+    mockedResponses.set(
+      `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1&billingTag=billingTag`,
+      new Response(JSON.stringify({ version: 42 }), { headers })
+    );
+
     // Setup the fetch to use mocked responses.
     fetchMock.withMockedResponses(mockedResponses);
 
@@ -610,7 +873,7 @@ describe("VolatileLayerClient", () => {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VolatileLayerClient(
+    const layerClient = new VersionedLayerClient(
       HRN.fromString("hrn:here:data:::test-hrn"),
       "test-layed-id",
       settings
@@ -620,6 +883,9 @@ describe("VolatileLayerClient", () => {
     assert.isDefined(quadKeyPartitionsRequest);
     expect(quadKeyPartitionsRequest).be.instanceOf(QuadKeyPartitionsRequest);
 
+    const quadKeyPartitionsRequestWithVersion = quadKeyPartitionsRequest.withVersion(
+      mockedVersion
+    );
     const quadKeyPartitionsRequestWithDepth = quadKeyPartitionsRequest.withDepth(
       mockedDepth
     );
@@ -630,6 +896,9 @@ describe("VolatileLayerClient", () => {
       billingTag
     );
 
+    expect(quadKeyPartitionsRequestWithVersion.getVersion()).to.be.equal(
+      mockedVersion
+    );
     expect(quadKeyPartitionsRequestWithDepth.getDepth()).to.be.equal(
       mockedDepth
     );
@@ -643,6 +912,7 @@ describe("VolatileLayerClient", () => {
     const partitions = await layerClient.getPartitions(
       quadKeyPartitionsRequest
     );
+
     if (partitions.parentQuads) {
       expect(partitions.parentQuads[0].partition).to.be.equal("73982");
     }
@@ -693,9 +963,15 @@ describe("VolatileLayerClient", () => {
       )
     );
 
+    // Set the response from Metadata service with the info about latest catalog version.
+    mockedResponses.set(
+      `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1&billingTag=billing-tag`,
+      new Response(JSON.stringify({ version: 30 }), { headers })
+    );
+
     // Set the response of mocked partitions with additional fields.
     mockedResponses.set(
-      `https://metadata.data.api.platform.here.com/metadata/v1/layers/test-layed-id/partitions?additionalFields=dataSize,checksum,compressedDataSize`,
+      `https://metadata.data.api.platform.here.com/metadata/v1/layers/test-layed-id/partitions?version=30&additionalFields=dataSize,checksum,compressedDataSize&billingTag=billing-tag`,
       new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
@@ -707,15 +983,16 @@ describe("VolatileLayerClient", () => {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VolatileLayerClient(
+    const layerClient = new VersionedLayerClient(
       HRN.fromString("hrn:here:data:::test-hrn"),
       "test-layed-id",
       settings
     );
 
-    const requestWithAdditionalFields = new PartitionsRequest().withAdditionalFields(
-      ["dataSize", "checksum", "compressedDataSize"]
-    );
+    const requestWithAdditionalFields = new PartitionsRequest()
+      .withAdditionalFields(["dataSize", "checksum", "compressedDataSize"])
+      .withFetchOption(FetchOptions.OnlineIfNotFound)
+      .withBillingTag("billing-tag");
 
     const partitions = await layerClient.getPartitions(
       requestWithAdditionalFields
@@ -800,7 +1077,7 @@ describe("VolatileLayerClient", () => {
 
     // Set the response of mocked partitions with additional fields.
     mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/quadkeys/70/depths/0?additionalFields=dataSize,checksum,compressedDataSize`,
+      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/versions/30/quadkeys/70/depths/0?additionalFields=dataSize,checksum,compressedDataSize`,
       new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
@@ -812,7 +1089,7 @@ describe("VolatileLayerClient", () => {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VolatileLayerClient(
+    const layerClient = new VersionedLayerClient(
       HRN.fromString("hrn:here:data:::test-hrn"),
       "test-layed-id",
       settings
@@ -836,26 +1113,6 @@ describe("VolatileLayerClient", () => {
     assert.isDefined(partitions);
   });
 
-  it("Shoud be initialized with VolatileLayerClientParams", async () => {
-    const settings = new OlpClientSettings({
-      environment: "here",
-      getToken: () => Promise.resolve("test-token-string")
-    });
-
-    const volatileLayerClientParams = {
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: settings
-    };
-    const volatileLayerClient = new VolatileLayerClient(
-      volatileLayerClientParams
-    );
-
-    assert.isDefined(volatileLayerClient);
-    expect(volatileLayerClient).to.be.instanceOf(VolatileLayerClient);
-    assert.equal(volatileLayerClient["hrn"], "hrn:here:data:::test-hrn");
-  });
-
   it("Should user-agent be added to the each request", async () => {
     const mockedResponses = new Map();
     const mockedDataHandle = "1b2ca68f-d4a0-4379-8120-cd025640510c";
@@ -867,10 +1124,19 @@ describe("VolatileLayerClient", () => {
       new Response(
         JSON.stringify([
           {
-            api: "volatile-blob",
+            api: "blob",
             version: "v1",
-            baseURL:
-              "https://volatile-blob.data.api.platform.here.com/volatile-blob/v1",
+            baseURL: "https://blob.data.api.platform.here.com/blob/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          },
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
             parameters: {
               additionalProp1: "string",
               additionalProp2: "string",
@@ -884,7 +1150,7 @@ describe("VolatileLayerClient", () => {
 
     // Set the response of mocked partitions from metadata service.
     mockedResponses.set(
-      `https://volatile-blob.data.api.platform.here.com/volatile-blob/v1/layers/test-layed-id/data/1b2ca68f-d4a0-4379-8120-cd025640510c`,
+      `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/1b2ca68f-d4a0-4379-8120-cd025640510c`,
       new Response(mockedData, { headers })
     );
 
@@ -895,9 +1161,9 @@ describe("VolatileLayerClient", () => {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VolatileLayerClient(
+    const layerClient = new VersionedLayerClient(
       testHRN,
-      testVolatileLayerId,
+      testLayerId,
       settings
     );
     const request = new DataRequest().withDataHandle(mockedDataHandle);
@@ -905,7 +1171,7 @@ describe("VolatileLayerClient", () => {
     const data = await layerClient.getData(request);
 
     assert.isDefined(data);
-    expect(fetchStub.callCount).to.be.equal(2);
+    expect(fetchStub.callCount).to.be.equal(2); // 1 - lookup, 1 - blob
     const calls = fetchStub.getCalls();
     calls.forEach(call => {
       const callHeaders = call.args[1].headers;
