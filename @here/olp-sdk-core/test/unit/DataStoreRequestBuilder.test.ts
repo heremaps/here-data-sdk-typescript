@@ -21,9 +21,7 @@ import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import * as dataServiceRead from "../../lib";
-import { DataStoreRequestBuilder, DownloadManager } from "../../lib";
-import { LIB_VERSION } from "@here/olp-sdk-dataservice-read/lib.version";
+import * as lib from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -31,13 +29,13 @@ const assert = chai.assert;
 const expect = chai.expect;
 
 describe("addBearerToken", () => {
-    const USER_AGENT = `OLP-TS-SDK/${LIB_VERSION}`;
+    const USER_AGENT = `OLP-TS-SDK/${lib.LIB_VERSION}`;
     const dm = ({
         download: async (url: string, init?: RequestInit) =>
             Promise.resolve({ json: () => Promise.resolve(init) })
-    } as unknown) as dataServiceRead.DownloadManager;
+    } as unknown) as lib.DownloadManager;
 
-    const requestBuilder = new dataServiceRead.DataStoreRequestBuilder(
+    const requestBuilder = new lib.DataStoreRequestBuilder(
         dm,
         "mocked-base-url",
         () => Promise.resolve("mocked-token")
@@ -189,7 +187,7 @@ describe("DataStoreRequestBuilder", () => {
                     return this;
                 }
             } as unknown) as Response)
-    } as unknown) as DownloadManager;
+    } as unknown) as lib.DownloadManager;
 
     let dmError = ({
         download: (url: any, options: any) =>
@@ -197,27 +195,24 @@ describe("DataStoreRequestBuilder", () => {
                 status: 404,
                 statusText: "Test Error"
             } as unknown) as Response)
-    } as unknown) as DownloadManager;
+    } as unknown) as lib.DownloadManager;
 
     before(() => {
         sandbox = sinon.createSandbox();
     });
 
     beforeEach(() => {
-        getBaseUrlRequestStub = sandbox.stub(
-            dataServiceRead.RequestFactory,
-            "getBaseUrl"
-        );
+        getBaseUrlRequestStub = sandbox.stub(lib.RequestFactory, "getBaseUrl");
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
 
-        dataStore = new dataServiceRead.DataStoreRequestBuilder(
+        dataStore = new lib.DataStoreRequestBuilder(
             dm,
             baseurl,
             token,
             abortSignalTest
         );
 
-        dataStoreError = new dataServiceRead.DataStoreRequestBuilder(
+        dataStoreError = new lib.DataStoreRequestBuilder(
             dmError,
             baseurl,
             token,
@@ -231,7 +226,7 @@ describe("DataStoreRequestBuilder", () => {
 
     it("Shoud be initialized", async () => {
         assert.isDefined(dataStore);
-        expect(dataStore).be.instanceOf(DataStoreRequestBuilder);
+        expect(dataStore).be.instanceOf(lib.DataStoreRequestBuilder);
     });
 
     it("Shoud downloads data from the provided URL", async () => {
@@ -283,9 +278,9 @@ describe("DataStoreRequestBuilder", () => {
                     }
                 } as unknown) as Response);
             }
-        } as unknown) as DownloadManager;
+        } as unknown) as lib.DownloadManager;
         const abortController = new AbortController();
-        const requestBuilder = new dataServiceRead.DataStoreRequestBuilder(
+        const requestBuilder = new lib.DataStoreRequestBuilder(
             dm,
             baseurl,
             token,

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { ArtifactApi, HttpError } from "@here/olp-sdk-dataservice-api";
+import { ArtifactApi } from "@here/olp-sdk-dataservice-api";
 import {
     OlpClientSettings,
     RequestFactory,

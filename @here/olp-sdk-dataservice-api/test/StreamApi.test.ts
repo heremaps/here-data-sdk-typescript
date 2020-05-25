@@ -40,7 +40,6 @@ describe("StreamApi", () => {
             }
         } as RequestBuilder;
 
-        // tslint:disable-next-line: deprecation
         await StreamApi.commitOffsets(builder, {
             layerId: "mocked-id",
             subscriptionId: "test-subscriptionId",
@@ -69,7 +68,6 @@ describe("StreamApi", () => {
             }
         } as RequestBuilder;
 
-        // tslint:disable-next-line: deprecation
         await StreamApi.doCommitOffsets(builder, {
             layerId: "mocked-id",
             subscriptionId: "test-subscriptionId",

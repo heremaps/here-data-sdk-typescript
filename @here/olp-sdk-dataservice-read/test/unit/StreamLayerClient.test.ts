@@ -22,13 +22,9 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
+import { HttpError } from "@here/olp-sdk-core";
 
-import {
-    BlobApi,
-    StreamApi,
-    HttpError,
-    UrlBuilder
-} from "@here/olp-sdk-dataservice-api";
+import { BlobApi, StreamApi } from "@here/olp-sdk-dataservice-api";
 
 chai.use(sinonChai);
 

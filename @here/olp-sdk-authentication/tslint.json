@@ -17,7 +17,7 @@
     ],
     "curly": true,
     "deprecation": {
-      "severity": "warn"
+      "severity": "none"
     },
     "eofline": true,
     "forin": true,

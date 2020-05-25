@@ -17,11 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import {
-    ConfigApi,
-    HttpError,
-    MetadataApi
-} from "@here/olp-sdk-dataservice-api";
+import { ConfigApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
 import {
     ApiName,
     CatalogVersionRequest,

@@ -29,7 +29,7 @@ import {
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "./FetchMock";
 import { LIB_VERSION } from "@here/olp-sdk-dataservice-read/lib.version";
-import { HttpError } from "@here/olp-sdk-dataservice-api/lib/HttpError";
+import { HttpError } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 

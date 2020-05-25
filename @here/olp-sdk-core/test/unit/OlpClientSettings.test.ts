@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,7 @@
 import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
-import { OlpClientSettings } from "../../lib";
-import * as lib from "../../lib";
+import * as lib from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 const expect = chai.expect;
@@ -80,7 +79,7 @@ describe("OlpClientSettings", () => {
     });
 
     it("Should be configured with correct params and default download manager", async () => {
-        const settings = new OlpClientSettings({
+        const settings = new lib.OlpClientSettings({
             environment: "test-env",
             getToken: () => Promise.resolve("test-token")
         });
@@ -102,7 +101,7 @@ describe("OlpClientSettings", () => {
     });
 
     it("Should be configured with correct params and custom download manager", async () => {
-        const settings = new OlpClientSettings({
+        const settings = new lib.OlpClientSettings({
             environment: "test-env",
             getToken: () => Promise.resolve("test-token"),
             dm: new MockedCustomDataStoreDownloadManager()

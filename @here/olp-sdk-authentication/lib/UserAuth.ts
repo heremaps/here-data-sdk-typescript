@@ -17,8 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { HttpError } from "..";
-import { LIB_VERSION } from "../lib.version";
+import { HttpError, LIB_VERSION } from "@here/olp-sdk-core";
 import { OAuthArgs, Token } from "./requestToken_common";
 
 /**

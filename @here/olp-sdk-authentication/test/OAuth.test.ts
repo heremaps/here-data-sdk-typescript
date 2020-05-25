@@ -20,8 +20,8 @@
 import * as chai from "chai";
 import { requestToken, Token, UserAuth } from "../index";
 
+import { HttpError } from "@here/olp-sdk-core";
 import fetchMock = require("fetch-mock");
-import { HttpError } from "../lib/HttpError";
 import { loadCredentialsFromFile } from "../lib/loadCredentialsFromFile";
 
 const REPLY_TIMEOUT_MS = 600;

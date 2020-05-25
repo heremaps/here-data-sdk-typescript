@@ -17,12 +17,8 @@
  * License-Filename: LICENSE
  */
 
-import {
-    BlobApi,
-    HttpError,
-    MetadataApi,
-    QueryApi
-} from "@here/olp-sdk-dataservice-api";
+import { HttpError } from "@here/olp-sdk-core";
+import { BlobApi, MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
 import {
     ApiName,
     DataRequest,
@@ -37,8 +33,6 @@ import {
 } from "..";
 import { MetadataCacheRepository } from "../cache";
 import { FetchOptions } from "./FetchOptions";
-
-// tslint:disable: deprecation
 
 /**
  * Parameters for use to initialize VersionLayerClient.

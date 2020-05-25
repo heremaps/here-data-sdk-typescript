@@ -204,6 +204,23 @@ export class LRUCache<Key, Value> {
         this.map.clear();
     }
 
+    /**
+     * Explicitly removes a key-value pair from the cache.
+     *
+     * @note: This is an explicit removal, thus, the eviction callback will not be called.
+     *
+     * @param key The key of the key-value pair to delete.
+     * @returns `true` if the key-value pair existed and was deleted, `false` otherwise.
+     */
+    delete(key: Key): boolean {
+        const entry = this.map.get(key);
+        if (entry === undefined) {
+            return false;
+        }
+        this.deleteEntry(entry);
+        return this.map.delete(key);
+    }
+
     protected evict() {
         while (this.oldestEntry !== null && this.cacheSize > this.maxCapacity) {
             const evicted = this.evictOldest();
@@ -256,5 +273,21 @@ export class LRUCache<Key, Value> {
             newest.newer = entry;
             this.newestEntry = entry;
         }
+    }
+
+    private deleteEntry(entry: Entry<Key, Value>): void {
+        if (entry === this.newestEntry) {
+            this.newestEntry = entry.older;
+        } else if (entry.newer) {
+            entry.newer.older = entry.older;
+        }
+
+        if (entry === this.oldestEntry) {
+            this.oldestEntry = entry.newer;
+        } else if (entry.older) {
+            entry.older.newer = entry.newer;
+        }
+
+        this.cacheSize -= entry.size;
     }
 }
