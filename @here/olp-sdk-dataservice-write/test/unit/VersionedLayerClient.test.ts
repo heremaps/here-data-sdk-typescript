@@ -20,18 +20,29 @@
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import { HelloWorld } from "../../lib";
+import { VersionedLayerClient } from "@here/olp-sdk-dataservice-write";
 
 chai.use(sinonChai);
 
 const assert = chai.assert;
 const expect = chai.expect;
+class MockedHrn {
+    constructor(private readonly hrn: string) {}
+    toString(): string {
+        return this.hrn;
+    }
+}
 
-describe("HelloWorld", () => {
+describe("VersionedLayerClient write", () => {
     it("Should initialize", () => {
-        const hello = new HelloWorld();
+        const catalogHrn = "hrn:here:data:::mocked-hrn";
 
-        assert.isDefined(hello);
-        expect(hello).be.instanceOf(HelloWorld);
+        const client = new VersionedLayerClient({
+            catalogHrn: new MockedHrn(catalogHrn) as any,
+            settings: {} as any
+        });
+
+        assert.isDefined(client);
+        expect(client).be.instanceOf(VersionedLayerClient);
     });
 });

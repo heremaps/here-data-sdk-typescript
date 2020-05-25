@@ -27,7 +27,7 @@ import {
   SchemaDetailsRequest,
   HRN
 } from "@here/olp-sdk-dataservice-read";
-import { FetchMock } from "./FetchMock";
+import { FetchMock } from "../FetchMock";
 import { LIB_VERSION } from "@here/olp-sdk-dataservice-read/lib.version";
 import { HttpError } from "@here/olp-sdk-core";
 

@@ -28,8 +28,8 @@ import {
   CatalogRequest,
   LayerVersionsRequest
 } from "@here/olp-sdk-dataservice-read";
-import { FetchMock } from "./FetchMock";
-import { LIB_VERSION } from "@here/olp-sdk-dataservice-read/lib.version";
+import { FetchMock } from "../FetchMock";
+import { LIB_VERSION } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 

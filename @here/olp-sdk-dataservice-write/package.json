@@ -50,6 +50,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "@here/olp-sdk-core": "1.0.0",
     "@here/olp-sdk-fetch": "1.4.0"
   },
   "devDependencies": {

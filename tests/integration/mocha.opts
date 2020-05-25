@@ -4,4 +4,4 @@
 --bail
 --check-leaks
 --reporter xunit
-tests/integration/*.test.ts
+tests/integration/olp-sdk-*/*.test.ts

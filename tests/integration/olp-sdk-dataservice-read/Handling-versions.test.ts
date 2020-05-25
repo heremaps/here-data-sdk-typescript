@@ -32,7 +32,7 @@ import {
   LayerVersionsRequest,
   CatalogVersionRequest
 } from "@here/olp-sdk-dataservice-read";
-import { FetchMock } from "./FetchMock";
+import { FetchMock } from "../FetchMock";
 
 chai.use(sinonChai);
 const expect = chai.expect;

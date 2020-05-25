@@ -17,4 +17,4 @@
  * License-Filename: LICENSE
  */
 
-export class HelloWorld {}
+export * from "./VersionedLayerClient";

@@ -26,9 +26,9 @@ import {
   IndexLayerClient,
   IndexQueryRequest
 } from "@here/olp-sdk-dataservice-read";
-import { FetchMock } from "./FetchMock";
+import { FetchMock } from "../FetchMock";
 import { Buffer } from "buffer";
-import { LIB_VERSION } from "@here/olp-sdk-dataservice-read/lib.version";
+import { LIB_VERSION } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
