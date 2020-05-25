@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,22 @@
  */
 
 /**
- * @deprecated This file will be removed by 11.2020. Please use the same from `@here/olp-sdk-core` package.
+ * Enumerates the fetch option that controls how requests are handled.
  */
+export enum FetchOptions {
+    /**
+     * A default option. Queries the network if the requested resource is not
+     * found in the cache.
+     */
+    OnlineIfNotFound,
 
-export * from "@here/olp-sdk-core/lib/client/OlpClientSettings";
+    /**
+     * Skips cache lookups and queries the network right away.
+     */
+    OnlineOnly,
+
+    /**
+     * Returns immediately if a cache lookup fails.
+     */
+    CacheOnly
+}

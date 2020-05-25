@@ -17,15 +17,14 @@
  * License-Filename: LICENSE
  */
 
-import { MetadataApi } from "@here/olp-sdk-dataservice-api";
 import {
     FetchOptions,
     HRN,
-    QuadKey,
-    RequestFactory,
-    validateBillingTag
-} from "..";
-import { OlpClientSettings } from "./OlpClientSettings";
+    OlpClientSettings,
+    RequestFactory
+} from "@here/olp-sdk-core";
+import { MetadataApi } from "@here/olp-sdk-dataservice-api";
+import { QuadKey, validateBillingTag } from "..";
 
 /**
  * Parameters used to get a tile.
@@ -77,7 +76,7 @@ export class TileRequest {
 
     /**
      * Gets the catalog version provided by the [[TileRequestParams]].
-     * 
+     *
      * @return The catalog version provided by the [[TileRequestParams]].
      * If this version was not provided, the latest version is fetched and used.
      */
@@ -98,7 +97,7 @@ export class TileRequest {
 
     /**
      * Gets the tile request parameters.
-     * 
+     *
      * @return The [[TileRequestParams]] instance.
      */
     public getParams(): TileRequestParams {
@@ -176,7 +175,7 @@ export class TileRequest {
 
     /**
      * Gets the latest available catalog version.
-     * 
+     *
      * @return The latest available catalog version.
      */
     private async getCatalogLatestVersion(): Promise<number> {

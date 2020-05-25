@@ -17,13 +17,9 @@
  * License-Filename: LICENSE
  */
 
+import { OlpClientSettings } from "@here/olp-sdk-core";
 import { ArtifactApi } from "@here/olp-sdk-dataservice-api";
-import {
-    OlpClientSettings,
-    RequestFactory,
-    SchemaDetailsRequest,
-    SchemaRequest
-} from "..";
+import { RequestFactory, SchemaDetailsRequest, SchemaRequest } from "..";
 
 /**
  * Gets schema metadata and data from the platform Artifact Service.
@@ -59,7 +55,6 @@ export class ArtifactClient {
         }
 
         const hrnStr = hrn.toString();
-
         const request = await RequestFactory.create(
             "artifact",
             this.apiVersion,

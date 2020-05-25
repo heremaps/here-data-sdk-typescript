@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
+import { FetchOptions } from "@here/olp-sdk-core";
 import { AdditionalFields } from "@here/olp-sdk-dataservice-api";
 import { validateBillingTag, validatePartitionsIdsList } from "..";
-import { FetchOptions } from "./FetchOptions";
 
 /**
  * Prepares information for calls to get partitions metadata from the Metadata Service API.

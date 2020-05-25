@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,9 @@
  * License-Filename: LICENSE
  */
 
+import { OlpClientSettings } from "@here/olp-sdk-core";
 import { ConfigApi } from "@here/olp-sdk-dataservice-api";
-import { CatalogsRequest, OlpClientSettings, RequestFactory } from "..";
+import { CatalogsRequest, RequestFactory } from "..";
 
 /**
  * A client for the platform Config Service.

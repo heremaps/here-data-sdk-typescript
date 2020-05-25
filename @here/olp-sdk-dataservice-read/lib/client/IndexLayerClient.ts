@@ -17,15 +17,14 @@
  * License-Filename: LICENSE
  */
 
-import { BlobApi, IndexApi } from "@here/olp-sdk-dataservice-api";
 import {
     ApiName,
     DataStoreRequestBuilder,
     HRN,
-    IndexQueryRequest,
-    OlpClientSettings,
-    RequestFactory
-} from "..";
+    OlpClientSettings
+} from "@here/olp-sdk-core";
+import { BlobApi, IndexApi } from "@here/olp-sdk-dataservice-api";
+import { IndexQueryRequest, RequestFactory } from "..";
 
 /**
  * Parameters for use to initialize IndexLayerClient.

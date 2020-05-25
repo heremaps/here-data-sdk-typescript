@@ -16,21 +16,21 @@
  * SPDX-License-Identifier: Apache-2.0
  * License-Filename: LICENSE
  */
+
+import { FetchOptions, RequestFactory } from "@here/olp-sdk-core";
 import { BlobApi } from "@here/olp-sdk-dataservice-api";
 import {
-    FetchOptions,
     MetadataCacheRepository,
     mortonCodeFromQuadKey,
     PartitionsRequest,
     QuadTreeIndexRequest,
     QueryClient,
-    RequestFactory,
     TileRequest
 } from "..";
 
 /**
  * Gets the tile by the key.
- * 
+ *
  * The tile is a geometric area represented as a HERE tile.
  * The quadtree metadata fetches the blob of needed tile from the Query Service API,
  * then caches it, and returns to the user.

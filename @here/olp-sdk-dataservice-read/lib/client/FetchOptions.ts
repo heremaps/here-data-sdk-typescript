@@ -18,22 +18,7 @@
  */
 
 /**
- * Enumerates the fetch option that controls how requests are handled.
+ * @deprecated This file will be removed by 11.2020. Please use the same from `@here/olp-sdk-core` package.
  */
-export enum FetchOptions {
-    /**
-     * A default option. Queries the network if the requested resource is not
-     * found in the cache.
-     */
-    OnlineIfNotFound,
 
-    /**
-     * Skips cache lookups and queries the network right away.
-     */
-    OnlineOnly,
-
-    /**
-     * Returns immediately if a cache lookup fails.
-     */
-    CacheOnly
-}
+export * from "@here/olp-sdk-core/lib/utils/FetchOptions";

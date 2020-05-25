@@ -17,11 +17,13 @@
  * License-Filename: LICENSE
  */
 
-import { BlobApi, StreamApi } from "@here/olp-sdk-dataservice-api";
 import {
     DataStoreRequestBuilder,
     HRN,
-    OlpClientSettings,
+    OlpClientSettings
+} from "@here/olp-sdk-core";
+import { BlobApi, StreamApi } from "@here/olp-sdk-dataservice-api";
+import {
     PollRequest,
     RequestFactory,
     SeekRequest,

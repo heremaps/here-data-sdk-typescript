@@ -17,15 +17,14 @@
  * License-Filename: LICENSE
  */
 
-import { ConfigApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
 import {
     ApiName,
-    CatalogVersionRequest,
     DataStoreRequestBuilder,
     HRN,
-    OlpClientSettings,
-    RequestFactory
-} from "..";
+    OlpClientSettings
+} from "@here/olp-sdk-core";
+import { ConfigApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
+import { CatalogVersionRequest, RequestFactory } from "..";
 import { CatalogRequest } from "./CatalogRequest";
 import { LayerVersionsRequest } from "./LayerVersionsRequest";
 
