@@ -18,25 +18,27 @@
  */
 
 import {
+    ApiName,
+    DataStoreRequestBuilder,
+    FetchOptions,
+    HRN,
     HttpError,
+    OlpClientSettings
+} from "@here/olp-sdk-core";
+import {
     MetadataApi,
     QueryApi,
     VolatileBlobApi
 } from "@here/olp-sdk-dataservice-api";
 import {
-    ApiName,
     DataRequest,
-    DataStoreRequestBuilder,
-    HRN,
     MetadataCacheRepository,
-    OlpClientSettings,
     PartitionsRequest,
     QuadKeyPartitionsRequest,
     QuadTreeIndexRequest,
     QueryClient,
     RequestFactory
 } from "..";
-import { FetchOptions } from "./FetchOptions";
 
 /**
  * Parameters for use to initialize VolatileLayerClient.

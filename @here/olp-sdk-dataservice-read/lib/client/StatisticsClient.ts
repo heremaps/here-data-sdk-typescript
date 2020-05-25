@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,14 @@
  * License-Filename: LICENSE
  */
 
+import {
+    DataStoreRequestBuilder,
+    HRN,
+    OlpClientSettings
+} from "@here/olp-sdk-core";
 import { CoverageApi } from "@here/olp-sdk-dataservice-api";
 import {
     CoverageDataType,
-    DataStoreRequestBuilder,
-    HRN,
-    OlpClientSettings,
     RequestFactory,
     StatisticsRequest,
     SummaryRequest

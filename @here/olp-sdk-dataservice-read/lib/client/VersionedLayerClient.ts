@@ -17,22 +17,24 @@
  * License-Filename: LICENSE
  */
 
-import { HttpError } from "@here/olp-sdk-core";
-import { BlobApi, MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
 import {
     ApiName,
-    DataRequest,
     DataStoreRequestBuilder,
+    FetchOptions,
     HRN,
-    OlpClientSettings,
+    HttpError,
+    OlpClientSettings
+} from "@here/olp-sdk-core";
+import { BlobApi, MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
+import {
+    DataRequest,
+    MetadataCacheRepository,
     PartitionsRequest,
     QuadKeyPartitionsRequest,
     QuadTreeIndexRequest,
     QueryClient,
     RequestFactory
 } from "..";
-import { MetadataCacheRepository } from "../cache";
-import { FetchOptions } from "./FetchOptions";
 
 /**
  * Parameters for use to initialize VersionLayerClient.

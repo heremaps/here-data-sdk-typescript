@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
+import { KeyValueCache } from "@here/olp-sdk-core";
 import { MetadataApi } from "@here/olp-sdk-dataservice-api";
 import { PartitionsRequest } from "../client";
-import { KeyValueCache } from "./KeyValueCache";
 
 /**
  * Caches the partitions metadata using a key-value pair.

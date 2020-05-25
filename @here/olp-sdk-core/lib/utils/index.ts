@@ -25,3 +25,4 @@ export * from "./getEnvLookupUrl";
 export * from "./HRN";
 export * from "./getDataSizeUtil";
 export * from "./HttpError";
+export * from "./FetchOptions";

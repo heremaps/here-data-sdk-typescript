@@ -17,7 +17,8 @@
  * License-Filename: LICENSE
  */
 
-import { FetchOptions, QuadKey, validateBillingTag } from "..";
+import { FetchOptions } from "@here/olp-sdk-core";
+import { QuadKey, validateBillingTag } from "..";
 
 /**
  *  Prepares information for calls to get data from the HERE Blob Service.
