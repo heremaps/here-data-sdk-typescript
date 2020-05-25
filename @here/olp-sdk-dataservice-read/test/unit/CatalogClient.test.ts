@@ -22,11 +22,9 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
-import {
-    ConfigApi,
-    HttpError,
-    MetadataApi
-} from "@here/olp-sdk-dataservice-api";
+import { ConfigApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
+
+import { HttpError } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 

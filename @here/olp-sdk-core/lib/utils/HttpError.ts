@@ -18,9 +18,6 @@
  */
 
 /**
- * @deprecated This class will be removed by 11.2020.
- * Please use the same from `@here/olp-sdk-core` package.
- *
  * HttpError class used to be able to provide for consumers
  * a more usable errors from services. Would be used in the methods
  * to propagate error with http status code and with a message in

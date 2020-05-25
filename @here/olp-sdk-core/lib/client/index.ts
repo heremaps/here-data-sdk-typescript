@@ -17,9 +17,4 @@
  * License-Filename: LICENSE
  */
 
-/**
- * @deprecated This file will be removed by 11.2020.
- * Please use the same from `@here/olp-sdk-core` package.
- */
-
-export * from "@here/olp-sdk-core/lib/utils/HttpError";
+export * from "./OlpClientSettings";

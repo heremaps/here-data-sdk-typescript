@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,7 @@
 import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
-import { DataStoreDownloadManager } from "../../lib";
-import { HttpError } from "@here/olp-sdk-dataservice-api";
+import { DataStoreDownloadManager } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 const assert = chai.assert;
@@ -81,7 +80,6 @@ describe("DataStoreDownloadManager", function() {
                 assert(fetchStub.getCall(0).args[0] === fakeDataUrl);
                 assert.equal(error.status, 503);
                 assert.equal(error.message, "Service unavailable!");
-                expect(error).to.be.instanceOf(HttpError);
             });
     });
 

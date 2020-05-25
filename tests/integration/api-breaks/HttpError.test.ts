@@ -20,7 +20,7 @@
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import { HttpError } from "@here/olp-sdk-dataservice-api";
+import { HttpError } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 

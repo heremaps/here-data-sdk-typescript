@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { BlobApi, HttpError, StreamApi } from "@here/olp-sdk-dataservice-api";
+import { BlobApi, StreamApi } from "@here/olp-sdk-dataservice-api";
 import {
     DataStoreRequestBuilder,
     HRN,

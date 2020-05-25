@@ -20,8 +20,7 @@
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import * as dataServiceRead from "../../lib";
-import { ApiCacheRepository, KeyValueCache } from "../../lib";
+import * as lib from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -29,9 +28,9 @@ const assert = chai.assert;
 const expect = chai.expect;
 
 describe("ApiCacheRepository", () => {
-    let testCache = new KeyValueCache();
+    let testCache = new lib.KeyValueCache();
     testCache.put("test-key", "test-value");
-    let apiCacheRepository = new ApiCacheRepository(testCache);
+    let apiCacheRepository = new lib.ApiCacheRepository(testCache);
 
     const testServiceApiName = "config";
     const testServiceVersion = "service-version";
@@ -47,9 +46,7 @@ describe("ApiCacheRepository", () => {
 
     it("Shoud be initialised", async () => {
         assert.isDefined(apiCacheRepository);
-        expect(apiCacheRepository).be.instanceOf(
-            dataServiceRead.ApiCacheRepository
-        );
+        expect(apiCacheRepository).be.instanceOf(lib.ApiCacheRepository);
     });
 
     it("Method put should store a new key-value pair in the cache", async () => {

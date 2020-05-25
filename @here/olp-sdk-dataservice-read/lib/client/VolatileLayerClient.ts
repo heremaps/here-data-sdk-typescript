@@ -38,8 +38,6 @@ import {
 } from "..";
 import { FetchOptions } from "./FetchOptions";
 
-// tslint:disable: deprecation
-
 /**
  * Parameters for use to initialize VolatileLayerClient.
  */

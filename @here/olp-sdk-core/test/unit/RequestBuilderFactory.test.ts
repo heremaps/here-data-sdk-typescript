@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,14 @@
 import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
-import * as dataServiceRead from "../../lib";
+import * as lib from "@here/olp-sdk-core";
 import * as dataServiceApi from "@here/olp-sdk-dataservice-api";
+
 chai.use(sinonChai);
 const expect = chai.expect;
 
 class MockedHrn {
-    constructor(private readonly data: dataServiceRead.HRNData) {}
+    constructor(private readonly data: lib.HRNData) {}
     toString(): string {
         return (
             "hrn:" +
@@ -86,7 +87,7 @@ class MockedApiCacheRepository {
 
 class MockedDataStoreRequestBuilder {
     constructor(
-        readonly downloadManager: dataServiceRead.DownloadManager,
+        readonly downloadManager: lib.DownloadManager,
         public readonly baseUrl: string,
         private readonly getBearerToken: () => Promise<string>
     ) {}
@@ -107,16 +108,13 @@ describe("RequestFactory", () => {
     });
 
     beforeEach(() => {
-        ApiCacheRepositoryStub = sandbox.stub(
-            dataServiceRead,
-            "ApiCacheRepository"
-        );
+        ApiCacheRepositoryStub = sandbox.stub(lib, "ApiCacheRepository");
         ApiCacheRepositoryStub.callsFake(
             (cache, hrn) => new MockedApiCacheRepository(cache, hrn)
         );
 
         DataStoreRequestBuilderStub = sandbox.stub(
-            dataServiceRead,
+            lib,
             "DataStoreRequestBuilder"
         );
         DataStoreRequestBuilderStub.callsFake((dm, url, token) => {
@@ -124,7 +122,7 @@ describe("RequestFactory", () => {
         });
 
         sandbox
-            .stub(dataServiceRead, "getEnvLookUpUrl")
+            .stub(lib, "getEnvLookUpUrl")
             .callsFake(() => "http://fake-lookup.service.url");
     });
 
@@ -153,7 +151,7 @@ describe("RequestFactory", () => {
                 );
 
             const settings = new MockedOlpClientSettings();
-            const requestBuilder = await dataServiceRead.RequestFactory.create(
+            const requestBuilder = await lib.RequestFactory.create(
                 "statistics",
                 "v1",
                 settings as any
@@ -181,7 +179,7 @@ describe("RequestFactory", () => {
             const settings = new MockedOlpClientSettings();
 
             try {
-                await dataServiceRead.RequestFactory.create(
+                await lib.RequestFactory.create(
                     "statistics",
                     "v1",
                     settings as any
@@ -215,7 +213,7 @@ describe("RequestFactory", () => {
                     Promise.resolve((response as unknown) as Response)
                 );
             const settings = new MockedOlpClientSettings();
-            const baseUrl = await dataServiceRead.RequestFactory.getBaseUrl(
+            const baseUrl = await lib.RequestFactory.getBaseUrl(
                 "statistics",
                 "v1",
                 settings as any
@@ -246,7 +244,7 @@ describe("RequestFactory", () => {
                 );
             const settings = new MockedOlpClientSettings();
 
-            const baseUrl = await dataServiceRead.RequestFactory.getBaseUrl(
+            const baseUrl = await lib.RequestFactory.getBaseUrl(
                 "statistics",
                 "v1",
                 settings as any,
@@ -274,7 +272,7 @@ describe("RequestFactory", () => {
                 );
             const settings = new MockedOlpClientSettings();
             try {
-                await dataServiceRead.RequestFactory.getBaseUrl(
+                await lib.RequestFactory.getBaseUrl(
                     "statistics",
                     "v1",
                     settings as any
@@ -296,7 +294,7 @@ describe("RequestFactory", () => {
                 );
             const settings = new MockedOlpClientSettings();
             try {
-                await dataServiceRead.RequestFactory.getBaseUrl(
+                await lib.RequestFactory.getBaseUrl(
                     "statistics",
                     "v1",
                     settings as any
@@ -329,7 +327,7 @@ describe("RequestFactory", () => {
                 );
             const settings = new MockedOlpClientSettings();
             try {
-                await dataServiceRead.RequestFactory.getBaseUrl(
+                await lib.RequestFactory.getBaseUrl(
                     "statistics",
                     "v1",
                     settings as any
@@ -362,7 +360,7 @@ describe("RequestFactory", () => {
                 );
             const settings = new MockedOlpClientSettings();
             try {
-                await dataServiceRead.RequestFactory.getBaseUrl(
+                await lib.RequestFactory.getBaseUrl(
                     "statistics",
                     "v1",
                     settings as any,
@@ -410,7 +408,7 @@ describe("RequestFactory", () => {
                 "getPlatformAPIList"
             );
 
-            const baseUrl1 = await dataServiceRead.RequestFactory.getBaseUrl(
+            const baseUrl1 = await lib.RequestFactory.getBaseUrl(
                 "statistics",
                 "v1",
                 settings as any,
@@ -423,7 +421,7 @@ describe("RequestFactory", () => {
             expect(resourceApiStub.callCount).to.be.equal(1);
             expect(baseUrl1).to.be.equal("test-base-url-to-resource-service");
 
-            const baseUrl2 = await dataServiceRead.RequestFactory.getBaseUrl(
+            const baseUrl2 = await lib.RequestFactory.getBaseUrl(
                 "statistics",
                 "v1",
                 settings as any,
@@ -438,7 +436,7 @@ describe("RequestFactory", () => {
             expect(baseUrl2).to.be.equal("test-base-url-to-resource-service");
 
             setTimeout(async () => {
-                const baseUrl3 = await dataServiceRead.RequestFactory.getBaseUrl(
+                const baseUrl3 = await lib.RequestFactory.getBaseUrl(
                     "statistics",
                     "v1",
                     settings as any,

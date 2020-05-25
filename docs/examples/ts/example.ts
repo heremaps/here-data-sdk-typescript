@@ -33,11 +33,10 @@ import {
   SeekRequest,
   VolatileLayerClient
 } from "@here/olp-sdk-dataservice-read";
-import {
-  UserAuth,
-  requestToken,
-  HttpError
-} from "@here/olp-sdk-authentication";
+import { UserAuth, requestToken } from "@here/olp-sdk-authentication";
+
+import { HttpError } from "@here/olp-sdk-core";
+
 const config = require("./config.json");
 
 const userAuth = new UserAuth({

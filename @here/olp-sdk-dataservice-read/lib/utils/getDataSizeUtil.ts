@@ -17,44 +17,8 @@
  * License-Filename: LICENSE
  */
 
-const BYTES_IN_NUMBER = 8;
-const BYTES_IN_BOOLEAN = 4;
+/**
+ * @deprecated This file will be removed by 11.2020. Please use the same from `@here/olp-sdk-core` package.
+ */
 
-export function getDataSize(data: any) {
-    let bytes = 0;
-
-    function sizeOf(obj: any) {
-        if (obj !== null && obj !== undefined) {
-            switch (typeof obj) {
-                case "number":
-                    bytes += BYTES_IN_NUMBER;
-                    break;
-                case "string":
-                    bytes += obj.length * 2;
-                    break;
-                case "boolean":
-                    bytes += BYTES_IN_BOOLEAN;
-                    break;
-                case "object":
-                    const objClass = Object.prototype.toString
-                        .call(obj)
-                        // tslint:disable-next-line: no-magic-numbers
-                        .slice(8, -1);
-                    if (objClass === "Object" || objClass === "Array") {
-                        for (const key in obj) {
-                            if (!obj.hasOwnProperty(key)) {
-                                continue;
-                            }
-                            sizeOf(obj[key]);
-                        }
-                    } else {
-                        bytes += obj.toString().length * 2;
-                    }
-                    break;
-            }
-        }
-        return bytes;
-    }
-
-    return sizeOf(data);
-}
+export * from "@here/olp-sdk-core/lib/utils/getDataSizeUtil";

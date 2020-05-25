@@ -18,8 +18,19 @@
  */
 
 /**
- * @deprecated This file will be removed by 11.2020.
- * Please use the same from `@here/olp-sdk-core` package.
+ * It's an interface for `@here/olp-sdk-dataservice-api` that is used to send requests to platform services.
+ * [[DataStoreRequestBuilder]] has its own default implementation of the download manager.
+ * If you want to use your download manager, you can implement this interface, and then set your download manager.
+ *
+ * @see [[DataStoreRequestBuilder]]
  */
-
-export * from "@here/olp-sdk-core/lib/utils/HttpError";
+export interface DownloadManager {
+    /**
+     * Downloads data from the specified URL.
+     *
+     * @param url The URL that you want to download.
+     * @param init The helper object for the request.
+     * @return The data from the specified URL.
+     */
+    download(url: string, init?: RequestInit): Promise<Response>;
+}

@@ -1,7 +1,27 @@
+/*
+ * Copyright (C) 2020 HERE Europe B.V.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
 import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
-import { KeyValueCache } from "../../lib";
+import { KeyValueCache } from "@here/olp-sdk-core";
+
 chai.use(sinonChai);
 const expect = chai.expect;
 
@@ -46,13 +66,6 @@ describe("KeyValueCache", () => {
 
     it("Should get key value", () => {
         expect(keyValueCache1.get("key1")).equal("value1");
-        expect(keyValueCache1.get("key2")).equal("value2");
-    });
-
-    it("Should remove key value", () => {
-        keyValueCache1.remove("key1");
-
-        expect(keyValueCache1.get("key1")).equal(undefined);
         expect(keyValueCache1.get("key2")).equal("value2");
     });
 });
