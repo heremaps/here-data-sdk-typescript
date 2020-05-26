@@ -21,7 +21,7 @@
  * API Lookup Service v1
  * The API Lookup Service is a platform service with following goals:
  * - Redirect users to REST APIs related to a resource identified by an HRN
- * - Given an HRN, provide parameters to be used in REST APIs calls. - Discovery of other platform APIs.
+ * - Given an HRN, provide parameters to be used in REST APIs calls. - Discovery of other HERE APIs.
  *
  * OpenAPI spec version: 1.0.3
  *
@@ -103,9 +103,9 @@ export async function platformAPI(
 
 /**
  * @deprecated This method is deprecated and is not used. Please used getPlatformAPIList()
- * Return the list of the platform APIs. This response is valid for the time specified by 'Cache-Control' header.
+ * Return the list of the HERE APIs. This response is valid for the time specified by 'Cache-Control' header.
  *
- * @summary Return the list of the platform APIs.
+ * @summary Return the list of the HERE APIs.
  */
 export async function platformAPIList(
     builder: RequestBuilder
@@ -124,9 +124,9 @@ export async function platformAPIList(
 }
 
 /**
- * Return the list of the platform APIs. This response is valid for the time specified by 'Cache-Control' header.
+ * Return the list of the HERE APIs. This response is valid for the time specified by 'Cache-Control' header.
  *
- * @summary Return the list of the platform APIs.
+ * @summary Return the list of the HERE APIs.
  */
 export async function getPlatformAPIList(
     builder: RequestBuilder

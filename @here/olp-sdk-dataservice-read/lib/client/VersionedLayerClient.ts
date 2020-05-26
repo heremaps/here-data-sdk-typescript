@@ -226,7 +226,7 @@ export class VersionedLayerClient {
     }
 
     /**
-     * Fetches partitions metadata from the Query API using a quadkey.
+     * Fetches partitions metadata from the Query Service API using a quadkey.
      *
      * @param quadKeyPartitionsRequest The [[QuadKeyPartitionsRequest]] instance.
      * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
@@ -253,8 +253,8 @@ export class VersionedLayerClient {
      * @returns A list of metadata for each of the partitions from the requested layer.
      *
      * If the partition IDs are not set, you get metadata from all of the partitions of the requested layer
-     * from the platform Metadata Service.
-     * If the IDs are set, you get data from the platform Query Service.
+     * from the Metadata Service API.
+     * If the IDs are set, you get data from the Query Service API.
      */
     async getPartitions(
         partitionsRequest: PartitionsRequest,
@@ -425,11 +425,11 @@ export class VersionedLayerClient {
             metadata.partitions[0].dataHandle
             ? metadata.partitions[0].dataHandle
             : Promise.reject(
-                  new HttpError(
-                      404,
-                      `No partition dataHandle for partition ${partitionId}. HRN: ${this.hrn}`
-                  )
-              );
+                new HttpError(
+                    404,
+                    `No partition dataHandle for partition ${partitionId}. HRN: ${this.hrn}`
+                )
+            );
     }
 
     /**

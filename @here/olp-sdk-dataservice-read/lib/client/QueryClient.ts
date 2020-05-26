@@ -35,7 +35,7 @@ import { MetadataCacheRepository } from "../cache/MetadataCacheRepository";
 import { FetchOptions } from "./FetchOptions";
 
 /**
- * A client for the platform Query Service that provides a way to get information (metadata)
+ * A client for the Query Service API that provides a way to get information (metadata)
  * about layers and partitions stored in a catalog.
  * This service exposes the metadata for a single partition that you can query one by one or using a parent tile.
  */
@@ -43,12 +43,12 @@ export class QueryClient {
     private readonly apiVersion = "v1";
 
     /**
-     * Constructs a new client for the platform Query Service.
+     * Constructs a new client for the Query Service API.
      *
      * @param settings The [[OlpClientSettings]] instance.
      * @return The [[QueryClient]] instance.
      */
-    constructor(private readonly settings: OlpClientSettings) {}
+    constructor(private readonly settings: OlpClientSettings) { }
 
     /**
      * Fetches the quadtree index.

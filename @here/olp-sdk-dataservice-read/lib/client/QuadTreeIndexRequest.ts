@@ -31,7 +31,7 @@ import { HRN, QuadKey, validateBillingTag } from "..";
 export type QuadTreeIndexDepth = 0 | 1 | 2 | 3 | 4;
 
 /**
- * Prepares information for calls to get quadtree metadata from the platform Query Service.
+ * Prepares information for calls to get quadtree metadata from the Query Service API.
  *
  * This class works only with versioned or volatile layers where the partitioning scheme is HERE Tile.
  */
@@ -43,7 +43,7 @@ export class QuadTreeIndexRequest {
     private additionalFields?: AdditionalFields;
 
     /**
-     * Constructs the [[QuadTreeIndexRequest]] instance for fetching the quadtree index from the plaform Query Service
+     * Constructs the [[QuadTreeIndexRequest]] instance for fetching the quadtree index from the Query Service API
      * for volatile or versioned layers
      *
      * @param catalogHrn The catalog HERE Resource Name ([[HRN]]).
@@ -55,7 +55,7 @@ export class QuadTreeIndexRequest {
         private catalogHrn: HRN,
         private layerId: string,
         private layerType: "versioned" | "volatile" = "versioned"
-    ) {}
+    ) { }
 
     /**
      * The version of the catalog against which you want to run the query.
