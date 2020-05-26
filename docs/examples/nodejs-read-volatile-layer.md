@@ -217,12 +217,12 @@ Partition metadata from a volatile layer consists of the following information a
 
 You can get partition metadata in one of the following ways:
 
-- Using the platform Metadata Service
-- Using the platform Query Service
+- Using the Metadata Service API 
+- Using the Query Service API
 
-You can get partition metadata using the platform Query Service only if the partition has the HERE tile scheme. For more information on the HERE tile scheme, see [Partitions](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/partitions.html).
+You can get partition metadata using the Query Service API only if the partition has the HERE tile scheme. For more information on the HERE tile scheme, see [Partitions](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/partitions.html).
 
-For performance reasons, it is best to use the platform Query Service to get metadata for a specific partition. For batch processes, and to get metadata for many partitions or all partitions in a layer, use the platform Metadata Service.
+For performance reasons, it is best to use the Query Service API to get metadata for a specific partition. For batch processes, and to get metadata for many partitions or all partitions in a layer, use the Metadata Service API.
 
 **To get partition metadata from a volatile layer:**
 
@@ -232,7 +232,7 @@ For performance reasons, it is best to use the platform Query Service to get met
 
 2. Do one of the following:
 
-   - (For partitions with the HERE tile scheme) To get partition metadata using the platform Metadata Service:
+   - (For partitions with the HERE tile scheme) To get partition metadata using the Metadata Service API:
 
      1. Create the `QuadKeyPartitionsRequest` object with the quadkey and the number of child partitions (from 0 to 4).
 
@@ -253,7 +253,7 @@ For performance reasons, it is best to use the platform Query Service to get met
 
      You get the quadkey tree index with metadata for the requested partition and its parent and children partitions.
 
-   - To get partition metadata using the platform Metadata Service:
+   - To get partition metadata using the Metadata Service API:
 
      1. Create the `PartitionsRequest` object.
 

@@ -22,7 +22,7 @@ import { validateBillingTag, validatePartitionsIdsList } from "..";
 import { FetchOptions } from "./FetchOptions";
 
 /**
- * Prepares information for calls to get partitions metadata from the HERE Metadata Service.
+ * Prepares information for calls to get partitions metadata from the Metadata Service API.
  */
 export class PartitionsRequest {
     private version?: number;

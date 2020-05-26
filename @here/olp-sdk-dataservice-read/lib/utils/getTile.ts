@@ -32,7 +32,7 @@ import {
  * Gets the tile by the key.
  * 
  * The tile is a geometric area represented as a HERE tile.
- * The quadtree metadata fetches the blob of needed tile from the HERE Query Service,
+ * The quadtree metadata fetches the blob of needed tile from the Query Service API,
  * then caches it, and returns to the user.
  * To disable caching of metadata use `request.withFetchOption(FetchOptions.OnlineOnly)`.
  *
