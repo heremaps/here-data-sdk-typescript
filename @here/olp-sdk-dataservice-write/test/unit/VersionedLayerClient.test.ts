@@ -21,6 +21,9 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import { VersionedLayerClient } from "@here/olp-sdk-dataservice-write";
+import sinon = require("sinon");
+import { MetadataApi } from "@here/olp-sdk-dataservice-api";
+import { OlpClientSettings, RequestFactory } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -34,15 +37,60 @@ class MockedHrn {
 }
 
 describe("VersionedLayerClient write", () => {
-    it("Should initialize", () => {
-        const catalogHrn = "hrn:here:data:::mocked-hrn";
+    let sandbox: sinon.SinonSandbox;
+    let getVersionStub: sinon.SinonStub;
+    let getBaseUrlRequestStub: sinon.SinonStub;
+    let settings: OlpClientSettings;
 
+    const fakeURL = "http://fake-base.url";
+    const catalogHrn = new MockedHrn("hrn:here:data:::mocked-hrn") as any;
+
+    before(() => {
+        sandbox = sinon.createSandbox();
+    });
+
+    beforeEach(() => {
+        settings = sandbox.createStubInstance(OlpClientSettings) as any;
+
+        getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
+
+        getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
+        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
+    });
+
+    afterEach(() => {
+        sandbox.restore();
+    });
+
+    it("Should initialize", () => {
         const client = new VersionedLayerClient({
-            catalogHrn: new MockedHrn(catalogHrn) as any,
-            settings: {} as any
+            catalogHrn,
+            settings
         });
 
         assert.isDefined(client);
         expect(client).be.instanceOf(VersionedLayerClient);
+    });
+
+    it("Should method getBaseVersion provide latest version", async () => {
+        const mockedVersion = {
+            version: 123
+        };
+
+        getVersionStub.callsFake(
+            (): Promise<MetadataApi.VersionResponse> => {
+                return Promise.resolve(mockedVersion);
+            }
+        );
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        const version = await client.getBaseVersion();
+
+        assert.isDefined(version);
+        expect(version).to.be.equal(mockedVersion.version);
     });
 });
