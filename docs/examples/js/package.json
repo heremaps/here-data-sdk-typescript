@@ -7,11 +7,5 @@
     "url": "https://here.com"
   },
   "license": "Apache-2.0",
-  "private": true,
-  "scripts": {
-    "start": "lite-server"
-  },
-  "devDependencies": {
-    "lite-server": "2.5.4"
-  }
+  "private": true
 }

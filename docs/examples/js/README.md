@@ -3,4 +3,4 @@
 To play with examples:
 
 1. Download the folder, add your credentials and layers params to the config.js.
-2. Run `npm install && npm start` and open in your favorite browser the url http://localhost:3000/.
+2. Install your favorite http server like `npm install http-server', run it and open in your favorite browser the url http://localhost:"port of your http server"/.
