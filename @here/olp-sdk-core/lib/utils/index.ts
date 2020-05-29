@@ -26,3 +26,4 @@ export * from "./HRN";
 export * from "./getDataSizeUtil";
 export * from "./HttpError";
 export * from "./FetchOptions";
+export * from "./TileKey";
