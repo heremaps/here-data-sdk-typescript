@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,14 @@ describe("QuadKeyUtils", () => {
         assert.strictEqual(parent_3.row, 0, "Row mismatch");
         assert.strictEqual(parent_3.column, 0, "Column mismatch");
         assert.strictEqual(parent_3.level, 0, "Level mismatch");
+    });
+
+    it("Check the tile parents with delta 4", () => {
+        const tile = { row: 3275, column: 8085, level: 13 };
+        const parent = utils.computeParentKey(tile, 4);
+        assert.strictEqual(parent.row, 204, "Row mismatch");
+        assert.strictEqual(parent.column, 505, "Column mismatch");
+        assert.strictEqual(parent.level, 9, "Level mismatch");
     });
 
     it("Subtile can be added to the root tile", () => {

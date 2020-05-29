@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2020 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
  */
 
 /**
+ * @deprecated This interface will be removed by 12.2020. Please use the same from `@here/olp-sdk-core` package.
  * Addresses a tile in a quadtree.
  *
  * A quadkey is defined by a row, a column, and a level. The tree has a root at level 0 that contains one
@@ -100,6 +101,9 @@ const powerOfTwo = [
 // tslint:enable:no-magic-numbers
 
 /**
+ * @deprecated This function will be removed by 12.2020.
+ * Please use the same method from [[TileKey]] class, imported from `@here/olp-sdk-core` package.
+ *
  * Creates a quadkey from a numeric or string Morton code representation.
  *
  * @param code The Morton code that you want to convert.
@@ -131,6 +135,9 @@ export function quadKeyFromMortonCode(code: number | string): QuadKey {
 }
 
 /**
+ * @deprecated This function will be removed by 12.2020.
+ * Please use the same method from [[TileKey]] class, imported from `@here/olp-sdk-core` package.
+ *
  * Converts a quadkey into a Morton code numeric representation.
  *
  * @param key The quadkey that you need to convert to the Morton code.
@@ -156,6 +163,9 @@ export function mortonCodeFromQuadKey(key: QuadKey): number {
 }
 
 /**
+ * @deprecated This function will be removed by 12.2020.
+ * Please use the same method from [[TileKey]] class, imported from `@here/olp-sdk-core` package.
+ *
  * Computes a new quadkey that is a result of appending the `subKey` (relative) quadkey to the current quadkey.
  *
  * This function treats the current quadkey as a root for a relative quadkey.
@@ -174,6 +184,9 @@ export function addQuadKeys(root: QuadKey, subKey: QuadKey): QuadKey {
 }
 
 /**
+ * @deprecated This function will be removed by 12.2020.
+ * Please use the same method from [[TileKey]] class, imported from `@here/olp-sdk-core` package.
+ *
  * Computes a new quadkey that is the parent of the current quadkey.
  *
  * If the result level is negative, the root quadkey is returned.
@@ -195,6 +208,9 @@ export function computeParentKey(key: QuadKey, delta: number = 1): QuadKey {
 }
 
 /**
+ * @deprecated This function will be removed by 12.2020.
+ * Please use the same method from [[TileKey]] class, imported from `@here/olp-sdk-core` package.
+ *
  * Checks if a quadkey is valid.
  *
  * The number of rows and columns must not be greater than the maximum number of rows and columns in the given level.
