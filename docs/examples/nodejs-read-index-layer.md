@@ -201,7 +201,7 @@ Partition metadata from an index layer consists of the following information abo
    const partitions = await indexLayerClient.getPartitions(request);
    ```
 
-   You get metadata for all the partitions in the layer.
+   You get the partition metadata filtered by the RSQL query.
 
 In browser and Node.js, to abort requests before they have completed, you can create the `AbortController` object, and then add the `AbortController.signal` property to your requests. For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
 
