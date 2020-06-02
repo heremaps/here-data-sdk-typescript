@@ -27,6 +27,7 @@ import * as CoverageApi from "./lib/coverage-api";
 import * as IndexApi from "./lib/index-api";
 import * as LookupApi from "./lib/lookup-api";
 import * as MetadataApi from "./lib/metadata-api";
+import * as PublishApi from "./lib/publish-api-v2";
 import * as QueryApi from "./lib/query-api";
 import * as StreamApi from "./lib/stream-api";
 import * as VolatileBlobApi from "./lib/volatile-blob-api";
@@ -45,5 +46,6 @@ export {
     BlobApi,
     VolatileBlobApi,
     IndexApi,
-    StreamApi
+    StreamApi,
+    PublishApi
 };
