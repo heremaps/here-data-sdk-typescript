@@ -17,5 +17,4 @@
  * License-Filename: LICENSE
  */
 
-export * from "./client";
-export * from "./model";
+export * from "./StartBatchRequest";
