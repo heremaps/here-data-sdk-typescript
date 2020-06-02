@@ -121,8 +121,11 @@ export interface UserInfo {
     language: string;
     /** The code of the country in which you live. */
     countryCode: string;
-    /** True if your email is verified, false otherwise. */
+    /** True if your email is verified; false otherwise. */
     emailVerified: boolean;
+    /** True if the marketing ID is enabled; false otherwise.
+     * @deprecated This property is not used anymore and will be deleted by 12.2020.
+     */
     marketingEnabled: boolean;
     /** The Unix time (seconds) when the authorization was created. */
     createdTime: number;

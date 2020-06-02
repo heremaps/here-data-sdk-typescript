@@ -63,7 +63,7 @@ export class HRN {
      *
      * @example `hrn:here:data:::example-catalog`
      *
-     * @param hrn The HRN string
+     * @param hrn The HRN string.
      * @return The new HRN.
      */
     static fromString(hrn: string): HRN {
@@ -109,7 +109,7 @@ export class HRN {
      * @param data The data from this HRN.
      * @return The [[HRN]] instance.
      */
-    constructor(readonly data: HRNData) {}
+    constructor(readonly data: HRNData) { }
 
     /**
      * Converts the specified HRN to its string representation.

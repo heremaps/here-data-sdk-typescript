@@ -101,6 +101,7 @@ export class DataStoreRequestBuilder extends RequestBuilder {
         private readonly getBearerToken: () => Promise<string>,
         private readonly abortSignal?: AbortSignal
     ) {
+        /** The URL string. */
         super(baseUrl);
     }
 
