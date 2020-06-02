@@ -40,13 +40,13 @@ import {
  * Parameters for use to initialize VersionLayerClient.
  */
 export interface VersionedLayerClientParams {
-    // HRN of the catalog.
+    /** The HRN of the catalog. */
     catalogHrn: HRN;
-    // The ID of the layer.
+    /** The ID of the layer. */
     layerId: string;
-    // The [[OlpClientSettings]] instance.
+    /** The [[OlpClientSettings]] instance. */
     settings: OlpClientSettings;
-    // Layer version. If it is not defined, then latest version will be used.
+    /** The layer version. If it is not defined, the latest version is used. */
     version?: number;
 }
 
@@ -208,16 +208,16 @@ export class VersionedLayerClient {
             return quadTreeIndexResponse.subQuads &&
                 quadTreeIndexResponse.subQuads.length
                 ? this.downloadPartition(
-                      quadTreeIndexResponse.subQuads[0].dataHandle,
-                      abortSignal,
-                      dataRequest.getBillingTag()
-                  )
+                    quadTreeIndexResponse.subQuads[0].dataHandle,
+                    abortSignal,
+                    dataRequest.getBillingTag()
+                )
                 : Promise.reject(
-                      new HttpError(
-                          204,
-                          `No dataHandle for quadKey {column: ${quadKey.column}, row: ${quadKey.row}, level: ${quadKey.level}}. HRN: ${this.hrn}`
-                      )
-                  );
+                    new HttpError(
+                        204,
+                        `No dataHandle for quadKey {column: ${quadKey.column}, row: ${quadKey.row}, level: ${quadKey.level}}. HRN: ${this.hrn}`
+                    )
+                );
         }
 
         return Promise.reject(

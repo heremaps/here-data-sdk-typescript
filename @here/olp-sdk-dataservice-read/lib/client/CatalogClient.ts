@@ -29,7 +29,7 @@ import { CatalogRequest } from "./CatalogRequest";
 import { LayerVersionsRequest } from "./LayerVersionsRequest";
 
 /**
- * Interacts with the DataStore catalog.
+ * Interacts with the `DataStore` catalog.
  */
 export class CatalogClient {
     private readonly apiVersion: string = "v1";

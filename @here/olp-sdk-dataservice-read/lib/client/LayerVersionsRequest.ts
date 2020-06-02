@@ -19,19 +19,22 @@
 
 import { validateBillingTag } from "..";
 
+/** Prepares information for calls to get layer versions of a specific catalog version. */
 export class LayerVersionsRequest {
     private version: number | undefined;
     private billingTag?: string;
 
     /**
-     * Catalog version.
+     * Gets a catalog version.
+     * 
+     * @returns The catalog version.
      */
     public getVersion(): number | undefined {
         return this.version;
     }
 
     /**
-     * Set the catalog version value to use in method getLayerVersions from [[CatalogClient]].
+     * Sets the catalog version value that is used in the 'getLayerVersions' method of [[CatalogClient]].
      *
      * @param version Specify the catalog version.
      * @returns The updated [[LayerVersionsRequest]] instance
@@ -41,15 +44,21 @@ export class LayerVersionsRequest {
         return this;
     }
     /**
-     * Billing Tag for grouping billing records together.
+     * An optional free-form tag that is used for grouping billing records together.
+     *
+     * If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].
+     *
+     * @param tag The `BillingTag` string.
+     * @return The updated [[LayerVersionsRequest]] instance that you can use to chain methods.
      */
     public getBillingTag(): string | undefined {
         return this.billingTag;
     }
 
     /**
-     * Billing Tag is an optional free-form tag which is used for grouping billing records together.
-     * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     * An optional free-form tag that is used for grouping billing records together.
+     *
+     * If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].
      */
     public withBillingTag(tag: string): LayerVersionsRequest {
         this.billingTag = validateBillingTag(tag);

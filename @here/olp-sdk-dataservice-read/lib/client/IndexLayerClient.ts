@@ -30,11 +30,11 @@ import { IndexQueryRequest, RequestFactory } from "..";
  * Parameters for use to initialize IndexLayerClient.
  */
 export interface IndexLayerClientParams {
-    // HRN of the catalog.
+    /** The HRN of the catalog. */
     catalogHrn: HRN;
-    // The ID of the layer.
+    /**  The ID of the layer. */
     layerId: string;
-    // The [[OlpClientSettings]] instance.
+    /** The [[OlpClientSettings]] instance. */
     settings: OlpClientSettings;
 }
 

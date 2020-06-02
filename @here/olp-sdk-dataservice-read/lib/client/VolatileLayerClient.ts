@@ -44,11 +44,11 @@ import {
  * Parameters for use to initialize VolatileLayerClient.
  */
 export interface VolatileLayerClientParams {
-    // HRN of the catalog.
+    /** The HRN of the catalog. */
     catalogHrn: HRN;
-    // The ID of the layer.
+    /** The ID of the layer. */
     layerId: string;
-    // The [[OlpClientSettings]] instance.
+    /** The [[OlpClientSettings]] instance. */
     settings: OlpClientSettings;
 }
 
@@ -177,16 +177,16 @@ export class VolatileLayerClient {
 
                 return quadTreeIndex.subQuads && quadTreeIndex.subQuads.length
                     ? this.downloadPartition(
-                          quadTreeIndex.subQuads[0].dataHandle,
-                          abortSignal,
-                          dataRequest.getBillingTag()
-                      )
+                        quadTreeIndex.subQuads[0].dataHandle,
+                        abortSignal,
+                        dataRequest.getBillingTag()
+                    )
                     : Promise.reject(
-                          new HttpError(
-                              204,
-                              `No dataHandle for quadKey {column: ${quadKey.column}, row: ${quadKey.row}, level: ${quadKey.level}}. HRN: ${this.hrn}`
-                          )
-                      );
+                        new HttpError(
+                            204,
+                            `No dataHandle for quadKey {column: ${quadKey.column}, row: ${quadKey.row}, level: ${quadKey.level}}. HRN: ${this.hrn}`
+                        )
+                    );
             }
         }
 
