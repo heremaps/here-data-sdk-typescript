@@ -52,74 +52,72 @@ describe("TileKey", function() {
         );
     });
 
-    it("toQuadKeyString", function() {
+    it("toQuadKey", function() {
         assert.strictEqual(
             "30",
-            TileKey.fromRowColumnLevel(2, 2, 2).toQuadKeyString()
+            TileKey.fromRowColumnLevel(2, 2, 2).toQuadKey()
         );
         assert.strictEqual(
             "31",
-            TileKey.fromRowColumnLevel(2, 3, 2).toQuadKeyString()
+            TileKey.fromRowColumnLevel(2, 3, 2).toQuadKey()
         );
         assert.strictEqual(
             "32",
-            TileKey.fromRowColumnLevel(3, 2, 2).toQuadKeyString()
+            TileKey.fromRowColumnLevel(3, 2, 2).toQuadKey()
         );
         assert.strictEqual(
             "33",
-            TileKey.fromRowColumnLevel(3, 3, 2).toQuadKeyString()
+            TileKey.fromRowColumnLevel(3, 3, 2).toQuadKey()
         );
         assert.strictEqual(
             "1331132012123",
-            TileKey.fromRowColumnLevel(3275, 8085, 13).toQuadKeyString()
+            TileKey.fromRowColumnLevel(3275, 8085, 13).toQuadKey()
         );
         assert.strictEqual(
             "-",
-            TileKey.fromRowColumnLevel(0, 0, 0).toQuadKeyString()
+            TileKey.fromRowColumnLevel(0, 0, 0).toQuadKey()
         );
     });
 
-    it("fromQuadKeyString", function() {
+    it("fromQuadKey", function() {
         assert.isTrue(
-            TileKey.fromQuadKeyString("30").equals(
+            TileKey.fromQuadKey("30").equals(
                 TileKey.fromRowColumnLevel(2, 2, 2)
             )
         );
         assert.isTrue(
-            TileKey.fromQuadKeyString("31").equals(
+            TileKey.fromQuadKey("31").equals(
                 TileKey.fromRowColumnLevel(2, 3, 2)
             )
         );
         assert.isTrue(
-            TileKey.fromQuadKeyString("32").equals(
+            TileKey.fromQuadKey("32").equals(
                 TileKey.fromRowColumnLevel(3, 2, 2)
             )
         );
         assert.isTrue(
-            TileKey.fromQuadKeyString("33").equals(
+            TileKey.fromQuadKey("33").equals(
                 TileKey.fromRowColumnLevel(3, 3, 2)
             )
         );
         assert.isTrue(
-            TileKey.fromQuadKeyString("1331132012123").equals(
+            TileKey.fromQuadKey("1331132012123").equals(
                 TileKey.fromRowColumnLevel(3275, 8085, 13)
             )
         );
         assert.isTrue(
-            TileKey.fromQuadKeyString("-").equals(
-                TileKey.fromRowColumnLevel(0, 0, 0)
-            )
+            TileKey.fromQuadKey("").equals(TileKey.fromRowColumnLevel(0, 0, 0))
         );
     });
 
-    it("columnsCount", function() {
-        assert.strictEqual(8, TileKey.columnsCount(3));
-        assert.strictEqual(8192, TileKey.columnsCount(13));
+    it("columnsAtLevel", function() {
+        assert.strictEqual(8, TileKey.columnsAtLevel(3));
+        assert.strictEqual(8192, TileKey.columnsAtLevel(13));
     });
 
-    it("rowsCount", function() {
-        assert.strictEqual(8, TileKey.rowsCount(3));
-        assert.strictEqual(8192, TileKey.rowsCount(13));
+    it("rowsAtLevel", function() {
+        assert.strictEqual(8, TileKey.rowsAtLevel(3));
+        assert.strictEqual(8192, TileKey.rowsAtLevel(13));
     });
 
     it("parent", function() {
@@ -167,5 +165,73 @@ describe("TileKey", function() {
                 TileKey.fromMortonCode(100000155)
             )
         );
+    });
+
+    it("rowCount", function() {
+        assert.strictEqual(
+            4096,
+            TileKey.fromRowColumnLevel(1637, 4042, 12).rowCount()
+        );
+    });
+
+    it("columnCount", function() {
+        assert.strictEqual(
+            8192,
+            TileKey.fromRowColumnLevel(3275, 8085, 13).columnCount()
+        );
+    });
+
+    it("toHereTile", function() {
+        assert.strictEqual(
+            "100000155",
+            TileKey.fromRowColumnLevel(3275, 8085, 13).toHereTile()
+        );
+    });
+
+    it("changedLevelTo", function() {
+        assert.isTrue(
+            TileKey.fromRowColumnLevel(6, 15, 4).equals(
+                TileKey.fromRowColumnLevel(3275, 8085, 13).changedLevelTo(4)
+            )
+        );
+    });
+
+    it("fromHereTile", function() {
+        assert.isTrue(
+            TileKey.fromHereTile("100000155").equals(
+                TileKey.fromRowColumnLevel(3275, 8085, 13)
+            )
+        );
+    });
+
+    it("parentMortonCode", function() {
+        assert.strictEqual(25000038, TileKey.parentMortonCode(100000155));
+    });
+
+    it("addedSubHereTile", function() {
+        assert.isTrue(
+            TileKey.fromRowColumnLevel(49, 124, 7).equals(
+                TileKey.fromRowColumnLevel(6, 15, 4).addedSubHereTile("82")
+            )
+        );
+    });
+
+    it("atCoords", function() {
+        assert.isTrue(
+            TileKey.fromRowColumnLevel(3, 6, 5).equals(
+                TileKey.atCoords(5, 8.8, 6.486, 45, 55)
+            )
+        );
+    });
+
+    it("throws an error", function() {
+        try {
+            TileKey.fromRowColumnLevel(0, 0, 0).parent();
+        } catch (error) {
+            assert.equal(
+                error.message,
+                "Cannot get the parent of the root tile key"
+            );
+        }
     });
 });
