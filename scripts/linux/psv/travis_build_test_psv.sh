@@ -41,7 +41,7 @@ npm run lint
 npm run test
 
 # Generate and upload codecov
-npm run codecov && npx codecov
+npm run codecov
 
 # Integration tests
 npm run integration-test
