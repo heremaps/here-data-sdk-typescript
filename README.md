@@ -28,6 +28,7 @@ This SDK lets you:
 - Read catalog and partition metadata
 - Retrieve data from layers
 
+
 Additionally, the SDK includes classes for work with geospatial tiling schemes that are used by most platform catalog layers.
 
 ## Backward Compatibility
