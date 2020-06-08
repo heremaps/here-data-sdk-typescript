@@ -18,3 +18,4 @@
  */
 
 export * from "./VersionedLayerClient";
+export * from "./StartBatchRequest";

@@ -77,7 +77,7 @@ export interface Publication {
     /**
      * The ID of the publication.
      */
-    id: string;
+    id?: string;
 
     details?: Details;
 
@@ -87,7 +87,7 @@ export interface Publication {
      * The current version of the catalog. If this is the catalog's first publication, the version is `-1`.
      * After the first publication, the catalog version becomes 0. Each subsequent publication increments the catalog version by 1.
      */
-    catalogVersion: number;
+    catalogVersion?: number;
 
     /**
      * The upstream version dependencies for the publication.
