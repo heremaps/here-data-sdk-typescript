@@ -19,3 +19,4 @@
 
 export * from "./VersionedLayerClient";
 export * from "./StartBatchRequest";
+export * from "./CancelBatchRequest";

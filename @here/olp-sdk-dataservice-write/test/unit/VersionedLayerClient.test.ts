@@ -20,11 +20,14 @@
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import { VersionedLayerClient } from "@here/olp-sdk-dataservice-write";
+import {
+    VersionedLayerClient,
+    StartBatchRequest,
+    CancelBatchRequest
+} from "@here/olp-sdk-dataservice-write";
 import sinon = require("sinon");
 import { MetadataApi, PublishApi } from "@here/olp-sdk-dataservice-api";
 import { OlpClientSettings, RequestFactory } from "@here/olp-sdk-core";
-import { StartBatchRequest } from "@here/olp-sdk-dataservice-write/lib";
 
 chai.use(sinonChai);
 
@@ -41,6 +44,7 @@ describe("VersionedLayerClient write", function() {
     let sandbox: sinon.SinonSandbox;
     let getVersionStub: sinon.SinonStub;
     let initPublicationStub: sinon.SinonStub;
+    let cancelPublicationStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
     let settings: OlpClientSettings;
 
@@ -56,6 +60,7 @@ describe("VersionedLayerClient write", function() {
 
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
         initPublicationStub = sandbox.stub(PublishApi, "initPublication");
+        cancelPublicationStub = sandbox.stub(PublishApi, "cancelPublication");
 
         getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
@@ -146,6 +151,62 @@ describe("VersionedLayerClient write", function() {
         getBaseUrlRequestStub.callsFake(() => Promise.reject("Server Error"));
         const response2 = await client
             .startBatch(new StartBatchRequest())
+            .catch(error => error.message);
+        expect(response2).to.be.equal(
+            'Error retrieving from cache builder for resource "hrn:here:data:::mocked-hrn" and api: publish. Server Error'
+        );
+    });
+
+    it("Should cancel the publication", async function() {
+        cancelPublicationStub.callsFake(() => {
+            return Promise.resolve({
+                status: 204
+            });
+        });
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        const response = await client.cancelBatch(
+            new CancelBatchRequest().withPublicationId("mocked-pub-id")
+        );
+        expect(response).equals(true);
+    });
+
+    it("Should rejects with error a cancel the publication operation", async function() {
+        cancelPublicationStub.callsFake(() => {
+            return Promise.reject({
+                message: "Internal Server Error",
+                status: 500
+            });
+        });
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        const response = await client
+            .cancelBatch(
+                new CancelBatchRequest().withPublicationId("mocked-pub-id")
+            )
+            .catch(error => error.message);
+        expect(response).to.be.equals("Internal Server Error");
+
+        const response1 = await client
+            .cancelBatch(new CancelBatchRequest())
+            .catch(error => error.message);
+        expect(response1).to.be.equals(
+            "Please provide publication id for the CancelBatchRequest"
+        );
+
+        getBaseUrlRequestStub.callsFake(() => Promise.reject("Server Error"));
+        const response2 = await client
+            .cancelBatch(
+                new CancelBatchRequest().withPublicationId("mocked-pub-id")
+            )
             .catch(error => error.message);
         expect(response2).to.be.equal(
             'Error retrieving from cache builder for resource "hrn:here:data:::mocked-hrn" and api: publish. Server Error'
