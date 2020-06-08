@@ -22,8 +22,9 @@ import sinonChai = require("sinon-chai");
 
 import { VersionedLayerClient } from "@here/olp-sdk-dataservice-write";
 import sinon = require("sinon");
-import { MetadataApi } from "@here/olp-sdk-dataservice-api";
+import { MetadataApi, PublishApi } from "@here/olp-sdk-dataservice-api";
 import { OlpClientSettings, RequestFactory } from "@here/olp-sdk-core";
+import { StartBatchRequest } from "@here/olp-sdk-dataservice-write/lib";
 
 chai.use(sinonChai);
 
@@ -36,33 +37,35 @@ class MockedHrn {
     }
 }
 
-describe("VersionedLayerClient write", () => {
+describe("VersionedLayerClient write", function() {
     let sandbox: sinon.SinonSandbox;
     let getVersionStub: sinon.SinonStub;
+    let initPublicationStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
     let settings: OlpClientSettings;
 
     const fakeURL = "http://fake-base.url";
     const catalogHrn = new MockedHrn("hrn:here:data:::mocked-hrn") as any;
 
-    before(() => {
+    before(function() {
         sandbox = sinon.createSandbox();
     });
 
-    beforeEach(() => {
+    beforeEach(function() {
         settings = sandbox.createStubInstance(OlpClientSettings) as any;
 
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
+        initPublicationStub = sandbox.stub(PublishApi, "initPublication");
 
         getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
-    afterEach(() => {
+    afterEach(function() {
         sandbox.restore();
     });
 
-    it("Should initialize", () => {
+    it("Should initialize", function() {
         const client = new VersionedLayerClient({
             catalogHrn,
             settings
@@ -72,7 +75,7 @@ describe("VersionedLayerClient write", () => {
         expect(client).be.instanceOf(VersionedLayerClient);
     });
 
-    it("Should method getBaseVersion provide latest version", async () => {
+    it("Should method getBaseVersion provide latest version", async function() {
         const mockedVersion = {
             version: 123
         };
@@ -92,5 +95,60 @@ describe("VersionedLayerClient write", () => {
 
         assert.isDefined(version);
         expect(version).to.be.equal(mockedVersion.version);
+    });
+
+    it("Should init the publication", async function() {
+        initPublicationStub.callsFake(
+            (): Promise<PublishApi.Publication> => {
+                return Promise.resolve({
+                    catalogId: "hrn:here:data:::mocked-hrn",
+                    catalogVersion: 8,
+                    details: {
+                        expires: 1591845135277,
+                        message: "",
+                        modified: 1591585935277,
+                        started: 1591585935277,
+                        state: "initialized"
+                    },
+                    id: "w2-vr-4c94c5a8-ea2e-4e82-ab83-d0da541cd96d",
+                    layerIds: ["mocked-layer-1"],
+                    versionDependencies: []
+                });
+            }
+        );
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        const response = await client.startBatch(
+            new StartBatchRequest().withLayers(["mocked-layer-1"])
+        );
+        expect(response.id).to.be.equal(
+            "w2-vr-4c94c5a8-ea2e-4e82-ab83-d0da541cd96d"
+        );
+    });
+
+    it("Should init the publication throw an error", async function() {
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        const response = await client
+            .startBatch(new StartBatchRequest())
+            .catch(error => error.message);
+        expect(response).to.be.equal(
+            "Please provide layer id or ids for the StartBatchRequest"
+        );
+
+        getBaseUrlRequestStub.callsFake(() => Promise.reject("Server Error"));
+        const response2 = await client
+            .startBatch(new StartBatchRequest())
+            .catch(error => error.message);
+        expect(response2).to.be.equal(
+            'Error retrieving from cache builder for resource "hrn:here:data:::mocked-hrn" and api: publish. Server Error'
+        );
     });
 });

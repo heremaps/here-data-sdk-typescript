@@ -18,7 +18,8 @@
  */
 
 import { HRN, OlpClientSettings, RequestFactory } from "@here/olp-sdk-core";
-import { MetadataApi } from "@here/olp-sdk-dataservice-api";
+import { MetadataApi, PublishApi } from "@here/olp-sdk-dataservice-api";
+import { StartBatchRequest } from "@here/olp-sdk-dataservice-write";
 
 /**
  * Parameters for use to initialize VolatileLayerClient.
@@ -84,5 +85,58 @@ export class VersionedLayerClient {
         }).catch(err => Promise.reject(err));
 
         return Promise.resolve(latestVersion.version);
+    }
+
+    /**
+     * Initializes a new publication for publishing metadata.
+     * Determines the publication type based on the provided layer IDs.
+     * A publication can only consist of layer IDs that have the same layer type.
+     * For example, you can have a publication for multiple layers of type versioned,
+     * but you cannot have a single publication that publishes to both versioned and stream layers.
+     *
+     * In addition, you may only have one versioned publication in process at a time.
+     * You cannot have multiple active publications to the same catalog for versioned layer types.
+     * The request field versionDependencies is optional and is used for versioned layers to declare version dependencies.
+     *
+     * @param request details of the batch operation to start
+     * @param abortSignal An optional signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     */
+    public async startBatch(
+        request: StartBatchRequest,
+        abortSignal?: AbortSignal
+    ) {
+        const requestBuilder = await RequestFactory.create(
+            "publish",
+            "v2",
+            this.params.settings,
+            this.params.catalogHrn,
+            abortSignal
+        ).catch((err: Response) =>
+            Promise.reject(
+                new Error(
+                    `Error retrieving from cache builder for resource "${this.params.catalogHrn}" and api: publish. ${err}`
+                )
+            )
+        );
+
+        const layerIds = request.getLayers();
+        if (!layerIds) {
+            return Promise.reject(
+                new Error(
+                    "Please provide layer id or ids for the StartBatchRequest"
+                )
+            );
+        }
+
+        return PublishApi.initPublication(requestBuilder, {
+            body: {
+                layerIds,
+                versionDependencies: request.getVersionDependencies()
+            },
+            billingTag: request.getBillingTag()
+        });
     }
 }

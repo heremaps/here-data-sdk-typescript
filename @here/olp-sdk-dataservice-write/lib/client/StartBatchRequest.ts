@@ -17,36 +17,14 @@
  * License-Filename: LICENSE
  */
 
-/**
- * @hidden Metadata about any dependencies on other catalogs that the publication may have.
- * @todo use model from generated API after the API will be merged to the master.
- */
-interface VersionDependency {
-    /**
-     * Indicates the type of data dependency. If this value is set to false, this dependency is an indirect dependency.
-     * This means that data from this catalog was not directly used by a data processing filter to update the current
-     * version of the catalog. Instead, the data was only used by upstream pipelines to generate the input data for
-     * a data processing pipeline.
-     */
-    direct: boolean;
-
-    /**
-     * The HERE Resource Name (HRN) of the catalog that the publication depends on.
-     */
-    hrn: string;
-
-    /**
-     * The version of the catalog metadata that the publication depends on.
-     */
-    version: number;
-}
+import { PublishApi } from "@here/olp-sdk-dataservice-api";
 
 /**
  * @brief StartBatchRequest is used to start a versioned batch operation.
  */
 export class StartBatchRequest {
     private layers?: string[];
-    private versionDependencies?: VersionDependency[];
+    private versionDependencies?: PublishApi.VersionDependency[];
     private billingTag?: string;
 
     /**
@@ -65,7 +43,7 @@ export class StartBatchRequest {
      * @returns reference to this object
      */
     public withVersionDependencies(
-        versionDependencies: VersionDependency[]
+        versionDependencies: PublishApi.VersionDependency[]
     ): StartBatchRequest {
         this.versionDependencies = versionDependencies;
         return this;
@@ -94,7 +72,9 @@ export class StartBatchRequest {
      * @brief gets the VersionDependencies of this batch operation
      * @returns the array of VersionDependencies or undefined
      */
-    public getVersionDependencies(): VersionDependency[] | undefined {
+    public getVersionDependencies():
+        | PublishApi.VersionDependency[]
+        | undefined {
         return this.versionDependencies;
     }
 
