@@ -48,7 +48,7 @@ async function sign(data: ArrayBufferLike, secretKey: string): Promise<string> {
         keyData,
         {
             name: "HMAC",
-            hash: { name: "SHA-1" }
+            hash: { name: "SHA-256" }
         },
         false,
         ["sign"]
@@ -70,7 +70,7 @@ function getRandomValues(data: Uint8Array): Uint8Array {
 
 /**
  * Creates an access token.
- * 
+ *
  * @param args The arguments needed to get the access token.
  * @return The generated access token.
  */

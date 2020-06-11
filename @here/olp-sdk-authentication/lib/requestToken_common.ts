@@ -116,7 +116,7 @@ async function getOAuthAuthorization(
         encodeURIComponent(args.url) +
         "&" +
         encodeURIComponent(
-            `oauth_consumer_key=${args.consumerKey}&oauth_nonce=${args.nonce}&oauth_signature_method=HMAC-SHA1&oauth_timestamp=${args.timestamp}&oauth_version=1.0`
+            `oauth_consumer_key=${args.consumerKey}&oauth_nonce=${args.nonce}&oauth_signature_method=HMAC-SHA256&oauth_timestamp=${args.timestamp}&oauth_version=1.0`
         );
 
     const signature = await signLatin1(
@@ -129,7 +129,7 @@ async function getOAuthAuthorization(
         args.consumerKey
     )}",oauth_nonce="${encodeURIComponent(
         args.nonce
-    )}",oauth_signature_method="HMAC-SHA1",oauth_timestamp="${
+    )}",oauth_signature_method="HMAC-SHA256",oauth_timestamp="${
         args.timestamp
     }",oauth_version="1.0",oauth_signature="${encodeURIComponent(signature)}"`;
 }

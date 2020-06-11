@@ -76,6 +76,23 @@ describe("oauth-request-offline", () => {
         fetchMock.reset();
     });
 
+    // tslint:disable-next-line: only-arrow-functions
+    it("SHA-256 to sign token requests", async function() {
+        const result = await requestToken({
+            consumerKey: "mocked-key",
+            secretKey: "mocked-secret",
+            url: "https://account.api.here.com/oauth2/token",
+            nonce: "mocked-nonce",
+            scope: "mocked-scope",
+            timestamp: MOCK_CREATED_TIME
+        });
+
+        const options: RequestInit & any = fetchMock.calls()[0][1];
+        expect(options.headers.get("Authorization")).to.be.equal(
+            `OAuth oauth_consumer_key="mocked-key",oauth_nonce="mocked-nonce",oauth_signature_method="HMAC-SHA256",oauth_timestamp="1550777140",oauth_version="1.0",oauth_signature="67j%2FteHKLDlh%2F8VVMU3pRSyGN7lXtC49dkRtWCFoz6U%3D"`
+        );
+    });
+
     it("requestToken", async () => {
         const consumerKey = "key";
         const secretKey = "secret";

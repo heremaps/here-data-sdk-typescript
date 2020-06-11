@@ -21,7 +21,7 @@ import * as crypto from "crypto";
 import { OAuthArgs, requestToken_common, Token } from "./requestToken_common";
 
 async function sign(data: ArrayBufferLike, secretKey: string): Promise<string> {
-    const hmac = crypto.createHmac("sha1", secretKey);
+    const hmac = crypto.createHmac("sha256", secretKey);
     hmac.update(Buffer.from(data));
     return Promise.resolve(hmac.digest("base64"));
 }
@@ -32,7 +32,7 @@ function getRandomValues(data: Uint8Array): Uint8Array {
 
 /**
  * Creates an access token.
- * 
+ *
  * @param args The arguments needed to get the access token.
  * @return The generated access token.
  */
