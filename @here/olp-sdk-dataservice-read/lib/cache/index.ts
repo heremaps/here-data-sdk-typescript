@@ -19,5 +19,6 @@
 
 export * from "./ApiCacheRepository";
 export * from "./MetadataCacheRepository";
+export * from "./QuadTreeIndexCacheRepository";
 export * from "./KeyValueCache";
 export * from "./LRUCache";
