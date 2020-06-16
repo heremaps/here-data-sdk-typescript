@@ -78,6 +78,30 @@ describe("BlobApi", () => {
         expect(result).to.be.equal("success");
     });
 
+    it("checkBlobExistsStatus", async () => {
+        const params = {
+            layerId: "mocked-id",
+            dataHandle: "mocked-datahandle",
+            billingTag: "mocked-billingTag"
+        };
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/layers/mocked-id/data/mocked-datahandle?billingTag=mocked-billingTag"
+                );
+                expect(options.method).to.be.equal("HEAD");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await BlobApi.checkBlobExistsStatus(
+            (builder as unknown) as RequestBuilder,
+            params
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
     it("completeMultipartUpload", async () => {
         const params = {
             layerId: "mocked-id",

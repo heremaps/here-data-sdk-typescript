@@ -26,8 +26,13 @@ import {
     CancelBatchRequest
 } from "@here/olp-sdk-dataservice-write";
 import sinon = require("sinon");
-import { MetadataApi, PublishApi } from "@here/olp-sdk-dataservice-api";
+import {
+    MetadataApi,
+    PublishApi,
+    BlobApi
+} from "@here/olp-sdk-dataservice-api";
 import { OlpClientSettings, RequestFactory } from "@here/olp-sdk-core";
+import { CheckDataExistsRequest } from "@here/olp-sdk-dataservice-write/lib";
 
 chai.use(sinonChai);
 
@@ -46,6 +51,7 @@ describe("VersionedLayerClient write", function() {
     let initPublicationStub: sinon.SinonStub;
     let cancelPublicationStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
+    let checkBlobExistsStub: sinon.SinonStub;
     let settings: OlpClientSettings;
 
     const fakeURL = "http://fake-base.url";
@@ -61,6 +67,7 @@ describe("VersionedLayerClient write", function() {
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
         initPublicationStub = sandbox.stub(PublishApi, "initPublication");
         cancelPublicationStub = sandbox.stub(PublishApi, "cancelPublication");
+        checkBlobExistsStub = sandbox.stub(BlobApi, "checkBlobExistsStatus");
 
         getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
@@ -78,6 +85,68 @@ describe("VersionedLayerClient write", function() {
 
         assert.isDefined(client);
         expect(client).be.instanceOf(VersionedLayerClient);
+    });
+
+    it("checkDataExists returns 200", async function() {
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        checkBlobExistsStub.callsFake(() => Promise.resolve({ status: 200 }));
+        const isDadaExists = await client.checkDataExists(
+            new CheckDataExistsRequest()
+                .withDataHandle("test-data-handle")
+                .withLayerId("test-layer")
+        );
+        expect(isDadaExists.status).to.be.equal(200);
+    });
+
+    it("checkDataExists rejects with HttpError", async function() {
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        checkBlobExistsStub.callsFake(() =>
+            Promise.reject({ status: 404, message: "Not found" })
+        );
+        const isDadaExists = await client
+            .checkDataExists(
+                new CheckDataExistsRequest()
+                    .withDataHandle("test-data-handle")
+                    .withLayerId("test-layer")
+            )
+            .catch(e => e);
+        expect(isDadaExists.status).to.be.equal(404);
+        expect(isDadaExists.message).to.be.equal("Not found");
+    });
+
+    it("checkDataExists rejects with errors if empty params", async function() {
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        const isDadaExists = await client
+            .checkDataExists(
+                new CheckDataExistsRequest().withDataHandle("test-data-handle")
+            )
+            .catch(e => e);
+
+        expect(isDadaExists.message).to.be.equal(
+            "Please provide layer id for the CheckDataExistsRequest"
+        );
+
+        const isDadaExists2 = await client
+            .checkDataExists(
+                new CheckDataExistsRequest().withLayerId("test-layer")
+            )
+            .catch(e => e);
+
+        expect(isDadaExists2.message).to.be.equal(
+            "Please provide data handle for the CheckDataExistsRequest"
+        );
     });
 
     it("Should method getBaseVersion provide latest version", async function() {
