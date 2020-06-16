@@ -229,6 +229,7 @@ export async function cancelMultipartUpload(
 }
 
 /**
+ * @deprecated This function will be deleted 12.20. Please use checkBlobExistsStatus.
  * Checks if a blob exists for the requested data handle.
  *
  * @summary Checks if a data handle exists
@@ -265,6 +266,42 @@ export async function checkBlobExists(
 }
 
 /**
+ * Checks if a blob exists for the requested data handle.
+ *
+ * @summary Checks if a data handle exists
+ * @param layerId The ID of the layer that the blob belongs to.
+ * @param dataHandle The data handle identifies a specific blob so that you can get that blob's contents.
+ * The data handle can only contain alphanumeric, "-" and "." characters, [0-9, a-z, A-Z, -, .].
+ * The maximum length of this field is 1024 characters.
+ * @param billingTag Billing Tag is an optional free-form tag which is used for grouping billing records together.
+ * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+ * Grouping billing records by billing tag will be available in future releases.
+ */
+export async function checkBlobExistsStatus(
+    builder: RequestBuilder,
+    params: {
+        layerId: string;
+        dataHandle: string;
+        billingTag?: string;
+    }
+): Promise<Response> {
+    const baseUrl = "/layers/{layerId}/data/{dataHandle}"
+        .replace("{layerId}", UrlBuilder.toString(params["layerId"]))
+        .replace("{dataHandle}", UrlBuilder.toString(params["dataHandle"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("billingTag", params["billingTag"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "HEAD",
+        headers
+    };
+
+    return builder.requestBlob(urlBuilder, options);
+}
+
+/**
  * Call this API when all parts have been uploaded. Please keep in mind that the actual URL for this operation
  * must be obtained from the response body of start multipart operation that is
  * 'POST /layers/{layerId}/data/{dataHandle}/multiparts' from the 'complete' element under the top level 'links' element of the response.
@@ -272,7 +309,7 @@ export async function checkBlobExists(
  * @summary Completes a multipart upload
  * @param layerId The ID of the layer that the data blob part belongs to.
  * @param dataHandle The data handle (ID) represents an identifier for the data blob which the part
- * belongs to. The data handle can only contain alphanumeric, &#39;-&#39; and &#39;.&#39; characters,
+ * belongs to. The data handle can only contain alphanumeric, "-"; and "." characters,
  * [0-9, a-z, A-Z, -, .]. The maximum length of this field is 1024 characters.
  * @param multiPartToken The identifier of the multi part upload (token). Content of this parameter must
  * refer to a valid nand started multipart upload.
@@ -446,20 +483,24 @@ export async function getMultipartUploadStatus(
 }
 
 /**
- * Persists the data blob in the underlying storage mechanism (volume). Use this upload mechanism for blobs smaller than 50 MB.
- * The size limit for blobs uploaded this way is 5 GB but we do not recommend uploading blobs this large with this method, so use
- * multipart upload instead. When the operation completes successfully there is no guarantee that the data blob will be immediately
- * available although in most cases it will be. To check if the data blob is available use the HEAD method.
+ * Persists the data blob in the underlying storage mechanism (volume).
+ * Use this upload mechanism for blobs smaller than 50 MB.
+ * The size limit for blobs uploaded this way is 5 GB but we do not recommend uploading blobs
+ * this large with this method, so use multipart upload instead.
+ * When the operation completes successfully there is no guarantee that the data blob will be
+ * immediately available although in most cases it will be.
+ * To check if the data blob is available use the HEAD method.
  *
  * @summary Publishes a data blob
  * @param layerId The ID of the layer that the data blob belongs to.
- * @param dataHandle The data handle (ID) represents an identifier for the data blob. The data handle can only contain alphanumeric,
- * &#39;-&#39; and &#39;.&#39; characters, [0-9, a-z, A-Z, -, .]. The maximum length of this field is 1024 characters.
+ * @param dataHandle The data handle (ID) represents an identifier for the data blob.
+ * The data handle can only contain alphanumeric, &#39;-&#39; and &#39;.&#39; characters, [0-9, a-z, A-Z, -, .].
+ * The maximum length of this field is 1024 characters.
  * @param body body
- * @param contentLength Size of the entity-body, in bytes. For more information,
- * see [RFC 7230, section 3.3.2: Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2).
- * @param billingTag Billing Tag is an optional free-form tag which is used for grouping billing records
- * together. If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+ * @param contentLength Size of the entity-body, in bytes.
+ * For more information, see [RFC 7230, section 3.3.2: Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2).
+ * @param billingTag Billing Tag is an optional free-form tag which is used for grouping billing records together.
+ * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
  * Grouping billing records by billing tag will be available in future releases.
  */
 export async function putBlob(

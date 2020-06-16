@@ -20,3 +20,4 @@
 export * from "./VersionedLayerClient";
 export * from "./StartBatchRequest";
 export * from "./CancelBatchRequest";
+export * from "./CheckDataExistsRequest";

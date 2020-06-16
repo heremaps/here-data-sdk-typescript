@@ -18,9 +18,14 @@
  */
 
 import { HRN, OlpClientSettings, RequestFactory } from "@here/olp-sdk-core";
-import { MetadataApi, PublishApi } from "@here/olp-sdk-dataservice-api";
+import {
+    BlobApi,
+    MetadataApi,
+    PublishApi
+} from "@here/olp-sdk-dataservice-api";
 import {
     CancelBatchRequest,
+    CheckDataExistsRequest,
     StartBatchRequest
 } from "@here/olp-sdk-dataservice-write";
 
@@ -46,6 +51,64 @@ export class VersionedLayerClient {
      * @param params parameters for use to initialize VersionedLayerClient.
      */
     constructor(private readonly params: VersionedLayerClientParams) {}
+
+    /**
+     * Checks that the datahandle is not used.
+     * Data handles must be unique within the layer across all versions.
+     * In case data handle exists, a new one needs to be generated and checked again until
+     * one is found that is not present in the blob store.
+     * @param request CheckDataExistsRequest with required params.
+     * @param abortSignal An optional signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @returns A promise void if data handle exists.
+     * Rejects with http response if DataHandle is not exists (404 status) or any http error.
+     */
+    public async checkDataExists(
+        request: CheckDataExistsRequest,
+        abortSignal?: AbortSignal
+    ): Promise<Response> {
+        const billingTag = request.getBillingTag();
+        const layerId = request.getLayerId();
+        if (!layerId) {
+            return Promise.reject(
+                new Error(
+                    "Please provide layer id for the CheckDataExistsRequest"
+                )
+            );
+        }
+
+        const dataHandle = request.getDataHandle();
+        if (!dataHandle) {
+            return Promise.reject(
+                new Error(
+                    "Please provide data handle for the CheckDataExistsRequest"
+                )
+            );
+        }
+
+        const requestBuilder = await RequestFactory.create(
+            "blob",
+            "v1",
+            this.params.settings,
+            this.params.catalogHrn,
+            abortSignal
+        ).catch(error =>
+            Promise.reject(
+                new Error(
+                    `Error retrieving from cache requestBuilder for resource "${this.params.catalogHrn}" and api: blob. ${error}`
+                )
+            )
+        );
+
+        return BlobApi.checkBlobExistsStatus(requestBuilder, {
+            layerId,
+            dataHandle,
+            billingTag
+        });
+    }
 
     /**
      * Gets the latest version of a catalog.
