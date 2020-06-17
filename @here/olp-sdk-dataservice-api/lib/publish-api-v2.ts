@@ -310,7 +310,7 @@ export async function initPublication(
 export async function submitPublication(
     builder: RequestBuilder,
     params: { publicationId: string; billingTag?: string }
-): Promise<any> {
+): Promise<Response> {
     const baseUrl = "/publications/{publicationId}".replace(
         "{publicationId}",
         UrlBuilder.toString(params["publicationId"])
@@ -325,7 +325,7 @@ export async function submitPublication(
         headers
     };
 
-    return builder.request<any>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }
 
 /**
@@ -350,7 +350,7 @@ export async function uploadPartitions(
         body: PublishPartitions;
         billingTag?: string;
     }
-): Promise<any> {
+): Promise<Response> {
     const baseUrl = "/layers/{layerId}/publications/{publicationId}/partitions"
         .replace("{layerId}", UrlBuilder.toString(params["layerId"]))
         .replace(
@@ -371,5 +371,5 @@ export async function uploadPartitions(
         options.body = JSON.stringify(params["body"]);
     }
 
-    return builder.request<any>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }

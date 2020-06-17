@@ -19,9 +19,9 @@
 
 import {
     HRN,
-    HttpError,
     OlpClientSettings,
-    RequestFactory
+    RequestFactory,
+    Uuid
 } from "@here/olp-sdk-core";
 import {
     BlobApi,
@@ -32,6 +32,7 @@ import {
     CancelBatchRequest,
     CheckDataExistsRequest,
     CompleteBatchRequest,
+    PublishSinglePartitionRequest,
     StartBatchRequest
 } from "@here/olp-sdk-dataservice-write";
 
@@ -213,6 +214,113 @@ export class VersionedLayerClient {
     }
 
     /**
+     * @breaf Gives the user the possibility to upload one partition blob and metadata at once
+     * @param request PublishSinglePartitionRequest with needed params
+     * @param abortSignal An optional signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @returns Promise resolves if the operation was successful. Rejects if unsuccessful.
+     */
+    public async publishToBatch(
+        request: PublishSinglePartitionRequest,
+        abortSignal?: AbortSignal
+    ): Promise<Response> {
+        const metadata = request.getMetadata();
+        if (!metadata) {
+            return Promise.reject(
+                new Error(
+                    "Please set metadata to the PublishSinglePartitionRequest"
+                )
+            );
+        }
+
+        if (!metadata.partition) {
+            return Promise.reject(new Error(`Partition ID is missing`));
+        }
+
+        const body = request.getData();
+        if (!body) {
+            return Promise.reject(
+                new Error(
+                    "Please set data to the PublishSinglePartitionRequest"
+                )
+            );
+        }
+
+        if (!metadata.dataSize) {
+            metadata.dataSize =
+                body instanceof Buffer ? body.byteLength : body.size;
+        }
+
+        const layerId = request.getLayerId();
+        if (!layerId) {
+            return Promise.reject(
+                new Error(
+                    "Please set layerId to the PublishSinglePartitionRequest"
+                )
+            );
+        }
+
+        const publicationId = request.getPublicationId();
+        if (!publicationId) {
+            return Promise.reject(
+                new Error(
+                    "Please set publicationId to the PublishSinglePartitionRequest"
+                )
+            );
+        }
+
+        if (!metadata.dataHandle) {
+            metadata.dataHandle = Uuid.create();
+        }
+
+        const publishRequestBuilder = await RequestFactory.create(
+            "publish",
+            "v2",
+            this.params.settings,
+            this.params.catalogHrn,
+            abortSignal
+        ).catch((err: Response) =>
+            Promise.reject(
+                new Error(
+                    `Error retrieving from cache builder for resource "${this.params.catalogHrn}" and api: publish. ${err}`
+                )
+            )
+        );
+
+        const blobRequestBuilder = await RequestFactory.create(
+            "blob",
+            "v1",
+            this.params.settings,
+            this.params.catalogHrn,
+            abortSignal
+        ).catch(error =>
+            Promise.reject(
+                new Error(
+                    `Error retrieving from cache requestBuilder for resource "${this.params.catalogHrn}" and api: blob. ${error}`
+                )
+            )
+        );
+
+        await BlobApi.putData(blobRequestBuilder, {
+            layerId,
+            body,
+            contentLength: `${metadata.dataSize}`,
+            dataHandle: metadata.dataHandle as string
+        }).catch(error => Promise.reject(error));
+
+        return PublishApi.uploadPartitions(publishRequestBuilder, {
+            layerId,
+            publicationId,
+            body: {
+                partitions: [metadata]
+            }
+        });
+    }
+
+    /**
      * Cancels a publication if it has not yet been submitted.
      * Will fail if attempting to cancel a submitted publication.
      * This allows the specified publication to be abandoned.
@@ -228,7 +336,7 @@ export class VersionedLayerClient {
     public async cancelBatch(
         request: CancelBatchRequest,
         abortSignal?: AbortSignal
-    ): Promise<boolean> {
+    ): Promise<Response> {
         const requestBuilder = await RequestFactory.create(
             "publish",
             "v2",
@@ -252,14 +360,10 @@ export class VersionedLayerClient {
             );
         }
 
-        const result = await PublishApi.cancelPublication(requestBuilder, {
+        return PublishApi.cancelPublication(requestBuilder, {
             publicationId,
             billingTag: request.getBillingTag()
-        }).catch(error => error);
-
-        return result.status === 204
-            ? Promise.resolve(true)
-            : Promise.reject(result);
+        });
     }
 
     /**
@@ -312,10 +416,6 @@ export class VersionedLayerClient {
         return PublishApi.submitPublication(requestBuilder, {
             publicationId,
             billingTag: request.getBillingTag()
-        }).catch(async (response: HttpError) => {
-            return response.status === 204
-                ? Promise.resolve(response)
-                : Promise.reject(response);
         });
     }
 }

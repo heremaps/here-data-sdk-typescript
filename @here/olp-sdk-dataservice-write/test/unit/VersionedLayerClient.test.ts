@@ -246,7 +246,7 @@ describe("VersionedLayerClient write", function() {
         const response = await client.cancelBatch(
             new CancelBatchRequest().withPublicationId("mocked-pub-id")
         );
-        expect(response).equals(true);
+        expect(response.status === 204).equals(true);
     });
 
     it("Should rejects with error a cancel the publication operation", async function() {
@@ -289,7 +289,7 @@ describe("VersionedLayerClient write", function() {
 
     it("Should submit the publication", async function() {
         submitPublicationStub.callsFake(() => {
-            return Promise.reject({
+            return Promise.resolve({
                 status: 204
             });
         });

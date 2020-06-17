@@ -94,7 +94,10 @@ describe("PublishApi", () => {
         };
         const builder = {
             baseUrl: "http://mocked.url",
-            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+            requestBlob: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit
+            ) => {
                 expect(urlBuilder.url).to.be.equal(
                     "http://mocked.url/publications/mocked-publicationId?billingTag=mocked-billingTag"
                 );
@@ -124,7 +127,7 @@ describe("PublishApi", () => {
         };
         const builder = {
             baseUrl: "http://mocked.url",
-            request: async (urlBuilder: UrlBuilder, options: any) => {
+            requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
                 expect(urlBuilder.url).to.be.equal(
                     "http://mocked.url/layers/mocked-layer-id/publications/mocked-publicationId/partitions?billingTag=mocked-billingTag"
                 );
