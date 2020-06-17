@@ -49,8 +49,9 @@ class DeferredPromise<T> {
 }
 
 enum STATUS_CODES {
-    Ok = 200,
+    OK = 200,
     CREATED = 201,
+    NO_CONTENT = 204,
     SERVICE_UNAVAIBLE = 503
 }
 
@@ -104,7 +105,8 @@ export class DataStoreDownloadManager implements DownloadManager {
                 retryCount >= maxRetries
             ) {
                 if (
-                    response.status === STATUS_CODES.Ok ||
+                    response.status === STATUS_CODES.OK ||
+                    response.status === STATUS_CODES.NO_CONTENT ||
                     response.status === STATUS_CODES.CREATED
                 ) {
                     return Promise.resolve(response);
