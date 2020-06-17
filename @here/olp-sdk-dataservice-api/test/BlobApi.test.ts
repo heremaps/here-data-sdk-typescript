@@ -240,6 +240,37 @@ describe("BlobApi", () => {
         expect(result).to.be.equal("success");
     });
 
+    it("putData", async () => {
+        const content = Buffer.from("mocked-data", "utf8");
+        const params = {
+            layerId: "mocked-id",
+            dataHandle: "mocked-datahandle",
+            billingTag: "mocked-billingTag",
+            body: content,
+            contentLength: "mocked-contentLength"
+        };
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/layers/mocked-id/data/mocked-datahandle?billingTag=mocked-billingTag"
+                );
+                expect(options.method).to.be.equal("PUT");
+                expect(options.body).equals(content);
+                expect(options.headers["Content-Length"]).equals(
+                    "mocked-contentLength"
+                );
+                return Promise.resolve("success");
+            }
+        };
+        const result = await BlobApi.putData(
+            (builder as unknown) as RequestBuilder,
+            params
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
     it("startMultipartUpload", async () => {
         const params = {
             layerId: "mocked-id",

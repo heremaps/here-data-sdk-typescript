@@ -483,6 +483,7 @@ export async function getMultipartUploadStatus(
 }
 
 /**
+ * @deprecated This function will be deleted 12.20. Please use `putData`.
  * Persists the data blob in the underlying storage mechanism (volume).
  * Use this upload mechanism for blobs smaller than 50 MB.
  * The size limit for blobs uploaded this way is 5 GB but we do not recommend uploading blobs
@@ -534,6 +535,60 @@ export async function putBlob(
     }
 
     return builder.request<any>(urlBuilder, options);
+}
+
+/**
+ * Persists the data blob in the underlying storage mechanism (volume).
+ * Use this upload mechanism for blobs smaller than 50 MB.
+ * The size limit for blobs uploaded this way is 5 GB but we do not recommend uploading blobs
+ * this large with this method, so use multipart upload instead.
+ * When the operation completes successfully there is no guarantee that the data blob will be
+ * immediately available although in most cases it will be.
+ * To check if the data blob is available use the HEAD method.
+ *
+ * @summary Publishes a data blob
+ * @param layerId The ID of the layer that the data blob belongs to.
+ * @param dataHandle The data handle (ID) represents an identifier for the data blob.
+ * The data handle can only contain alphanumeric, "-" and "." characters, [0-9, a-z, A-Z, -, .].
+ * The maximum length of this field is 1024 characters.
+ * @param body The data to upload. Can be Blob or Buffer.
+ * @param contentLength Size of the entity-body, in bytes.
+ * For more information, see [RFC 7230, section 3.3.2: Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2).
+ * @param billingTag Billing Tag is an optional free-form tag which is used for grouping billing records together.
+ * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+ * Grouping billing records by billing tag will be available in future releases.
+ */
+export async function putData(
+    builder: RequestBuilder,
+    params: {
+        layerId: string;
+        dataHandle: string;
+        body: Blob | Buffer;
+        contentLength: string;
+        billingTag?: string;
+    }
+): Promise<Response> {
+    const baseUrl = "/layers/{layerId}/data/{dataHandle}"
+        .replace("{layerId}", UrlBuilder.toString(params["layerId"]))
+        .replace("{dataHandle}", UrlBuilder.toString(params["dataHandle"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("billingTag", params["billingTag"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "PUT",
+        headers
+    };
+    headers["Content-Type"] = "application/json";
+    if (params["body"] !== undefined) {
+        options.body = params["body"] as any;
+    }
+    if (params["contentLength"] !== undefined) {
+        headers["Content-Length"] = params["contentLength"] as string;
+    }
+
+    return builder.requestBlob(urlBuilder, options);
 }
 
 /**
