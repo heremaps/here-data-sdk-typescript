@@ -17,7 +17,12 @@
  * License-Filename: LICENSE
  */
 
-import { HRN, OlpClientSettings, RequestFactory } from "@here/olp-sdk-core";
+import {
+    HRN,
+    HttpError,
+    OlpClientSettings,
+    RequestFactory
+} from "@here/olp-sdk-core";
 import {
     BlobApi,
     MetadataApi,
@@ -26,6 +31,7 @@ import {
 import {
     CancelBatchRequest,
     CheckDataExistsRequest,
+    CompleteBatchRequest,
     StartBatchRequest
 } from "@here/olp-sdk-dataservice-write";
 
@@ -254,5 +260,62 @@ export class VersionedLayerClient {
         return result.status === 204
             ? Promise.resolve(true)
             : Promise.reject(result);
+    }
+
+    /**
+     * Submits the publication, resp. a batch, and initiates post processing if necessary.
+     *
+     * Publication state becomes `Submitted` directly after submission and `Succeeded` after successful processing.
+     * Users can only complete a publication which is in state `Initialized`.
+     *
+     * Once the user triggered to complete a publication,
+     * he must request the status of the publication regularly until the status becomes `Succeeded`.
+     *
+     * After submitting the publication, the metadata processing will begin.
+     * You will be unable to modify or interrupt the publication process so make sure that you are ready before submitting the publication.
+     *
+     * @param request details of the complete publish.
+     * @param abortSignal An optional signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @returns Promise resolves if the operation was successful. Rejects if unsuccessful.
+     */
+    public async completeBatch(
+        request: CompleteBatchRequest,
+        abortSignal?: AbortSignal
+    ) {
+        const requestBuilder = await RequestFactory.create(
+            "publish",
+            "v2",
+            this.params.settings,
+            this.params.catalogHrn,
+            abortSignal
+        ).catch((err: Response) =>
+            Promise.reject(
+                new Error(
+                    `Error retrieving from cache builder for resource "${this.params.catalogHrn}" and api: publish. ${err}`
+                )
+            )
+        );
+
+        const publicationId = request.getPublicationId();
+        if (!publicationId) {
+            return Promise.reject(
+                new Error(
+                    "Please provide publication id for the CompleteBatchRequest"
+                )
+            );
+        }
+
+        return PublishApi.submitPublication(requestBuilder, {
+            publicationId,
+            billingTag: request.getBillingTag()
+        }).catch(async (response: HttpError) => {
+            return response.status === 204
+                ? Promise.resolve(response)
+                : Promise.reject(response);
+        });
     }
 }
