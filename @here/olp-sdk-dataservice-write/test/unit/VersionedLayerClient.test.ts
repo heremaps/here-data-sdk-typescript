@@ -32,7 +32,10 @@ import {
     BlobApi
 } from "@here/olp-sdk-dataservice-api";
 import { OlpClientSettings, RequestFactory } from "@here/olp-sdk-core";
-import { CheckDataExistsRequest } from "@here/olp-sdk-dataservice-write/lib";
+import {
+    CheckDataExistsRequest,
+    CompleteBatchRequest
+} from "@here/olp-sdk-dataservice-write/lib";
 
 chai.use(sinonChai);
 
@@ -50,6 +53,7 @@ describe("VersionedLayerClient write", function() {
     let getVersionStub: sinon.SinonStub;
     let initPublicationStub: sinon.SinonStub;
     let cancelPublicationStub: sinon.SinonStub;
+    let submitPublicationStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
     let checkBlobExistsStub: sinon.SinonStub;
     let settings: OlpClientSettings;
@@ -67,6 +71,7 @@ describe("VersionedLayerClient write", function() {
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
         initPublicationStub = sandbox.stub(PublishApi, "initPublication");
         cancelPublicationStub = sandbox.stub(PublishApi, "cancelPublication");
+        submitPublicationStub = sandbox.stub(PublishApi, "submitPublication");
         checkBlobExistsStub = sandbox.stub(BlobApi, "checkBlobExistsStatus");
 
         getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
@@ -269,6 +274,62 @@ describe("VersionedLayerClient write", function() {
             .catch(error => error.message);
         expect(response1).to.be.equals(
             "Please provide publication id for the CancelBatchRequest"
+        );
+
+        getBaseUrlRequestStub.callsFake(() => Promise.reject("Server Error"));
+        const response2 = await client
+            .cancelBatch(
+                new CancelBatchRequest().withPublicationId("mocked-pub-id")
+            )
+            .catch(error => error.message);
+        expect(response2).to.be.equal(
+            'Error retrieving from cache builder for resource "hrn:here:data:::mocked-hrn" and api: publish. Server Error'
+        );
+    });
+
+    it("Should submit the publication", async function() {
+        submitPublicationStub.callsFake(() => {
+            return Promise.reject({
+                status: 204
+            });
+        });
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        const response = await client.completeBatch(
+            new CompleteBatchRequest().withPublicationId("mocked-pub-id")
+        );
+        expect(response.status).equals(204);
+    });
+
+    it("Should rejects with error a submit the publication operation", async function() {
+        submitPublicationStub.callsFake(() => {
+            return Promise.reject({
+                message: "Internal Server Error",
+                status: 500
+            });
+        });
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        const response = await client
+            .completeBatch(
+                new CompleteBatchRequest().withPublicationId("mocked-pub-id")
+            )
+            .catch(error => error.message);
+        expect(response).to.be.equals("Internal Server Error");
+
+        const response1 = await client
+            .completeBatch(new CompleteBatchRequest())
+            .catch(error => error.message);
+        expect(response1).to.be.equals(
+            "Please provide publication id for the CompleteBatchRequest"
         );
 
         getBaseUrlRequestStub.callsFake(() => Promise.reject("Server Error"));
