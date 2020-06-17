@@ -17,14 +17,33 @@
  * License-Filename: LICENSE
  */
 
-export * from "./DataStoreDownloadManager";
-export * from "./DataStoreRequestBuilder";
-export * from "./DownloadManager";
-export * from "./RequestBuilderFactory";
-export * from "./getEnvLookupUrl";
-export * from "./HRN";
-export * from "./getDataSizeUtil";
-export * from "./HttpError";
-export * from "./FetchOptions";
-export * from "./TileKey";
-export * from "./Uuid";
+// tslint:disable:no-bitwise
+// tslint:disable: no-magic-numbers
+
+/**
+ * @brief Lets you generate uuid code
+ */
+export class Uuid {
+    /**
+     * Creates an UUID
+     */
+    public static create(): string {
+        return [
+            Uuid.generate(2),
+            Uuid.generate(1),
+            Uuid.generate(1),
+            Uuid.generate(1),
+            Uuid.generate(3)
+        ].join("-");
+    }
+
+    private static generate(count: number) {
+        let result = "";
+        for (let i = 0; i < count; i++) {
+            result += (((1 + Math.random()) * 0x10000) | 0)
+                .toString(16)
+                .substring(1);
+        }
+        return result;
+    }
+}
