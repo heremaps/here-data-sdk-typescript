@@ -23,3 +23,4 @@ export * from "./CancelBatchRequest";
 export * from "./CheckDataExistsRequest";
 export * from "./CompleteBatchRequest";
 export * from "./PublishSinglePartitionRequest";
+export * from "./UploadPartitionsRequest";
