@@ -32,6 +32,7 @@ import {
     CancelBatchRequest,
     CheckDataExistsRequest,
     CompleteBatchRequest,
+    GetBatchRequest,
     PublishSinglePartitionRequest,
     StartBatchRequest
 } from "@here/olp-sdk-dataservice-write";
@@ -361,6 +362,50 @@ export class VersionedLayerClient {
         }
 
         return PublishApi.cancelPublication(requestBuilder, {
+            publicationId,
+            billingTag: request.getBillingTag()
+        });
+    }
+
+    /**
+     * Retrieves the publication details.
+     *
+     * @param request details of the retrieve operation.
+     * @param abortSignal An optional signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @returns The publication details.
+     */
+    public async getBatch(
+        request: GetBatchRequest,
+        abortSignal?: AbortSignal
+    ): Promise<PublishApi.Publication> {
+        const requestBuilder = await RequestFactory.create(
+            "publish",
+            "v2",
+            this.params.settings,
+            this.params.catalogHrn,
+            abortSignal
+        ).catch((err: Response) =>
+            Promise.reject(
+                new Error(
+                    `Error retrieving builder for resource "${this.params.catalogHrn}" and api: publish. ${err}`
+                )
+            )
+        );
+
+        const publicationId = request.getPublicationId();
+        if (!publicationId) {
+            return Promise.reject(
+                new Error(
+                    "Please provide publication id for the GetBatchRequest"
+                )
+            );
+        }
+
+        return PublishApi.getPublication(requestBuilder, {
             publicationId,
             billingTag: request.getBillingTag()
         });
