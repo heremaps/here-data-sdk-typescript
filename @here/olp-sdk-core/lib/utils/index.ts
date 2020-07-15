@@ -17,6 +17,17 @@
  * License-Filename: LICENSE
  */
 
+/**
+ * Status codes of HTTP responses.
+ */
+export enum STATUS_CODES {
+    OK = 200,
+    CREATED = 201,
+    NO_CONTENT = 204,
+    NOT_FOUND = 404,
+    SERVICE_UNAVAIBLE = 503
+}
+
 export * from "./DataStoreDownloadManager";
 export * from "./DataStoreRequestBuilder";
 export * from "./DownloadManager";

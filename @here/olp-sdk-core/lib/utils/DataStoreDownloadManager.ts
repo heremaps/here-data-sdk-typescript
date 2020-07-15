@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { DownloadManager, HttpError } from "@here/olp-sdk-core";
+import { DownloadManager, HttpError, STATUS_CODES } from "@here/olp-sdk-core";
 
 /** @internal
  * 'DeferredPromise' takes an executor function for executing it later, when [[exec]] is called.
@@ -46,13 +46,6 @@ class DeferredPromise<T> {
             .then(this.resolveFunc)
             .catch(this.rejectFunc);
     }
-}
-
-enum STATUS_CODES {
-    OK = 200,
-    CREATED = 201,
-    NO_CONTENT = 204,
-    SERVICE_UNAVAIBLE = 503
 }
 
 /**
