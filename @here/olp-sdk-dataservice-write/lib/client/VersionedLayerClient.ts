@@ -21,6 +21,7 @@ import {
     HRN,
     OlpClientSettings,
     RequestFactory,
+    STATUS_CODES,
     Uuid
 } from "@here/olp-sdk-core";
 import {
@@ -229,6 +230,8 @@ export class VersionedLayerClient {
         abortSignal?: AbortSignal
     ): Promise<Response> {
         const metadata = request.getMetadata();
+        const billingTag = request.getBillingTag();
+
         if (!metadata) {
             return Promise.reject(
                 new Error(
@@ -274,7 +277,50 @@ export class VersionedLayerClient {
         }
 
         if (!metadata.dataHandle) {
-            metadata.dataHandle = Uuid.create();
+            /**
+             * If datahandle was not provided, we generate the UUID and use it as datahandle.
+             * A retry logic in case datahandle is already present is a loop of 3 tries
+             * and each time we generate a new UUID and retry.
+             *
+             * If all thies was not success, the method rejects the promise with Error.
+             */
+            const timesToGenerate = 3;
+            const checkDataExistsRequest = new CheckDataExistsRequest().withLayerId(
+                layerId
+            );
+            if (billingTag) {
+                checkDataExistsRequest.withBillingTag(billingTag);
+            }
+
+            for (
+                let generatingCount = 0;
+                generatingCount < timesToGenerate;
+                generatingCount++
+            ) {
+                const generatedDatahandle = Uuid.create();
+                const dataExist = await this.checkDataExists(
+                    checkDataExistsRequest.withDataHandle(generatedDatahandle)
+                ).catch(async (response: Response) => {
+                    if (response.status === STATUS_CODES.NOT_FOUND) {
+                        metadata.dataHandle = generatedDatahandle;
+                        return Promise.resolve(false);
+                    }
+
+                    return Promise.reject(response);
+                });
+
+                if (!dataExist) {
+                    break;
+                }
+            }
+
+            if (!metadata.dataHandle) {
+                return Promise.reject(
+                    new Error(
+                        "Please set DataHandle to the PublishSinglePartitionRequest"
+                    )
+                );
+            }
         }
 
         const publishRequestBuilder = await RequestFactory.create(
