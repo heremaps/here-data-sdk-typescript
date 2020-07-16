@@ -26,8 +26,10 @@ export class PublishSinglePartitionRequest {
     private publicationId?: string;
     private billingTag?: string;
     private layerId?: string;
-    private data?: Blob | Buffer;
+    private data?: ArrayBuffer | Buffer;
     private metaData?: PublishPartition;
+    private contentType?: string;
+    private contentEncoding?: string;
 
     /**
      * @brief set the ID of the publication to upload.
@@ -68,13 +70,12 @@ export class PublishSinglePartitionRequest {
     }
 
     /**
-     * Optionally use embedded data in PublishPartition or uploadBlob() API
-     * @param data The content published directly in the metadata and encoded in base64.
-     * The size of the content is limited.
-     * @note Optional. This will be use in stream layers and present only if the message size is less than or equal to 1 MB.
+     * Sets the data for uploading.
+     * @param data The data to be uploaded to the Blob API.
+     * @note Required.
      * @returns reference to this object
      */
-    public withData(data: Blob | Buffer): PublishSinglePartitionRequest {
+    public withData(data: ArrayBuffer | Buffer): PublishSinglePartitionRequest {
         this.data = data;
         return this;
     }
@@ -82,8 +83,47 @@ export class PublishSinglePartitionRequest {
     /**
      * @return data previously set or undefined.
      */
-    public getData(): Blob | Buffer | undefined {
+    public getData(): ArrayBuffer | Buffer | undefined {
         return this.data;
+    }
+
+    /**
+     * @brief set the content encoding of the data to upload. Can be gzip or identity.
+     * @param contentEncoding the content encoding of the data to upload.
+     * @returns reference to this object
+     */
+    public withContentEncoding(
+        contentEncoding: string
+    ): PublishSinglePartitionRequest {
+        this.contentEncoding = contentEncoding;
+        return this;
+    }
+
+    /**
+     * @brief get the content encoding of the data to upload.
+     * @returns The content encoding of the data to upload.
+     */
+    public getContentEncoding(): string | undefined {
+        return this.contentEncoding;
+    }
+
+    /**
+     * @brief set the content type of the data to upload.
+     * @param contentType the content type of the data to upload.
+     * @note Required.
+     * @returns reference to this object
+     */
+    public withContentType(contentType: string): PublishSinglePartitionRequest {
+        this.contentType = contentType;
+        return this;
+    }
+
+    /**
+     * @brief get the content type of the data to upload.
+     * @returns The content type of the data to upload.
+     */
+    public getContentType(): string | undefined {
+        return this.contentType;
     }
 
     /**

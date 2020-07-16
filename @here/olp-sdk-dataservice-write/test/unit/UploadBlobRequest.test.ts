@@ -19,53 +19,42 @@
 
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
-import { PublishSinglePartitionRequest } from "@here/olp-sdk-dataservice-write";
+import { UploadBlobRequest } from "@here/olp-sdk-dataservice-write";
 
 chai.use(sinonChai);
 
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("PublishSinglePartitionRequest", function() {
+describe("UploadBlobRequest", function() {
     it("Should initialize", function() {
-        const request = new PublishSinglePartitionRequest();
+        const request = new UploadBlobRequest();
 
         assert.isDefined(request);
-        expect(request).be.instanceOf(PublishSinglePartitionRequest);
+        expect(request).be.instanceOf(UploadBlobRequest);
     });
 
     it("Should set and get parameters", function() {
-        const mockedPublicationId = "publication-id";
         const mockedLayerId = "mocked-layer-id";
-        const mockedData = Buffer.from("mocked-data", "utf-8");
-        const mockedContentEncoding = "gzip";
-        const mockedContentType = "text/plain";
-        const mockedMetadata = {
-            partition: "partition-1",
-            checksum: "checksum-1",
-            compressedDataSize: 123,
-            dataSize: 321,
-            data: "data-1",
-            dataHandle: "dataHandle-1",
-            timestamp: 1234567890
-        };
         const mockedBillingTag = "mocked-billing-tag";
+        const mockedContentType = "plain/text";
+        const mockedData = Buffer.alloc(10);
+        const mockedDatahandle = "mocked-datahandle";
+        const mockedContentEncoding = "gzip";
 
-        const request = new PublishSinglePartitionRequest()
-            .withPublicationId(mockedPublicationId)
+        const request = new UploadBlobRequest()
+            .withDataHandle(mockedDatahandle)
             .withLayerId(mockedLayerId)
             .withData(mockedData)
-            .withMetaData(mockedMetadata)
-            .withContentEncoding(mockedContentEncoding)
             .withContentType(mockedContentType)
+            .withContentEncoding(mockedContentEncoding)
             .withBillingTag(mockedBillingTag);
 
-        expect(request.getPublicationId()).to.be.equal(mockedPublicationId);
+        expect(request.getDataHandle()).to.be.equal(mockedDatahandle);
         expect(request.getLayerId()).to.be.equal(mockedLayerId);
         expect(request.getData()).to.be.equal(mockedData);
-        expect(request.getContentEncoding()).to.be.equal(mockedContentEncoding);
         expect(request.getContentType()).to.be.equal(mockedContentType);
-        expect(request.getMetadata()).to.be.equal(mockedMetadata);
+        expect(request.getContentEncoding()).to.be.equal(mockedContentEncoding);
         expect(request.getBillingTag()).to.be.equal(mockedBillingTag);
     });
 });
