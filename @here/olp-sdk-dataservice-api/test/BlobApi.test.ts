@@ -283,7 +283,8 @@ describe("BlobApi", function() {
             dataHandle: "mocked-datahandle",
             billingTag: "mocked-billingTag",
             body: content,
-            contentLength: "mocked-contentLength"
+            contentLength: 11,
+            contentType: "text/plain"
         };
         const builder = {
             baseUrl: "http://mocked.url",
@@ -293,9 +294,9 @@ describe("BlobApi", function() {
                 );
                 expect(options.method).to.be.equal("PUT");
                 expect(options.body).equals(content);
-                expect(options.headers["Content-Length"]).equals(
-                    "mocked-contentLength"
-                );
+                // tslint:disable-next-line: no-magic-numbers
+                expect(options.headers["Content-Length"]).equals(11);
+                expect(options.headers["Content-Type"]).equals("text/plain");
                 return Promise.resolve("success");
             }
         };
@@ -377,12 +378,12 @@ it("doUploadPart", async function() {
         layerId: "mocked-id",
         dataHandle: "mocked-datahandle",
         billingTag: "mocked-billingTag",
-        body: Buffer.from("mocked-data"),
+        body: "mocked-data",
         multiPartToken: "mocked-multiPartToken",
         partNumber: 3,
         contentType: "mocked-contentType",
         contentLength: 11
-    };
+    } as any;
     const builder = {
         baseUrl: "http://mocked.url",
         requestBlob: async (urlBuilder: UrlBuilder, options: any) => {

@@ -26,7 +26,10 @@ import {
     CancelBatchRequest,
     CheckDataExistsRequest,
     CompleteBatchRequest,
-    GetBatchRequest
+    GetBatchRequest,
+    UploadBlobRequest,
+    UploadPartitionsRequest,
+    PublishSinglePartitionRequest
 } from "@here/olp-sdk-dataservice-write";
 import sinon = require("sinon");
 import {
@@ -34,7 +37,7 @@ import {
     PublishApi,
     BlobApi
 } from "@here/olp-sdk-dataservice-api";
-import { OlpClientSettings, RequestFactory } from "@here/olp-sdk-core";
+import { OlpClientSettings, RequestFactory, Uuid } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -56,7 +59,13 @@ describe("VersionedLayerClient write", function() {
     let submitPublicationStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
     let checkBlobExistsStub: sinon.SinonStub;
+    let startMultipartUploadStub: sinon.SinonStub;
+    let doUploadPartStub: sinon.SinonStub;
+    let doCompleteMultipartUploadStub: sinon.SinonStub;
+    let uploadPartitionsStub: sinon.SinonStub;
     let settings: OlpClientSettings;
+    let uuidCreateStub: sinon.SinonStub;
+    let putDataStub: sinon.SinonStub;
 
     const fakeURL = "http://fake-base.url";
     const catalogHrn = new MockedHrn("hrn:here:data:::mocked-hrn") as any;
@@ -74,9 +83,23 @@ describe("VersionedLayerClient write", function() {
         getPublicationStub = sandbox.stub(PublishApi, "getPublication");
         submitPublicationStub = sandbox.stub(PublishApi, "submitPublication");
         checkBlobExistsStub = sandbox.stub(BlobApi, "checkBlobExistsStatus");
+        uploadPartitionsStub = sandbox.stub(PublishApi, "uploadPartitions");
+        uuidCreateStub = sandbox.stub(Uuid, "create");
+
+        startMultipartUploadStub = sandbox.stub(
+            BlobApi,
+            "startMultipartUpload"
+        );
+        doUploadPartStub = sandbox.stub(BlobApi, "doUploadPart");
+        doCompleteMultipartUploadStub = sandbox.stub(
+            BlobApi,
+            "doCompleteMultipartUpload"
+        );
 
         getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
+
+        putDataStub = sandbox.stub(BlobApi, "putData");
     });
 
     afterEach(function() {
@@ -410,6 +433,567 @@ describe("VersionedLayerClient write", function() {
             .catch(error => error.message);
         expect(response2).to.be.equal(
             'Error retrieving builder for resource "hrn:here:data:::mocked-hrn" and api: publish. Server Error'
+        );
+    });
+
+    it("UploadBlob", async function() {
+        const data = Buffer.alloc(25000);
+        const mockedDatahandle = "mocked-datahandle";
+        const mockedContentType = "text/plain";
+        const mockedBillingTag = "mocked-billing-tag";
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        const layerId = "mocked-layer";
+
+        startMultipartUploadStub.callsFake(() =>
+            Promise.resolve({
+                links: {
+                    complete: { href: "http://mocked.url", method: "PUT" },
+                    _delete: { href: "http://mocked.url", method: "DELETE" },
+                    status: { href: "http://mocked.url", method: "GET" },
+                    uploadPart: { href: "http://mocked.url", method: "POST" }
+                }
+            })
+        );
+
+        const mockedHeaders = new Headers();
+        mockedHeaders.set("ETag", "mocked-etag");
+        doUploadPartStub.callsFake(() =>
+            Promise.resolve({
+                headers: mockedHeaders,
+                status: 204
+            })
+        );
+        doCompleteMultipartUploadStub.callsFake(() =>
+            Promise.resolve({ status: 204 })
+        );
+
+        putDataStub.callsFake(() =>
+            Promise.resolve({
+                status: 204
+            })
+        );
+
+        const request = new UploadBlobRequest()
+            .withLayerId(layerId)
+            .withData(data)
+            .withDataHandle(mockedDatahandle)
+            .withContentType(mockedContentType)
+            .withBillingTag(mockedBillingTag);
+
+        const response = await client.uploadBlob(request);
+        expect(response.getDataHandle()).equals(mockedDatahandle);
+
+        const bigData = Buffer.alloc(52428800);
+
+        const response2 = await client.uploadBlob(request.withData(bigData));
+        expect(response2.getDataHandle()).equals(mockedDatahandle);
+    });
+
+    it("UploadBlob should generate and return the datahandle", async function() {
+        const data = Buffer.alloc(25000);
+        const mockedDatahandle = "mocked-datahandle";
+        const mockedContentType = "text/plain";
+        const mockedBillingTag = "mocked-billing-tag";
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        const layerId = "mocked-layer";
+
+        startMultipartUploadStub.callsFake(() =>
+            Promise.resolve({
+                links: {
+                    complete: { href: "http://mocked.url", method: "PUT" },
+                    _delete: { href: "http://mocked.url", method: "DELETE" },
+                    status: { href: "http://mocked.url", method: "GET" },
+                    uploadPart: { href: "http://mocked.url", method: "POST" }
+                }
+            })
+        );
+
+        uuidCreateStub.callsFake(() => mockedDatahandle);
+        checkBlobExistsStub.callsFake(() => Promise.reject({ status: 404 }));
+
+        const mockedHeaders = new Headers();
+        mockedHeaders.set("ETag", "mocked-etag");
+        doUploadPartStub.callsFake(() =>
+            Promise.resolve({
+                headers: mockedHeaders,
+                status: 204
+            })
+        );
+        doCompleteMultipartUploadStub.callsFake(() =>
+            Promise.resolve({ status: 204 })
+        );
+
+        putDataStub.callsFake(() =>
+            Promise.resolve({
+                status: 204
+            })
+        );
+
+        const request = new UploadBlobRequest()
+            .withLayerId(layerId)
+            .withData(data)
+            .withContentType(mockedContentType)
+            .withBillingTag(mockedBillingTag);
+
+        const response = await client.uploadBlob(request);
+        expect(response.getDataHandle()).equals(mockedDatahandle);
+    });
+
+    it("UploadBlob should try to generate datahandle and return the error", async function() {
+        const data = Buffer.alloc(25000);
+        const mockedDatahandle = "mocked-datahandle";
+        const mockedContentType = "text/plain";
+        const mockedBillingTag = "mocked-billing-tag";
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        const layerId = "mocked-layer";
+
+        startMultipartUploadStub.callsFake(() =>
+            Promise.resolve({
+                links: {
+                    complete: { href: "http://mocked.url", method: "PUT" },
+                    _delete: { href: "http://mocked.url", method: "DELETE" },
+                    status: { href: "http://mocked.url", method: "GET" },
+                    uploadPart: { href: "http://mocked.url", method: "POST" }
+                }
+            })
+        );
+
+        uuidCreateStub.callsFake(() => mockedDatahandle);
+        checkBlobExistsStub.callsFake(() => Promise.resolve({ status: 200 }));
+
+        const mockedHeaders = new Headers();
+        mockedHeaders.set("ETag", "mocked-etag");
+        doUploadPartStub.callsFake(() =>
+            Promise.resolve({
+                headers: mockedHeaders,
+                status: 204
+            })
+        );
+        doCompleteMultipartUploadStub.callsFake(() =>
+            Promise.resolve({ status: 204 })
+        );
+
+        const request = new UploadBlobRequest()
+            .withLayerId(layerId)
+            .withData(data)
+            .withContentType(mockedContentType)
+            .withBillingTag(mockedBillingTag);
+
+        const response = await client.uploadBlob(request).catch(e => e);
+        expect(response.message).equals("Please set DataHandle to the request");
+    });
+
+    it("UploadBlob wrong parameters test", async function() {
+        const data = Buffer.alloc(52428800);
+        const mockedDatahandle = "mocked-datahandle";
+        const mockedContentType = "text/plain";
+        const mockedBillingTag = "mocked-billing-tag";
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        const layerId = "mocked-layer";
+
+        const request = new UploadBlobRequest()
+            .withData(data)
+            .withDataHandle(mockedDatahandle)
+            .withContentType(mockedContentType)
+            .withBillingTag(mockedBillingTag);
+
+        const response = await client.uploadBlob(request).catch(e => e);
+        expect(response.message).equals(
+            "Please set layerId to the UploadBlobRequest"
+        );
+
+        const request2 = new UploadBlobRequest()
+            .withLayerId(layerId)
+            .withData(data)
+            .withDataHandle(mockedDatahandle)
+            .withBillingTag(mockedBillingTag);
+
+        const response2 = await client.uploadBlob(request2).catch(e => e);
+        expect(response2.message).equals(
+            "Please set contentType to the UploadBlobRequest"
+        );
+
+        const request3 = new UploadBlobRequest()
+            .withLayerId(layerId)
+            .withContentType(mockedContentType)
+            .withDataHandle(mockedDatahandle)
+            .withBillingTag(mockedBillingTag);
+
+        const response3 = await client.uploadBlob(request3).catch(e => e);
+        expect(response3.message).equals(
+            "Please set data to the UploadBlobRequest"
+        );
+
+        startMultipartUploadStub.callsFake(() =>
+            Promise.resolve({
+                links: {
+                    complete: { href: "http://mocked.url", method: "PUT" },
+                    _delete: { href: "http://mocked.url", method: "DELETE" },
+                    status: { href: "http://mocked.url", method: "GET" },
+                    uploadPart: { href: "http://mocked.url", method: "POST" }
+                }
+            })
+        );
+        doUploadPartStub.callsFake(() => Promise.reject("A some server error"));
+        const request4 = new UploadBlobRequest()
+            .withLayerId(layerId)
+            .withData(data)
+            .withDataHandle(mockedDatahandle)
+            .withContentType(mockedContentType)
+            .withBillingTag(mockedBillingTag);
+
+        const response4 = await client.uploadBlob(request4).catch(e => e);
+        expect(response4).equals("A some server error");
+    });
+
+    it("UploadBlob rejects if no ETag in header", async function() {
+        const data = Buffer.alloc(52428800);
+        const mockedDatahandle = "mocked-datahandle";
+        const mockedContentType = "text/plain";
+        const mockedBillingTag = "mocked-billing-tag";
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        const layerId = "mocked-layer";
+
+        startMultipartUploadStub.callsFake(() =>
+            Promise.resolve({
+                links: {
+                    complete: { href: "http://mocked.url", method: "PUT" },
+                    _delete: { href: "http://mocked.url", method: "DELETE" },
+                    status: { href: "http://mocked.url", method: "GET" },
+                    uploadPart: { href: "http://mocked.url", method: "POST" }
+                }
+            })
+        );
+
+        const mockedHeaders = new Headers();
+        doUploadPartStub.callsFake(() =>
+            Promise.resolve({
+                headers: mockedHeaders,
+                status: 204
+            })
+        );
+        doCompleteMultipartUploadStub.callsFake(() =>
+            Promise.resolve({ status: 204 })
+        );
+
+        const request = new UploadBlobRequest()
+            .withLayerId(layerId)
+            .withData(data)
+            .withDataHandle(mockedDatahandle)
+            .withContentType(mockedContentType)
+            .withBillingTag(mockedBillingTag);
+
+        const response = await client.uploadBlob(request).catch(e => e);
+        expect(response.message).equals(
+            "Error uploading chunk 1, can't read ETag from headers."
+        );
+    });
+
+    it("UploadBlob rejects if multipart upload not started", async function() {
+        const data = Buffer.alloc(52428800);
+        const mockedDatahandle = "mocked-datahandle";
+        const mockedContentType = "text/plain";
+        const mockedBillingTag = "mocked-billing-tag";
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        const layerId = "mocked-layer";
+
+        startMultipartUploadStub.callsFake(() =>
+            Promise.reject("Error starting multipart upload")
+        );
+
+        const request = new UploadBlobRequest()
+            .withLayerId(layerId)
+            .withData(data)
+            .withDataHandle(mockedDatahandle)
+            .withContentType(mockedContentType)
+            .withBillingTag(mockedBillingTag);
+
+        const response = await client.uploadBlob(request).catch(e => e);
+        expect(response).equals("Error starting multipart upload");
+    });
+
+    it("UploadBlob rejects if complete multipart upload was not OK", async function() {
+        const data = Buffer.alloc(52428800);
+        const mockedDatahandle = "mocked-datahandle";
+        const mockedContentType = "text/plain";
+        const mockedBillingTag = "mocked-billing-tag";
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        const layerId = "mocked-layer";
+
+        startMultipartUploadStub.callsFake(() =>
+            Promise.resolve({
+                links: {
+                    complete: { href: "http://mocked.url", method: "PUT" },
+                    _delete: { href: "http://mocked.url", method: "DELETE" },
+                    status: { href: "http://mocked.url", method: "GET" },
+                    uploadPart: { href: "http://mocked.url", method: "POST" }
+                }
+            })
+        );
+
+        const mockedHeaders = new Headers();
+        mockedHeaders.set("ETag", "mocked-etag");
+        doUploadPartStub.callsFake(() =>
+            Promise.resolve({
+                headers: mockedHeaders,
+                status: 204
+            })
+        );
+        doCompleteMultipartUploadStub.callsFake(() =>
+            Promise.reject("Error completing upload")
+        );
+
+        const request = new UploadBlobRequest()
+            .withLayerId(layerId)
+            .withData(data)
+            .withDataHandle(mockedDatahandle)
+            .withContentType(mockedContentType)
+            .withBillingTag(mockedBillingTag);
+
+        const response = await client.uploadBlob(request).catch(e => e);
+        expect(response).equals("Error completing upload");
+    });
+
+    it("UploadPartitions", async function() {
+        const mockedPublicationId = "mocked-publication-id";
+        const layerId = "mocked-layer";
+        const mockedPartitions = {
+            partitions: [
+                {
+                    partition: "partitions-1",
+                    dataHandle: "datahandle-1"
+                },
+                {
+                    partition: "partitions-2",
+                    dataHandle: "datahandle-2"
+                }
+            ]
+        };
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        uploadPartitionsStub.callsFake(() => Promise.resolve({ status: 204 }));
+
+        const request = new UploadPartitionsRequest()
+            .withLayerId(layerId)
+            .withPublicationId(mockedPublicationId)
+            .withPartitions(mockedPartitions);
+
+        const response = await client.uploadPartitions(request);
+
+        expect(response.status).equals(204);
+    });
+
+    it("UploadPartitions negative", async function() {
+        const mockedPublicationId = "mocked-publication-id";
+        const layerId = "mocked-layer";
+        const mockedPartitions = {
+            partitions: [
+                {
+                    partition: "partitions-1",
+                    dataHandle: "datahandle-1"
+                },
+                {
+                    partition: "partitions-2",
+                    dataHandle: "datahandle-2"
+                }
+            ]
+        };
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        uploadPartitionsStub.callsFake(() => Promise.resolve({ status: 204 }));
+
+        const request = new UploadPartitionsRequest()
+            .withPublicationId(mockedPublicationId)
+            .withPartitions(mockedPartitions);
+
+        const response = await client.uploadPartitions(request).catch(e => e);
+        expect(response.message).equals(
+            "Please set layerId to the UploadPartitionsRequest"
+        );
+
+        const request2 = new UploadPartitionsRequest()
+            .withLayerId(layerId)
+            .withPartitions(mockedPartitions);
+
+        const response2 = await client.uploadPartitions(request2).catch(e => e);
+        expect(response2.message).equals(
+            "Please set publicationId to the UploadPartitionsRequest"
+        );
+
+        const request3 = new UploadPartitionsRequest()
+            .withLayerId(layerId)
+            .withPublicationId(mockedPublicationId);
+
+        const response3 = await client.uploadPartitions(request3).catch(e => e);
+        expect(response3.message).equals(
+            "Please set partitions to the UploadPartitionsRequest"
+        );
+    });
+
+    it("publishToBatch", async function() {
+        const data = Buffer.alloc(25000);
+        const mockedDatahandle = "mocked-datahandle";
+        const mockedContentType = "text/plain";
+        const mockedBillingTag = "mocked-billing-tag";
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        const layerId = "mocked-layer";
+
+        startMultipartUploadStub.callsFake(() =>
+            Promise.resolve({
+                links: {
+                    complete: { href: "http://mocked.url", method: "PUT" },
+                    _delete: { href: "http://mocked.url", method: "DELETE" },
+                    status: { href: "http://mocked.url", method: "GET" },
+                    uploadPart: { href: "http://mocked.url", method: "POST" }
+                }
+            })
+        );
+
+        const mockedHeaders = new Headers();
+        mockedHeaders.set("ETag", "mocked-etag");
+        doUploadPartStub.callsFake(() =>
+            Promise.resolve({
+                headers: mockedHeaders,
+                status: 204
+            })
+        );
+        doCompleteMultipartUploadStub.callsFake(() =>
+            Promise.resolve({ status: 204 })
+        );
+
+        putDataStub.callsFake(() =>
+            Promise.resolve({
+                status: 204
+            })
+        );
+
+        uploadPartitionsStub.callsFake(() => Promise.resolve({ status: 204 }));
+
+        const request = new PublishSinglePartitionRequest()
+            .withLayerId(layerId)
+            .withData(data)
+            .withMetaData({
+                partition: "mocked-partition",
+                dataSize: data.byteLength,
+                dataHandle: "mocked-datahandle"
+            })
+            .withPublicationId("mocked-publication-id")
+            .withContentType(mockedContentType)
+            .withBillingTag(mockedBillingTag);
+
+        const response = await client.publishToBatch(request);
+        expect(response.status).equals(204);
+
+        const bigData = Buffer.alloc(52428800);
+
+        const response2 = await client.publishToBatch(
+            request.withData(bigData)
+        );
+        expect(response2.status).equals(204);
+    });
+
+    it("publishToBatch wrong parameters test", async function() {
+        const data = Buffer.alloc(52428800);
+        const mockedContentType = "text/plain";
+        const mockedBillingTag = "mocked-billing-tag";
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        const layerId = "mocked-layer";
+
+        const request = new PublishSinglePartitionRequest()
+            .withLayerId(layerId)
+            .withData(data)
+            .withPublicationId("mocked-publication-id")
+            .withContentType(mockedContentType)
+            .withBillingTag(mockedBillingTag);
+
+        const response = await client.publishToBatch(request).catch(e => e);
+        expect(response.message).equals(
+            "Please set metadata to the PublishSinglePartitionRequest"
+        );
+
+        const request2 = new PublishSinglePartitionRequest()
+            .withLayerId(layerId)
+            .withMetaData({
+                partition: "mocked-partition",
+                dataSize: data.byteLength,
+                dataHandle: "mocked-datahandle"
+            })
+            .withPublicationId("mocked-publication-id")
+            .withContentType(mockedContentType)
+            .withBillingTag(mockedBillingTag);
+
+        const response2 = await client.publishToBatch(request2).catch(e => e);
+        expect(response2.message).equals(
+            "Please set data to the PublishSinglePartitionRequest"
+        );
+
+        const request3 = new PublishSinglePartitionRequest()
+            .withData(data)
+            .withMetaData({
+                partition: "mocked-partition",
+                dataSize: data.byteLength,
+                dataHandle: "mocked-datahandle"
+            })
+            .withPublicationId("mocked-publication-id")
+            .withContentType(mockedContentType)
+            .withBillingTag(mockedBillingTag);
+
+        const response3 = await client.publishToBatch(request3).catch(e => e);
+        expect(response3.message).equals(
+            "Please set layerId to the PublishSinglePartitionRequest"
         );
     });
 });

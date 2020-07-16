@@ -17,13 +17,25 @@
  * License-Filename: LICENSE
  */
 
-export * from "./VersionedLayerClient";
-export * from "./StartBatchRequest";
-export * from "./CancelBatchRequest";
-export * from "./CheckDataExistsRequest";
-export * from "./CompleteBatchRequest";
-export * from "./PublishSinglePartitionRequest";
-export * from "./UploadPartitionsRequest";
-export * from "./GetBatchRequest";
-export * from "./UploadBlobRequest";
-export * from "./UploadBlobResult";
+export class UploadBlobResult {
+    private dataHandle?: string;
+
+    /**
+     * @brief set the datahandle of the uploaded data.
+     * @param id the datahandle.
+     * @note required.
+     * @returns reference to this object
+     */
+    public withDataHandle(dataHandle: string): UploadBlobResult {
+        this.dataHandle = dataHandle;
+        return this;
+    }
+
+    /**
+     * @brief get the datahandle of the uploaded data.
+     * @returns The datahandle of the data to upload.
+     */
+    public getDataHandle(): string | undefined {
+        return this.dataHandle;
+    }
+}

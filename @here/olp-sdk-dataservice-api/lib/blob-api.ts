@@ -555,6 +555,10 @@ export async function putBlob(
  * The maximum length of this field is 1024 characters.
  * @param body The data to upload. Can be Blob or Buffer.
  * @param contentLength Size of the entity-body, in bytes.
+ * @param contentType A standard MIME type describing the format of the blob data. For more information,
+ * see [RFC 2616, section 14.17: Content-Type](https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17).
+ * The value of this header must match the content type specified in the contentType field when the multipart
+ * upload was initialized, and this content type must also match the content type specified in the layer's configuration.
  * For more information, see [RFC 7230, section 3.3.2: Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2).
  * @param billingTag Billing Tag is an optional free-form tag which is used for grouping billing records together.
  * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
@@ -565,8 +569,9 @@ export async function putData(
     params: {
         layerId: string;
         dataHandle: string;
-        body: Blob | Buffer;
-        contentLength: string;
+        body: ArrayBuffer | Buffer;
+        contentLength: number;
+        contentType: string;
         billingTag?: string;
     }
 ): Promise<Response> {
@@ -586,8 +591,11 @@ export async function putData(
     if (params["body"] !== undefined) {
         options.body = params["body"] as any;
     }
+    if (params["contentType"] !== undefined) {
+        headers["Content-Type"] = params["contentType"];
+    }
     if (params["contentLength"] !== undefined) {
-        headers["Content-Length"] = params["contentLength"] as string;
+        headers["Content-Length"] = params["contentLength"] as any;
     }
 
     return builder.requestBlob(urlBuilder, options);
@@ -764,19 +772,19 @@ export async function doCompleteMultipartUpload(
  * @summary Uploads a part
  * @param layerId The ID of the layer that the data blob part belongs to.
  * @param dataHandle The data handle (ID) represents an identifier for the data blob which the part belongs to. The data handle
- * can only contain alphanumeric, &#39;-&#39; and &#39;.&#39; characters, [0-9, a-z, A-Z, -, .].
+ * can only contain alphanumeric, '-' and '.' characters, [0-9, a-z, A-Z, -, .].
  * The maximum length of this field is 1024 characters.
  * @param multiPartToken The identifier of the multi part upload (token). Content of this parameter
  * must refer to a valid nand started multipart upload.
  * @param partNumber The number of the part for the multi part upload. The numbers of the upload parts
  * must start from 1, be no greater than 10,000 and be consecutive. Parts uploaded with the same &#x60;partNumber&#x60;
- * are overridden. Do not reuse the same &#x60;partnumber&#x60; when retrying an upload in an error situation
+ * are overridden. Do not reuse the same 'partnumber' when retrying an upload in an error situation
  * (network problems, 4xx or 5xx responses). Reusing the same &#x60;partnumber&#x60; in a retry may cause the publication to fail.
  * @param body The data to upload as part of the blob.
  * @param contentType A standard MIME type describing the format of the blob data. For more information,
  * see [RFC 2616, section 14.17: Content-Type](https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17).
- * The value of this header must match the content type specified in the &#39;contentType&#39; field when the multipart
- * upload was initialized, and this content type must also match the content type specified in the layer&#39;s configuration.
+ * The value of this header must match the content type specified in the contentType field when the multipart
+ * upload was initialized, and this content type must also match the content type specified in the layer's configuration.
  * @param contentLength Size of the entity-body, in bytes. For more information,
  * see [RFC 7230, section 3.3.2: Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2).
  * @param billingTag Billing Tag is an optional free-form tag which is used for grouping billing records together.
@@ -788,7 +796,7 @@ export async function doUploadPart(
     params: {
         url: string;
         partNumber: number;
-        body: ArrayBuffer | Blob;
+        body: ArrayBuffer | Buffer;
         contentType: string;
         contentLength: number;
         billingTag?: string;
@@ -806,14 +814,13 @@ export async function doUploadPart(
 
     headers["Content-Type"] = "application/json";
     if (params["body"] !== undefined) {
-        options.body = JSON.stringify(params["body"]);
+        options.body = params["body"] as any;
     }
     if (params["contentType"] !== undefined) {
-        headers["Content-Type"] = params["contentType"] as string;
+        headers["Content-Type"] = params["contentType"];
     }
     if (params["contentLength"] !== undefined) {
-        headers["Content-Length"] = params["contentLength"].toString();
+        headers["Content-Length"] = params["contentLength"] as any;
     }
-
     return builder.requestBlob(urlBuilder, options);
 }

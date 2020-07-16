@@ -35,7 +35,10 @@ import {
     CompleteBatchRequest,
     GetBatchRequest,
     PublishSinglePartitionRequest,
-    StartBatchRequest
+    StartBatchRequest,
+    UploadBlobRequest,
+    UploadBlobResult,
+    UploadPartitionsRequest
 } from "@here/olp-sdk-dataservice-write";
 
 /**
@@ -229,6 +232,14 @@ export class VersionedLayerClient {
         request: PublishSinglePartitionRequest,
         abortSignal?: AbortSignal
     ): Promise<Response> {
+        const publishRequestBuilder = await RequestFactory.create(
+            "publish",
+            "v2",
+            this.params.settings,
+            this.params.catalogHrn,
+            abortSignal
+        );
+
         const metadata = request.getMetadata();
         const billingTag = request.getBillingTag();
 
@@ -244,8 +255,8 @@ export class VersionedLayerClient {
             return Promise.reject(new Error(`Partition ID is missing`));
         }
 
-        const body = request.getData();
-        if (!body) {
+        const data = request.getData();
+        if (!data) {
             return Promise.reject(
                 new Error(
                     "Please set data to the PublishSinglePartitionRequest"
@@ -254,8 +265,7 @@ export class VersionedLayerClient {
         }
 
         if (!metadata.dataSize) {
-            metadata.dataSize =
-                body instanceof Buffer ? body.byteLength : body.size;
+            metadata.dataSize = data.byteLength;
         }
 
         const layerId = request.getLayerId();
@@ -276,87 +286,37 @@ export class VersionedLayerClient {
             );
         }
 
-        if (!metadata.dataHandle) {
-            /**
-             * If datahandle was not provided, we generate the UUID and use it as datahandle.
-             * A retry logic in case datahandle is already present is a loop of 3 tries
-             * and each time we generate a new UUID and retry.
-             *
-             * If all thies was not success, the method rejects the promise with Error.
-             */
-            const timesToGenerate = 3;
-            const checkDataExistsRequest = new CheckDataExistsRequest().withLayerId(
-                layerId
+        const contentType = request.getContentType();
+        if (!contentType) {
+            return Promise.reject(
+                new Error("Please set contentType to the UploadBlobRequest")
             );
-            if (billingTag) {
-                checkDataExistsRequest.withBillingTag(billingTag);
-            }
-
-            for (
-                let generatingCount = 0;
-                generatingCount < timesToGenerate;
-                generatingCount++
-            ) {
-                const generatedDatahandle = Uuid.create();
-                const dataExist = await this.checkDataExists(
-                    checkDataExistsRequest.withDataHandle(generatedDatahandle)
-                ).catch(async (response: Response) => {
-                    if (response.status === STATUS_CODES.NOT_FOUND) {
-                        metadata.dataHandle = generatedDatahandle;
-                        return Promise.resolve(false);
-                    }
-
-                    return Promise.reject(response);
-                });
-
-                if (!dataExist) {
-                    break;
-                }
-            }
-
-            if (!metadata.dataHandle) {
-                return Promise.reject(
-                    new Error(
-                        "Please set DataHandle to the PublishSinglePartitionRequest"
-                    )
-                );
-            }
         }
 
-        const publishRequestBuilder = await RequestFactory.create(
-            "publish",
-            "v2",
-            this.params.settings,
-            this.params.catalogHrn,
+        const uploadBlobRequest = new UploadBlobRequest()
+            .withLayerId(layerId)
+            .withData(data)
+            .withContentType(contentType);
+
+        if (metadata.dataHandle) {
+            uploadBlobRequest.withDataHandle(metadata.dataHandle);
+        }
+
+        if (billingTag) {
+            uploadBlobRequest.withBillingTag(billingTag);
+        }
+
+        const contentEncoding = request.getContentEncoding();
+        if (contentEncoding) {
+            uploadBlobRequest.withContentEncoding(contentEncoding);
+        }
+
+        const uploadBlobResult = await this.uploadBlob(
+            uploadBlobRequest,
             abortSignal
-        ).catch((err: Response) =>
-            Promise.reject(
-                new Error(
-                    `Error retrieving from cache builder for resource "${this.params.catalogHrn}" and api: publish. ${err}`
-                )
-            )
         );
 
-        const blobRequestBuilder = await RequestFactory.create(
-            "blob",
-            "v1",
-            this.params.settings,
-            this.params.catalogHrn,
-            abortSignal
-        ).catch(error =>
-            Promise.reject(
-                new Error(
-                    `Error retrieving from cache requestBuilder for resource "${this.params.catalogHrn}" and api: blob. ${error}`
-                )
-            )
-        );
-
-        await BlobApi.putData(blobRequestBuilder, {
-            layerId,
-            body,
-            contentLength: `${metadata.dataSize}`,
-            dataHandle: metadata.dataHandle as string
-        }).catch(error => Promise.reject(error));
+        metadata.dataHandle = uploadBlobResult.getDataHandle();
 
         return PublishApi.uploadPartitions(publishRequestBuilder, {
             layerId,
@@ -508,5 +468,266 @@ export class VersionedLayerClient {
             publicationId,
             billingTag: request.getBillingTag()
         });
+    }
+
+    /**
+     * Uploads data to the service
+     *
+     * If you are uploading more than 50 MB of data,
+     * the data splits into parts and uploads each part individually.
+     * The size of each part is 5 MB, except the last part.
+     *
+     * @param request details of the uploading data.
+     * @param abortSignal An optional signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @returns Promise resolves with UploadBlobResult.
+     */
+    public async uploadBlob(
+        request: UploadBlobRequest,
+        abortSignal?: AbortSignal
+    ): Promise<UploadBlobResult> {
+        /**
+         * If data size is less then 50Mb we can upload all data in one request
+         * If more than 50Mb, we should split the data by 5Mb chunks and upload
+         * chunk by chunk, colloeting ETags from responses and than submit all tags by PUT request.
+         */
+        const chunkSize = 5242880; // 1024 * 1024 * 5 = 5MB
+        const maxDataSizeForOneRequestUpload = 52428800; // 1024 * 1024 * 50 = 50Mb
+
+        const billingTag = request.getBillingTag();
+        const layerId = request.getLayerId();
+        if (!layerId) {
+            return Promise.reject(
+                new Error("Please set layerId to the UploadBlobRequest")
+            );
+        }
+
+        const contentType = request.getContentType();
+        if (!contentType) {
+            return Promise.reject(
+                new Error("Please set contentType to the UploadBlobRequest")
+            );
+        }
+
+        const data = request.getData();
+        if (!data) {
+            return Promise.reject(
+                new Error("Please set data to the UploadBlobRequest")
+            );
+        }
+
+        let dataHandle = request.getDataHandle();
+        if (!dataHandle) {
+            dataHandle = await this.generateDatahandle(layerId, billingTag);
+        }
+
+        const blobRequestBuilder = await RequestFactory.create(
+            "blob",
+            "v1",
+            this.params.settings,
+            this.params.catalogHrn,
+            abortSignal
+        );
+
+        const dataSize = data.byteLength;
+        if (dataSize >= maxDataSizeForOneRequestUpload) {
+            const etags = [];
+            let unreadBytes = dataSize;
+            let readBytes = 0;
+            let chunkNumber = 0;
+
+            const multipartUploadParams: BlobApi.MultipartUploadMetadata = {
+                contentType
+            };
+
+            const contentEncoding = request.getContentEncoding() as
+                | BlobApi.ContentEncodingEnum
+                | undefined;
+            if (contentEncoding !== undefined) {
+                multipartUploadParams.contentEncoding = contentEncoding;
+            }
+
+            const multipartUploadMeta = (await BlobApi.startMultipartUpload(
+                blobRequestBuilder,
+                {
+                    dataHandle,
+                    layerId,
+                    body: multipartUploadParams
+                }
+            )) as any;
+
+            while (unreadBytes > 0) {
+                const chunk = data.slice(readBytes, readBytes + chunkSize);
+                chunkNumber++;
+
+                const uploadPartResponse = await BlobApi.doUploadPart(
+                    blobRequestBuilder,
+                    {
+                        url: multipartUploadMeta.links.uploadPart.href,
+                        body: chunk,
+                        partNumber: chunkNumber,
+                        contentType,
+                        contentLength: chunk.byteLength
+                    }
+                ).catch(error => Promise.reject(error));
+
+                const etag = uploadPartResponse.headers.get("ETag");
+                if (etag) {
+                    etags.push(etag);
+                } else {
+                    return Promise.reject(
+                        new Error(
+                            `Error uploading chunk ${chunkNumber}, can't read ETag from headers.`
+                        )
+                    );
+                }
+                readBytes += chunkSize;
+                unreadBytes -= chunkSize;
+            }
+
+            await BlobApi.doCompleteMultipartUpload(blobRequestBuilder, {
+                url: multipartUploadMeta.links.complete.href,
+                parts: {
+                    parts: etags.map((etag, index) => ({
+                        etag,
+                        number: index + 1
+                    }))
+                }
+            });
+        } else {
+            await BlobApi.putData(blobRequestBuilder, {
+                layerId,
+                body: data,
+                contentType,
+                dataHandle,
+                contentLength: dataSize
+            });
+        }
+
+        return new UploadBlobResult().withDataHandle(dataHandle);
+    }
+
+    /**
+     * Uploads metadata to the service.
+     *
+     * When all data have been uploaded,
+     * you need to generate the metadata which will be used to represent
+     * your data inside the HERE platform.
+     * At a minimum, your metadata must consist of a partition ID and the data handle you used to upload your data.
+     * For a complete description of the fields you can set, @see [[PublishPartition]].
+     *
+     * The maximum number of partitions you can upload and publish in one request is 1,000.
+     * If you have more than 1,000 partitions you want to upload,
+     * upload the data for the first 1,000 partitions
+     * then upload the metadata for those 1,000 partitions.
+     * Then, continue to the next set of partitions.
+     * Do not wait until all data is uploaded before uploading metadata.
+     * Doing so will result in poor performance.
+     * Instead, upload data, then metadata, and repeat as needed until all your data and corresponding metadata is uploaded.
+     *
+     * @param request details of the uploading metadata.
+     * @param abortSignal An optional signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @returns Promise resolves with 204 status if success.
+     */
+    public async uploadPartitions(
+        request: UploadPartitionsRequest,
+        abortSignal?: AbortSignal
+    ) {
+        const publishRequestBuilder = await RequestFactory.create(
+            "publish",
+            "v2",
+            this.params.settings,
+            this.params.catalogHrn,
+            abortSignal
+        ).catch((err: Response) =>
+            Promise.reject(
+                new Error(
+                    `Error retrieving from cache builder for resource "${this.params.catalogHrn}" and api: publish. ${err}`
+                )
+            )
+        );
+
+        const layerId = request.getLayerId();
+        if (!layerId) {
+            return Promise.reject(
+                new Error("Please set layerId to the UploadPartitionsRequest")
+            );
+        }
+
+        const publicationId = request.getPublicationId();
+        if (!publicationId) {
+            return Promise.reject(
+                new Error(
+                    "Please set publicationId to the UploadPartitionsRequest"
+                )
+            );
+        }
+
+        const partitions = request.getPartitions();
+        if (!partitions) {
+            return Promise.reject(
+                new Error(
+                    "Please set partitions to the UploadPartitionsRequest"
+                )
+            );
+        }
+        return PublishApi.uploadPartitions(publishRequestBuilder, {
+            layerId,
+            publicationId,
+            body: partitions
+        });
+    }
+
+    /**
+     * Generates the UUID and use it as datahandle.
+     * A retry logic in case datahandle is already present is a loop of 3 tries
+     * and each time we generate a new UUID and retry.
+     *
+     * If all thies was not success, the method rejects the promise with Error.
+     *
+     * @param layerId The id of layer to check if data exist
+     * @param billingTag An optional free-form tag which is used for grouping
+     * billing records together. If supplied, it must be between 4 - 16
+     * characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     *
+     * @returns A promise with generated datahandle or rejects if was not succeed.
+     */
+    private async generateDatahandle(
+        layerId: string,
+        billingTag?: string
+    ): Promise<string> {
+        const timesToGenerate = 3;
+        const checkDataExistsRequest = new CheckDataExistsRequest().withLayerId(
+            layerId
+        );
+        if (billingTag) {
+            checkDataExistsRequest.withBillingTag(billingTag);
+        }
+
+        for (
+            let generatingCount = 0;
+            generatingCount < timesToGenerate;
+            generatingCount++
+        ) {
+            const generatedDatahandle = Uuid.create();
+            const dataExist = await this.checkDataExists(
+                checkDataExistsRequest.withDataHandle(generatedDatahandle)
+            ).catch(response => response.status !== STATUS_CODES.NOT_FOUND);
+
+            if (!dataExist) {
+                return generatedDatahandle;
+            }
+        }
+
+        return Promise.reject(
+            new Error("Please set DataHandle to the request")
+        );
     }
 }
