@@ -17,15 +17,21 @@
  * License-Filename: LICENSE
  */
 
-export * from "./DataStoreDownloadManager";
-export * from "./DataStoreRequestBuilder";
-export * from "./DownloadManager";
-export * from "./RequestBuilderFactory";
-export * from "./getEnvLookupUrl";
-export * from "./HRN";
-export * from "./getDataSizeUtil";
-export * from "./HttpError";
-export * from "./FetchOptions";
-export * from "./TileKey";
-export * from "./Uuid";
-export * from "./splitDataToChunks";
+/**
+ * Splits Blob or Buffer for chunks. Each chunk will
+ * have size = chunkSize, the last one will have size <= chunkSize.
+ *
+ * @param data The data to be splitted.
+ * @param chunkSize The size for chunk in bytes.
+ * @returns array of chunks.
+ */
+export function splitDataToChunks(data: Blob | Buffer, chunkSize: number) {
+    const dataSize = data instanceof Buffer ? data.length : data.size;
+    const dataChunks = [];
+
+    for (let start = 0; start < dataSize; start += chunkSize) {
+        dataChunks.push(data.slice(start, start + chunkSize));
+    }
+
+    return dataChunks;
+}
