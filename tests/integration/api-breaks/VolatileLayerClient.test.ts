@@ -35,8 +35,8 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("VolatileLayerClientParams", () => {
-  it("VolatileLayerClientParams with all required params", () => {
+describe("VolatileLayerClientParams", function() {
+  it("VolatileLayerClientParams with all required params", function() {
     const params: VolatileLayerClientParams = {
       catalogHrn: HRN.fromString("hrn:here:data:::example-catalog"),
       layerId: "mocked-layer-id",
@@ -49,7 +49,7 @@ describe("VolatileLayerClientParams", () => {
     assert.isDefined(params);
   });
 
-  it("VolatileLayerClientParams with all required and optional params", () => {
+  it("VolatileLayerClientParams with all required and optional params", function() {
     const params: VolatileLayerClientParams = {
       catalogHrn: HRN.fromString("hrn:here:data:::example-catalog"),
       layerId: "mocked-layer-id",
@@ -63,7 +63,7 @@ describe("VolatileLayerClientParams", () => {
   });
 });
 
-describe("VolatileLayerClient", () => {
+describe("VolatileLayerClient", function() {
   class VolatileLayerClientTest extends VolatileLayerClient {
     constructor(params: VolatileLayerClientParams) {
       super(params);
@@ -93,11 +93,11 @@ describe("VolatileLayerClient", () => {
     }
   }
 
-  beforeEach(() => {
+  beforeEach(function() {
     VolatileLayerClientTest;
   });
 
-  it("Shoud be initialized with arguments", async () => {
+  it("Shoud be initialized with arguments", async function() {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -117,7 +117,7 @@ describe("VolatileLayerClient", () => {
     assert.isDefined(layerClient.settings);
   });
 
-  it("Shoud be initialized with VolatileLayerClientParams", async () => {
+  it("Shoud be initialized with VolatileLayerClientParams", async function() {
     const layerClient = new VolatileLayerClient({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -136,7 +136,7 @@ describe("VolatileLayerClient", () => {
     assert.isDefined(layerClient.settings);
   });
 
-  it("getPartitions method with QuadKeyPartitionsRequest", async () => {
+  it("getPartitions method with QuadKeyPartitionsRequest", async function() {
     const layerClient = new VolatileLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -150,7 +150,7 @@ describe("VolatileLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("getPartitions method with QuadKeyPartitionsRequest and abort signal", async () => {
+  it("getPartitions method with QuadKeyPartitionsRequest and abort signal", async function() {
     const layerClient = new VolatileLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -169,7 +169,7 @@ describe("VolatileLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("getPartitions method with PartitionsRequest", async () => {
+  it("getPartitions method with PartitionsRequest", async function() {
     const layerClient = new VolatileLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -183,7 +183,7 @@ describe("VolatileLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("getPartitions method with PartitionsRequest and abort signal", async () => {
+  it("getPartitions method with PartitionsRequest and abort signal", async function() {
     const layerClient = new VolatileLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -202,7 +202,7 @@ describe("VolatileLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("getData method method with dataHandle", async () => {
+  it("getData method method with dataHandle", async function() {
     const layerClient = new VolatileLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -219,7 +219,7 @@ describe("VolatileLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("getData method method with dataHandle and abort signal", async () => {
+  it("getData method method with dataHandle and abort signal", async function() {
     const layerClient = new VolatileLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",

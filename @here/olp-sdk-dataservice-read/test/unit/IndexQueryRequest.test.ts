@@ -28,26 +28,32 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("IndexQueryRequest", () => {
+describe("IndexQueryRequest", function() {
     const mockedQuery = "ingestionTime>1552341200000;";
 
-    it("Should initialize", () => {
+    it("Should initialize", function() {
         const indexQueryRequest = new IndexQueryRequest();
 
         assert.isDefined(indexQueryRequest);
         expect(indexQueryRequest).be.instanceOf(IndexQueryRequest);
     });
 
-    it("Should set parameters", () => {
+    it("Should set parameters", function() {
         const indexQueryRequest = new IndexQueryRequest();
-        const indexQueryRequestWithHuge = indexQueryRequest.withHugeResponse(true);
-        const indexQueryRequestWithQuery = indexQueryRequest.withQueryString(mockedQuery);
+        const indexQueryRequestWithHuge = indexQueryRequest.withHugeResponse(
+            true
+        );
+        const indexQueryRequestWithQuery = indexQueryRequest.withQueryString(
+            mockedQuery
+        );
 
         expect(indexQueryRequestWithHuge.getHugeResponse()).to.be.equal(true);
-        expect(indexQueryRequestWithQuery.getQueryString()).to.be.equal(mockedQuery);
+        expect(indexQueryRequestWithQuery.getQueryString()).to.be.equal(
+            mockedQuery
+        );
     });
 
-    it("Should set parameters with chain", () => {
+    it("Should set parameters with chain", function() {
         const indexQueryRequest = new IndexQueryRequest()
             .withHugeResponse(false)
             .withQueryString(mockedQuery);

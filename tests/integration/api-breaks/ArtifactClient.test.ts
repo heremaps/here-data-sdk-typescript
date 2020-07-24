@@ -32,7 +32,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("ArtifactClient", () => {
+describe("ArtifactClient", function() {
   class ArtifactClientTest extends ArtifactClient {
     constructor(settings: OlpClientSettings) {
       super(settings);
@@ -63,7 +63,7 @@ describe("ArtifactClient", () => {
     getToken: () => Promise.resolve("mocked-token")
   });
 
-  it("Shoud be initialized with arguments", async () => {
+  it("Shoud be initialized with arguments", async function() {
     const artifactClient = new ArtifactClient(settings);
     assert.isDefined(artifactClient);
 
@@ -72,7 +72,7 @@ describe("ArtifactClient", () => {
     assert.isDefined(artifactClient.getSchema);
   });
 
-  it("Test getSchemaDetails method with schemaDetailsRequest", async () => {
+  it("Test getSchemaDetails method with schemaDetailsRequest", async function() {
     const artifactClient = new ArtifactClientTest(settings);
 
     const response = await artifactClient.getSchemaDetails(
@@ -81,7 +81,7 @@ describe("ArtifactClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test getSchema method with schemaRequest", async () => {
+  it("Test getSchema method with schemaRequest", async function() {
     const artifactClient = new ArtifactClientTest(settings);
 
     const response = await artifactClient.getSchema(

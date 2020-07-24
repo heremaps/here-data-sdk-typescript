@@ -28,8 +28,8 @@ chai.use(sinonChai);
 
 const expect = chai.expect;
 
-describe("PublishApi", () => {
-    it("getPublication", async () => {
+describe("PublishApi", function() {
+    it("getPublication", async function() {
         const params = {
             publicationId: "mocked-publicationId",
             billingTag: "mocked-billingTag"
@@ -52,7 +52,7 @@ describe("PublishApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("initPublication", async () => {
+    it("initPublication", async function() {
         const params = {
             publicationId: "mocked-publicationId",
             body: {
@@ -87,7 +87,7 @@ describe("PublishApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("submitPublication", async () => {
+    it("submitPublication", async function() {
         const params = {
             publicationId: "mocked-publicationId",
             billingTag: "mocked-billingTag"
@@ -113,7 +113,7 @@ describe("PublishApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("uploadPartitions", async () => {
+    it("uploadPartitions", async function() {
         const params = {
             layerId: "mocked-layer-id",
             publicationId: "mocked-publicationId",
@@ -152,7 +152,7 @@ describe("PublishApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("cancelPublication", async () => {
+    it("cancelPublication", async function() {
         const params = {
             publicationId: "mocked-publicationId",
             billingTag: "mocked-billingTag"

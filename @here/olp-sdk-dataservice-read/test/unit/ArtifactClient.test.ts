@@ -30,7 +30,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("ArtifactClient", () => {
+describe("ArtifactClient", function() {
     let sandbox: sinon.SinonSandbox;
     let olpClientSettingsStub: sinon.SinonStubbedInstance<dataServiceRead.OlpClientSettings>;
     let getArtifactUsingGETStub: sinon.SinonStub;
@@ -42,11 +42,11 @@ describe("ArtifactClient", () => {
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
 
-    before(() => {
+    before(function() {
         sandbox = sinon.createSandbox();
     });
 
-    beforeEach(() => {
+    beforeEach(function() {
         olpClientSettingsStub = sandbox.createStubInstance(
             dataServiceRead.OlpClientSettings
         );
@@ -63,18 +63,18 @@ describe("ArtifactClient", () => {
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
-    afterEach(() => {
+    afterEach(function() {
         sandbox.restore();
     });
 
-    it("Shoud be initialised with settings", async () => {
+    it("Shoud be initialised with settings", async function() {
         const artifactClient = new dataServiceRead.ArtifactClient(
             olpClientSettingsStub as any
         );
         assert.isDefined(artifactClient);
     });
 
-    it("Should method getSchema provide data", async () => {
+    it("Should method getSchema provide data", async function() {
         const mockedSchema: Response = new Response(null, {
             statusText: "mocked response"
         });
@@ -100,7 +100,7 @@ describe("ArtifactClient", () => {
         assert.isDefined(response);
     });
 
-    it("Should method getSchema return HttpError when ArtifactClient API crashes", async () => {
+    it("Should method getSchema return HttpError when ArtifactClient API crashes", async function() {
         const NOT_FOUND_ERROR_CODE = 404;
         const mockedError = new HttpError(NOT_FOUND_ERROR_CODE, "Not found");
 
@@ -134,7 +134,7 @@ describe("ArtifactClient", () => {
             });
     });
 
-    it("Should method getSchema return error without variant data provided", async () => {
+    it("Should method getSchema return error without variant data provided", async function() {
         const mockedError: string =
             "Please provide the schema variant by schemaRequest.withVariant()";
 
@@ -153,7 +153,7 @@ describe("ArtifactClient", () => {
             });
     });
 
-    it("Should method getSchemaDetails provide data", async () => {
+    it("Should method getSchemaDetails provide data", async function() {
         const mockedSchema: ArtifactApi.GetSchemaResponse = {
             variants: [
                 {
@@ -186,7 +186,7 @@ describe("ArtifactClient", () => {
         expect(mockedSchema).be.equal(response);
     });
 
-    it("Should method getSchemaDetails return HttpError when ArtifactClient crashes", async () => {
+    it("Should method getSchemaDetails return HttpError when ArtifactClient crashes", async function() {
         const NOT_FOUND_ERROR_CODE = 404;
         const mockedError = new HttpError(NOT_FOUND_ERROR_CODE, "Not found");
 
@@ -226,7 +226,7 @@ describe("ArtifactClient", () => {
             });
     });
 
-    it("Should method getSchemaDetails return error without hrn provided", async () => {
+    it("Should method getSchemaDetails return error without hrn provided", async function() {
         const mockedError: string =
             "Please provide the schema HRN by schemaDetailsRequest.withSchema()";
 

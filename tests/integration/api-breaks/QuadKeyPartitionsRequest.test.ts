@@ -31,7 +31,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("QuadKeyPartitionsRequest", () => {
+describe("QuadKeyPartitionsRequest", function() {
   class QuadKeyPartitionsRequestTest extends QuadKeyPartitionsRequest {
     withVersion(version?: number): QuadKeyPartitionsRequest {
       return this;
@@ -80,7 +80,7 @@ describe("QuadKeyPartitionsRequest", () => {
     }
   }
 
-  it("Shoud be initialized", async () => {
+  it("Shoud be initialized", async function() {
     const request = new QuadKeyPartitionsRequest();
     assert.isDefined(request);
     expect(request).to.be.instanceOf(QuadKeyPartitionsRequest);
@@ -97,42 +97,42 @@ describe("QuadKeyPartitionsRequest", () => {
     assert.isFunction(request.getAdditionalFields);
   });
 
-  it("Test withVersion method with version", async () => {
+  it("Test withVersion method with version", async function() {
     const request = new QuadKeyPartitionsRequestTest();
 
     const response = request.withVersion(3);
     assert.isDefined(response);
   });
 
-  it("Test withVersion method without params", async () => {
+  it("Test withVersion method without params", async function() {
     const request = new QuadKeyPartitionsRequestTest();
 
     const response = request.withVersion();
     assert.isDefined(response);
   });
 
-  it("Test getVersion method without params", async () => {
+  it("Test getVersion method without params", async function() {
     const request = new QuadKeyPartitionsRequestTest();
 
     const response = request.getVersion();
     assert.isDefined(response);
   });
 
-  it("Test withDepth method with depth", async () => {
+  it("Test withDepth method with depth", async function() {
     const request = new QuadKeyPartitionsRequestTest();
 
     const response = request.withDepth(3);
     assert.isDefined(response);
   });
 
-  it("Test getDepth method without params", async () => {
+  it("Test getDepth method without params", async function() {
     const request = new QuadKeyPartitionsRequestTest();
 
     const response = request.getDepth();
     assert.isDefined(response);
   });
 
-  it("Test withQuadKey method with quadKey", async () => {
+  it("Test withQuadKey method with quadKey", async function() {
     const request = new QuadKeyPartitionsRequestTest();
 
     const response = request.withQuadKey({
@@ -143,35 +143,35 @@ describe("QuadKeyPartitionsRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test getQuadKey method without params", async () => {
+  it("Test getQuadKey method without params", async function() {
     const request = new QuadKeyPartitionsRequestTest();
 
     const response = request.getQuadKey();
     assert.isDefined(response);
   });
 
-  it("Test withBillingTag method with tag", async () => {
+  it("Test withBillingTag method with tag", async function() {
     const catalogRequest = new QuadKeyPartitionsRequestTest();
 
     const response = catalogRequest.withBillingTag("test-tag");
     assert.isDefined(response);
   });
 
-  it("Test getBillingTag method without params", async () => {
+  it("Test getBillingTag method without params", async function() {
     const catalogRequest = new QuadKeyPartitionsRequestTest();
 
     const response = catalogRequest.getBillingTag();
     assert.isDefined(response);
   });
 
-  it("Test withAdditionalFields method with additionalFields", async () => {
+  it("Test withAdditionalFields method with additionalFields", async function() {
     const catalogRequest = new QuadKeyPartitionsRequestTest();
 
     const response = catalogRequest.withAdditionalFields(["dataSize"]);
     assert.isDefined(response);
   });
 
-  it("Test getAdditionalFields method without params", async () => {
+  it("Test getAdditionalFields method without params", async function() {
     const catalogRequest = new QuadKeyPartitionsRequestTest();
 
     const response = catalogRequest.getAdditionalFields();

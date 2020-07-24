@@ -26,7 +26,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("IndexQueryRequest", () => {
+describe("IndexQueryRequest", function() {
   class IndexQueryRequestTest extends IndexQueryRequest {
     withQueryString(query?: string): IndexQueryRequest {
       return this;
@@ -45,7 +45,7 @@ describe("IndexQueryRequest", () => {
     }
   }
 
-  it("Shoud be initialized", async () => {
+  it("Shoud be initialized", async function() {
     const request = new IndexQueryRequest();
     assert.isDefined(request);
     expect(request).to.be.instanceOf(IndexQueryRequest);
@@ -56,35 +56,35 @@ describe("IndexQueryRequest", () => {
     assert.isFunction(request.getQueryString);
   });
 
-  it("Test withHugeResponse method with isHuge", async () => {
+  it("Test withHugeResponse method with isHuge", async function() {
     const request = new IndexQueryRequestTest();
 
     const response = request.withHugeResponse(true);
     assert.isDefined(response);
   });
 
-  it("Test getHugeResponse method without params", async () => {
+  it("Test getHugeResponse method without params", async function() {
     const request = new IndexQueryRequestTest();
 
     const response = request.getHugeResponse();
     assert.isDefined(response);
   });
 
-  it("Test withQueryString method with query", async () => {
+  it("Test withQueryString method with query", async function() {
     const request = new IndexQueryRequestTest();
 
     const response = request.withQueryString("test");
     assert.isDefined(response);
   });
 
-  it("Test withQueryString method without params", async () => {
+  it("Test withQueryString method without params", async function() {
     const request = new IndexQueryRequestTest();
 
     const response = request.withQueryString();
     assert.isDefined(response);
   });
 
-  it("Test getQueryString method without params", async () => {
+  it("Test getQueryString method without params", async function() {
     const request = new IndexQueryRequestTest();
 
     const response = request.getQueryString();

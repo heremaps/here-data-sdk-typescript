@@ -27,15 +27,15 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("SubscribeRequest", () => {
-    it("Should initialize", () => {
+describe("SubscribeRequest", function() {
+    it("Should initialize", function() {
         const request = new UnsubscribeRequest();
 
         assert.isDefined(request);
         expect(request).be.instanceOf(UnsubscribeRequest);
     });
 
-    it("Should set parameters", () => {
+    it("Should set parameters", function() {
         const mockMode = "parallel";
         const mockSubId = "1111111111";
         const request = new UnsubscribeRequest();
@@ -46,7 +46,7 @@ describe("SubscribeRequest", () => {
         expect(requestWithSub.getSubscriptionId()).to.be.equal(mockSubId);
     });
 
-    it("Should get parameters with chain", () => {
+    it("Should get parameters with chain", function() {
         const mockMode = "parallel";
         const mockSubId = "1111111111";
 

@@ -26,19 +26,19 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("LayerVersionsRequest", () => {
+describe("LayerVersionsRequest", function() {
     const billingTag = "billingTag";
     const mockedVersion1 = 5;
     const mockedVersion2 = 6;
 
-    it("Should initialize", () => {
+    it("Should initialize", function() {
         const layerVersionsRequest = new LayerVersionsRequest();
 
         assert.isDefined(layerVersionsRequest);
         expect(layerVersionsRequest).be.instanceOf(LayerVersionsRequest);
     });
 
-    it("Should set version", () => {
+    it("Should set version", function() {
         const layerVersionsRequest = new LayerVersionsRequest();
         const layerVersionsRequestWithVersion = layerVersionsRequest.withVersion(
             mockedVersion1
@@ -55,7 +55,7 @@ describe("LayerVersionsRequest", () => {
         );
     });
 
-    it("Should set version with chain", () => {
+    it("Should set version with chain", function() {
         const layerVersionsRequest = new LayerVersionsRequest()
             .withVersion(mockedVersion1)
             .withVersion(mockedVersion2)

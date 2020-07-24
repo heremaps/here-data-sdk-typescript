@@ -35,8 +35,8 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("VersionedLayerClientParams", () => {
-  it("VersionedLayerClientParams with all required params", () => {
+describe("VersionedLayerClientParams", function() {
+  it("VersionedLayerClientParams with all required params", function() {
     const params: VersionedLayerClientParams = {
       catalogHrn: HRN.fromString("hrn:here:data:::example-catalog"),
       layerId: "mocked-layer-id",
@@ -49,7 +49,7 @@ describe("VersionedLayerClientParams", () => {
     assert.isDefined(params);
   });
 
-  it("VersionedLayerClientParams with all required and optional params", () => {
+  it("VersionedLayerClientParams with all required and optional params", function() {
     const params: VersionedLayerClientParams = {
       catalogHrn: HRN.fromString("hrn:here:data:::example-catalog"),
       layerId: "mocked-layer-id",
@@ -64,7 +64,7 @@ describe("VersionedLayerClientParams", () => {
   });
 });
 
-describe("VersionedLayerClient", () => {
+describe("VersionedLayerClient", function() {
   class VersionedLayerClientTest extends VersionedLayerClient {
     constructor(params: VersionedLayerClientParams) {
       super(params);
@@ -94,11 +94,11 @@ describe("VersionedLayerClient", () => {
     }
   }
 
-  beforeEach(() => {
+  beforeEach(function() {
     VersionedLayerClientTest;
   });
 
-  it("Shoud be initialized with arguments", async () => {
+  it("Shoud be initialized with arguments", async function() {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -118,7 +118,7 @@ describe("VersionedLayerClient", () => {
     assert.isDefined(layerClient.settings);
   });
 
-  it("Shoud be initialized with VersionedLayerClientParams", async () => {
+  it("Shoud be initialized with VersionedLayerClientParams", async function() {
     const layerClient = new VersionedLayerClient({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -137,7 +137,7 @@ describe("VersionedLayerClient", () => {
     assert.isDefined(layerClient.settings);
   });
 
-  it("getPartitions method with QuadKeyPartitionsRequest", async () => {
+  it("getPartitions method with QuadKeyPartitionsRequest", async function() {
     const layerClient = new VersionedLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -151,7 +151,7 @@ describe("VersionedLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("getPartitions method with QuadKeyPartitionsRequest and abort signal", async () => {
+  it("getPartitions method with QuadKeyPartitionsRequest and abort signal", async function() {
     const layerClient = new VersionedLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -170,7 +170,7 @@ describe("VersionedLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("getPartitions method with PartitionsRequest", async () => {
+  it("getPartitions method with PartitionsRequest", async function() {
     const layerClient = new VersionedLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -184,7 +184,7 @@ describe("VersionedLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("getPartitions method with PartitionsRequest and abort signal", async () => {
+  it("getPartitions method with PartitionsRequest and abort signal", async function() {
     const layerClient = new VersionedLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -203,7 +203,7 @@ describe("VersionedLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("getData method method with dataHandle", async () => {
+  it("getData method method with dataHandle", async function() {
     const layerClient = new VersionedLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -220,7 +220,7 @@ describe("VersionedLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("getData method method with dataHandle and abort signal", async () => {
+  it("getData method method with dataHandle and abort signal", async function() {
     const layerClient = new VersionedLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",

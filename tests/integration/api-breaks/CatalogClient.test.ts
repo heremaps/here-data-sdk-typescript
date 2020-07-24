@@ -33,7 +33,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("CatalogClient", () => {
+describe("CatalogClient", function() {
   class CatalogClientTest extends CatalogClient {
     constructor(catalogHrn: HRN, settings: OlpClientSettings) {
       super(catalogHrn, settings);
@@ -94,7 +94,7 @@ describe("CatalogClient", () => {
     getToken: () => Promise.resolve("mocked-token")
   });
 
-  it("Shoud be initialized with arguments", async () => {
+  it("Shoud be initialized with arguments", async function() {
     const catalogClient = new CatalogClient(mockedHRN, settings);
     assert.isDefined(catalogClient);
 
@@ -105,7 +105,7 @@ describe("CatalogClient", () => {
     assert.isDefined(catalogClient.getLayerVersions);
   });
 
-  it("Test getCatalog method with request", async () => {
+  it("Test getCatalog method with request", async function() {
     const catalogClient = new CatalogClientTest(mockedHRN, settings);
 
     const response = await catalogClient.getCatalog(
@@ -114,7 +114,7 @@ describe("CatalogClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test getCatalog method with catalogRequest and abortSignal", async () => {
+  it("Test getCatalog method with catalogRequest and abortSignal", async function() {
     const catalogClient = new CatalogClientTest(mockedHRN, settings);
     const abortSignal: any = "test";
 
@@ -125,7 +125,7 @@ describe("CatalogClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test getEarliestVersion method with catalogVersionRequest", async () => {
+  it("Test getEarliestVersion method with catalogVersionRequest", async function() {
     const catalogClient = new CatalogClientTest(mockedHRN, settings);
 
     const response = await catalogClient.getEarliestVersion(
@@ -134,7 +134,7 @@ describe("CatalogClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test getEarliestVersion method with catalogVersionRequest and abortSignal", async () => {
+  it("Test getEarliestVersion method with catalogVersionRequest and abortSignal", async function() {
     const catalogClient = new CatalogClientTest(mockedHRN, settings);
     const abortSignal: any = "test";
 
@@ -145,7 +145,7 @@ describe("CatalogClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test getLatestVersion method with catalogVersionRequest", async () => {
+  it("Test getLatestVersion method with catalogVersionRequest", async function() {
     const catalogClient = new CatalogClientTest(mockedHRN, settings);
 
     const response = await catalogClient.getLatestVersion(
@@ -154,7 +154,7 @@ describe("CatalogClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test getLatestVersion method with catalogVersionRequest and abortSignal", async () => {
+  it("Test getLatestVersion method with catalogVersionRequest and abortSignal", async function() {
     const catalogClient = new CatalogClientTest(mockedHRN, settings);
     const abortSignal: any = "test";
 
@@ -165,7 +165,7 @@ describe("CatalogClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test getLayerVersions method with layerVersionsRequest", async () => {
+  it("Test getLayerVersions method with layerVersionsRequest", async function() {
     const catalogClient = new CatalogClientTest(mockedHRN, settings);
 
     const response = await catalogClient.getLayerVersions(
@@ -174,7 +174,7 @@ describe("CatalogClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test getLayerVersions method with layerVersionsRequest and abortSignal", async () => {
+  it("Test getLayerVersions method with layerVersionsRequest and abortSignal", async function() {
     const catalogClient = new CatalogClientTest(mockedHRN, settings);
     const abortSignal: any = "test";
 

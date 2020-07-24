@@ -28,7 +28,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("addBearerToken", () => {
+describe("addBearerToken", function() {
     const USER_AGENT = `OLP-TS-SDK/${lib.LIB_VERSION}`;
     const dm = ({
         download: async (url: string, init?: RequestInit) =>
@@ -41,14 +41,14 @@ describe("addBearerToken", () => {
         () => Promise.resolve("mocked-token")
     );
 
-    it("Shoud be added token to the request headers with empty params from the user", async () => {
+    it("Shoud be added token to the request headers with empty params from the user", async function() {
         const result: any = await requestBuilder.download("mocked-url");
         expect(result.headers.get("Authorization")).equals(
             "Bearer mocked-token"
         );
     });
 
-    it("Shoud be added token to the request headers with not empty params from the user", async () => {
+    it("Shoud be added token to the request headers with not empty params from the user", async function() {
         const result: any = await requestBuilder.download("mocked-url", {
             body: "test-string"
         });
@@ -58,7 +58,7 @@ describe("addBearerToken", () => {
         );
     });
 
-    it("Shoud be added token to the request headers with some headers in params from the user", async () => {
+    it("Shoud be added token to the request headers with some headers in params from the user", async function() {
         const result: any = await requestBuilder.download("mocked-url", {
             body: "test-string",
             headers: [
@@ -74,7 +74,7 @@ describe("addBearerToken", () => {
         );
     });
 
-    it("Shoud be added token to the request headers with some instance of  Headers in params from the user", async () => {
+    it("Shoud be added token to the request headers with some instance of  Headers in params from the user", async function() {
         const result: any = await requestBuilder.download("mocked-url", {
             body: "test-string",
             headers: new Headers({ "test-header": "test-header-value" })
@@ -86,7 +86,7 @@ describe("addBearerToken", () => {
         expect(result.headers.get("test-header")).equals("test-header-value");
     });
 
-    it("Shoud be added token to the request headers with some empty headers object in params from the user", async () => {
+    it("Shoud be added token to the request headers with some empty headers object in params from the user", async function() {
         const result: any = await requestBuilder.download("mocked-url", {
             body: "test-string",
             headers: {}
@@ -97,7 +97,7 @@ describe("addBearerToken", () => {
         );
     });
 
-    it("Shoud be added token to the request headers with some not empty headers object in params from the user", async () => {
+    it("Shoud be added token to the request headers with some not empty headers object in params from the user", async function() {
         const result: any = await requestBuilder.download("mocked-url", {
             body: "test-string",
             headers: { "test-header": "test-header-value" }
@@ -109,12 +109,12 @@ describe("addBearerToken", () => {
         expect(result.headers.get("test-header")).equals("test-header-value");
     });
 
-    it("Shoud be added user-agent to the request headers with empty params from the user", async () => {
+    it("Shoud be added user-agent to the request headers with empty params from the user", async function() {
         const result: any = await requestBuilder.download("mocked-url");
         expect(result.headers.get("User-Agent")).equals(USER_AGENT);
     });
 
-    it("Shoud be added user-agent to the request headers with not empty params from the user", async () => {
+    it("Shoud be added user-agent to the request headers with not empty params from the user", async function() {
         const result: any = await requestBuilder.download("mocked-url", {
             body: "test-string"
         });
@@ -122,7 +122,7 @@ describe("addBearerToken", () => {
         expect(result.headers.get("User-Agent")).equals(USER_AGENT);
     });
 
-    it("Shoud be added user-agent to the request headers with some headers in params from the user", async () => {
+    it("Shoud be added user-agent to the request headers with some headers in params from the user", async function() {
         const result: any = await requestBuilder.download("mocked-url", {
             body: "test-string",
             headers: [
@@ -136,7 +136,7 @@ describe("addBearerToken", () => {
         );
     });
 
-    it("Shoud be added token to the request headers with some instance of  Headers in params from the user", async () => {
+    it("Shoud be added token to the request headers with some instance of  Headers in params from the user", async function() {
         const result: any = await requestBuilder.download("mocked-url", {
             body: "test-string",
             headers: new Headers({ "test-header": "test-header-value" })
@@ -146,7 +146,7 @@ describe("addBearerToken", () => {
         expect(result.headers.get("test-header")).equals("test-header-value");
     });
 
-    it("Shoud be added token to the request headers with some empty headers object in params from the user", async () => {
+    it("Shoud be added token to the request headers with some empty headers object in params from the user", async function() {
         const result: any = await requestBuilder.download("mocked-url", {
             body: "test-string",
             headers: {}
@@ -155,7 +155,7 @@ describe("addBearerToken", () => {
         expect(result.headers.get("User-Agent")).equals(USER_AGENT);
     });
 
-    it("Shoud be added token to the request headers with some not empty headers object in params from the user", async () => {
+    it("Shoud be added token to the request headers with some not empty headers object in params from the user", async function() {
         const result: any = await requestBuilder.download("mocked-url", {
             body: "test-string",
             headers: { "test-header": "test-header-value" }
@@ -166,7 +166,7 @@ describe("addBearerToken", () => {
     });
 });
 
-describe("DataStoreRequestBuilder", () => {
+describe("DataStoreRequestBuilder", function() {
     let sandbox: sinon.SinonSandbox;
     let getBaseUrlRequestStub: sinon.SinonStub;
 
@@ -197,11 +197,11 @@ describe("DataStoreRequestBuilder", () => {
             } as unknown) as Response)
     } as unknown) as lib.DownloadManager;
 
-    before(() => {
+    before(function() {
         sandbox = sinon.createSandbox();
     });
 
-    beforeEach(() => {
+    beforeEach(function() {
         getBaseUrlRequestStub = sandbox.stub(lib.RequestFactory, "getBaseUrl");
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
 
@@ -220,16 +220,16 @@ describe("DataStoreRequestBuilder", () => {
         );
     });
 
-    afterEach(() => {
+    afterEach(function() {
         sandbox.restore();
     });
 
-    it("Shoud be initialized", async () => {
+    it("Shoud be initialized", async function() {
         assert.isDefined(dataStore);
         expect(dataStore).be.instanceOf(lib.DataStoreRequestBuilder);
     });
 
-    it("Shoud downloads data from the provided URL", async () => {
+    it("Shoud downloads data from the provided URL", async function() {
         const response = await dataStore.download(mockedUrl);
 
         assert.isDefined(response);
@@ -237,7 +237,7 @@ describe("DataStoreRequestBuilder", () => {
         expect(response.statusText).to.be.equal("Test Success");
     });
 
-    it("Shoud download method return error when downloadManager crashed", async () => {
+    it("Shoud download method return error when downloadManager crashed", async function() {
         try {
             await dataStoreError.download(mockedUrl);
         } catch (error) {
@@ -247,7 +247,7 @@ describe("DataStoreRequestBuilder", () => {
         }
     });
 
-    it("Shoud downloads the blob data from the provided URL", async () => {
+    it("Shoud downloads the blob data from the provided URL", async function() {
         const response = await dataStore.downloadBlob(mockedUrl);
 
         assert.isDefined(response);
@@ -255,7 +255,7 @@ describe("DataStoreRequestBuilder", () => {
         expect(response.statusText).to.be.equal("Test Success");
     });
 
-    it("Shoud downloadBlob method return error when downloadManager crashed", async () => {
+    it("Shoud downloadBlob method return error when downloadManager crashed", async function() {
         try {
             await dataStoreError.downloadBlob(mockedUrl);
         } catch (error) {
@@ -265,7 +265,7 @@ describe("DataStoreRequestBuilder", () => {
         }
     });
 
-    it("Shoud abort signal be added to the headers of the requests", async () => {
+    it("Shoud abort signal be added to the headers of the requests", async function() {
         const dm = ({
             download: (url: any, options: any) => {
                 assert.isDefined(options.signal.aborted);

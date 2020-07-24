@@ -41,8 +41,8 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("ConfigApi", () => {
-  it("ParentQuad with all required params", () => {
+describe("ConfigApi", function() {
+  it("ParentQuad with all required params", function() {
     const params: ParentQuad = {
       dataHandle: "test",
       partition: "test",
@@ -52,7 +52,7 @@ describe("ConfigApi", () => {
     assert.isDefined(params);
   });
 
-  it("ParentQuad with all required and optional params", () => {
+  it("ParentQuad with all required and optional params", function() {
     const params: ParentQuad = {
       additionalMetadata: "test",
       checksum: "test",
@@ -66,7 +66,7 @@ describe("ConfigApi", () => {
     assert.isDefined(params);
   });
 
-  it("SubQuad with all required params", () => {
+  it("SubQuad with all required params", function() {
     const params: SubQuad = {
       dataHandle: "test",
       subQuadKey: "test",
@@ -76,7 +76,7 @@ describe("ConfigApi", () => {
     assert.isDefined(params);
   });
 
-  it("SubQuad with all required and optional params", () => {
+  it("SubQuad with all required and optional params", function() {
     const params: SubQuad = {
       additionalMetadata: "test",
       checksum: "test",
@@ -90,7 +90,7 @@ describe("ConfigApi", () => {
     assert.isDefined(params);
   });
 
-  it("Index with all required params", () => {
+  it("Index with all required params", function() {
     const params: Index = {
       parentQuads: [
         {
@@ -112,7 +112,7 @@ describe("ConfigApi", () => {
     assert.isDefined(params);
   });
 
-  it("Layer with all required params", () => {
+  it("Layer with all required params", function() {
     const params: Layer = {
       hrn: "test",
       id: "test",
@@ -126,7 +126,7 @@ describe("ConfigApi", () => {
     assert.isDefined(params);
   });
 
-  it("Layer with all required and optional params", () => {
+  it("Layer with all required and optional params", function() {
     const params: Layer = {
       billingTags: ["test"],
       contentEncoding: "gzip",
@@ -164,7 +164,7 @@ describe("ConfigApi", () => {
     assert.isDefined(params);
   });
 
-  it("Catalog with all required params", () => {
+  it("Catalog with all required params", function() {
     const params: Catalog = {
       created: "test",
       description: "test",
@@ -222,7 +222,7 @@ describe("ConfigApi", () => {
     assert.isDefined(params);
   });
 
-  it("Catalog with all required and optional params", () => {
+  it("Catalog with all required and optional params", function() {
     const params: Catalog = {
       billingTags: ["text"],
       coverage: {
@@ -295,12 +295,12 @@ describe("ConfigApi", () => {
     assert.isDefined(params);
   });
 
-  it("CatalogFailureStatus with all required params", () => {
+  it("CatalogFailureStatus with all required params", function() {
     const params: CatalogFailureStatus = {};
     assert.isDefined(params);
   });
 
-  it("CatalogFailureStatus with all required and optional params", () => {
+  it("CatalogFailureStatus with all required and optional params", function() {
     const params: CatalogFailureStatus = {
       reason: "test",
       status: "test"
@@ -308,22 +308,22 @@ describe("ConfigApi", () => {
     assert.isDefined(params);
   });
 
-  it("CatalogPendingStatus with all required params", () => {
+  it("CatalogPendingStatus with all required params", function() {
     const params: CatalogPendingStatus = {};
     assert.isDefined(params);
   });
-  it("CatalogPendingStatus with all required and optional params", () => {
+  it("CatalogPendingStatus with all required and optional params", function() {
     const params: CatalogPendingStatus = {
       status: "test"
     };
     assert.isDefined(params);
   });
 
-  it("CatalogSummary with all required params", () => {
+  it("CatalogSummary with all required params", function() {
     const params: CatalogSummary = {};
     assert.isDefined(params);
   });
-  it("CatalogSummary with all required and optional params", () => {
+  it("CatalogSummary with all required and optional params", function() {
     const params: CatalogSummary = {
       href: "test",
       hrn: "test",
@@ -333,12 +333,12 @@ describe("ConfigApi", () => {
     assert.isDefined(params);
   });
 
-  it("CatalogsList with all required params", () => {
+  it("CatalogsList with all required params", function() {
     const params: CatalogsList = {};
     assert.isDefined(params);
   });
 
-  it("CatalogsList with all required and optional params", () => {
+  it("CatalogsList with all required and optional params", function() {
     const params: CatalogsList = {
       items: [
         {
@@ -352,12 +352,12 @@ describe("ConfigApi", () => {
     assert.isDefined(params);
   });
 
-  it("CatalogsListResult with all required params", () => {
+  it("CatalogsListResult with all required params", function() {
     const params: CatalogsListResult = {};
     assert.isDefined(params);
   });
 
-  it("CatalogsListResult with all required and optional params", () => {
+  it("CatalogsListResult with all required and optional params", function() {
     const params: CatalogsListResult = {
       results: {
         items: [
@@ -373,13 +373,13 @@ describe("ConfigApi", () => {
     assert.isDefined(params);
   });
 
-  it("StatusLink with all required params", () => {
+  it("StatusLink with all required params", function() {
     const params: StatusLink = {};
 
     assert.isDefined(params);
   });
 
-  it("StatusLink with all required and optional params", () => {
+  it("StatusLink with all required and optional params", function() {
     const params: StatusLink = {
       href: "test",
       title: "test",
@@ -391,7 +391,7 @@ describe("ConfigApi", () => {
 
   ////////////////
 
-  it("Test catalogExists method with all required params", async () => {
+  it("Test catalogExists method with all required params", async function() {
     const params = {
       catalogHrn: "mocked-catalogHrn"
     };
@@ -401,7 +401,7 @@ describe("ConfigApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test catalogExists method with all required and optional params", async () => {
+  it("Test catalogExists method with all required and optional params", async function() {
     const params = {
       catalogHrn: "mocked-catalogHrn",
       billingTag: "mocked-billingTag"
@@ -412,7 +412,7 @@ describe("ConfigApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test createCatalog method with all required params", async () => {
+  it("Test createCatalog method with all required params", async function() {
     const params = {
       body: "mocked-body" as any
     };
@@ -422,7 +422,7 @@ describe("ConfigApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test createCatalog method with all required and optional params", async () => {
+  it("Test createCatalog method with all required and optional params", async function() {
     const params = {
       body: "mocked-body" as any,
       billingTag: "mocked-billingTag"
@@ -433,7 +433,7 @@ describe("ConfigApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test deleteCatalog method with all required params", async () => {
+  it("Test deleteCatalog method with all required params", async function() {
     const params = {
       catalogHrn: "mocked-catalogHrn"
     };
@@ -443,7 +443,7 @@ describe("ConfigApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test deleteCatalog method with all required and optional params", async () => {
+  it("Test deleteCatalog method with all required and optional params", async function() {
     const params = {
       catalogHrn: "mocked-catalogHrn",
       billingTag: "mocked-billingTag"
@@ -454,7 +454,7 @@ describe("ConfigApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test deleteLayer method with all required params", async () => {
+  it("Test deleteLayer method with all required params", async function() {
     const params = {
       catalogHrn: "mocked-catalogHrn",
       layerId: "mocked-layerId"
@@ -465,7 +465,7 @@ describe("ConfigApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getCatalog method with all required params", async () => {
+  it("Test getCatalog method with all required params", async function() {
     const params = {
       catalogHrn: "mocked-catalogHrn",
       billingTag: "mocked-billingTag"
@@ -476,7 +476,7 @@ describe("ConfigApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getCatalogStatus method with all required params", async () => {
+  it("Test getCatalogStatus method with all required params", async function() {
     const params = {
       token: "mocked-token",
       billingTag: "mocked-billingTag"
@@ -490,7 +490,7 @@ describe("ConfigApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getCatalogs method with all required params", async () => {
+  it("Test getCatalogs method with all required params", async function() {
     const params = {};
 
     const result = await ConfigApi.getCatalogs(mockedRequestBuilder, params);
@@ -498,7 +498,7 @@ describe("ConfigApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getCatalogs method with all required and optional params", async () => {
+  it("Test getCatalogs method with all required and optional params", async function() {
     const params = {
       billingTag: "mocked-billingTag" as any,
       verbose: "mocked-verbose" as any,
@@ -521,7 +521,7 @@ describe("ConfigApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test patchCatalog method with all required params", async () => {
+  it("Test patchCatalog method with all required params", async function() {
     const params = {
       catalogHrn: "mocked-catalogHrn",
       body: "mocked-body" as any
@@ -532,7 +532,7 @@ describe("ConfigApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test patchLayer method with all required params", async () => {
+  it("Test patchLayer method with all required params", async function() {
     const params = {
       catalogHrn: "mocked-catalogHrn",
       layerId: "mocked-layerId",
@@ -544,7 +544,7 @@ describe("ConfigApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test updateCatalog method with all required params", async () => {
+  it("Test updateCatalog method with all required params", async function() {
     const params = {
       catalogHrn: "mocked-catalogHrn",
       body: "mocked-body" as any
@@ -555,7 +555,7 @@ describe("ConfigApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test updateCatalog method with all required and optional params", async () => {
+  it("Test updateCatalog method with all required and optional params", async function() {
     const params = {
       catalogHrn: "mocked-catalogHrn",
       body: "mocked-body" as any,

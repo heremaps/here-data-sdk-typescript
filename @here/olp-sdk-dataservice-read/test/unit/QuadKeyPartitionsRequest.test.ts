@@ -28,7 +28,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("QuadKeyPartitionsRequest", () => {
+describe("QuadKeyPartitionsRequest", function() {
     const billingTag = "billingTag";
     const mockedVersion = 42;
     const mockedDepth = 3;
@@ -38,7 +38,7 @@ describe("QuadKeyPartitionsRequest", () => {
         level: 3
     };
 
-    it("Should initialize", () => {
+    it("Should initialize", function() {
         const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest();
 
         assert.isDefined(quadKeyPartitionsRequest);
@@ -47,7 +47,7 @@ describe("QuadKeyPartitionsRequest", () => {
         );
     });
 
-    it("Should set parameters", () => {
+    it("Should set parameters", function() {
         const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest();
         const quadKeyPartitionsRequestWithVersion = quadKeyPartitionsRequest.withVersion(
             mockedVersion
@@ -82,7 +82,7 @@ describe("QuadKeyPartitionsRequest", () => {
         );
     });
 
-    it("Should get parameters with chain", () => {
+    it("Should get parameters with chain", function() {
         const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest()
             .withVersion(mockedVersion)
             .withDepth(mockedDepth)

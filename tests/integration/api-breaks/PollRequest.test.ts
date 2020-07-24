@@ -26,7 +26,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("PollRequest", () => {
+describe("PollRequest", function() {
   class PollRequestTest extends PollRequest {
     getMode(): "serial" {
       return "serial";
@@ -45,7 +45,7 @@ describe("PollRequest", () => {
     }
   }
 
-  it("Shoud be initialized", async () => {
+  it("Shoud be initialized", async function() {
     const request = new PollRequest();
     assert.isDefined(request);
     expect(request).to.be.instanceOf(PollRequest);
@@ -56,28 +56,28 @@ describe("PollRequest", () => {
     assert.isFunction(request.getSubscriptionId);
   });
 
-  it("Test withMode method with mode", async () => {
+  it("Test withMode method with mode", async function() {
     const request = new PollRequestTest();
 
     const response = request.withMode("serial");
     assert.isDefined(response);
   });
 
-  it("Test getMode method without params", async () => {
+  it("Test getMode method without params", async function() {
     const request = new PollRequestTest();
 
     const response = request.getMode();
     assert.isDefined(response);
   });
 
-  it("Test withSubscriptionId method with id", async () => {
+  it("Test withSubscriptionId method with id", async function() {
     const request = new PollRequestTest();
 
     const response = request.withSubscriptionId("test");
     assert.isDefined(response);
   });
 
-  it("Test getSubscriptionId method without params", async () => {
+  it("Test getSubscriptionId method without params", async function() {
     const request = new PollRequestTest();
 
     const response = request.getSubscriptionId();

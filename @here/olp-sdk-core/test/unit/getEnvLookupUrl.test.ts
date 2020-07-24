@@ -25,8 +25,8 @@ chai.use(sinonChai);
 
 const expect = chai.expect;
 
-describe("getEnvLookUpUrl", () => {
-    it("Should return default url", () => {
+describe("getEnvLookUpUrl", function() {
+    it("Should return default url", function() {
         expect(getEnvLookUpUrl("invalid environment name string")).to.be.equal(
             "https://api-lookup.data.api.platform.here.com/lookup/v1"
         );
@@ -35,37 +35,37 @@ describe("getEnvLookUpUrl", () => {
         );
     });
 
-    it("Should return url to the development instance", () => {
+    it("Should return url to the development instance", function() {
         expect(getEnvLookUpUrl("here-dev")).to.be.equal(
             "https://api-lookup.data.api.platform.in.here.com/lookup/v1"
         );
     });
 
-    it("Should return url to the production instance", () => {
+    it("Should return url to the production instance", function() {
         expect(getEnvLookUpUrl("here")).to.be.equal(
             "https://api-lookup.data.api.platform.here.com/lookup/v1"
         );
     });
 
-    it("Should return url to the china production instance", () => {
+    it("Should return url to the china production instance", function() {
         expect(getEnvLookUpUrl("here-cn")).to.be.equal(
             "https://api-lookup.data.api.platform.hereolp.cn/lookup/v1"
         );
     });
 
-    it("Should return url to the china development instance", () => {
+    it("Should return url to the china development instance", function() {
         expect(getEnvLookUpUrl("here-cn-dev")).to.be.equal(
             "https://api-lookup.data.api.platform.in.hereolp.cn/lookup/v1"
         );
     });
 
-    it("Should return url to the localhost instance", () => {
+    it("Should return url to the localhost instance", function() {
         expect(getEnvLookUpUrl("local")).to.be.equal(
             "http://localhost:31005/lookup/v1"
         );
     });
 
-    it("Should return url to the custom instance", () => {
+    it("Should return url to the custom instance", function() {
         expect(getEnvLookUpUrl("http://localhost:3000/lookup/v1")).to.be.equal(
             "http://localhost:3000/lookup/v1"
         );

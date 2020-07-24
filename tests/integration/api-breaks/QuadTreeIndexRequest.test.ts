@@ -32,7 +32,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("QuadTreeIndexRequest", () => {
+describe("QuadTreeIndexRequest", function() {
   class QuadTreeIndexRequestTest extends QuadTreeIndexRequest {
     withVersion(version?: number): QuadTreeIndexRequest {
       return this;
@@ -81,7 +81,7 @@ describe("QuadTreeIndexRequest", () => {
     }
   }
 
-  it("Shoud be initialized", async () => {
+  it("Shoud be initialized", async function() {
     const request = new QuadTreeIndexRequest(
       HRN.fromString("hrn:here:data:::test-hrn"),
       "id",
@@ -94,7 +94,7 @@ describe("QuadTreeIndexRequest", () => {
     assert.isFunction(request.getBillingTag);
   });
 
-  it("Test withVersion method with version", async () => {
+  it("Test withVersion method with version", async function() {
     const request = new QuadTreeIndexRequestTest(
       HRN.fromString("hrn:here:data:::test-hrn"),
       "id",
@@ -105,7 +105,7 @@ describe("QuadTreeIndexRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test withVersion method without params", async () => {
+  it("Test withVersion method without params", async function() {
     const request = new QuadTreeIndexRequestTest(
       HRN.fromString("hrn:here:data:::test-hrn"),
       "id",
@@ -116,7 +116,7 @@ describe("QuadTreeIndexRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test getVersion method without params", async () => {
+  it("Test getVersion method without params", async function() {
     const request = new QuadTreeIndexRequestTest(
       HRN.fromString("hrn:here:data:::test-hrn"),
       "id",
@@ -127,7 +127,7 @@ describe("QuadTreeIndexRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test withDepth method with depth", async () => {
+  it("Test withDepth method with depth", async function() {
     const request = new QuadTreeIndexRequestTest(
       HRN.fromString("hrn:here:data:::test-hrn"),
       "id",
@@ -138,7 +138,7 @@ describe("QuadTreeIndexRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test getDepth method without params", async () => {
+  it("Test getDepth method without params", async function() {
     const request = new QuadTreeIndexRequestTest(
       HRN.fromString("hrn:here:data:::test-hrn"),
       "id",
@@ -149,7 +149,7 @@ describe("QuadTreeIndexRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test withQuadKey method with quadKey", async () => {
+  it("Test withQuadKey method with quadKey", async function() {
     const request = new QuadTreeIndexRequestTest(
       HRN.fromString("hrn:here:data:::test-hrn"),
       "id",
@@ -164,7 +164,7 @@ describe("QuadTreeIndexRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test getQuadKey method without params", async () => {
+  it("Test getQuadKey method without params", async function() {
     const request = new QuadTreeIndexRequestTest(
       HRN.fromString("hrn:here:data:::test-hrn"),
       "id",
@@ -175,7 +175,7 @@ describe("QuadTreeIndexRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test withBillingTag method with tag", async () => {
+  it("Test withBillingTag method with tag", async function() {
     const request = new QuadTreeIndexRequestTest(
       HRN.fromString("hrn:here:data:::test-hrn"),
       "id",
@@ -186,7 +186,7 @@ describe("QuadTreeIndexRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test getBillingTag method without params", async () => {
+  it("Test getBillingTag method without params", async function() {
     const request = new QuadTreeIndexRequestTest(
       HRN.fromString("hrn:here:data:::test-hrn"),
       "id",
@@ -197,7 +197,7 @@ describe("QuadTreeIndexRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test withAdditionalFields method with additionalFields", async () => {
+  it("Test withAdditionalFields method with additionalFields", async function() {
     const request = new QuadTreeIndexRequestTest(
       HRN.fromString("hrn:here:data:::test-hrn"),
       "id",
@@ -208,7 +208,7 @@ describe("QuadTreeIndexRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test getAdditionalFields method without params", async () => {
+  it("Test getAdditionalFields method without params", async function() {
     const request = new QuadTreeIndexRequestTest(
       HRN.fromString("hrn:here:data:::test-hrn"),
       "id",

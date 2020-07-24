@@ -40,10 +40,10 @@ global.crypto = {
 
 global.btoa = () => "mocked-btoa-string";
 
-describe("oauth-request-offline", () => {
+describe("oauth-request-offline", function() {
     const mock_token = "eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsIm";
 
-    beforeEach(() => {
+    beforeEach(function() {
         fetchMock.config.overwriteRoutes = true;
         fetchMock.post("https://account.api.here.com/oauth2/token", {
             accessToken: mock_token,
@@ -52,11 +52,11 @@ describe("oauth-request-offline", () => {
         });
     });
 
-    afterEach(() => {
+    afterEach(function() {
         fetchMock.reset();
     });
 
-    it("requestTokenWeb", async () => {
+    it("requestTokenWeb", async function() {
         const consumerKey = "key";
         const secretKey = "secret";
 

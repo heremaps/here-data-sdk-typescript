@@ -27,7 +27,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("SchemaRequest", () => {
+describe("SchemaRequest", function() {
   class SchemaRequestTest extends SchemaRequest {
     getVariant(): ArtifactApi.Variant {
       return {
@@ -49,7 +49,7 @@ describe("SchemaRequest", () => {
     }
   }
 
-  it("Shoud be initialized", async () => {
+  it("Shoud be initialized", async function() {
     const request = new SchemaRequest();
     assert.isDefined(request);
     expect(request).to.be.instanceOf(SchemaRequest);
@@ -60,7 +60,7 @@ describe("SchemaRequest", () => {
     assert.isFunction(request.getBillingTag);
   });
 
-  it("Test withVariant method with variant", async () => {
+  it("Test withVariant method with variant", async function() {
     const request = new SchemaRequestTest();
 
     const response = request.withVariant({
@@ -70,21 +70,21 @@ describe("SchemaRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test getVariant method without params", async () => {
+  it("Test getVariant method without params", async function() {
     const request = new SchemaRequestTest();
 
     const response = request.getVariant();
     assert.isDefined(response);
   });
 
-  it("Test withBillingTag method with tag", async () => {
+  it("Test withBillingTag method with tag", async function() {
     const request = new SchemaRequestTest();
 
     const response = request.withBillingTag("test-tag");
     assert.isDefined(response);
   });
 
-  it("Test getBillingTag method without params", async () => {
+  it("Test getBillingTag method without params", async function() {
     const request = new SchemaRequestTest();
 
     const response = request.getBillingTag();

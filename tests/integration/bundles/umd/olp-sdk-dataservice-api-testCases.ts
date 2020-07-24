@@ -18,127 +18,130 @@
  */
 
 import {
-    ArtifactApi,
-    ConfigApi,
-    BlobApi,
-    CoverageApi,
-    IndexApi,
-    LookupApi,
-    MetadataApi,
-    QueryApi,
-    VolatileBlobApi
+  ArtifactApi,
+  ConfigApi,
+  BlobApi,
+  CoverageApi,
+  IndexApi,
+  LookupApi,
+  MetadataApi,
+  QueryApi,
+  VolatileBlobApi
 } from "@here/olp-sdk-dataservice-api";
 
 import assert = require("assert");
 
- export const OlpSdkDataserviceApiTestCases: {it: string, callback: () => void}[] = [
-    {
-        it: "ArtifactApi should be defined",
-        callback: () => {
-            assert(ArtifactApi !== undefined);
-            assert(ArtifactApi.deleteArtifactUsingDELETE !== undefined);
-            assert(ArtifactApi.deleteFileUsingDELETE !== undefined);
-            assert(ArtifactApi.deleteSchemaUsingDELETE !== undefined);
-            assert(ArtifactApi.getArtifactFileUsingGET !== undefined);
-            assert(ArtifactApi.getArtifactUsingGET !== undefined);
-            assert(ArtifactApi.getDocumentUsingGET !== undefined);
-            assert(ArtifactApi.getSchemaUsingGET !== undefined);
-            assert(ArtifactApi.listUsingGET !== undefined);
-            assert(ArtifactApi.putArtifactFileUsingPUT !== undefined);
-            assert(ArtifactApi.registerArtifactUsingPUT !== undefined);
-            assert(ArtifactApi.updateSchemaPermissionUsingPOST !== undefined);
-          }
-    },
-    {
-        it: "ConfigApi should be defined",
-        callback: () => {
-            assert(ConfigApi !== undefined);
-            assert(ConfigApi.catalogExists !== undefined);
-            assert(ConfigApi.createCatalog !== undefined);
-            assert(ConfigApi.deleteCatalog !== undefined);
-            assert(ConfigApi.deleteLayer !== undefined);
-            assert(ConfigApi.getCatalog !== undefined);
-            assert(ConfigApi.getCatalogStatus !== undefined);
-            assert(ConfigApi.getCatalogs !== undefined);
-            assert(ConfigApi.patchCatalog !== undefined);
-            assert(ConfigApi.patchLayer !== undefined);
-            assert(ConfigApi.updateCatalog !== undefined);
-        }
-    },
-    {
-        it: "BlobApi should be defined",
-        callback: () => {
-            assert(BlobApi !== undefined);
-            assert(BlobApi.cancelMultipartUpload !== undefined);
-            assert(BlobApi.checkBlobExists !== undefined);
-            assert(BlobApi.completeMultipartUpload !== undefined);
-            assert(BlobApi.deleteBlob !== undefined);
-            assert(BlobApi.getBlob !== undefined);
-            assert(BlobApi.getMultipartUploadStatus !== undefined);
-            assert(BlobApi.putBlob !== undefined);
-            assert(BlobApi.startMultipartUpload !== undefined);
-            assert(BlobApi.uploadPart !== undefined);
-        }
-    },
-    {
-        it: "CoverageApi should be defined",
-        callback: () => {
-            assert(CoverageApi !== undefined);
-            assert(CoverageApi.getDataCoverageAdminAreas !== undefined);
-            assert(CoverageApi.getDataCoverageSizeMap !== undefined);
-            assert(CoverageApi.getDataCoverageSummary !== undefined);
-            assert(CoverageApi.getDataCoverageTile !== undefined);
-            assert(CoverageApi.getDataCoverageTimeMap !== undefined);
-        }
-    },
-    {
-        it: "IndexApi should be defined",
-        callback: () => {
-            assert(IndexApi !== undefined);
-            assert(IndexApi.insertIndexes !== undefined);
-            assert(IndexApi.performQuery !== undefined);
-            assert(IndexApi.performUpdate !== undefined);
-        }
-    },
-    {
-        it: "LookupApi should be defined",
-        callback: () => {
-            assert(LookupApi !== undefined);
-            assert(LookupApi.platformAPI !== undefined);
-            assert(LookupApi.platformAPIList !== undefined);
-            assert(LookupApi.resourceAPI !== undefined);
-            assert(LookupApi.resourceAPIList !== undefined);
-        }
-    },
-    {
-        it: "MetadataApi should be defined",
-        callback: () => {
-            assert(MetadataApi !== undefined);
-            assert(MetadataApi.getChanges !== undefined);
-            assert(MetadataApi.getLayerVersions !== undefined);
-            assert(MetadataApi.getPartitions !== undefined);
-            assert(MetadataApi.latestVersion !== undefined);
-            assert(MetadataApi.listVersions !== undefined);
-            assert(MetadataApi.minimumVersion !== undefined);
-        }
-    },
-    {
-        it: "QueryApi should be defined",
-        callback: () => {
-            assert(QueryApi.getChangesById !== undefined);
-            assert(QueryApi.getPartitionsById !== undefined);
-            assert(QueryApi.quadTreeIndex !== undefined);
-            assert(QueryApi.quadTreeIndexVolatile !== undefined);
-        }
-    },
-    {
-        it: "VolatileBlobApi should be defined",
-        callback: () => {
-            assert(VolatileBlobApi !== undefined);
-            assert(VolatileBlobApi.checkHandleExists !== undefined);
-            assert(VolatileBlobApi.deleteVolatileBlob !== undefined);
-            assert(VolatileBlobApi.getVolatileBlob !== undefined);
-            assert(VolatileBlobApi.putVolatileBlob !== undefined);
-        }
+export const OlpSdkDataserviceApiTestCases: {
+  it: string;
+  callback: () => void;
+}[] = [
+  {
+    it: "ArtifactApi should be defined",
+    callback: function() {
+      assert(ArtifactApi !== undefined);
+      assert(ArtifactApi.deleteArtifactUsingDELETE !== undefined);
+      assert(ArtifactApi.deleteFileUsingDELETE !== undefined);
+      assert(ArtifactApi.deleteSchemaUsingDELETE !== undefined);
+      assert(ArtifactApi.getArtifactFileUsingGET !== undefined);
+      assert(ArtifactApi.getArtifactUsingGET !== undefined);
+      assert(ArtifactApi.getDocumentUsingGET !== undefined);
+      assert(ArtifactApi.getSchemaUsingGET !== undefined);
+      assert(ArtifactApi.listUsingGET !== undefined);
+      assert(ArtifactApi.putArtifactFileUsingPUT !== undefined);
+      assert(ArtifactApi.registerArtifactUsingPUT !== undefined);
+      assert(ArtifactApi.updateSchemaPermissionUsingPOST !== undefined);
     }
- ];
+  },
+  {
+    it: "ConfigApi should be defined",
+    callback: function() {
+      assert(ConfigApi !== undefined);
+      assert(ConfigApi.catalogExists !== undefined);
+      assert(ConfigApi.createCatalog !== undefined);
+      assert(ConfigApi.deleteCatalog !== undefined);
+      assert(ConfigApi.deleteLayer !== undefined);
+      assert(ConfigApi.getCatalog !== undefined);
+      assert(ConfigApi.getCatalogStatus !== undefined);
+      assert(ConfigApi.getCatalogs !== undefined);
+      assert(ConfigApi.patchCatalog !== undefined);
+      assert(ConfigApi.patchLayer !== undefined);
+      assert(ConfigApi.updateCatalog !== undefined);
+    }
+  },
+  {
+    it: "BlobApi should be defined",
+    callback: function() {
+      assert(BlobApi !== undefined);
+      assert(BlobApi.cancelMultipartUpload !== undefined);
+      assert(BlobApi.checkBlobExists !== undefined);
+      assert(BlobApi.completeMultipartUpload !== undefined);
+      assert(BlobApi.deleteBlob !== undefined);
+      assert(BlobApi.getBlob !== undefined);
+      assert(BlobApi.getMultipartUploadStatus !== undefined);
+      assert(BlobApi.putBlob !== undefined);
+      assert(BlobApi.startMultipartUpload !== undefined);
+      assert(BlobApi.uploadPart !== undefined);
+    }
+  },
+  {
+    it: "CoverageApi should be defined",
+    callback: function() {
+      assert(CoverageApi !== undefined);
+      assert(CoverageApi.getDataCoverageAdminAreas !== undefined);
+      assert(CoverageApi.getDataCoverageSizeMap !== undefined);
+      assert(CoverageApi.getDataCoverageSummary !== undefined);
+      assert(CoverageApi.getDataCoverageTile !== undefined);
+      assert(CoverageApi.getDataCoverageTimeMap !== undefined);
+    }
+  },
+  {
+    it: "IndexApi should be defined",
+    callback: function() {
+      assert(IndexApi !== undefined);
+      assert(IndexApi.insertIndexes !== undefined);
+      assert(IndexApi.performQuery !== undefined);
+      assert(IndexApi.performUpdate !== undefined);
+    }
+  },
+  {
+    it: "LookupApi should be defined",
+    callback: function() {
+      assert(LookupApi !== undefined);
+      assert(LookupApi.platformAPI !== undefined);
+      assert(LookupApi.platformAPIList !== undefined);
+      assert(LookupApi.resourceAPI !== undefined);
+      assert(LookupApi.resourceAPIList !== undefined);
+    }
+  },
+  {
+    it: "MetadataApi should be defined",
+    callback: function() {
+      assert(MetadataApi !== undefined);
+      assert(MetadataApi.getChanges !== undefined);
+      assert(MetadataApi.getLayerVersions !== undefined);
+      assert(MetadataApi.getPartitions !== undefined);
+      assert(MetadataApi.latestVersion !== undefined);
+      assert(MetadataApi.listVersions !== undefined);
+      assert(MetadataApi.minimumVersion !== undefined);
+    }
+  },
+  {
+    it: "QueryApi should be defined",
+    callback: function() {
+      assert(QueryApi.getChangesById !== undefined);
+      assert(QueryApi.getPartitionsById !== undefined);
+      assert(QueryApi.quadTreeIndex !== undefined);
+      assert(QueryApi.quadTreeIndexVolatile !== undefined);
+    }
+  },
+  {
+    it: "VolatileBlobApi should be defined",
+    callback: function() {
+      assert(VolatileBlobApi !== undefined);
+      assert(VolatileBlobApi.checkHandleExists !== undefined);
+      assert(VolatileBlobApi.deleteVolatileBlob !== undefined);
+      assert(VolatileBlobApi.getVolatileBlob !== undefined);
+      assert(VolatileBlobApi.putVolatileBlob !== undefined);
+    }
+  }
+];

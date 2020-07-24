@@ -20,7 +20,6 @@
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-
 import { VolatileBlobApi } from "@here/olp-sdk-dataservice-api";
 import {
   AuthenticationMessage,
@@ -33,14 +32,14 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("VolatileBlobApi", () => {
-  it("AuthenticationMessage  with all required params", () => {
+describe("VolatileBlobApi", function() {
+  it("AuthenticationMessage  with all required params", function() {
     const params: AuthenticationMessage = {};
 
     assert.isDefined(params);
   });
 
-  it("AuthenticationMessage with all required and optional params", () => {
+  it("AuthenticationMessage with all required and optional params", function() {
     const params: AuthenticationMessage = {
       error: "test",
       errorDescription: "test"
@@ -49,13 +48,13 @@ describe("VolatileBlobApi", () => {
     assert.isDefined(params);
   });
 
-  it("AuthorizationMessage  with all required params", () => {
+  it("AuthorizationMessage  with all required params", function() {
     const params: AuthorizationMessage = {};
 
     assert.isDefined(params);
   });
 
-  it("AuthorizationMessage with all required and optional params", () => {
+  it("AuthorizationMessage with all required and optional params", function() {
     const params: AuthorizationMessage = {
       error: "test",
       errorDescription: "test"
@@ -64,7 +63,7 @@ describe("VolatileBlobApi", () => {
     assert.isDefined(params);
   });
 
-  it("Test checkHandleExists method with all required params", async () => {
+  it("Test checkHandleExists method with all required params", async function() {
     const params = {
       layerId: "test",
       dataHandle: "test"
@@ -78,7 +77,7 @@ describe("VolatileBlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test checkHandleExists method with all required and optional params", async () => {
+  it("Test checkHandleExists method with all required and optional params", async function() {
     const params = {
       layerId: "test",
       dataHandle: "test",
@@ -93,7 +92,7 @@ describe("VolatileBlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test deleteVolatileBlob method with all required params", async () => {
+  it("Test deleteVolatileBlob method with all required params", async function() {
     const params = {
       layerId: "test",
       dataHandle: "test"
@@ -107,7 +106,7 @@ describe("VolatileBlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test deleteVolatileBlob method with all required and optional params", async () => {
+  it("Test deleteVolatileBlob method with all required and optional params", async function() {
     const params = {
       layerId: "test",
       dataHandle: "test",
@@ -122,7 +121,7 @@ describe("VolatileBlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getVolatileBlob method with all required params", async () => {
+  it("Test getVolatileBlob method with all required params", async function() {
     const params = {
       layerId: "test",
       dataHandle: "test"
@@ -136,7 +135,7 @@ describe("VolatileBlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getVolatileBlob method with all required and optional params", async () => {
+  it("Test getVolatileBlob method with all required and optional params", async function() {
     const params = {
       layerId: "test",
       dataHandle: "test",
@@ -151,7 +150,7 @@ describe("VolatileBlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test putVolatileBlob method with all required params", async () => {
+  it("Test putVolatileBlob method with all required params", async function() {
     const params = {
       layerId: "test",
       dataHandle: "test",
@@ -166,7 +165,7 @@ describe("VolatileBlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test putVolatileBlob method with all required and optional params", async () => {
+  it("Test putVolatileBlob method with all required and optional params", async function() {
     const params = {
       layerId: "test",
       dataHandle: "test",

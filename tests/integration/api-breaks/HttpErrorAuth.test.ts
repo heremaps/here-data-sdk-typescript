@@ -27,8 +27,8 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("Authentication HttpError", () => {
-  it("Shoud be initialized with arguments", async () => {
+describe("Authentication HttpError", function() {
+  it("Shoud be initialized with arguments", async function() {
     const testError = new HttpError(101, "Test Error");
     assert.isDefined(testError);
 
@@ -37,7 +37,7 @@ describe("Authentication HttpError", () => {
     assert.isDefined(testError.message);
   });
 
-  it("Test isHttpError method with HttpError", async () => {
+  it("Test isHttpError method with HttpError", async function() {
     const testError = new HttpError(101, "Test Error");
     const response = HttpError.isHttpError(testError);
     assert.isTrue(response);

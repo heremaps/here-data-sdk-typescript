@@ -20,22 +20,22 @@
 import { assert } from "chai";
 import * as utils from "../../lib/utils/QuadKeyUtils";
 
-describe("QuadKeyUtils", () => {
-    it("Can be constructed from root morton code", () => {
+describe("QuadKeyUtils", function() {
+    it("Can be constructed from root morton code", function() {
         const tile = utils.quadKeyFromMortonCode("0");
         assert.strictEqual(tile.row, 0, "Row mismatch");
         assert.strictEqual(tile.column, 0, "Column mismatch");
         assert.strictEqual(tile.level, 0, "Level mismatch");
     });
 
-    it("Can be constructed from morton code", () => {
+    it("Can be constructed from morton code", function() {
         const tile = utils.quadKeyFromMortonCode("22893");
         assert.strictEqual(tile.row, 38, "Row mismatch");
         assert.strictEqual(tile.column, 91, "Column mismatch");
         assert.strictEqual(tile.level, 7, "Level mismatch");
     });
 
-    it("Check the tile parents", () => {
+    it("Check the tile parents", function() {
         const tile = { row: 3, column: 3, level: 2 };
         const parent_1 = utils.computeParentKey(tile, 1);
         assert.strictEqual(parent_1.row, 1, "Row mismatch");
@@ -51,7 +51,7 @@ describe("QuadKeyUtils", () => {
         assert.strictEqual(parent_3.level, 0, "Level mismatch");
     });
 
-    it("Check the tile parents with delta 4", () => {
+    it("Check the tile parents with delta 4", function() {
         const tile = { row: 3275, column: 8085, level: 13 };
         const parent = utils.computeParentKey(tile, 4);
         assert.strictEqual(parent.row, 204, "Row mismatch");
@@ -59,7 +59,7 @@ describe("QuadKeyUtils", () => {
         assert.strictEqual(parent.level, 9, "Level mismatch");
     });
 
-    it("Subtile can be added to the root tile", () => {
+    it("Subtile can be added to the root tile", function() {
         const rootTile = { row: 1, column: 1, level: 1 };
         const subTile = { row: 38, column: 91, level: 7 };
         const result = utils.addQuadKeys(rootTile, subTile);
@@ -68,7 +68,7 @@ describe("QuadKeyUtils", () => {
         assert.strictEqual(result.level, 8, "Level mismatch");
     });
 
-    it("Tile is not valid if the row/column is out of bounds", () => {
+    it("Tile is not valid if the row/column is out of bounds", function() {
         const invalid_tile_1 = { row: 5, column: 1, level: 1 };
         assert.isFalse(utils.isValid(invalid_tile_1));
 
@@ -82,7 +82,7 @@ describe("QuadKeyUtils", () => {
         assert.isFalse(utils.isValid(invalid_tile_4));
     });
 
-    it("Tile is not valid if the level is out of bounds", () => {
+    it("Tile is not valid if the level is out of bounds", function() {
         const invalid_tile_1 = { row: 0, column: 0, level: -1 };
         assert.isFalse(utils.isValid(invalid_tile_1));
 

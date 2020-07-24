@@ -26,15 +26,15 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("GetBatchRequest", () => {
-    it("Should initialize", () => {
+describe("GetBatchRequest", function() {
+    it("Should initialize", function() {
         const request = new GetBatchRequest();
 
         assert.isDefined(request);
         expect(request).be.instanceOf(GetBatchRequest);
     });
 
-    it("Should set and get parameters", () => {
+    it("Should set and get parameters", function() {
         const mockedPublicationId = "publication-id";
         const mockedBillingTag = "mocked-billing-tag";
 

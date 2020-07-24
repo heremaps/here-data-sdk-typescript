@@ -28,7 +28,7 @@ chai.use(sinonChai);
 
 const assert = chai.assert;
 
-describe("StatistiscClient", () => {
+describe("StatistiscClient", function() {
     let sandbox: sinon.SinonSandbox;
     let olpClientSettingsStub: sinon.SinonStubbedInstance<dataServiceRead.OlpClientSettings>;
     let getDataCoverageSummaryStub: sinon.SinonStub;
@@ -42,11 +42,11 @@ describe("StatistiscClient", () => {
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
 
-    before(() => {
+    before(function() {
         sandbox = sinon.createSandbox();
     });
 
-    beforeEach(() => {
+    beforeEach(function() {
         olpClientSettingsStub = sandbox.createStubInstance(
             dataServiceRead.OlpClientSettings
         );
@@ -74,18 +74,18 @@ describe("StatistiscClient", () => {
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
-    afterEach(() => {
+    afterEach(function() {
         sandbox.restore();
     });
 
-    it("Shoud be initialised with context", async () => {
+    it("Shoud be initialised with context", async function() {
         const statisticsClient = new dataServiceRead.StatisticsClient(
             olpClientSettingsStub as any
         );
         assert.isDefined(statisticsClient);
     });
 
-    it("Should method getSummary provide data", async () => {
+    it("Should method getSummary provide data", async function() {
         const mockedSummary: CoverageApi.LayerSummary = {
             catalogHRN: "hrn:here:data:::mocked-hrn",
             layer: mockedLayerId,
@@ -125,7 +125,7 @@ describe("StatistiscClient", () => {
         assert.isDefined(summary);
     });
 
-    it("Should method getSummary return error if catalogHRN is not provided", async () => {
+    it("Should method getSummary return error if catalogHRN is not provided", async function() {
         const mockedErrorResponse = "No catalogHrn provided";
         const statisticsClient = new dataServiceRead.StatisticsClient(
             olpClientSettingsStub as any
@@ -144,7 +144,7 @@ describe("StatistiscClient", () => {
             });
     });
 
-    it("Should method getSummary return error if layerId is not provided", async () => {
+    it("Should method getSummary return error if layerId is not provided", async function() {
         const mockedErrorResponse = "No layerId provided";
         const statisticsClient = new dataServiceRead.StatisticsClient(
             olpClientSettingsStub as any
@@ -163,7 +163,7 @@ describe("StatistiscClient", () => {
             });
     });
 
-    it("Should method getStatistics provide data", async () => {
+    it("Should method getStatistics provide data", async function() {
         const mockedStatistics: Response = new Response("mocked-response");
         const statisticsClient = new dataServiceRead.StatisticsClient(
             olpClientSettingsStub as any
@@ -219,7 +219,7 @@ describe("StatistiscClient", () => {
         assert.isDefined(statisticTimeMap);
     });
 
-    it("Should method getStatistics return error if catalogHRN is not provided", async () => {
+    it("Should method getStatistics return error if catalogHRN is not provided", async function() {
         const mockedErrorResponse = "No catalogHrn provided";
         const statisticsClient = new dataServiceRead.StatisticsClient(
             olpClientSettingsStub as any
@@ -239,7 +239,7 @@ describe("StatistiscClient", () => {
             });
     });
 
-    it("Should method getStatistics return error if layerId is not provided", async () => {
+    it("Should method getStatistics return error if layerId is not provided", async function() {
         const mockedErrorResponse = "No layerId provided";
         const statisticsClient = new dataServiceRead.StatisticsClient(
             olpClientSettingsStub as any
@@ -259,7 +259,7 @@ describe("StatistiscClient", () => {
             });
     });
 
-    it("Should method getStatistics return error if typemap is not provided", async () => {
+    it("Should method getStatistics return error if typemap is not provided", async function() {
         const mockedErrorResponse = "No typemap provided";
         const statisticsClient = new dataServiceRead.StatisticsClient(
             olpClientSettingsStub as any
@@ -279,7 +279,7 @@ describe("StatistiscClient", () => {
             });
     });
 
-    it("Should method getStatistics provide data if dataLevel not set", async () => {
+    it("Should method getStatistics provide data if dataLevel not set", async function() {
         const mockedStatistics: Response = new Response("mocked-response");
         const statisticsClient = new dataServiceRead.StatisticsClient(
             olpClientSettingsStub as any

@@ -28,8 +28,8 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("IndexApi", () => {
-    it("Should performQuery provide data", async () => {
+describe("IndexApi", function() {
+    it("Should performQuery provide data", async function() {
         const mockedResponse = {
             data: [
                 {

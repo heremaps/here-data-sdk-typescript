@@ -32,7 +32,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("StatisticsClient", () => {
+describe("StatisticsClient", function() {
   class StatisticsClientTest extends StatisticsClient {
     constructor(settings: OlpClientSettings) {
       super(settings);
@@ -76,7 +76,7 @@ describe("StatisticsClient", () => {
     getToken: () => Promise.resolve("mocked-token")
   });
 
-  it("Shoud be initialized with arguments", async () => {
+  it("Shoud be initialized with arguments", async function() {
     const client = new StatisticsClient(settings);
     assert.isDefined(client);
 
@@ -85,7 +85,7 @@ describe("StatisticsClient", () => {
     assert.isDefined(client.getStatistics);
   });
 
-  it("Test getSummary method with summaryRequest", async () => {
+  it("Test getSummary method with summaryRequest", async function() {
     const client = new StatisticsClientTest(settings);
 
     const response = await client.getSummary(
@@ -94,7 +94,7 @@ describe("StatisticsClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test getStatistics method with statisticsRequest", async () => {
+  it("Test getStatistics method with statisticsRequest", async function() {
     const client = new StatisticsClientTest(settings);
 
     const response = await client.getStatistics(

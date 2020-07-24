@@ -28,21 +28,21 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("SummaryRequest", () => {
+describe("SummaryRequest", function() {
     const billingTag = "billingTag";
     const mockedHRN = HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
     const mockedDataLevel = 9;
     const mockedTimemap = CoverageDataType.TIMEMAP;
 
-    it("Should initialize", () => {
+    it("Should initialize", function() {
         const statisticsRequest = new StatisticsRequest();
 
         assert.isDefined(statisticsRequest);
         expect(statisticsRequest).be.instanceOf(StatisticsRequest);
     });
 
-    it("Should set parameters", () => {
+    it("Should set parameters", function() {
         const statisticsRequest = new StatisticsRequest();
         const statisticsRequestWithCatalogHrn = statisticsRequest.withCatalogHrn(
             mockedHRN
@@ -77,7 +77,7 @@ describe("SummaryRequest", () => {
         );
     });
 
-    it("Should get parameters with chain", () => {
+    it("Should get parameters with chain", function() {
         const statisticsRequest = new StatisticsRequest()
             .withCatalogHrn(mockedHRN)
             .withLayerId(mockedLayerId)

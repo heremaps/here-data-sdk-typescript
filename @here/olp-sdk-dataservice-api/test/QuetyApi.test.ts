@@ -27,8 +27,8 @@ chai.use(sinonChai);
 
 const expect = chai.expect;
 
-describe("QueryApi", () => {
-    it("getChangesById", async () => {
+describe("QueryApi", function() {
+    it("getChangesById", async function() {
         const params = {
             layerId: "mocked-layerId",
             startVersion: "mocked-startVersion",
@@ -56,7 +56,7 @@ describe("QueryApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("getPartitionsById", async () => {
+    it("getPartitionsById", async function() {
         const params = {
             layerId: "mocked-layerId",
             partition: ["mocked-partition-1", "mocked-partition-2"],
@@ -82,7 +82,7 @@ describe("QueryApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("quadTreeIndex", async () => {
+    it("quadTreeIndex", async function() {
         const params = {
             layerId: "mocked-layerId",
             version: 124,
@@ -112,7 +112,7 @@ describe("QueryApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("quadTreeIndexVolatile", async () => {
+    it("quadTreeIndexVolatile", async function() {
         const params = {
             layerId: "mocked-layerId",
             quadKey: "mocked-quadKey",

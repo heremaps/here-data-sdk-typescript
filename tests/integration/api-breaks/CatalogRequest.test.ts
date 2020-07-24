@@ -26,7 +26,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("CatalogRequest", () => {
+describe("CatalogRequest", function() {
   class CatalogRequestTest extends CatalogRequest {
     withBillingTag(tag: string): CatalogRequest {
       return this;
@@ -37,7 +37,7 @@ describe("CatalogRequest", () => {
     }
   }
 
-  it("Shoud be initialized", async () => {
+  it("Shoud be initialized", async function() {
     const catalogRequest = new CatalogRequestTest();
     assert.isDefined(catalogRequest);
     expect(catalogRequest).to.be.instanceOf(CatalogRequest);
@@ -46,14 +46,14 @@ describe("CatalogRequest", () => {
     assert.isFunction(catalogRequest.getBillingTag);
   });
 
-  it("Test withBillingTag method with tag", async () => {
+  it("Test withBillingTag method with tag", async function() {
     const catalogRequest = new CatalogRequestTest();
 
     const response = catalogRequest.withBillingTag("test-tag");
     assert.isDefined(response);
   });
 
-  it("Test getBillingTag method without params", async () => {
+  it("Test getBillingTag method without params", async function() {
     const catalogRequest = new CatalogRequestTest();
     catalogRequest.withBillingTag("test-tag");
 

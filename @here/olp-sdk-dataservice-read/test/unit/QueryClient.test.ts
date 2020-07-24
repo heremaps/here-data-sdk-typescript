@@ -29,7 +29,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("QueryClient", () => {
+describe("QueryClient", function() {
     let sandbox: sinon.SinonSandbox;
     let getVersionStub: sinon.SinonStub;
     let getPartitionsByIdStub: sinon.SinonStub;
@@ -49,11 +49,11 @@ describe("QueryClient", () => {
         level: 3
     };
 
-    before(() => {
+    before(function() {
         sandbox = sinon.createSandbox();
     });
 
-    beforeEach(() => {
+    beforeEach(function() {
         olpClientSettingsStub = sandbox.createStubInstance(
             dataServiceRead.OlpClientSettings
         );
@@ -71,18 +71,18 @@ describe("QueryClient", () => {
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
-    afterEach(() => {
+    afterEach(function() {
         sandbox.restore();
     });
 
-    it("Shoud be initialised with settings", async () => {
+    it("Shoud be initialised with settings", async function() {
         const queryClient = new dataServiceRead.QueryClient(
             olpClientSettingsStub as any
         );
         assert.isDefined(queryClient);
     });
 
-    it("Should method fetchQuadTreeIndex provide data with all parameters", async () => {
+    it("Should method fetchQuadTreeIndex provide data with all parameters", async function() {
         const mockedQuadKeyTreeData = {
             subQuads: [
                 {
@@ -126,7 +126,7 @@ describe("QueryClient", () => {
         expect(response).to.be.equal(mockedQuadKeyTreeData);
     });
 
-    it("Should method fetchQuadTreeIndex return error if quadKey is not provided", async () => {
+    it("Should method fetchQuadTreeIndex return error if quadKey is not provided", async function() {
         const mockedErrorResponse = "Please provide correct QuadKey";
         const queryClient = new dataServiceRead.QueryClient(
             olpClientSettingsStub as any
@@ -147,7 +147,7 @@ describe("QueryClient", () => {
             });
     });
 
-    it("Should method fetchQuadTreeIndex return error if layerId is not provided", async () => {
+    it("Should method fetchQuadTreeIndex return error if layerId is not provided", async function() {
         const mockedErrorResponse = "Please provide correct Id of the Layer";
         const queryClient = new dataServiceRead.QueryClient(
             olpClientSettingsStub as any
@@ -168,7 +168,7 @@ describe("QueryClient", () => {
             });
     });
 
-    it("Should method fetchQuadTreeIndex return error if catalog version is not provided", async () => {
+    it("Should method fetchQuadTreeIndex return error if catalog version is not provided", async function() {
         const mockedErrorResponse = `Please provide correct catalog version`;
         const queryClient = new dataServiceRead.QueryClient(
             olpClientSettingsStub as any
@@ -198,7 +198,7 @@ describe("QueryClient", () => {
             });
     });
 
-    it("Should method fetchQuadTreeIndex return error if catalog version is not provided", async () => {
+    it("Should method fetchQuadTreeIndex return error if catalog version is not provided", async function() {
         const mockedError = "Unknown error";
         const mockedErrorResponse = `Error getting the last catalog version: ${mockedError}`;
         const queryClient = new dataServiceRead.QueryClient(
@@ -229,7 +229,7 @@ describe("QueryClient", () => {
             });
     });
 
-    it("Should method getPartitionsById provide data with all parameters", async () => {
+    it("Should method getPartitionsById provide data with all parameters", async function() {
         const mockedIds = ["1", "2", "13", "42"];
         const mockedLayerId = "fake-layer-id";
         const mockedHRN = dataServiceRead.HRN.fromString(
@@ -277,7 +277,7 @@ describe("QueryClient", () => {
         expect(response).to.be.equal(mockedPartitionsResponse);
     });
 
-    it("Should method getPartitionsById return error if partitionIds list is not provided", async () => {
+    it("Should method getPartitionsById return error if partitionIds list is not provided", async function() {
         const mockedErrorResponse = "Please provide correct partitionIds list";
         const mockedLayerId = "fake-layer-id";
         const mockedHRN = dataServiceRead.HRN.fromString(

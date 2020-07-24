@@ -26,15 +26,15 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("PublishSinglePartitionRequest", () => {
-    it("Should initialize", () => {
+describe("PublishSinglePartitionRequest", function() {
+    it("Should initialize", function() {
         const request = new PublishSinglePartitionRequest();
 
         assert.isDefined(request);
         expect(request).be.instanceOf(PublishSinglePartitionRequest);
     });
 
-    it("Should set and get parameters", () => {
+    it("Should set and get parameters", function() {
         const mockedPublicationId = "publication-id";
         const mockedLayerId = "mocked-layer-id";
         const mockedData = Buffer.from("mocked-data", "utf-8");

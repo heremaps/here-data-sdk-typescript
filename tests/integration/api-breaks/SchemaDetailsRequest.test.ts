@@ -26,7 +26,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("SchemaDetailsRequest", () => {
+describe("SchemaDetailsRequest", function() {
   class SchemaDetailsRequestTest extends SchemaDetailsRequest {
     getSchema(): HRN {
       return HRN.fromString("hrn:here:data:::test-hrn");
@@ -45,7 +45,7 @@ describe("SchemaDetailsRequest", () => {
     }
   }
 
-  it("Shoud be initialized", async () => {
+  it("Shoud be initialized", async function() {
     const request = new SchemaDetailsRequest();
     assert.isDefined(request);
     expect(request).to.be.instanceOf(SchemaDetailsRequest);
@@ -56,7 +56,7 @@ describe("SchemaDetailsRequest", () => {
     assert.isFunction(request.getBillingTag);
   });
 
-  it("Test withSchema method with schema", async () => {
+  it("Test withSchema method with schema", async function() {
     const request = new SchemaDetailsRequestTest();
 
     const response = request.withSchema(
@@ -65,21 +65,21 @@ describe("SchemaDetailsRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test getSchema method without params", async () => {
+  it("Test getSchema method without params", async function() {
     const request = new SchemaDetailsRequestTest();
 
     const response = request.getSchema();
     assert.isDefined(response);
   });
 
-  it("Test withBillingTag method with tag", async () => {
+  it("Test withBillingTag method with tag", async function() {
     const request = new SchemaDetailsRequestTest();
 
     const response = request.withBillingTag("test-tag");
     assert.isDefined(response);
   });
 
-  it("Test getBillingTag method without params", async () => {
+  it("Test getBillingTag method without params", async function() {
     const request = new SchemaDetailsRequestTest();
 
     const response = request.getBillingTag();

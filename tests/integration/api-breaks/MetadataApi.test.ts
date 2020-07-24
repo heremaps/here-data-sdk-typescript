@@ -38,8 +38,8 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("MetadataApi", () => {
-  it("LayerVersion with all required params", () => {
+describe("MetadataApi", function() {
+  it("LayerVersion with all required params", function() {
     const params: LayerVersion = {
       layer: "test",
       version: 1,
@@ -49,7 +49,7 @@ describe("MetadataApi", () => {
     assert.isDefined(params);
   });
 
-  it("LayerVersion with all required and optional params", () => {
+  it("LayerVersion with all required and optional params", function() {
     const params: LayerVersion = {
       layer: "test",
       version: 1,
@@ -59,7 +59,7 @@ describe("MetadataApi", () => {
     assert.isDefined(params);
   });
 
-  it("LayerVersions with all required params", () => {
+  it("LayerVersions with all required params", function() {
     const params: LayerVersions = {
       layerVersions: [
         {
@@ -74,7 +74,7 @@ describe("MetadataApi", () => {
     assert.isDefined(params);
   });
 
-  it("LayerVersions with all required and optional params", () => {
+  it("LayerVersions with all required and optional params", function() {
     const params: LayerVersions = {
       layerVersions: [
         {
@@ -89,7 +89,7 @@ describe("MetadataApi", () => {
     assert.isDefined(params);
   });
 
-  it("Partition with all required params", () => {
+  it("Partition with all required params", function() {
     const params: Partition = {
       dataHandle: "test",
       partition: "test",
@@ -99,7 +99,7 @@ describe("MetadataApi", () => {
     assert.isDefined(params);
   });
 
-  it("Partition with all required and optional params", () => {
+  it("Partition with all required and optional params", function() {
     const params: Partition = {
       checksum: "test",
       compressedDataSize: 1,
@@ -112,7 +112,7 @@ describe("MetadataApi", () => {
     assert.isDefined(params);
   });
 
-  it("Partitions with all required params", () => {
+  it("Partitions with all required params", function() {
     const params: Partitions = {
       partitions: [
         {
@@ -129,7 +129,7 @@ describe("MetadataApi", () => {
     assert.isDefined(params);
   });
 
-  it("Partitions with all required and optional params", () => {
+  it("Partitions with all required and optional params", function() {
     const params: Partitions = {
       partitions: [
         {
@@ -147,7 +147,7 @@ describe("MetadataApi", () => {
     assert.isDefined(params);
   });
 
-  it("VersionDependency with all required params", () => {
+  it("VersionDependency with all required params", function() {
     const params: VersionDependency = {
       direct: true,
       hrn: "test",
@@ -157,7 +157,7 @@ describe("MetadataApi", () => {
     assert.isDefined(params);
   });
 
-  it("VersionDependency with all required and optional params", () => {
+  it("VersionDependency with all required and optional params", function() {
     const params: VersionDependency = {
       direct: true,
       hrn: "test",
@@ -167,7 +167,7 @@ describe("MetadataApi", () => {
     assert.isDefined(params);
   });
 
-  it("VersionInfo with all required params", () => {
+  it("VersionInfo with all required params", function() {
     const params: VersionInfo = {
       dependencies: [
         {
@@ -184,7 +184,7 @@ describe("MetadataApi", () => {
     assert.isDefined(params);
   });
 
-  it("VersionInfo with all required and optional params", () => {
+  it("VersionInfo with all required and optional params", function() {
     const params: VersionInfo = {
       dependencies: [
         {
@@ -201,7 +201,7 @@ describe("MetadataApi", () => {
     assert.isDefined(params);
   });
 
-  it("VersionInfos with all required params", () => {
+  it("VersionInfos with all required params", function() {
     const params: VersionInfos = {
       versions: [
         {
@@ -222,7 +222,7 @@ describe("MetadataApi", () => {
     assert.isDefined(params);
   });
 
-  it("VersionInfos with all required and optional params", () => {
+  it("VersionInfos with all required and optional params", function() {
     const params: VersionInfos = {
       versions: [
         {
@@ -243,7 +243,7 @@ describe("MetadataApi", () => {
     assert.isDefined(params);
   });
 
-  it("VersionResponse with all required params", () => {
+  it("VersionResponse with all required params", function() {
     const params: VersionResponse = {
       version: 1
     };
@@ -251,7 +251,7 @@ describe("MetadataApi", () => {
     assert.isDefined(params);
   });
 
-  it("VersionResponse with all required and optional params", () => {
+  it("VersionResponse with all required and optional params", function() {
     const params: VersionResponse = {
       version: 1
     };
@@ -259,7 +259,7 @@ describe("MetadataApi", () => {
     assert.isDefined(params);
   });
 
-  it("Test getChanges method with all required params", async () => {
+  it("Test getChanges method with all required params", async function() {
     const params = {
       layerId: "test"
     };
@@ -269,7 +269,7 @@ describe("MetadataApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getChanges method with all required and optional params", async () => {
+  it("Test getChanges method with all required and optional params", async function() {
     const params = {
       layerId: "test",
       startVersion: 1,
@@ -285,7 +285,7 @@ describe("MetadataApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getLayerVersions method with all required params", async () => {
+  it("Test getLayerVersions method with all required params", async function() {
     const params = {
       version: 1
     };
@@ -298,7 +298,7 @@ describe("MetadataApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getLayerVersions method with all required and optional params", async () => {
+  it("Test getLayerVersions method with all required and optional params", async function() {
     const params = {
       version: 1,
       billingTag: "test"
@@ -312,7 +312,7 @@ describe("MetadataApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getPartitions method with all required params", async () => {
+  it("Test getPartitions method with all required params", async function() {
     const params = {
       layerId: "test"
     };
@@ -325,7 +325,7 @@ describe("MetadataApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getPartitions method with all required and optional params", async () => {
+  it("Test getPartitions method with all required and optional params", async function() {
     const params = {
       layerId: "test",
       version: 1,
@@ -342,7 +342,7 @@ describe("MetadataApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test latestVersion method with all required params", async () => {
+  it("Test latestVersion method with all required params", async function() {
     const params = {
       startVersion: 1
     };
@@ -355,7 +355,7 @@ describe("MetadataApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test latestVersion method with all required and optional params", async () => {
+  it("Test latestVersion method with all required and optional params", async function() {
     const params = {
       startVersion: 1,
       billingTag: "test"
@@ -369,7 +369,7 @@ describe("MetadataApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test listVersions method with all required params", async () => {
+  it("Test listVersions method with all required params", async function() {
     const params = {
       startVersion: 1,
       endVersion: 1
@@ -380,7 +380,7 @@ describe("MetadataApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test listVersions method with all required and optional params", async () => {
+  it("Test listVersions method with all required and optional params", async function() {
     const params = {
       startVersion: 1,
       endVersion: 1,
@@ -392,7 +392,7 @@ describe("MetadataApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test minimumVersion method with all required params", async () => {
+  it("Test minimumVersion method with all required params", async function() {
     const params = {};
 
     const result = await MetadataApi.minimumVersion(
@@ -403,7 +403,7 @@ describe("MetadataApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test minimumVersion method with all required and optional params", async () => {
+  it("Test minimumVersion method with all required and optional params", async function() {
     const params = {
       billingTag: "test"
     };

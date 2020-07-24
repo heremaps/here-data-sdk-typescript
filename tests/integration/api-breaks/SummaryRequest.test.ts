@@ -29,12 +29,12 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("SummaryRequest", () => {
+describe("SummaryRequest", function() {
   const testCatalogHrn = dataServiceRead.HRN.fromString(
     "hrn:here:data:::mocked-hrn"
   );
 
-  it("Shoud be initialized with arguments", async () => {
+  it("Shoud be initialized with arguments", async function() {
     const client = new SummaryRequest();
     assert.isDefined(client);
 
@@ -47,14 +47,14 @@ describe("SummaryRequest", () => {
     assert.isDefined(client.withLayerId);
   });
 
-  it("Test withLayerId method with layerId", async () => {
+  it("Test withLayerId method with layerId", async function() {
     const client = new SummaryRequest();
 
     const response = await client.withLayerId("test");
     assert.isDefined(response);
   });
 
-  it("Test getLayerId method without params", async () => {
+  it("Test getLayerId method without params", async function() {
     const client = new SummaryRequest();
     await client.withLayerId("test");
 
@@ -62,14 +62,14 @@ describe("SummaryRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test withBillingTag method with tag", async () => {
+  it("Test withBillingTag method with tag", async function() {
     const client = new SummaryRequest();
 
     const response = await client.withBillingTag("test");
     assert.isDefined(response);
   });
 
-  it("Test getBillingTag method without params", async () => {
+  it("Test getBillingTag method without params", async function() {
     const client = new SummaryRequest();
     await client.withBillingTag("test");
 
@@ -77,14 +77,14 @@ describe("SummaryRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test withCatalogHrn method with hrn", async () => {
+  it("Test withCatalogHrn method with hrn", async function() {
     const client = new SummaryRequest();
 
     const response = await client.withCatalogHrn(testCatalogHrn);
     assert.isDefined(response);
   });
 
-  it("Test getCatalogHrn method without params", async () => {
+  it("Test getCatalogHrn method without params", async function() {
     const client = new SummaryRequest();
     await client.withCatalogHrn(testCatalogHrn);
 

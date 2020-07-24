@@ -31,7 +31,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("VersionedLayerClient", () => {
+describe("VersionedLayerClient", function() {
     let sandbox: sinon.SinonSandbox;
     let getBlobStub: sinon.SinonStub;
     let getPartitionsStub: sinon.SinonStub;
@@ -68,7 +68,7 @@ describe("VersionedLayerClient", () => {
         ]
     };
 
-    before(() => {
+    before(function() {
         sandbox = sinon.createSandbox();
         let settings = new dataServiceRead.OlpClientSettings({
             environment: "here",
@@ -102,7 +102,7 @@ describe("VersionedLayerClient", () => {
         );
     });
 
-    beforeEach(() => {
+    beforeEach(function() {
         getBlobStub = sandbox.stub(BlobApi, "getBlob");
         getPartitionsStub = sandbox.stub(MetadataApi, "getPartitions");
         getPartitionsByIdStub = sandbox.stub(QueryApi, "getPartitionsById");
@@ -116,21 +116,21 @@ describe("VersionedLayerClient", () => {
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
-    afterEach(() => {
+    afterEach(function() {
         sandbox.restore();
     });
 
-    it("Shoud be initialized", async () => {
+    it("Shoud be initialized", async function() {
         assert.isDefined(versionedLayerClient);
     });
 
-    it("VersionedLayerClient should throw Error when setted unsuported parameters", async () => {
+    it("VersionedLayerClient should throw Error when setted unsuported parameters", async function() {
         let settings1 = sandbox.createStubInstance(
             dataServiceRead.OlpClientSettings
         );
 
         assert.throws(
-            () => {
+            function() {
                 new dataServiceRead.VersionedLayerClient(
                     mockedHRN,
                     "",
@@ -142,7 +142,7 @@ describe("VersionedLayerClient", () => {
         );
     });
 
-    it("VersionedLayerClient instance should be initialized with VersionedLayerClientParams", async () => {
+    it("VersionedLayerClient instance should be initialized with VersionedLayerClientParams", async function() {
         assert.isDefined(versionedLayerClientWithVersion);
         assert.equal(versionedLayerClientWithVersion["version"], 5);
         assert.equal(
@@ -151,7 +151,7 @@ describe("VersionedLayerClient", () => {
         );
     });
 
-    it("Should method getData provide data with dataHandle parameter", async () => {
+    it("Should method getData provide data with dataHandle parameter", async function() {
         const mockedVersion = {
             version: 42
         };
@@ -182,7 +182,7 @@ describe("VersionedLayerClient", () => {
         assert.isTrue(response.ok);
     });
 
-    it("Should method getData provide data with partitionId parameter", async () => {
+    it("Should method getData provide data with partitionId parameter", async function() {
         const mockedBlobData = new Response("mocked-blob-response");
         const mockedVersion = {
             version: 42
@@ -227,7 +227,7 @@ describe("VersionedLayerClient", () => {
         assert.isTrue(response.ok);
     });
 
-    it("Should method getData provide data with partitionId parameter and version", async () => {
+    it("Should method getData provide data with partitionId parameter and version", async function() {
         const mockedBlobData = new Response("mocked-blob-response");
         const mockedPartitionsIdData = {
             partitions: [
@@ -261,7 +261,7 @@ describe("VersionedLayerClient", () => {
         assert.isTrue(response.ok);
     });
 
-    it("Should method getData provide data with quadKey", async () => {
+    it("Should method getData provide data with quadKey", async function() {
         const mockedBlobData = new Response("mocked-blob-response");
         const mockedVersion = {
             version: 42
@@ -313,7 +313,7 @@ describe("VersionedLayerClient", () => {
         assert.isTrue(response.ok);
     });
 
-    it("Should method getData return Error without dataRequest parameters", async () => {
+    it("Should method getData return Error without dataRequest parameters", async function() {
         const mockedErrorResponse =
             "No data provided. Add dataHandle, partitionId or quadKey to the DataRequest object";
         const dataRequest = new dataServiceRead.DataRequest();
@@ -326,7 +326,7 @@ describe("VersionedLayerClient", () => {
             });
     });
 
-    it("Should method getData return Error with correct partitionId and wrong version parameter", async () => {
+    it("Should method getData return Error with correct partitionId and wrong version parameter", async function() {
         const dataRequest = new dataServiceRead.DataRequest()
             .withVersion(100500)
             .withPartitionId("42");
@@ -354,7 +354,7 @@ describe("VersionedLayerClient", () => {
             });
     });
 
-    it("Should method getData with wrong partitionId parameter and version return error", async () => {
+    it("Should method getData with wrong partitionId parameter and version return error", async function() {
         const mockedBlobData = new Response("mocked-blob-response");
         const mockedErrorResponse =
             "No partition dataHandle for partition 42. HRN: hrn:here:data:::mocked-hrn";
@@ -391,7 +391,7 @@ describe("VersionedLayerClient", () => {
             });
     });
 
-    it("Should method getData return Error with correct quadKey and wrong version parameter", async () => {
+    it("Should method getData return Error with correct quadKey and wrong version parameter", async function() {
         const dataRequest = new dataServiceRead.DataRequest()
             .withVersion(100500)
             .withQuadKey(dataServiceRead.quadKeyFromMortonCode("23618403"));
@@ -419,7 +419,7 @@ describe("VersionedLayerClient", () => {
             });
     });
 
-    it("Should method getData return Error with incorrect quadKey", async () => {
+    it("Should method getData return Error with incorrect quadKey", async function() {
         const errorMessage =
             "No dataHandle for quadKey {column: 15, row: 1, level: 5}. HRN: hrn:here:data:::mocked-hrn";
         const ERROR_STATUS = 204;
@@ -447,7 +447,7 @@ describe("VersionedLayerClient", () => {
             });
     });
 
-    it("Should be aborted fetching by abort signal", async () => {
+    it("Should be aborted fetching by abort signal", async function() {
         const mockedBlobData = new Response("mocked-blob-response");
         const mockedPartitionsIdData = {
             partitions: [
@@ -492,7 +492,7 @@ describe("VersionedLayerClient", () => {
         abortController.abort();
     });
 
-    it("Should method getPartitions provide data with PartitionsRequest", async () => {
+    it("Should method getPartitions provide data with PartitionsRequest", async function() {
         const mockedVersion = {
             version: 42
         };
@@ -534,7 +534,7 @@ describe("VersionedLayerClient", () => {
         expect(partitions).to.be.equal(mockedPartitions);
     });
 
-    it("Should method getPartitions provide data with PartitionIds list", async () => {
+    it("Should method getPartitions provide data with PartitionIds list", async function() {
         const mockedIds = ["1", "2", "13", "42"];
         const mockedVersion = {
             version: 42
@@ -579,7 +579,7 @@ describe("VersionedLayerClient", () => {
         expect(partitions).to.be.equal(mockedPartitions);
     });
 
-    it("Should layerClient sends a PartitionsRequest for getPartitions with additionalFields params", async () => {
+    it("Should layerClient sends a PartitionsRequest for getPartitions with additionalFields params", async function() {
         const mockedVersion = {
             version: 42
         };
@@ -624,7 +624,7 @@ describe("VersionedLayerClient", () => {
         ).to.be.equal("checksum");
     });
 
-    it("Should layerClient sends a PartitionsRequest for getPartitions with additionalFields params and get cached data", async () => {
+    it("Should layerClient sends a PartitionsRequest for getPartitions with additionalFields params and get cached data", async function() {
         const partitionsRequest = new dataServiceRead.PartitionsRequest().withAdditionalFields(
             ["dataSize", "checksum"]
         );
@@ -641,7 +641,7 @@ describe("VersionedLayerClient", () => {
         );
     });
 
-    it("Should layerClient sends a PartitionsRequest for getPartitions with extra additionalFields params, check cached data and get new metadata", async () => {
+    it("Should layerClient sends a PartitionsRequest for getPartitions with extra additionalFields params, check cached data and get new metadata", async function() {
         const mockedVersion = {
             version: 42
         };
@@ -677,7 +677,7 @@ describe("VersionedLayerClient", () => {
         );
     });
 
-    it("Should method getPartitions return error without QuadKeyPartitionsRequest", async () => {
+    it("Should method getPartitions return error without QuadKeyPartitionsRequest", async function() {
         const mockedErrorResponse = {
             message: "Please provide correct QuadKey"
         };
@@ -691,7 +691,7 @@ describe("VersionedLayerClient", () => {
             });
     });
 
-    it("Should layerClient sends a QuadKeyPartitionsRequest for getPartitions with additionalFields params", async () => {
+    it("Should layerClient sends a QuadKeyPartitionsRequest for getPartitions with additionalFields params", async function() {
         const mockedBlobData = new Response("mocked-blob-response");
         const mockedVersion = {
             version: 42
@@ -757,7 +757,7 @@ describe("VersionedLayerClient", () => {
         ).to.be.equal("compressedDataSize");
     });
 
-    it("Should baseUrl error be handled", async () => {
+    it("Should baseUrl error be handled", async function() {
         const mockedErrorResponse = "Bad response";
         const dataHandleRequest = new dataServiceRead.DataRequest().withDataHandle(
             "moсked-data-handle"
@@ -801,7 +801,7 @@ describe("VersionedLayerClient", () => {
             });
     });
 
-    it("Should latestVersion error be handled", async () => {
+    it("Should latestVersion error be handled", async function() {
         const mockedErrorResponse = "Bad response";
         const dataPartitionRequest = new dataServiceRead.DataRequest().withPartitionId(
             "mocked-id"
@@ -849,7 +849,7 @@ describe("VersionedLayerClient", () => {
             });
     });
 
-    it("Should getPartitions with quadKey error be handled", async () => {
+    it("Should getPartitions with quadKey error be handled", async function() {
         const mockedErrorResponse = "Bad response";
         const quadRrequest = new dataServiceRead.DataRequest()
             .withQuadKey(dataServiceRead.quadKeyFromMortonCode("23618403"))
@@ -877,7 +877,7 @@ describe("VersionedLayerClient", () => {
             });
     });
 
-    it("Should getPartitions error be handled if error getting latest layer version", async () => {
+    it("Should getPartitions error be handled if error getting latest layer version", async function() {
         getVersionStub.callsFake(() =>
             Promise.reject({
                 status: 400,
@@ -907,7 +907,7 @@ describe("VersionedLayerClient", () => {
         }
     });
 
-    it("Should getData error be handled if error getting latest layer version", async () => {
+    it("Should getData error be handled if error getting latest layer version", async function() {
         getVersionStub.callsFake(() =>
             Promise.reject({
                 status: 400,
@@ -940,7 +940,7 @@ describe("VersionedLayerClient", () => {
         }
     });
 
-    it("Should getPartitions fetch menadata with latest layer version if not defined", async () => {
+    it("Should getPartitions fetch menadata with latest layer version if not defined", async function() {
         getVersionStub.callsFake(() => Promise.resolve({ version: 5 }));
 
         getPartitionsStub.callsFake((builder, params) => {
@@ -963,7 +963,7 @@ describe("VersionedLayerClient", () => {
         } as any);
     });
 
-    it("Should getPartitions fetch menadata with set layer version in constructor", async () => {
+    it("Should getPartitions fetch menadata with set layer version in constructor", async function() {
         getPartitionsStub.callsFake((builder, params) => {
             assert.equal(params.version, 6);
             return Promise.resolve();
@@ -985,7 +985,7 @@ describe("VersionedLayerClient", () => {
         } as any);
     });
 
-    it("Method QueryApi.getPartitionsById should be called with param additionalFields and run getPartitions method with additionalFields", async () => {
+    it("Method QueryApi.getPartitionsById should be called with param additionalFields and run getPartitions method with additionalFields", async function() {
         const QueryClientStub = sandbox.stub(dataServiceRead, "QueryClient");
 
         const mockedPartitions = {
@@ -1034,7 +1034,7 @@ describe("VersionedLayerClient", () => {
     });
 });
 
-describe("VersionedLayerClient with locked version 0 in constructor", () => {
+describe("VersionedLayerClient with locked version 0 in constructor", function() {
     let sandbox: sinon.SinonSandbox;
     let client: dataServiceRead.VersionedLayerClient;
 
@@ -1046,11 +1046,11 @@ describe("VersionedLayerClient with locked version 0 in constructor", () => {
         getToken: () => Promise.resolve("mocked-token")
     });
 
-    before(() => {
+    before(function() {
         sandbox = sinon.createSandbox();
     });
 
-    beforeEach(() => {
+    beforeEach(function() {
         client = new dataServiceRead.VersionedLayerClient({
             settings: mockedSettings,
             catalogHrn: mockedCatalogHRH,
@@ -1059,16 +1059,16 @@ describe("VersionedLayerClient with locked version 0 in constructor", () => {
         });
     });
 
-    afterEach(() => {
+    afterEach(function() {
         sandbox.restore();
     });
 
-    it("Versioned layer should be initialized with 0 version", () => {
+    it("Versioned layer should be initialized with 0 version", function() {
         expect(client !== undefined).to.be.true;
         expect(client["version"]).to.be.equal(0);
     });
 
-    it("Versioned layer should be initialized with undefined version if user set some version < 0 ", () => {
+    it("Versioned layer should be initialized with undefined version if user set some version < 0 ", function() {
         const client = new dataServiceRead.VersionedLayerClient({
             settings: mockedSettings,
             catalogHrn: mockedCatalogHRH,
@@ -1079,7 +1079,7 @@ describe("VersionedLayerClient with locked version 0 in constructor", () => {
         expect(client["version"]).to.be.equal(undefined);
     });
 
-    it("Method getPartitions should call queryClient.fetchQuadTreeIndex with QuadTreeIndexRequest.getVersion() === 0", async () => {
+    it("Method getPartitions should call queryClient.fetchQuadTreeIndex with QuadTreeIndexRequest.getVersion() === 0", async function() {
         const QueryClientStub = sandbox.stub(dataServiceRead, "QueryClient");
 
         class MockedQueryClient {
@@ -1104,7 +1104,7 @@ describe("VersionedLayerClient with locked version 0 in constructor", () => {
         );
     });
 
-    it("Method getData should not change the version of the layer", async () => {
+    it("Method getData should not change the version of the layer", async function() {
         // @ts-ignore
         class VersionedLayerClientTest extends dataServiceRead.VersionedLayerClient {
             constructor(params: dataServiceRead.VersionedLayerClientParams) {
@@ -1135,7 +1135,7 @@ describe("VersionedLayerClient with locked version 0 in constructor", () => {
         expect(client["version"]).to.be.equal(0);
     });
 
-    it("Method getPartitions should call queryClient.getPartitionsById with PartitionsRequest.getVersion() === 0", async () => {
+    it("Method getPartitions should call queryClient.getPartitionsById with PartitionsRequest.getVersion() === 0", async function() {
         const QueryClientStub = sandbox.stub(dataServiceRead, "QueryClient");
 
         class MockedQueryClient {
@@ -1161,7 +1161,7 @@ describe("VersionedLayerClient with locked version 0 in constructor", () => {
         );
     });
 
-    it("Method getPartitions should call MetadataApi.getPartitions with param version === 0", async () => {
+    it("Method getPartitions should call MetadataApi.getPartitions with param version === 0", async function() {
         // @ts-ignore
         class VersionedLayerClientTest extends dataServiceRead.VersionedLayerClient {
             constructor(params: dataServiceRead.VersionedLayerClientParams) {

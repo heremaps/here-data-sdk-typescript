@@ -21,8 +21,6 @@ import { assert } from "chai";
 import * as path from "path";
 import "../index";
 
-// tslint:disable:only-arrow-functions
-
 const isNode = typeof window === "undefined";
 const describeOnlyNode = isNode ? describe : xdescribe;
 
@@ -46,7 +44,10 @@ describe("@here/harp-fetch", function() {
 
     describeOnlyNode("global.fetch file support (node.js)", function() {
         function getRelativeResourcePath(filePath: string) {
-            return path.relative(process.cwd(), path.resolve(__dirname, filePath));
+            return path.relative(
+                process.cwd(),
+                path.resolve(__dirname, filePath)
+            );
         }
 
         it("loads binaries", async function() {

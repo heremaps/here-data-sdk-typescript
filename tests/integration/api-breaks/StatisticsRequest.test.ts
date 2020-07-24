@@ -27,7 +27,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("StatisticsRequest", () => {
+describe("StatisticsRequest", function() {
   enum CoverageDataType {
     BITMAP = "tilemap",
     SIZEMAP = "heatmap/size",
@@ -91,7 +91,7 @@ describe("StatisticsRequest", () => {
     }
   }
 
-  it("Shoud be initialized", async () => {
+  it("Shoud be initialized", async function() {
     const request = new StatisticsRequest();
     assert.isDefined(request);
     expect(request).to.be.instanceOf(StatisticsRequest);
@@ -110,21 +110,21 @@ describe("StatisticsRequest", () => {
     assert.isFunction(request.getBillingTag);
   });
 
-  it("Test withTypemap method with type map", async () => {
+  it("Test withTypemap method with type map", async function() {
     const request = new StatisticsRequestTest();
 
     const response = request.withTypemap(CoverageDataType.BITMAP);
     assert.isDefined(response);
   });
 
-  it("Test getTypemap method without params", async () => {
+  it("Test getTypemap method without params", async function() {
     const request = new StatisticsRequestTest();
 
     const response = request.getTypemap();
     assert.isDefined(response);
   });
 
-  it("Test withCatalogHrn method with hrn", async () => {
+  it("Test withCatalogHrn method with hrn", async function() {
     const request = new StatisticsRequestTest();
 
     const response = request.withCatalogHrn(
@@ -133,49 +133,49 @@ describe("StatisticsRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test getCatalogHrn method without params", async () => {
+  it("Test getCatalogHrn method without params", async function() {
     const request = new StatisticsRequestTest();
 
     const response = request.getCatalogHrn();
     assert.isDefined(response);
   });
 
-  it("Test withDataLevel method with dataLevel", async () => {
+  it("Test withDataLevel method with dataLevel", async function() {
     const request = new StatisticsRequestTest();
 
     const response = request.withDataLevel(1);
     assert.isDefined(response);
   });
 
-  it("Test getDataLevel method without params", async () => {
+  it("Test getDataLevel method without params", async function() {
     const request = new StatisticsRequestTest();
 
     const response = request.getDataLevel();
     assert.isDefined(response);
   });
 
-  it("Test withLayerId method with layerId", async () => {
+  it("Test withLayerId method with layerId", async function() {
     const request = new StatisticsRequestTest();
 
     const response = request.withLayerId("test");
     assert.isDefined(response);
   });
 
-  it("Test getLayerId method without params", async () => {
+  it("Test getLayerId method without params", async function() {
     const request = new StatisticsRequestTest();
 
     const response = request.getLayerId();
     assert.isDefined(response);
   });
 
-  it("Test withBillingTag method with tag", async () => {
+  it("Test withBillingTag method with tag", async function() {
     const request = new StatisticsRequestTest();
 
     const response = request.withBillingTag("test-tag");
     assert.isDefined(response);
   });
 
-  it("Test getBillingTag method without params", async () => {
+  it("Test getBillingTag method without params", async function() {
     const request = new StatisticsRequestTest();
 
     const response = request.getBillingTag();

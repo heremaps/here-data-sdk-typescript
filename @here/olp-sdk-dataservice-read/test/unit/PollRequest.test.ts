@@ -27,15 +27,15 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("PollRequest", () => {
-    it("Should initialize", () => {
+describe("PollRequest", function() {
+    it("Should initialize", function() {
         const pollRequest = new PollRequest();
 
         assert.isDefined(pollRequest);
         expect(pollRequest).be.instanceOf(PollRequest);
     });
 
-    it("Should set parameters", () => {
+    it("Should set parameters", function() {
         const mockMode = "parallel";
         const mockSubId = "1111111111";
 
@@ -47,7 +47,7 @@ describe("PollRequest", () => {
         expect(pollRequestWithSub.getSubscriptionId()).to.be.equal(mockSubId);
     });
 
-    it("Should get parameters with chain", () => {
+    it("Should get parameters with chain", function() {
         const mockMode = "parallel";
         const mockSubId = "1111111111";
         const pollRequest = new PollRequest()

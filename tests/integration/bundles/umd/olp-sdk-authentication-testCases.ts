@@ -26,13 +26,13 @@ export const OlpSdkAuthenticationTestCases: {
 }[] = [
   {
     it: "UserAuth should be defined",
-    callback: () => {
+    callback: function() {
       assert(UserAuth !== undefined);
     }
   },
   {
     it: "UserAuth should be initialised",
-    callback: () => {
+    callback: function() {
       const userAuth = new UserAuth({
         credentials: {
           accessKeyId: "mocked-id",
@@ -48,7 +48,7 @@ export const OlpSdkAuthenticationTestCases: {
   },
   {
     it: "requestToken should be defined",
-    callback: () => {
+    callback: function() {
       assert(requestToken !== undefined);
     }
   }

@@ -30,7 +30,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("DataRequest", () => {
+describe("DataRequest", function() {
   class DataRequestTest extends DataRequest {
     getDataHandle(): string | undefined {
       return "test";
@@ -77,7 +77,7 @@ describe("DataRequest", () => {
     }
   }
 
-  it("Shoud be initialized", async () => {
+  it("Shoud be initialized", async function() {
     const request = new DataRequest();
     assert.isDefined(request);
     expect(request).to.be.instanceOf(DataRequest);
@@ -94,21 +94,21 @@ describe("DataRequest", () => {
     assert.isFunction(request.getBillingTag);
   });
 
-  it("Test withVersion method with version", async () => {
+  it("Test withVersion method with version", async function() {
     const request = new DataRequestTest();
 
     const response = request.withVersion(3);
     assert.isDefined(response);
   });
 
-  it("Test getVersion method without params", async () => {
+  it("Test getVersion method without params", async function() {
     const request = new DataRequestTest();
 
     const response = request.getVersion();
     assert.isDefined(response);
   });
 
-  it("Test withQuadKey method with quadKey", async () => {
+  it("Test withQuadKey method with quadKey", async function() {
     const request = new DataRequestTest();
 
     const response = request.withQuadKey({
@@ -119,49 +119,49 @@ describe("DataRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test getQuadKey method without params", async () => {
+  it("Test getQuadKey method without params", async function() {
     const request = new DataRequestTest();
 
     const response = request.getQuadKey();
     assert.isDefined(response);
   });
 
-  it("Test withPartitionId method with id", async () => {
+  it("Test withPartitionId method with id", async function() {
     const request = new DataRequestTest();
 
     const response = request.withPartitionId("test");
     assert.isDefined(response);
   });
 
-  it("Test getPartitionId method without params", async () => {
+  it("Test getPartitionId method without params", async function() {
     const request = new DataRequestTest();
 
     const response = request.getPartitionId();
     assert.isDefined(response);
   });
 
-  it("Test withDataHandle method with dataHandle", async () => {
+  it("Test withDataHandle method with dataHandle", async function() {
     const request = new DataRequestTest();
 
     const response = request.withDataHandle("test");
     assert.isDefined(response);
   });
 
-  it("Test getDataHandle method without params", async () => {
+  it("Test getDataHandle method without params", async function() {
     const request = new DataRequestTest();
 
     const response = request.getDataHandle();
     assert.isDefined(response);
   });
 
-  it("Test withBillingTag method with tag", async () => {
+  it("Test withBillingTag method with tag", async function() {
     const request = new DataRequestTest();
 
     const response = request.withBillingTag("test-tag");
     assert.isDefined(response);
   });
 
-  it("Test getBillingTag method without params", async () => {
+  it("Test getBillingTag method without params", async function() {
     const request = new DataRequestTest();
 
     const response = request.getBillingTag();

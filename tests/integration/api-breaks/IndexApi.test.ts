@@ -34,14 +34,14 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("IndexApi", () => {
-  it("DataResponse with all required params", () => {
+describe("IndexApi", function() {
+  it("DataResponse with all required params", function() {
     const params: DataResponse = {};
 
     assert.isDefined(params);
   });
 
-  it("DataResponse with all required and optional params", () => {
+  it("DataResponse with all required and optional params", function() {
     const params: DataResponse = {
       data: [
         {
@@ -58,13 +58,13 @@ describe("IndexApi", () => {
     assert.isDefined(params);
   });
 
-  it("Index with all required params", () => {
+  it("Index with all required params", function() {
     const params: Index = {};
 
     assert.isDefined(params);
   });
 
-  it("Index with all required and optional params", () => {
+  it("Index with all required and optional params", function() {
     const params: Index = {
       checksum: "test",
       fields: "test",
@@ -76,7 +76,7 @@ describe("IndexApi", () => {
     assert.isDefined(params);
   });
 
-  it("MapStringObject with all required params", () => {
+  it("MapStringObject with all required params", function() {
     const params: MapStringObject = {
       mykey: "test"
     };
@@ -84,13 +84,13 @@ describe("IndexApi", () => {
     assert.isDefined(params);
   });
 
-  it("UpdateIndexRequest with all required params", () => {
+  it("UpdateIndexRequest with all required params", function() {
     const params: UpdateIndexRequest = {};
 
     assert.isDefined(params);
   });
 
-  it("UpdateIndexRequest with all required and optional params", () => {
+  it("UpdateIndexRequest with all required and optional params", function() {
     const params: UpdateIndexRequest = {
       additions: [
         {
@@ -107,7 +107,7 @@ describe("IndexApi", () => {
     assert.isDefined(params);
   });
 
-  it("Test insertIndexes method with all required params", async () => {
+  it("Test insertIndexes method with all required params", async function() {
     const params = {
       indexes: [
         {
@@ -126,7 +126,7 @@ describe("IndexApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test performQuery method with all required params", async () => {
+  it("Test performQuery method with all required params", async function() {
     const params = {
       layerID: "test",
       query: "test"
@@ -137,7 +137,7 @@ describe("IndexApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test performQuery method with all required and optional params", async () => {
+  it("Test performQuery method with all required and optional params", async function() {
     const params = {
       layerID: "test",
       query: "test",
@@ -149,7 +149,7 @@ describe("IndexApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test performUpdate method with all required params", async () => {
+  it("Test performUpdate method with all required params", async function() {
     const params = {
       layerID: "test",
       request: {

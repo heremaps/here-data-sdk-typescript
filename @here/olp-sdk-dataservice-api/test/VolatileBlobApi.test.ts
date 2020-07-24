@@ -28,8 +28,8 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("VolatileBlobApi", () => {
-    it("checkHandleExists", async () => {
+describe("VolatileBlobApi", function() {
+    it("checkHandleExists", async function() {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -53,7 +53,7 @@ describe("VolatileBlobApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("deleteVolatileBlob", async () => {
+    it("deleteVolatileBlob", async function() {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -77,7 +77,7 @@ describe("VolatileBlobApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("getVolatileBlob", async () => {
+    it("getVolatileBlob", async function() {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -101,7 +101,7 @@ describe("VolatileBlobApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("putVolatileBlob", async () => {
+    it("putVolatileBlob", async function() {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",

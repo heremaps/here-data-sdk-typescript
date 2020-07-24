@@ -25,7 +25,7 @@ import {
     HRN
 } from "@here/olp-sdk-dataservice-read/lib";
 
-describe("getTile", () => {
+describe("getTile", function() {
     const settings = new OlpClientSettings({
         environment: "mock-env",
         getToken: () => Promise.resolve("mocked-token"),
@@ -42,7 +42,7 @@ describe("getTile", () => {
         layerType: "versioned"
     });
 
-    it("Should throw an error if not tile key", async () => {
+    it("Should throw an error if not tile key", async function() {
         const tile = await getTile(request).catch(err => err.message);
         assert.isTrue(tile === "Please provide correct QuadKey");
     });

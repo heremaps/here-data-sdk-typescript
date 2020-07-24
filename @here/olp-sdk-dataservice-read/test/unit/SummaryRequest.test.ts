@@ -28,19 +28,19 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("SummaryRequest", () => {
+describe("SummaryRequest", function() {
     const billingTag = "billingTag";
     const mockedHRN = HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
 
-    it("Should initialize", () => {
+    it("Should initialize", function() {
         const summaryRequest = new SummaryRequest();
 
         assert.isDefined(summaryRequest);
         expect(summaryRequest).be.instanceOf(SummaryRequest);
     });
 
-    it("Should set parameters", () => {
+    it("Should set parameters", function() {
         const summaryRequest = new SummaryRequest();
         const summaryRequestWithCatalogHrn = summaryRequest.withCatalogHrn(
             mockedHRN
@@ -48,7 +48,9 @@ describe("SummaryRequest", () => {
         const summaryRequestWithLAyerId = summaryRequest.withLayerId(
             mockedLayerId
         );
-        const summaryRequestWithBillTag = summaryRequest.withBillingTag(billingTag);
+        const summaryRequestWithBillTag = summaryRequest.withBillingTag(
+            billingTag
+        );
 
         expect(summaryRequestWithCatalogHrn.getCatalogHrn()).to.be.equal(
             mockedHRN.toString()
@@ -61,7 +63,7 @@ describe("SummaryRequest", () => {
         );
     });
 
-    it("Should get parameters with chain", () => {
+    it("Should get parameters with chain", function() {
         const summaryRequest = new SummaryRequest()
             .withCatalogHrn(mockedHRN)
             .withLayerId(mockedLayerId)

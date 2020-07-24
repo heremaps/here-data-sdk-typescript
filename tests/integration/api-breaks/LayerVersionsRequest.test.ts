@@ -26,7 +26,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("LayerVersionsRequest", () => {
+describe("LayerVersionsRequest", function() {
   class LayerVersionsRequestTest extends LayerVersionsRequest {
     getVersion(): number {
       return 5;
@@ -45,7 +45,7 @@ describe("LayerVersionsRequest", () => {
     }
   }
 
-  it("Shoud be initialized", async () => {
+  it("Shoud be initialized", async function() {
     const request = new LayerVersionsRequestTest();
     assert.isDefined(request);
     expect(request).to.be.instanceOf(LayerVersionsRequest);
@@ -57,14 +57,14 @@ describe("LayerVersionsRequest", () => {
     assert.isFunction(request.getBillingTag);
   });
 
-  it("Test withVersion method with version", async () => {
+  it("Test withVersion method with version", async function() {
     const request = new LayerVersionsRequestTest();
 
     const response = request.withVersion(11);
     assert.isDefined(response);
   });
 
-  it("Test getVersion method without params", async () => {
+  it("Test getVersion method without params", async function() {
     const request = new LayerVersionsRequestTest();
     request.withVersion(11);
 
@@ -72,14 +72,14 @@ describe("LayerVersionsRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test withBillingTag method with tag", async () => {
+  it("Test withBillingTag method with tag", async function() {
     const request = new LayerVersionsRequestTest();
 
     const response = request.withBillingTag("test-tag");
     assert.isDefined(response);
   });
 
-  it("Test getBillingTag method without params", async () => {
+  it("Test getBillingTag method without params", async function() {
     const request = new LayerVersionsRequestTest();
     request.withBillingTag("test-tag");
 

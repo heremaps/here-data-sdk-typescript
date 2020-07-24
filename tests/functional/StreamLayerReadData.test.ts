@@ -47,13 +47,13 @@ import {
   SeekRequest
 } from "@here/olp-sdk-dataservice-read";
 
-describe("Stream Layer Client Read Data", async () => {
+describe("Stream Layer Client Read Data", async function() {
   const olpClientSettings = new OlpClientSettings({
     environment: `http://${SERVER_HOST}:${SERVER_PORT}`,
     getToken: () => Promise.resolve("mocked-token-string")
   });
 
-  before(async () => {
+  before(async function() {
     await mockserver.start_mockserver({
       serverPort: SERVER_PORT,
       trace: true
@@ -61,7 +61,7 @@ describe("Stream Layer Client Read Data", async () => {
     console.log("Started Mocked Server\n");
   });
 
-  after(async () => {
+  after(async function() {
     await mockserver.stop_mockserver({
       serverPort: SERVER_PORT
     });
@@ -69,7 +69,7 @@ describe("Stream Layer Client Read Data", async () => {
     console.log("Stoped Mocked Server\n");
   });
 
-  it("Should Subscribe, Read messages, Read Blob and Unsubscribe from the layer", async () => {
+  it("Should Subscribe, Read messages, Read Blob and Unsubscribe from the layer", async function() {
     const client = new StreamLayerClient({
       catalogHrn: HRN.fromString(MOCKED_CATALOG_WITH_STREAM_LAYER_HRN),
       layerId: MOCKED_STREAM_LAYER_ID,
@@ -225,7 +225,7 @@ describe("Stream Layer Client Read Data", async () => {
         }
       ])
       .then(
-        () => {
+        function() {
           console.log(
             "Created expectations.\nMock server training finished.\n"
           );

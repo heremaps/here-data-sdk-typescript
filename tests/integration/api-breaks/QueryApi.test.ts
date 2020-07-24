@@ -35,14 +35,14 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("QueryApi", () => {
-  it("Index with all required params", () => {
+describe("QueryApi", function() {
+  it("Index with all required params", function() {
     const params: Index = {};
 
     assert.isDefined(params);
   });
 
-  it("Index with all required and optional params", () => {
+  it("Index with all required and optional params", function() {
     const params: Index = {
       parentQuads: [
         {
@@ -73,7 +73,7 @@ describe("QueryApi", () => {
     assert.isDefined(params);
   });
 
-  it("ParentQuad with all required params", () => {
+  it("ParentQuad with all required params", function() {
     const params: ParentQuad = {
       dataHandle: "test",
       partition: "test",
@@ -83,7 +83,7 @@ describe("QueryApi", () => {
     assert.isDefined(params);
   });
 
-  it("ParentQuad with all required and optional params", () => {
+  it("ParentQuad with all required and optional params", function() {
     const params: ParentQuad = {
       additionalMetadata: "test",
       checksum: "test",
@@ -97,7 +97,7 @@ describe("QueryApi", () => {
     assert.isDefined(params);
   });
 
-  it("Partition with all required params", () => {
+  it("Partition with all required params", function() {
     const params: Partition = {
       partition: "test",
       version: 1
@@ -106,7 +106,7 @@ describe("QueryApi", () => {
     assert.isDefined(params);
   });
 
-  it("Partition with all required and optional params", () => {
+  it("Partition with all required and optional params", function() {
     const params: Partition = {
       checksum: "test",
       compressedDataSize: 1,
@@ -119,13 +119,13 @@ describe("QueryApi", () => {
     assert.isDefined(params);
   });
 
-  it("Partitions with all required params", () => {
+  it("Partitions with all required params", function() {
     const params: Partitions = {};
 
     assert.isDefined(params);
   });
 
-  it("Partitions with all required and optional params", () => {
+  it("Partitions with all required and optional params", function() {
     const params: Partitions = {
       partitions: [
         {
@@ -144,7 +144,7 @@ describe("QueryApi", () => {
     assert.isDefined(params);
   });
 
-  it("SubQuad with all required params", () => {
+  it("SubQuad with all required params", function() {
     const params: SubQuad = {
       dataHandle: "test",
       subQuadKey: "test",
@@ -154,7 +154,7 @@ describe("QueryApi", () => {
     assert.isDefined(params);
   });
 
-  it("SubQuad with all required and optional params", () => {
+  it("SubQuad with all required and optional params", function() {
     const params: SubQuad = {
       additionalMetadata: "test",
       checksum: "test",
@@ -168,7 +168,7 @@ describe("QueryApi", () => {
     assert.isDefined(params);
   });
 
-  it("Test getChangesById method with all required params", async () => {
+  it("Test getChangesById method with all required params", async function() {
     const params = {
       layerId: "test",
       partition: ["test"]
@@ -179,7 +179,7 @@ describe("QueryApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getChangesById method with all required and optional params", async () => {
+  it("Test getChangesById method with all required and optional params", async function() {
     const params = {
       layerId: "test",
       partition: ["test"],
@@ -195,7 +195,7 @@ describe("QueryApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getPartitionsById method with all required params", async () => {
+  it("Test getPartitionsById method with all required params", async function() {
     const params = {
       layerId: "test",
       partition: ["test"]
@@ -209,7 +209,7 @@ describe("QueryApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getPartitionsById method with all required and optional params", async () => {
+  it("Test getPartitionsById method with all required and optional params", async function() {
     const params = {
       layerId: "test",
       partition: ["test"],
@@ -226,7 +226,7 @@ describe("QueryApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test quadTreeIndex method with all required params", async () => {
+  it("Test quadTreeIndex method with all required params", async function() {
     const params = {
       layerId: "test",
       version: 1,
@@ -239,7 +239,7 @@ describe("QueryApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test quadTreeIndex method with all required and optional params", async () => {
+  it("Test quadTreeIndex method with all required and optional params", async function() {
     const params = {
       layerId: "test",
       version: 1,
@@ -254,7 +254,7 @@ describe("QueryApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test quadTreeIndexVolatile method with all required params", async () => {
+  it("Test quadTreeIndexVolatile method with all required params", async function() {
     const params = {
       layerId: "test",
       quadKey: "test",
@@ -269,7 +269,7 @@ describe("QueryApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test quadTreeIndexVolatile method with all required and optional params", async () => {
+  it("Test quadTreeIndexVolatile method with all required and optional params", async function() {
     const params = {
       layerId: "test",
       quadKey: "test",

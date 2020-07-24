@@ -93,21 +93,21 @@ class MockedDataStoreRequestBuilder {
     ) {}
 }
 
-describe("RequestFactory", () => {
+describe("RequestFactory", function() {
     let ApiCacheRepositoryStub: sinon.SinonStub;
     let DataStoreRequestBuilderStub: sinon.SinonStub;
 
     let sandbox: sinon.SinonSandbox;
 
-    before(() => {
+    before(function() {
         sandbox = sinon.createSandbox();
     });
 
-    afterEach(() => {
+    afterEach(function() {
         sandbox.restore();
     });
 
-    beforeEach(() => {
+    beforeEach(function() {
         ApiCacheRepositoryStub = sandbox.stub(lib, "ApiCacheRepository");
         ApiCacheRepositoryStub.callsFake(
             (cache, hrn) => new MockedApiCacheRepository(cache, hrn)
@@ -126,8 +126,8 @@ describe("RequestFactory", () => {
             .callsFake(() => "http://fake-lookup.service.url");
     });
 
-    describe("create()", () => {
-        it("Should return created RequestBuilder with correct base url for platform service", async () => {
+    describe("create()", function() {
+        it("Should return created RequestBuilder with correct base url for platform service", async function() {
             const headers = new Headers();
             headers.append("cache-control", "max-age=3600");
             const response = {
@@ -162,7 +162,7 @@ describe("RequestFactory", () => {
             );
         });
 
-        it("Should reject with correct error about base url", async () => {
+        it("Should reject with correct error about base url", async function() {
             sandbox
                 .stub(dataServiceApi.LookupApi, "getPlatformAPIList")
                 .callsFake(
@@ -190,8 +190,8 @@ describe("RequestFactory", () => {
         });
     });
 
-    describe("getBaseUrl()", () => {
-        it("Should return correct base url for platform service", async () => {
+    describe("getBaseUrl()", function() {
+        it("Should return correct base url for platform service", async function() {
             const headers = new Headers();
             headers.append("cache-control", "max-age=3600");
             const response = {
@@ -221,7 +221,7 @@ describe("RequestFactory", () => {
             expect(baseUrl).to.be.equal("test-base-url-to-platform-service");
         });
 
-        it("Should return correct base url for resource service", async () => {
+        it("Should return correct base url for resource service", async function() {
             const headers = new Headers();
             headers.append("cache-control", "max-age=3600");
             const response = {
@@ -257,7 +257,7 @@ describe("RequestFactory", () => {
             expect(baseUrl).to.be.equal("test-base-url-to-resource-service");
         });
 
-        it("Should reject with correct error message", async () => {
+        it("Should reject with correct error message", async function() {
             sandbox
                 .stub(dataServiceApi.LookupApi, "getPlatformAPIList")
                 .callsFake(() =>
@@ -282,7 +282,7 @@ describe("RequestFactory", () => {
             }
         });
 
-        it("Should reject with correct custom error message", async () => {
+        it("Should reject with correct custom error message", async function() {
             sandbox
                 .stub(dataServiceApi.LookupApi, "getPlatformAPIList")
                 .callsFake(() =>
@@ -304,7 +304,7 @@ describe("RequestFactory", () => {
             }
         });
 
-        it("Should reject with not found error message", async () => {
+        it("Should reject with not found error message", async function() {
             const headers = new Headers();
             headers.append("cache-control", "max-age=3600");
             const response = {
@@ -337,7 +337,7 @@ describe("RequestFactory", () => {
             }
         });
 
-        it("Should reject with not found error message for hrn", async () => {
+        it("Should reject with not found error message for hrn", async function() {
             const headers = new Headers();
             headers.append("cache-control", "max-age=3600");
             const response = {
@@ -378,7 +378,7 @@ describe("RequestFactory", () => {
             }
         });
 
-        it("Should return correct base url for resource service from cache while max-age is valid", async () => {
+        it("Should return correct base url for resource service from cache while max-age is valid", async function() {
             const headers = new Headers();
             headers.append("cache-control", "max-age=2");
             const response = {
@@ -435,7 +435,7 @@ describe("RequestFactory", () => {
             expect(resourceApiStub.callCount).to.be.equal(1);
             expect(baseUrl2).to.be.equal("test-base-url-to-resource-service");
 
-            setTimeout(async () => {
+            setTimeout(async function() {
                 const baseUrl3 = await lib.RequestFactory.getBaseUrl(
                     "statistics",
                     "v1",

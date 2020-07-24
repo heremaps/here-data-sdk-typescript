@@ -27,7 +27,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("PartitionsRequest", () => {
+describe("PartitionsRequest", function() {
   class PartitionsRequestTest extends PartitionsRequest {
     withVersion(version?: number): PartitionsRequest {
       return this;
@@ -63,7 +63,7 @@ describe("PartitionsRequest", () => {
     }
   }
 
-  it("Shoud be initialized", async () => {
+  it("Shoud be initialized", async function() {
     const request = new PartitionsRequest();
     assert.isDefined(request);
     expect(request).to.be.instanceOf(PartitionsRequest);
@@ -78,63 +78,63 @@ describe("PartitionsRequest", () => {
     assert.isFunction(request.getAdditionalFields);
   });
 
-  it("Test withVersion method with version", async () => {
+  it("Test withVersion method with version", async function() {
     const request = new PartitionsRequestTest();
 
     const response = request.withVersion(5);
     assert.isDefined(response);
   });
 
-  it("Test withVersion method without params", async () => {
+  it("Test withVersion method without params", async function() {
     const request = new PartitionsRequestTest();
 
     const response = request.withVersion();
     assert.isDefined(response);
   });
 
-  it("Test getVersion method without params", async () => {
+  it("Test getVersion method without params", async function() {
     const request = new PartitionsRequestTest();
 
     const response = request.getVersion();
     assert.isDefined(response);
   });
 
-  it("Test withBillingTag method with tag", async () => {
+  it("Test withBillingTag method with tag", async function() {
     const request = new PartitionsRequestTest();
 
     const response = request.withBillingTag("test-tag");
     assert.isDefined(response);
   });
 
-  it("Test getBillingTag method without params", async () => {
+  it("Test getBillingTag method without params", async function() {
     const request = new PartitionsRequestTest();
 
     const response = request.getBillingTag();
     assert.isDefined(response);
   });
 
-  it("Test withPartitionIds method with ids", async () => {
+  it("Test withPartitionIds method with ids", async function() {
     const request = new PartitionsRequestTest();
 
     const response = request.withPartitionIds(["test"]);
     assert.isDefined(response);
   });
 
-  it("Test getPartitionIds method without params", async () => {
+  it("Test getPartitionIds method without params", async function() {
     const request = new PartitionsRequestTest();
 
     const response = request.getPartitionIds();
     assert.isDefined(response);
   });
 
-  it("Test withAdditionalFields method with AdditionalFields", async () => {
+  it("Test withAdditionalFields method with AdditionalFields", async function() {
     const request = new PartitionsRequestTest();
 
     const response = request.withAdditionalFields(["dataSize"]);
     assert.isDefined(response);
   });
 
-  it("Test getAdditionalFields method without params", async () => {
+  it("Test getAdditionalFields method without params", async function() {
     const request = new PartitionsRequestTest();
 
     const response = request.getAdditionalFields();

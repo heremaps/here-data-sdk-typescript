@@ -28,8 +28,8 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("MetadataApi", () => {
-    it("Should getChanges provide data", async () => {
+describe("MetadataApi", function() {
+    it("Should getChanges provide data", async function() {
         const mockedResponse = {
             partitions: [
                 {
@@ -69,7 +69,7 @@ describe("MetadataApi", () => {
         expect(changes).to.be.equal(mockedResponse);
     });
 
-    it("Should getLayerVersions provide data", async () => {
+    it("Should getLayerVersions provide data", async function() {
         const mockedResponse = {
             layerVersions: [
                 {
@@ -103,7 +103,7 @@ describe("MetadataApi", () => {
         expect(versions.version).to.be.equal(mockedResponse.version);
     });
 
-    it("Should getPartitions provide data", async () => {
+    it("Should getPartitions provide data", async function() {
         const mockedResponse = {
             partitions: [
                 {
@@ -142,7 +142,7 @@ describe("MetadataApi", () => {
         expect(changes).to.be.equal(mockedResponse);
     });
 
-    it("Should latestVersion provide data", async () => {
+    it("Should latestVersion provide data", async function() {
         const mockedStartedVersion = 1;
         const mockedResponse = {
             version: 42
@@ -166,7 +166,7 @@ describe("MetadataApi", () => {
         expect(version.version).to.be.equal(mockedResponse.version);
     });
 
-    it("Should listVersions provide data", async () => {
+    it("Should listVersions provide data", async function() {
         const mockedStartedVersion = 1;
         const mockedEndVersion = 42;
         const mockedResponse = {
@@ -202,7 +202,7 @@ describe("MetadataApi", () => {
         expect(versions).to.be.equal(mockedResponse);
     });
 
-    it("Should minimumVersion provide data", async () => {
+    it("Should minimumVersion provide data", async function() {
         const mockedResponse = {
             version: 42
         };
