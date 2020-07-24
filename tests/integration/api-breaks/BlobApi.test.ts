@@ -40,14 +40,14 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("BlobApi", () => {
-  it("BlobInitResponse  with all required params", () => {
+describe("BlobApi", function() {
+  it("BlobInitResponse  with all required params", function() {
     const params: BlobInitResponse = {};
 
     assert.isDefined(params);
   });
 
-  it("BlobInitResponse with all required and optional params", () => {
+  it("BlobInitResponse with all required and optional params", function() {
     const params: BlobInitResponse = {
       links: {
         complete: {
@@ -75,13 +75,13 @@ describe("BlobApi", () => {
     assert.isDefined(params);
   });
 
-  it("BlobInitResponseCancelLink  with all required params", () => {
+  it("BlobInitResponseCancelLink  with all required params", function() {
     const params: BlobInitResponseCancelLink = {};
 
     assert.isDefined(params);
   });
 
-  it("BlobInitResponseCancelLink with all required and optional params", () => {
+  it("BlobInitResponseCancelLink with all required and optional params", function() {
     const params: BlobInitResponseCancelLink = {
       href: "test",
       method: "test"
@@ -90,13 +90,13 @@ describe("BlobApi", () => {
     assert.isDefined(params);
   });
 
-  it("BlobInitResponseCompleteLink  with all required params", () => {
+  it("BlobInitResponseCompleteLink  with all required params", function() {
     const params: BlobInitResponseCompleteLink = {};
 
     assert.isDefined(params);
   });
 
-  it("BlobInitResponseCompleteLink with all required and optional params", () => {
+  it("BlobInitResponseCompleteLink with all required and optional params", function() {
     const params: BlobInitResponseCompleteLink = {
       href: "test",
       method: "test"
@@ -105,13 +105,13 @@ describe("BlobApi", () => {
     assert.isDefined(params);
   });
 
-  it("BlobInitResponseLinks  with all required params", () => {
+  it("BlobInitResponseLinks  with all required params", function() {
     const params: BlobInitResponseLinks = {};
 
     assert.isDefined(params);
   });
 
-  it("BlobInitResponseLinks with all required and optional params", () => {
+  it("BlobInitResponseLinks with all required and optional params", function() {
     const params: BlobInitResponseLinks = {
       complete: {
         href: "test",
@@ -137,13 +137,13 @@ describe("BlobApi", () => {
     assert.isDefined(params);
   });
 
-  it("BlobInitResponseStatusLink  with all required params", () => {
+  it("BlobInitResponseStatusLink  with all required params", function() {
     const params: BlobInitResponseStatusLink = {};
 
     assert.isDefined(params);
   });
 
-  it("BlobInitResponseStatusLink with all required and optional params", () => {
+  it("BlobInitResponseStatusLink with all required and optional params", function() {
     const params: BlobInitResponseStatusLink = {
       href: "test",
       method: "test"
@@ -152,13 +152,13 @@ describe("BlobApi", () => {
     assert.isDefined(params);
   });
 
-  it("BlobInitResponseUploadPartLink  with all required params", () => {
+  it("BlobInitResponseUploadPartLink  with all required params", function() {
     const params: BlobInitResponseUploadPartLink = {};
 
     assert.isDefined(params);
   });
 
-  it("BlobInitResponseUploadPartLink with all required and optional params", () => {
+  it("BlobInitResponseUploadPartLink with all required and optional params", function() {
     const params: BlobInitResponseUploadPartLink = {
       href: "test",
       method: "test"
@@ -167,13 +167,13 @@ describe("BlobApi", () => {
     assert.isDefined(params);
   });
 
-  it("MultipartCompletePart  with all required params", () => {
+  it("MultipartCompletePart  with all required params", function() {
     const params: MultipartCompletePart = {};
 
     assert.isDefined(params);
   });
 
-  it("MultipartCompletePart with all required and optional params", () => {
+  it("MultipartCompletePart with all required and optional params", function() {
     const params: MultipartCompletePart = {
       etag: "test",
       number: 1
@@ -182,13 +182,13 @@ describe("BlobApi", () => {
     assert.isDefined(params);
   });
 
-  it("MultipartCompleteRequest  with all required params", () => {
+  it("MultipartCompleteRequest  with all required params", function() {
     const params: MultipartCompleteRequest = {};
 
     assert.isDefined(params);
   });
 
-  it("MultipartCompleteRequest with all required and optional params", () => {
+  it("MultipartCompleteRequest with all required and optional params", function() {
     const params: MultipartCompleteRequest = {
       parts: [
         {
@@ -201,7 +201,7 @@ describe("BlobApi", () => {
     assert.isDefined(params);
   });
 
-  it("MultipartUploadMetadata  with all required params", () => {
+  it("MultipartUploadMetadata  with all required params", function() {
     const params: MultipartUploadMetadata = {
       contentType: "test"
     };
@@ -209,7 +209,7 @@ describe("BlobApi", () => {
     assert.isDefined(params);
   });
 
-  it("MultipartUploadMetadata with all required and optional params", () => {
+  it("MultipartUploadMetadata with all required and optional params", function() {
     const params: MultipartUploadMetadata = {
       contentEncoding: "gzip",
       contentType: "test"
@@ -218,13 +218,13 @@ describe("BlobApi", () => {
     assert.isDefined(params);
   });
 
-  it("MultipartUploadStatus  with all required params", () => {
+  it("MultipartUploadStatus  with all required params", function() {
     const params: MultipartUploadStatus = {};
 
     assert.isDefined(params);
   });
 
-  it("MultipartUploadStatus with all required and optional params", () => {
+  it("MultipartUploadStatus with all required and optional params", function() {
     const params: MultipartUploadStatus = {
       status: "failed"
     };
@@ -232,7 +232,7 @@ describe("BlobApi", () => {
     assert.isDefined(params);
   });
 
-  it("Test cancelMultipartUpload method with all required params", async () => {
+  it("Test cancelMultipartUpload method with all required params", async function() {
     const params = {
       layerId: "mocked-id",
       dataHandle: "mocked-datahandle",
@@ -247,7 +247,7 @@ describe("BlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test cancelMultipartUpload method with all required and optional params", async () => {
+  it("Test cancelMultipartUpload method with all required and optional params", async function() {
     const params = {
       layerId: "mocked-id",
       dataHandle: "mocked-datahandle",
@@ -263,7 +263,7 @@ describe("BlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test checkBlobExists method with all required params", async () => {
+  it("Test checkBlobExists method with all required params", async function() {
     const params = {
       layerId: "mocked-id",
       dataHandle: "mocked-datahandle"
@@ -274,7 +274,7 @@ describe("BlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test checkBlobExists method with all required and optional params", async () => {
+  it("Test checkBlobExists method with all required and optional params", async function() {
     const params = {
       layerId: "mocked-id",
       dataHandle: "mocked-datahandle",
@@ -286,7 +286,7 @@ describe("BlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test completeMultipartUpload method with all required params", async () => {
+  it("Test completeMultipartUpload method with all required params", async function() {
     const params = {
       layerId: "mocked-id",
       dataHandle: "mocked-datahandle",
@@ -302,7 +302,7 @@ describe("BlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test completeMultipartUpload method with all required and optional params", async () => {
+  it("Test completeMultipartUpload method with all required and optional params", async function() {
     const params = {
       layerId: "mocked-id",
       dataHandle: "mocked-datahandle",
@@ -321,7 +321,7 @@ describe("BlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test deleteBlob method with all required params", async () => {
+  it("Test deleteBlob method with all required params", async function() {
     const params = {
       layerId: "mocked-id",
       dataHandle: "mocked-datahandle"
@@ -330,7 +330,7 @@ describe("BlobApi", () => {
     const result = await BlobApi.deleteBlob(mockedRequestBuilder, params);
   });
 
-  it("Test deleteBlob method with all required and optional params", async () => {
+  it("Test deleteBlob method with all required and optional params", async function() {
     const params = {
       layerId: "mocked-id",
       dataHandle: "mocked-datahandle",
@@ -342,7 +342,7 @@ describe("BlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getBlob method with all required params", async () => {
+  it("Test getBlob method with all required params", async function() {
     const params = {
       layerId: "mocked-id",
       dataHandle: "mocked-datahandle",
@@ -354,7 +354,7 @@ describe("BlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getBlob method with all required and optional params", async () => {
+  it("Test getBlob method with all required and optional params", async function() {
     const params = {
       layerId: "mocked-id",
       dataHandle: "mocked-datahandle",
@@ -367,7 +367,7 @@ describe("BlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getMultipartUploadStatus method with all required params", async () => {
+  it("Test getMultipartUploadStatus method with all required params", async function() {
     const params = {
       layerId: "mocked-id",
       dataHandle: "mocked-datahandle",
@@ -382,7 +382,7 @@ describe("BlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getMultipartUploadStatus method with all required and optional params", async () => {
+  it("Test getMultipartUploadStatus method with all required and optional params", async function() {
     const params = {
       layerId: "mocked-id",
       dataHandle: "mocked-datahandle",
@@ -398,7 +398,7 @@ describe("BlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test putBlob method with all required params", async () => {
+  it("Test putBlob method with all required params", async function() {
     const params = {
       layerId: "mocked-id",
       dataHandle: "mocked-datahandle",
@@ -411,7 +411,7 @@ describe("BlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test putBlob method with all required and optional params", async () => {
+  it("Test putBlob method with all required and optional params", async function() {
     const params = {
       layerId: "mocked-id",
       dataHandle: "mocked-datahandle",
@@ -425,7 +425,7 @@ describe("BlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test startMultipartUpload method with all required params", async () => {
+  it("Test startMultipartUpload method with all required params", async function() {
     const params = {
       layerId: "mocked-id",
       dataHandle: "mocked-datahandle",
@@ -440,7 +440,7 @@ describe("BlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test startMultipartUpload method with all required and optional params", async () => {
+  it("Test startMultipartUpload method with all required and optional params", async function() {
     const params = {
       layerId: "mocked-id",
       dataHandle: "mocked-datahandle",
@@ -456,7 +456,7 @@ describe("BlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test uploadPart method with all required params", async () => {
+  it("Test uploadPart method with all required params", async function() {
     const params = {
       layerId: "mocked-id",
       dataHandle: "mocked-datahandle",
@@ -472,7 +472,7 @@ describe("BlobApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test uploadPart method with all required and optional params", async () => {
+  it("Test uploadPart method with all required and optional params", async function() {
     const params = {
       layerId: "mocked-id",
       dataHandle: "mocked-datahandle",

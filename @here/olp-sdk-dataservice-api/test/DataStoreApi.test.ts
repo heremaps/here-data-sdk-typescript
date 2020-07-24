@@ -19,8 +19,8 @@
 
 import { assert } from "chai";
 
-describe("DataStoreApiTest", () => {
-    it("ok", () => {
+describe("DataStoreApiTest", function() {
+    it("ok", function() {
         assert(true);
     });
 });

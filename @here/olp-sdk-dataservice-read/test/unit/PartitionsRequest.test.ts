@@ -28,7 +28,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("PartitionsRequest", () => {
+describe("PartitionsRequest", function() {
     const billingTag = "billingTag";
     const mockedVersion = 42;
     const mockedIds = ["1", "2", "13", "42"];
@@ -39,14 +39,14 @@ describe("PartitionsRequest", () => {
         "crc"
     ];
 
-    it("Should initialize", () => {
+    it("Should initialize", function() {
         const partitionsRequest = new PartitionsRequest();
 
         assert.isDefined(partitionsRequest);
         expect(partitionsRequest).be.instanceOf(PartitionsRequest);
     });
 
-    it("Should set parameters", () => {
+    it("Should set parameters", function() {
         const partitionsRequest = new PartitionsRequest();
         const partitionsRequestWithVersion = partitionsRequest.withVersion(
             mockedVersion
@@ -73,7 +73,7 @@ describe("PartitionsRequest", () => {
         assert.isDefined(partitionsAdditionalFields.getAdditionalFields());
     });
 
-    it("Should get parameters with chain", () => {
+    it("Should get parameters with chain", function() {
         const partitionsRequest = new PartitionsRequest()
             .withVersion(mockedVersion)
             .withBillingTag(billingTag)
@@ -91,7 +91,7 @@ describe("PartitionsRequest", () => {
         assert.isDefined(partitionsRequest.getAdditionalFields());
     });
 
-    it("Should be thrown error if additional fields are empty", () => {
+    it("Should be thrown error if additional fields are empty", function() {
         try {
             const partitionsRequest = new PartitionsRequest().withAdditionalFields(
                 []

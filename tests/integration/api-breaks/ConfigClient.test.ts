@@ -32,7 +32,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("ConfigClient", () => {
+describe("ConfigClient", function() {
   class ConfigClientTest extends ConfigClient {
     constructor(settings: OlpClientSettings) {
       super(settings);
@@ -52,7 +52,7 @@ describe("ConfigClient", () => {
     getToken: () => Promise.resolve("mocked-token")
   });
 
-  it("Shoud be initialized with arguments", async () => {
+  it("Shoud be initialized with arguments", async function() {
     const configClient = new ConfigClient(settings);
     assert.isDefined(configClient);
 
@@ -60,14 +60,14 @@ describe("ConfigClient", () => {
     assert.isDefined(configClient.getCatalogs);
   });
 
-  it("Test getCatalogs method without params", async () => {
+  it("Test getCatalogs method without params", async function() {
     const configClient = new ConfigClientTest(settings);
 
     const response = await configClient.getCatalogs();
     assert.isDefined(response);
   });
 
-  it("Test getCatalog method with catalogsRequest", async () => {
+  it("Test getCatalog method with catalogsRequest", async function() {
     const configClient = new ConfigClientTest(settings);
 
     const response = await configClient.getCatalogs(

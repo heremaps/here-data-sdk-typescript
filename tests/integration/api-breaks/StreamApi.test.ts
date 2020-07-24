@@ -43,8 +43,8 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("StreamApi", () => {
-  it("BootstrapServer with all required params", () => {
+describe("StreamApi", function() {
+  it("BootstrapServer with all required params", function() {
     const params: BootstrapServer = {
       hostname: "test",
       port: 1
@@ -53,13 +53,13 @@ describe("StreamApi", () => {
     assert.isDefined(params);
   });
 
-  it("CommitOffsetsRequest with all required params", () => {
+  it("CommitOffsetsRequest with all required params", function() {
     const params: CommitOffsetsRequest = {};
 
     assert.isDefined(params);
   });
 
-  it("CommitOffsetsRequest with all required and optional params", () => {
+  it("CommitOffsetsRequest with all required and optional params", function() {
     const params: CommitOffsetsRequest = {
       offsets: [
         {
@@ -72,7 +72,7 @@ describe("StreamApi", () => {
     assert.isDefined(params);
   });
 
-  it("ConsumeDataResponse with all required params", () => {
+  it("ConsumeDataResponse with all required params", function() {
     const params: ConsumeDataResponse = {
       messages: [
         {
@@ -96,13 +96,13 @@ describe("StreamApi", () => {
     assert.isDefined(params);
   });
 
-  it("ConsumerSubscribeResponse with all required params", () => {
+  it("ConsumerSubscribeResponse with all required params", function() {
     const params: ConsumerSubscribeResponse = {};
 
     assert.isDefined(params);
   });
 
-  it("ConsumerSubscribeResponse with all required and optional params", () => {
+  it("ConsumerSubscribeResponse with all required and optional params", function() {
     const params: ConsumerSubscribeResponse = {
       nodeBaseURL: "test",
       subscriptionId: "test"
@@ -111,7 +111,7 @@ describe("StreamApi", () => {
     assert.isDefined(params);
   });
 
-  it("ErrorResponse with all required params", () => {
+  it("ErrorResponse with all required params", function() {
     const params: ErrorResponse = {
       title: "test",
       status: 1,
@@ -124,13 +124,13 @@ describe("StreamApi", () => {
     assert.isDefined(params);
   });
 
-  it("InlineResponse401 with all required params", () => {
+  it("InlineResponse401 with all required params", function() {
     const params: InlineResponse401 = {};
 
     assert.isDefined(params);
   });
 
-  it("InlineResponse401 with all required and optional params", () => {
+  it("InlineResponse401 with all required and optional params", function() {
     const params: InlineResponse401 = {
       error: "test",
       errorDescription: "test"
@@ -139,13 +139,13 @@ describe("StreamApi", () => {
     assert.isDefined(params);
   });
 
-  it("InlineResponse403  with all required params", () => {
+  it("InlineResponse403  with all required params", function() {
     const params: InlineResponse403 = {};
 
     assert.isDefined(params);
   });
 
-  it("InlineResponse403  with all required and optional params", () => {
+  it("InlineResponse403  with all required and optional params", function() {
     const params: InlineResponse403 = {
       error: "test",
       errorDescription: "test"
@@ -154,7 +154,7 @@ describe("StreamApi", () => {
     assert.isDefined(params);
   });
 
-  it("ConsumerProperties with all required params", () => {
+  it("ConsumerProperties with all required params", function() {
     const params: ConsumerProperties = {
       ["test"]: "test"
     };
@@ -162,7 +162,7 @@ describe("StreamApi", () => {
     assert.isDefined(params);
   });
 
-  it("Message with all required params", () => {
+  it("Message with all required params", function() {
     const params: Message = {
       metaData: {
         partition: "test",
@@ -182,7 +182,7 @@ describe("StreamApi", () => {
     assert.isDefined(params);
   });
 
-  it("Metadata with all required params", () => {
+  it("Metadata with all required params", function() {
     const params: Metadata = {
       partition: "test"
     };
@@ -190,7 +190,7 @@ describe("StreamApi", () => {
     assert.isDefined(params);
   });
 
-  it("Metadata with all required and optional params", () => {
+  it("Metadata with all required and optional params", function() {
     const params: Metadata = {
       partition: "test",
       checksum: "test",
@@ -204,13 +204,13 @@ describe("StreamApi", () => {
     assert.isDefined(params);
   });
 
-  it("SeekOffsetsRequest with all required params", () => {
+  it("SeekOffsetsRequest with all required params", function() {
     const params: SeekOffsetsRequest = {};
 
     assert.isDefined(params);
   });
 
-  it("SeekOffsetsRequest with all required and optional params", () => {
+  it("SeekOffsetsRequest with all required and optional params", function() {
     const params: SeekOffsetsRequest = {
       offsets: [
         {
@@ -223,7 +223,7 @@ describe("StreamApi", () => {
     assert.isDefined(params);
   });
 
-  it("StreamLayerEndpointResponse with all required params", () => {
+  it("StreamLayerEndpointResponse with all required params", function() {
     const params: StreamLayerEndpointResponse = {
       kafkaProtocolVersion: ["0.10"],
       topic: "test",
@@ -240,7 +240,7 @@ describe("StreamApi", () => {
     assert.isDefined(params);
   });
 
-  it("StreamLayerEndpointResponse with all required and optional params", () => {
+  it("StreamLayerEndpointResponse with all required and optional params", function() {
     const params: StreamLayerEndpointResponse = {
       kafkaProtocolVersion: ["0.10"],
       topic: "test",
@@ -263,7 +263,7 @@ describe("StreamApi", () => {
     assert.isDefined(params);
   });
 
-  it("StreamOffset with all required params", () => {
+  it("StreamOffset with all required params", function() {
     const params: StreamOffset = {
       partition: 1,
       offset: 1
@@ -272,7 +272,7 @@ describe("StreamApi", () => {
     assert.isDefined(params);
   });
 
-  it("Test commitOffsets method with all required params", async () => {
+  it("Test commitOffsets method with all required params", async function() {
     const params = {
       layerId: "mocked-id",
       commitOffsets: {
@@ -290,7 +290,7 @@ describe("StreamApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test commitOffsets method with all required and optional params", async () => {
+  it("Test commitOffsets method with all required and optional params", async function() {
     const params = {
       layerId: "mocked-id",
       subscriptionId: "test-subscriptionId",
@@ -310,7 +310,7 @@ describe("StreamApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test doCommitOffsets method with all required params", async () => {
+  it("Test doCommitOffsets method with all required params", async function() {
     const params = {
       layerId: "mocked-id",
       commitOffsets: {
@@ -331,7 +331,7 @@ describe("StreamApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test doCommitOffsets method with all required and optional params", async () => {
+  it("Test doCommitOffsets method with all required and optional params", async function() {
     const params = {
       layerId: "mocked-id",
       subscriptionId: "test-subscriptionId",
@@ -354,7 +354,7 @@ describe("StreamApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test consumeData method with all required params", async () => {
+  it("Test consumeData method with all required params", async function() {
     const params = {
       layerId: "mocked-id"
     };
@@ -364,7 +364,7 @@ describe("StreamApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test consumeData method with all required and optional params", async () => {
+  it("Test consumeData method with all required and optional params", async function() {
     const params = {
       layerId: "mocked-id",
       subscriptionId: "test-subscriptionId",
@@ -376,7 +376,7 @@ describe("StreamApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test deleteSubscription method with all required params", async () => {
+  it("Test deleteSubscription method with all required params", async function() {
     const params = {
       layerId: "mocked-id"
     };
@@ -389,7 +389,7 @@ describe("StreamApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test deleteSubscription method with all required and optional params", async () => {
+  it("Test deleteSubscription method with all required and optional params", async function() {
     const params = {
       layerId: "mocked-id",
       subscriptionId: "test-subscriptionId",
@@ -404,7 +404,7 @@ describe("StreamApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test endpoint method with all required params", async () => {
+  it("Test endpoint method with all required params", async function() {
     const params = {
       layerId: "mocked-id"
     };
@@ -414,7 +414,7 @@ describe("StreamApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test seekToOffset method with all required params", async () => {
+  it("Test seekToOffset method with all required params", async function() {
     const params = {
       layerId: "mocked-id",
       seekOffsets: {
@@ -432,7 +432,7 @@ describe("StreamApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test seekToOffset method with all required and optional params", async () => {
+  it("Test seekToOffset method with all required and optional params", async function() {
     const params = {
       layerId: "mocked-id",
       seekOffsets: {
@@ -452,7 +452,7 @@ describe("StreamApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test subscribe method with all required params", async () => {
+  it("Test subscribe method with all required params", async function() {
     const params = {
       layerId: "mocked-id"
     };
@@ -462,7 +462,7 @@ describe("StreamApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test subscribe method with all required and optional params", async () => {
+  it("Test subscribe method with all required and optional params", async function() {
     const params = {
       layerId: "mocked-id",
       subscriptionId: "testSubsId",

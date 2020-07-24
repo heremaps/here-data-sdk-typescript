@@ -20,13 +20,13 @@
 import { assert } from "chai";
 import { HRN } from "@here/olp-sdk-core";
 
-describe("HRN", () => {
-    it("fromString", () => {
+describe("HRN", function() {
+    it("fromString", function() {
         const hrnString = "hrn:here:datastore:::testcatalog";
         assert.strictEqual(HRN.fromString(hrnString).toString(), hrnString);
     });
 
-    it("localURL", () => {
+    it("localURL", function() {
         const hrn = HRN.fromString("http://localhost:5000");
 
         assert.strictEqual(hrn.data.partition, "catalog-url");
@@ -35,7 +35,7 @@ describe("HRN", () => {
         assert.strictEqual(hrn.data.account, "");
     });
 
-    it("additionalFields", () => {
+    it("additionalFields", function() {
         const hrn = HRN.fromString(
             "hrn:here:datastore:::testcatalog:some:additional:fields"
         );
@@ -47,7 +47,7 @@ describe("HRN", () => {
         ]);
     });
 
-    it("HRN throw Error on malformed input data", () => {
+    it("HRN throw Error on malformed input data", function() {
         let caught = false;
         try {
             // tslint:disable-next-line:no-unused-variable

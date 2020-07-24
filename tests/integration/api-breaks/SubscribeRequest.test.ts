@@ -27,7 +27,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("SubscribeRequest", () => {
+describe("SubscribeRequest", function() {
   class SubscribeRequestTest extends SubscribeRequest {
     getMode(): "serial" {
       return "serial";
@@ -66,7 +66,7 @@ describe("SubscribeRequest", () => {
     }
   }
 
-  it("Shoud be initialized", async () => {
+  it("Shoud be initialized", async function() {
     const request = new SubscribeRequest();
     assert.isDefined(request);
     expect(request).to.be.instanceOf(SubscribeRequest);
@@ -81,49 +81,49 @@ describe("SubscribeRequest", () => {
     assert.isFunction(request.getSubscriptionProperties);
   });
 
-  it("Test withMode method with mode", async () => {
+  it("Test withMode method with mode", async function() {
     const request = new SubscribeRequestTest();
 
     const response = request.withMode("serial");
     assert.isDefined(response);
   });
 
-  it("Test getMode method without params", async () => {
+  it("Test getMode method without params", async function() {
     const request = new SubscribeRequestTest();
 
     const response = request.getMode();
     assert.isDefined(response);
   });
 
-  it("Test withSubscriptionId method with id", async () => {
+  it("Test withSubscriptionId method with id", async function() {
     const request = new SubscribeRequestTest();
 
     const response = request.withSubscriptionId("test");
     assert.isDefined(response);
   });
 
-  it("Test getSubscriptionId method without params", async () => {
+  it("Test getSubscriptionId method without params", async function() {
     const request = new SubscribeRequestTest();
 
     const response = request.getSubscriptionId();
     assert.isDefined(response);
   });
 
-  it("Test withConsumerId method with id", async () => {
+  it("Test withConsumerId method with id", async function() {
     const request = new SubscribeRequestTest();
 
     const response = request.withConsumerId("test");
     assert.isDefined(response);
   });
 
-  it("Test getConsumerId method without params", async () => {
+  it("Test getConsumerId method without params", async function() {
     const request = new SubscribeRequestTest();
 
     const response = request.getConsumerId();
     assert.isDefined(response);
   });
 
-  it("Test withSubscriptionProperties method with props", async () => {
+  it("Test withSubscriptionProperties method with props", async function() {
     const request = new SubscribeRequestTest();
 
     const response = request.withSubscriptionProperties({
@@ -132,7 +132,7 @@ describe("SubscribeRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test getSubscriptionProperties method without params", async () => {
+  it("Test getSubscriptionProperties method without params", async function() {
     const request = new SubscribeRequestTest();
 
     const response = request.getSubscriptionProperties();

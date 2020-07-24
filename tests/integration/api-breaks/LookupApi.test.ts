@@ -32,8 +32,8 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("LookupApi", () => {
-  it("API with all required params", () => {
+describe("LookupApi", function() {
+  it("API with all required params", function() {
     const params: API = {
       api: "test",
       version: "test",
@@ -43,7 +43,7 @@ describe("LookupApi", () => {
     assert.isDefined(params);
   });
 
-  it("API with all required and optional params", () => {
+  it("API with all required and optional params", function() {
     const params: API = {
       api: "test",
       version: "test",
@@ -54,13 +54,13 @@ describe("LookupApi", () => {
     assert.isDefined(params);
   });
 
-  it("ApiNotFoundError with all required params", () => {
+  it("ApiNotFoundError with all required params", function() {
     const params: ApiNotFoundError = {};
 
     assert.isDefined(params);
   });
 
-  it("ApiNotFoundError with all required and optional params", () => {
+  it("ApiNotFoundError with all required and optional params", function() {
     const params: ApiNotFoundError = {
       status: 1,
       title: "test",
@@ -72,7 +72,7 @@ describe("LookupApi", () => {
     assert.isDefined(params);
   });
 
-  it("Test platformAPI method with all required params", async () => {
+  it("Test platformAPI method with all required params", async function() {
     const params = {
       api: "mocked-api",
       version: "mocked-version"
@@ -83,19 +83,19 @@ describe("LookupApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test platformAPIList method without params", async () => {
+  it("Test platformAPIList method without params", async function() {
     const result = await LookupApi.platformAPIList(mockedRequestBuilder);
 
     expect(result).to.be.equal("success");
   });
 
-  it("Test getPlatformAPIList method without params", async () => {
+  it("Test getPlatformAPIList method without params", async function() {
     const result = await LookupApi.getPlatformAPIList(mockedRequestBuilder);
 
     expect(result).to.be.equal("success");
   });
 
-  it("Test resourceAPI method with all required params", async () => {
+  it("Test resourceAPI method with all required params", async function() {
     const params = {
       hrn: "mocked-hrn",
       api: "test",
@@ -107,7 +107,7 @@ describe("LookupApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test resourceAPI method with all required and optional params", async () => {
+  it("Test resourceAPI method with all required and optional params", async function() {
     const params = {
       hrn: "mocked-hrn",
       api: "test",
@@ -120,7 +120,7 @@ describe("LookupApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test resourceAPIList method with all required params", async () => {
+  it("Test resourceAPIList method with all required params", async function() {
     const params = {
       hrn: "mocked-hrn"
     };
@@ -133,7 +133,7 @@ describe("LookupApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test resourceAPIList method with all required and optional params", async () => {
+  it("Test resourceAPIList method with all required and optional params", async function() {
     const params = {
       hrn: "mocked-hrn",
       region: "mocked-region"
@@ -147,7 +147,7 @@ describe("LookupApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getResourceAPIList method with all required params", async () => {
+  it("Test getResourceAPIList method with all required params", async function() {
     const params = {
       hrn: "mocked-hrn"
     };
@@ -160,7 +160,7 @@ describe("LookupApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getResourceAPIList method with all required and optional params", async () => {
+  it("Test getResourceAPIList method with all required and optional params", async function() {
     const params = {
       hrn: "mocked-hrn",
       region: "mocked-region"

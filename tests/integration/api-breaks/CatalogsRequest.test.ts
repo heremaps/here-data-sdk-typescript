@@ -26,7 +26,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("CatalogsRequest", () => {
+describe("CatalogsRequest", function() {
   class CatalogsRequestTest extends CatalogsRequest {
     withSchema(schemaHrn: string): CatalogsRequest {
       return this;
@@ -44,7 +44,7 @@ describe("CatalogsRequest", () => {
     }
   }
 
-  it("Shoud be initialized", async () => {
+  it("Shoud be initialized", async function() {
     const catalogsRequest = new CatalogsRequestTest();
     assert.isDefined(catalogsRequest);
     expect(catalogsRequest).to.be.instanceOf(CatalogsRequest);
@@ -53,28 +53,28 @@ describe("CatalogsRequest", () => {
     assert.isFunction(catalogsRequest.getBillingTag);
   });
 
-  it("Test withSchema method with schemaHrn", async () => {
+  it("Test withSchema method with schemaHrn", async function() {
     const catalogsRequest = new CatalogsRequestTest();
 
     const response = catalogsRequest.withSchema("test");
     assert.isDefined(response);
   });
 
-  it("Test getSchema method without params", async () => {
+  it("Test getSchema method without params", async function() {
     const catalogsRequest = new CatalogsRequestTest();
 
     const response = catalogsRequest.getSchema();
     assert.isDefined(response);
   });
 
-  it("Test withBillingTag method with tag", async () => {
+  it("Test withBillingTag method with tag", async function() {
     const catalogsRequest = new CatalogsRequestTest();
 
     const response = catalogsRequest.withBillingTag("test-tag");
     assert.isDefined(response);
   });
 
-  it("Test getBillingTag method without params", async () => {
+  it("Test getBillingTag method without params", async function() {
     const catalogsRequest = new CatalogsRequestTest();
 
     const response = catalogsRequest.getBillingTag();

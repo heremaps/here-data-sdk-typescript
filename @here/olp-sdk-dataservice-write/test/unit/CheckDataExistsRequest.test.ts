@@ -26,15 +26,15 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("CheckDataExistsRequest", () => {
-    it("Should initialize", () => {
+describe("CheckDataExistsRequest", function() {
+    it("Should initialize", function() {
         const request = new CheckDataExistsRequest();
 
         assert.isDefined(request);
         expect(request).be.instanceOf(CheckDataExistsRequest);
     });
 
-    it("Should set and get parameters", () => {
+    it("Should set and get parameters", function() {
         const mockedLayer = "layer-0";
         const mockedBillingTag = "mocked-billing-tag";
         const mockedDataHandle = "datahandle123";

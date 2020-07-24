@@ -30,7 +30,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("IndexLayerClient", () => {
+describe("IndexLayerClient", function() {
     let sandbox: sinon.SinonSandbox;
     let getBlobStub: sinon.SinonStub;
     let getIndexStub: sinon.SinonStub;
@@ -43,7 +43,7 @@ describe("IndexLayerClient", () => {
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
 
-    before(() => {
+    before(function() {
         sandbox = sinon.createSandbox();
         let settings = sandbox.createStubInstance(
             dataServiceRead.OlpClientSettings
@@ -64,7 +64,7 @@ describe("IndexLayerClient", () => {
         );
     });
 
-    beforeEach(() => {
+    beforeEach(function() {
         getBlobStub = sandbox.stub(BlobApi, "getBlob");
         getIndexStub = sandbox.stub(IndexApi, "performQuery");
         getBaseUrlRequestStub = sandbox.stub(
@@ -74,18 +74,18 @@ describe("IndexLayerClient", () => {
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
-    afterEach(() => {
+    afterEach(function() {
         sandbox.restore();
     });
 
-    it("Shoud be initialized", async () => {
+    it("Shoud be initialized", async function() {
         assert.isDefined(indexLayerClient);
         expect(indexLayerClient).be.instanceOf(
             dataServiceRead.IndexLayerClient
         );
     });
 
-    it("Should method getPartitions provide data with IndexQueryRequest", async () => {
+    it("Should method getPartitions provide data with IndexQueryRequest", async function() {
         const mockedIndexResponse = {
             data: [
                 {
@@ -133,7 +133,7 @@ describe("IndexLayerClient", () => {
         expect(partitions).to.be.equal(mockedIndexResponse.data);
     });
 
-    it("Should method getPartitions with IndexQueryRequest return HttpError when IndexApi crashes", async () => {
+    it("Should method getPartitions with IndexQueryRequest return HttpError when IndexApi crashes", async function() {
         const TEST_ERROR_CODE = 404;
         const mockedHttpError = new HttpError(TEST_ERROR_CODE, "Test Error");
 
@@ -156,7 +156,7 @@ describe("IndexLayerClient", () => {
             });
     });
 
-    it("Should method getPartitions return error without IndexQueryRequest", async () => {
+    it("Should method getPartitions return error without IndexQueryRequest", async function() {
         const mockedErrorResponse = {
             message: "Please provide correct query"
         };
@@ -170,7 +170,7 @@ describe("IndexLayerClient", () => {
             });
     });
 
-    it("Should method getPartitions be aborted fetching by abort signal", async () => {
+    it("Should method getPartitions be aborted fetching by abort signal", async function() {
         const mockedBlobData = new Response("mocked-blob-response");
         const mockedIndexResponse = {
             data: [
@@ -231,7 +231,7 @@ describe("IndexLayerClient", () => {
         abortController.abort();
     });
 
-    it("Should method getData provide data", async () => {
+    it("Should method getData provide data", async function() {
         const mockedBlobData: Response = new Response("mocked-blob-response");
         const mockedModel = {
             id: "8c0e5ac9-b036-4365-8820-dfcba64588fc",
@@ -255,7 +255,7 @@ describe("IndexLayerClient", () => {
         );
     });
 
-    it("Should method getData return Error without parameters", async () => {
+    it("Should method getData return Error without parameters", async function() {
         const mockedErrorResponse = {
             message: "No data handle for this partition"
         };
@@ -266,7 +266,7 @@ describe("IndexLayerClient", () => {
         });
     });
 
-    it("Should error be handled", async () => {
+    it("Should error be handled", async function() {
         const mockedModel = {
             id: "8c0e5ac9-b036-4365-8820-dfcba64588fc",
             size: 111928,
@@ -292,7 +292,7 @@ describe("IndexLayerClient", () => {
             });
     });
 
-    it("Should base url error be handled", async () => {
+    it("Should base url error be handled", async function() {
         const mockedModel = {
             id: "8c0e5ac9-b036-4365-8820-dfcba64588fc",
             size: 111928,
@@ -319,7 +319,7 @@ describe("IndexLayerClient", () => {
             });
     });
 
-    it("Should HttpError be handled", async () => {
+    it("Should HttpError be handled", async function() {
         const TEST_ERROR_CODE = 404;
         const mockedError = new HttpError(TEST_ERROR_CODE, "Test Error");
 
@@ -349,18 +349,18 @@ describe("IndexLayerClient", () => {
             });
     });
 
-    it("IndexLayerClient instance should be initialized with IndexLayerClientParams", async () => {
+    it("IndexLayerClient instance should be initialized with IndexLayerClientParams", async function() {
         assert.isDefined(indexLayerClientNew);
         assert.equal(indexLayerClientNew["hrn"], "hrn:here:data:::mocked-hrn");
     });
 
-    it("IndexLayerClient should throw Error when setted unsuported parameters", async () => {
+    it("IndexLayerClient should throw Error when setted unsuported parameters", async function() {
         let settings1 = sandbox.createStubInstance(
             dataServiceRead.OlpClientSettings
         );
 
         assert.throws(
-            () => {
+            function() {
                 new dataServiceRead.IndexLayerClient(
                     mockedHRN,
                     "",

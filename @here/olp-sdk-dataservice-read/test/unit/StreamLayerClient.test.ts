@@ -60,7 +60,7 @@ class StreamLayerClientTest extends dataServiceRead.StreamLayerClient {
     }
 }
 
-describe("StreamLayerClient", () => {
+describe("StreamLayerClient", function() {
     let sandbox: sinon.SinonSandbox;
     let getBaseUrlRequestStub: sinon.SinonStub;
     let getFactoryRequestStub: sinon.SinonStub;
@@ -84,7 +84,7 @@ describe("StreamLayerClient", () => {
         settings: dataServiceRead.OlpClientSettings;
     };
 
-    before(() => {
+    before(function() {
         sandbox = sinon.createSandbox();
         settings = (sandbox.createStubInstance(
             dataServiceRead.OlpClientSettings
@@ -97,7 +97,7 @@ describe("StreamLayerClient", () => {
         streamLayerClient = new StreamLayerClientTest(params);
     });
 
-    beforeEach(() => {
+    beforeEach(function() {
         getBlobStub = sandbox.stub(BlobApi, "getBlob");
         subscribeStub = sandbox.stub(StreamApi, "subscribe");
         pollStub = sandbox.stub(StreamApi, "consumeData");
@@ -111,11 +111,11 @@ describe("StreamLayerClient", () => {
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
-    afterEach(() => {
+    afterEach(function() {
         sandbox.restore();
     });
 
-    it("Shoud be initialized", async () => {
+    it("Shoud be initialized", async function() {
         assert.isDefined(streamLayerClient);
         expect(streamLayerClient).be.instanceOf(
             dataServiceRead.StreamLayerClient
@@ -127,7 +127,7 @@ describe("StreamLayerClient", () => {
         );
     });
 
-    it("Should subscribe method post data and return subscription id", async () => {
+    it("Should subscribe method post data and return subscription id", async function() {
         const headers = new Headers();
         headers.append("X-Correlation-Id", "9141392.f96875c-9422-4df4-b5ff");
         const mockResponse = {
@@ -154,7 +154,7 @@ describe("StreamLayerClient", () => {
         expect(subscription).to.be.equal(mockResponse.subscriptionId);
     });
 
-    it("Should subscribe be aborted fetching by abort signal", async () => {
+    it("Should subscribe be aborted fetching by abort signal", async function() {
         const mockResponse = {
             nodeBaseURL: "https://mock-url/hrn/id",
             subscriptionId: "-9141392.f96875c-9422-4df4-b5ff-41a4f459"
@@ -189,13 +189,13 @@ describe("StreamLayerClient", () => {
         abortController.abort();
     });
 
-    it("Should poll method get data, post offsets and return messages", async () => {
+    it("Should poll method get data, post offsets and return messages", async function() {
         const headers = new Headers();
         const commitOffsetsResponse = new Response("Ok");
         headers.append("X-Correlation-Id", "9141392.f96875c-9422-4df4-bdfj");
         const mockResponse = ({
             headers,
-            json: () => {
+            json: function() {
                 return {
                     messages: [
                         {
@@ -266,7 +266,7 @@ describe("StreamLayerClient", () => {
         expect(messages[0].metaData.dataSize).to.be.equal(100500);
     });
 
-    it("Should method getData call API with correct arguments", async () => {
+    it("Should method getData call API with correct arguments", async function() {
         const mockedBlobData: Response = new Response("mocked-blob-response");
         const mockedMessage = {
             metaData: {
@@ -296,7 +296,7 @@ describe("StreamLayerClient", () => {
         );
     });
 
-    it("Should base url error be handled", async () => {
+    it("Should base url error be handled", async function() {
         const mockedMessage = {
             metaData: {
                 partition: "314010583",
@@ -328,7 +328,7 @@ describe("StreamLayerClient", () => {
         });
     });
 
-    it("Should method getData return Error without parameters", async () => {
+    it("Should method getData return Error without parameters", async function() {
         const mockedMessage = {
             metaData: {
                 partition: "314010583"
@@ -349,7 +349,7 @@ describe("StreamLayerClient", () => {
         });
     });
 
-    it("Should error be handled", async () => {
+    it("Should error be handled", async function() {
         const mockedMessage = {
             metaData: {
                 partition: "314010583",
@@ -383,7 +383,7 @@ describe("StreamLayerClient", () => {
             });
     });
 
-    it("Should HttpError be handled", async () => {
+    it("Should HttpError be handled", async function() {
         const TEST_ERROR_CODE = 404;
         const mockedError = new HttpError(TEST_ERROR_CODE, "Test Error");
 
@@ -420,7 +420,7 @@ describe("StreamLayerClient", () => {
             });
     });
 
-    it("Should unsubscribe be aborted fetching by abort signal", async () => {
+    it("Should unsubscribe be aborted fetching by abort signal", async function() {
         const mockResponse = ({
             status: 200
         } as unknown) as Response;
@@ -450,7 +450,7 @@ describe("StreamLayerClient", () => {
         abortController.abort();
     });
 
-    it("Should unsubscribe delete subscription and return OK", async () => {
+    it("Should unsubscribe delete subscription and return OK", async function() {
         const mockResponse = ({
             status: 200
         } as unknown) as Response;
@@ -472,7 +472,7 @@ describe("StreamLayerClient", () => {
         expect(unsubscription.status).to.be.equal(mockResponse.status);
     });
 
-    it("Should unsubscribe return error if mode is parallel and subscriptionId is missed", async () => {
+    it("Should unsubscribe return error if mode is parallel and subscriptionId is missed", async function() {
         const mockError =
             "Error: for 'parallel' mode 'subscriptionId' is required.";
 
@@ -487,7 +487,7 @@ describe("StreamLayerClient", () => {
             });
     });
 
-    it("Should seek return error if mode is parallel and subscriptionId is missed", async () => {
+    it("Should seek return error if mode is parallel and subscriptionId is missed", async function() {
         const mockOffsets = {
             offsets: [
                 {
@@ -512,7 +512,7 @@ describe("StreamLayerClient", () => {
         });
     });
 
-    it("Should seek return error if offsets are missed", async () => {
+    it("Should seek return error if offsets are missed", async function() {
         const mockError = "Error: offsets are required.";
 
         const request = new dataServiceRead.SeekRequest();
@@ -522,7 +522,7 @@ describe("StreamLayerClient", () => {
         });
     });
 
-    it("Should seek set offsets and return OK", async () => {
+    it("Should seek set offsets and return OK", async function() {
         const headers = new Headers();
         headers.append("X-Correlation-Id", "9141392.f96875c-9422-4df4-bdfj");
         const mockResponse = ({
@@ -562,7 +562,7 @@ describe("StreamLayerClient", () => {
         expect(seek.status).to.be.equal(mockResponse.status);
     });
 
-    it("Should seek update xCorrelationId", async () => {
+    it("Should seek update xCorrelationId", async function() {
         const xCorrelationId = "9141392.f96875c-9422-4df4-bdfj";
         const headers = new Headers();
         headers.append("X-Correlation-Id", xCorrelationId);
@@ -602,7 +602,7 @@ describe("StreamLayerClient", () => {
         expect(streamLayerClient["xCorrelationId"]).equals(xCorrelationId);
     });
 
-    it("Should pull return error if mode is parallel and subscriptionId is missed", async () => {
+    it("Should pull return error if mode is parallel and subscriptionId is missed", async function() {
         await streamLayerClient
             .poll(new dataServiceRead.PollRequest().withMode("parallel"))
             .catch(error => {
@@ -612,7 +612,7 @@ describe("StreamLayerClient", () => {
             });
     });
 
-    it("Should pull return error if subscribtionNodeBaseUrl is missed", async () => {
+    it("Should pull return error if subscribtionNodeBaseUrl is missed", async function() {
         streamLayerClient["subscribtionNodeBaseUrl"] = undefined;
         await streamLayerClient
             .poll(

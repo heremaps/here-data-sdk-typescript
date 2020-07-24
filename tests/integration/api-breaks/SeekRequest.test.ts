@@ -27,7 +27,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("SeekRequest", () => {
+describe("SeekRequest", function() {
   class SeekRequestTest extends SeekRequest {
     getMode(): "serial" {
       return "serial";
@@ -61,7 +61,7 @@ describe("SeekRequest", () => {
     }
   }
 
-  it("Shoud be initialized", async () => {
+  it("Shoud be initialized", async function() {
     const request = new SeekRequest();
     assert.isDefined(request);
     expect(request).to.be.instanceOf(SeekRequest);
@@ -74,35 +74,35 @@ describe("SeekRequest", () => {
     assert.isFunction(request.getSeekOffsets);
   });
 
-  it("Test withMode method with mode", async () => {
+  it("Test withMode method with mode", async function() {
     const request = new SeekRequestTest();
 
     const response = request.withMode("serial");
     assert.isDefined(response);
   });
 
-  it("Test getMode method without params", async () => {
+  it("Test getMode method without params", async function() {
     const request = new SeekRequestTest();
 
     const response = request.getMode();
     assert.isDefined(response);
   });
 
-  it("Test withSubscriptionId method with id", async () => {
+  it("Test withSubscriptionId method with id", async function() {
     const request = new SeekRequestTest();
 
     const response = request.withSubscriptionId("test");
     assert.isDefined(response);
   });
 
-  it("Test getSubscriptionId method without params", async () => {
+  it("Test getSubscriptionId method without params", async function() {
     const request = new SeekRequestTest();
 
     const response = request.getSubscriptionId();
     assert.isDefined(response);
   });
 
-  it("Test withSeekOffsets method with offsets", async () => {
+  it("Test withSeekOffsets method with offsets", async function() {
     const request = new SeekRequestTest();
 
     const response = request.withSeekOffsets({
@@ -116,7 +116,7 @@ describe("SeekRequest", () => {
     assert.isDefined(response);
   });
 
-  it("Test getSeekOffsets method without params", async () => {
+  it("Test getSeekOffsets method without params", async function() {
     const request = new SeekRequestTest();
 
     const response = request.getSeekOffsets();

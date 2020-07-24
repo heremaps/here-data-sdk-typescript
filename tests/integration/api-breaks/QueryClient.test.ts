@@ -29,7 +29,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("QueryClient", () => {
+describe("QueryClient", function() {
   class QueryClientTest extends QueryClient {
     constructor(settings: OlpClientSettings) {
       super(settings);
@@ -67,7 +67,7 @@ describe("QueryClient", () => {
     "hrn:here:data:::mocked-hrn"
   );
 
-  it("Shoud be initialized with arguments", async () => {
+  it("Shoud be initialized with arguments", async function() {
     const queryClient = new QueryClient(settings);
     assert.isDefined(queryClient);
 
@@ -76,7 +76,7 @@ describe("QueryClient", () => {
     assert.isDefined(queryClient.getPartitionsById);
   });
 
-  it("Test fetchQuadTreeIndex method with required params", async () => {
+  it("Test fetchQuadTreeIndex method with required params", async function() {
     const client = new QueryClientTest(settings);
 
     const response = await client.fetchQuadTreeIndex(
@@ -85,7 +85,7 @@ describe("QueryClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test fetchQuadTreeIndex method with required and optional params", async () => {
+  it("Test fetchQuadTreeIndex method with required and optional params", async function() {
     const client = new QueryClientTest(settings);
 
     const response = await client.fetchQuadTreeIndex(
@@ -95,7 +95,7 @@ describe("QueryClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test getPartitionsById method with required params", async () => {
+  it("Test getPartitionsById method with required params", async function() {
     const client = new QueryClientTest(settings);
 
     const response = await client.getPartitionsById(
@@ -106,7 +106,7 @@ describe("QueryClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test getPartitionsById method with required and optional params", async () => {
+  it("Test getPartitionsById method with required and optional params", async function() {
     const client = new QueryClientTest(settings);
 
     const response = await client.getPartitionsById(

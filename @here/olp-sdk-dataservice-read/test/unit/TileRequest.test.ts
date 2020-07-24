@@ -28,7 +28,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("TileRequest", () => {
+describe("TileRequest", function() {
     const mockedHRN = dataServiceRead.HRN.fromString(
         "hrn:here:data:::mocked-hrn"
     );
@@ -58,12 +58,12 @@ describe("TileRequest", () => {
 
     const request = new dataServiceRead.TileRequest(tileRequestParams);
 
-    it("Should initialize", () => {
+    it("Should initialize", function() {
         assert.isDefined(request);
         expect(request).be.instanceOf(dataServiceRead.TileRequest);
     });
 
-    it("Should get parameters with chain", async () => {
+    it("Should get parameters with chain", async function() {
         request
             .withTileKey(mockedQuadKey)
             .withBillingTag(mockedBillingTag)
@@ -78,7 +78,7 @@ describe("TileRequest", () => {
         expect(await request.getCatalogVersion()).to.be.equal(12);
     });
 
-    it("Should fetch the latest version of catalog", async () => {
+    it("Should fetch the latest version of catalog", async function() {
         // @ts-ignore
         class TileRequestTest extends dataServiceRead.TileRequest {
             constructor(params: dataServiceRead.TileRequestParams) {
@@ -102,7 +102,7 @@ describe("TileRequest", () => {
         expect(version).to.be.equal(32);
     });
 
-    it("Should be rejected with version error", async () => {
+    it("Should be rejected with version error", async function() {
         // @ts-ignore
         class TileRequestTest extends dataServiceRead.TileRequest {
             constructor(params: dataServiceRead.TileRequestParams) {

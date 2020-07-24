@@ -31,13 +31,13 @@ const MOCK_UPDATED_TIME = 1550777141;
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("oauth-request", () => {
+describe("oauth-request", function() {
     // requires CONSUMER_KEY and SECRET_KEY env variables, disabled by default
-    xit("requestTokenOnline", async () => {
+    xit("requestTokenOnline", async function() {
         let consumerKey = "";
         let secretKey = "";
 
-        assert.doesNotThrow(() => {
+        assert.doesNotThrow(function() {
             consumerKey = process.env.CONSUMER_KEY as string;
             secretKey = process.env.SECRET_KEY as string;
         });
@@ -58,12 +58,12 @@ describe("oauth-request", () => {
     });
 });
 
-describe("oauth-request-offline", () => {
+describe("oauth-request-offline", function() {
     const mock_token = "eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsIm";
     const mock_id = "mock-id";
     const mock_scrt = "mock-str";
 
-    beforeEach(() => {
+    beforeEach(function() {
         fetchMock.config.overwriteRoutes = true;
         fetchMock.post("https://account.api.here.com/oauth2/token", {
             accessToken: mock_token,
@@ -72,7 +72,7 @@ describe("oauth-request-offline", () => {
         });
     });
 
-    afterEach(() => {
+    afterEach(function() {
         fetchMock.reset();
     });
 
@@ -93,7 +93,7 @@ describe("oauth-request-offline", () => {
         );
     });
 
-    it("requestToken", async () => {
+    it("requestToken", async function() {
         const consumerKey = "key";
         const secretKey = "secret";
 
@@ -108,7 +108,7 @@ describe("oauth-request-offline", () => {
         assert.isNotEmpty(reply.accessToken);
     });
 
-    it("getTokenAuthModeFile", async () => {
+    it("getTokenAuthModeFile", async function() {
         let token: string | null = null;
         const credentialsFilePath = "./test/test-credentials.properties";
         const credentials = loadCredentialsFromFile(credentialsFilePath);
@@ -128,7 +128,7 @@ describe("oauth-request-offline", () => {
         }
     });
 
-    it("getTokenAuthModeForm", async () => {
+    it("getTokenAuthModeForm", async function() {
         let token: string | null = null;
 
         const userAuth = new UserAuth({
@@ -149,7 +149,7 @@ describe("oauth-request-offline", () => {
         }
     });
 
-    it("validateAccessToken", async () => {
+    it("validateAccessToken", async function() {
         const userAuth = new UserAuth({
             credentials: {
                 accessKeyId: mock_id,
@@ -172,7 +172,7 @@ describe("oauth-request-offline", () => {
         }
     });
 
-    it("validateAccessTokenFalse", async () => {
+    it("validateAccessTokenFalse", async function() {
         const userAuth = new UserAuth({
             credentials: {
                 accessKeyId: mock_id,
@@ -196,7 +196,7 @@ describe("oauth-request-offline", () => {
         });
     });
 
-    it("getAccessTokenFalse", async () => {
+    it("getAccessTokenFalse", async function() {
         const userAuth = new UserAuth({
             credentials: {
                 accessKeyId: mock_id,
@@ -221,12 +221,12 @@ describe("oauth-request-offline", () => {
     });
 });
 
-describe("oauth-request-lookupapi", () => {
+describe("oauth-request-lookupapi", function() {
     const mock_token = "eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsIm";
     const mock_id = "mock-id";
     const mock_scrt = "mock-str";
 
-    beforeEach(() => {
+    beforeEach(function() {
         fetchMock.config.overwriteRoutes = true;
         fetchMock.post("https://account.api.here.com/oauth2/token", {
             accessToken: mock_token,
@@ -235,11 +235,11 @@ describe("oauth-request-lookupapi", () => {
         });
     });
 
-    afterEach(() => {
+    afterEach(function() {
         fetchMock.reset();
     });
 
-    it("getUserInfo-ProdEnv", async () => {
+    it("getUserInfo-ProdEnv", async function() {
         const userAuth = new UserAuth({
             env: "here",
             credentials: {
@@ -287,7 +287,7 @@ describe("oauth-request-lookupapi", () => {
         }
     });
 
-    it("getUserInfo-DevEnv", async () => {
+    it("getUserInfo-DevEnv", async function() {
         const userAuth = new UserAuth({
             env: "here-dev",
             credentials: {
@@ -335,7 +335,7 @@ describe("oauth-request-lookupapi", () => {
         }
     });
 
-    it("getUserInfo-CnEnv", async () => {
+    it("getUserInfo-CnEnv", async function() {
         const userAuth = new UserAuth({
             env: "here-cn",
             credentials: {
@@ -383,7 +383,7 @@ describe("oauth-request-lookupapi", () => {
         }
     });
 
-    it("getUserInfo-CnDevEnv", async () => {
+    it("getUserInfo-CnDevEnv", async function() {
         const userAuth = new UserAuth({
             env: "here-cn-dev",
             credentials: {
@@ -434,7 +434,7 @@ describe("oauth-request-lookupapi", () => {
         }
     });
 
-    it("getUserInfo-CustomUrl", async () => {
+    it("getUserInfo-CustomUrl", async function() {
         const userAuth = new UserAuth({
             customUrl: "http://localhost/",
             credentials: {
@@ -482,7 +482,7 @@ describe("oauth-request-lookupapi", () => {
         }
     });
 
-    it("getUserInfo-default", async () => {
+    it("getUserInfo-default", async function() {
         const userAuth = new UserAuth({
             credentials: {
                 accessKeyId: mock_id,
@@ -530,7 +530,7 @@ describe("oauth-request-lookupapi", () => {
     });
 });
 
-describe("auth-request-project-scope", () => {
+describe("auth-request-project-scope", function() {
     let token: string | null = null;
     const mockedScope = "mocked-scope";
     const mock_id = "mock-id";
@@ -545,7 +545,7 @@ describe("auth-request-project-scope", () => {
         return Promise.resolve(mockedToken);
     };
 
-    it("Should scope be present on userAuth", async () => {
+    it("Should scope be present on userAuth", async function() {
         const userAuth = new UserAuth({
             env: "here-dev",
             credentials: {
@@ -566,7 +566,7 @@ describe("auth-request-project-scope", () => {
         }
     });
 
-    it("Should customUrl be present in getToken request", async () => {
+    it("Should customUrl be present in getToken request", async function() {
         const mockedUrl = "https://example.com/my/custom/url";
         const mockedTokenRequest = async (params: any): Promise<Token> => {
             assert.strictEqual(params.url, mockedUrl);
@@ -594,7 +594,7 @@ describe("auth-request-project-scope", () => {
     });
 });
 
-describe("expired token refreshing", async () => {
+describe("expired token refreshing", async function() {
     const mockedTokenRequester = async (params: any): Promise<Token> => {
         const mockedToken: Token = {
             accessToken: `${params.url}-${params.consumerKey}`,
@@ -612,7 +612,7 @@ describe("expired token refreshing", async () => {
         }
     });
 
-    it("Should getToken return the same token for two requests in row", async () => {
+    it("Should getToken return the same token for two requests in row", async function() {
         const token1 = await userAuth.getToken();
         const token2 = await userAuth.getToken();
 
@@ -621,10 +621,10 @@ describe("expired token refreshing", async () => {
         expect(token1).to.be.equal(token2);
     });
 
-    it("Should getToken return the different tokens for two requests with delay", async () => {
+    it("Should getToken return the different tokens for two requests with delay", async function() {
         const token1 = await userAuth.getToken();
 
-        setTimeout(async () => {
+        setTimeout(async function() {
             const token2 = await userAuth.getToken();
 
             assert.isDefined(token1);

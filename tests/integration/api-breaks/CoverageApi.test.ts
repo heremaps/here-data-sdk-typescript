@@ -35,14 +35,14 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("CoverageApi", () => {
-  it("BoundingBox with all required params", () => {
+describe("CoverageApi", function() {
+  it("BoundingBox with all required params", function() {
     const params: BoundingBox = {};
 
     assert.isDefined(params);
   });
 
-  it("BoundingBox with all optional params", () => {
+  it("BoundingBox with all optional params", function() {
     const params: BoundingBox = {
       east: "test",
       north: "test",
@@ -53,13 +53,13 @@ describe("CoverageApi", () => {
     assert.isDefined(params);
   });
 
-  it("CatalogAdminAreas with all required params", () => {
+  it("CatalogAdminAreas with all required params", function() {
     const params: CatalogAdminAreas = {};
 
     assert.isDefined(params);
   });
 
-  it("CatalogAdminAreas with all optional params", () => {
+  it("CatalogAdminAreas with all optional params", function() {
     const params: CatalogAdminAreas = {
       cities: ["test"],
       counties: ["test"],
@@ -70,7 +70,7 @@ describe("CoverageApi", () => {
     assert.isDefined(params);
   });
 
-  it("LayerBoundingBox  with all required params", () => {
+  it("LayerBoundingBox  with all required params", function() {
     const params: LayerBoundingBox = {
       east: 1,
       south: 1,
@@ -81,7 +81,7 @@ describe("CoverageApi", () => {
     assert.isDefined(params);
   });
 
-  it("LayerLevelSummary with all required params", () => {
+  it("LayerLevelSummary with all required params", function() {
     const params: LayerLevelSummary = {
       boundingBox: {
         east: 1,
@@ -101,7 +101,7 @@ describe("CoverageApi", () => {
     assert.isDefined(params);
   });
 
-  it("LayerSummary with all required params", () => {
+  it("LayerSummary with all required params", function() {
     const params: LayerSummary = {
       catalogHRN: "test-hrn",
       layer: "test",
@@ -127,7 +127,7 @@ describe("CoverageApi", () => {
     assert.isDefined(params);
   });
 
-  it("Test getDataCoverageAdminAreas method with all required params", async () => {
+  it("Test getDataCoverageAdminAreas method with all required params", async function() {
     const params = {
       layerId: "mocked-layerId",
       datalevel: "mocked-datalevel"
@@ -141,7 +141,7 @@ describe("CoverageApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getDataCoverageSizeMap method with all required params", async () => {
+  it("Test getDataCoverageSizeMap method with all required params", async function() {
     const params = {
       layerId: "mocked-layerId"
     };
@@ -154,7 +154,7 @@ describe("CoverageApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getDataCoverageSizeMap method with all required and optional params", async () => {
+  it("Test getDataCoverageSizeMap method with all required and optional params", async function() {
     const params = {
       layerId: "mocked-layerId",
       datalevel: 12
@@ -168,7 +168,7 @@ describe("CoverageApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getDataCoverageSummary method with all required params", async () => {
+  it("Test getDataCoverageSummary method with all required params", async function() {
     const params = {
       layerId: "mocked-layerId"
     };
@@ -181,7 +181,7 @@ describe("CoverageApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getDataCoverageTile method with all required params", async () => {
+  it("Test getDataCoverageTile method with all required params", async function() {
     const params = {
       layerId: "mocked-layerId"
     };
@@ -194,7 +194,7 @@ describe("CoverageApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getDataCoverageTile method with all required and optional params", async () => {
+  it("Test getDataCoverageTile method with all required and optional params", async function() {
     const params = {
       layerId: "mocked-layerId",
       datalevel: 12
@@ -208,7 +208,7 @@ describe("CoverageApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getDataCoverageTimeMap method with all required params", async () => {
+  it("Test getDataCoverageTimeMap method with all required params", async function() {
     const params = {
       layerId: "mocked-layerId",
       catalogHRN: "mocked-catalogHRN"
@@ -222,7 +222,7 @@ describe("CoverageApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getDataCoverageTimeMap method with all required and optional params", async () => {
+  it("Test getDataCoverageTimeMap method with all required and optional params", async function() {
     const params = {
       layerId: "mocked-layerId",
       datalevel: 12,

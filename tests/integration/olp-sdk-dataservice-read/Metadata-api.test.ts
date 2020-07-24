@@ -31,21 +31,21 @@ import { FetchMock } from "../FetchMock";
 chai.use(sinonChai);
 const expect = chai.expect;
 
-describe("CatalogClient", () => {
+describe("CatalogClient", function() {
   let fetchMock: FetchMock;
   let sandbox: sinon.SinonSandbox;
   let fetchStub: sinon.SinonStub;
   let settings: OlpClientSettings;
 
-  before(() => {
+  before(function() {
     sandbox = sinon.createSandbox();
   });
 
-  afterEach(() => {
+  afterEach(function() {
     sandbox.restore();
   });
 
-  beforeEach(() => {
+  beforeEach(function() {
     fetchMock = new FetchMock();
     fetchStub = sandbox.stub(global as any, "fetch");
     fetchStub.callsFake(fetchMock.fetch());
@@ -57,7 +57,7 @@ describe("CatalogClient", () => {
     });
   });
 
-  it("Should be passsed parameter Range to the headers of the metadata request", async () => {
+  it("Should be passsed parameter Range to the headers of the metadata request", async function() {
     const mockedResponses = new Map();
 
     // Set the response from lookup api with the info about Metadata service.

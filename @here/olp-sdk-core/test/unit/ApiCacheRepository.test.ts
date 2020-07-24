@@ -27,7 +27,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("ApiCacheRepository", () => {
+describe("ApiCacheRepository", function() {
     let testCache = new lib.KeyValueCache();
     testCache.put("test-key", "test-value");
     let apiCacheRepository = new lib.ApiCacheRepository(testCache);
@@ -44,12 +44,12 @@ describe("ApiCacheRepository", () => {
     const testServiceVersion3 = "service-version3";
     const testServiceUrl3 = "service-url3";
 
-    it("Shoud be initialised", async () => {
+    it("Shoud be initialised", async function() {
         assert.isDefined(apiCacheRepository);
         expect(apiCacheRepository).be.instanceOf(lib.ApiCacheRepository);
     });
 
-    it("Method put should store a new key-value pair in the cache", async () => {
+    it("Method put should store a new key-value pair in the cache", async function() {
         const operationIsSuccessful = apiCacheRepository.put(
             testServiceApiName,
             testServiceVersion,
@@ -67,7 +67,7 @@ describe("ApiCacheRepository", () => {
         ).equal(testServiceUrl);
     });
 
-    it("Method get should return the base URL from the cache.", async () => {
+    it("Method get should return the base URL from the cache.", async function() {
         apiCacheRepository.put(
             testServiceApiName2,
             testServiceVersion2,

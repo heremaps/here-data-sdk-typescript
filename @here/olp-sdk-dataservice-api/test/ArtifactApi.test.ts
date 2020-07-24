@@ -27,8 +27,8 @@ chai.use(sinonChai);
 
 const expect = chai.expect;
 
-describe("ArtifactApi", () => {
-    it("deleteArtifactUsingDELETE", async () => {
+describe("ArtifactApi", function() {
+    it("deleteArtifactUsingDELETE", async function() {
         const params = {
             artifactHrn: "mocked-artifactHrn"
         };
@@ -50,7 +50,7 @@ describe("ArtifactApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("deleteFileUsingDELETE", async () => {
+    it("deleteFileUsingDELETE", async function() {
         const params = {
             artifactHrn: "mocked-artifactHrn",
             fileName: "mocked-fileName"
@@ -73,7 +73,7 @@ describe("ArtifactApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("getArtifactFileUsingGET", async () => {
+    it("getArtifactFileUsingGET", async function() {
         const params = {
             artifactHrn: "mocked-artifactHrn",
             fileName: "mocked-fileName"
@@ -96,7 +96,7 @@ describe("ArtifactApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("getArtifactUsingGET", async () => {
+    it("getArtifactUsingGET", async function() {
         const params = {
             artifactHrn: "mocked-artifactHrn",
             fileName: "mocked-fileName"
@@ -119,7 +119,7 @@ describe("ArtifactApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("putArtifactFileUsingPUT", async () => {
+    it("putArtifactFileUsingPUT", async function() {
         const params = {
             artifactHrn: "mocked-artifactHrn",
             fileName: "mocked-fileName",
@@ -147,7 +147,7 @@ describe("ArtifactApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("registerArtifactUsingPUT", async () => {
+    it("registerArtifactUsingPUT", async function() {
         const params = {
             groupId: "mocked-groupId",
             artifactId: "mocked-artifactId",
@@ -177,7 +177,7 @@ describe("ArtifactApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("deleteSchemaUsingDELETE", async () => {
+    it("deleteSchemaUsingDELETE", async function() {
         const params = {
             schemaHrn: "mocked-schemaHrn"
         };
@@ -199,7 +199,7 @@ describe("ArtifactApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("getDocumentUsingGET", async () => {
+    it("getDocumentUsingGET", async function() {
         const params = {
             schemaHrn: "mocked-schemaHrn",
             file: "mocked-file"
@@ -222,7 +222,7 @@ describe("ArtifactApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("getSchemaUsingGET", async () => {
+    it("getSchemaUsingGET", async function() {
         const params = {
             schemaHrn: "mocked-schemaHrn"
         };
@@ -244,7 +244,7 @@ describe("ArtifactApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("listUsingGET", async () => {
+    it("listUsingGET", async function() {
         const params = {
             sort: "mocked-sort",
             order: "mocked-order" as any,
@@ -269,7 +269,7 @@ describe("ArtifactApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("updateSchemaPermissionUsingPOST", async () => {
+    it("updateSchemaPermissionUsingPOST", async function() {
         const params = {
             schemaHrn: "mocked-schemaHrn",
             updatePermissionRequest: "mocked-updatePermissionRequest" as any

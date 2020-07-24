@@ -36,22 +36,22 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("ArtifactClient", () => {
+describe("ArtifactClient", function() {
   let fetchMock: FetchMock;
   let sandbox: sinon.SinonSandbox;
   let fetchStub: sinon.SinonStub;
   let artifactClient: ArtifactClient;
   let settings: OlpClientSettings;
 
-  before(() => {
+  before(function() {
     sandbox = sinon.createSandbox();
   });
 
-  afterEach(() => {
+  afterEach(function() {
     sandbox.restore();
   });
 
-  beforeEach(() => {
+  beforeEach(function() {
     fetchMock = new FetchMock();
     fetchStub = sandbox.stub(global as any, "fetch");
     fetchStub.callsFake(fetchMock.fetch());
@@ -64,12 +64,12 @@ describe("ArtifactClient", () => {
     artifactClient = new ArtifactClient(settings);
   });
 
-  it("Shoud be initialized with settings", async () => {
+  it("Shoud be initialized with settings", async function() {
     assert.isDefined(artifactClient);
     expect(artifactClient).to.be.instanceOf(ArtifactClient);
   });
 
-  it("Should fetch the schema details", async () => {
+  it("Should fetch the schema details", async function() {
     const mockedResponses = new Map();
     const headers = new Headers();
     headers.append("cache-control", "max-age=3600");
@@ -156,7 +156,7 @@ describe("ArtifactClient", () => {
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
-  it("Should getSchemaDetails() handle errors", async () => {
+  it("Should getSchemaDetails() handle errors", async function() {
     const request = new SchemaDetailsRequest().withBillingTag("billing-tag");
 
     const response = await artifactClient
@@ -168,7 +168,7 @@ describe("ArtifactClient", () => {
       });
   });
 
-  it("Should getSchema() handle errors", async () => {
+  it("Should getSchema() handle errors", async function() {
     const request = new SchemaRequest();
 
     const response = await artifactClient.getSchema(request).catch(error => {
@@ -178,7 +178,7 @@ describe("ArtifactClient", () => {
     });
   });
 
-  it("Should fetch file of the schema", async () => {
+  it("Should fetch file of the schema", async function() {
     const mockedResponses = new Map();
     const headers = new Headers();
     headers.append("cache-control", "max-age=3600");
@@ -241,7 +241,7 @@ describe("ArtifactClient", () => {
     expect(fetchStub.callCount).to.be.equal(3);
   });
 
-  it("Should getSchema() handle 400 error", async () => {
+  it("Should getSchema() handle 400 error", async function() {
     const mockedResponses = new Map();
     const headers = new Headers();
     headers.append("cache-control", "max-age=3600");
@@ -291,7 +291,7 @@ describe("ArtifactClient", () => {
     });
   });
 
-  it("Should user-agent be added to the each request", async () => {
+  it("Should user-agent be added to the each request", async function() {
     const mockedResponses = new Map();
     const headers = new Headers();
     headers.append("cache-control", "max-age=3600");

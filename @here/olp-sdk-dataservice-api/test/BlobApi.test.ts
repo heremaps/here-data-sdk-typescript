@@ -28,8 +28,8 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("BlobApi", () => {
-    it("cancelMultipartUpload", async () => {
+describe("BlobApi", function() {
+    it("cancelMultipartUpload", async function() {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -54,7 +54,7 @@ describe("BlobApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("checkBlobExists", async () => {
+    it("checkBlobExists", async function() {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -78,7 +78,7 @@ describe("BlobApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("checkBlobExistsStatus", async () => {
+    it("checkBlobExistsStatus", async function() {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -102,7 +102,7 @@ describe("BlobApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("completeMultipartUpload", async () => {
+    it("completeMultipartUpload", async function() {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -135,7 +135,7 @@ describe("BlobApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("doCompleteMultipartUpload", async () => {
+    it("doCompleteMultipartUpload", async function() {
         const params = {
             url:
                 "http://mocked.url/layers/mocked-id/data/mocked-datahandle/multiparts/mocked-multiPartToken",
@@ -171,7 +171,7 @@ describe("BlobApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("deleteBlob", async () => {
+    it("deleteBlob", async function() {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -195,7 +195,7 @@ describe("BlobApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("getBlob", async () => {
+    it("getBlob", async function() {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -221,7 +221,7 @@ describe("BlobApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("getMultipartUploadStatus", async () => {
+    it("getMultipartUploadStatus", async function() {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -246,7 +246,7 @@ describe("BlobApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("putBlob", async () => {
+    it("putBlob", async function() {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -276,7 +276,7 @@ describe("BlobApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("putData", async () => {
+    it("putData", async function() {
         const content = Buffer.from("mocked-data", "utf8");
         const params = {
             layerId: "mocked-id",
@@ -307,7 +307,7 @@ describe("BlobApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("startMultipartUpload", async () => {
+    it("startMultipartUpload", async function() {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -333,7 +333,7 @@ describe("BlobApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("uploadPart", async () => {
+    it("uploadPart", async function() {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -370,7 +370,7 @@ describe("BlobApi", () => {
     });
 });
 
-it("doUploadPart", async () => {
+it("doUploadPart", async function() {
     const params = {
         url:
             "http://mocked.url/layers/mocked-id/data/mocked-datahandle/multiparts/mocked-multiPartToken/parts",

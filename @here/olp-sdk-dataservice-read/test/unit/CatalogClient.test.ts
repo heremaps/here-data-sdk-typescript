@@ -37,7 +37,7 @@ class MockCatalogVersionRequest {
     }
 }
 
-describe("CatalogClient", () => {
+describe("CatalogClient", function() {
     let sandbox: sinon.SinonSandbox;
     let getVersionStub: sinon.SinonStub;
     let getLayerVersionsStub: sinon.SinonStub;
@@ -51,7 +51,7 @@ describe("CatalogClient", () => {
         "hrn:here:data:::live-weather-na"
     );
 
-    before(() => {
+    before(function() {
         sandbox = sinon.createSandbox();
         let settings = sandbox.createStubInstance(
             dataServiceRead.OlpClientSettings
@@ -62,7 +62,7 @@ describe("CatalogClient", () => {
         );
     });
 
-    beforeEach(() => {
+    beforeEach(function() {
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
         getLayerVersionsStub = sandbox.stub(MetadataApi, "getLayerVersions");
         getCatalogStub = sandbox.stub(ConfigApi, "getCatalog");
@@ -75,15 +75,15 @@ describe("CatalogClient", () => {
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
-    afterEach(() => {
+    afterEach(function() {
         sandbox.restore();
     });
 
-    it("Shoud be initialised", async () => {
+    it("Shoud be initialised", async function() {
         assert.isDefined(catalogClient);
     });
 
-    it("Should method getLatestVersion provide data with startVersion parameter", async () => {
+    it("Should method getLatestVersion provide data with startVersion parameter", async function() {
         const mockedVersion = {
             version: 42
         };
@@ -109,7 +109,7 @@ describe("CatalogClient", () => {
         expect(response).to.be.equal(mockedVersion.version);
     });
 
-    it("Should method getLatestVersion return HttpError when API crashes", async () => {
+    it("Should method getLatestVersion return HttpError when API crashes", async function() {
         const TEST_ERROR_CODE = 404;
         const mockedError = new HttpError(
             TEST_ERROR_CODE,
@@ -147,7 +147,7 @@ describe("CatalogClient", () => {
             });
     });
 
-    it("Should method getLayerVersions return HttpError when MetadataApi.getLayerVersions crashes", async () => {
+    it("Should method getLayerVersions return HttpError when MetadataApi.getLayerVersions crashes", async function() {
         const testError = "Can not get catalog layer version";
 
         getLayerVersionsStub.callsFake(
@@ -169,7 +169,7 @@ describe("CatalogClient", () => {
             });
     });
 
-    it("Should method getLayerVersions provide data with version parameter", async () => {
+    it("Should method getLayerVersions provide data with version parameter", async function() {
         const mockedVersion = {
             layerVersions: [
                 { layer: "testLayer1", version: 1, timestamp: 11 },
@@ -196,7 +196,7 @@ describe("CatalogClient", () => {
         expect(response).to.be.equal(mockedVersion.layerVersions);
     });
 
-    it("Should method getLayerVersions provide data for latests version when version parameter is not setted", async () => {
+    it("Should method getLayerVersions provide data for latests version when version parameter is not setted", async function() {
         const mockedLayerVersions = {
             layerVersions: [
                 { layer: "testLayer1", version: 1, timestamp: 11 },
@@ -233,7 +233,7 @@ describe("CatalogClient", () => {
         expect(response).to.be.equal(mockedLayerVersions.layerVersions);
     });
 
-    it("Should method getEarliestVersion provide the minimun version availiable for the given catalogRequest", async () => {
+    it("Should method getEarliestVersion provide the minimun version availiable for the given catalogRequest", async function() {
         const mockedEarliestVersion: MetadataApi.VersionResponse = {
             version: 5
         };
@@ -256,7 +256,7 @@ describe("CatalogClient", () => {
         expect(response).to.be.equal(mockedEarliestVersion.version);
     });
 
-    it("Should method getEarliestVersion return HttpError getting earliest catalog version", async () => {
+    it("Should method getEarliestVersion return HttpError getting earliest catalog version", async function() {
         const TEST_ERROR_CODE = 404;
         const mockedError = new HttpError(
             TEST_ERROR_CODE,
@@ -288,7 +288,7 @@ describe("CatalogClient", () => {
             });
     });
 
-    it("Should method getCatalog provide data", async () => {
+    it("Should method getCatalog provide data", async function() {
         const mockedCatalogResponse: ConfigApi.Catalog = {
             id: "here-internal-test",
             hrn: "hrn:here-dev:data:::here-internal-test",
@@ -328,7 +328,7 @@ describe("CatalogClient", () => {
         expect(response).to.be.equal(mockedCatalogResponse);
     });
 
-    it("Should method getCatalog return HttpError when Can not load catalog configuration", async () => {
+    it("Should method getCatalog return HttpError when Can not load catalog configuration", async function() {
         const TEST_ERROR_CODE = 404;
         const mockedError = new HttpError(
             TEST_ERROR_CODE,
@@ -378,7 +378,7 @@ describe("CatalogClient", () => {
             });
     });
 
-    it("Should method getVersions provide data with startVersion and EndVersion parameters", async () => {
+    it("Should method getVersions provide data with startVersion and EndVersion parameters", async function() {
         const mockedVersions: MetadataApi.VersionInfos = {
             versions: [
                 {
@@ -413,7 +413,7 @@ describe("CatalogClient", () => {
         assert.isTrue(response.versions.length > 0);
     });
 
-    it("Should method getVersions provide data with startVersion parameters", async () => {
+    it("Should method getVersions provide data with startVersion parameters", async function() {
         const mockedVersions = {
             versions: [
                 {
@@ -445,7 +445,7 @@ describe("CatalogClient", () => {
         assert.isTrue(response.versions.length > 0);
     });
 
-    it("Should method getVersions return HttpError when API crashes", async () => {
+    it("Should method getVersions return HttpError when API crashes", async function() {
         const TEST_ERROR_CODE = 404;
         const mockedError = new HttpError(
             TEST_ERROR_CODE,

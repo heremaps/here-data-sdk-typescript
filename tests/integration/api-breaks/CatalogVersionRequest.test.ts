@@ -26,7 +26,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("CatalogVersionRequest", () => {
+describe("CatalogVersionRequest", function() {
   class CatalogVersionRequestTest extends CatalogVersionRequest {
     getStartVersion(): number {
       return 5;
@@ -53,7 +53,7 @@ describe("CatalogVersionRequest", () => {
     }
   }
 
-  it("Shoud be initialized", async () => {
+  it("Shoud be initialized", async function() {
     const catalogRequest = new CatalogVersionRequestTest();
     assert.isDefined(catalogRequest);
     expect(catalogRequest).to.be.instanceOf(CatalogVersionRequest);
@@ -66,42 +66,42 @@ describe("CatalogVersionRequest", () => {
     assert.isFunction(catalogRequest.getBillingTag);
   });
 
-  it("Test withStartVersion method with version", async () => {
+  it("Test withStartVersion method with version", async function() {
     const request = new CatalogVersionRequestTest();
 
     const response = request.withStartVersion(1);
     assert.isDefined(response);
   });
 
-  it("Test getStartVersion method without params", async () => {
+  it("Test getStartVersion method without params", async function() {
     const request = new CatalogVersionRequestTest();
 
     const response = request.getStartVersion();
     assert.isDefined(response);
   });
 
-  it("Test withEndVersion method with version", async () => {
+  it("Test withEndVersion method with version", async function() {
     const request = new CatalogVersionRequestTest();
 
     const response = request.withEndVersion(25);
     assert.isDefined(response);
   });
 
-  it("Test getEndVersion method without params", async () => {
+  it("Test getEndVersion method without params", async function() {
     const request = new CatalogVersionRequestTest();
 
     const response = request.getEndVersion();
     assert.isDefined(response);
   });
 
-  it("Test withBillingTag method with tag", async () => {
+  it("Test withBillingTag method with tag", async function() {
     const catalogRequest = new CatalogVersionRequestTest();
 
     const response = catalogRequest.withBillingTag("test-tag");
     assert.isDefined(response);
   });
 
-  it("Test getBillingTag method without params", async () => {
+  it("Test getBillingTag method without params", async function() {
     const catalogRequest = new CatalogVersionRequestTest();
     catalogRequest.withBillingTag("test-tag");
 

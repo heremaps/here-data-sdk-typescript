@@ -23,17 +23,17 @@ import { HttpError } from "../index";
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("HttpErrorTest", () => {
+describe("HttpErrorTest", function() {
     const NOT_FOUND_ERROR_CODE = 404;
     const error = new HttpError(NOT_FOUND_ERROR_CODE, "Not found");
 
-    it("HttpError shoud be initialized", async () => {
+    it("HttpError shoud be initialized", async function() {
         assert.isDefined(error);
         expect(error).to.be.instanceOf(Error);
         expect(error).to.be.instanceOf(HttpError);
     });
 
-    it("HttpError should have parameters status, message and name", async () => {
+    it("HttpError should have parameters status, message and name", async function() {
         expect(error.status).to.be.equal(NOT_FOUND_ERROR_CODE);
         expect(error.message).to.be.equal("Not found");
         expect(error.name).to.be.equal("HttpError");

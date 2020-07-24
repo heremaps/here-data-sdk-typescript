@@ -20,8 +20,8 @@
 import { assert } from "chai";
 import { loadCredentialsFromFile } from "../lib/loadCredentialsFromFile";
 
-describe("loadCredentialsFromFile", () => {
-    it("should return correct AuthCredentials", () => {
+describe("loadCredentialsFromFile", function() {
+    it("should return correct AuthCredentials", function() {
         const credentials = loadCredentialsFromFile(
             "./test/test-credentials.properties"
         );
@@ -33,7 +33,7 @@ describe("loadCredentialsFromFile", () => {
         );
     });
 
-    it("should throw an error", () => {
+    it("should throw an error", function() {
         try {
             loadCredentialsFromFile("./test/test-error-credentials.properties");
         } catch (error) {

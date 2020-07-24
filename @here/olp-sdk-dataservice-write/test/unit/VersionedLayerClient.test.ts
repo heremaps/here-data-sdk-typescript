@@ -233,7 +233,7 @@ describe("VersionedLayerClient write", function() {
     });
 
     it("Should cancel the publication", async function() {
-        cancelPublicationStub.callsFake(() => {
+        cancelPublicationStub.callsFake(function() {
             return Promise.resolve({
                 status: 204
             });
@@ -251,7 +251,7 @@ describe("VersionedLayerClient write", function() {
     });
 
     it("Should rejects with error a cancel the publication operation", async function() {
-        cancelPublicationStub.callsFake(() => {
+        cancelPublicationStub.callsFake(function() {
             return Promise.reject({
                 message: "Internal Server Error",
                 status: 500
@@ -289,7 +289,7 @@ describe("VersionedLayerClient write", function() {
     });
 
     it("Should submit the publication", async function() {
-        submitPublicationStub.callsFake(() => {
+        submitPublicationStub.callsFake(function() {
             return Promise.resolve({
                 status: 204
             });
@@ -307,7 +307,7 @@ describe("VersionedLayerClient write", function() {
     });
 
     it("Should rejects with error a submit the publication operation", async function() {
-        submitPublicationStub.callsFake(() => {
+        submitPublicationStub.callsFake(function() {
             return Promise.reject({
                 message: "Internal Server Error",
                 status: 500
@@ -345,7 +345,7 @@ describe("VersionedLayerClient write", function() {
     });
 
     it("Should return the publication details", async function() {
-        getPublicationStub.callsFake(() => {
+        getPublicationStub.callsFake(function() {
             return Promise.resolve({
                 catalogId: "sdk-writing-test",
                 catalogVersion: 37,
@@ -380,7 +380,7 @@ describe("VersionedLayerClient write", function() {
     });
 
     it("Should rejects with error when getting the publication details", async function() {
-        getPublicationStub.callsFake(() => {
+        getPublicationStub.callsFake(function() {
             return Promise.reject({
                 message: "Internal Server Error",
                 status: 500

@@ -26,15 +26,15 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("StartBatchRequest", () => {
-    it("Should initialize", () => {
+describe("StartBatchRequest", function() {
+    it("Should initialize", function() {
         const request = new StartBatchRequest();
 
         assert.isDefined(request);
         expect(request).be.instanceOf(StartBatchRequest);
     });
 
-    it("Should set and get parameters", () => {
+    it("Should set and get parameters", function() {
         const mockedLayers = ["layer-0", "layer-1", "layer-2"];
         const mockedBillingTag = "mocked-billing-tag";
         const mockedVersionDependencies = [

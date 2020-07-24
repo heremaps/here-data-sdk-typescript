@@ -27,8 +27,8 @@ chai.use(sinonChai);
 
 const expect = chai.expect;
 
-describe("StreamApi", () => {
-    it("Should commitOffsets works as expected", async () => {
+describe("StreamApi", function() {
+    it("Should commitOffsets works as expected", async function() {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: any) => {
@@ -56,7 +56,7 @@ describe("StreamApi", () => {
         });
     });
 
-    it("Should doCommitOffsets works as expected", async () => {
+    it("Should doCommitOffsets works as expected", async function() {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
@@ -84,7 +84,7 @@ describe("StreamApi", () => {
         });
     });
 
-    it("Should subscribe works as expected", async () => {
+    it("Should subscribe works as expected", async function() {
         const builder = ({
             baseUrl: "http://mocked.url",
             requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
@@ -108,7 +108,7 @@ describe("StreamApi", () => {
         });
     });
 
-    it("Should consumeData works as expected", async () => {
+    it("Should consumeData works as expected", async function() {
         const builder = ({
             baseUrl: "http://mocked.url",
             requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
@@ -128,7 +128,7 @@ describe("StreamApi", () => {
         });
     });
 
-    it("Should seekToOffset works as expected", async () => {
+    it("Should seekToOffset works as expected", async function() {
         const builder = ({
             baseUrl: "http://mocked.url",
             requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
@@ -156,7 +156,7 @@ describe("StreamApi", () => {
         });
     });
 
-    it("Should deleteSubscription works as expected", async () => {
+    it("Should deleteSubscription works as expected", async function() {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
@@ -176,7 +176,7 @@ describe("StreamApi", () => {
         });
     });
 
-    it("Should endpoint works as expected", async () => {
+    it("Should endpoint works as expected", async function() {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: any) => {
@@ -193,7 +193,7 @@ describe("StreamApi", () => {
         });
     });
 
-    it("Should endpointByConsumer works as expected", async () => {
+    it("Should endpointByConsumer works as expected", async function() {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: any) => {

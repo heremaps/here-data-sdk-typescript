@@ -26,8 +26,8 @@ const puppeteer = require("puppeteer");
 let browser: any;
 let page: any;
 
-describe("Test published olp-edge-datastore-api", async () => {
-  before(async () => {
+describe("Test published olp-edge-datastore-api", async function() {
+  before(async function() {
     browser = await puppeteer.launch({
       args: ["no-sandbox", "disable-setuid-sandbox"]
     });
@@ -38,7 +38,7 @@ describe("Test published olp-edge-datastore-api", async () => {
     await page.goto("http://127.0.0.1:8080", { waitUntil: "networkidle2" });
   });
 
-  after(async () => {
+  after(async function() {
     await browser.close();
   });
 
@@ -47,8 +47,8 @@ describe("Test published olp-edge-datastore-api", async () => {
   });
 });
 
-describe("Test published olp-edge-datastore-read", () => {
-  before(async () => {
+describe("Test published olp-edge-datastore-read", function() {
+  before(async function() {
     browser = await puppeteer.launch({
       args: ["no-sandbox", "disable-setuid-sandbox"]
     });
@@ -59,7 +59,7 @@ describe("Test published olp-edge-datastore-read", () => {
     await page.goto("http://127.0.0.1:8080", { waitUntil: "networkidle2" });
   });
 
-  after(async () => {
+  after(async function() {
     await browser.close();
   });
 
@@ -68,8 +68,8 @@ describe("Test published olp-edge-datastore-read", () => {
   });
 });
 
-describe("Test published olp-sdk-authentication", () => {
-  before(async () => {
+describe("Test published olp-sdk-authentication", function() {
+  before(async function() {
     browser = await puppeteer.launch({
       args: ["no-sandbox", "disable-setuid-sandbox"]
     });
@@ -80,7 +80,7 @@ describe("Test published olp-sdk-authentication", () => {
     await page.goto("http://127.0.0.1:8080", { waitUntil: "networkidle2" });
   });
 
-  after(async () => {
+  after(async function() {
     await browser.close();
   });
 

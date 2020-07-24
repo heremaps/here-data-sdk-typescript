@@ -51,21 +51,21 @@ class MockedCustomDataStoreDownloadManager {
     }
 }
 
-describe("OlpClientSettings", () => {
+describe("OlpClientSettings", function() {
     let KeyValueCacheStub: sinon.SinonStub;
     let DataStoreDownloadManagerStub: sinon.SinonStub;
 
     let sandbox: sinon.SinonSandbox;
 
-    before(() => {
+    before(function() {
         sandbox = sinon.createSandbox();
     });
 
-    afterEach(() => {
+    afterEach(function() {
         sandbox.restore();
     });
 
-    beforeEach(() => {
+    beforeEach(function() {
         KeyValueCacheStub = sandbox.stub(lib, "KeyValueCache");
         KeyValueCacheStub.callsFake((cache, hrn) => new MockedKeyValueCache());
 
@@ -78,7 +78,7 @@ describe("OlpClientSettings", () => {
         );
     });
 
-    it("Should be configured with correct params and default download manager", async () => {
+    it("Should be configured with correct params and default download manager", async function() {
         const settings = new lib.OlpClientSettings({
             environment: "test-env",
             getToken: () => Promise.resolve("test-token")
@@ -100,7 +100,7 @@ describe("OlpClientSettings", () => {
         expect(tokenStr).equal("test-token");
     });
 
-    it("Should be configured with correct params and custom download manager", async () => {
+    it("Should be configured with correct params and custom download manager", async function() {
         const settings = new lib.OlpClientSettings({
             environment: "test-env",
             getToken: () => Promise.resolve("test-token"),

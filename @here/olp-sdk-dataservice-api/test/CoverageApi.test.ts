@@ -27,8 +27,8 @@ chai.use(sinonChai);
 
 const expect = chai.expect;
 
-describe("CoverageApi", () => {
-    it("getDataCoverageAdminAreas", async () => {
+describe("CoverageApi", function() {
+    it("getDataCoverageAdminAreas", async function() {
         const params = {
             layerId: "mocked-layerId",
             datalevel: "mocked-datalevel"
@@ -51,7 +51,7 @@ describe("CoverageApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("getDataCoverageSizeMap", async () => {
+    it("getDataCoverageSizeMap", async function() {
         const params = {
             layerId: "mocked-layerId",
             datalevel: 12
@@ -74,7 +74,7 @@ describe("CoverageApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("getDataCoverageSummary", async () => {
+    it("getDataCoverageSummary", async function() {
         const params = {
             layerId: "mocked-layerId"
         };
@@ -96,7 +96,7 @@ describe("CoverageApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("getDataCoverageTile", async () => {
+    it("getDataCoverageTile", async function() {
         const params = {
             layerId: "mocked-layerId",
             datalevel: 12
@@ -119,7 +119,7 @@ describe("CoverageApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("getDataCoverageTimeMap", async () => {
+    it("getDataCoverageTimeMap", async function() {
         const params = {
             layerId: "mocked-layerId",
             datalevel: 12,

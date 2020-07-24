@@ -37,7 +37,7 @@ import { FetchMock } from "../FetchMock";
 chai.use(sinonChai);
 const expect = chai.expect;
 
-describe("Handling versions in the requests classes and clients", () => {
+describe("Handling versions in the requests classes and clients", function() {
   let fetchMock: FetchMock;
   let sandbox: sinon.SinonSandbox;
   let fetchStub: sinon.SinonStub;
@@ -46,15 +46,15 @@ describe("Handling versions in the requests classes and clients", () => {
   const headers = new Headers();
   headers.append("cache-control", "max-age=3600");
 
-  before(() => {
+  before(function() {
     sandbox = sinon.createSandbox();
   });
 
-  afterEach(() => {
+  afterEach(function() {
     sandbox.restore();
   });
 
-  beforeEach(() => {
+  beforeEach(function() {
     fetchMock = new FetchMock();
     fetchStub = sandbox.stub(global as any, "fetch");
     fetchStub.callsFake(fetchMock.fetch());
@@ -66,7 +66,7 @@ describe("Handling versions in the requests classes and clients", () => {
     });
   });
 
-  it("Should use version 0 for getPartitions with PartitionsRequest.withVersion(0).withPartitionIds(['23605706']);", async () => {
+  it("Should use version 0 for getPartitions with PartitionsRequest.withVersion(0).withPartitionIds(['23605706']);", async function() {
     const mockedResponses = new Map();
 
     mockedResponses.set(
@@ -132,7 +132,7 @@ describe("Handling versions in the requests classes and clients", () => {
     );
   });
 
-  it("Should use version 0 for getPartitions with QuadKeyPartitionsRequest.withVersion(0).withQuadKey(quadKeyFromMortonCode(23605706));", async () => {
+  it("Should use version 0 for getPartitions with QuadKeyPartitionsRequest.withVersion(0).withQuadKey(quadKeyFromMortonCode(23605706));", async function() {
     const mockedResponses = new Map();
 
     mockedResponses.set(
@@ -209,7 +209,7 @@ describe("Handling versions in the requests classes and clients", () => {
     );
   });
 
-  it("Should use version 0 for getData with DataRequest.withVersion(0).withQuadKey(quadKeyFromMortonCode(23605706));", async () => {
+  it("Should use version 0 for getData with DataRequest.withVersion(0).withQuadKey(quadKeyFromMortonCode(23605706));", async function() {
     const mockedResponses = new Map();
 
     mockedResponses.set(
@@ -301,7 +301,7 @@ describe("Handling versions in the requests classes and clients", () => {
     );
   });
 
-  it("Should use version 0 for getData with DataRequest.withVersion(0).withPartitionId('23605706');", async () => {
+  it("Should use version 0 for getData with DataRequest.withVersion(0).withPartitionId('23605706');", async function() {
     const mockedResponses = new Map();
 
     mockedResponses.set(
@@ -380,7 +380,7 @@ describe("Handling versions in the requests classes and clients", () => {
     );
   });
 
-  it("Should use locked version 142 for getPartitions with PartitionsRequest.withPartitionIds(['23605706']);", async () => {
+  it("Should use locked version 142 for getPartitions with PartitionsRequest.withPartitionIds(['23605706']);", async function() {
     const mockedResponses = new Map();
 
     mockedResponses.set(
@@ -444,7 +444,7 @@ describe("Handling versions in the requests classes and clients", () => {
     );
   });
 
-  it("Should use locked version 142 for getPartitions with QuadKeyPartitionsRequest.withQuadKey(quadKeyFromMortonCode(23605706));", async () => {
+  it("Should use locked version 142 for getPartitions with QuadKeyPartitionsRequest.withQuadKey(quadKeyFromMortonCode(23605706));", async function() {
     const mockedResponses = new Map();
 
     mockedResponses.set(
@@ -521,7 +521,7 @@ describe("Handling versions in the requests classes and clients", () => {
     );
   });
 
-  it("Should use locked version 142 for getData with DataRequest.withQuadKey(quadKeyFromMortonCode(23605706));", async () => {
+  it("Should use locked version 142 for getData with DataRequest.withQuadKey(quadKeyFromMortonCode(23605706));", async function() {
     const mockedResponses = new Map();
 
     mockedResponses.set(
@@ -611,7 +611,7 @@ describe("Handling versions in the requests classes and clients", () => {
     );
   });
 
-  it("Should use locked version 142 for getData with DataRequest.withPartitionId('23605706');", async () => {
+  it("Should use locked version 142 for getData with DataRequest.withPartitionId('23605706');", async function() {
     const mockedResponses = new Map();
 
     mockedResponses.set(
@@ -690,7 +690,7 @@ describe("Handling versions in the requests classes and clients", () => {
     );
   });
 
-  it("Should use latest version for getPartitions with PartitionsRequest.withPartitionIds(['23605706']) and lock it;", async () => {
+  it("Should use latest version for getPartitions with PartitionsRequest.withPartitionIds(['23605706']) and lock it;", async function() {
     const mockedResponses = new Map();
 
     mockedResponses.set(
@@ -770,7 +770,7 @@ describe("Handling versions in the requests classes and clients", () => {
     );
   });
 
-  it("Should use latest version for getPartitions with QuadKeyPartitionsRequest.withQuadKey(quadKeyFromMortonCode(23605706)) and lock it;", async () => {
+  it("Should use latest version for getPartitions with QuadKeyPartitionsRequest.withQuadKey(quadKeyFromMortonCode(23605706)) and lock it;", async function() {
     const mockedResponses = new Map();
 
     mockedResponses.set(
@@ -863,7 +863,7 @@ describe("Handling versions in the requests classes and clients", () => {
     );
   });
 
-  it("Should use latest version for getData with DataRequest.withQuadKey(quadKeyFromMortonCode(23605706)) and lock it;", async () => {
+  it("Should use latest version for getData with DataRequest.withQuadKey(quadKeyFromMortonCode(23605706)) and lock it;", async function() {
     const mockedResponses = new Map();
 
     mockedResponses.set(
@@ -969,7 +969,7 @@ describe("Handling versions in the requests classes and clients", () => {
     );
   });
 
-  it("Should use latest version for getData with DataRequest.withPartitionId('23605706') and lock it;", async () => {
+  it("Should use latest version for getData with DataRequest.withPartitionId('23605706') and lock it;", async function() {
     const mockedResponses = new Map();
 
     mockedResponses.set(
@@ -1064,7 +1064,7 @@ describe("Handling versions in the requests classes and clients", () => {
     );
   });
 
-  it("Should use version 0 for getLayerVersions with LayerVersionsRequest.withVersion(0);", async () => {
+  it("Should use version 0 for getLayerVersions with LayerVersionsRequest.withVersion(0);", async function() {
     const mockedResponses = new Map();
 
     mockedResponses.set(
@@ -1125,7 +1125,7 @@ describe("Handling versions in the requests classes and clients", () => {
     );
   });
 
-  it("Should use version 0 for getVersions with CatalogVersionRequest.withEndVersion(0);", async () => {
+  it("Should use version 0 for getVersions with CatalogVersionRequest.withEndVersion(0);", async function() {
     const mockedResponses = new Map();
 
     mockedResponses.set(

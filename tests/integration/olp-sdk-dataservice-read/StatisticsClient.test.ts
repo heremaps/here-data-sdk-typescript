@@ -36,7 +36,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("StatisticsClient", () => {
+describe("StatisticsClient", function() {
   let fetchMock: FetchMock;
   let sandbox: sinon.SinonSandbox;
   let fetchStub: sinon.SinonStub;
@@ -47,15 +47,15 @@ describe("StatisticsClient", () => {
   const mockedHRN = HRN.fromString("hrn:here:data:::mocked-hrn");
   const mockedLayerId = "mocked-layed-id";
 
-  before(() => {
+  before(function() {
     sandbox = sinon.createSandbox();
   });
 
-  afterEach(() => {
+  afterEach(function() {
     sandbox.restore();
   });
 
-  beforeEach(() => {
+  beforeEach(function() {
     fetchMock = new FetchMock();
     fetchStub = sandbox.stub(global as any, "fetch");
     fetchStub.callsFake(fetchMock.fetch());
@@ -68,12 +68,12 @@ describe("StatisticsClient", () => {
     statisticsClient = new StatisticsClient(settings);
   });
 
-  it("Shoud be initialized with settings", async () => {
+  it("Shoud be initialized with settings", async function() {
     assert.isDefined(statisticsClient);
     expect(statisticsClient).to.be.instanceOf(StatisticsClient);
   });
 
-  it("Should fetch the summary info from statistics service", async () => {
+  it("Should fetch the summary info from statistics service", async function() {
     const mockedResponses = new Map();
 
     // Set the response from lookup api
@@ -146,7 +146,7 @@ describe("StatisticsClient", () => {
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
-  it("Should method getSummary return error if catalogHRN is not provided", async () => {
+  it("Should method getSummary return error if catalogHRN is not provided", async function() {
     const mockedErrorResponse = "No catalogHrn provided";
 
     const summaryRequest = new SummaryRequest().withLayerId(mockedLayerId);
@@ -159,7 +159,7 @@ describe("StatisticsClient", () => {
       });
   });
 
-  it("Should method getSummary return error if layerId is not provided", async () => {
+  it("Should method getSummary return error if layerId is not provided", async function() {
     const mockedErrorResponse = "No layerId provided";
 
     const summaryRequest = new SummaryRequest().withCatalogHrn(mockedHRN);
@@ -172,7 +172,7 @@ describe("StatisticsClient", () => {
       });
   });
 
-  it("Should method getStatistics return timemap statistics data", async () => {
+  it("Should method getStatistics return timemap statistics data", async function() {
     const mockedResponses = new Map();
 
     // Set the response from lookup api
@@ -219,7 +219,7 @@ describe("StatisticsClient", () => {
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
-  it("Should method getStatistics return sizemap statistics data", async () => {
+  it("Should method getStatistics return sizemap statistics data", async function() {
     const mockedResponses = new Map();
 
     // Set the response from lookup api
@@ -266,7 +266,7 @@ describe("StatisticsClient", () => {
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
-  it("Should method getStatistics return bitmap statistics data", async () => {
+  it("Should method getStatistics return bitmap statistics data", async function() {
     const mockedResponses = new Map();
 
     // Set the response from lookup api
@@ -313,7 +313,7 @@ describe("StatisticsClient", () => {
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
-  it("Should user-agent be added to the each request", async () => {
+  it("Should user-agent be added to the each request", async function() {
     const mockedResponses = new Map();
 
     // Set the response from lookup api

@@ -17,9 +17,6 @@
  * License-Filename: LICENSE
  */
 
-// tslint:disable:only-arrow-functions
-//    Mocha discourages using arrow functions, see https://mochajs.org/#arrow-functions
-
 import { assert } from "chai";
 import { Uuid } from "@here/olp-sdk-core";
 

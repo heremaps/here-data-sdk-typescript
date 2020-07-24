@@ -28,38 +28,48 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("CatalogVersionRequest", () => {
+describe("CatalogVersionRequest", function() {
     const billingTag = "billingTag";
     const mockedStartVersion = 13;
     const mockedEndVersion = 42;
 
-    it("Should initialize", () => {
+    it("Should initialize", function() {
         const catalogVersionRequest = new CatalogVersionRequest();
 
         assert.isDefined(catalogVersionRequest);
         expect(catalogVersionRequest).be.instanceOf(CatalogVersionRequest);
     });
 
-    it("Should set parameters", () => {
+    it("Should set parameters", function() {
         const catalogVersionRequest = new CatalogVersionRequest();
 
-        const catalogStartVersion = catalogVersionRequest.withStartVersion(mockedStartVersion);
-        const catalogEndVersion = catalogVersionRequest.withEndVersion(mockedEndVersion);
+        const catalogStartVersion = catalogVersionRequest.withStartVersion(
+            mockedStartVersion
+        );
+        const catalogEndVersion = catalogVersionRequest.withEndVersion(
+            mockedEndVersion
+        );
         const catalogBillTag = catalogVersionRequest.withBillingTag(billingTag);
 
-        expect(catalogStartVersion.getStartVersion()).to.be.equal(mockedStartVersion);
+        expect(catalogStartVersion.getStartVersion()).to.be.equal(
+            mockedStartVersion
+        );
         expect(catalogEndVersion.getEndVersion()).to.be.equal(mockedEndVersion);
         expect(catalogBillTag.getBillingTag()).to.be.equal(billingTag);
     });
 
-    it("Should get parameters with chain", () => {
+    it("Should get parameters with chain", function() {
         const catalogVersionRequest = new CatalogVersionRequest()
             .withStartVersion(mockedStartVersion)
             .withEndVersion(mockedEndVersion)
             .withBillingTag(billingTag);
 
-        expect(catalogVersionRequest.getStartVersion()).to.be.equal(mockedStartVersion);
-        expect(catalogVersionRequest.getEndVersion()).to.be.equal(mockedEndVersion);
+        expect(catalogVersionRequest.getStartVersion()).to.be.equal(
+            mockedStartVersion
+        );
+        expect(catalogVersionRequest.getEndVersion()).to.be.equal(
+            mockedEndVersion
+        );
         expect(catalogVersionRequest.getBillingTag()).to.be.equal(billingTag);
     });
 });

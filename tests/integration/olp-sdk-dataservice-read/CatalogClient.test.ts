@@ -36,7 +36,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("CatalogClient", () => {
+describe("CatalogClient", function() {
   let fetchMock: FetchMock;
   let sandbox: sinon.SinonSandbox;
   let fetchStub: sinon.SinonStub;
@@ -45,15 +45,15 @@ describe("CatalogClient", () => {
   const headers = new Headers();
   headers.append("cache-control", "max-age=3600");
 
-  before(() => {
+  before(function() {
     sandbox = sinon.createSandbox();
   });
 
-  afterEach(() => {
+  afterEach(function() {
     sandbox.restore();
   });
 
-  beforeEach(() => {
+  beforeEach(function() {
     fetchMock = new FetchMock();
     fetchStub = sandbox.stub(global as any, "fetch");
     fetchStub.callsFake(fetchMock.fetch());
@@ -69,12 +69,12 @@ describe("CatalogClient", () => {
     );
   });
 
-  it("Shoud be initialized with settings", async () => {
+  it("Shoud be initialized with settings", async function() {
     assert.isDefined(catalogClient);
     expect(catalogClient).to.be.instanceOf(CatalogClient);
   });
 
-  it("Should fetch the information about about specific catalog versions", async () => {
+  it("Should fetch the information about about specific catalog versions", async function() {
     const mockedResponses = new Map();
 
     // Set the response from lookup api with the info about Metadata service.
@@ -174,7 +174,7 @@ describe("CatalogClient", () => {
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
-  it("Should fetch the information about all catalog versions", async () => {
+  it("Should fetch the information about all catalog versions", async function() {
     const mockedResponses = new Map();
 
     // Set the response from lookup api with the info about Metadata service.
@@ -310,7 +310,7 @@ describe("CatalogClient", () => {
     expect(fetchStub.callCount).to.be.equal(3);
   });
 
-  it("Should fetch the configuration of all catalogs", async () => {
+  it("Should fetch the configuration of all catalogs", async function() {
     const mockedResponses = new Map();
 
     // Set the response from lookup api with the info about Metadata service.
@@ -375,7 +375,7 @@ describe("CatalogClient", () => {
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
-  it("Should fetch the configuration of all catalogs 2", async () => {
+  it("Should fetch the configuration of all catalogs 2", async function() {
     const mockedResponses = new Map();
 
     // Set the response from lookup api with the info about Metadata service.
@@ -438,7 +438,7 @@ describe("CatalogClient", () => {
     });
   });
 
-  it("Should read the full catalog configuration for the requested catalog", async () => {
+  it("Should read the full catalog configuration for the requested catalog", async function() {
     const mockedResponses = new Map();
 
     // Set the response from lookup api with the info about Metadata service.
@@ -518,7 +518,7 @@ describe("CatalogClient", () => {
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
-  it("Should getEarliestVersion() return version", async () => {
+  it("Should getEarliestVersion() return version", async function() {
     const mockedResponses = new Map();
 
     // Set the response from lookup api with the info about Metadata service.
@@ -557,7 +557,7 @@ describe("CatalogClient", () => {
     expect(version).to.be.equal(42);
   });
 
-  it("Should getLayerVersions() with latest version return layer version", async () => {
+  it("Should getLayerVersions() with latest version return layer version", async function() {
     const mockedResponses = new Map();
     const mockedResponse = {
       version: 42,
@@ -600,7 +600,7 @@ describe("CatalogClient", () => {
     expect(versions.length).to.be.equal(mockedResponse.layerVersions.length);
   });
 
-  it("Should getLayerVersions() without latest version return layer version", async () => {
+  it("Should getLayerVersions() without latest version return layer version", async function() {
     const mockedResponses = new Map();
     const mockedResponse = {
       version: 42,

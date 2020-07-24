@@ -38,7 +38,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("StreamLayerClient", () => {
+describe("StreamLayerClient", function() {
   let fetchMock: FetchMock;
   let sandbox: sinon.SinonSandbox;
   let fetchStub: sinon.SinonStub;
@@ -46,21 +46,21 @@ describe("StreamLayerClient", () => {
   const testHRN = HRN.fromString("hrn:here:data:::test-hrn");
   const testLayerId = "test-layed-id";
 
-  before(() => {
+  before(function() {
     sandbox = sinon.createSandbox();
   });
 
-  afterEach(() => {
+  afterEach(function() {
     sandbox.restore();
   });
 
-  beforeEach(() => {
+  beforeEach(function() {
     fetchMock = new FetchMock();
     fetchStub = sandbox.stub(global as any, "fetch");
     fetchStub.callsFake(fetchMock.fetch());
   });
 
-  it("Shoud be initialized with StreamLayerClientParams", async () => {
+  it("Shoud be initialized with StreamLayerClientParams", async function() {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -78,7 +78,7 @@ describe("StreamLayerClient", () => {
     assert.equal(streamLayerClient["layerId"], "test-layed-id");
   });
 
-  it("Shoud getData() fetch data with dataHandle", async () => {
+  it("Shoud getData() fetch data with dataHandle", async function() {
     const mockedResponses = new Map();
     const mockedData = Buffer.alloc(42);
 
@@ -142,7 +142,7 @@ describe("StreamLayerClient", () => {
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
-  it("Should getData() method handle error", async () => {
+  it("Should getData() method handle error", async function() {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -158,7 +158,7 @@ describe("StreamLayerClient", () => {
     });
   });
 
-  it("Should subscribe() method return data", async () => {
+  it("Should subscribe() method return data", async function() {
     const mockedResponses = new Map();
     const headers = new Headers();
     headers.append("X-Correlation-Id", "9141392.f96875c-9422-4df4-b5ff");
@@ -216,7 +216,7 @@ describe("StreamLayerClient", () => {
     expect(result).equal("-9141392.f96875c-9422-4df4-b5ff-41a4f459");
   });
 
-  it("Should poll() method get messages from stream layer", async () => {
+  it("Should poll() method get messages from stream layer", async function() {
     const mockedResponses = new Map();
     const headers = new Headers();
     const commitOffsetsResponse = new Response("Ok");
@@ -318,7 +318,7 @@ describe("StreamLayerClient", () => {
     expect(messages[0].metaData.dataSize).to.be.equal(100500);
   });
 
-  it("Should poll() method handle errors", async () => {
+  it("Should poll() method handle errors", async function() {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -344,7 +344,7 @@ describe("StreamLayerClient", () => {
     });
   });
 
-  it("Shoult unsubscribe() method cancel subscription", async () => {
+  it("Shoult unsubscribe() method cancel subscription", async function() {
     const mockedResponses = new Map();
     const headers = new Headers();
     headers.append("X-Correlation-Id", "9141392.f96875c-9422-4df4-b5ff");
@@ -410,7 +410,7 @@ describe("StreamLayerClient", () => {
     expect(unsubscription.status).to.be.equal(200);
   });
 
-  it("Should unsubscribe() method handle errors", async () => {
+  it("Should unsubscribe() method handle errors", async function() {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -436,7 +436,7 @@ describe("StreamLayerClient", () => {
     });
   });
 
-  it("Should seek() method handle errors", async () => {
+  it("Should seek() method handle errors", async function() {
     const mockedResponses = new Map();
     const headers = new Headers();
     headers.append("X-Correlation-Id", "9141392.f96875c-9422-4df4-b5ff");

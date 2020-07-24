@@ -38,7 +38,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("VolatileLayerClient", () => {
+describe("VolatileLayerClient", function() {
   let fetchMock: FetchMock;
   let sandbox: sinon.SinonSandbox;
   let fetchStub: sinon.SinonStub;
@@ -48,21 +48,21 @@ describe("VolatileLayerClient", () => {
   const headers = new Headers();
   headers.append("cache-control", "max-age=3600");
 
-  before(() => {
+  before(function() {
     sandbox = sinon.createSandbox();
   });
 
-  afterEach(() => {
+  afterEach(function() {
     sandbox.restore();
   });
 
-  beforeEach(() => {
+  beforeEach(function() {
     fetchMock = new FetchMock();
     fetchStub = sandbox.stub(global as any, "fetch");
     fetchStub.callsFake(fetchMock.fetch());
   });
 
-  it("Shoud be initialized with settings", async () => {
+  it("Shoud be initialized with settings", async function() {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -76,7 +76,7 @@ describe("VolatileLayerClient", () => {
     expect(layerClient).to.be.instanceOf(VolatileLayerClient);
   });
 
-  it("Shoud be initialization error be handled", async () => {
+  it("Shoud be initialization error be handled", async function() {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -92,7 +92,7 @@ describe("VolatileLayerClient", () => {
     }
   });
 
-  it("Shoud be fetched partitions metadata for specific IDs", async () => {
+  it("Shoud be fetched partitions metadata for specific IDs", async function() {
     const mockedResponses = new Map();
 
     // Set the response from lookup api with the info about Query API.
@@ -189,7 +189,7 @@ describe("VolatileLayerClient", () => {
     }
   });
 
-  it("Shoud be fetched data with PartitionId", async () => {
+  it("Shoud be fetched data with PartitionId", async function() {
     const mockedResponses = new Map();
     const mockedPartitionId = "0000042";
     const mockedData = Buffer.alloc(42);
@@ -271,7 +271,7 @@ describe("VolatileLayerClient", () => {
     expect(fetchStub.callCount).to.be.equal(3);
   });
 
-  it("Shoud be fetched partitions all metadata", async () => {
+  it("Shoud be fetched partitions all metadata", async function() {
     const mockedResponses = new Map();
 
     // Set the response from lookup api with the info about Metadata service.
@@ -370,7 +370,7 @@ describe("VolatileLayerClient", () => {
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
-  it("Shoud read data with dataHandle", async () => {
+  it("Shoud read data with dataHandle", async function() {
     const mockedResponses = new Map();
     const mockedDataHandle = "1b2ca68f-d4a0-4379-8120-cd025640510c";
     const mockedData = Buffer.alloc(42);
@@ -422,7 +422,7 @@ describe("VolatileLayerClient", () => {
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
-  it("Shoud be fetched data with QuadKey", async () => {
+  it("Shoud be fetched data with QuadKey", async function() {
     const mockedResponses = new Map();
     const mockedQuadKey = quadKeyFromMortonCode("23618403");
     const mockedData = Buffer.alloc(42);
@@ -522,7 +522,7 @@ describe("VolatileLayerClient", () => {
     expect(fetchStub.callCount).to.be.equal(4);
   });
 
-  it("Shoud read partitions metadata by QuadKey for specific VolatileLayer", async () => {
+  it("Shoud read partitions metadata by QuadKey for specific VolatileLayer", async function() {
     const mockedResponses = new Map();
 
     const billingTag = "billingTag";
@@ -648,7 +648,7 @@ describe("VolatileLayerClient", () => {
     }
   });
 
-  it("Shoud read partitions with additionalFields parameter from PartitionsRequest", async () => {
+  it("Shoud read partitions with additionalFields parameter from PartitionsRequest", async function() {
     const mockedResponses = new Map();
 
     const mockedPartitions = {
@@ -732,7 +732,7 @@ describe("VolatileLayerClient", () => {
     );
   });
 
-  it("Shoud read partitions with additionalFields parameter from QuadKeyPartitionsRequest", async () => {
+  it("Shoud read partitions with additionalFields parameter from QuadKeyPartitionsRequest", async function() {
     const mockedResponses = new Map();
 
     const mockedQuadKey = {
@@ -836,7 +836,7 @@ describe("VolatileLayerClient", () => {
     assert.isDefined(partitions);
   });
 
-  it("Shoud be initialized with VolatileLayerClientParams", async () => {
+  it("Shoud be initialized with VolatileLayerClientParams", async function() {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -856,7 +856,7 @@ describe("VolatileLayerClient", () => {
     assert.equal(volatileLayerClient["hrn"], "hrn:here:data:::test-hrn");
   });
 
-  it("Should user-agent be added to the each request", async () => {
+  it("Should user-agent be added to the each request", async function() {
     const mockedResponses = new Map();
     const mockedDataHandle = "1b2ca68f-d4a0-4379-8120-cd025640510c";
     const mockedData = Buffer.alloc(42);

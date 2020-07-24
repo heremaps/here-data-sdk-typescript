@@ -28,7 +28,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("QuadTreeIndexRequest", () => {
+describe("QuadTreeIndexRequest", function() {
     const billingTag = "billingTag";
     const mockedHRN = dataServiceRead.HRN.fromString(
         "hrn:here:data:::mocked-hrn"
@@ -43,7 +43,7 @@ describe("QuadTreeIndexRequest", () => {
         level: 3
     };
 
-    it("Should initialize", () => {
+    it("Should initialize", function() {
         const quadTreeRequest = new dataServiceRead.QuadTreeIndexRequest(
             mockedHRN,
             mockedLayerId,
@@ -59,7 +59,7 @@ describe("QuadTreeIndexRequest", () => {
         expect(quadTreeRequest.getLayerType()).to.be.equal(mockedLayerType);
     });
 
-    it("Should set parameters", () => {
+    it("Should set parameters", function() {
         const quadTreeRequest = new dataServiceRead.QuadTreeIndexRequest(
             mockedHRN,
             mockedLayerId,
@@ -90,7 +90,7 @@ describe("QuadTreeIndexRequest", () => {
         assert.isDefined(quadTreeRequest.getAdditionalFields());
     });
 
-    it("Should get parameters with chain", () => {
+    it("Should get parameters with chain", function() {
         const quadTreeRequest = new dataServiceRead.QuadTreeIndexRequest(
             mockedHRN,
             mockedLayerId,

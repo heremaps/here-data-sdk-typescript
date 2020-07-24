@@ -28,34 +28,36 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("SchemaDetailsRequest", () => {
+describe("SchemaDetailsRequest", function() {
     const billingTag = "billingTag";
     const mockedHRN = HRN.fromString("hrn:here:data:::mocked-hrn");
 
-    it("Should initialize", () => {
+    it("Should initialize", function() {
         const schemaDetailsRequest = new SchemaDetailsRequest();
 
         assert.isDefined(SchemaDetailsRequest);
         expect(schemaDetailsRequest).be.instanceOf(SchemaDetailsRequest);
     });
 
-    it("Should set parameters", () => {
+    it("Should set parameters", function() {
         const schemaDetailsRequest = new SchemaDetailsRequest();
 
-        const schemaDetailsRequestWithSchema = schemaDetailsRequest.withSchema(mockedHRN);
-        const schemaRequestWithBilTag = schemaDetailsRequest.withBillingTag(billingTag);
+        const schemaDetailsRequestWithSchema = schemaDetailsRequest.withSchema(
+            mockedHRN
+        );
+        const schemaRequestWithBilTag = schemaDetailsRequest.withBillingTag(
+            billingTag
+        );
 
         assert.isDefined(schemaDetailsRequestWithSchema);
         assert.isDefined(schemaRequestWithBilTag);
         expect(schemaDetailsRequestWithSchema.getSchema()).to.be.equal(
             mockedHRN
         );
-        expect(schemaRequestWithBilTag.getBillingTag()).to.be.equal(
-            billingTag
-        );
+        expect(schemaRequestWithBilTag.getBillingTag()).to.be.equal(billingTag);
     });
 
-    it("Should set parameters with chain", () => {
+    it("Should set parameters with chain", function() {
         const schemaDetailsRequest = new SchemaDetailsRequest()
             .withSchema(mockedHRN)
             .withBillingTag(billingTag);

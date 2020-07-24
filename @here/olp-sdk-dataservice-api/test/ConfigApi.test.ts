@@ -27,8 +27,8 @@ chai.use(sinonChai);
 
 const expect = chai.expect;
 
-describe("ConfigApi", () => {
-    it("catalogExists", async () => {
+describe("ConfigApi", function() {
+    it("catalogExists", async function() {
         const params = {
             catalogHrn: "mocked-catalogHrn",
             billingTag: "mocked-billingTag"
@@ -51,7 +51,7 @@ describe("ConfigApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("createCatalog", async () => {
+    it("createCatalog", async function() {
         const params = {
             body: "mocked-body" as any,
             billingTag: "mocked-billingTag"
@@ -75,7 +75,7 @@ describe("ConfigApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("deleteCatalog", async () => {
+    it("deleteCatalog", async function() {
         const params = {
             catalogHrn: "mocked-catalogHrn",
             billingTag: "mocked-billingTag"
@@ -98,7 +98,7 @@ describe("ConfigApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("deleteLayer", async () => {
+    it("deleteLayer", async function() {
         const params = {
             catalogHrn: "mocked-catalogHrn",
             layerId: "mocked-layerId"
@@ -121,7 +121,7 @@ describe("ConfigApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("getCatalog", async () => {
+    it("getCatalog", async function() {
         const params = {
             catalogHrn: "mocked-catalogHrn",
             billingTag: "mocked-billingTag"
@@ -144,7 +144,7 @@ describe("ConfigApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("getCatalogStatus", async () => {
+    it("getCatalogStatus", async function() {
         const params = {
             token: "mocked-token",
             billingTag: "mocked-billingTag"
@@ -167,7 +167,7 @@ describe("ConfigApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("getCatalogs", async () => {
+    it("getCatalogs", async function() {
         const params = {
             billingTag: "mocked-billingTag" as any,
             verbose: "mocked-verbose" as any,
@@ -203,7 +203,7 @@ describe("ConfigApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("patchCatalog", async () => {
+    it("patchCatalog", async function() {
         const params = {
             catalogHrn: "mocked-catalogHrn",
             body: "mocked-body" as any
@@ -230,7 +230,7 @@ describe("ConfigApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("patchLayer", async () => {
+    it("patchLayer", async function() {
         const params = {
             catalogHrn: "mocked-catalogHrn",
             layerId: "mocked-layerId",
@@ -258,7 +258,7 @@ describe("ConfigApi", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("updateCatalog", async () => {
+    it("updateCatalog", async function() {
         const params = {
             catalogHrn: "mocked-catalogHrn",
             body: "mocked-body" as any,

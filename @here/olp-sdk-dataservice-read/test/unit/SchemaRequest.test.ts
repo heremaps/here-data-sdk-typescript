@@ -28,39 +28,39 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("SchemaRequest", () => {
+describe("SchemaRequest", function() {
     const billingTag = "billingTag";
     const mockedVersion = {
         id: "42",
         url: "http://fake.url"
     };
 
-    it("Should initialize", () => {
+    it("Should initialize", function() {
         const schemaRequest = new SchemaRequest();
 
         assert.isDefined(schemaRequest);
         expect(schemaRequest).be.instanceOf(SchemaRequest);
     });
 
-    it("Should set parameters", () => {
+    it("Should set parameters", function() {
         const schemaRequest = new SchemaRequest();
 
         const schemaRequestWithVariant = schemaRequest.withVariant(
             mockedVersion
         );
-        const schemaRequestWithBilTag = schemaRequest.withBillingTag(billingTag);
+        const schemaRequestWithBilTag = schemaRequest.withBillingTag(
+            billingTag
+        );
 
         assert.isDefined(schemaRequestWithVariant);
         assert.isDefined(schemaRequestWithBilTag);
         expect(schemaRequestWithVariant.getVariant()).to.be.equal(
             mockedVersion
         );
-        expect(schemaRequestWithBilTag.getBillingTag()).to.be.equal(
-            billingTag
-        );
+        expect(schemaRequestWithBilTag.getBillingTag()).to.be.equal(billingTag);
     });
 
-    it("Should set parameters with chain", () => {
+    it("Should set parameters with chain", function() {
         const schemaRequest = new SchemaRequest()
             .withVariant(mockedVersion)
             .withBillingTag(billingTag);

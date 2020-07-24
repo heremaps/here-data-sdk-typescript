@@ -20,8 +20,8 @@
 import { assert } from "chai";
 import { LRUCache } from "@here/olp-sdk-core";
 
-describe("LRU", () => {
-    it("set", () => {
+describe("LRU", function() {
+    it("set", function() {
         const cache = new LRUCache(3);
         cache.set(1, 1);
         cache.set(2, 2);
@@ -32,7 +32,7 @@ describe("LRU", () => {
         assert.strictEqual(cache.get(3), 3);
     });
 
-    it("get", () => {
+    it("get", function() {
         const cache = new LRUCache<number, number>(3);
         assert.strictEqual(cache.get(1), undefined);
         assert.strictEqual(cache.get(2), undefined);
@@ -44,7 +44,7 @@ describe("LRU", () => {
         assert.strictEqual(cache.get(3), undefined);
     });
 
-    it("overflow", () => {
+    it("overflow", function() {
         const cache = new LRUCache(3);
         cache.set(1, 1);
         cache.set(2, 2);
@@ -57,7 +57,7 @@ describe("LRU", () => {
         assert.strictEqual(cache.get(4), 4);
     });
 
-    it("clear", () => {
+    it("clear", function() {
         const cache = new LRUCache(3);
         cache.set(1, 1);
         cache.set(2, 2);
@@ -67,7 +67,7 @@ describe("LRU", () => {
         assert.strictEqual(cache.get(2), undefined);
     });
 
-    it("resize", () => {
+    it("resize", function() {
         const cache = new LRUCache<number, number>(2);
 
         cache.set(1, 1);

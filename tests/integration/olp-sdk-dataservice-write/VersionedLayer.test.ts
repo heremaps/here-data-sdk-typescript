@@ -30,7 +30,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("Versioned Layer Client for write", () => {
+describe("Versioned Layer Client for write", function() {
   let fetchMock: FetchMock;
   let sandbox: sinon.SinonSandbox;
   let fetchStub: sinon.SinonStub;
@@ -45,15 +45,15 @@ describe("Versioned Layer Client for write", () => {
   const headers = new Headers();
   headers.append("cache-control", "max-age=3600");
 
-  before(() => {
+  before(function() {
     sandbox = sinon.createSandbox();
   });
 
-  afterEach(() => {
+  afterEach(function() {
     sandbox.restore();
   });
 
-  beforeEach(() => {
+  beforeEach(function() {
     fetchMock = new FetchMock();
     fetchStub = sandbox.stub(global as any, "fetch");
     fetchStub.callsFake(fetchMock.fetch());
@@ -64,7 +64,7 @@ describe("Versioned Layer Client for write", () => {
     });
   });
 
-  it("Should initialize", () => {
+  it("Should initialize", function() {
     const client = new VersionedLayerClient({
       catalogHrn,
       settings
@@ -74,7 +74,7 @@ describe("Versioned Layer Client for write", () => {
     expect(client).be.instanceOf(VersionedLayerClient);
   });
 
-  xit("Should fetch the latest version of catalog", async () => {
+  xit("Should fetch the latest version of catalog", async function() {
     const mockedResponses = new Map();
 
     // Set the response from lookup api with the info about Metadata service.

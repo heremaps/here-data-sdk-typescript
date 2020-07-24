@@ -35,7 +35,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("IndexLayerClient", () => {
+describe("IndexLayerClient", function() {
   let fetchMock: FetchMock;
   let sandbox: sinon.SinonSandbox;
   let fetchStub: sinon.SinonStub;
@@ -43,21 +43,21 @@ describe("IndexLayerClient", () => {
   const testHRN = HRN.fromString("hrn:here:data:::test-hrn");
   const testLayerId = "test-layed-id";
 
-  before(() => {
+  before(function() {
     sandbox = sinon.createSandbox();
   });
 
-  afterEach(() => {
+  afterEach(function() {
     sandbox.restore();
   });
 
-  beforeEach(() => {
+  beforeEach(function() {
     fetchMock = new FetchMock();
     fetchStub = sandbox.stub(global as any, "fetch");
     fetchStub.callsFake(fetchMock.fetch());
   });
 
-  it("Should be initialized with settings", async () => {
+  it("Should be initialized with settings", async function() {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -71,7 +71,7 @@ describe("IndexLayerClient", () => {
     expect(indexClient).to.be.instanceOf(IndexLayerClient);
   });
 
-  it("Should initialization error be handled", () => {
+  it("Should initialization error be handled", function() {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -87,7 +87,7 @@ describe("IndexLayerClient", () => {
     }
   });
 
-  it("Should be fetched partitions all metadata", async () => {
+  it("Should be fetched partitions all metadata", async function() {
     const mockedResponses = new Map();
 
     // Set the response from lookup api with the info about Index service.
@@ -181,7 +181,7 @@ describe("IndexLayerClient", () => {
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
-  it("Should getPartitions() method handle errors", async () => {
+  it("Should getPartitions() method handle errors", async function() {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -197,7 +197,7 @@ describe("IndexLayerClient", () => {
     });
   });
 
-  it("Should getData() method handle errors", async () => {
+  it("Should getData() method handle errors", async function() {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -212,7 +212,7 @@ describe("IndexLayerClient", () => {
     });
   });
 
-  it("Should be fetched data with dataHandle", async () => {
+  it("Should be fetched data with dataHandle", async function() {
     const mockedResponses = new Map();
     const mockedData = Buffer.alloc(42);
     const mockedModel = {
@@ -269,7 +269,7 @@ describe("IndexLayerClient", () => {
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
-  it("Should be initialized with IndexLayerClientParams", async () => {
+  it("Should be initialized with IndexLayerClientParams", async function() {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -287,7 +287,7 @@ describe("IndexLayerClient", () => {
     assert.equal(indexLayerClient["hrn"], "hrn:here:data:::test-hrn");
   });
 
-  it("Should user-agent be added to the each request", async () => {
+  it("Should user-agent be added to the each request", async function() {
     const mockedResponses = new Map();
     const mockedData = Buffer.alloc(42);
     const mockedModel = {

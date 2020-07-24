@@ -30,22 +30,22 @@ let sandbox: sinon.SinonSandbox;
 const settings = {} as any;
 const configClient = new dataServiceRead.ConfigClient(settings);
 
-describe("ConfigClient", () => {
-    before(() => {
+describe("ConfigClient", function() {
+    before(function() {
         sandbox = sinon.createSandbox();
     });
 
-    beforeEach(() => {
+    beforeEach(function() {
         sandbox
             .stub(dataServiceRead.RequestFactory, "create")
             .callsFake(() => Promise.resolve({} as any));
     });
 
-    afterEach(() => {
+    afterEach(function() {
         sandbox.restore();
     });
 
-    it("Should works as expected with empty request.", async () => {
+    it("Should works as expected with empty request.", async function() {
         class MockedCatalogsRequest {
             public getSchema() {
                 return undefined;
@@ -64,7 +64,7 @@ describe("ConfigClient", () => {
         await configClient.getCatalogs(catalogsConfigRequest as any);
     });
 
-    it("Should works as expected with request with schema and empty billing tag", async () => {
+    it("Should works as expected with request with schema and empty billing tag", async function() {
         class MockedCatalogsRequest {
             public getSchema() {
                 return "test-schema-string";
@@ -85,7 +85,7 @@ describe("ConfigClient", () => {
         await configClient.getCatalogs(catalogsConfigRequest as any);
     });
 
-    it("Should works as expected with request with schema and with billing tag", async () => {
+    it("Should works as expected with request with schema and with billing tag", async function() {
         class MockedCatalogsRequest {
             public getSchema() {
                 return "test-schema-string";

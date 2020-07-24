@@ -39,7 +39,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("VersionedLayerClient", () => {
+describe("VersionedLayerClient", function() {
   let fetchMock: FetchMock;
   let sandbox: sinon.SinonSandbox;
   let fetchStub: sinon.SinonStub;
@@ -49,21 +49,21 @@ describe("VersionedLayerClient", () => {
   const headers = new Headers();
   headers.append("cache-control", "max-age=3600");
 
-  before(() => {
+  before(function() {
     sandbox = sinon.createSandbox();
   });
 
-  afterEach(() => {
+  afterEach(function() {
     sandbox.restore();
   });
 
-  beforeEach(() => {
+  beforeEach(function() {
     fetchMock = new FetchMock();
     fetchStub = sandbox.stub(global as any, "fetch");
     fetchStub.callsFake(fetchMock.fetch());
   });
 
-  it("Shoud be initialized with settings", async () => {
+  it("Shoud be initialized with settings", async function() {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -77,7 +77,7 @@ describe("VersionedLayerClient", () => {
     expect(layerClient).to.be.instanceOf(VersionedLayerClient);
   });
 
-  it("Shoud be initialization error be handled", async () => {
+  it("Shoud be initialization error be handled", async function() {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -93,7 +93,7 @@ describe("VersionedLayerClient", () => {
     }
   });
 
-  it("Shoud be initialized with VersionedLayerClientParams with version", async () => {
+  it("Shoud be initialized with VersionedLayerClientParams with version", async function() {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -112,7 +112,7 @@ describe("VersionedLayerClient", () => {
     expect(layerClientWithVersion).to.be.instanceOf(VersionedLayerClient);
   });
 
-  it("Shoud be initialised with VersionedLayerClientParams without version", async () => {
+  it("Shoud be initialised with VersionedLayerClientParams without version", async function() {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -130,7 +130,7 @@ describe("VersionedLayerClient", () => {
     expect(layerClientWithoutVersion).to.be.instanceOf(VersionedLayerClient);
   });
 
-  it("Shoud be fetched partitions metadata for specific IDs", async () => {
+  it("Shoud be fetched partitions metadata for specific IDs", async function() {
     const mockedResponses = new Map();
 
     // Set the response from lookup api with the info about Query API.
@@ -243,7 +243,7 @@ describe("VersionedLayerClient", () => {
     }
   });
 
-  it("Shoud be fetched partitions all metadata", async () => {
+  it("Shoud be fetched partitions all metadata", async function() {
     const mockedResponses = new Map();
 
     // Set the response from lookup api with the info about Metadata service.
@@ -365,7 +365,7 @@ describe("VersionedLayerClient", () => {
     expect(fetchStub.callCount).to.be.equal(3);
   });
 
-  it("Shoud be fetched data with dataHandle", async () => {
+  it("Shoud be fetched data with dataHandle", async function() {
     const mockedResponses = new Map();
     const mockedDataHandle = "1b2ca68f-d4a0-4379-8120-cd025640510c";
     const mockedData = Buffer.alloc(42);
@@ -426,7 +426,7 @@ describe("VersionedLayerClient", () => {
     expect(fetchStub.callCount).to.be.equal(2); // 1 - lookup, 1 - blob
   });
 
-  it("Shoud be fetched data with PartitionId", async () => {
+  it("Shoud be fetched data with PartitionId", async function() {
     const mockedResponses = new Map();
     const mockedPartitionId = "0000042";
     const mockedData = Buffer.alloc(42);
@@ -521,7 +521,7 @@ describe("VersionedLayerClient", () => {
     expect(fetchStub.callCount).to.be.equal(4);
   });
 
-  it("Shoud be fetched data with PartitionId and version", async () => {
+  it("Shoud be fetched data with PartitionId and version", async function() {
     const mockedResponses = new Map();
     const mockedPartitionId = "0000042";
     const mockedData = Buffer.alloc(42);
@@ -603,7 +603,7 @@ describe("VersionedLayerClient", () => {
     expect(fetchStub.callCount).to.be.equal(3); // 1 - lookup, 1 - query, 1 - blob
   });
 
-  it("Shoud be fetched data with QuadKey", async () => {
+  it("Shoud be fetched data with QuadKey", async function() {
     const mockedResponses = new Map();
     const mockedQuadKey = quadKeyFromMortonCode("23618403");
     const mockedData = Buffer.alloc(42);
@@ -700,7 +700,7 @@ describe("VersionedLayerClient", () => {
     expect(fetchStub.callCount).to.be.equal(4);
   });
 
-  it("Shoud be fetched data with QuadKey and Version", async () => {
+  it("Shoud be fetched data with QuadKey and Version", async function() {
     const mockedResponses = new Map();
     const mockedQuadKey = quadKeyFromMortonCode("23618403");
     const mockedData = Buffer.alloc(42);
@@ -784,7 +784,7 @@ describe("VersionedLayerClient", () => {
     expect(fetchStub.callCount).to.be.equal(3); // 1 - lookup, 1 - query, 1 - blob
   });
 
-  it("Shoud read partitions metadata by QuadKey for specific VersionLayer", async () => {
+  it("Shoud read partitions metadata by QuadKey for specific VersionLayer", async function() {
     const mockedResponses = new Map();
 
     const billingTag = "billingTag";
@@ -918,7 +918,7 @@ describe("VersionedLayerClient", () => {
     }
   });
 
-  it("Shoud read partitions with additionalFields parameter from PartitionsRequest", async () => {
+  it("Shoud read partitions with additionalFields parameter from PartitionsRequest", async function() {
     const mockedResponses = new Map();
 
     const mockedPartitions = {
@@ -1009,7 +1009,7 @@ describe("VersionedLayerClient", () => {
     );
   });
 
-  it("Shoud read partitions with additionalFields parameter from QuadKeyPartitionsRequest", async () => {
+  it("Shoud read partitions with additionalFields parameter from QuadKeyPartitionsRequest", async function() {
     const mockedResponses = new Map();
 
     const mockedQuadKey = {
@@ -1113,7 +1113,7 @@ describe("VersionedLayerClient", () => {
     assert.isDefined(partitions);
   });
 
-  it("Should user-agent be added to the each request", async () => {
+  it("Should user-agent be added to the each request", async function() {
     const mockedResponses = new Map();
     const mockedDataHandle = "1b2ca68f-d4a0-4379-8120-cd025640510c";
     const mockedData = Buffer.alloc(42);

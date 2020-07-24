@@ -112,7 +112,7 @@
       "check-whitespace"
     ],
     "only-arrow-functions": [
-      true,
+      false,
       "allow-declarations",
       "allow-named-functions"
     ],

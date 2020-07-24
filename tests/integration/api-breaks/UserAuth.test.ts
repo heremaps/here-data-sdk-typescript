@@ -35,7 +35,7 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("UserAuth", () => {
+describe("UserAuth", function() {
   class UserAuthTest extends UserAuth {
     constructor(config: UserAuthConfig) {
       super(config);
@@ -68,7 +68,7 @@ describe("UserAuth", () => {
     }
   }
 
-  it("Shoud be initialized with config", async () => {
+  it("Shoud be initialized with config", async function() {
     const credentials = {
       accessKeyId: "test-key",
       accessKeySecret: "test-key-secret"
@@ -87,7 +87,7 @@ describe("UserAuth", () => {
     assert.isFunction(userAuth.getUserInfo);
   });
 
-  it("Should getToken be called without arguments", async () => {
+  it("Should getToken be called without arguments", async function() {
     const credentials = {
       accessKeyId: "test-key",
       accessKeySecret: "test-key-secret"
@@ -103,7 +103,7 @@ describe("UserAuth", () => {
     assert.isDefined(response);
   });
 
-  it("Should validateAccessToken be called with required arguments", async () => {
+  it("Should validateAccessToken be called with required arguments", async function() {
     const credentials = {
       accessKeyId: "test-key",
       accessKeySecret: "test-key-secret"
@@ -119,7 +119,7 @@ describe("UserAuth", () => {
     assert.isDefined(response);
   });
 
-  it("Test getUserInfo method with token", async () => {
+  it("Test getUserInfo method with token", async function() {
     const credentials = {
       accessKeyId: "test-key",
       accessKeySecret: "test-key-secret"
@@ -136,8 +136,8 @@ describe("UserAuth", () => {
   });
 });
 
-describe("AuthCredentials", () => {
-  it("Test AuthCredentials with params", () => {
+describe("AuthCredentials", function() {
+  it("Test AuthCredentials with params", function() {
     const credentials: AuthCredentials = {
       accessKeyId: "test-accessKeyId",
       accessKeySecret: "test-accessKeySecret"
@@ -146,15 +146,15 @@ describe("AuthCredentials", () => {
     assert.isDefined(credentials);
   });
 
-  it("Test AuthCredentials with all required params", () => {
+  it("Test AuthCredentials with all required params", function() {
     const credentials: AuthCredentials = {};
 
     assert.isDefined(credentials);
   });
 });
 
-describe("UserAuthConfig", () => {
-  it("Test UserAuthConfig with params", () => {
+describe("UserAuthConfig", function() {
+  it("Test UserAuthConfig with params", function() {
     const config: UserAuthConfig = {
       credentials: {
         accessKeyId: "test-accessKeyId",
@@ -169,7 +169,7 @@ describe("UserAuthConfig", () => {
     assert.isDefined(config);
   });
 
-  it("Test UserAuthConfig with all required params", () => {
+  it("Test UserAuthConfig with all required params", function() {
     const config: UserAuthConfig = {
       tokenRequester: authentication.requestToken
     };
@@ -178,8 +178,8 @@ describe("UserAuthConfig", () => {
   });
 });
 
-describe("UserInfo", () => {
-  it("Test UserInfo with all required params", () => {
+describe("UserInfo", function() {
+  it("Test UserInfo with all required params", function() {
     const userInfo: UserInfo = {
       userId: "userId",
       realm: "test",
@@ -200,8 +200,8 @@ describe("UserInfo", () => {
   });
 });
 
-describe("Signer", () => {
-  it("Test Signer with all required params", () => {
+describe("Signer", function() {
+  it("Test Signer with all required params", function() {
     const signer: Signer = {
       sign: (data: ArrayBufferLike, secretKey: string) =>
         Promise.resolve("test-response"),
@@ -212,8 +212,8 @@ describe("Signer", () => {
   });
 });
 
-describe("OAuthArgs", () => {
-  it("Test OAuthArgs with params", () => {
+describe("OAuthArgs", function() {
+  it("Test OAuthArgs with params", function() {
     const oAuthArgs: OAuthArgs = {
       url: "test",
       consumerKey: "test",
@@ -226,7 +226,7 @@ describe("OAuthArgs", () => {
     assert.isDefined(oAuthArgs);
   });
 
-  it("Test OAuthArgs with all required params", () => {
+  it("Test OAuthArgs with all required params", function() {
     const oAuthArgs: OAuthArgs = {
       url: "test",
       consumerKey: "test",
@@ -237,8 +237,8 @@ describe("OAuthArgs", () => {
   });
 });
 
-describe("Token", () => {
-  it("Test Token with all required params", () => {
+describe("Token", function() {
+  it("Test Token with all required params", function() {
     const token: Token = {
       accessToken: "test",
       tokenType: "test",

@@ -27,8 +27,8 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("KeyValueCache", () => {
-  it("Shoud be initialized withouth arguments", async () => {
+describe("KeyValueCache", function() {
+  it("Shoud be initialized withouth arguments", async function() {
     const testKeyValueCache = new KeyValueCache();
     assert.isDefined(testKeyValueCache);
 
@@ -38,14 +38,14 @@ describe("KeyValueCache", () => {
     assert.isDefined(testKeyValueCache.remove);
   });
 
-  it("Test put method with params", async () => {
+  it("Test put method with params", async function() {
     const testKeyValueCache = new KeyValueCache();
 
     const response = testKeyValueCache.put("test-key", "test");
     assert.isTrue(response);
   });
 
-  it("Test get method with params", async () => {
+  it("Test get method with params", async function() {
     const testKeyValueCache = new KeyValueCache();
     testKeyValueCache.put("test-key", "test");
 
@@ -53,7 +53,7 @@ describe("KeyValueCache", () => {
     assert.isDefined(response);
   });
 
-  it("Test remove method with params", async () => {
+  it("Test remove method with params", async function() {
     const testKeyValueCache = new KeyValueCache();
     testKeyValueCache.put("test-key", "test");
     testKeyValueCache.put("test-key2", "test");

@@ -33,8 +33,8 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("IndexLayerClientParams", () => {
-  it("IndexLayerClientParams with all required params", () => {
+describe("IndexLayerClientParams", function() {
+  it("IndexLayerClientParams with all required params", function() {
     const params: IndexLayerClientParams = {
       catalogHrn: HRN.fromString("hrn:here:data:::example-catalog"),
       layerId: "mocked-layer-id",
@@ -47,7 +47,7 @@ describe("IndexLayerClientParams", () => {
     assert.isDefined(params);
   });
 
-  it("IndexLayerClientParams with all required and optional params", () => {
+  it("IndexLayerClientParams with all required and optional params", function() {
     const params: IndexLayerClientParams = {
       catalogHrn: HRN.fromString("hrn:here:data:::example-catalog"),
       layerId: "mocked-layer-id",
@@ -61,7 +61,7 @@ describe("IndexLayerClientParams", () => {
   });
 });
 
-describe("IndexLayerClient", () => {
+describe("IndexLayerClient", function() {
   class IndexLayerClientTest extends IndexLayerClient {
     constructor(params: IndexLayerClientParams) {
       super(params);
@@ -82,11 +82,11 @@ describe("IndexLayerClient", () => {
     }
   }
 
-  beforeEach(() => {
+  beforeEach(function() {
     IndexLayerClientTest;
   });
 
-  it("Shoud be initialized with arguments", async () => {
+  it("Shoud be initialized with arguments", async function() {
     const settings = new OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
@@ -106,7 +106,7 @@ describe("IndexLayerClient", () => {
     assert.isDefined(layerClient.settings);
   });
 
-  it("Shoud be initialized with IndexLayerClientParams", async () => {
+  it("Shoud be initialized with IndexLayerClientParams", async function() {
     const layerClient = new IndexLayerClient({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -125,7 +125,7 @@ describe("IndexLayerClient", () => {
     assert.isDefined(layerClient.settings);
   });
 
-  it("getPartitions method with IndexQueryRequest", async () => {
+  it("getPartitions method with IndexQueryRequest", async function() {
     const layerClient = new IndexLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -139,7 +139,7 @@ describe("IndexLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("getPartitions method with IndexQueryRequest and abort signal", async () => {
+  it("getPartitions method with IndexQueryRequest and abort signal", async function() {
     const layerClient = new IndexLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -158,7 +158,7 @@ describe("IndexLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("getData method with model", async () => {
+  it("getData method with model", async function() {
     const layerClient = new IndexLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -182,7 +182,7 @@ describe("IndexLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("getData method with empty model", async () => {
+  it("getData method with empty model", async function() {
     const layerClient = new IndexLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -198,7 +198,7 @@ describe("IndexLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("getData method with model and abort signal", async () => {
+  it("getData method with model and abort signal", async function() {
     const layerClient = new IndexLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",

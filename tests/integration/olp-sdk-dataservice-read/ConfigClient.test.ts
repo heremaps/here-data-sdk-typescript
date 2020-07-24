@@ -37,22 +37,22 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("configClient", () => {
+describe("configClient", function() {
   let fetchMock: FetchMock;
   let sandbox: sinon.SinonSandbox;
   let fetchStub: sinon.SinonStub;
   let configClient: ConfigClient;
   let settings: OlpClientSettings;
 
-  before(() => {
+  before(function() {
     sandbox = sinon.createSandbox();
   });
 
-  afterEach(() => {
+  afterEach(function() {
     sandbox.restore();
   });
 
-  beforeEach(() => {
+  beforeEach(function() {
     fetchMock = new FetchMock();
     fetchStub = sandbox.stub(global as any, "fetch");
     fetchStub.callsFake(fetchMock.fetch());
@@ -65,12 +65,12 @@ describe("configClient", () => {
     configClient = new ConfigClient(settings);
   });
 
-  it("Shoud be initialized with settings", async () => {
+  it("Shoud be initialized with settings", async function() {
     assert.isDefined(configClient);
     expect(configClient).to.be.instanceOf(ConfigClient);
   });
 
-  it("Should fetch the list of catalogs to which you have access", async () => {
+  it("Should fetch the list of catalogs to which you have access", async function() {
     const mockedResponses = new Map();
 
     const mockedCatalogsHRN: ConfigApi.CatalogsListResult = {
@@ -119,7 +119,7 @@ describe("configClient", () => {
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
-  it("Should fetch the list of catalogs to which you have access filtered by hrn", async () => {
+  it("Should fetch the list of catalogs to which you have access filtered by hrn", async function() {
     const mockedResponses = new Map();
 
     const mockedCatalogsFilteredByHRN: ConfigApi.CatalogsListResult = {
@@ -161,7 +161,7 @@ describe("configClient", () => {
     expect(fetchStub.callCount).to.be.equal(2);
   });
 
-  it("Should user-agent be added to the each request", async () => {
+  it("Should user-agent be added to the each request", async function() {
     const mockedResponses = new Map();
 
     const mockedCatalogsHRN: ConfigApi.CatalogsListResult = {

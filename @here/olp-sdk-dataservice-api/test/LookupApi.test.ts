@@ -27,8 +27,8 @@ chai.use(sinonChai);
 
 const expect = chai.expect;
 
-describe("lookupAPI", () => {
-    it("platformAPI", async () => {
+describe("lookupAPI", function() {
+    it("platformAPI", async function() {
         const params = {
             api: "mocked-api",
             version: "mocked-version"
@@ -51,7 +51,7 @@ describe("lookupAPI", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("platformAPIList", async () => {
+    it("platformAPIList", async function() {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: any) => {
@@ -69,7 +69,7 @@ describe("lookupAPI", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("resourceAPI", async () => {
+    it("resourceAPI", async function() {
         const params = {
             hrn: "mocked-hrn",
             api: "mocked-api",
@@ -94,7 +94,7 @@ describe("lookupAPI", () => {
         expect(result).to.be.equal("success");
     });
 
-    it("resourceAPIList", async () => {
+    it("resourceAPIList", async function() {
         const params = {
             hrn: "mocked-hrn",
             region: "mocked-region"

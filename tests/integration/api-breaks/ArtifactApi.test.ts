@@ -48,8 +48,8 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("ArtifactApi", () => {
-  it("Artifact with all required params", () => {
+describe("ArtifactApi", function() {
+  it("Artifact with all required params", function() {
     const params: Artifact = {
       artifactId: "test",
       created: {} as Date,
@@ -62,13 +62,13 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("ArtifactFile with all required params", () => {
+  it("ArtifactFile with all required params", function() {
     const params: ArtifactFile = {};
 
     assert.isDefined(params);
   });
 
-  it("ArtifactFile with all required and optional params", () => {
+  it("ArtifactFile with all required and optional params", function() {
     const params: ArtifactFile = {
       name: "test"
     };
@@ -76,13 +76,13 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("DeleteArtifactResponse with all required params", () => {
+  it("DeleteArtifactResponse with all required params", function() {
     const params: DeleteArtifactResponse = {};
 
     assert.isDefined(params);
   });
 
-  it("DeleteArtifactResponse with all required and optional params", () => {
+  it("DeleteArtifactResponse with all required and optional params", function() {
     const params: DeleteArtifactResponse = {
       artifact: {
         artifactId: "test",
@@ -98,13 +98,13 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("DeleteFileResponse with all required params", () => {
+  it("DeleteFileResponse with all required params", function() {
     const params: DeleteFileResponse = {};
 
     assert.isDefined(params);
   });
 
-  it("DeleteFileResponse with all required and optional params", () => {
+  it("DeleteFileResponse with all required and optional params", function() {
     const params: DeleteFileResponse = {
       artifact: {
         artifactId: "test",
@@ -120,13 +120,13 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("DeleteSchemaResponse with all required params", () => {
+  it("DeleteSchemaResponse with all required params", function() {
     const params: DeleteSchemaResponse = {};
 
     assert.isDefined(params);
   });
 
-  it("DeleteSchemaResponse with all required and optional params", () => {
+  it("DeleteSchemaResponse with all required and optional params", function() {
     const params: DeleteSchemaResponse = {
       artifacts: [
         {
@@ -153,13 +153,13 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("DeleteSchemaResponse with all required params", () => {
+  it("DeleteSchemaResponse with all required params", function() {
     const params: DeleteSchemaResponse = {};
 
     assert.isDefined(params);
   });
 
-  it("DeleteSchemaResponse with all required and optional params", () => {
+  it("DeleteSchemaResponse with all required and optional params", function() {
     const params: DeleteSchemaResponse = {
       artifacts: [
         {
@@ -186,7 +186,7 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("Schema with all required params", () => {
+  it("Schema with all required params", function() {
     const params: Schema = {
       artifactId: "test",
       created: {} as Date,
@@ -200,7 +200,7 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("Schema with all required and optional params", () => {
+  it("Schema with all required and optional params", function() {
     const params: Schema = {
       artifactId: "test",
       created: {} as Date,
@@ -215,13 +215,13 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("GetArtifactResponse with all required params", () => {
+  it("GetArtifactResponse with all required params", function() {
     const params: GetArtifactResponse = {};
 
     assert.isDefined(params);
   });
 
-  it("GetArtifactResponse with all required and optional params", () => {
+  it("GetArtifactResponse with all required and optional params", function() {
     const params: GetArtifactResponse = {
       artifact: {
         artifactId: "test",
@@ -241,13 +241,13 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("GetSchemaResponse with all required params", () => {
+  it("GetSchemaResponse with all required params", function() {
     const params: GetSchemaResponse = {};
 
     assert.isDefined(params);
   });
 
-  it("GetSchemaResponse with all required and optional params", () => {
+  it("GetSchemaResponse with all required and optional params", function() {
     const params: GetSchemaResponse = {
       artifacts: [
         {
@@ -280,13 +280,13 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("ListSchemasResponse with all required params", () => {
+  it("ListSchemasResponse with all required params", function() {
     const params: ListSchemasResponse = {};
 
     assert.isDefined(params);
   });
 
-  it("ListSchemasResponse with all required and optional params", () => {
+  it("ListSchemasResponse with all required and optional params", function() {
     const params: ListSchemasResponse = {
       items: [
         {
@@ -309,7 +309,7 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("PagedQuery with all required params", () => {
+  it("PagedQuery with all required params", function() {
     const params: PagedQuery = {
       order: "ASC",
       sort: "test"
@@ -318,7 +318,7 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("PagedQuery with all required and optional params", () => {
+  it("PagedQuery with all required and optional params", function() {
     const params: PagedQuery = {
       from: "test",
       limit: 1,
@@ -329,7 +329,7 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("Principal with all required params", () => {
+  it("Principal with all required params", function() {
     const params: Principal = {
       type: "User",
       token: "test"
@@ -338,13 +338,13 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("RegisterArtifactRequest with all required params", () => {
+  it("RegisterArtifactRequest with all required params", function() {
     const params: RegisterArtifactRequest = {};
 
     assert.isDefined(params);
   });
 
-  it("RegisterArtifactRequest with all required and optional params", () => {
+  it("RegisterArtifactRequest with all required and optional params", function() {
     const params: RegisterArtifactRequest = {
       userId: "test"
     };
@@ -352,13 +352,13 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("RegisterArtifactResponse with all required params", () => {
+  it("RegisterArtifactResponse with all required params", function() {
     const params: RegisterArtifactResponse = {};
 
     assert.isDefined(params);
   });
 
-  it("RegisterArtifactResponse with all required and optional params", () => {
+  it("RegisterArtifactResponse with all required and optional params", function() {
     const params: RegisterArtifactResponse = {
       artifactId: "test",
       created: true,
@@ -369,7 +369,7 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("SchemaValidationResults with all required params", () => {
+  it("SchemaValidationResults with all required params", function() {
     const params: SchemaValidationResults = {
       module: "test"
     };
@@ -377,7 +377,7 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("SchemaValidationResults with all required and optional params", () => {
+  it("SchemaValidationResults with all required and optional params", function() {
     const params: SchemaValidationResults = {
       backwardsCompatibility: true,
       fileExtension: true,
@@ -390,7 +390,7 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("UpdatePermissionRequest with all required params", () => {
+  it("UpdatePermissionRequest with all required params", function() {
     const params: UpdatePermissionRequest = {
       principal: {
         type: "User",
@@ -402,7 +402,7 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("UpdatePermissionRequest with all required and optional params", () => {
+  it("UpdatePermissionRequest with all required and optional params", function() {
     const params: UpdatePermissionRequest = {
       principal: {
         type: "User",
@@ -415,13 +415,13 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("UpdatePermissionResponse with all required params", () => {
+  it("UpdatePermissionResponse with all required params", function() {
     const params: UpdatePermissionResponse = {};
 
     assert.isDefined(params);
   });
 
-  it("UpdatePermissionResponse with all required and optional params", () => {
+  it("UpdatePermissionResponse with all required and optional params", function() {
     const params: UpdatePermissionResponse = {
       principal: {
         type: "User",
@@ -434,7 +434,7 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("Variant with all required params", () => {
+  it("Variant with all required params", function() {
     const params: Variant = {
       id: "test",
       url: "test"
@@ -443,7 +443,7 @@ describe("ArtifactApi", () => {
     assert.isDefined(params);
   });
 
-  it("Test deleteArtifactUsingDELETE method with all required params", async () => {
+  it("Test deleteArtifactUsingDELETE method with all required params", async function() {
     const params = {
       artifactHrn: "mocked-artifactHrn"
     };
@@ -456,7 +456,7 @@ describe("ArtifactApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test deleteFileUsingDELETE method with all required params", async () => {
+  it("Test deleteFileUsingDELETE method with all required params", async function() {
     const params = {
       artifactHrn: "mocked-artifactHrn",
       fileName: "mocked-fileName"
@@ -468,7 +468,7 @@ describe("ArtifactApi", () => {
     );
   });
 
-  it("Test getArtifactFileUsingGET method with all required params", async () => {
+  it("Test getArtifactFileUsingGET method with all required params", async function() {
     const params = {
       artifactHrn: "mocked-artifactHrn",
       fileName: "mocked-fileName"
@@ -482,7 +482,7 @@ describe("ArtifactApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getArtifactUsingGET method with all required params", async () => {
+  it("Test getArtifactUsingGET method with all required params", async function() {
     const params = {
       artifactHrn: "mocked-artifactHrn",
       fileName: "mocked-fileName"
@@ -496,7 +496,7 @@ describe("ArtifactApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test putArtifactFileUsingPUT method with all required params", async () => {
+  it("Test putArtifactFileUsingPUT method with all required params", async function() {
     const params = {
       artifactHrn: "mocked-artifactHrn",
       fileName: "mocked-fileName",
@@ -511,7 +511,7 @@ describe("ArtifactApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test registerArtifactUsingPUT method with all required params", async () => {
+  it("Test registerArtifactUsingPUT method with all required params", async function() {
     const params = {
       groupId: "mocked-groupId",
       artifactId: "mocked-artifactId"
@@ -525,7 +525,7 @@ describe("ArtifactApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test registerArtifactUsingPUT method with all required and optional params", async () => {
+  it("Test registerArtifactUsingPUT method with all required and optional params", async function() {
     const params = {
       groupId: "mocked-groupId",
       artifactId: "mocked-artifactId",
@@ -540,7 +540,7 @@ describe("ArtifactApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test deleteSchemaUsingDELETE method with all required params", async () => {
+  it("Test deleteSchemaUsingDELETE method with all required params", async function() {
     const params = {
       schemaHrn: "mocked-schemaHrn"
     };
@@ -553,7 +553,7 @@ describe("ArtifactApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getDocumentUsingGET method with all required params", async () => {
+  it("Test getDocumentUsingGET method with all required params", async function() {
     const params = {
       schemaHrn: "mocked-schemaHrn",
       file: "mocked-file"
@@ -567,7 +567,7 @@ describe("ArtifactApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test getSchemaUsingGET( method with all required params", async () => {
+  it("Test getSchemaUsingGET( method with all required params", async function() {
     const params = {
       schemaHrn: "mocked-schemaHrn"
     };
@@ -580,7 +580,7 @@ describe("ArtifactApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test listUsingGET method with all required params", async () => {
+  it("Test listUsingGET method with all required params", async function() {
     const params = {};
 
     const result = await ArtifactApi.listUsingGET(mockedRequestBuilder, params);
@@ -588,7 +588,7 @@ describe("ArtifactApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test listUsingGET method with all required and optional params", async () => {
+  it("Test listUsingGET method with all required and optional params", async function() {
     const params = {
       sort: "mocked-sort",
       order: "mocked-order" as any,
@@ -601,7 +601,7 @@ describe("ArtifactApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test updateSchemaPermissionUsingPOST method with all required params", async () => {
+  it("Test updateSchemaPermissionUsingPOST method with all required params", async function() {
     const params = {
       schemaHrn: "mocked-schemaHrn"
     };
@@ -614,7 +614,7 @@ describe("ArtifactApi", () => {
     expect(result).to.be.equal("success");
   });
 
-  it("Test updateSchemaPermissionUsingPOST method with all required and optional params", async () => {
+  it("Test updateSchemaPermissionUsingPOST method with all required and optional params", async function() {
     const params = {
       schemaHrn: "mocked-schemaHrn",
       updatePermissionRequest: "mocked-updatePermissionRequest" as any

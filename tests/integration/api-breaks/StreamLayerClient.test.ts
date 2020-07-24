@@ -36,8 +36,8 @@ chai.use(sinonChai);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe("StreamLayerClientParams", () => {
-  it("StreamLayerClientParams with all required params", () => {
+describe("StreamLayerClientParams", function() {
+  it("StreamLayerClientParams with all required params", function() {
     const params: StreamLayerClientParams = {
       catalogHrn: HRN.fromString("hrn:here:data:::example-catalog"),
       layerId: "mocked-layer-id",
@@ -51,7 +51,7 @@ describe("StreamLayerClientParams", () => {
   });
 });
 
-describe("StreamLayerClient", () => {
+describe("StreamLayerClient", function() {
   class StreamLayerClientTest extends StreamLayerClient {
     constructor(params: StreamLayerClientParams) {
       super(params);
@@ -93,7 +93,7 @@ describe("StreamLayerClient", () => {
     }
   }
 
-  it("Shoud be initialized with StreamLayerClientParams", async () => {
+  it("Shoud be initialized with StreamLayerClientParams", async function() {
     const layerClient = new StreamLayerClient({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -112,7 +112,7 @@ describe("StreamLayerClient", () => {
     assert.isFunction(layerClient.seek);
   });
 
-  it("Test subscribe method method with SubscribeRequest", async () => {
+  it("Test subscribe method method with SubscribeRequest", async function() {
     const layerClient = new StreamLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -128,7 +128,7 @@ describe("StreamLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test subscribe method method with SubscribeRequest and abort signal", async () => {
+  it("Test subscribe method method with SubscribeRequest and abort signal", async function() {
     const layerClient = new StreamLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -149,7 +149,7 @@ describe("StreamLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test poll method method with PollRequest", async () => {
+  it("Test poll method method with PollRequest", async function() {
     const layerClient = new StreamLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -165,7 +165,7 @@ describe("StreamLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test poll method method with PollRequest and abort signal", async () => {
+  it("Test poll method method with PollRequest and abort signal", async function() {
     const layerClient = new StreamLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -183,7 +183,7 @@ describe("StreamLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test unsubscribe method method with UnsubscribeRequest", async () => {
+  it("Test unsubscribe method method with UnsubscribeRequest", async function() {
     const layerClient = new StreamLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -199,7 +199,7 @@ describe("StreamLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test unsubscribe method method with UnsubscribeRequest and abort signal", async () => {
+  it("Test unsubscribe method method with UnsubscribeRequest and abort signal", async function() {
     const layerClient = new StreamLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -220,7 +220,7 @@ describe("StreamLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test getData method method with message", async () => {
+  it("Test getData method method with message", async function() {
     const layerClient = new StreamLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -242,7 +242,7 @@ describe("StreamLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test getData method method with message and abort signal", async () => {
+  it("Test getData method method with message and abort signal", async function() {
     const layerClient = new StreamLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -266,7 +266,7 @@ describe("StreamLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test seek method method with SeekRequest", async () => {
+  it("Test seek method method with SeekRequest", async function() {
     const layerClient = new StreamLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
@@ -282,7 +282,7 @@ describe("StreamLayerClient", () => {
     assert.isDefined(response);
   });
 
-  it("Test seek method method with SeekRequest and abort signal", async () => {
+  it("Test seek method method with SeekRequest and abort signal", async function() {
     const layerClient = new StreamLayerClientTest({
       catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
