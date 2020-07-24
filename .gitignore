@@ -22,3 +22,4 @@ heaptrack/
 heaptrack_report.html
 !tests/utils/mocked-olp-server/*.js
 CertificateAuthorityCertificate.pem
+demo-app
