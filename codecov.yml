@@ -1,10 +1,11 @@
 coverage:
-  range: 60..100
+  range: 80..100
   round: up
   precision: 4
-  parsers:
-    javascript:
-      enable_partials: no
+  notify:
+    wait_for_ci: false
+  ci:
+    - "travis.org"
   status:
     project:
       authentication:

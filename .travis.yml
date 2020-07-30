@@ -20,7 +20,7 @@ matrix:
     name: "PSV Linux Build & Test"
     script: $WORKSPACE/scripts/linux/psv/travis_build_test_psv.sh && env
     after_success:
-        - bash <(curl -s https://codecov.io/bash)
+        - bash <(curl -s https://codecov.io/bash) || sleep 10 && bash <(curl -s https://codecov.io/bash)
   - language: minimal
     name: "PSV Commit checker script"
     script: $WORKSPACE/scripts/misc/commit_checker.sh
