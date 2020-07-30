@@ -43,7 +43,6 @@ regression_generate_report_job:
   tags:
   - docker-prod
   image: python:3.6
-  when: always
   before_script:
     - pip install junit2html
   script:
