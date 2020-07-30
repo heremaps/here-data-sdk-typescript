@@ -2,6 +2,9 @@ coverage:
   range: 60..100
   round: up
   precision: 4
+  parsers:
+    javascript:
+      enable_partials: no
   status:
     project:
       authentication:
