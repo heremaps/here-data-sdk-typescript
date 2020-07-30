@@ -1,7 +1,7 @@
 coverage:
   range: 60..100
-  round: nearest
-  precision: 1
+  round: up
+  precision: 4
   status:
     project:
       authentication:
