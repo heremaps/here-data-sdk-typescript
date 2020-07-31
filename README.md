@@ -6,14 +6,14 @@ The HERE Data SDK for TypeScript is a TypeScript client for the <a href="https:/
 
 ### Build and Test
 
-| Master                      | Node version       | Status                                                                                                                                                                                       |
-| :-------------------------- | :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Master                      | Node version       | Status                                                                                                                                                                                         |
+| :-------------------------- | :----------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Build/Test/Bundling/Typedoc | Node 12.13.0 (LTS) | <a href="https://travis-ci.com/heremaps/here-data-sdk-typescript" target="_blank"><img src="https://travis-ci.com/heremaps/here-data-sdk-typescript.svg?branch=master" alt="Build Status"></a> |
 
 ### Test Coverage
 
-| Platform | Status                                                                                                                                                                                              |
-| :------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Platform | Status                                                                                                                                                                                                              |
+| :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Linux    | <a href="https://codecov.io/gh/heremaps/here-data-sdk-typescript/" target="_blank"><img src="https://codecov.io/gh/heremaps/here-data-sdk-typescript/branch/master/graph/badge.svg" alt="Linux code coverage"/></a> |
 
 ## Why Use
@@ -24,9 +24,10 @@ The Data SDK for TypeScrypt is a modern, lightweight, and modular SDK with minim
 
 This SDK lets you:
 
-- Authenticate to the HERE platform using client credentials
-- Read catalog and partition metadata
-- Retrieve data from layers
+- Authenticate to the HERE platform using client credentials.
+- Read catalog and partition metadata.
+- Retrieve data from layers.
+- Publish data to a versioned layer.
 
 Additionally, the SDK includes classes for work with geospatial tiling schemes that are used by most platform catalog layers.
 
@@ -54,7 +55,9 @@ To install the SDK modules using npm, run the following commands:
 
 ```sh
 npm install @here/olp-sdk-authentication
+npm install @here/olp-sdk-core
 npm install @here/olp-sdk-dataservice-read
+npm install @here/olp-sdk-dataservice-write
 npm install @here/olp-sdk-dataservice-api
 ```
 
@@ -62,8 +65,10 @@ To use the compiled bundles from the CDN, add the following files to an HTML pag
 
 ```
 https://unpkg.com/@here/olp-sdk-authentication/bundle.umd.min.js
+https://unpkg.com/@here/olp-sdk-core/bundle.umd.min.js
 https://unpkg.com/@here/olp-sdk-dataservice-api/bundle.umd.min.js
 https://unpkg.com/@here/olp-sdk-dataservice-read/bundle.umd.min.js
+https://unpkg.com/@here/olp-sdk-dataservice-write/bundle.umd.min.js
 https://unpkg.com/@here/olp-sdk-fetch/bundle.umd.min.js
 ```
 
@@ -138,7 +143,9 @@ If you want to have a compiled project, you can use bundle commands. After runni
 
 ```sh
 @here/olp-sdk-authentication/bundle.umd.min.js
+@here/olp-sdk-core/bundle.umd.min.js
 @here/olp-sdk-dataservice-read/bundle.umd.min.js
+@here/olp-sdk-dataservice-write/bundle.umd.min.js
 @here/olp-sdk-dataservice-api/bundle.umd.min.js
 @here/olp-sdk-fetch/bundle.umd.min.js
 ```

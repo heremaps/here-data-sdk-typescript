@@ -34,7 +34,7 @@ Before you build an application, make sure that you installed all of the depende
 
    Now, everything is set to create the application.
 
-5. Create the index.ts file and application skeleton.
+5. Create the `index.ts` file and application skeleton.
 
    ```typescript
    /**
@@ -88,7 +88,7 @@ To authenticate with the Here platform, you must get platform credentials that c
      ```typescript
      const credentials = {
        accessKeyId: "replace-with-your-access-key-id",
-       accessKeySecret: "replace-with-your-access-key-secret"
+       accessKeySecret: "replace-with-your-access-key-secret",
      };
      ```
 
@@ -107,7 +107,7 @@ To authenticate with the Here platform, you must get platform credentials that c
      env: "here | here-dev | here-cn | here-cn-dev",
      customUrl: "http://YourCustomEnvironment",
      credentials: credentials,
-     tokenRequester: requestToken
+     tokenRequester: requestToken,
    });
    ```
 
@@ -118,6 +118,8 @@ To authenticate with the Here platform, you must get platform credentials that c
    ```
 
 You can use the `UserAuth` instance to create the `OlpClientSettings` object.
+
+To learn more about authentication, see [Authenticate to the HERE Platform](authenticate.md).
 
 ## <a name="create-olpclientsettings"></a>Create `OlpClientSettings`
 
@@ -139,7 +141,7 @@ You need to create the `OlpClientSettings` object to get catalog and partition m
    const olpClientSettings = new OlpClientSettings({
      environment:
        "here | here-dev | here-cn | here-cn-dev | http://YourCustomEnvironment",
-     getToken: () => userAuth.getToken()
+     getToken: () => userAuth.getToken(),
    });
    ```
 
@@ -149,25 +151,21 @@ You can use the `VersionedLayerClient` object to request any data and partition 
 
 **To create the `VersionedLayerClient` object:**
 
-1. Get an access key ID and access key secret.
-
-   For instructions, see [Authenticate to the HERE Platform Using Client Credentials](#authenticate-using-client-credentials).
-
-2. Create the `OlpClientSettings` object.
+1. Create the `OlpClientSettings` object.
 
    For instructions, see [Create OlpClientSettings](#create-olpclientsettings).
 
-3.  Create an [[VersionedLayerClient]] instance with VersionedLayerClientParams that contains the catalog HRN, the layer ID, the platform client settings from step 2 and layer version. If layer version is not defined, then latest version will be used.
+2. Create a [[VersionedLayerClient]] instance with `VersionedLayerClientParams` that contains the catalog HRN, the layer ID, the platform client settings from step 1, and the layer version.
+
+   > Note: If the version is not specified, the latest version is used.
 
    ```typescript
-   const versionedLayerClient = new VersionedLayerClient(
-      {
-         catalogHrn: "CatalogHRN",
-         layerId: "LayerId",
-         settings: olpClientSettings,
-         version: 5
-      }
-   );
+   const versionedLayerClient = new VersionedLayerClient({
+     catalogHrn: "CatalogHRN",
+     layerId: "LayerId",
+     settings: olpClientSettings,
+     version: 5,
+   });
    ```
 
 ## Get Data from a Versioned Layer
@@ -241,7 +239,7 @@ For performance reasons, it is best to use the Query Service API to get metadata
 
      1. Create the `QuadKeyPartitionsRequest` object with the version number of the layer for which you want to get the metadata, the quadkey, and the number of child partitions (from 0 to 4).
 
-        > Note: You don't need to specify a version number if you want to get metadata for the latest version of the versioned layer.
+        > Note: You do not need to specify a version number if you want to get metadata for a volatile layer or the latest version of the versioned layer.
 
         ```typescript
         const requestByQuadKey = new QuadKeyPartitionsRequest()

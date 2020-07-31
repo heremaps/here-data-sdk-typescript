@@ -34,10 +34,12 @@ After you set up the credentials, you can use them to access the HERE Data SDK l
 
 The Data SDK for TypeScript package contains two independent modules that focus on a specific set of responsibilities:
 
-- `olp-sdk-authentication` &ndash; gets OAuth2 bearer tokens used to confirm platform requests.
-- `olp-sdk-dataservice-read` &ndash; gets layer and partition data from platform catalogs.
-- `olp-sdk-dataservice-api` &ndash; retrieves data from the HERE platform.
-- `olp-sdk-fetch` &ndash; adds a subset of the fetch API for Node.js.
+- `olp-sdk-authentication` – gets OAuth2 bearer tokens used to confirm platform requests.
+- `olp-sdk-core` – contains code that is common for `@here/olp-sdk-dataservice-read`, `@here/olp-sdk-dataservice-api`, and `@here/olp-sdk-authentication`.
+- `olp-sdk-dataservice-read` – gets layer and partition data from platform catalogs.
+- `olp-sdk-dataservice-write` – writes data to layers.
+- `olp-sdk-dataservice-api` – retrieves data from the HERE platform.
+- `olp-sdk-fetch` – adds a subset of the fetch API for Node.js.
 
 ## Reference Documentation
 
