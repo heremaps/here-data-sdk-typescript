@@ -34,7 +34,7 @@ Before you build an application, make sure that you installed all of the depende
 
    Now, everything is set to create the application.
 
-5. Create the index.ts file and application skeleton.
+5. Create the `index.ts` file and application skeleton.
 
    ```typescript
    /**
@@ -88,7 +88,7 @@ To authenticate with the HERE platform, you must get platform credentials that c
      ```typescript
      const credentials = {
        accessKeyId: "replace-with-your-access-key-id",
-       accessKeySecret: "replace-with-your-access-key-secret"
+       accessKeySecret: "replace-with-your-access-key-secret",
      };
      ```
 
@@ -107,7 +107,7 @@ To authenticate with the HERE platform, you must get platform credentials that c
      env: "here | here-dev | here-cn | here-cn-dev",
      customUrl: "http://YourCustomEnvironment",
      credentials: credentials,
-     tokenRequester: requestToken
+     tokenRequester: requestToken,
    });
    ```
 
@@ -118,6 +118,8 @@ To authenticate with the HERE platform, you must get platform credentials that c
    ```
 
 You can use the `UserAuth` instance to create the `OlpClientSettings` object.
+
+To learn more about authentication, see [Authenticate to the HERE Platform](authenticate.md).
 
 ## <a name="create-olpclientsettings"></a>Create `OlpClientSettings`
 
@@ -139,7 +141,7 @@ You need to create the `OlpClientSettings` object to get catalog and partition m
    const olpClientSettings = new OlpClientSettings({
      environment:
        "here | here-dev | here-cn | here-cn-dev | http://YourCustomEnvironment",
-     getToken: () => userAuth.getToken()
+     getToken: () => userAuth.getToken(),
    });
    ```
 
@@ -149,24 +151,18 @@ You can use the `IndexLayerClient` object to request any data and partition meta
 
 **To create the `IndexLayerClient` object:**
 
-1. Get an access key ID and access key secret.
-
-   For instructions, see [Authenticate to the HERE Platform Using Client Credentials](#authenticate-using-client-credentials).
-
-2. Create the `OlpClientSettings` object.
+1. Create the `OlpClientSettings` object.
 
    For instructions, see [Create OlpClientSettings](#create-olpclientsettings).
 
-3. Create the `IndexLayerClient` object IndexLayerClientParams that contains the HERE Resource Name (HRN) of the catalog, the layer ID, and the platform client settings from step 2.
+2. Create the `IndexLayerClient` object IndexLayerClientParams that contains the HERE Resource Name (HRN) of the catalog, the layer ID, and the platform client settings from step 1.
 
    ```typescript
-   const indexLayerClient = await new IndexLayerClient(
-      {
-         catalogHrn: "CatalogHRN",
-         layerId: "LayerId",
-         settings: olpClientSettings
-      }
-   );
+   const indexLayerClient = await new IndexLayerClient({
+     catalogHrn: "CatalogHRN",
+     layerId: "LayerId",
+     settings: olpClientSettings,
+   });
    ```
 
 ## Get Partition Metadata from an Index Layer

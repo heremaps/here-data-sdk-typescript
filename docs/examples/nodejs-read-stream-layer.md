@@ -34,7 +34,7 @@ Before you build an application, make sure that you installed all of the depende
 
    Now, everything is set to create the application.
 
-5. Create the index.ts file and application skeleton.
+5. Create the `index.ts` file and application skeleton.
 
    ```typescript
    /**
@@ -88,7 +88,7 @@ To authenticate with the HERE platform, you must get platform credentials that c
      ```typescript
      const credentials = {
        accessKeyId: "replace-with-your-access-key-id",
-       accessKeySecret: "replace-with-your-access-key-secret"
+       accessKeySecret: "replace-with-your-access-key-secret",
      };
      ```
 
@@ -107,7 +107,7 @@ To authenticate with the HERE platform, you must get platform credentials that c
      env: "here | here-dev | here-cn | here-cn-dev",
      customUrl: "http://YourCustomEnvironment",
      credentials: credentials,
-     tokenRequester: requestToken
+     tokenRequester: requestToken,
    });
    ```
 
@@ -118,6 +118,8 @@ To authenticate with the HERE platform, you must get platform credentials that c
    ```
 
 You can use the `UserAuth` instance to create the `OlpClientSettings` object.
+
+To learn more about authentication, see [Authenticate to the HERE Platform](authenticate.md).
 
 ## <a name="create-olpclientsettings"></a>Create `OlpClientSettings`
 
@@ -139,37 +141,31 @@ You need to create the `OlpClientSettings` object to get catalog and partition m
    const olpClientSettings = new OlpClientSettings({
      environment:
        "here | here-dev | here-cn | here-cn-dev | http://YourCustomEnvironment",
-     getToken: () => userAuth.getToken()
+     getToken: () => userAuth.getToken(),
    });
    ```
 
 ## <a name="create-streamlayerclient"></a>Create `StreamLayerClient`
 
-You can use the `StreamLayerClient` class to request data from the queue that streams data from a [stream layer](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/layers.html#stream-layers). Once a consumer read the data, the data is no longer available to that consumer, but the data remains available to other consumers.
+You can use the `StreamLayerClient` class to request data from the queue that streams data from a [stream layer](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/layers.html#stream-layers). Once a consumer reads the data, the data is no longer available to that consumer, but the data remains available to other consumers.
 
 Stream layers can be configured with retention time, or time-to-live (TTL) which results in unconsumed data being removed after a specified period.
 
 **To create the `StreamLayerClient` instance:**
 
-1. Get an access key ID and access key secret.
-
-   For instructions, see [Authenticate to the HERE Platform Using Client Credentials](#authenticate-using-client-credentials).
-
-2. Create the `OlpClientSettings` object.
+1. Create the `OlpClientSettings` object.
 
    For instructions, see [Create OlpClientSettings](#create-olpclientsettings).
 
-3.  Create an [[StreamLayerClient]] instance with StreamLayerClientParams that contains the catalog HRN, the layer ID, the platform client settings from step 2.
+2. Create an [[StreamLayerClient]] instance with StreamLayerClientParams that contains the catalog HRN, the layer ID, the platform client settings from step 1.
 
-   ```typescript
-   const streamLayerClient = new StreamLayerClient(
-      {
-         catalogHrn: "CatalogHRN",
-         layerId: "LayerId",
-         settings: olpClientSettings
-      }
-   );
-   ```
+```typescript
+const streamLayerClient = new StreamLayerClient({
+  catalogHrn: "CatalogHRN",
+  layerId: "LayerId",
+  settings: olpClientSettings,
+});
+```
 
 ## <a name="subscribe-streamlayerclient"></a>Subscribe to the Stream Layer
 
@@ -184,11 +180,13 @@ Stream layers can be configured with retention time, or time-to-live (TTL) which
    ```typescript
    const subscribeRequest = new SubscribeRequest().withMode("serial");
    ```
-   
-   > Note: If you want to create one more subscription for the same stream, you can use "parallel" mode.
+
+   > Note: If you want to create more subscriptions for the same stream, you can use the `parallel` mode.
 
    ```typescript
-   const subscribeRequest = new SubscribeRequest().withMode("parallel").withSubscriptionId("some-another-your-subscription-id");
+   const subscribeRequest = new SubscribeRequest()
+     .withMode("parallel")
+     .withSubscriptionId("some-another-your-subscription-id");
    ```
 
 3. Call the `Subscribe` method with the `SubscribeRequest` parameter.
@@ -198,7 +196,7 @@ Stream layers can be configured with retention time, or time-to-live (TTL) which
    ```
 
 You receive a subscription ID from the requested subscription to the selected layer.
-Then you can call the Poll method.
+Now, to get data, you can call the `Poll` method.
 
 ## <a name="get-data-streamlayerclient"></a>Get Data from a Stream Layer
 
@@ -210,12 +208,15 @@ Then you can call the Poll method.
 
 2. Subscribe to the stream layer, see [Subscribe to the Stream Layer](#subscribe-streamlayerclient)
 
-3. Call method Poll with the ID of subscription:
+3. Call method `Poll` with the subscription ID.
 
-  ```typescript
-        const messages = await streamLayerClient.poll(new PollRequest().withMode("serial").withSubscriptionId(subscribtionId));
-  ```
-You will get the messages of the data. Each message will contains metadata and data of partition:
+   ```typescript
+   const messages = await streamLayerClient.poll(
+     new PollRequest().withMode("serial").withSubscriptionId(subscribtionId)
+   );
+   ```
+
+You will get messages with the layer data and partition metadata.
 
 ```json
 {
@@ -237,37 +238,38 @@ You will get the messages of the data. Each message will contains metadata and d
     }
   ]
 }
-  ```
+```
 
-  If the data size is less than 1 MB, the data field will be populated. If the data size is greater than 1 MB, a data handle will be returned pointing to the object stored in the Blob store and you can fetch that data using getData method:
+If the data size is less than 1 MB, the data field is populated. If the data size is greater than 1 MB, you get a data handle that points to the object stored in the blob store, and you can fetch that data using the `getData` method:
 
-  ```typescript
-  const data = await streamLayerClient.getData({
-        "partition": "1314010583",
-        "checksum": "ff7494d6f17da702862e550c907c0a91",
-        "compressedDataSize": 1152417,
-        "dataSize": 1250110,
-        "data": "",
-        "dataHandle": "some-datahandle",
-        "timestamp": 1517916706
-      });
-  ```
+```typescript
+const data = await streamLayerClient.getData({
+  partition: "1314010583",
+  checksum: "ff7494d6f17da702862e550c907c0a91",
+  compressedDataSize: 1152417,
+  dataSize: 1250110,
+  data: "",
+  dataHandle: "some-datahandle",
+  timestamp: 1517916706,
+});
+```
 
-## <a name="seek-streamlayerclient"></a>Seek to predefined offset.
-Enables you to start reading data from a specified offset. You can move the message pointer to any offset in the layer (topic). Message consumption will start from that offset. Once you seek to an offset, there is no returning to the initial offset, unless the initial offset is saved.
+## <a name="seek-streamlayerclient"></a>Seek to a predefined offset
+
+You can start reading data from a specified offset. To start message consumption from a layer (topic) offset, move the message pointer to it. Once you seek to an offset, you cannot return to the initial offset, unless the initial offset is saved.
 
 ```typescript
 await streamLayerClient.seek(
   new SeekRequest()
     .withMode("serial")
     .withSubscriptionId(subscribtionId)
-    .withSeekOffsets({offsets: [{partition: 7, offset: 38562}]}
-  )
+    .withSeekOffsets({ offsets: [{ partition: 7, offset: 38562 }] })
 );
-  ```
+```
 
-## <a name="unsubscribe-streamlayerclient"></a>Delete subscription to a layer.
-Deletes a subscription to a layer (topic). This operation removes the subscription from the service.
+## <a name="unsubscribe-streamlayerclient"></a>Delete subscription to a layer
+
+You can delete a subscription to a layer (topic). This operation removes the subscription from the service.
 
 ```typescript
 await streamLayerClient.unsubscribe(
@@ -276,4 +278,4 @@ await streamLayerClient.unsubscribe(
     .withSubscriptionId(subscribtionId)
   )
 );
-  ```
+```
