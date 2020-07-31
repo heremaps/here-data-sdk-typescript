@@ -15,14 +15,14 @@ regression_test_job:
   - npm install -g yarn
   - yarn
   - yarn bootstrap
-  - npm run build
-  - npm run test
-  - npm run integration-test
-  - npm run functional-test
-  - npm run api-breaks-test
+  - npm run build --loglevel verbose
+  - npm run test --loglevel verbose
+  - npm run integration-test --loglevel verbose
+  - npm run functional-test --loglevel verbose
+  - npm run api-breaks-test --loglevel verbose
   - cp ./tests/integration/api-breaks/xunit.xml $CI_PROJECT_DIR/api-breaks-xunit.xml
   - cp ./tests/integration/xunit.xml $CI_PROJECT_DIR/integration-xunit.xml
-  - cp ./tests/functional/xunit.xml $CI_PROJECT_DIR/reports/api-breaks-xunit.xml
+  - cp ./tests/functional/xunit.xml $CI_PROJECT_DIR/functional-xunit.xml
   - cp ./@here/olp-sdk-authentication/xunit.xml $CI_PROJECT_DIR/olp-sdk-authentication-xunit.xml
   - cp ./@here/olp-sdk-core/xunit.xml $CI_PROJECT_DIR/olp-sdk-core-xunit.xml
   - cp ./@here/olp-sdk-dataservice-api/xunit.xml $CI_PROJECT_DIR/olp-sdk-dataservice-api-xunit.xml
@@ -31,6 +31,7 @@ regression_test_job:
   - cp ./@here/olp-sdk-fetch/xunit.xml $CI_PROJECT_DIR/olp-sdk-fetch-xunit.xml
   only:
     - master
+    - branches
   artifacts:
     when: always
     paths:
@@ -55,6 +56,7 @@ regression_generate_report_job:
   only:
     refs:
       - master
+      - branches
 
 release_verify_job:
   stage: test
