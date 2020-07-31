@@ -1,14 +1,64 @@
 image: ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}
 
 stages:
-  - post_release_test
-  - performance_test
-  - security_test
+  - test
   - translate_report
   - deploy
 
-rv_job:
-  stage: post_release_test
+regression_test_job:
+  stage: test
+  when: manual
+  tags:
+  - docker-prod
+  image: ${DOCKER_REGISTRY}/${DOCKER_IMAGE_PERFORMANCE}:${DOCKER_IMAGE_PERFORMANCE_VERSION}
+  script:
+  - npm install -g yarn
+  - yarn
+  - yarn bootstrap
+  - npm run build
+  - npm run test
+  - npm run integration-test
+  - npm run functional-test
+  - npm run api-breaks-test
+  - cp ./tests/integration/api-breaks/xunit.xml $CI_PROJECT_DIR/api-breaks-xunit.xml
+  - cp ./tests/integration/xunit.xml $CI_PROJECT_DIR/integration-xunit.xml
+  - cp ./tests/functional/xunit.xml $CI_PROJECT_DIR/reports/api-breaks-xunit.xml
+  - cp ./@here/olp-sdk-authentication/xunit.xml $CI_PROJECT_DIR/olp-sdk-authentication-xunit.xml
+  - cp ./@here/olp-sdk-core/xunit.xml $CI_PROJECT_DIR/olp-sdk-core-xunit.xml
+  - cp ./@here/olp-sdk-dataservice-api/xunit.xml $CI_PROJECT_DIR/olp-sdk-dataservice-api-xunit.xml
+  - cp ./@here/olp-sdk-dataservice-read/xunit.xml $CI_PROJECT_DIR/olp-sdk-dataservice-read-xunit.xml
+  - cp ./@here/olp-sdk-dataservice-write/xunit.xml $CI_PROJECT_DIR/olp-sdk-dataservice-write-xunit.xml
+  - cp ./@here/olp-sdk-fetch/xunit.xml $CI_PROJECT_DIR/olp-sdk-fetch-xunit.xml
+  only:
+    - master
+  artifacts:
+    when: always
+    paths:
+      - ./*.xml
+    expire_in: 1 year # save for 1 year as job artifacts
+
+regression_generate_report_job:
+  stage: translate_report
+  when: manual
+  tags:
+  - docker-prod
+  image: python:3.6
+  when: always
+  before_script:
+    - pip install junit2html
+  script:
+    - python -m junit2htmlreport --report-matrix index.html ./*.xml
+    - mkdir -p .public
+    - cp index.html .public/
+  artifacts:
+    paths:
+      - .public
+  only:
+    refs:
+      - master
+
+release_verify_job:
+  stage: test
   tags:
   - docker-prod
   image: ${DOCKER_REGISTRY}/${DOCKER_IMAGE_PERFORMANCE}:${DOCKER_IMAGE_PERFORMANCE_VERSION}
@@ -22,8 +72,8 @@ rv_job:
   only:
     - master
 
-wv_security_job:
-  stage: security_test
+weekly_security_test_job:
+  stage: test
   tags:
   - docker-prod
   script:
@@ -39,8 +89,9 @@ wv_security_job:
     paths:
       - build
     expire_in: 1 year # save our zip for 1 year as job artifacts
-nv_job:
-  stage: performance_test
+
+nightly_perf_publish_test_job:
+  stage: test
   tags:
   - docker-prod
   image: ${DOCKER_REGISTRY}/${DOCKER_IMAGE_PERFORMANCE}:${DOCKER_IMAGE_PERFORMANCE_VERSION}
@@ -62,8 +113,9 @@ nv_job:
       - heaptrack
       - reports
     expire_in: 1 year # save our archives for 1 year as job artifacts
-wv_job:
-  stage: performance_test
+
+weekly_perf_test_job:
+  stage: test
   tags:
   - docker-prod
   image: ${DOCKER_REGISTRY}/${DOCKER_IMAGE_PERFORMANCE}:${DOCKER_IMAGE_PERFORMANCE_VERSION}
@@ -87,7 +139,7 @@ wv_job:
     
     # next stages will run on NV and WK jobs
 
-translate_report:
+generate_perf_report_job:
   stage: translate_report
   tags:
   - docker-prod
@@ -96,7 +148,6 @@ translate_report:
   before_script:
     - pip install junit2html
   script:
-    # - python -m junit2htmlreport --report-matrix reports/index.html reports/*.xml
     - if [ "$NIGHTLY" == "1" ]; then cat heaptrack_report.html >> reports/index.html; fi
     - if [ "$WEEKLY" == "1" ]; then cat heaptrack_report.html >> reports/index.html; fi
     - mkdir -p .public
@@ -129,5 +180,3 @@ pages:
     variables:
       - $WEEKLY
       - $NIGHTLY
-
-
