@@ -40,9 +40,6 @@ npm run lint
 # Run tests
 npm run test
 
-# Generate and upload codecov
-npm run codecov
-
 # Integration tests
 npm run integration-test
 
@@ -51,3 +48,6 @@ npm run functional-test
 
 # Test the generated bundles
 npm run http-server-testing-bundles & npm run test-generated-bundles
+
+# Generate and upload codecov
+( npm run codecov && ./node_modules/.bin/codecov ) || ( echo "CodeCov exited with non-zero, please investigate!" && exit 1 )
