@@ -30,10 +30,11 @@ coverage:
         threshold: 1
 ignore:
   - ./@here/olp-sdk-authentication/test
-  - ./@here/olp-sdk-dataservice-read/test
-  - ./@here/olp-sdk-fetch/test
+  - ./@here/olp-sdk-core/test
   - ./@here/olp-sdk-dataservice-api/test
+  - ./@here/olp-sdk-dataservice-read/test
   - ./@here/olp-sdk-dataservice-write/test
-  - tests
-  - scripts
+  - ./@here/olp-sdk-fetch/test
   - docs
+  - scripts
+  - tests
