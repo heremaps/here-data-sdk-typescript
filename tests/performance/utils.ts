@@ -17,6 +17,7 @@
  * License-Filename: LICENSE
  */
 
+/* tslint:disable */
 export interface TestParams {
   runTimeSeconds: number;
   requestsPerSecond: number;

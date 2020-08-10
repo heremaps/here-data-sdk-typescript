@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+/* tslint:disable */
+
 import { getPartitionsMemoryTest } from "./getDataPartitionsTest";
 
 getPartitionsMemoryTest({

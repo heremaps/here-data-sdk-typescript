@@ -23,7 +23,8 @@ import {
     FetchOptions,
     HRN,
     HttpError,
-    OlpClientSettings
+    OlpClientSettings,
+    STATUS_CODES
 } from "@here/olp-sdk-core";
 import { BlobApi, MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
 import {
@@ -200,7 +201,7 @@ export class VersionedLayerClient {
 
             if (
                 quadTreeIndexResponse.status &&
-                quadTreeIndexResponse.status === 400
+                quadTreeIndexResponse.status === STATUS_CODES.BAD_REQUEST
             ) {
                 return Promise.reject(quadTreeIndexResponse);
             }
@@ -208,16 +209,16 @@ export class VersionedLayerClient {
             return quadTreeIndexResponse.subQuads &&
                 quadTreeIndexResponse.subQuads.length
                 ? this.downloadPartition(
-                    quadTreeIndexResponse.subQuads[0].dataHandle,
-                    abortSignal,
-                    dataRequest.getBillingTag()
-                )
+                      quadTreeIndexResponse.subQuads[0].dataHandle,
+                      abortSignal,
+                      dataRequest.getBillingTag()
+                  )
                 : Promise.reject(
-                    new HttpError(
-                        204,
-                        `No dataHandle for quadKey {column: ${quadKey.column}, row: ${quadKey.row}, level: ${quadKey.level}}. HRN: ${this.hrn}`
-                    )
-                );
+                      new HttpError(
+                          STATUS_CODES.NO_CONTENT,
+                          `No dataHandle for quadKey {column: ${quadKey.column}, row: ${quadKey.row}, level: ${quadKey.level}}. HRN: ${this.hrn}`
+                      )
+                  );
         }
 
         return Promise.reject(
@@ -427,11 +428,11 @@ export class VersionedLayerClient {
             metadata.partitions[0].dataHandle
             ? metadata.partitions[0].dataHandle
             : Promise.reject(
-                new HttpError(
-                    404,
-                    `No partition dataHandle for partition ${partitionId}. HRN: ${this.hrn}`
-                )
-            );
+                  new HttpError(
+                      STATUS_CODES.NOT_FOUND,
+                      `No partition dataHandle for partition ${partitionId}. HRN: ${this.hrn}`
+                  )
+              );
     }
 
     /**

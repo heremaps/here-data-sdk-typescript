@@ -13,5 +13,8 @@
         "newLine": "LF",
         "noImplicitReturns": true
     },
+    "include": [
+        "tests"
+    ],
     "exclude": ["node_modules", "@here/*/node_modules"]
 }

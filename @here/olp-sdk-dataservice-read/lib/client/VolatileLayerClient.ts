@@ -23,7 +23,8 @@ import {
     FetchOptions,
     HRN,
     HttpError,
-    OlpClientSettings
+    OlpClientSettings,
+    STATUS_CODES
 } from "@here/olp-sdk-core";
 import {
     MetadataApi,
@@ -171,22 +172,25 @@ export class VolatileLayerClient {
                     quadKeyPartitionsRequest
                 ).catch(error => Promise.reject(error));
 
-                if (quadTreeIndex.status && quadTreeIndex.status === 400) {
+                if (
+                    quadTreeIndex.status &&
+                    quadTreeIndex.status === STATUS_CODES.BAD_REQUEST
+                ) {
                     return Promise.reject(quadTreeIndex);
                 }
 
                 return quadTreeIndex.subQuads && quadTreeIndex.subQuads.length
                     ? this.downloadPartition(
-                        quadTreeIndex.subQuads[0].dataHandle,
-                        abortSignal,
-                        dataRequest.getBillingTag()
-                    )
+                          quadTreeIndex.subQuads[0].dataHandle,
+                          abortSignal,
+                          dataRequest.getBillingTag()
+                      )
                     : Promise.reject(
-                        new HttpError(
-                            204,
-                            `No dataHandle for quadKey {column: ${quadKey.column}, row: ${quadKey.row}, level: ${quadKey.level}}. HRN: ${this.hrn}`
-                        )
-                    );
+                          new HttpError(
+                              STATUS_CODES.NO_CONTENT,
+                              `No dataHandle for quadKey {column: ${quadKey.column}, row: ${quadKey.row}, level: ${quadKey.level}}. HRN: ${this.hrn}`
+                          )
+                      );
             }
         }
 
@@ -401,10 +405,10 @@ export class VolatileLayerClient {
             metadata.partitions[0].dataHandle
             ? metadata.partitions[0].dataHandle
             : Promise.reject(
-                new HttpError(
-                    404,
-                    `No partition dataHandle for partition ${partitionId}. HRN: ${this.hrn}`
-                )
-            );
+                  new HttpError(
+                      STATUS_CODES.NOT_FOUND,
+                      `No partition dataHandle for partition ${partitionId}. HRN: ${this.hrn}`
+                  )
+              );
     }
 }
