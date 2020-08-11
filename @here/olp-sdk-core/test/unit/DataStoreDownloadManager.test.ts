@@ -83,6 +83,56 @@ describe("DataStoreDownloadManager", function() {
             });
     });
 
+    it("#download handles HTTP 500 status response max retries", async function() {
+        // Arrange
+        const mock = createMockDownloadResponse();
+        mock.status = 500;
+        mock.ok = false;
+        mock.statusText = "Internal Server Error";
+        mock.json.resolves({ statusText: "Internal Server Error" });
+        const fetchStub = sinon.stub().resolves(mock);
+        const downloadMgr = new DataStoreDownloadManager(fetchStub, 3);
+
+        // Act
+        const downloadResponse = await downloadMgr
+            .download(fakeDataUrl)
+            .catch(error => {
+                // Assert
+                assert(fetchStub.called);
+
+                // callCount should be 4. (1 first call + 3 retries)
+                assert(fetchStub.callCount === 4);
+                assert(fetchStub.getCall(0).args[0] === fakeDataUrl);
+                assert.equal(error.status, 500);
+                assert.equal(error.message, "Internal Server Error");
+            });
+    });
+
+    it("#download handles HTTP 429 status response max retries", async function() {
+        // Arrange
+        const mock = createMockDownloadResponse();
+        mock.status = 429;
+        mock.ok = false;
+        mock.statusText = "To many requests";
+        mock.json.resolves({ statusText: "To many requests" });
+        const fetchStub = sinon.stub().resolves(mock);
+        const downloadMgr = new DataStoreDownloadManager(fetchStub, 3);
+
+        // Act
+        const downloadResponse = await downloadMgr
+            .download(fakeDataUrl)
+            .catch(error => {
+                // Assert
+                assert(fetchStub.called);
+
+                // callCount should be 4. (1 first call + 3 retries)
+                assert(fetchStub.callCount === 4);
+                assert(fetchStub.getCall(0).args[0] === fakeDataUrl);
+                assert.equal(error.status, 429);
+                assert.equal(error.message, "To many requests");
+            });
+    });
+
     /*
      * Note, DataStoreDownloadManager limits the number of html headers sent to MAX_PARALLEL_DOWNLOADS, but
      * will allow more then MAX_PARALLEL_DOWNLOADS of parallel download under the hood.

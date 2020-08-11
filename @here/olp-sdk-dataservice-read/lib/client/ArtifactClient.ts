@@ -90,6 +90,7 @@ export class ArtifactClient {
             artifactHrn: variant.url
         }).catch(async error => {
             const messages: { [key: number]: string } = {
+                400: "Bad request",
                 401: "You are not authorized to view the schema",
                 403: "Accessing the schema is forbidden",
                 404: "The schema was not found",

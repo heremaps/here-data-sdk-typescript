@@ -94,7 +94,7 @@ export class DataStoreDownloadManager implements DownloadManager {
         try {
             const response = await fetchFunction(url, init);
             if (
-                response.status !== STATUS_CODES.SERVICE_UNAVAIBLE ||
+                !this.requestShouldRetryOnError(response.status) ||
                 retryCount >= maxRetries
             ) {
                 if (
@@ -128,6 +128,14 @@ export class DataStoreDownloadManager implements DownloadManager {
                 url,
                 init
             )
+        );
+    }
+
+    private static requestShouldRetryOnError(code: number): boolean {
+        return (
+            (code >= STATUS_CODES.INTERNAL_SERVER_ERROR &&
+                code <= STATUS_CODES.NETWORK_CONNECT_TIMEOUT) ||
+            code === STATUS_CODES.TO_MANY_REQUESTS
         );
     }
 

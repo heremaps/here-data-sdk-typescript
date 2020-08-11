@@ -271,7 +271,7 @@ describe("ArtifactClient", function() {
     // Set the response from Metadata service with the versions info from the catalog.
     mockedResponses.set(
       `https://artifact.data.api.platform.here.com/artifact/v1/artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2`,
-      new HttpError(500, "Internal server error")
+      { status: 400, statusText: "Bad request" }
     );
 
     // Setup the fetch to use mocked responses.
@@ -286,7 +286,7 @@ describe("ArtifactClient", function() {
 
     const response = await artifactClient.getSchema(request).catch(error => {
       expect(error.message).equal(
-        "Artifact Service error: HTTP 500: Internal server error"
+        "Artifact Service error: HTTP 400: Bad request"
       );
     });
   });
