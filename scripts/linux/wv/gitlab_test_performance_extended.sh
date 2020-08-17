@@ -48,10 +48,10 @@ echo ">>> Local Server started for further performance test ... >>>"
 
 echo ">>> Start performance tests ... >>>"
 
-npx tsc --target ES5 tests/performance/longMemoryTest.ts && heaptrack node ./tests/performance/longMemoryTest.js 2>> errors.txt || TEST_FAILURE=1
+heaptrack node ./tests/performance/longMemoryTest.js 2>> errors.txt || TEST_FAILURE=1
 mv heaptrack.node.* long_test.gz
 
-npx tsc --target ES5 tests/performance/longCacheInMemoryTest.ts && heaptrack node ./tests/performance/longCacheInMemoryTest.js 2>> errors.txt || TEST_FAILURE=1
+heaptrack node ./tests/performance/longCacheInMemoryTest.js 2>> errors.txt || TEST_FAILURE=1
 mv heaptrack.node.* long_cacheInMemory_test.gz
 
 echo ">>> Finished performance tests . >>>"
