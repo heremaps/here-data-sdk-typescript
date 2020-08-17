@@ -46,7 +46,7 @@ export class QueryClient {
      * @param settings The [[OlpClientSettings]] instance.
      * @return The [[QueryClient]] instance.
      */
-    constructor(private readonly settings: OlpClientSettings) { }
+    constructor(private readonly settings: OlpClientSettings) {}
 
     /**
      * Fetches the quadtree index.
@@ -76,7 +76,10 @@ export class QueryClient {
 
         let catalogVersion = request.getVersion();
 
-        if (catalogVersion === undefined) {
+        if (
+            request.getLayerType() === "versioned" &&
+            catalogVersion === undefined
+        ) {
             catalogVersion = await this.getCatalogLatestVersion(
                 request.getCatalogHrn(),
                 abortSignal,
@@ -88,7 +91,10 @@ export class QueryClient {
             );
         }
 
-        if (catalogVersion === undefined) {
+        if (
+            request.getLayerType() === "versioned" &&
+            catalogVersion === undefined
+        ) {
             return Promise.reject(`Please provide correct catalog version`);
         }
 
@@ -132,7 +138,7 @@ export class QueryClient {
             fetchingQuadTreeIndexFunction = QueryApi.quadTreeIndex;
             paramsForFetchQuadTreeIndex = {
                 ...paramsForFetchQuadTreeIndex,
-                version: catalogVersion
+                version: catalogVersion as number
             };
         }
 
