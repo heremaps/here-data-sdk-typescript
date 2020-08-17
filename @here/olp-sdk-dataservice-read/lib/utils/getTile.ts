@@ -82,7 +82,7 @@ export async function getTile(
 ): Promise<Response>;
 
 /**
- * @deprecated This parameter will be removed by 11.2020.
+ * @deprecated This signature will be removed by 11.2020.
  * Please use signature getTile(request: TileRequest, params: TileRequestParams, abortSignal?: AbortSignal): Promise<Response>
  *
  * Gets the tile by the key.
@@ -131,6 +131,12 @@ export async function getTile(
 ): Promise<Response> {
     let params: TileRequestParams | undefined;
     let abortSignal: AbortSignal | undefined;
+    let catalogVersion: number | undefined;
+
+    const quadKey = request.getTileKey();
+    if (!quadKey) {
+        return Promise.reject(new Error("Please provide correct QuadKey"));
+    }
 
     if (
         !paramsOrSignal ||
@@ -139,31 +145,27 @@ export async function getTile(
         // usind deprecated
         params = request.getParams();
         abortSignal = paramsOrSignal;
+        if (params.layerType === "versioned") {
+            catalogVersion = await request.getCatalogVersion();
+        }
     } else {
         params = paramsOrSignal;
         abortSignal = signal;
-    }
-
-    const quadKey = request.getTileKey();
-    if (!quadKey) {
-        return Promise.reject(new Error("Please provide correct QuadKey"));
+        if (params.layerType === "versioned") {
+            catalogVersion = params.catalogVersion;
+        }
     }
 
     if (!params) {
         return Promise.reject(
             new Error(
-                `Error getting params. Use TileRequest.withParams() method.`
+                `Error getting params. Please use signature getTile(request: TileRequest, params: TileRequestParams, abortSignal?: AbortSignal)`
             )
         );
     }
 
-    let catalogVersion: number | undefined;
-    let blobType: ApiName = "volatile-blob";
-
-    if (params.layerType === "versioned") {
-        blobType = "blob";
-        catalogVersion = await request.getCatalogVersion();
-    }
+    const blobType: ApiName =
+        params.layerType === "versioned" ? "blob" : "volatile-blob";
 
     const blobRequestBuilder = await RequestFactory.create(
         blobType,

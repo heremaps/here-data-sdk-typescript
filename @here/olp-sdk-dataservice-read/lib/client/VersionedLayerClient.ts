@@ -36,6 +36,8 @@ import {
     QueryClient,
     RequestFactory
 } from "..";
+import { getTile } from "../utils";
+import { TileRequest, TileRequestParams } from "./TileRequest";
 
 /**
  * Parameters for use to initialize VersionLayerClient.
@@ -121,6 +123,39 @@ export class VersionedLayerClient {
                 this.version = paramsOrHrn.version;
             }
         }
+    }
+
+    /**
+     * @brief Fetches data of a tile or its closest ancestor.
+     * Use this API for tile-tree structures where children tile data is aggregated and stored in parent tiles.
+     *
+     * @param request The `TileRequest` instance that contains a complete set
+     * of request parameters.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @return Tile data (if it exists) or the nearest parent tile data
+     */
+    async getAggregatedData(request: TileRequest, abortSignal?: AbortSignal) {
+        let catalogVersion = this.version;
+
+        if (catalogVersion === undefined) {
+            catalogVersion = await this.getLatestVersion(
+                request.getBillingTag()
+            );
+        }
+
+        const params: TileRequestParams = {
+            catalogHrn: HRN.fromString(this.hrn),
+            layerId: this.layerId,
+            layerType: "versioned",
+            settings: this.settings,
+            catalogVersion
+        };
+
+        return getTile(request, params, abortSignal);
     }
 
     /**

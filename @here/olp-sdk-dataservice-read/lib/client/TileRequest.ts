@@ -70,11 +70,20 @@ export class TileRequest {
     private fetchOption = FetchOptions.OnlineIfNotFound;
     private catalogVersion?: number;
 
-    constructor(private readonly params: TileRequestParams) {
-        this.catalogVersion = params.catalogVersion;
+    /**
+     * @deprecated This signature will be removed by 02.2021.
+     * Plase use `new TileRequest()`
+     *
+     * @param params
+     */
+    constructor(private readonly params?: TileRequestParams) {
+        this.catalogVersion = params && params.catalogVersion;
     }
 
     /**
+     * @deprecated This method will be removed by 02.2021.
+     * Please call getTile with signature getTile(request: TileRequest, params: TileRequestParams, abortSignal?: AbortSignal)
+     *
      * Gets the catalog version provided by the [[TileRequestParams]].
      *
      * @return The catalog version provided by the [[TileRequestParams]].
@@ -96,12 +105,15 @@ export class TileRequest {
     }
 
     /**
+     * @deprecated This method will be removed by 02.2021.
+     * Please call getTile with signature getTile(request: TileRequest, params: TileRequestParams, abortSignal?: AbortSignal)
+     *
      * Gets the tile request parameters.
      *
      * @return The [[TileRequestParams]] instance.
      */
     public getParams(): TileRequestParams {
-        return this.params;
+        return this.params as TileRequestParams;
     }
 
     /**
@@ -174,11 +186,17 @@ export class TileRequest {
     }
 
     /**
+     * @deprecated This method will be removed by 02.2021.
      * Gets the latest available catalog version.
      *
      * @return The latest available catalog version.
      */
     private async getCatalogLatestVersion(): Promise<number> {
+        if (!this.params) {
+            return Promise.reject(
+                "Using deprecated method, please use getVersionOfCatalog()"
+            );
+        }
         const request = await RequestFactory.create(
             "metadata",
             "v1",

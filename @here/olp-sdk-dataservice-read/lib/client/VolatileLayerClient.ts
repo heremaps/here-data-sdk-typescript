@@ -33,12 +33,15 @@ import {
 } from "@here/olp-sdk-dataservice-api";
 import {
     DataRequest,
+    getTile,
     MetadataCacheRepository,
     PartitionsRequest,
     QuadKeyPartitionsRequest,
     QuadTreeIndexRequest,
     QueryClient,
-    RequestFactory
+    RequestFactory,
+    TileRequest,
+    TileRequestParams
 } from "..";
 
 /**
@@ -116,6 +119,30 @@ export class VolatileLayerClient {
             this.layerId = paramsOrHrn.layerId;
             this.settings = paramsOrHrn.settings;
         }
+    }
+
+    /**
+     * @brief Fetches data of a tile or its closest ancestor.
+     * Use this API for tile-tree structures where children tile data is aggregated and stored in parent tiles.
+     *
+     * @param request The `TileRequest` instance that contains a complete set
+     * of request parameters.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @return Tile data (if it exists) or the nearest parent tile data
+     */
+    async getAggregatedData(request: TileRequest, abortSignal?: AbortSignal) {
+        const params: TileRequestParams = {
+            catalogHrn: HRN.fromString(this.hrn),
+            layerId: this.layerId,
+            layerType: "volatile",
+            settings: this.settings
+        };
+
+        return getTile(request, params, abortSignal);
     }
 
     /**
