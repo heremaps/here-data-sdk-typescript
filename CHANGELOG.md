@@ -1,3 +1,70 @@
+## v1.5.0 (18/08/2020)
+
+**olp-sdk-core**
+
+- Added the new `@here/olp-sdk-core` module v1.0.0 and moved common components to it.
+
+**olp-sdk-authentication**
+
+- Added `@here/olp-sdk-core` as a dependency.
+- Updated `olp-sdk-fetch` to version 1.5.0.
+- Deprecated the `lib.version.ts` file. It will be removed by 02.2021. Use the same from the `@here/olp-sdk-core` package instead.
+- Deprecated the `./lib/HttpError.ts` file. It will be removed by 02.2021. Use the same from the `@here/olp-sdk-core` package instead.
+
+**olp-sdk-dataservice-api**
+
+- Added the `checkBlobExistsStatus` function to `blob-api.ts`. It is a fork of the `checkBlobExists` function.
+- Deprecated the `checkBlobExists` function in `blob-api.ts`. It will be removed by 02.2021. Use the `checkBlobExistsStatus` function instead.
+- Added the `doCompleteMultipartUpload` function to `blob-api.ts`. It is a fork of the `completeMultipartUpload` function.
+- Deprecated the `completeMultipartUpload` function in `blob-api.ts`. It will be removed by 02.2021. Use the `doCompleteMultipartUpload` function instead.
+- Added the `putData` function to `blob-api.ts`. It is a fork of the `putBlob` function.
+- Deprecated the `putBlob` function in `blob-api.ts`. It will be removed by 02.2021. Use the `putData` function instead.
+- Added the `doUploadPart` function to `blob-api.ts`. It is a fork of the `uploadPart` function.
+- Deprecated the `uploadPart` function in `blob-api.ts`. It will be removed by 02.2021. Use the `doUploadPart` function instead.
+- Deprecated the `./lib/HttpError.ts` file. It will be removed by 02.2021. Use the same from the `@here/olp-sdk-core` package instead..
+
+**olp-sdk-fetch**
+
+- Updated dependencies.
+
+**olp-sdk-dataservice-read**
+
+- Added `@here/olp-sdk-core` as a dependency.
+- Deprecated the `lib.version.ts` file. It will be removed by 02.2021. Use the same from the `@here/olp-sdk-core` package instead.
+- Deprecated the `lib/DataStoreDownloadManager.ts` file. It will be removed by 02.2021. Use the same from the `@here/olp-sdk-core` package instead.
+- Deprecated the `lib/DataStoreRequestBuilder.ts` file. It will be removed by 02.2021. Use the same from the `@here/olp-sdk-core` package instead.
+- Deprecated the `lib/DownloadManager.ts` file. It will be removed by 02.2021. Use the same from the `@here/olp-sdk-core` package instead.
+- Deprecated the `lib/HRN.ts` file. It will be removed by 02.2021. Use the same from the `@here/olp-sdk-core` package instead.
+- Deprecated the `lib/ApiCacheRepository.ts` file. It will be removed by 02.2021. Use the same from the `@here/olp-sdk-core` package instead.
+- Deprecated the `lib/KeyValueCache.ts` file. It will be removed by 02.2021. Use the same from the `@here/olp-sdk-core` package instead.
+- Deprecated the `lib/LRUCache.ts` file. It will be removed by 02.2021. Use the same from the `@here/olp-sdk-core` package instead.
+- Deprecated the `DataRequest.getQuadKey` method. It will be removed by 02.2021. If you need to get data using a quadkey, use the [[getAggregatedData]] method instead.
+- Deprecated the `lib/FetchOptions.ts` file. It will be removed by 02.2021. Use the same from the `@here/olp-sdk-core` package instead.
+- Deprecated the `lib/OlpClientSettings.ts` file. It will be removed by 02.2021. Use the same from the `@here/olp-sdk-core` package instead.
+- Deprecated the `lib/QuadKey.ts` file. It will be removed by 02.2021. Use the same from the `@here/olp-sdk-core` package instead.
+- Deprecated the `lib/getEnvLookupUrl.ts` file. It will be removed by 02.2021. Use the same from the `@here/olp-sdk-core` package instead.
+- Deprecated the `lib/getDataSizeUtil.ts` file. It will be removed by 02.2021. Use the same from the `@here/olp-sdk-core` package instead.
+- Deprecated the `lib/utils/RequestBuilderFactory.ts` file. This file will be removed by 02.2021. Use the same from the `@here/olp-sdk-core` package instead.
+- Deprecated the `TileRequestParams` parameter required to construct `TileRequest`. This signature will be removed by 02.2021. Use the new `TileRequest()` parameter instead.
+- Deprecated the `TileRequest.getCatalogVersion()` method. It will be removed by 02.2021. Call the `getTile` method with the following signature instead: `getTile(request: TileRequest, params: TileRequestParams, abortSignal?: AbortSignal)`.
+- Deprecated the signature for the following function: `getTile(request: TileRequest, abortSignal?: AbortSignal): Promise<Response>;`. This signature will be removed by 02.2021. Use the following signature instead: `getTile(request: TileRequest, params: TileRequestParams, abortSignal?: AbortSignal): Promise<Response>`.
+- Added the `getAggregatedTile` method to `VersionedLayerClient` and `VolatileLayerClient`. This method fetches data of a tile or its closest ancestor. Use the `getAggregatedTile` method for tile-tree structures where children tile data is aggregated and stored in parent tiles.
+
+**olp-sdk-dataservice-write**
+
+- Added the new `olp-sdk-dataservice-write` module that you can use to upload data to catalogs. For instruction, see the [related](https://developer.here.com/documentation/sdk-typescript/dev_guide/topics/publish-data.html) section in the Developer Guide.
+- Added `VersionedLayerClient`. You can use it to upload data to versioned layers.
+- Added the `VersionedLayerClient.checkDataExists()` method. You can use it to check if a data handle is not used in a layer.
+- Added the `VersionedLayerClient.getBaseVersion()` method. You can use it to get the latest version of a catalog.
+- Added the `VersionedLayerClient.startBatch()` method. You can use it to initialize a new publication for publishing.
+- Added the `VersionedLayerClient.publishToBatch()` method. You can use it to upload a blob and metadata of one partition. If you upload more than 50 MB of data, the data is split and uploaded in parts of 5 MB each.
+- Added the `VersionedLayerClient.uploadBlob()` method. You can use it to upload data blobs of multiple partitions. If you upload more than 50 MB of data, the data is split and uploaded in parts of 5 MB each.
+- Added the `VersionedLayerClient.uploadPartitions()` method. You can use it to upload metadata to the write service.
+- Added the `VersionedLayerClient.cancelBatch()` method. You can use it to cancel a publication if it has not been submitted.
+- Added the `VersionedLayerClient.getBatch()` method. You can use it to retrieve publication details.
+- Added the `VersionedLayerClient.completeBatch()` method. You can use it to submit a publication, that is a batch, and if necessary, initiate post-processing.
+
+
 ## v1.4.0 (30/04/2020)
 
 **olp-sdk-authentication**
@@ -6,7 +73,7 @@
 
 **olp-sdk-dataservice-api**
 
-- Deprecated the `commitOffsets` function from `stream-api.ts`. It will be removed by 09.2020. Use the `doCommitOffsets` function instead.
+- Deprecated the `commitOffsets` function in `stream-api.ts`. It will be removed by 09.2020. Use the `doCommitOffsets` function instead.
 
 **olp-sdk-fetch**
 

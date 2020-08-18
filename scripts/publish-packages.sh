@@ -29,6 +29,10 @@ while [[ $# -gt 0 ]]; do
         # olp-sdk-fetch publish
         cd @here/olp-sdk-fetch && npm install && npm publish && cd -
         ;;
+        -core)
+        # olp-sdk-core publish
+        cd @here/olp-sdk-core && npm install && npm publish && cd -
+        ;;
         -api)
         # olp-sdk-dataservice-api publish
         cd @here/olp-sdk-dataservice-api && npm install && npm publish && cd -

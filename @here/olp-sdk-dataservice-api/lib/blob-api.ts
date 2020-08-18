@@ -229,7 +229,7 @@ export async function cancelMultipartUpload(
 }
 
 /**
- * @deprecated This function will be deleted 12.20. Please use checkBlobExistsStatus.
+ * @deprecated This function will be deleted 02.21. Please use checkBlobExistsStatus.
  * Checks if a blob exists for the requested data handle.
  *
  * @summary Checks if a data handle exists
@@ -302,7 +302,7 @@ export async function checkBlobExistsStatus(
 }
 
 /**
- * @deprecated This function will be deleted 01.21. Please use doCompleteMultipartUpload.
+ * @deprecated This function will be deleted 02.21. Please use doCompleteMultipartUpload.
  *
  * Call this API when all parts have been uploaded. Please keep in mind that the actual URL for this operation
  * must be obtained from the response body of start multipart operation that is
@@ -485,7 +485,7 @@ export async function getMultipartUploadStatus(
 }
 
 /**
- * @deprecated This function will be deleted 12.20. Please use `putData`.
+ * @deprecated This function will be deleted 02.21. Please use `putData`.
  * Persists the data blob in the underlying storage mechanism (volume).
  * Use this upload mechanism for blobs smaller than 50 MB.
  * The size limit for blobs uploaded this way is 5 GB but we do not recommend uploading blobs
@@ -647,7 +647,7 @@ export async function startMultipartUpload(
 }
 
 /**
- * @deprecated This function will be deleted 01.21. Please use doUploadPart.
+ * @deprecated This function will be deleted 02.21. Please use doUploadPart.
  *
  * Upload a single part of a multipart upload for the blob. Every uploaded part except the last one must have a
  * minimum 5 MB of data and maximum of 5 GB, but we do not recommend uploading parts this large.

@@ -106,12 +106,13 @@ Add minified JavaScript files to your `html` and create an object of userAuth an
                     settings: olpClientSettings
             });
             /**
-             * Get some partition from the layer by ID
+             * Gets some data from the layer by ID
              */
+            const request = new DataRequest().withPartitionId("your-partition-id");
             volatileLayerClient
-                .getPartition("some-partition-id")
-                .then(partitionResponse => {
-                    partitionResponse.blob().then(partitionBlob => {
+                .getData(request)
+                .then(response => {
+                    response.blob().then(blob => {
                         // your blob here
                     });
                 });

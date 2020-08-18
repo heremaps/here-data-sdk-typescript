@@ -82,8 +82,9 @@ export async function getTile(
 ): Promise<Response>;
 
 /**
- * @deprecated This signature will be removed by 11.2020.
- * Please use signature getTile(request: TileRequest, params: TileRequestParams, abortSignal?: AbortSignal): Promise<Response>
+ * @deprecated This signature will be removed by 02.2021.
+ * Use the following signature instead:
+ * `getTile(request: TileRequest, params: TileRequestParams, abortSignal?: AbortSignal): Promise<Response>`.
  *
  * Gets the tile by the key.
  *
