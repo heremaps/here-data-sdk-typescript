@@ -74,7 +74,7 @@ export class DataRequest {
     }
 
     /**
-     * @deprecated This method will be removed by 10.2020. Please use [[getTile]] function
+     * @deprecated This method will be removed by 02.2021. Please use [[getAggregatedData]] method
      * if you need to get data using a quadkey.
      * You can also use the [[getPartitions]] method to get datahandle using a quadkey.
      *
@@ -87,7 +87,7 @@ export class DataRequest {
     }
 
     /**
-     * @deprecated This method will be removed by 10.2020. Please use [[getTile]] function
+     * @deprecated This method will be removed by 02.2021. Please use [[getAggregatedData]] method
      * if you need to get data using a quadkey.
      * You can also use the [[getPartitions]] method to get datahandle using a quadkey.
      *

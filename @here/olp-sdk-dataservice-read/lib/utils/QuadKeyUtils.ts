@@ -18,7 +18,7 @@
  */
 
 /**
- * @deprecated This interface will be removed by 12.2020. Please use the same from `@here/olp-sdk-core` package.
+ * @deprecated This interface will be removed by 02.2021. Please use the same from  the `@here/olp-sdk-core` package.
  * Addresses a tile in a quadtree.
  *
  * A quadkey is defined by a row, a column, and a level. The tree has a root at level 0 that contains one
@@ -101,7 +101,7 @@ const powerOfTwo = [
 // tslint:enable:no-magic-numbers
 
 /**
- * @deprecated This function will be removed by 12.2020.
+ * @deprecated This function will be removed by 02.2021.
  * Please use the same method from [[TileKey]] class, imported from `@here/olp-sdk-core` package.
  *
  * Creates a quadkey from a numeric or string Morton code representation.
@@ -135,7 +135,7 @@ export function quadKeyFromMortonCode(code: number | string): QuadKey {
 }
 
 /**
- * @deprecated This function will be removed by 12.2020.
+ * @deprecated This function will be removed by 02.2021.
  * Please use the same method from [[TileKey]] class, imported from `@here/olp-sdk-core` package.
  *
  * Converts a quadkey into a Morton code numeric representation.
@@ -163,7 +163,7 @@ export function mortonCodeFromQuadKey(key: QuadKey): number {
 }
 
 /**
- * @deprecated This function will be removed by 12.2020.
+ * @deprecated This function will be removed by 02.2021.
  * Please use the same method from [[TileKey]] class, imported from `@here/olp-sdk-core` package.
  *
  * Computes a new quadkey that is a result of appending the `subKey` (relative) quadkey to the current quadkey.
@@ -184,7 +184,7 @@ export function addQuadKeys(root: QuadKey, subKey: QuadKey): QuadKey {
 }
 
 /**
- * @deprecated This function will be removed by 12.2020.
+ * @deprecated This function will be removed by 02.2021.
  * Please use the same method from [[TileKey]] class, imported from `@here/olp-sdk-core` package.
  *
  * Computes a new quadkey that is the parent of the current quadkey.
@@ -208,7 +208,7 @@ export function computeParentKey(key: QuadKey, delta: number = 1): QuadKey {
 }
 
 /**
- * @deprecated This function will be removed by 12.2020.
+ * @deprecated This function will be removed by 02.2021.
  * Please use the same method from [[TileKey]] class, imported from `@here/olp-sdk-core` package.
  *
  * Checks if a quadkey is valid.

@@ -49,7 +49,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@here/olp-sdk-fetch": "1.4.0"
+    "@here/olp-sdk-fetch": "1.5.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.7",
