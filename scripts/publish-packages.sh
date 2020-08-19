@@ -22,6 +22,8 @@
 
 echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ~/.npmrc
 
+yarn
+
 while [[ $# -gt 0 ]]; do
     key="$1"
     case "$key" in
