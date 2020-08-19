@@ -22,8 +22,6 @@
 
 echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ~/.npmrc
 
-yarn
-
 while [[ $# -gt 0 ]]; do
     key="$1"
     case "$key" in
@@ -33,7 +31,7 @@ while [[ $# -gt 0 ]]; do
         ;;
         -core)
         # olp-sdk-core publish
-        cd @here/olp-sdk-core && npm install && npm publish --access=public && cd -
+        cd @here/olp-sdk-core && npm install && npm publish && cd -
         ;;
         -api)
         # olp-sdk-dataservice-api publish
@@ -49,7 +47,7 @@ while [[ $# -gt 0 ]]; do
         ;;
         -write)
         # olp-sdk-dataservice-write publish
-        cd @here/olp-sdk-dataservice-write && npm install && npm publish --access=public && cd -
+        cd @here/olp-sdk-dataservice-write && npm install && npm publish && cd -
         ;;
     esac
     # Shift after checking all the cases to get the next option

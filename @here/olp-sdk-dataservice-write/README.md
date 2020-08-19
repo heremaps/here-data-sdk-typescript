@@ -73,11 +73,10 @@ The maximum number of partitions you can upload and publish in one request is 1,
 
 **To publish data to the versioned layer:**
 
-1. Add the `@here/olp-sdk-dataservice-api` and `@here/olp-sdk-dataservice-write` packages to your dependencies.
+1. Add the `@here/olp-sdk-dataservice-write` package to your dependencies.
 
     ```
-    "@here/olp-sdk-dataservice-api": "1.5.0",
-    "@here/olp-sdk-dataservice-write": "1.0.0"
+    "@here/olp-sdk-dataservice-write": "^1.0.0"
     ```
 
 2. Import classes from the `olp-sdk-dataservice-write` module.
