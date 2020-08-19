@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>HttpError | @here/olp-sdk-ts</title>
+	<title>QuadTreeIndexCacheRepository | @here/olp-sdk-ts</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -52,13 +52,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_olp_sdk_authentication_lib_httperror_.html">&quot;olp-sdk-authentication/lib/HttpError&quot;</a>
+					<a href="../modules/_olp_sdk_dataservice_read_lib_cache_quadtreeindexcacherepository_.html">&quot;olp-sdk-dataservice-read/lib/cache/QuadTreeIndexCacheRepository&quot;</a>
 				</li>
 				<li>
-					<a href="_olp_sdk_authentication_lib_httperror_.httperror.html">HttpError</a>
+					<a href="_olp_sdk_dataservice_read_lib_cache_quadtreeindexcacherepository_.quadtreeindexcacherepository.html">QuadTreeIndexCacheRepository</a>
 				</li>
 			</ul>
-			<h1>Class HttpError</h1>
+			<h1>Class QuadTreeIndexCacheRepository</h1>
 		</div>
 	</div>
 </header>
@@ -68,12 +68,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>HttpError class used to be able to provide for consumers
-							a more usable errors from services. Would be used in the methods
-							to propagate error with http status code and with a message in
-							case if something went wrong during the request.
-							The HttpError class extends generic Error class from V8 and
-						adds property code for http status.</p>
+						<p>Caches the QuadTreeIndex using a key-value pair.</p>
 					</div>
 				</div>
 			</section>
@@ -81,12 +76,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">Error</span>
-						<ul class="tsd-hierarchy">
-							<li>
-								<span class="target">HttpError</span>
-							</li>
-						</ul>
+						<span class="target">QuadTreeIndexCacheRepository</span>
 					</li>
 				</ul>
 			</section>
@@ -97,23 +87,14 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_olp_sdk_authentication_lib_httperror_.httperror.html#constructor" class="tsd-kind-icon">constructor</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Properties</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_olp_sdk_authentication_lib_httperror_.httperror.html#message" class="tsd-kind-icon">message</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite"><a href="_olp_sdk_authentication_lib_httperror_.httperror.html#name" class="tsd-kind-icon">name</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_olp_sdk_authentication_lib_httperror_.httperror.html#stack" class="tsd-kind-icon">stack</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_olp_sdk_authentication_lib_httperror_.httperror.html#status" class="tsd-kind-icon">status</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="_olp_sdk_authentication_lib_httperror_.httperror.html#error" class="tsd-kind-icon">Error</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_cache_quadtreeindexcacherepository_.quadtreeindexcacherepository.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-static"><a href="_olp_sdk_authentication_lib_httperror_.httperror.html#ishttperror" class="tsd-kind-icon">is<wbr>Http<wbr>Error</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_cache_quadtreeindexcacherepository_.quadtreeindexcacherepository.html#get" class="tsd-kind-icon">get</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_olp_sdk_dataservice_read_lib_cache_quadtreeindexcacherepository_.quadtreeindexcacherepository.html#put" class="tsd-kind-icon">put</a></li>
 							</ul>
 						</section>
 					</div>
@@ -125,125 +106,100 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Http<wbr>Error<span class="tsd-signature-symbol">(</span>status<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, message<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_olp_sdk_authentication_lib_httperror_.httperror.html" class="tsd-signature-type">HttpError</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Quad<wbr>Tree<wbr>Index<wbr>Cache<wbr>Repository<span class="tsd-signature-symbol">(</span>cache<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_core_lib_cache_keyvaluecache_.keyvaluecache.html" class="tsd-signature-type">KeyValueCache</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_cache_quadtreeindexcacherepository_.quadtreeindexcacherepository.html" class="tsd-signature-type">QuadTreeIndexCacheRepository</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-authentication/lib/HttpError.ts#L29">@here/olp-sdk-authentication/lib/HttpError.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/cache/QuadTreeIndexCacheRepository.ts#L34">@here/olp-sdk-dataservice-read/lib/cache/QuadTreeIndexCacheRepository.ts:34</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Constructs a new HttpError.</p>
+									<p>Generates the <a href="_olp_sdk_dataservice_read_lib_cache_quadtreeindexcacherepository_.quadtreeindexcacherepository.html">QuadTreeIndexCacheRepository</a> instance.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>status: <span class="tsd-signature-type">number</span></h5>
-								</li>
-								<li>
-									<h5>message: <span class="tsd-signature-type">string</span></h5>
+									<h5>cache: <a href="_olp_sdk_core_lib_cache_keyvaluecache_.keyvaluecache.html" class="tsd-signature-type">KeyValueCache</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
+											<p>The <a href="_olp_sdk_core_lib_cache_keyvaluecache_.keyvaluecache.html">KeyValueCache</a> instance.</p>
 										</div>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_authentication_lib_httperror_.httperror.html" class="tsd-signature-type">HttpError</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_cache_quadtreeindexcacherepository_.quadtreeindexcacherepository.html" class="tsd-signature-type">QuadTreeIndexCacheRepository</a></h4>
+							<p>The <a href="_olp_sdk_dataservice_read_lib_cache_quadtreeindexcacherepository_.quadtreeindexcacherepository.html">QuadTreeIndexCacheRepository</a> instance.</p>
 						</li>
 					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-					<a name="message" class="tsd-anchor"></a>
-					<h3>message</h3>
-					<div class="tsd-signature tsd-kind-icon">message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from Error.message</p>
-						<ul>
-							<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:974</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
-					<a name="name" class="tsd-anchor"></a>
-					<h3>name</h3>
-					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<p>Overrides Error.name</p>
-						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-authentication/lib/HttpError.ts#L29">@here/olp-sdk-authentication/lib/HttpError.ts:29</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-					<a name="stack" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> stack</h3>
-					<div class="tsd-signature tsd-kind-icon">stack<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></div>
-					<aside class="tsd-sources">
-						<p>Inherited from Error.stack</p>
-						<ul>
-							<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:975</li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="status" class="tsd-anchor"></a>
-					<h3>status</h3>
-					<div class="tsd-signature tsd-kind-icon">status<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-authentication/lib/HttpError.ts#L37">@here/olp-sdk-authentication/lib/HttpError.ts:37</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
-					<a name="error" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> Error</h3>
-					<div class="tsd-signature tsd-kind-icon">Error<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ErrorConstructor</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in node_modules/typedoc/node_modules/typescript/lib/lib.es5.d.ts:984</li>
-						</ul>
-					</aside>
-				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-static">
-					<a name="ishttperror" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagStatic">Static</span> is<wbr>Http<wbr>Error</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-static">
-						<li class="tsd-signature tsd-kind-icon">is<wbr>Http<wbr>Error<span class="tsd-signature-symbol">(</span>error<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">error</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">HttpError</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="get" class="tsd-anchor"></a>
+					<h3>get</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">QuadTreeIndexCacheParams</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">QuadTreeIndex</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-authentication/lib/HttpError.ts#L48">@here/olp-sdk-authentication/lib/HttpError.ts:48</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/cache/QuadTreeIndexCacheRepository.ts#L63">@here/olp-sdk-dataservice-read/lib/cache/QuadTreeIndexCacheRepository.ts:63</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Returns true if the given error is a HttpError,
-									false otherwise</p>
+									<p>Gets a QuadTreeIndex from the cache.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>error: <span class="tsd-signature-type">any</span></h5>
+									<h5>params: <span class="tsd-signature-type">QuadTreeIndexCacheParams</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>The error object to check</p>
+										<p>[[QuadTreeIndexCacheParams]] object.</p>
 									</div>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">error</span><span class="tsd-signature-symbol"> is </span><span class="tsd-signature-type">HttpError</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">QuadTreeIndex</span>
+								<span class="tsd-signature-symbol"> | </span>
+								<span class="tsd-signature-type">undefined</span>
+							</h4>
+							<p>The QuadTreeIndex for the Tile, or undefined if the QuadTreeIndex does not exist.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="put" class="tsd-anchor"></a>
+					<h3>put</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">put<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">QuadTreeIndexCacheParams</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/cache/QuadTreeIndexCacheRepository.ts#L48">@here/olp-sdk-dataservice-read/lib/cache/QuadTreeIndexCacheRepository.ts:48</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Stores a key-value pair in the cache.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>params: <span class="tsd-signature-type">QuadTreeIndexCacheParams</span><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-type">object</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+							<p>True if the operation is successful, false otherwise.</p>
 						</li>
 					</ul>
 				</section>
@@ -256,7 +212,7 @@
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
 					<li class="current tsd-kind-external-module">
-						<a href="../modules/_olp_sdk_authentication_lib_httperror_.html">&quot;olp-<wbr>sdk-<wbr>authentication/lib/<wbr>Http<wbr>Error&quot;</a>
+						<a href="../modules/_olp_sdk_dataservice_read_lib_cache_quadtreeindexcacherepository_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/cache/<wbr>Quad<wbr>Tree<wbr>Index<wbr>Cache<wbr>Repository&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -265,28 +221,16 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_olp_sdk_authentication_lib_httperror_.httperror.html" class="tsd-kind-icon">Http<wbr>Error</a>
+						<a href="_olp_sdk_dataservice_read_lib_cache_quadtreeindexcacherepository_.quadtreeindexcacherepository.html" class="tsd-kind-icon">Quad<wbr>Tree<wbr>Index<wbr>Cache<wbr>Repository</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="_olp_sdk_authentication_lib_httperror_.httperror.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="_olp_sdk_dataservice_read_lib_cache_quadtreeindexcacherepository_.quadtreeindexcacherepository.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="_olp_sdk_authentication_lib_httperror_.httperror.html#message" class="tsd-kind-icon">message</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_olp_sdk_dataservice_read_lib_cache_quadtreeindexcacherepository_.quadtreeindexcacherepository.html#get" class="tsd-kind-icon">get</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite">
-								<a href="_olp_sdk_authentication_lib_httperror_.httperror.html#name" class="tsd-kind-icon">name</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
-								<a href="_olp_sdk_authentication_lib_httperror_.httperror.html#stack" class="tsd-kind-icon">stack</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_olp_sdk_authentication_lib_httperror_.httperror.html#status" class="tsd-kind-icon">status</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
-								<a href="_olp_sdk_authentication_lib_httperror_.httperror.html#error" class="tsd-kind-icon">Error</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-static">
-								<a href="_olp_sdk_authentication_lib_httperror_.httperror.html#ishttperror" class="tsd-kind-icon">is<wbr>Http<wbr>Error</a>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_olp_sdk_dataservice_read_lib_cache_quadtreeindexcacherepository_.quadtreeindexcacherepository.html#put" class="tsd-kind-icon">put</a>
 							</li>
 						</ul>
 					</li>

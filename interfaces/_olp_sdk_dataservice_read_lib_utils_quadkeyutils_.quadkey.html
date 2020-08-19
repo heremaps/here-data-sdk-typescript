@@ -67,16 +67,17 @@
 		<div class="col-8 col-content">
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>Addresses a tile in a quadtree.</p>
-					</div>
-					<p>A quadkey is defined by a row, a column, and a level. The tree has a root at level 0 that contains one
-					single tile. On every level, each tile is divided into four children (hence, the name &quot;quadtree&quot;).</p>
-					<p>Within each <a href="_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html#level">level</a>, a tile is addressed with a <a href="_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html#row">row</a> and <a href="_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html#column">column</a>. The number
-						of rows and columns in each level is 2 to the power of the level. This means that on level 0, only
-						one tile exists, so there is 1 column and 1 row. On level 1, 4 tiles exist in 2 rows and 2 columns.
-					On level 2, we have 16 tiles in 4 rows and 4 columns. And so on.</p>
 					<dl class="tsd-comment-tags">
+						<dt>deprecated</dt>
+						<dd><p>This interface will be removed by 02.2021. Please use the same from  the <code>@here/olp-sdk-core</code> package.
+							Addresses a tile in a quadtree.</p>
+							<p>A quadkey is defined by a row, a column, and a level. The tree has a root at level 0 that contains one
+							single tile. On every level, each tile is divided into four children (hence, the name &quot;quadtree&quot;).</p>
+							<p>Within each <a href="_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html#level">level</a>, a tile is addressed with a <a href="_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html#row">row</a> and <a href="_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html#column">column</a>. The number
+								of rows and columns in each level is 2 to the power of the level. This means that on level 0, only
+								one tile exists, so there is 1 column and 1 row. On level 1, 4 tiles exist in 2 rows and 2 columns.
+							On level 2, we have 16 tiles in 4 rows and 4 columns. And so on.</p>
+						</dd>
 						<dt>note</dt>
 						<dd><p>As the JavaScript number type can hold 53 bits in its mantissa, only levels up to 26 can be
 							represented in the number representation returned by [[<code>mortonCodeFromQuadKey</code>]].</p>
@@ -115,7 +116,7 @@
 					<div class="tsd-signature tsd-kind-icon">column<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L38">@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:38</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L39">@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:39</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -130,7 +131,7 @@
 					<div class="tsd-signature tsd-kind-icon">level<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L40">@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:40</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L41">@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:41</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -145,7 +146,7 @@
 					<div class="tsd-signature tsd-kind-icon">row<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L36">@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:36</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L37">@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:37</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">

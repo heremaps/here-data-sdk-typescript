@@ -131,19 +131,31 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Tile<wbr>Request<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">: </span><a href="../interfaces/_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequestparams.html" class="tsd-signature-type">TileRequestParams</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html" class="tsd-signature-type">TileRequest</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Tile<wbr>Request<span class="tsd-signature-symbol">(</span>params<span class="tsd-signature-symbol">?: </span><a href="../interfaces/_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequestparams.html" class="tsd-signature-type">TileRequestParams</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html" class="tsd-signature-type">TileRequest</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L72">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:72</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L71">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:71</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>This signature will be removed by 02.2021.
+										Plase use <code>new TileRequest()</code></p>
+									</dd>
+								</dl>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>params: <a href="../interfaces/_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequestparams.html" class="tsd-signature-type">TileRequestParams</a></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> params: <a href="../interfaces/_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequestparams.html" class="tsd-signature-type">TileRequestParams</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html" class="tsd-signature-type">TileRequest</a></h4>
@@ -163,7 +175,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L146">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:146</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L157">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:157</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -189,13 +201,17 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L84">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:84</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L92">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:92</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Gets the catalog version provided by the <a href="../interfaces/_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequestparams.html">TileRequestParams</a>.</p>
-								</div>
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>This method will be removed by 02.2021.
+										Please call getTile with signature getTile(request: TileRequest, params: TileRequestParams, abortSignal?: AbortSignal)</p>
+										<p>Gets the catalog version provided by the <a href="../interfaces/_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequestparams.html">TileRequestParams</a>.</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
 							<p>The catalog version provided by the <a href="../interfaces/_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequestparams.html">TileRequestParams</a>.
@@ -207,13 +223,13 @@
 					<a name="getfetchoption" class="tsd-anchor"></a>
 					<h3>get<wbr>Fetch<wbr>Option</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Fetch<wbr>Option<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/_olp_sdk_dataservice_read_lib_client_fetchoptions_.fetchoptions.html" class="tsd-signature-type">FetchOptions</a></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Fetch<wbr>Option<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/_olp_sdk_core_lib_utils_fetchoptions_.fetchoptions.html" class="tsd-signature-type">FetchOptions</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L173">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:173</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L184">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:184</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -223,7 +239,7 @@
 								<p>The default option is <code>OnlineIfNotFound</code>. It queries the network if
 								the requested resource is not in the cache.</p>
 							</div>
-							<h4 class="tsd-returns-title">Returns <a href="../enums/_olp_sdk_dataservice_read_lib_client_fetchoptions_.fetchoptions.html" class="tsd-signature-type">FetchOptions</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../enums/_olp_sdk_core_lib_utils_fetchoptions_.fetchoptions.html" class="tsd-signature-type">FetchOptions</a></h4>
 							<p>The fetch option.</p>
 						</li>
 					</ul>
@@ -238,13 +254,17 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L104">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:104</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L115">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:115</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Gets the tile request parameters.</p>
-								</div>
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>This method will be removed by 02.2021.
+										Please call getTile with signature getTile(request: TileRequest, params: TileRequestParams, abortSignal?: AbortSignal)</p>
+										<p>Gets the tile request parameters.</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequestparams.html" class="tsd-signature-type">TileRequestParams</a></h4>
 							<p>The <a href="../interfaces/_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequestparams.html">TileRequestParams</a> instance.</p>
@@ -261,19 +281,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L137">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:137</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L148">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:148</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Gets the configured <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html">QuadKey</a> object for the request.</p>
+									<p>Gets the configured <a href="../interfaces/_olp_sdk_core_lib_utils_tilekey_.quadkey.html">QuadKey</a> object for the request.</p>
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html" class="tsd-signature-type">QuadKey</a>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">undefined</span>
 							</h4>
-							<p>The configured <a href="../interfaces/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.quadkey.html">QuadKey</a> object.</p>
+							<p>The configured <a href="../interfaces/_olp_sdk_core_lib_utils_tilekey_.quadkey.html">QuadKey</a> object.</p>
 						</li>
 					</ul>
 				</section>
@@ -287,7 +307,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L127">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:127</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L138">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:138</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -314,13 +334,13 @@
 					<a name="withfetchoption" class="tsd-anchor"></a>
 					<h3>with<wbr>Fetch<wbr>Option</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">with<wbr>Fetch<wbr>Option<span class="tsd-signature-symbol">(</span>option<span class="tsd-signature-symbol">: </span><a href="../enums/_olp_sdk_dataservice_read_lib_client_fetchoptions_.fetchoptions.html" class="tsd-signature-type">FetchOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html" class="tsd-signature-type">TileRequest</a></li>
+						<li class="tsd-signature tsd-kind-icon">with<wbr>Fetch<wbr>Option<span class="tsd-signature-symbol">(</span>option<span class="tsd-signature-symbol">: </span><a href="../enums/_olp_sdk_core_lib_utils_fetchoptions_.fetchoptions.html" class="tsd-signature-type">FetchOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html" class="tsd-signature-type">TileRequest</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L160">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:160</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L171">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:171</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -337,7 +357,7 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>option: <a href="../enums/_olp_sdk_dataservice_read_lib_client_fetchoptions_.fetchoptions.html" class="tsd-signature-type">FetchOptions</a></h5>
+									<h5>option: <a href="../enums/_olp_sdk_core_lib_utils_fetchoptions_.fetchoptions.html" class="tsd-signature-type">FetchOptions</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<p>The <code>FetchOption</code> enum.</p>
 									</div>
@@ -358,7 +378,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L114">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:114</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L125">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:125</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">

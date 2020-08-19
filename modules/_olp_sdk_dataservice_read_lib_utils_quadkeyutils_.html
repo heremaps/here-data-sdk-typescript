@@ -97,15 +97,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L167">@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:167</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L177">@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:177</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Computes a new quadkey that is a result of appending the <code>subKey</code> (relative) quadkey to the current quadkey.</p>
-								</div>
-								<p>This function treats the current quadkey as a root for a relative quadkey.
-								The quadkey level of the result is computed as the current level plus the relative level.</p>
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>This function will be removed by 02.2021.
+										Please use the same method from <a href="../classes/_olp_sdk_core_lib_utils_tilekey_.tilekey.html">TileKey</a> class, imported from <code>@here/olp-sdk-core</code> package.</p>
+										<p>Computes a new quadkey that is a result of appending the <code>subKey</code> (relative) quadkey to the current quadkey.</p>
+										<p>This function treats the current quadkey as a root for a relative quadkey.
+										The quadkey level of the result is computed as the current level plus the relative level.</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -137,15 +141,17 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L185">@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:185</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L198">@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:198</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Computes a new quadkey that is the parent of the current quadkey.</p>
-								</div>
-								<p>If the result level is negative, the root quadkey is returned.</p>
 								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>This function will be removed by 02.2021.
+										Please use the same method from <a href="../classes/_olp_sdk_core_lib_utils_tilekey_.tilekey.html">TileKey</a> class, imported from <code>@here/olp-sdk-core</code> package.</p>
+										<p>Computes a new quadkey that is the parent of the current quadkey.</p>
+										<p>If the result level is negative, the root quadkey is returned.</p>
+									</dd>
 									<dt>note</dt>
 									<dd><p>If the ancestor level is not specified, the function returns the first ancestor.</p>
 									</dd>
@@ -181,16 +187,18 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L210">@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:210</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L226">@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:226</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Checks if a quadkey is valid.</p>
-								</div>
-								<p>The number of rows and columns must not be greater than the maximum number of rows and columns in the given level.
-								The maximum number of rows and columns in a level is computed as 2 to the power of the level.</p>
 								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>This function will be removed by 02.2021.
+										Please use the same method from <a href="../classes/_olp_sdk_core_lib_utils_tilekey_.tilekey.html">TileKey</a> class, imported from <code>@here/olp-sdk-core</code> package.</p>
+										<p>Checks if a quadkey is valid.</p>
+										<p>The number of rows and columns must not be greater than the maximum number of rows and columns in the given level.
+										The maximum number of rows and columns in a level is computed as 2 to the power of the level.</p>
+									</dd>
 									<dt>note</dt>
 									<dd><p>As the JavaScript number type can hold 53 bits in its mantissa, only levels up to 26 can be
 											represented in the number representation returned by <a href="_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.html#mortoncodefromquadkey">mortonCodeFromQuadKey</a>.
@@ -222,13 +230,17 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L139">@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:139</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L146">@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:146</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Converts a quadkey into a Morton code numeric representation.</p>
-								</div>
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>This function will be removed by 02.2021.
+										Please use the same method from <a href="../classes/_olp_sdk_core_lib_utils_tilekey_.tilekey.html">TileKey</a> class, imported from <code>@here/olp-sdk-core</code> package.</p>
+										<p>Converts a quadkey into a Morton code numeric representation.</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -254,13 +266,17 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-olp-sdk-typescript/blob/2d02e15/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L108">@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:108</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts#L112">@here/olp-sdk-dataservice-read/lib/utils/QuadKeyUtils.ts:112</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Creates a quadkey from a numeric or string Morton code representation.</p>
-								</div>
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>This function will be removed by 02.2021.
+										Please use the same method from <a href="../classes/_olp_sdk_core_lib_utils_tilekey_.tilekey.html">TileKey</a> class, imported from <code>@here/olp-sdk-core</code> package.</p>
+										<p>Creates a quadkey from a numeric or string Morton code representation.</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
