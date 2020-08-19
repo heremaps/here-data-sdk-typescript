@@ -1,3 +1,22 @@
+## v1.5.1 (19/08/2020)
+
+**olp-sdk-core**
+
+- Added `@here/olp-sdk-dataservice-api` as a dependency.
+
+**olp-sdk-authentication**
+
+- Updated `olp-sdk-core` to version ^1.0.0.
+
+**olp-sdk-dataservice-read**
+
+- Updated `olp-sdk-core` to version ^1.0.0.
+
+**olp-sdk-dataservice-write**
+
+- Updated `olp-sdk-core` to version ^1.0.0.
+
+
 ## v1.5.0 (18/08/2020)
 
 **olp-sdk-core**
