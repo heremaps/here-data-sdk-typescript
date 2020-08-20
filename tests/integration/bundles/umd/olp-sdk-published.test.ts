@@ -35,7 +35,6 @@ describe("Test published olp-edge-datastore-api", async function() {
     await page.addScriptTag({
       url: "https://unpkg.com/@here/olp-sdk-dataservice-api/bundle.umd.min.js"
     });
-    await page.goto("http://127.0.0.1:8080", { waitUntil: "networkidle2" });
   });
 
   after(async function() {
