@@ -68,6 +68,7 @@ release_verify_job:
   - yarn
   - yarn bootstrap
   - npm run build
+  - npm run http-server-testing-bundles
   - npm run test-published-bundles
   when: manual
   only:
