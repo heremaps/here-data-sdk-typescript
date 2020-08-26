@@ -4,4 +4,5 @@
 --bail
 --check-leaks
 --reporter xunit
+--reporter-option output=tests/integration/api-breaks/xunit.xml
 tests/integration/api-breaks/*.test.ts

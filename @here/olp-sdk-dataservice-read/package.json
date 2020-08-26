@@ -12,8 +12,8 @@
   "scripts": {
     "build": "tsc",
     "lint": "tslint -c tslint.json -p tsconfig.json",
-    "test": "mocha > xunit.xml",
-    "coverage": "nyc mocha > xunit.xml",
+    "test": "mocha",
+    "coverage": "nyc mocha",
     "codecov": "npm run coverage && nyc report --reporter=lcov",
     "prepare": "tsc --sourceMap false && npm run bundle",
     "bundle": "npm run bundle:dev && npm run bundle:prod",

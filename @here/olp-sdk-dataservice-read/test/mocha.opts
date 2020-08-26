@@ -4,4 +4,5 @@
 --bail
 --check-leaks
 --reporter xunit
+--reporter-option output=xunit.xml
 test/**/*.test.ts

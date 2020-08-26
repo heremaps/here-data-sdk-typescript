@@ -4,4 +4,5 @@
 --bail
 --check-leaks
 --reporter xunit
+--reporter-option output=tests/integration/xunit.xml
 tests/integration/olp-sdk-*/*.test.ts
