@@ -4,5 +4,6 @@
 --bail
 --check-leaks
 --reporter xunit
+--reporter-option output=tests/functional/xunit.xml
 -timeout 10000
 tests/functional/*.test.ts
