@@ -48,6 +48,34 @@ regression_generate_report_job:
     - pip install junit2html
   script:
     - python -m junit2htmlreport --report-matrix index.html ./*.xml
+    - python -m junit2htmlreport --report-matrix api-breaks-index.html ./api-breaks-xunit.xml
+    - python -m junit2htmlreport --report-matrix fetch-index.html ./olp-sdk-fetch-xunit.xml
+    - python -m junit2htmlreport --report-matrix integration-index.html ./integration-xunit.xml
+    - python -m junit2htmlreport --report-matrix functional-index.html ./functional-xunit.xml
+    - python -m junit2htmlreport --report-matrix authentication-index.html ./olp-sdk-authentication-xunit.xml
+    - python -m junit2htmlreport --report-matrix core-index.html ./olp-sdk-core-xunit.xml
+    - python -m junit2htmlreport --report-matrix dataservice-api-index.html ./olp-sdk-dataservice-api-xunit.xml
+    - python -m junit2htmlreport --report-matrix dataservice-read-index.html ./olp-sdk-dataservice-read-xunit.xml
+    - python -m junit2htmlreport --report-matrix dataservice-write-index.html ./olp-sdk-dataservice-write-xunit.xml
+    - sed -i -e 's/Reports\ Matrix/API-Breaks\ Test\ Report/g' ./api-breaks-index.html
+    - sed -i -e 's/Reports\ Matrix/Fetch\ Test\ Report/g' ./fetch-index.html
+    - sed -i -e 's/Reports\ Matrix/Integration\ Test\ Report/g' ./integration-index.html
+    - sed -i -e 's/Reports\ Matrix/Functional\ Test\ Report/g' ./functional-index.html
+    - sed -i -e 's/Reports\ Matrix/Authentication\ Test\ Report/g' ./authentication-index.html
+    - sed -i -e 's/Reports\ Matrix/Core\ Test\ Report/g' ./core-index.html
+    - sed -i -e 's/Reports\ Matrix/Dataservice-api\ Test\ Report/g' ./dataservice-api-index.html
+    - sed -i -e 's/Reports\ Matrix/Dataservice-read\ Test\ Report/g' ./dataservice-read-index.html
+    - sed -i -e 's/Reports\ Matrix/Dataservice-write\ Test\ Report/g' ./dataservice-write-index.html
+    - sed -i -e 's/Reports\ Matrix/Full\ Regression\ Test\ Report/g' ./index.html
+    - cat ./authentication-index.html >> ./index.html
+    - cat ./core-index.html >> ./index.html
+    - cat ./dataservice-api-index.html >> ./index.html
+    - cat ./dataservice-read-index.html >> ./index.html
+    - cat ./dataservice-write-index.html >> ./index.html
+    - cat ./fetch-index.html >> ./index.html
+    - cat ./functional-index.html >> ./index.html
+    - cat ./integration-index.html >> ./index.html
+    - cat ./api-breaks-index.html >> ./index.html
     - mkdir -p .public
     - cp index.html .public/
   artifacts:
