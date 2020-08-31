@@ -21,10 +21,10 @@ export class UploadBlobResult {
     private dataHandle?: string;
 
     /**
-     * @brief set the datahandle of the uploaded data.
-     * @param id the datahandle.
-     * @note required.
-     * @returns reference to this object
+     * @brief Sets the data handle of the uploaded data.
+     * @param id The data handle.
+     * 
+     * @returns A reference to this object
      */
     public withDataHandle(dataHandle: string): UploadBlobResult {
         this.dataHandle = dataHandle;
@@ -32,8 +32,9 @@ export class UploadBlobResult {
     }
 
     /**
-     * @brief get the datahandle of the uploaded data.
-     * @returns The datahandle of the data to upload.
+     * @brief Gets the data handle of the uploaded data.
+     * 
+     * @returns The data handle of the uploaded data.
      */
     public getDataHandle(): string | undefined {
         return this.dataHandle;

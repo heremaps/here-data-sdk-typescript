@@ -18,7 +18,7 @@
  */
 
 /**
- * @brief Check data existence request structure holding all necessary information.
+ * Checks if a structure of a data existence request holds all necessary information.
  */
 export class CheckDataExistsRequest {
     private layerId?: string;
@@ -26,11 +26,11 @@ export class CheckDataExistsRequest {
     private billingTag?: string;
 
     /**
-     * @brief set the ID of the layer to check if data exist.
-     * @param layerId the ID of the layer.
-     * @note Required.
+     * Sets the ID of the layer to check if data exist.
+     * 
+     * @param layerId The ID of the layer.
      *
-     * @returns reference to this object
+     * @returns A reference to this object.
      */
     public withLayerId(layerId: string): CheckDataExistsRequest {
         this.layerId = layerId;
@@ -38,21 +38,21 @@ export class CheckDataExistsRequest {
     }
 
     /**
-     * @brief get the ID of the layer.
-     * @returns The ID of the layer to check.
+     * Gets the ID of the layer that you want to check.
+     * 
+     * @returns The layer ID.
      */
     public getLayerId(): string | undefined {
         return this.layerId;
     }
 
     /**
-     * @brief set the DataHandle to check if data exist.
-     * @param dataHandele string. Can be any unique number or a hash of the content or metadata.
+     * Sets the data handle to check if data exist.
+     * 
+     * @param dataHandele The data handle. Can be any unique number or a hash of the content or metadata.
      * Data handles must be unique within the layer across all versions.
      *
-     * @note Required.
-     *
-     * @returns reference to this object
+     * @returns A reference to this object.
      */
     public withDataHandle(dataHandle: string): CheckDataExistsRequest {
         this.dataHandle = dataHandle;
@@ -60,19 +60,21 @@ export class CheckDataExistsRequest {
     }
 
     /**
-     * @brief get the DataHandle.previously set or undefined
-     * @returns The datahandle.
+     * Gets the data handle (if it was set).
+     * 
+     * @returns The data handle or `undefined` if it was not set.
      */
     public getDataHandle(): string | undefined {
         return this.dataHandle;
     }
 
     /**
-     * @param billing_tag An optional free-form tag which is used for grouping
-     * billing records together. If supplied, it must be between 4 - 16
-     * characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
-     *
-     * @note Optional.
+     * Sets the billing tag.
+     * 
+     * @param tag he free-form tag that is used for grouping billing records together.
+     * If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].
+     * 
+     * @returns A reference to this object.
      */
     public withBillingTag(tag: string): CheckDataExistsRequest {
         this.billingTag = tag;
@@ -80,7 +82,9 @@ export class CheckDataExistsRequest {
     }
 
     /**
-     * @return Billing Tag previously set or undefined.
+     * Gets the billing tag (if it was set).
+     * 
+     * @return The billing tag or `undefined` if it was not set.
      */
     public getBillingTag(): string | undefined {
         return this.billingTag;
