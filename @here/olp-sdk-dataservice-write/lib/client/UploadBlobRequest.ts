@@ -18,7 +18,7 @@
  */
 
 /**
- * @brief UploadBlobRequest is used to upload the data to the DS.
+ * Uupload data to the DS.
  */
 export class UploadBlobRequest {
     private dataHandle?: string;
@@ -29,10 +29,13 @@ export class UploadBlobRequest {
     private contentEncoding?: string;
 
     /**
-     * @brief set the content encoding of the data to upload. Can be gzip or identity.
-     * @param contentEncoding the content encoding of the data to upload.
-     * @note Optional.
-     * @returns reference to this object
+     * Sets the content encoding of the data to upload.
+     * 
+     * Can be `gzip` or identity.
+     * 
+     * @param contentEncoding The content encoding of the data to upload.
+     * 
+     * @returns A reference to this object
      */
     public withContentEncoding(contentEncoding: string): UploadBlobRequest {
         this.contentEncoding = contentEncoding;
@@ -40,7 +43,8 @@ export class UploadBlobRequest {
     }
 
     /**
-     * @brief get the content encoding of the data to upload.
+     * Gets the content encoding of the data to upload.
+     * 
      * @returns The content encoding of the data to upload.
      */
     public getContentEncoding(): string | undefined {
@@ -48,10 +52,11 @@ export class UploadBlobRequest {
     }
 
     /**
-     * @brief set the content type of the data to upload.
+     * Sets the content type of the data to upload.
+     * 
      * @param contentType the content type of the data to upload.
-     * @note Required.
-     * @returns reference to this object
+     * 
+     * @returns A reference to this object
      */
     public withContentType(contentType: string): UploadBlobRequest {
         this.contentType = contentType;
@@ -59,7 +64,8 @@ export class UploadBlobRequest {
     }
 
     /**
-     * @brief get the content type of the data to upload.
+     * Gets the content type of the data to upload.
+     * 
      * @returns The content type of the data to upload.
      */
     public getContentType(): string | undefined {
@@ -67,10 +73,11 @@ export class UploadBlobRequest {
     }
 
     /**
-     * @brief set the datahandle of the data to upload.
+     * Sets the data handle of the data to upload.
+     * 
      * @param id the datahandle of the data to upload.
-     * @note Required.
-     * @returns reference to this object
+     * 
+     * @returns A reference to this object
      */
     public withDataHandle(dataHandle: string): UploadBlobRequest {
         this.dataHandle = dataHandle;
@@ -78,18 +85,20 @@ export class UploadBlobRequest {
     }
 
     /**
-     * @brief get the datahandle of the data to upload.
-     * @returns The datahandle of the data to upload, required.
+     * Gets the data handle of the data to upload.
+     * 
+     * @returns The data handle of the data to upload.
      */
     public getDataHandle(): string | undefined {
         return this.dataHandle;
     }
 
     /**
-     * @brief set the ID of the layer.
+     * Sets the ID of the layer.
+     * 
      * @param id the ID of the layer.
-     * @note Required.
-     * @returns reference to this object
+     * 
+     * @returns A reference to this object
      */
     public withLayerId(id: string): UploadBlobRequest {
         this.layerId = id;
@@ -97,18 +106,20 @@ export class UploadBlobRequest {
     }
 
     /**
-     * @brief get the ID of the layer.
-     * @returns The ID of the layer, required.
+     * Gets the ID of the layer.
+     * 
+     * @returns The ID of the layer.
      */
     public getLayerId(): string | undefined {
         return this.layerId;
     }
 
     /**
-     * @brief set the data to upload.
+     * Sets the data to upload.
+     * 
      * @param data The buffer of the data to upload.
-     * @note Required.
-     * @returns reference to this object
+     * 
+     * @returns A reference to this object
      */
     public withData(data: ArrayBuffer | Buffer): UploadBlobRequest {
         this.data = data;
@@ -116,18 +127,21 @@ export class UploadBlobRequest {
     }
 
     /**
-     * @return data previously set or undefined.
+     * Gets the data (if it was set).
+     * 
+     * @return The data previously set or undefined.
      */
     public getData(): ArrayBuffer | Buffer | undefined {
         return this.data;
     }
 
     /**
-     * @brief set the billing tag.
-     * @param billing_tag An optional free-form tag which is used for grouping
-     * billing records together. If supplied, it must be between 4 - 16
-     * characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
-     * @note Optional.
+     * Sets the billing tag.
+     * 
+     * @param tag The free-form tag that is used for grouping billing records together.
+     * If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].
+     * 
+     * @returns A reference to this object.
      */
     public withBillingTag(tag: string): UploadBlobRequest {
         this.billingTag = tag;
@@ -135,7 +149,9 @@ export class UploadBlobRequest {
     }
 
     /**
-     * @return Billing Tag previously set or undefined.
+     * Gets the billing tag (if it was set).
+     * 
+     * @return The billing tag or `undefined` if it was not set.
      */
     public getBillingTag(): string | undefined {
         return this.billingTag;

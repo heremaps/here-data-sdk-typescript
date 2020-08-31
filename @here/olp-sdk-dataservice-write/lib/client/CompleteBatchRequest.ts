@@ -18,17 +18,18 @@
  */
 
 /**
- * @brief CompleteBatchRequest is used to complete a publication.
+ * Completes a publication.
  */
 export class CompleteBatchRequest {
     private publicationId?: string;
     private billingTag?: string;
 
     /**
-     * @brief set the ID of the publication to submit.
-     * @param id the ID of the publication to submit.
-     * @note Required.
-     * @returns reference to this object
+     * Sets the ID of the publication that you want to submit.
+     * 
+     * @param id The ID of the publication to submit.
+     * 
+     * @returns A reference to this object.
      */
     public withPublicationId(id: string): CompleteBatchRequest {
         this.publicationId = id;
@@ -36,10 +37,12 @@ export class CompleteBatchRequest {
     }
 
     /**
-     * @param billing_tag An optional free-form tag which is used for grouping
-     * billing records together. If supplied, it must be between 4 - 16
-     * characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
-     * @note Optional.
+     * Sets the billing tag.
+     * 
+     * @param tag The free-form tag that is used for grouping billing records together.
+     * If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].
+     * 
+     * @returns A reference to this object.
      */
     public withBillingTag(tag: string): CompleteBatchRequest {
         this.billingTag = tag;
@@ -47,15 +50,18 @@ export class CompleteBatchRequest {
     }
 
     /**
-     * @brief get the ID of the publication to cancel.
-     * @returns The ID of the publication to cancel, required.
+     * Gets the ID of the publication that you want to submit.
+     * 
+     * @returns The publication ID.
      */
     public getPublicationId(): string | undefined {
         return this.publicationId;
     }
 
     /**
-     * @return Billing Tag previously set or undefined.
+     * Gets the billing tag (if it was set).
+     * 
+     * @return The billing tag or `undefined` if it was not set.
      */
     public getBillingTag(): string | undefined {
         return this.billingTag;

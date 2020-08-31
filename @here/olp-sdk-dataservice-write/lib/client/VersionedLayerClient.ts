@@ -42,41 +42,42 @@ import {
 } from "@here/olp-sdk-dataservice-write";
 
 /**
- * Parameters for use to initialize VolatileLayerClient.
+ * Parameters used to initialize `VersionedLayerClient`.
  */
 export interface VersionedLayerClientParams {
-    // [[HRN]] instance of the catalog hrn.
+    // An instance of the catalog [[HRN]].
     catalogHrn: HRN;
     // The [[OlpClientSettings]] instance.
     settings: OlpClientSettings;
 }
 
 /**
- * Describes a versioned layer and provides the possibility to push the data to the versioned layers.
+ * Describes a versioned layer and provides a possibility to publish data to it.
  */
 export class VersionedLayerClient {
     private readonly apiVersion = "v1";
 
     /**
-     * Creates the [[VersionedLayerClient]] instance with VersionedLayerClientParams.
+     * Creates the [[VersionedLayerClient]] instance with `VersionedLayerClientParams`.
      *
-     * @param params parameters for use to initialize VersionedLayerClient.
+     * @param params The parameters that are used to initialize `VersionedLayerClient`.
      */
     constructor(private readonly params: VersionedLayerClientParams) {}
 
     /**
-     * Checks that the datahandle is not used.
-     * Data handles must be unique within the layer across all versions.
-     * In case data handle exists, a new one needs to be generated and checked again until
-     * one is found that is not present in the blob store.
-     * @param request CheckDataExistsRequest with required params.
-     * @param abortSignal An optional signal object that allows you to communicate with a request (such as the `fetch` request)
+     * Checks whether the data handle is not used.
+     * 
+     * Data handles must be unique within a layer across all versions.
+     * If the data handle exists, generate a new one and check it again 
+     * to be sure that it is not present in the blob store.
+     * 
+     * @param request `CheckDataExistsRequest` with the required params.
+     * @param abortSignal The signal object that allows you to communicate with the request
      * and, if required, abort it using the `AbortController` object.
-     *
      * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
-     *
-     * @returns A promise void if data handle exists.
-     * Rejects with http response if DataHandle is not exists (404 status) or any http error.
+     * 
+     * @returns The `Promise` void if the data handle exists.
+     * If the data handle does not exist, rejects with an HTTP response (404 status) or an HTTP error.
      */
     public async checkDataExists(
         request: CheckDataExistsRequest,
@@ -123,20 +124,18 @@ export class VersionedLayerClient {
     }
 
     /**
-     * Gets the latest version of a catalog.
+     * Gets the latest version of the catalog.
      *
      * The default value is -1. By convention -1 indicates the virtual initial version before
      * the first publication that has version 0.
      *
-     * @param billingTag An optional free-form tag that is used for grouping billing records together.
-     * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
-     *
-     * @param abortSignal An optional signal object that allows you to communicate with a request (such as the `fetch` request)
+     * @param billingTag The free-form tag that is used for grouping billing records together.
+     * If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].
+     * @param abortSignal The signal object that allows you to communicate with the request
      * and, if required, abort it using the `AbortController` object.
-     *
      * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
      *
-     * @returns A promise of the HTTP response that contains the payload with the latest version.
+     * @returns The `Promise` of the HTTP response that contains the payload with the latest version.
      */
     public async getBaseVersion(
         billingTag?: string,
@@ -166,20 +165,20 @@ export class VersionedLayerClient {
     }
 
     /**
-     * Initializes a new publication for publishing metadata.
+     * Starts a new publication.
+     * 
      * Determines the publication type based on the provided layer IDs.
      * A publication can only consist of layer IDs that have the same layer type.
-     * For example, you can have a publication for multiple layers of type versioned,
-     * but you cannot have a single publication that publishes to both versioned and stream layers.
+     * For example, you can have a publication for multiple versioned layers,
+     * but you cannot have a single publication that publishes data to both versioned and stream layers.
      *
-     * In addition, you may only have one versioned publication in process at a time.
-     * You cannot have multiple active publications to the same catalog for versioned layer types.
-     * The request field versionDependencies is optional and is used for versioned layers to declare version dependencies.
+     * Also, you can only have one versioned-layer publication in progress at a time.
+     * You cannot have multiple active publications to the same catalog for versioned layers.
+     * The version dependencies request field is optional and is used for versioned layers to declare version dependencies.
      *
-     * @param request details of the batch operation to start
-     * @param abortSignal An optional signal object that allows you to communicate with a request (such as the `fetch` request)
+     * @param request The details of the batch operation that you want to start.
+     * @param abortSignal The signal object that allows you to communicate with the request
      * and, if required, abort it using the `AbortController` object.
-     *
      * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
      */
     public async startBatch(
@@ -219,14 +218,14 @@ export class VersionedLayerClient {
     }
 
     /**
-     * @breaf Gives the user the possibility to upload one partition blob and metadata at once
-     * @param request PublishSinglePartitionRequest with needed params
-     * @param abortSignal An optional signal object that allows you to communicate with a request (such as the `fetch` request)
+     * Uploads one partition blob and metadata at once.
+     * 
+     * @param request The `PublishSinglePartitionRequest` object with the needed parameters.
+     * @param abortSignal The signal object that allows you to communicate with the request
      * and, if required, abort it using the `AbortController` object.
-     *
      * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
-     *
-     * @returns Promise resolves if the operation was successful. Rejects if unsuccessful.
+     * 
+     * @returns The `Promise` resolves if the operation was successful; rejects otherwise.
      */
     public async publishToBatch(
         request: PublishSinglePartitionRequest,
@@ -328,17 +327,17 @@ export class VersionedLayerClient {
     }
 
     /**
-     * Cancels a publication if it has not yet been submitted.
-     * Will fail if attempting to cancel a submitted publication.
+     * Cancels the publication if it has not been submitted.
+     * 
+     * Fails if you attempt to cancel a submitted publication.
      * This allows the specified publication to be abandoned.
      *
-     * @param request details of the cancel operation.
-     * @param abortSignal An optional signal object that allows you to communicate with a request (such as the `fetch` request)
+     * @param request The details of the cancel operation.
+     * @param abortSignal The signal object that allows you to communicate with the request
      * and, if required, abort it using the `AbortController` object.
-     *
      * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
-     *
-     * @returns True if the operation was successful. Rejects error if unsuccessful.
+     * 
+     * @returns True if the operation was successful; rejects with an error otherwise.
      */
     public async cancelBatch(
         request: CancelBatchRequest,
@@ -374,14 +373,13 @@ export class VersionedLayerClient {
     }
 
     /**
-     * Retrieves the publication details.
+     * Gets the publication details.
      *
-     * @param request details of the retrieve operation.
-     * @param abortSignal An optional signal object that allows you to communicate with a request (such as the `fetch` request)
+     * @param request The details of the `GET` operation.
+     * @param abortSignal The signal object that allows you to communicate with the request
      * and, if required, abort it using the `AbortController` object.
-     *
      * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
-     *
+     * 
      * @returns The publication details.
      */
     public async getBatch(
@@ -418,24 +416,24 @@ export class VersionedLayerClient {
     }
 
     /**
-     * Submits the publication, resp. a batch, and initiates post processing if necessary.
+     * Submits the publication (that is a batch) and initiates post-processing if necessary.
+     * 
+     * You cannot modify or interrupt the publication process, so double-check the publication details before submitting it.
      *
-     * Publication state becomes `Submitted` directly after submission and `Succeeded` after successful processing.
-     * Users can only complete a publication which is in state `Initialized`.
+     * The publication state becomes `Submitted` directly after submission and `Succeeded` after successful processing.
+     * You can only complete a publication that is in the `Initialized` state.
      *
-     * Once the user triggered to complete a publication,
-     * he must request the status of the publication regularly until the status becomes `Succeeded`.
+     * Once you trigger to complete a publication,
+     * request the status of the publication regularly until the status becomes `Succeeded`.
      *
-     * After submitting the publication, the metadata processing will begin.
-     * You will be unable to modify or interrupt the publication process so make sure that you are ready before submitting the publication.
+     * When you submit the publication, the metadata processing starts.
      *
-     * @param request details of the complete publish.
-     * @param abortSignal An optional signal object that allows you to communicate with a request (such as the `fetch` request)
+     * @param request The details of the publication completion.
+     * @param abortSignal The signal object that allows you to communicate with the request
      * and, if required, abort it using the `AbortController` object.
-     *
      * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
-     *
-     * @returns Promise resolves if the operation was successful. Rejects if unsuccessful.
+     * 
+     * @returns The `Promise` resolves if the operation was successful; rejects otherwise.
      */
     public async completeBatch(
         request: CompleteBatchRequest,
@@ -471,31 +469,30 @@ export class VersionedLayerClient {
     }
 
     /**
-     * Uploads data to the service
+     * Uploads data to the service.
      *
-     * If you are uploading more than 50 MB of data,
-     * the data splits into parts and uploads each part individually.
+     * If you are upload more than 50 MB of data,
+     * the data is split into parts, and each part is uploaded individually.
      * The size of each part is 5 MB, except the last part.
      *
-     * @param request details of the uploading data.
-     * @param abortSignal An optional signal object that allows you to communicate with a request (such as the `fetch` request)
+     * @param request The details of the data upload process.
+     * @param abortSignal The signal object that allows you to communicate with the request
      * and, if required, abort it using the `AbortController` object.
-     *
      * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
      *
-     * @returns Promise resolves with UploadBlobResult.
+     * @returns The `Promise` resolves with `UploadBlobResult`.
      */
     public async uploadBlob(
         request: UploadBlobRequest,
         abortSignal?: AbortSignal
     ): Promise<UploadBlobResult> {
         /**
-         * If data size is less then 50Mb we can upload all data in one request
-         * If more than 50Mb, we should split the data by 5Mb chunks and upload
-         * chunk by chunk, colloeting ETags from responses and than submit all tags by PUT request.
+         * If the data size is less then 50 MB, we can upload all data in one request.
+         * If more than 50 MB, we split the data in chunks of 5 MB and upload chunk by chunk.
+         * We collect ETags from responses, and then submit all tags using the `PUT` request.
          */
-        const chunkSize = 5242880; // 1024 * 1024 * 5 = 5MB
-        const maxDataSizeForOneRequestUpload = 52428800; // 1024 * 1024 * 50 = 50Mb
+        const chunkSize = 5242880; // 1024 * 1024 * 5 = 5 MB
+        const maxDataSizeForOneRequestUpload = 52428800; // 1024 * 1024 * 50 = 5 Mb
 
         const billingTag = request.getBillingTag();
         const layerId = request.getLayerId();
@@ -613,28 +610,26 @@ export class VersionedLayerClient {
     /**
      * Uploads metadata to the service.
      *
-     * When all data have been uploaded,
-     * you need to generate the metadata which will be used to represent
-     * your data inside the HERE platform.
-     * At a minimum, your metadata must consist of a partition ID and the data handle you used to upload your data.
-     * For a complete description of the fields you can set, @see [[PublishPartition]].
+     * When all data is uploaded, you need to
+     * generate metadata to represent your data inside the HERE platform.
+     * At a minimum, your metadata must consist of a partition ID and the data handle that you used to upload your data.
+     * For a complete description of the fields that you can set, @see [[PublishPartition]].
      *
      * The maximum number of partitions you can upload and publish in one request is 1,000.
-     * If you have more than 1,000 partitions you want to upload,
-     * upload the data for the first 1,000 partitions
-     * then upload the metadata for those 1,000 partitions.
-     * Then, continue to the next set of partitions.
+     * If you have more than 1,000 partitions that you want to upload,
+     * upload the data for the first 1,000 partitions, and
+     * then upload the metadata for these 1,000 partitions.
+     * Then, continue with the next set of partitions.
      * Do not wait until all data is uploaded before uploading metadata.
      * Doing so will result in poor performance.
-     * Instead, upload data, then metadata, and repeat as needed until all your data and corresponding metadata is uploaded.
+     * Instead, upload data, then metadata, and repeat if needed until all your data and corresponding metadata is uploaded.
      *
-     * @param request details of the uploading metadata.
-     * @param abortSignal An optional signal object that allows you to communicate with a request (such as the `fetch` request)
+     * @param request The details of the metadata upload process.
+     * @param abortSignal The signal object that allows you to communicate with the request
      * and, if required, abort it using the `AbortController` object.
-     *
      * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
      *
-     * @returns Promise resolves with 204 status if success.
+     * @returns The `Promise` resolves with the 204 status code if the upload was successful.
      */
     public async uploadPartitions(
         request: UploadPartitionsRequest,
@@ -686,18 +681,17 @@ export class VersionedLayerClient {
     }
 
     /**
-     * Generates the UUID and use it as datahandle.
-     * A retry logic in case datahandle is already present is a loop of 3 tries
+     * Generates the UUID and uses it as a data handle.
+     * A retry logic in case the data handle is already present is a loop of 3 tries,
      * and each time we generate a new UUID and retry.
      *
-     * If all thies was not success, the method rejects the promise with Error.
+     * If all tries are not successful, the method rejects the `Promise` with an error.
      *
-     * @param layerId The id of layer to check if data exist
-     * @param billingTag An optional free-form tag which is used for grouping
-     * billing records together. If supplied, it must be between 4 - 16
-     * characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
+     * @param layerId The ID of the layer to check if data exist.
+     * @param billingTag The free-form tag that is used for grouping billing records together.
+     * If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].
      *
-     * @returns A promise with generated datahandle or rejects if was not succeed.
+     * @returns A `Promise` with the generated data handle; otherwise, the `Promise` rejects.
      */
     private async generateDatahandle(
         layerId: string,

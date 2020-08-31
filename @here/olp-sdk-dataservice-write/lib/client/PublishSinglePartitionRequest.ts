@@ -20,7 +20,7 @@
 import { PublishPartition } from "@here/olp-sdk-dataservice-api/lib/publish-api-v2";
 
 /**
- * @brief PublishSinglePartitionRequest is used to upload single partition.
+ * @brief Uploads a single partition.
  */
 export class PublishSinglePartitionRequest {
     private publicationId?: string;
@@ -32,10 +32,11 @@ export class PublishSinglePartitionRequest {
     private contentEncoding?: string;
 
     /**
-     * @brief set the ID of the publication to upload.
-     * @param id the ID of the publication to upload.
-     * @note Required.
-     * @returns reference to this object
+     * Sets the ID of the publication that you want to upload.
+     * 
+     * @param id The ID of the publication that you want to upload.
+     * 
+     * @returns A reference to this object.
      */
     public withPublicationId(id: string): PublishSinglePartitionRequest {
         this.publicationId = id;
@@ -43,18 +44,20 @@ export class PublishSinglePartitionRequest {
     }
 
     /**
-     * @brief get the ID of the publication to upload.
-     * @returns The ID of the publication to upload, required.
+     * Gets the ID of the publication that you want to upload.
+     * 
+     * @returns The ID of the publication that you want to upload.
      */
     public getPublicationId(): string | undefined {
         return this.publicationId;
     }
 
     /**
-     * @brief set the ID of the layer.
-     * @param id the ID of the layer.
-     * @note Required.
-     * @returns reference to this object
+     * Sets the ID of the layer.
+     * 
+     * @param id The layer ID.
+     * 
+     * @returns A reference to this object.
      */
     public withLayerId(id: string): PublishSinglePartitionRequest {
         this.layerId = id;
@@ -62,18 +65,22 @@ export class PublishSinglePartitionRequest {
     }
 
     /**
-     * @brief get the ID of the layer.
-     * @returns The ID of the layer, required.
+     * Gets the ID of the layer.
+     * 
+     * @returns The ID of the layer.
      */
     public getLayerId(): string | undefined {
         return this.layerId;
     }
 
     /**
-     * Sets the data for uploading.
-     * @param data The data to be uploaded to the Blob API.
-     * @note Required.
-     * @returns reference to this object
+     * Uses embedded data in the `PublishPartition` or `uploadBlob()` API.
+     * 
+     * @param data The content published directly to the metadata and encoded in Base64.
+     * The size of the content is limited.
+     * @note It will be used in stream layers and present only if the message size is less than or equal to 1 MB.
+     * 
+     * @returns A reference to this object.
      */
     public withData(data: ArrayBuffer | Buffer): PublishSinglePartitionRequest {
         this.data = data;
@@ -81,16 +88,22 @@ export class PublishSinglePartitionRequest {
     }
 
     /**
-     * @return data previously set or undefined.
+     * Gets the data (if it was set).
+     * 
+     * @return The data or `undefined` if it was not set.
      */
     public getData(): ArrayBuffer | Buffer | undefined {
         return this.data;
     }
 
     /**
-     * @brief set the content encoding of the data to upload. Can be gzip or identity.
-     * @param contentEncoding the content encoding of the data to upload.
-     * @returns reference to this object
+     * Set the content encoding of the data to upload.
+     * 
+     * Can be `gzip` or identity.
+     * 
+     * @param contentEncoding The content encoding of the data to upload.
+     * 
+     * @returns A reference to this object
      */
     public withContentEncoding(
         contentEncoding: string
@@ -100,7 +113,8 @@ export class PublishSinglePartitionRequest {
     }
 
     /**
-     * @brief get the content encoding of the data to upload.
+     * @brief Gets the content encoding of the data to upload.
+     * 
      * @returns The content encoding of the data to upload.
      */
     public getContentEncoding(): string | undefined {
@@ -108,10 +122,11 @@ export class PublishSinglePartitionRequest {
     }
 
     /**
-     * @brief set the content type of the data to upload.
-     * @param contentType the content type of the data to upload.
-     * @note Required.
-     * @returns reference to this object
+     * @brief Sets the content type of the data to upload.
+     * 
+     * @param contentType The content type of the data to upload.
+     * 
+     * @returns A reference to this object
      */
     public withContentType(contentType: string): PublishSinglePartitionRequest {
         this.contentType = contentType;
@@ -119,7 +134,7 @@ export class PublishSinglePartitionRequest {
     }
 
     /**
-     * @brief get the content type of the data to upload.
+     * @brief Gets the content type of the data to upload.
      * @returns The content type of the data to upload.
      */
     public getContentType(): string | undefined {
@@ -127,10 +142,11 @@ export class PublishSinglePartitionRequest {
     }
 
     /**
-     * @brief set the metadata of the partition to upload.
-     * @param metaData  The metadata to be published for the blob data.
-     * @note Required.
-     * @returns reference to this object
+     * Sets the metadata of the partition that you want to publish.
+     * 
+     * @param metaData The metadata for the blob data that you want to publish.
+     * 
+     * @returns A reference to this object.
      */
     public withMetaData(
         metaData: PublishPartition
@@ -140,19 +156,21 @@ export class PublishSinglePartitionRequest {
     }
 
     /**
-     * @brief get the the metadata of the partition.
-     * @returns The the metadata of the partition.
+     * Gets the metadata of the partition.
+     * 
+     * @returns The metadata of the partition.
      */
     public getMetadata(): PublishPartition | undefined {
         return this.metaData;
     }
 
     /**
-     * @brief set the billing tag.
-     * @param billing_tag An optional free-form tag which is used for grouping
-     * billing records together. If supplied, it must be between 4 - 16
-     * characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
-     * @note Optional.
+     * Sets the billing tag.
+     * 
+     * @param tag The free-form tag that is used for grouping billing records together.
+     * If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].
+     * 
+     * @returns A reference to this object.
      */
     public withBillingTag(tag: string): PublishSinglePartitionRequest {
         this.billingTag = tag;
@@ -160,7 +178,9 @@ export class PublishSinglePartitionRequest {
     }
 
     /**
-     * @return Billing Tag previously set or undefined.
+     * Gets the billing tag (if it was set).
+     * 
+     * @return The billing tag or `undefined` if it was not set.
      */
     public getBillingTag(): string | undefined {
         return this.billingTag;

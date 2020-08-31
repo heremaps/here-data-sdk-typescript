@@ -18,16 +18,18 @@
  */
 
 /**
- * @brief GetBatchRequest is used to retrieve the publication details.
+ * Gets publication details.
  */
 export class GetBatchRequest {
     private publicationId?: string;
     private billingTag?: string;
 
     /**
-     * @brief set the ID of the publication to retrieve the publication details.
-     * @param id the ID of the publication to retrieve the publication details.
-     * @returns reference to this object
+     * Sets the ID of the publication to retrieve the publication details.
+     * 
+     * @param id The ID of the publication details of which you want to retrieve.
+     * 
+     * @returns A reference to this object.
      */
     public withPublicationId(id: string): GetBatchRequest {
         this.publicationId = id;
@@ -35,10 +37,12 @@ export class GetBatchRequest {
     }
 
     /**
-     * @param billing_tag An optional free-form tag which is used for grouping
-     * billing records together. If supplied, it must be between 4 - 16
-     * characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
-     * @note Optional.
+     * Sets the billing tag.
+     * 
+     * @param tag The free-form tag that is used for grouping billing records together.
+     * If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].
+     * 
+     * @returns A reference to this object.
      */
     public withBillingTag(tag: string): GetBatchRequest {
         this.billingTag = tag;
@@ -46,15 +50,18 @@ export class GetBatchRequest {
     }
 
     /**
-     * @brief get the ID of the publication to retrieve the publication details.
-     * @returns The ID of the publication to retrieve the publication details, required.
+     * Gets the ID of the publication to retrieve the publication details.
+     * 
+     * @returns The ID of the publication details of which you want to retrieve.
      */
     public getPublicationId(): string | undefined {
         return this.publicationId;
     }
 
     /**
-     * @return Billing Tag previously set or undefined.
+     * Gets the billing tag (if it was set).
+     * 
+     * @return The billing tag or `undefined` if it was not set.
      */
     public getBillingTag(): string | undefined {
         return this.billingTag;

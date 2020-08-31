@@ -20,7 +20,7 @@
 import { PublishPartitions } from "@here/olp-sdk-dataservice-api/lib/publish-api-v2";
 
 /**
- * @brief UploadPartitionsRequest is used to upload multiple partitions at once.
+ * @brief Uploads multiple partitions at once.
  */
 export class UploadPartitionsRequest {
     private publicationId?: string;
@@ -29,10 +29,11 @@ export class UploadPartitionsRequest {
     private publishPartitions?: PublishPartitions;
 
     /**
-     * @brief set the ID of the publication to upload.
-     * @param id the ID of the publication to upload.
-     * @note Required.
-     * @returns reference to this object
+     * Sets the ID of the publication to upload.
+     * 
+     * @param id The ID of the publication to upload.
+     * 
+     * @returns A reference to this object.
      */
     public withPublicationId(id: string): UploadPartitionsRequest {
         this.publicationId = id;
@@ -40,18 +41,20 @@ export class UploadPartitionsRequest {
     }
 
     /**
-     * @brief get the ID of the publication to upload.
-     * @returns The ID of the publication to upload, required.
+     * Gets the ID of the publication to upload.
+     * 
+     * @returns The ID of the publication to upload.
      */
     public getPublicationId(): string | undefined {
         return this.publicationId;
     }
 
     /**
-     * @brief set the ID of the layer.
-     * @param id the ID of the layer.
-     * @note Required.
-     * @returns reference to this object
+     * Sets the ID of the layer.
+     * 
+     * @param id The ID of the layer.
+     * 
+     * @returns A reference to this object.
      */
     public withLayerId(id: string): UploadPartitionsRequest {
         this.layerId = id;
@@ -59,18 +62,20 @@ export class UploadPartitionsRequest {
     }
 
     /**
-     * @brief get the ID of the layer.
-     * @returns The ID of the layer, required.
+     * Gets the ID of the layer.
+     * 
+     * @returns The ID of the layer.
      */
     public getLayerId(): string | undefined {
         return this.layerId;
     }
 
     /**
-     * @brief set the metadata of the partitions to upload.
-     * @param publishPartitions  The partitions metadata to be published.
-     * @note Required.
-     * @returns reference to this object
+     * Sets the metadata of the partitions to upload.
+     * 
+     * @param publishPartitions The partitions metadata to upload.
+     * 
+     * @returns A reference to this object.
      */
     public withPartitions(
         publishPartitions: PublishPartitions
@@ -80,19 +85,21 @@ export class UploadPartitionsRequest {
     }
 
     /**
-     * @brief get the the partitions.
-     * @returns The the partition metatada.
+     * Gets the metadata of partitions.
+     * 
+     * @returns The metadata of partitions.
      */
     public getPartitions(): PublishPartitions | undefined {
         return this.publishPartitions;
     }
 
     /**
-     * @brief set the billing tag.
-     * @param billing_tag An optional free-form tag which is used for grouping
-     * billing records together. If supplied, it must be between 4 - 16
-     * characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
-     * @note Optional.
+     * Sets the billing tag.
+     * 
+     * @param tag The free-form tag that is used for grouping billing records together.
+     * If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].
+     * 
+     * @returns A reference to this object.
      */
     public withBillingTag(tag: string): UploadPartitionsRequest {
         this.billingTag = tag;
@@ -100,7 +107,9 @@ export class UploadPartitionsRequest {
     }
 
     /**
-     * @return Billing Tag previously set or undefined.
+     * Gets the billing tag (if it was set).
+     * 
+     * @return The billing tag or `undefined` if it was not set.
      */
     public getBillingTag(): string | undefined {
         return this.billingTag;

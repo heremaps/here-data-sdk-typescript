@@ -20,7 +20,7 @@
 import { PublishApi } from "@here/olp-sdk-dataservice-api";
 
 /**
- * @brief StartBatchRequest is used to start a versioned batch operation.
+ * Starts a batch operation for a versioned layer.
  */
 export class StartBatchRequest {
     private layers?: string[];
@@ -28,9 +28,11 @@ export class StartBatchRequest {
     private billingTag?: string;
 
     /**
-     * @brief set the layers used in this batch operation
-     * @param layers layer id's to be used
-     * @returns reference to this object
+     * Sets the layers to use in this batch operation.
+     * 
+     * @param layers The IDs of the layers to use in this batch operation.
+     * 
+     * @returns A reference to this object.
      */
     public withLayers(layers: string[]): StartBatchRequest {
         this.layers = layers;
@@ -38,9 +40,11 @@ export class StartBatchRequest {
     }
 
     /**
-     * @brief set the version dependencies used in this batch operation
-     * @param versionDependencies array of VersionDependencies
-     * @returns reference to this object
+     * Sets the version dependencies used in this batch operation.
+     * 
+     * @param versionDependencies The array of version dependencies.
+     * 
+     * @returns A reference to this object.
      */
     public withVersionDependencies(
         versionDependencies: PublishApi.VersionDependency[]
@@ -50,10 +54,12 @@ export class StartBatchRequest {
     }
 
     /**
-     * @param billing_tag An optional free-form tag which is used for grouping
-     * billing records together. If supplied, it must be between 4 - 16
-     * characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
-     * @note Optional.
+     * Sets the billing tag.
+     * 
+     * @param tag The free-form tag that is used for grouping billing records together.
+     * If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].
+     * 
+     * @returns A reference to this object.
      */
     public withBillingTag(tag: string): StartBatchRequest {
         this.billingTag = tag;
@@ -61,16 +67,18 @@ export class StartBatchRequest {
     }
 
     /**
-     * @brief get the layers used in this batch operation
-     * @returns array of layers ids or undefined
+     * Gets the layers used in this batch operation.
+     * 
+     * @returns The array of layer IDs or `undefined`.
      */
     public getLayers(): string[] | undefined {
         return this.layers;
     }
 
     /**
-     * @brief gets the VersionDependencies of this batch operation
-     * @returns the array of VersionDependencies or undefined
+     * Gets the version dependencies of this batch operation.
+     * 
+     * @returns The array of the version dependencies or `undefined`.
      */
     public getVersionDependencies():
         | PublishApi.VersionDependency[]
@@ -79,7 +87,9 @@ export class StartBatchRequest {
     }
 
     /**
-     * @return Billing Tag previously set or undefined.
+     * Gets the billing tag (if it was set).
+     * 
+     * @return The billing tag or `undefined` if it was not set.
      */
     public getBillingTag(): string | undefined {
         return this.billingTag;
