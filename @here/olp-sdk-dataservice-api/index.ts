@@ -21,6 +21,7 @@ export * from "./lib/RequestBuilder";
 export * from "./lib/HttpError";
 
 import * as ArtifactApi from "./lib/artifact-api";
+import * as AuthorizationAPI from "./lib/authorization-api-v1.1";
 import * as BlobApi from "./lib/blob-api";
 import * as ConfigApi from "./lib/config-api";
 import * as CoverageApi from "./lib/coverage-api";
@@ -37,6 +38,7 @@ export type AdditionalFields = Array<
 >;
 
 export {
+    AuthorizationAPI,
     LookupApi,
     MetadataApi,
     ConfigApi,
