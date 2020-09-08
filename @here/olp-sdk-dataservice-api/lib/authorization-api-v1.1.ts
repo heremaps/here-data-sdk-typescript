@@ -433,6 +433,42 @@ export interface EntityGrants {
     data?: EntityGrant[];
 }
 
+export interface Role {
+    /**
+     * Unique identifier for the role
+     */
+    id?: string;
+    /**
+     * Unique identifier for this role with partition/realm/etc, an HRN
+     */
+    hrn?: string;
+    /**
+     * System defined name for the role
+     */
+    name?: string;
+    /**
+     * Represents either Group or Realm HRN for which object is scoped for
+     */
+    resource?: string;
+}
+
+export interface RolePageWToken extends PageWToken {
+    data?: Role[];
+}
+
+export interface RoleEntity {
+    entityHrn?: string;
+    entityType?: EntityTypeEnum;
+    info?: RoleEntityInfo;
+}
+export interface RoleEntityPageWToken extends PageWToken {
+    data?: RoleEntity[];
+}
+
+export interface PermissionPageWToken extends PageWToken {
+    data?: ActivePermission[];
+}
+
 /**
  * Retrieve the groups a given entity is a member of. Restrictions:
  * The calling principal **must** have permission to take the **readGroups** action against the specified entity.
@@ -1016,4 +1052,331 @@ export async function removeGrant(
     };
 
     return builder.requestBlob(urlBuilder, options);
+}
+
+/**
+ * ===================================================================
+ * RolesApi
+ * ===================================================================
+ */
+
+/**
+ * Assign the role provided to the given entity.
+ * If the provided role is associated with a group, the entity being assigned the role must be a member of the associated group.
+ * Restrictions:
+ * * The calling principal **must** have permission to take the **manageEntities** action against the specified role.
+ * * Example: In order to assign the role, _GroupAdmin_, to an entity a permission with the following would
+ * be required:
+ * * "action" : "manageEntities"
+ * * "resource" : "hrn:here:authorization::myrealm:role/ROLE-c1662138-a170-4264-ba18-7b506a708c37"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Assign a role to an entity
+ * @param role HRN identifying a given role
+ * @param entity HRN identifying a given entity
+ */
+export async function addRoleEntity(
+    builder: RequestBuilder,
+    params: { role: string; entity: string }
+): Promise<Response> {
+    const baseUrl = "/roles/{role}/entities/{entity}"
+        .replace("{role}", UrlBuilder.toString(params["role"]))
+        .replace("{entity}", UrlBuilder.toString(params["entity"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "POST",
+        headers
+    };
+
+    return builder.requestBlob(urlBuilder, options);
+}
+
+/**
+ * Remove the role provided to from the given member.
+ * Restrictions:
+ * * The calling principal **must** have permission to take the **manageEntities** action against the specified role.
+ * * Example: In order to revoke the role, _GroupAdmin_, from an entity a permission with the following would be required:
+ * * "action" : "manageEntities"
+ * * "resource" : "hrn:here:authorization::myrealm:role/ROLE-c1662138-a170-4264-ba18-7b506a708c37"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Revoke a role from an entity
+ * @param role HRN identifying a given role
+ * @param entity HRN identifying a given entity
+ */
+export async function deleteRoleEntity(
+    builder: RequestBuilder,
+    params: { role: string; entity: string }
+): Promise<Response> {
+    const baseUrl = "/roles/{role}/entities/{entity}"
+        .replace("{role}", UrlBuilder.toString(params["role"]))
+        .replace("{entity}", UrlBuilder.toString(params["entity"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "DELETE",
+        headers
+    };
+
+    return builder.requestBlob(urlBuilder, options);
+}
+
+/**
+ * Retrieve the list of roles which have been assigned to the calling party.
+ * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get My Roles
+ * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
+ * @param count Number of records to return. Default is 100 records. Maximum is 100 records.
+ */
+export async function getMyRoles(
+    builder: RequestBuilder,
+    params: { pageToken?: string; count?: number }
+): Promise<RolePageWToken> {
+    const baseUrl = "/roles/me";
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+    urlBuilder.appendQuery("count", params["count"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<RolePageWToken>(urlBuilder, options);
+}
+
+/**
+ * Get the role identified by the provided Role HRN.
+ *
+ * Restrictions:
+ * * The calling principal **must** have permission to take the **readRoles** action against the specified realm.
+ *
+ *  Example:
+ * In order to retrieve a role within the realm, _MyRealm_, a permission with the following
+ * would be required:
+ * * "action" : "readRoles"
+ * * "resource" : "hrn:here:account::myrealm:realm/myrealm"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get Role
+ * @param role HRN identifying a given role
+ */
+export async function getRole(
+    builder: RequestBuilder,
+    params: { role: string }
+): Promise<Role> {
+    const baseUrl = "/roles/{role}".replace(
+        "{role}",
+        UrlBuilder.toString(params["role"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<Role>(urlBuilder, options);
+}
+
+/**
+ * Retrieve the list of entities which have been assigned the role as identified by the provided role HRN.
+ *
+ * Restrictions:
+ * * The calling principal **must** have permission to take the **readEntities** action against the specified role.
+ *
+ * Example:
+ * In order to list the entities assigned the role, _
+ * hrn:here:authorization::myrealm:role/ROLE-c1662138-a170-4264-ba18-7b506a708c37_,
+ * a permission with the following would be required:
+ * * "action" : "readEntities"
+ * * "resource" : "hrn:here:authorization::myrealm:role/ROLE-c1662138-a170-4264-ba18-7b506a708c37"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get role entities
+ * @param role HRN identifying a given role
+ * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
+ * @param count Number of records to return. Default is 100 records. Maximum is 100 records.
+ */
+export async function getRoleEntities(
+    builder: RequestBuilder,
+    params: { role: string; pageToken?: string; count?: number }
+): Promise<RoleEntityPageWToken> {
+    const baseUrl = "/roles/{role}/entities".replace(
+        "{role}",
+        UrlBuilder.toString(params["role"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+    urlBuilder.appendQuery("count", params["count"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<RoleEntityPageWToken>(urlBuilder, options);
+}
+
+/**
+ * Retrieve a single entity which has been assigned the role as identified by the provided role HRN.
+ *
+ * Restrictions:
+ * * The calling principal **must** have permission to take the **readEntities** action against the specified role.
+ * * Example: In order to retrieve an entity assigned the role, _GroupAdmin_, a permission with the following
+ * would be required:
+ * * "action" : "readEntities"
+ * * "resource" : "hrn:here:authorization::myrealm:role/ROLE-c1662138-a170-4264-ba18-7b506a708c37"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get a single role entity
+ * @param role HRN identifying a given role
+ * @param entity HRN identifying a given entity
+ */
+export async function getRoleEntity(
+    builder: RequestBuilder,
+    params: { role: string; entity: string }
+): Promise<RoleEntity> {
+    const baseUrl = "/roles/{role}/entities/{entity}"
+        .replace("{role}", UrlBuilder.toString(params["role"]))
+        .replace("{entity}", UrlBuilder.toString(params["entity"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<RoleEntity>(urlBuilder, options);
+}
+
+/**
+ * Get a single permission associated with the role identified by the provided Role HRN.
+ *
+ * Restrictions:
+ * * The calling principal **must** have permission to take the **readPermissions** action against the specified role.
+ * * Example: In order to retrieve a single role permission for the specified role in realm _MyRealm_,
+ * a permission with the following would be required:
+ * * "action" : "readPermissions"
+ * * "resource" : "hrn:here:authorization::myrealm:role/ROLE-c1662138-a170-4264-ba18-7b506a708c37"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get Role Permission
+ * @param role HRN identifying a given role
+ * @param permission Permission identifier
+ */
+export async function getRolePermission(
+    builder: RequestBuilder,
+    params: { role: string; permission: string }
+): Promise<ActivePermission> {
+    const baseUrl = "/roles/{role}/permissions/{permission}"
+        .replace("{role}", UrlBuilder.toString(params["role"]))
+        .replace("{permission}", UrlBuilder.toString(params["permission"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<ActivePermission>(urlBuilder, options);
+}
+
+/**
+ * Get the permissions associated with the role identified by the provided Role HRN.
+ *
+ * Restrictions:
+ * * The calling principal **must** have permission to take the **readPermissions** action against the specified role.
+ *
+ * Example:
+ * In order to list role permissions for the specified role in realm _MyRealm_, a permission with the following
+ * would be required:
+ * * "action" : "readPermissions"
+ * * "resource" : "hrn:here:authorization::myrealm:role/ROLE-c1662138-a170-4264-ba18-7b506a708c37"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get Role Permissions
+ * @param role HRN identifying a given role
+ * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
+ * @param count Number of records to return. Default is 100 records. Maximum is 100 records.
+ */
+export async function getRolePermissions(
+    builder: RequestBuilder,
+    params: { role: string; pageToken?: string; count?: number }
+): Promise<PermissionPageWToken> {
+    const baseUrl = "/roles/{role}/permissions".replace(
+        "{role}",
+        UrlBuilder.toString(params["role"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+    urlBuilder.appendQuery("count", params["count"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<PermissionPageWToken>(urlBuilder, options);
+}
+
+/**
+ * Retrieve the list of roles within the context of the provided realm.
+ *
+ * Restrictions:
+ * * The calling principal **must** have permission to take the **readRoles** action against the specified realm.
+ * * Example: In order to list roles within the realm, _MyRealm_, a permission with the following would
+ * be required:
+ * * "action" : "readRoles"
+ * * "resource" : "hrn:here:account::myrealm:realm/myrealm"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get Roles
+ * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
+ * @param count Number of records to return. Default is 100 records. Maximum is 100 records.
+ * @param roleName The name of the role to be returned in the result set.
+ * @param resource The hrn of the resource which the roles returned in the result set should be associated with.
+ */
+export async function getRoles(
+    builder: RequestBuilder,
+    params: {
+        pageToken?: string;
+        count?: number;
+        roleName?: string;
+        resource?: string;
+    }
+): Promise<RolePageWToken> {
+    const baseUrl = "/roles";
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+    urlBuilder.appendQuery("count", params["count"]);
+    urlBuilder.appendQuery("roleName", params["roleName"]);
+    urlBuilder.appendQuery("resource", params["resource"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<RolePageWToken>(urlBuilder, options);
 }

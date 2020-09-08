@@ -351,4 +351,211 @@ describe("AuthorizationApi", function() {
 
         expect(result).to.be.equal("success");
     });
+
+    it("addRoleEntity", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/roles/mocked-role/entities/mocked-entity"
+                );
+                expect(options.method).to.be.equal("POST");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.addRoleEntity(
+            (builder as unknown) as RequestBuilder,
+            {
+                role: "mocked-role",
+                entity: "mocked-entity"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("deleteRoleEntity", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/roles/mocked-role/entities/mocked-entity"
+                );
+                expect(options.method).to.be.equal("DELETE");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.deleteRoleEntity(
+            (builder as unknown) as RequestBuilder,
+            {
+                role: "mocked-role",
+                entity: "mocked-entity"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getMyRoles", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/roles/me?pageToken=mocked-pageToken&count=5"
+                );
+                expect(options.method).to.be.equal("GET");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getMyRoles(
+            (builder as unknown) as RequestBuilder,
+            {
+                pageToken: "mocked-pageToken",
+                count: 5
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getRole", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/roles/mocked-role"
+                );
+                expect(options.method).to.be.equal("GET");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getRole(
+            (builder as unknown) as RequestBuilder,
+            {
+                role: "mocked-role"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getRoleEntities", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/roles/mocked-role/entities?pageToken=mocked-pageToken&count=5"
+                );
+                expect(options.method).to.be.equal("GET");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getRoleEntities(
+            (builder as unknown) as RequestBuilder,
+            {
+                role: "mocked-role",
+                pageToken: "mocked-pageToken",
+                count: 5
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getRoleEntity", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/roles/mocked-role/entities/mocked-entity"
+                );
+                expect(options.method).to.be.equal("GET");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getRoleEntity(
+            (builder as unknown) as RequestBuilder,
+            {
+                role: "mocked-role",
+                entity: "mocked-entity"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getRolePermissions", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/roles/mocked-role/permissions?pageToken=mocked-pageToken&count=5"
+                );
+                expect(options.method).to.be.equal("GET");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getRolePermissions(
+            (builder as unknown) as RequestBuilder,
+            {
+                role: "mocked-role",
+                pageToken: "mocked-pageToken",
+                count: 5
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getRolePermission", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/roles/mocked-role/permissions/mocked-permission"
+                );
+                expect(options.method).to.be.equal("GET");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getRolePermission(
+            (builder as unknown) as RequestBuilder,
+            {
+                role: "mocked-role",
+                permission: "mocked-permission"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getRoles", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/roles?pageToken=mocked-pageToken&count=5&roleName=mocked-roleName&resource=mocked-resource"
+                );
+                expect(options.method).to.be.equal("GET");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getRoles(
+            (builder as unknown) as RequestBuilder,
+            {
+                pageToken: "mocked-pageToken",
+                count: 5,
+                resource: "mocked-resource",
+                roleName: "mocked-roleName"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
 });
