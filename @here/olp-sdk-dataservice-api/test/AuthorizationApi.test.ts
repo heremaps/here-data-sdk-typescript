@@ -229,4 +229,126 @@ describe("AuthorizationApi", function() {
 
         expect(result).to.be.equal("success");
     });
+
+    it("addGrant", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/grants/resources/mocked-resourceHrn/entities/mocked-entityId/actions/mocked-actionId?entityType=mocked-entityType"
+                );
+                expect(options.method).to.be.equal("POST");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.addGrant(
+            (builder as unknown) as RequestBuilder,
+            {
+                resourceHrn: "mocked-resourceHrn",
+                entityId: "mocked-entityId",
+                actionId: "mocked-actionId",
+                entityType: "mocked-entityType"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getGrant", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/grants/resources/mocked-resourceHrn/entities/mocked-entityId/actions/mocked-actionId?entityType=mocked-entityType"
+                );
+                expect(options.method).to.be.equal("GET");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getGrant(
+            (builder as unknown) as RequestBuilder,
+            {
+                resourceHrn: "mocked-resourceHrn",
+                entityId: "mocked-entityId",
+                actionId: "mocked-actionId",
+                entityType: "mocked-entityType"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getGrants", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/grants/resources/mocked-resourceHrn/entities/mocked-entityId?entityType=mocked-entityType"
+                );
+                expect(options.method).to.be.equal("GET");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getGrants(
+            (builder as unknown) as RequestBuilder,
+            {
+                resourceHrn: "mocked-resourceHrn",
+                entityId: "mocked-entityId",
+                entityType: "mocked-entityType"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("listGrants", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/grants/resources/mocked-resourceHrn/entities?entityType=mocked-entityType&pageToken=mocked-pageToken&count=5"
+                );
+                expect(options.method).to.be.equal("GET");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.listGrants(
+            (builder as unknown) as RequestBuilder,
+            {
+                resourceHrn: "mocked-resourceHrn",
+                entityType: "mocked-entityType",
+                pageToken: "mocked-pageToken",
+                count: 5
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("removeGrant", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/grants/resources/mocked-resourceHrn/entities/mocked-entityId/actions/mocked-actionId?entityType=mocked-entityType"
+                );
+                expect(options.method).to.be.equal("DELETE");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.removeGrant(
+            (builder as unknown) as RequestBuilder,
+            {
+                resourceHrn: "mocked-resourceHrn",
+                entityId: "mocked-entityId",
+                actionId: "mocked-actionId",
+                entityType: "mocked-entityType"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
 });

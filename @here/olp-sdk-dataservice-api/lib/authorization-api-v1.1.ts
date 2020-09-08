@@ -136,7 +136,7 @@ export interface RoleEntityInfo extends UserInfo {
      */
     ownerHrn?: string;
     /**
-     * The default value for the \"scope\" parameter when requesting a client_credentials OAuth2 token
+     * The default value for the "scope" parameter when requesting a client_credentials OAuth2 token
      * if no \"scope\" parameter is specified.
      */
     defaultScope?: string;
@@ -303,6 +303,134 @@ export interface ListInviteResponse {
 
 export interface InvitePageWToken extends PageWToken {
     data?: ListInviteResponse[];
+}
+
+export interface EntityId {
+    /**
+     * The unique identifier of the user, app, or group.
+     */
+    id?: string;
+    /**
+     * The HRN of the user, app, or group.
+     */
+    hrn?: string;
+    /**
+     * The type of this entity. One of user, app, or group
+     */
+    type?: string;
+}
+
+export interface AppInfo {
+    /**
+     * Identifier for the client/application.
+     */
+    clientId?: string;
+    /**
+     * HRN for the client/application.
+     */
+    clientHrn?: string;
+    /**
+     * A realm to which app belongs to.
+     */
+    realm?: string;
+    /**
+     * Human readable name of the client.
+     */
+    name?: string;
+    /**
+     * Prose description of the client.
+     */
+    description?: string;
+    /**
+     * The id of the user that owns this client.
+     */
+    ownerId?: string;
+    /**
+     * The hrn of the user that owns this client.
+     */
+    ownerHrn?: string;
+    /**
+     * The default value for the "scope" parameter when requesting a client_credentials OAuth2 token if no "scope" parameter is specified.
+     */
+    defaultScope?: string;
+    /**
+     * If true, the app cannot request a token with a scope different from defaultScope.
+     */
+    isRestrictedScope?: boolean;
+    /**
+     * If true, the app can create apps.
+     */
+    appCreationEnabled?: boolean;
+}
+
+export interface GroupInfo {
+    /**
+     * The id of the group..
+     */
+    id?: string;
+    /**
+     * The hrn of the group..
+     */
+    hrn?: string;
+    /**
+     * A user assigned name for the group.
+     */
+    name?: string;
+}
+
+export interface ActivePermission {
+    /**
+     * The unique identifier of the permission in the context of the client.  Begins with \"PERM-\".
+     */
+    id?: string;
+    /**
+     * The specific action identifier that this permission is controlling access to for the specific associated service.
+     */
+    action?: string;
+    /**
+     * One of \"allow\" or \"deny\"
+     */
+    effect?: EffectEnum;
+    /**
+     * The resource identifier that this permission is controlling access to for the given action.
+     */
+    resource?: string;
+    /**
+     * Identifies the service that this permission is associated with.
+     */
+    serviceId?: string;
+}
+
+export type EffectEnum = "allow" | "deny";
+
+export interface EntityGrant {
+    entityId?: EntityId;
+    user?: UserInfo;
+    app?: AppInfo;
+    group?: GroupInfo;
+    /**
+     * List of permissions
+     */
+    permissions?: ActivePermission[];
+}
+
+export interface EntityGrants {
+    /**
+     * Total entities
+     */
+    total?: number;
+    /**
+     * The pageToken used to retrieve the next page of entities
+     */
+    pageToken?: string;
+    /**
+     * count of page
+     */
+    count?: number;
+    /**
+     * List of users, apps, or groups and their associated permissions.
+     */
+    data?: EntityGrant[];
 }
 
 /**
@@ -647,4 +775,245 @@ export async function searchRealmMemberInvites(
     };
 
     return builder.request<InvitePageWToken>(urlBuilder, options);
+}
+
+/**
+ * ===================================================================
+ * GrantsApi
+ * ===================================================================
+ */
+
+/**
+ * Grant access to a resource to an entity.
+ * The result of this call is that the specified entity will have permission to take the specified action against the specified resource.
+ * Restrictions:
+ * * The realm of the calling principal **must** match the realm of the requested entity.
+ * * The calling principal **must** have permission to take the **addGrant:{actionId}** OR **share** action against the specified resource.
+ * * Example: In order to add a grant for the **readResource** action against resource **hrn:here:data:::my-shared-catalog** a permission
+ * with the following would be required:
+ * * "action" : "addGrant:readResource"
+ * * "resource" : "hrn:here:data:::my-shared-catalog"
+ * OR
+ * * "action" : "share"
+ * * "resource" : "hrn:here:data:::my-shared-catalog"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Grant access to a resource to an entity.
+ * @param resourceHrn The hrn that identifies the resource
+ * @param entityId The target entityId to grant access to
+ * @param actionId The action to assign as allowed against the resource
+ * @param entityType The type of the entity to grant access to.  Must be one of user, app, or group
+ */
+export async function addGrant(
+    builder: RequestBuilder,
+    params: {
+        resourceHrn: string;
+        entityId: string;
+        actionId: string;
+        entityType: string;
+    }
+): Promise<EntityGrant> {
+    const baseUrl = "/grants/resources/{resourceHrn}/entities/{entityId}/actions/{actionId}"
+        .replace("{resourceHrn}", UrlBuilder.toString(params["resourceHrn"]))
+        .replace("{entityId}", UrlBuilder.toString(params["entityId"]))
+        .replace("{actionId}", UrlBuilder.toString(params["actionId"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("entityType", params["entityType"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "POST",
+        headers
+    };
+
+    return builder.request<EntityGrant>(urlBuilder, options);
+}
+
+/**
+ * Get a single grant given to an entity.
+ * This calls returns any permission to take the specified action against the specified resource on the requested entity.
+ * Restrictions:
+ * * The realm of the calling principal **must** match the realm of the requested app.
+ * * The calling principal **must** have permission to take the **listGrants** OR **share** action against the specified resource.
+ * * In order to get a grant against resource **hrn:here:data:::my-shared-catalog**
+ * a permission with the following would be required:
+ * * "action" : "listGrants"
+ * * "resource" : "hrn:here:data:::my-shared-catalog"
+ * OR
+ * * "action" : "share"
+ * * "resource" : "hrn:here:data:::my-shared-catalog"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get a single grant given to an entity
+ * @param resourceHrn The hrn that identifies the resource
+ * @param entityId The target entityId to get the grant of
+ * @param actionId The action of the grant
+ * @param entityType The type of the entity to get the grant of.  Must be one of user, app, or group
+ */
+export async function getGrant(
+    builder: RequestBuilder,
+    params: {
+        resourceHrn: string;
+        entityId: string;
+        actionId: string;
+        entityType: string;
+    }
+): Promise<EntityGrant> {
+    const baseUrl = "/grants/resources/{resourceHrn}/entities/{entityId}/actions/{actionId}"
+        .replace("{resourceHrn}", UrlBuilder.toString(params["resourceHrn"]))
+        .replace("{entityId}", UrlBuilder.toString(params["entityId"]))
+        .replace("{actionId}", UrlBuilder.toString(params["actionId"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("entityType", params["entityType"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<EntityGrant>(urlBuilder, options);
+}
+
+/**
+ * Get grants. This call describes the permissions assigned to the specified entity that grant access to the specified resource.
+ *
+ * Restrictions:
+ * * The realm of the calling principal **must** match the realm of the requested entity.
+ * * The calling principal **must** have permission to take the **listGrants** OR **share** action against the specified resource.
+ * * Example:
+ * In order to get grants against resource **hrn:here:data:::my-shared-catalog** a permission with the following would be required:
+ * * "action" : "listGrants"
+ * * "resource" : "hrn:here:data:::my-shared-catalog"
+ * OR
+ * * "action" : "share"
+ * * "resource" : "hrn:here:data:::my-shared-catalog"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get grants given to a user, app, or group
+ * @param resourceHrn The hrn that identifies the resource
+ * @param entityId The entityId to get the grants of
+ * @param entityType The type of the entity requested.  Must be one of user, app, or group
+ */
+export async function getGrants(
+    builder: RequestBuilder,
+    params: { resourceHrn: string; entityId: string; entityType: string }
+): Promise<EntityGrant> {
+    const baseUrl = "/grants/resources/{resourceHrn}/entities/{entityId}"
+        .replace("{resourceHrn}", UrlBuilder.toString(params["resourceHrn"]))
+        .replace("{entityId}", UrlBuilder.toString(params["entityId"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("entityType", params["entityType"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<EntityGrant>(urlBuilder, options);
+}
+
+/**
+ * List grants on user, apps, or groups.
+ * This call describes the permissions assigned to any user, app, or group **in the same realm as the calling principal**
+ * that has been granted access to the specified resource through an exact matching permission.
+ * Permissions granted through policies and roles are not included.
+ * Restrictions:
+ * * The calling principal **must** have permission to take the **listGrants** OR **share** action against the specified resource.
+ * * Example:
+ * In order to list grants against resource **hrn:here:data:::my-shared-catalog** a permission with the following would be required:
+ * * "action" : "listGrants"
+ * * "resource" : "hrn:here:data:::my-shared-catalog"
+ * OR
+ * * "action" : "share"
+ * * "resource" : "hrn:here:data:::my-shared-catalog"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary List grants on users, apps, or groups
+ * @param resourceHrn The hrn that identifies the resource
+ * @param entityType Restrict to only this type of entity  in the response.  Must be one of user, app, or group
+ * @param pageToken When there are more than 'count' total records, use the pageToken from the previous page to retrieve the next page
+ * @param count Number of records to return
+ */
+export async function listGrants(
+    builder: RequestBuilder,
+    params: {
+        resourceHrn: string;
+        entityType?: string;
+        pageToken?: string;
+        count?: number;
+    }
+): Promise<EntityGrants> {
+    const baseUrl = "/grants/resources/{resourceHrn}/entities".replace(
+        "{resourceHrn}",
+        UrlBuilder.toString(params["resourceHrn"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("entityType", params["entityType"]);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+    urlBuilder.appendQuery("count", params["count"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<EntityGrants>(urlBuilder, options);
+}
+
+/**
+ * Revoke access to a resource from an entity.
+ * The result of this call is that the specified entity will have any directly assigned permission
+ * to take the specified action against the specified resource removed.
+ *
+ * Restrictions:
+ * * The realm of the calling principal **must** match the realm of the requested app.
+ * * The calling principal **must** have permission to take the **removeGrant:{actionId}**
+ * OR **share** action against the specified resource.
+ *
+ * * Example: In order to remove a grant for the **readResource** action against resource **hrn:here:data:::my-shared-catalog**
+ * a permission with the following would be required:
+ * * "action" : "removeGrant:readResource"
+ * * "resource" : "hrn:here:data:::my-shared-catalog"
+ * OR
+ * * "action" : "share"
+ * * "resource" : "hrn:here:data:::my-shared-catalog"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Revoke access to a resource from an entity
+ * @param resourceHrn The hrn that identifies the resource
+ * @param entityId The target entityId to revoke access from
+ * @param actionId The action against the resource to revoke access from
+ * @param entityType The type of the entity to revoke access from.  Must be one of user, app, or group
+ */
+export async function removeGrant(
+    builder: RequestBuilder,
+    params: {
+        resourceHrn: string;
+        entityId: string;
+        actionId: string;
+        entityType: string;
+    }
+): Promise<Response> {
+    const baseUrl = "/grants/resources/{resourceHrn}/entities/{entityId}/actions/{actionId}"
+        .replace("{resourceHrn}", UrlBuilder.toString(params["resourceHrn"]))
+        .replace("{entityId}", UrlBuilder.toString(params["entityId"]))
+        .replace("{actionId}", UrlBuilder.toString(params["actionId"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("entityType", params["entityType"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "DELETE",
+        headers
+    };
+
+    return builder.requestBlob(urlBuilder, options);
 }
