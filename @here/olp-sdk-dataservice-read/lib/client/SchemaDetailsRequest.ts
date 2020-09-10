@@ -18,7 +18,7 @@
  */
 
 import { HRN } from "@here/olp-sdk-core";
-import { validateBillingTag } from "..";
+import { validateBillingTag } from "@here/olp-sdk-dataservice-read";
 
 /**
  * Prepares information for calls to the platform Artifact Service.

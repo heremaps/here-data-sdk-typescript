@@ -21,10 +21,10 @@ import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import * as dataServiceRead from "../../lib";
-import * as dataServiceApi from "@here/olp-sdk-dataservice-api";
+import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
 import { BlobApi, MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
 import { Index } from "@here/olp-sdk-dataservice-api/lib/query-api";
+import { RequestFactory } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -108,10 +108,7 @@ describe("VersionedLayerClient", function() {
         getPartitionsByIdStub = sandbox.stub(QueryApi, "getPartitionsById");
         getQuadTreeIndexStub = sandbox.stub(QueryApi, "quadTreeIndex");
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
-        getBaseUrlRequestStub = sandbox.stub(
-            dataServiceRead.RequestFactory,
-            "getBaseUrl"
-        );
+        getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
 
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });

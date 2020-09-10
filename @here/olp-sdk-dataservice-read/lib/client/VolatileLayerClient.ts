@@ -24,6 +24,7 @@ import {
     HRN,
     HttpError,
     OlpClientSettings,
+    RequestFactory,
     STATUS_CODES
 } from "@here/olp-sdk-core";
 import {
@@ -39,10 +40,9 @@ import {
     QuadKeyPartitionsRequest,
     QuadTreeIndexRequest,
     QueryClient,
-    RequestFactory,
     TileRequest,
     TileRequestParams
-} from "..";
+} from "@here/olp-sdk-dataservice-read";
 
 /**
  * Parameters for use to initialize VolatileLayerClient.

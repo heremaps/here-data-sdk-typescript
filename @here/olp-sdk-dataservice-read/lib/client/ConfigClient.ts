@@ -17,9 +17,9 @@
  * License-Filename: LICENSE
  */
 
-import { OlpClientSettings } from "@here/olp-sdk-core";
+import { OlpClientSettings, RequestFactory } from "@here/olp-sdk-core";
 import { ConfigApi } from "@here/olp-sdk-dataservice-api";
-import { CatalogsRequest, RequestFactory } from "..";
+import { CatalogsRequest } from "@here/olp-sdk-dataservice-read";
 
 /**
  * A client for the platform Config Service.

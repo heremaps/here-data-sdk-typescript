@@ -17,9 +17,12 @@
  * License-Filename: LICENSE
  */
 
-import { OlpClientSettings } from "@here/olp-sdk-core";
+import { OlpClientSettings, RequestFactory } from "@here/olp-sdk-core";
 import { ArtifactApi } from "@here/olp-sdk-dataservice-api";
-import { RequestFactory, SchemaDetailsRequest, SchemaRequest } from "..";
+import {
+    SchemaDetailsRequest,
+    SchemaRequest
+} from "@here/olp-sdk-dataservice-read";
 
 /**
  * Gets schema metadata and data from the platform Artifact Service.

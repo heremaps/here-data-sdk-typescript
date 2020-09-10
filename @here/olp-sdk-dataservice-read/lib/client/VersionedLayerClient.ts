@@ -24,21 +24,21 @@ import {
     HRN,
     HttpError,
     OlpClientSettings,
+    RequestFactory,
     STATUS_CODES
 } from "@here/olp-sdk-core";
 import { BlobApi, MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
 import {
     DataRequest,
+    getTile,
     MetadataCacheRepository,
     PartitionsRequest,
     QuadKeyPartitionsRequest,
     QuadTreeIndexRequest,
     QueryClient,
-    RequestFactory
-} from "..";
-import { getTile } from "../utils";
-import { TileRequest, TileRequestParams } from "./TileRequest";
-
+    TileRequest,
+    TileRequestParams
+} from "@here/olp-sdk-dataservice-read";
 /**
  * Parameters for use to initialize VersionLayerClient.
  */

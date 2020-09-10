@@ -18,7 +18,7 @@
  */
 
 import { FetchOptions } from "@here/olp-sdk-core";
-import { QuadKey, validateBillingTag } from "..";
+import { QuadKey, validateBillingTag } from "@here/olp-sdk-dataservice-read";
 
 /**
  *  Prepares information for calls to get data from the HERE Blob Service.

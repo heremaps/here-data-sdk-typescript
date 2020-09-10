@@ -18,12 +18,8 @@
  */
 
 import { assert } from "chai";
-import {
-    TileRequest,
-    getTile,
-    OlpClientSettings,
-    HRN
-} from "@here/olp-sdk-dataservice-read/lib";
+import { TileRequest, getTile } from "@here/olp-sdk-dataservice-read/lib";
+import { OlpClientSettings, HRN } from "@here/olp-sdk-core";
 
 describe("getTile", function() {
     const settings = new OlpClientSettings({

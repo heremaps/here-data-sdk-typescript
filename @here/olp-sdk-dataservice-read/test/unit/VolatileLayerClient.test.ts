@@ -21,13 +21,13 @@ import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import * as dataServiceRead from "../../lib";
+import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
 import {
     MetadataApi,
     QueryApi,
     VolatileBlobApi
 } from "@here/olp-sdk-dataservice-api";
-import { PartitionsRequest } from "../../lib";
+import { RequestFactory } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -98,10 +98,7 @@ describe("VolatileLayerClient", function() {
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
         getPartitionsByIdStub = sandbox.stub(QueryApi, "getPartitionsById");
         getQuadTreeIndexStub = sandbox.stub(QueryApi, "quadTreeIndexVolatile");
-        getBaseUrlRequestStub = sandbox.stub(
-            dataServiceRead.RequestFactory,
-            "getBaseUrl"
-        );
+        getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 

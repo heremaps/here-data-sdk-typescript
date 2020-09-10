@@ -23,6 +23,7 @@ import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
 import { CoverageApi } from "@here/olp-sdk-dataservice-api";
+import { RequestFactory } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -50,10 +51,7 @@ describe("StatistiscClient", function() {
         olpClientSettingsStub = sandbox.createStubInstance(
             dataServiceRead.OlpClientSettings
         );
-        getBaseUrlRequestStub = sandbox.stub(
-            dataServiceRead.RequestFactory,
-            "getBaseUrl"
-        );
+        getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
         getDataCoverageSummaryStub = sandbox.stub(
             CoverageApi,
             "getDataCoverageSummary"

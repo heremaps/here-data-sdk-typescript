@@ -24,7 +24,7 @@ import sinonChai = require("sinon-chai");
 import * as dataServiceRead from "../../lib";
 import { ConfigApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
 
-import { HttpError } from "@here/olp-sdk-core";
+import * as core from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -53,9 +53,7 @@ describe("CatalogClient", function() {
 
     before(function() {
         sandbox = sinon.createSandbox();
-        let settings = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
-        );
+        let settings = sandbox.createStubInstance(core.OlpClientSettings);
         catalogClient = new dataServiceRead.CatalogClient(
             mockedHRN,
             (settings as unknown) as dataServiceRead.OlpClientSettings
@@ -68,10 +66,7 @@ describe("CatalogClient", function() {
         getCatalogStub = sandbox.stub(ConfigApi, "getCatalog");
         getListVersionsStub = sandbox.stub(MetadataApi, "listVersions");
         getEarliestVersionsStub = sandbox.stub(MetadataApi, "minimumVersion");
-        getBaseUrlRequestStub = sandbox.stub(
-            dataServiceRead.RequestFactory,
-            "getBaseUrl"
-        );
+        getBaseUrlRequestStub = sandbox.stub(core.RequestFactory, "getBaseUrl");
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
@@ -111,7 +106,7 @@ describe("CatalogClient", function() {
 
     it("Should method getLatestVersion return HttpError when API crashes", async function() {
         const TEST_ERROR_CODE = 404;
-        const mockedError = new HttpError(
+        const mockedError = new core.HttpError(
             TEST_ERROR_CODE,
             "Can not get catalog latest version"
         );
@@ -258,7 +253,7 @@ describe("CatalogClient", function() {
 
     it("Should method getEarliestVersion return HttpError getting earliest catalog version", async function() {
         const TEST_ERROR_CODE = 404;
-        const mockedError = new HttpError(
+        const mockedError = new core.HttpError(
             TEST_ERROR_CODE,
             "Error getting earliest catalog version"
         );
@@ -330,7 +325,7 @@ describe("CatalogClient", function() {
 
     it("Should method getCatalog return HttpError when Can not load catalog configuration", async function() {
         const TEST_ERROR_CODE = 404;
-        const mockedError = new HttpError(
+        const mockedError = new core.HttpError(
             TEST_ERROR_CODE,
             "Can't load catalog configuration"
         );
@@ -447,7 +442,7 @@ describe("CatalogClient", function() {
 
     it("Should method getVersions return HttpError when API crashes", async function() {
         const TEST_ERROR_CODE = 404;
-        const mockedError = new HttpError(
+        const mockedError = new core.HttpError(
             TEST_ERROR_CODE,
             "Can't get versions"
         );

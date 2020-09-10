@@ -17,7 +17,12 @@
  * License-Filename: LICENSE
  */
 
-import { FetchOptions, HRN, OlpClientSettings } from "@here/olp-sdk-core";
+import {
+    FetchOptions,
+    HRN,
+    OlpClientSettings,
+    RequestFactory
+} from "@here/olp-sdk-core";
 import {
     AdditionalFields,
     MetadataApi,
@@ -25,12 +30,11 @@ import {
 } from "@here/olp-sdk-dataservice-api";
 import {
     isValid,
+    MetadataCacheRepository,
     mortonCodeFromQuadKey,
     PartitionsRequest,
-    QuadTreeIndexRequest,
-    RequestFactory
-} from "..";
-import { MetadataCacheRepository } from "../cache/MetadataCacheRepository";
+    QuadTreeIndexRequest
+} from "@here/olp-sdk-dataservice-read";
 
 /**
  * A client for the Query Service API that provides a way to get information (metadata)

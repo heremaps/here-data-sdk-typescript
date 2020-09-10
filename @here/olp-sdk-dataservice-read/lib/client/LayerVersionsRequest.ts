@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { validateBillingTag } from "..";
+import { validateBillingTag } from "@here/olp-sdk-dataservice-read";
 
 /** Prepares information for calls to get layer versions of a specific catalog version. */
 export class LayerVersionsRequest {
@@ -26,7 +26,7 @@ export class LayerVersionsRequest {
 
     /**
      * Gets a catalog version.
-     * 
+     *
      * @returns The catalog version.
      */
     public getVersion(): number | undefined {

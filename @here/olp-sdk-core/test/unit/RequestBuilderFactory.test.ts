@@ -45,7 +45,7 @@ class MockedHrn {
 }
 
 class MockedOlpClientSettings {
-    private keyValueCache = new Map();
+    private keyValueCache = new lib.LRUCache(50);
 
     constructor() {}
     get cache() {
@@ -55,18 +55,107 @@ class MockedOlpClientSettings {
         return "test-env";
     }
     get token() {
-        return Promise.resolve("mocked-token");
+        return () => Promise.resolve("mocked-token");
     }
     get downloadManager() {
         return {
-            download: (url: string) => Promise.resolve("mocked-results")
+            download: (url: string) =>
+                Promise.resolve({
+                    status: 200,
+                    json: () =>
+                        Promise.resolve([
+                            {
+                                api: "account",
+                                version: "v1",
+                                baseURL: "https://mocked.url",
+                                parameters: {}
+                            },
+                            {
+                                api: "account",
+                                version: "v1.1",
+                                baseURL:
+                                    "https://mocked.url/authorization/v1.1",
+                                parameters: {}
+                            },
+                            {
+                                api: "artifact",
+                                version: "v1",
+                                baseURL:
+                                    "https://artifact.api.platform.here.com/v1",
+                                parameters: {}
+                            },
+                            {
+                                api: "authentication",
+                                version: "v1.1",
+                                baseURL:
+                                    "https://mocked.url/authentication/v1.1",
+                                parameters: {}
+                            },
+                            {
+                                api: "authorization",
+                                version: "v1.1",
+                                baseURL:
+                                    "https://mocked.url/authorization/v1.1",
+                                parameters: {}
+                            },
+                            {
+                                api: "config",
+                                version: "v1",
+                                baseURL:
+                                    "https://config.data.api.platform.here.com/config/v1",
+                                parameters: {}
+                            },
+                            {
+                                api: "consent",
+                                version: "v0",
+                                baseURL:
+                                    "https://consent.api.platform.here.com/consent-service/v0",
+                                parameters: {}
+                            },
+                            {
+                                api: "consent",
+                                version: "v1",
+                                baseURL:
+                                    "https://consent.api.platform.here.com/consent-service/v1",
+                                parameters: {}
+                            },
+                            {
+                                api: "location-service-registry",
+                                version: "v1",
+                                baseURL:
+                                    "https://registry.services.api.platform.here.com/v1",
+                                parameters: {}
+                            },
+                            {
+                                api: "lookup",
+                                version: "v1",
+                                baseURL:
+                                    "https://api-lookup.data.api.platform.here.com/lookup/v1",
+                                parameters: {}
+                            },
+                            {
+                                api: "marketplace",
+                                version: "v1",
+                                baseURL:
+                                    "https://marketplace.api.platform.here.com/api/v1",
+                                parameters: {}
+                            },
+                            {
+                                api: "pipelines",
+                                version: "v2",
+                                baseURL:
+                                    "https://pipelines.api.platform.here.com/pipeline-service",
+                                parameters: {}
+                            }
+                        ])
+                })
         };
     }
 }
 
 class MockedApiCacheRepository {
     private readonly hrn: string;
-    constructor(private readonly cache: Map<string, string>, hrn?: MockedHrn) {
+    constructor(private readonly cache: any, hrn?: MockedHrn) {
         this.hrn = hrn ? hrn.toString() : "plathorm-api";
     }
 
