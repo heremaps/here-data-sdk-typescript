@@ -19,7 +19,7 @@
 
 import { HRN } from "@here/olp-sdk-core";
 import { AdditionalFields } from "@here/olp-sdk-dataservice-api";
-import { QuadKey, validateBillingTag } from "..";
+import { QuadKey, validateBillingTag } from "@here/olp-sdk-dataservice-read";
 
 /**
  * The recursion depth of the quadtree.
@@ -56,7 +56,7 @@ export class QuadTreeIndexRequest {
         private catalogHrn: HRN,
         private layerId: string,
         private layerType: "versioned" | "volatile" = "versioned"
-    ) { }
+    ) {}
 
     /**
      * The version of the catalog against which you want to run the query.

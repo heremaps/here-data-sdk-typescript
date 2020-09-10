@@ -17,20 +17,19 @@
  * License-Filename: LICENSE
  */
 
-import { FetchOptions, HRN, TileKey } from "@here/olp-sdk-core";
+import { FetchOptions, HRN, RequestFactory, TileKey } from "@here/olp-sdk-core";
 import { BlobApi } from "@here/olp-sdk-dataservice-api";
 import { Index as QuadTreeIndex } from "@here/olp-sdk-dataservice-api/lib/query-api";
 import {
+    ApiName,
     OlpClientSettings,
     QuadTreeIndexCacheRepository,
+    QuadTreeIndexDepth,
     QuadTreeIndexRequest,
     QueryClient,
-    RequestFactory,
-    TileRequest
-} from "..";
-import { ApiName } from "../cache";
-import { QuadTreeIndexDepth, TileRequestParams } from "../client";
-
+    TileRequest,
+    TileRequestParams
+} from "@here/olp-sdk-dataservice-read";
 /**
  * Parameters used to get a tile.
  */

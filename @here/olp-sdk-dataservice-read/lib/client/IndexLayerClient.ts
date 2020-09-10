@@ -21,10 +21,11 @@ import {
     ApiName,
     DataStoreRequestBuilder,
     HRN,
-    OlpClientSettings
+    OlpClientSettings,
+    RequestFactory
 } from "@here/olp-sdk-core";
 import { BlobApi, IndexApi } from "@here/olp-sdk-dataservice-api";
-import { IndexQueryRequest, RequestFactory } from "..";
+import { IndexQueryRequest } from "@here/olp-sdk-dataservice-read";
 
 /**
  * Parameters for use to initialize IndexLayerClient.

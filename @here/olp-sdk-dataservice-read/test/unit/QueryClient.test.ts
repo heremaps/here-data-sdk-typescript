@@ -23,6 +23,7 @@ import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
 import { MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
+import { RequestFactory } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -63,10 +64,7 @@ describe("QueryClient", function() {
         );
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
         getPartitionsByIdStub = sandbox.stub(QueryApi, "getPartitionsById");
-        getBaseUrlRequestStub = sandbox.stub(
-            dataServiceRead.RequestFactory,
-            "getBaseUrl"
-        );
+        getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
 
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });

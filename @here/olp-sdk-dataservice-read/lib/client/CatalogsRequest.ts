@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { validateBillingTag } from "..";
+import { validateBillingTag } from "@here/olp-sdk-dataservice-read";
 
 /**
  * Prepares information for calls to get catalogs from the platform Config Service.
@@ -28,7 +28,7 @@ export class CatalogsRequest {
 
     /**
      *  Gets a schema HERE Resource Name (HRN) for the request.
-     * 
+     *
      * @return The schema HRN.
      */
     public getSchema(): string | undefined {
@@ -39,7 +39,7 @@ export class CatalogsRequest {
      * Sets a value of a layer schema HERE Resource Name (HRN) that is used in the `getCatalogs` method of the [[ConfigClient]] instance.
      * If the schema is set, the `getCatalogs` method returns catalogs witch have a layer or layers with the specific schema HRN.
      * If the schema is not set, the filter returns all of the catalogs to which you have access.
-     * 
+     *
      * @param schemaHrn The layer schema HRN.
      * @return The updated [[CatalogRequest]] instance that you can use to chain methods.
      */
@@ -51,7 +51,7 @@ export class CatalogsRequest {
     /**
      * An optional free-form tag that is used for grouping billing records together.
      * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
-     * 
+     *
      * @param tag The `BillingTag` string.
      * @return The updated [[CatalogsRequest]] instance that you can use to chain methods.
      */
@@ -62,7 +62,7 @@ export class CatalogsRequest {
 
     /**
      * Gets a billing tag to group billing records together.
-     * 
+     *
      * @return The `BillingTag` string.
      */
     public getBillingTag(): string | undefined {

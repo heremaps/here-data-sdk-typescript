@@ -21,6 +21,7 @@ import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 import * as dataServiceRead from "../../lib";
+import { RequestFactory } from "@here/olp-sdk-core";
 import { ConfigApi } from "@here/olp-sdk-dataservice-api";
 
 chai.use(sinonChai);
@@ -37,7 +38,7 @@ describe("ConfigClient", function() {
 
     beforeEach(function() {
         sandbox
-            .stub(dataServiceRead.RequestFactory, "create")
+            .stub(RequestFactory, "create")
             .callsFake(() => Promise.resolve({} as any));
     });
 

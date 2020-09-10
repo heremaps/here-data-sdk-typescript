@@ -22,7 +22,7 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
-import { HttpError } from "@here/olp-sdk-core";
+import { HttpError, RequestFactory } from "@here/olp-sdk-core";
 import { IndexApi, BlobApi } from "@here/olp-sdk-dataservice-api";
 
 chai.use(sinonChai);
@@ -67,10 +67,7 @@ describe("IndexLayerClient", function() {
     beforeEach(function() {
         getBlobStub = sandbox.stub(BlobApi, "getBlob");
         getIndexStub = sandbox.stub(IndexApi, "performQuery");
-        getBaseUrlRequestStub = sandbox.stub(
-            dataServiceRead.RequestFactory,
-            "getBaseUrl"
-        );
+        getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 

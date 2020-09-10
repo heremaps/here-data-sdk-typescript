@@ -22,7 +22,7 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
-import { HttpError } from "@here/olp-sdk-core";
+import { HttpError, RequestFactory } from "@here/olp-sdk-core";
 
 import { BlobApi, StreamApi } from "@here/olp-sdk-dataservice-api";
 
@@ -104,10 +104,7 @@ describe("StreamLayerClient", function() {
         commitOffsetsStub = sandbox.stub(StreamApi, "doCommitOffsets");
         unsubscribeStub = sandbox.stub(StreamApi, "deleteSubscription");
         seekOffsetsStub = sandbox.stub(StreamApi, "seekToOffset");
-        getBaseUrlRequestStub = sandbox.stub(
-            dataServiceRead.RequestFactory,
-            "getBaseUrl"
-        );
+        getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 

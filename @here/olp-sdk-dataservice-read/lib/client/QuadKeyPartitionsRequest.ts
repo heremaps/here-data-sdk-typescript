@@ -18,7 +18,11 @@
  */
 
 import { AdditionalFields } from "@here/olp-sdk-dataservice-api";
-import { QuadKey, QuadTreeIndexDepth, validateBillingTag } from "..";
+import {
+    QuadKey,
+    QuadTreeIndexDepth,
+    validateBillingTag
+} from "@here/olp-sdk-dataservice-read";
 
 /**
  * Prepares information for calls to get quadtree metadata from the Query Service API.

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { validateBillingTag } from "..";
+import { validateBillingTag } from "@here/olp-sdk-dataservice-read";
 
 /**
  * Prepares information for calls to get catalog metadata from the platform Config Service.

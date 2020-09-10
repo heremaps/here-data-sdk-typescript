@@ -20,15 +20,15 @@
 import {
     DataStoreRequestBuilder,
     HRN,
-    OlpClientSettings
+    OlpClientSettings,
+    RequestFactory
 } from "@here/olp-sdk-core";
 import { CoverageApi } from "@here/olp-sdk-dataservice-api";
 import {
     CoverageDataType,
-    RequestFactory,
     StatisticsRequest,
     SummaryRequest
-} from "..";
+} from "@here/olp-sdk-dataservice-read";
 
 /**
  * A client for the platform Statistics Service.

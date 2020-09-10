@@ -21,12 +21,15 @@ import {
     ApiName,
     DataStoreRequestBuilder,
     HRN,
-    OlpClientSettings
+    OlpClientSettings,
+    RequestFactory
 } from "@here/olp-sdk-core";
 import { ConfigApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
-import { CatalogVersionRequest, RequestFactory } from "..";
-import { CatalogRequest } from "./CatalogRequest";
-import { LayerVersionsRequest } from "./LayerVersionsRequest";
+import {
+    CatalogRequest,
+    CatalogVersionRequest,
+    LayerVersionsRequest
+} from "@here/olp-sdk-dataservice-read";
 
 /**
  * Interacts with the `DataStore` catalog.

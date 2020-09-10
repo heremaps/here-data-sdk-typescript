@@ -21,9 +21,9 @@ import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import * as dataServiceRead from "../../lib";
+import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
 import { ArtifactApi } from "@here/olp-sdk-dataservice-api";
-import { HttpError } from "@here/olp-sdk-core";
+import { HttpError, RequestFactory } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -50,10 +50,7 @@ describe("ArtifactClient", function() {
         olpClientSettingsStub = sandbox.createStubInstance(
             dataServiceRead.OlpClientSettings
         );
-        getBaseUrlRequestStub = sandbox.stub(
-            dataServiceRead.RequestFactory,
-            "getBaseUrl"
-        );
+        getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
         getArtifactUsingGETStub = sandbox.stub(
             ArtifactApi,
             "getArtifactUsingGET"

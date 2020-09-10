@@ -20,16 +20,16 @@
 import {
     DataStoreRequestBuilder,
     HRN,
-    OlpClientSettings
+    OlpClientSettings,
+    RequestFactory
 } from "@here/olp-sdk-core";
 import { BlobApi, StreamApi } from "@here/olp-sdk-dataservice-api";
 import {
     PollRequest,
-    RequestFactory,
     SeekRequest,
     SubscribeRequest,
     UnsubscribeRequest
-} from "..";
+} from "@here/olp-sdk-dataservice-read";
 
 export interface StreamLayerClientParams {
     // The HERE Resource Name (HRN) of the catalog from which you want to get partitions metadata and data.

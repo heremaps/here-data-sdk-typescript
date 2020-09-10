@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { validateBillingTag } from "..";
+import { validateBillingTag } from "@here/olp-sdk-dataservice-read";
 
 /**
  * Prepares information for calls to the platform Artifact Service.
@@ -30,7 +30,7 @@ export class CatalogVersionRequest {
     /**
      * Gets a catalog start version (exclusive) for the request. Default is -1. By convention -1
      * indicates the virtual initial version before the first publication that has version 0.
-     * 
+     *
      * @return The catalog start version.
      */
     public getStartVersion(): number | undefined {
@@ -40,7 +40,7 @@ export class CatalogVersionRequest {
     /**
      * Gets a catalog end version (inclusive) for the request. If not defined, then the latest catalog
      * version is fethced and used.
-     * 
+     *
      * @return The catalog end version.
      */
     public getEndVersion(): number | undefined {
@@ -72,7 +72,7 @@ export class CatalogVersionRequest {
     /**
      * An optional free-form tag that is used for grouping billing records together.
      * If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].
-     * 
+     *
      * @param tag The `BillingTag` string.
      * @return The updated [[CatalogVersionRequest]] instance that you can use to chain methods.
      */
@@ -83,7 +83,7 @@ export class CatalogVersionRequest {
 
     /**
      * Gets a billing tag to group billing records together.
-     * 
+     *
      * @return The `BillingTag` string.
      */
     public getBillingTag(): string | undefined {

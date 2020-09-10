@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 import { HRN } from "@here/olp-sdk-core";
-import { validateBillingTag } from "..";
+import { validateBillingTag } from "@here/olp-sdk-dataservice-read";
 
 /**
  * Prepares information for calls to get a summary from the platform Statistics Service.

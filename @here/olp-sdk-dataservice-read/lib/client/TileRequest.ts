@@ -24,7 +24,7 @@ import {
     RequestFactory
 } from "@here/olp-sdk-core";
 import { MetadataApi } from "@here/olp-sdk-dataservice-api";
-import { QuadKey, validateBillingTag } from "..";
+import { QuadKey, validateBillingTag } from "@here/olp-sdk-dataservice-read";
 
 /**
  * Parameters used to get a tile.
