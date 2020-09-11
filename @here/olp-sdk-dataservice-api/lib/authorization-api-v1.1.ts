@@ -468,6 +468,79 @@ export interface RoleEntityPageWToken extends PageWToken {
 export interface PermissionPageWToken extends PageWToken {
     data?: ActivePermission[];
 }
+export interface GroupMember {
+    memberHrn?: string;
+    entityType?: EntityTypeEnum;
+    info?: GroupMemberInfo;
+}
+
+export interface GroupMemberInfo extends UserInfo {
+    /**
+     * Identifier for the client/application.
+     */
+    clientId?: string;
+    /**
+     * HRN for the client/application.
+     */
+    clientHrn?: string;
+    /**
+     * The realm which the invite is associated with
+     */
+    realm?: string;
+    /**
+     * Human readable name of the client.
+     */
+    name?: string;
+    /**
+     * Prose description of the client.
+     */
+    description?: string;
+    /**
+     * The id of the user that owns this client.
+     */
+    ownerId?: string;
+    /**
+     * The hrn of the user that owns this client.
+     */
+    ownerHrn?: string;
+    /**
+     * The default value for the "scope" parameter when requesting a client_credentials OAuth2 token if no
+     * "scope" parameter is specified.
+     */
+    defaultScope?: string;
+    /**
+     * If true, the app cannot request a token with a scope different from defaultScope.
+     */
+    isRestrictedScope?: boolean;
+    /**
+     * If true, the app can create apps.
+     */
+    appCreationEnabled?: boolean;
+    /**
+     * The unique identifier of the invite
+     */
+    inviteId?: string;
+    /**
+     * The HRN of the invite
+     */
+    inviteHrn?: string;
+    /**
+     * The first name of the user this invite is for.
+     */
+    firstname?: string;
+    /**
+     * The last name of the user this invite is for.
+     */
+    lastname?: string;
+    /**
+     * Email address of the user this invite is for.
+     */
+    email?: string;
+}
+
+export interface GroupMemberPageWToken extends PageWToken {
+    data?: GroupMember[];
+}
 
 /**
  * Retrieve the groups a given entity is a member of. Restrictions:
@@ -1379,4 +1452,454 @@ export async function getRoles(
     };
 
     return builder.request<RolePageWToken>(urlBuilder, options);
+}
+
+/**
+ * ===================================================================
+ * GroupsApi
+ * ===================================================================
+ */
+
+/**
+ * Add a single member to a group.
+ *
+ * Restrictions:
+ * * The calling principal **must** have permission to take the **manageMembers** action against the group
+ * identified by the provided group HRN.
+ *
+ * * Example:
+ * In order to add a member to the group, _GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a_, a permission with the following would
+ * be required:
+ * * \"action\" : \"manageMembers\"
+ * * \"resource\" : \"hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a\"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Add a member to a group
+ * @param groupId HRN identifying a group.
+ * @param member HRN identifying group or realm member
+ */
+export async function addGroupMember(
+    builder: RequestBuilder,
+    params: { groupId: string; member: string }
+): Promise<Response> {
+    const baseUrl = "/groups/{groupId}/members/{member}"
+        .replace("{groupId}", UrlBuilder.toString(params["groupId"]))
+        .replace("{member}", UrlBuilder.toString(params["member"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "POST",
+        headers
+    };
+
+    return builder.requestBlob(urlBuilder, options);
+}
+
+/**
+ * Create a group within the realm that is associated with the calling party.
+ * The calling party will be made a member and an administrator of the created group.
+ *
+ * Restrictions:
+ * * The calling principal **must** have permission to take the **createGroup** action
+ * against the realm associated with the calling party.
+ *
+ * * Example:
+ * In order to create a group within the calling party's realm a permission with the following would be required:
+ * * \"action\" : \"createGroup\"
+ * * \"resource\" : \"hrn:here:account::myrealm:realm/myrealm\"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Create group
+ * @param body
+ */
+export async function createGroup(
+    builder: RequestBuilder,
+    params: { body: Group }
+): Promise<Group> {
+    const baseUrl = "/groups";
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "POST",
+        headers
+    };
+    headers["Content-Type"] = "application/json";
+    if (params["body"] !== undefined) {
+        options.body = JSON.stringify(params["body"]);
+    }
+
+    return builder.request<Group>(urlBuilder, options);
+}
+
+/**
+ * Delete the group identified by the provided group HRN.
+ *
+ * Restrictions:
+ * * The calling principal **must** have permission to take
+ * the **deleteGroup** action against the group identified by the provided group HRN.
+ *
+ * * Example:
+ * In order to delete the group, _GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a_,
+ * a permission with the following would be required:
+ * * \"action\" : \"deleteGroup\"
+ * * \"resource\" : \"hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a\"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary delete group
+ * @param groupId HRN identifying a group.
+ */
+export async function deleteGroup(
+    builder: RequestBuilder,
+    params: { groupId: string }
+): Promise<Response> {
+    const baseUrl = "/groups/{groupId}".replace(
+        "{groupId}",
+        UrlBuilder.toString(params["groupId"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "DELETE",
+        headers
+    };
+
+    return builder.requestBlob(urlBuilder, options);
+}
+
+/**
+ * Retrieve the group identified by the provided group HRN.
+ *
+ * Restrictions:
+ * * The calling principal **must** have permission to take the **readMembers** action
+ * against the realm associated with the calling party.
+ *
+ * * Example:
+ * In order to retrieve a group within the calling party's realm a permission
+ * with the following would be required:
+ * * \"action\" : \"readMembers\"
+ * * \"resource\" : \"hrn:here:account::myrealm:realm/myrealm\"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get single group
+ * @param groupId HRN identifying a group.
+ */
+export async function getGroup(
+    builder: RequestBuilder,
+    params: { groupId: string }
+): Promise<Group> {
+    const baseUrl = "/groups/{groupId}".replace(
+        "{groupId}",
+        UrlBuilder.toString(params["groupId"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<Group>(urlBuilder, options);
+}
+
+/**
+ * Retrieve a single group member.
+ *
+ * Restrictions:
+ * * The calling principal **must** have permission to take the **readMembers** action against
+ * the group identified by the provided group HRN.
+ *
+ * * Example:
+ * In order to retrieve a single member of the group, _GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a_,
+ * a permission with the following would be required:
+ * * \"action\" : \"readMembers\"
+ * * \"resource\" : \"hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a\"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get single Group member
+ * @param groupId HRN identifying a group.
+ * @param member HRN identifying group or realm member
+ */
+export async function getGroupMember(
+    builder: RequestBuilder,
+    params: { groupId: string; member: string }
+): Promise<GroupMember> {
+    const baseUrl = "/groups/{groupId}/members/{member}"
+        .replace("{groupId}", UrlBuilder.toString(params["groupId"]))
+        .replace("{member}", UrlBuilder.toString(params["member"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<GroupMember>(urlBuilder, options);
+}
+
+/**
+ * Retrieve the list of members of the group identified by the provided group HRN.
+ *
+ * Restrictions:
+ * * The calling principal **must** have permission to take the **readMembers** action against the group
+ * identified by the provided group HRN.
+ *
+ * * Example: In order to retrieve the members of the group, _GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a_,
+ * a permission with the following would be required:
+ * * \"action\" : \"readMembers\"
+ * * \"resource\" : \"hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a\"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get Group members
+ * @param groupId HRN identifying a group.
+ * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
+ * @param count Number of records to return. Default is 100 records. Maximum is 100 records.
+ * @param entityType The type of members to return in the result.
+ * One of 'user', 'app', or 'invite'.  If this parameter is omitted, all entity types will be returned.
+ */
+export async function getGroupMembers(
+    builder: RequestBuilder,
+    params: {
+        groupId: string;
+        pageToken?: string;
+        count?: number;
+        entityType?: string;
+    }
+): Promise<GroupMemberPageWToken> {
+    const baseUrl = "/groups/{groupId}/members".replace(
+        "{groupId}",
+        UrlBuilder.toString(params["groupId"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+    urlBuilder.appendQuery("count", params["count"]);
+    urlBuilder.appendQuery("entityType", params["entityType"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<GroupMemberPageWToken>(urlBuilder, options);
+}
+
+/**
+ * List the roles which are associated with the provided group.
+ *
+ * Restrictions:
+ * * The calling principal **must** have permission to take the **readRoles** action against the specified group.
+ * * Example: In order list the roles associated with the group, _GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a_,
+ * a permission with the following would be required:
+ * * \"action\" : \"readRoles\"
+ * * \"resource\" : \"hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a\"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get group roles
+ * @param groupId HRN identifying a group.
+ * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
+ * @param count Number of records to return. Default is 100 records. Maximum is 100 records.
+ */
+export async function getGroupRoles(
+    builder: RequestBuilder,
+    params: { groupId: string; pageToken?: string; count?: number }
+): Promise<RolePageWToken> {
+    const baseUrl = "/groups/{groupId}/roles".replace(
+        "{groupId}",
+        UrlBuilder.toString(params["groupId"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+    urlBuilder.appendQuery("count", params["count"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<RolePageWToken>(urlBuilder, options);
+}
+
+/**
+ * Retrieve the list of groups within the realm associated with the calling party.
+ *
+ * Restrictions:
+ * * The calling principal **must** have permission to take the **readMembers** action against the realm associated with the calling party.
+ *
+ * * Example:
+ * In order to list the groups within the calling party's realm a permission with the following would be required:
+ * * \"action\" : \"readMembers\"
+ * * \"resource\" : \"hrn:here:account::myrealm:realm/myrealm\"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get groups
+ * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
+ * @param count Number of records to return. Default is 100 records. Maximum is 100 records.
+ * @param q A free text query string used to filter the results.
+ * A search against groups in the realm will consider the 'id', 'name', and 'description' fields of the groups.
+ * The precise search algorithm used to match groups is not specified, but generally any member where
+ * one of the considered fields has a full or partial match should be included in the results.
+ */
+export async function getGroups(
+    builder: RequestBuilder,
+    params: { pageToken?: string; count?: number; q?: string }
+): Promise<GroupPageWToken> {
+    const baseUrl = "/groups";
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+    urlBuilder.appendQuery("count", params["count"]);
+    urlBuilder.appendQuery("q", params["q"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<GroupPageWToken>(urlBuilder, options);
+}
+
+/**
+ * Retrieve a list of groups of a member * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get My Groups
+ * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
+ * @param count Number of records to return. Default is 100 records. Maximum is 100 records.
+ */
+export async function getMyGroups(
+    builder: RequestBuilder,
+    params: { pageToken?: string; count?: number }
+): Promise<GroupPageWToken> {
+    const baseUrl = "/groups/me";
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+    urlBuilder.appendQuery("count", params["count"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<GroupPageWToken>(urlBuilder, options);
+}
+
+/**
+ * Remove the calling party from the group. This operation will also remove administrative roles from this member.
+ * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Removes the calling party from a group
+ * @param groupId HRN identifying a group.
+ */
+export async function leaveGroup(
+    builder: RequestBuilder,
+    params: { groupId: string }
+): Promise<Response> {
+    const baseUrl = "/groups/{groupId}/members/me".replace(
+        "{groupId}",
+        UrlBuilder.toString(params["groupId"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "DELETE",
+        headers
+    };
+
+    return builder.requestBlob(urlBuilder, options);
+}
+
+/**
+ * Remove a member from the group. This operation will also remove administrative roles from this member.
+ *
+ * Restrictions:
+ * * The calling principal **must** have permission to take the **manageMembers**
+ * action against the group identified by the provided group HRN.
+ *
+ * * Example:
+ * In order to remove a member from the group, _GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a_,
+ * a permission with the following would be required:
+ * * \"action\" : \"manageMembers\"
+ * * \"resource\" : \"hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a\"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Remove a member from the group.
+ * @param groupId HRN identifying a group.
+ * @param member HRN identifying group or realm member
+ */
+export async function removeGroupMember(
+    builder: RequestBuilder,
+    params: { groupId: string; member: string }
+): Promise<Response> {
+    const baseUrl = "/groups/{groupId}/members/{member}"
+        .replace("{groupId}", UrlBuilder.toString(params["groupId"]))
+        .replace("{member}", UrlBuilder.toString(params["member"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "DELETE",
+        headers
+    };
+
+    return builder.requestBlob(urlBuilder, options);
+}
+
+/**
+ * Update the group identified by the provided group HRN by updating all writable group fields including name and description.
+ *
+ * Restrictions:
+ * * The calling principal **must** have permission to take the  **updateGroup** action
+ * against the group identified by the provided group HRN.
+ *
+ * * Example:
+ * In order to modify the group, _GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a_, a permission with the following
+ * would be required:
+ * * \"action\" : \"updateGroup\"
+ * * \"resource\" : \"hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a\"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Update group
+ * @param body
+ * @param groupId HRN identifying a group.
+ */
+export async function updateGroup(
+    builder: RequestBuilder,
+    params: { body: Group; groupId: string }
+): Promise<Group> {
+    const baseUrl = "/groups/{groupId}".replace(
+        "{groupId}",
+        UrlBuilder.toString(params["groupId"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "POST",
+        headers
+    };
+    headers["Content-Type"] = "application/json";
+    if (params["body"] !== undefined) {
+        options.body = JSON.stringify(params["body"]);
+    }
+
+    return builder.request<Group>(urlBuilder, options);
 }
