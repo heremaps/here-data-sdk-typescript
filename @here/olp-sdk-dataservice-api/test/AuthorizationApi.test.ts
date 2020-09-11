@@ -558,4 +558,298 @@ describe("AuthorizationApi", function() {
 
         expect(result).to.be.equal("success");
     });
+
+    it("addGroupMember", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/groups/mocked-groupId/members/mocked-member"
+                );
+                expect(options.method).to.be.equal("POST");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.addGroupMember(
+            (builder as unknown) as RequestBuilder,
+            {
+                groupId: "mocked-groupId",
+                member: "mocked-member"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("createGroup", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+                expect(urlBuilder.url).to.be.equal("http://mocked.url/groups");
+                expect(options.method).to.be.equal("POST");
+                expect(options.body).to.be.equal(
+                    // tslint:disable-next-line: quotemark
+                    '{"name":"mocked-group","description":"mocked-desc","hrn":"mocked-hrn","id":"mocked-id","realm":"mocked-realm"}'
+                );
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.createGroup(
+            (builder as unknown) as RequestBuilder,
+            {
+                body: {
+                    name: "mocked-group",
+                    description: "mocked-desc",
+                    hrn: "mocked-hrn",
+                    id: "mocked-id",
+                    realm: "mocked-realm"
+                }
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("deleteGroup", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/groups/mocked-groupId"
+                );
+                expect(options.method).to.be.equal("DELETE");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.deleteGroup(
+            (builder as unknown) as RequestBuilder,
+            {
+                groupId: "mocked-groupId"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getGroup", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/groups/mocked-groupId"
+                );
+                expect(options.method).to.be.equal("GET");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getGroup(
+            (builder as unknown) as RequestBuilder,
+            {
+                groupId: "mocked-groupId"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getGroupMember", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/groups/mocked-groupId/members/mocked-member"
+                );
+                expect(options.method).to.be.equal("GET");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getGroupMember(
+            (builder as unknown) as RequestBuilder,
+            {
+                groupId: "mocked-groupId",
+                member: "mocked-member"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getGroupMembers", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/groups/mocked-groupId/members?pageToken=mocked-pageToken&count=5&entityType=mocked-entityType"
+                );
+                expect(options.method).to.be.equal("GET");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getGroupMembers(
+            (builder as unknown) as RequestBuilder,
+            {
+                groupId: "mocked-groupId",
+                pageToken: "mocked-pageToken",
+                count: 5,
+                entityType: "mocked-entityType"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getGroupRoles", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/groups/mocked-groupId/roles?pageToken=mocked-pageToken&count=5"
+                );
+                expect(options.method).to.be.equal("GET");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getGroupRoles(
+            (builder as unknown) as RequestBuilder,
+            {
+                groupId: "mocked-groupId",
+                pageToken: "mocked-pageToken",
+                count: 5
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getGroups", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/groups?pageToken=mocked-pageToken&count=5&q=mocked-q"
+                );
+                expect(options.method).to.be.equal("GET");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getGroups(
+            (builder as unknown) as RequestBuilder,
+            {
+                pageToken: "mocked-pageToken",
+                count: 5,
+                q: "mocked-q"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getMyGroups", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/groups/me?pageToken=mocked-pageToken&count=5"
+                );
+                expect(options.method).to.be.equal("GET");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getMyGroups(
+            (builder as unknown) as RequestBuilder,
+            {
+                pageToken: "mocked-pageToken",
+                count: 5
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("leaveGroup", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/groups/mocked-groupId/members/me"
+                );
+                expect(options.method).to.be.equal("DELETE");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.leaveGroup(
+            (builder as unknown) as RequestBuilder,
+            {
+                groupId: "mocked-groupId"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("removeGroupMember", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/groups/mocked-groupId/members/mocked-member"
+                );
+                expect(options.method).to.be.equal("DELETE");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.removeGroupMember(
+            (builder as unknown) as RequestBuilder,
+            {
+                groupId: "mocked-groupId",
+                member: "mocked-member"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("updateGroup", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/groups/mocked-groupId"
+                );
+                expect(options.method).to.be.equal("POST");
+                expect(options.body).to.be.equal(
+                    // tslint:disable-next-line: quotemark
+                    '{"name":"mocked-name","description":"mocked-desc","hrn":"mocked-hrn","id":"mocked-id","realm":"mocked-realm"}'
+                );
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.updateGroup(
+            (builder as unknown) as RequestBuilder,
+            {
+                groupId: "mocked-groupId",
+                body: {
+                    name: "mocked-name",
+                    description: "mocked-desc",
+                    hrn: "mocked-hrn",
+                    id: "mocked-id",
+                    realm: "mocked-realm"
+                }
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
 });
