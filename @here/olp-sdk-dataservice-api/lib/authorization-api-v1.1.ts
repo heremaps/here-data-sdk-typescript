@@ -1209,13 +1209,15 @@ export async function deleteRoleEntity(
  */
 export async function getMyRoles(
     builder: RequestBuilder,
-    params: { pageToken?: string; count?: number }
+    params?: { pageToken?: string; count?: number }
 ): Promise<RolePageWToken> {
     const baseUrl = "/roles/me";
 
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
-    urlBuilder.appendQuery("pageToken", params["pageToken"]);
-    urlBuilder.appendQuery("count", params["count"]);
+    if (params) {
+        urlBuilder.appendQuery("pageToken", params["pageToken"]);
+        urlBuilder.appendQuery("count", params["count"]);
+    }
 
     const headers: { [header: string]: string } = {};
     const options: RequestOptions = {
@@ -1430,7 +1432,7 @@ export async function getRolePermissions(
  */
 export async function getRoles(
     builder: RequestBuilder,
-    params: {
+    params?: {
         pageToken?: string;
         count?: number;
         roleName?: string;
@@ -1440,10 +1442,12 @@ export async function getRoles(
     const baseUrl = "/roles";
 
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
-    urlBuilder.appendQuery("pageToken", params["pageToken"]);
-    urlBuilder.appendQuery("count", params["count"]);
-    urlBuilder.appendQuery("roleName", params["roleName"]);
-    urlBuilder.appendQuery("resource", params["resource"]);
+    if (params) {
+        urlBuilder.appendQuery("pageToken", params["pageToken"]);
+        urlBuilder.appendQuery("count", params["count"]);
+        urlBuilder.appendQuery("roleName", params["roleName"]);
+        urlBuilder.appendQuery("resource", params["resource"]);
+    }
 
     const headers: { [header: string]: string } = {};
     const options: RequestOptions = {
@@ -1754,14 +1758,16 @@ export async function getGroupRoles(
  */
 export async function getGroups(
     builder: RequestBuilder,
-    params: { pageToken?: string; count?: number; q?: string }
+    params?: { pageToken?: string; count?: number; q?: string }
 ): Promise<GroupPageWToken> {
     const baseUrl = "/groups";
 
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
-    urlBuilder.appendQuery("pageToken", params["pageToken"]);
-    urlBuilder.appendQuery("count", params["count"]);
-    urlBuilder.appendQuery("q", params["q"]);
+    if (params) {
+        urlBuilder.appendQuery("pageToken", params["pageToken"]);
+        urlBuilder.appendQuery("count", params["count"]);
+        urlBuilder.appendQuery("q", params["q"]);
+    }
 
     const headers: { [header: string]: string } = {};
     const options: RequestOptions = {
@@ -1773,7 +1779,9 @@ export async function getGroups(
 }
 
 /**
- * Retrieve a list of groups of a member * This API works only with tokens that are not scoped to a project.
+ * Retrieve a list of groups of a member
+ *
+ * This API works only with tokens that are not scoped to a project.
  *
  * @summary Get My Groups
  * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
@@ -1781,13 +1789,15 @@ export async function getGroups(
  */
 export async function getMyGroups(
     builder: RequestBuilder,
-    params: { pageToken?: string; count?: number }
+    params?: { pageToken?: string; count?: number }
 ): Promise<GroupPageWToken> {
     const baseUrl = "/groups/me";
 
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
-    urlBuilder.appendQuery("pageToken", params["pageToken"]);
-    urlBuilder.appendQuery("count", params["count"]);
+    if (params) {
+        urlBuilder.appendQuery("pageToken", params["pageToken"]);
+        urlBuilder.appendQuery("count", params["count"]);
+    }
 
     const headers: { [header: string]: string } = {};
     const options: RequestOptions = {

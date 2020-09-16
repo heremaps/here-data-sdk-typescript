@@ -23,6 +23,7 @@ import { HRN, KeyValueCache } from "@here/olp-sdk-core";
  * The list of the API endpoints names that the HERE Data SDK for TypeScript uses.
  */
 export type ApiName =
+    | "authorization"
     | "config"
     | "artifact"
     | "blob"
