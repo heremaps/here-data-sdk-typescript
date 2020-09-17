@@ -244,8 +244,7 @@ export class UserAuth {
 
         const headers = new Headers({
             Authorization: "Bearer " + token,
-            "Content-Type": "application/json",
-            "User-Agent": `OLP-TS-SDK/${LIB_VERSION}`
+            "Content-Type": "application/json"
         });
 
         const request = await fetch(this.m_apiUrl + "verify/accessToken", {
@@ -272,8 +271,7 @@ export class UserAuth {
     async getUserInfo(userToken: string): Promise<UserInfo> {
         const headers = new Headers({
             Authorization: "Bearer " + userToken,
-            "Content-Type": "application/json",
-            "User-Agent": `OLP-TS-SDK/${LIB_VERSION}`
+            "Content-Type": "application/json"
         });
 
         const request = await fetch(this.m_apiUrl + "user/me", {
