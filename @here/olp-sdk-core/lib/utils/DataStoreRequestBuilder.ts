@@ -63,13 +63,9 @@ function addUserAgent(init?: RequestInit): RequestInit {
         // if empty RequestInit, just create new one and add user-agent to the headers
         init = {};
         init.headers = new Headers();
-        init.headers.append("User-Agent", USER_AGENT);
     } else {
         // convert init.headers to the Headers if received a plain object
         const headers = new Headers(init.headers);
-
-        // adding user-agent to the headers
-        headers.append("User-Agent", USER_AGENT);
         init.headers = headers;
     }
 

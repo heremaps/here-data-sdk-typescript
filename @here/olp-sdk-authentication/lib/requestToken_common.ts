@@ -158,8 +158,7 @@ export async function requestToken_common(
 
     const headers = new Headers({
         Authorization: authorization,
-        "Content-Type": "application/json",
-        "User-Agent": `OLP-TS-SDK/${LIB_VERSION}`
+        "Content-Type": "application/json"
     });
 
     const requestInit: any = {
