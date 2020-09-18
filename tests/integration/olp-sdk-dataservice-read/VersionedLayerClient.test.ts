@@ -1207,4 +1207,248 @@ describe("VersionedLayerClient", function() {
      */
     expect(fetchStub.callCount).to.be.equal(4);
   });
+
+  it("Shoud fetch partitions with additionalFields if cached the same partitions, but without additionalFields", async function() {
+    const mockedResponses = new Map();
+
+    const mockedPartitions = {
+      partitions: [
+        {
+          checksum: "291f66029c232400e3403cd6e9cfd36e",
+          dataHandle: "1b2ca68f-d4a0-4379-8120-cd025640510c",
+          partition: "314010583"
+        },
+        {
+          dataHandle: "1b2ca68f-d4a0-4379-8120-cd025640578e",
+          partition: "1000"
+        }
+      ],
+      next: "/uri/to/next/page"
+    };
+
+    const mockedPartitionsWithAdditionalFields = {
+      partitions: [
+        {
+          checksum: "291f66029c232400e3403cd6e9cfd36e",
+          compressedDataSize: 1024,
+          dataHandle: "1b2ca68f-d4a0-4379-8120-cd025640510c",
+          dataSize: 1024,
+          crc: "c3f276d7",
+          partition: "314010583"
+        },
+        {
+          checksum: "123f66029c232400e3403cd6e9cfd45b",
+          compressedDataSize: 2084,
+          dataHandle: "1b2ca68f-d4a0-4379-8120-cd025640578e",
+          dataSize: 2084,
+          crc: "c3f2766y",
+          partition: "1000"
+        }
+      ],
+      next: "/uri/to/next/page"
+    };
+
+    // Set the response from lookup api with the info about Metadata service.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ]),
+        { headers }
+      )
+    );
+
+    // Set the response from Metadata service with the info about latest catalog version.
+    mockedResponses.set(
+      `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1&billingTag=billing-tag`,
+      new Response(JSON.stringify({ version: 30 }), { headers })
+    );
+
+    // Set the response of mocked partitions without additional fields.
+    mockedResponses.set(
+      `https://metadata.data.api.platform.here.com/metadata/v1/layers/test-layed-id/partitions?version=30&billingTag=billing-tag`,
+      new Response(JSON.stringify(mockedPartitions), { headers })
+    );
+
+    // Set the response of mocked partitions with additional fields.
+    mockedResponses.set(
+      `https://metadata.data.api.platform.here.com/metadata/v1/layers/test-layed-id/partitions?version=30&additionalFields=dataSize,checksum,compressedDataSize&billingTag=billing-tag`,
+      new Response(JSON.stringify(mockedPartitionsWithAdditionalFields), {
+        headers
+      })
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    // Setup Layer Client with new OlpClientSettings.
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+    const layerClient = new VersionedLayerClient(
+      HRN.fromString("hrn:here:data:::test-hrn"),
+      "test-layed-id",
+      settings
+    );
+
+    const requestWithoutAdditionalFields = new PartitionsRequest()
+      .withFetchOption(FetchOptions.OnlineIfNotFound)
+      .withBillingTag("billing-tag");
+
+    // fetch and cache partitions without additional fields.
+    await layerClient.getPartitions(requestWithoutAdditionalFields);
+
+    const requestWithAdditionalFields = new PartitionsRequest()
+      .withAdditionalFields(["dataSize", "checksum", "compressedDataSize"])
+      .withFetchOption(FetchOptions.OnlineIfNotFound)
+      .withBillingTag("billing-tag");
+
+    // fetch partition with additionalFields
+    const partitions = await layerClient.getPartitions(
+      requestWithAdditionalFields
+    );
+
+    expect(partitions.partitions[0].checksum).to.be.equal(
+      mockedPartitionsWithAdditionalFields.partitions[0].checksum
+    );
+    expect(partitions.partitions[1].compressedDataSize).to.be.equal(
+      mockedPartitionsWithAdditionalFields.partitions[1].compressedDataSize
+    );
+    expect(partitions.partitions[1].dataSize).to.be.equal(
+      mockedPartitionsWithAdditionalFields.partitions[1].dataSize
+    );
+
+    /**
+     * Should be 4 calls:
+     * 1 - lookup
+     * 2 - metadata for latest version
+     * 3 - metadata for partitions without additional fields
+     * 4 - metadata for partitions with additional fields
+     */
+    expect(fetchStub.callCount).to.be.equal(4);
+  });
+
+  it("Shoud return from cache partitions with additionalFields if cached with additionalFields", async function() {
+    const mockedResponses = new Map();
+
+    const mockedPartitionsWithAdditionalFields = {
+      partitions: [
+        {
+          checksum: "291f66029c232400e3403cd6e9cfd36e",
+          compressedDataSize: 1024,
+          dataHandle: "1b2ca68f-d4a0-4379-8120-cd025640510c",
+          dataSize: 1024,
+          crc: "c3f276d7",
+          partition: "314010583"
+        },
+        {
+          checksum: "123f66029c232400e3403cd6e9cfd45b",
+          compressedDataSize: 2084,
+          dataHandle: "1b2ca68f-d4a0-4379-8120-cd025640578e",
+          dataSize: 2084,
+          crc: "c3f2766y",
+          partition: "1000"
+        }
+      ],
+      next: "/uri/to/next/page"
+    };
+
+    // Set the response from lookup api with the info about Metadata service.
+    mockedResponses.set(
+      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
+      new Response(
+        JSON.stringify([
+          {
+            api: "metadata",
+            version: "v1",
+            baseURL: "https://metadata.data.api.platform.here.com/metadata/v1",
+            parameters: {
+              additionalProp1: "string",
+              additionalProp2: "string",
+              additionalProp3: "string"
+            }
+          }
+        ]),
+        { headers }
+      )
+    );
+
+    // Set the response from Metadata service with the info about latest catalog version.
+    mockedResponses.set(
+      `https://metadata.data.api.platform.here.com/metadata/v1/versions/latest?startVersion=-1&billingTag=billing-tag`,
+      new Response(JSON.stringify({ version: 30 }), { headers })
+    );
+
+    // Set the response of mocked partitions without additional fields.
+    mockedResponses.set(
+      `https://metadata.data.api.platform.here.com/metadata/v1/layers/test-layed-id/partitions?version=30&billingTag=billing-tag`,
+      new Response(JSON.stringify(mockedPartitionsWithAdditionalFields), {
+        headers
+      })
+    );
+
+    // Set the response of mocked partitions with additional fields.
+    mockedResponses.set(
+      `https://metadata.data.api.platform.here.com/metadata/v1/layers/test-layed-id/partitions?version=30&additionalFields=dataSize,checksum,compressedDataSize&billingTag=billing-tag`,
+      new Response(JSON.stringify(mockedPartitionsWithAdditionalFields), {
+        headers
+      })
+    );
+
+    // Setup the fetch to use mocked responses.
+    fetchMock.withMockedResponses(mockedResponses);
+
+    // Setup Layer Client with new OlpClientSettings.
+    const settings = new OlpClientSettings({
+      environment: "here",
+      getToken: () => Promise.resolve("test-token-string")
+    });
+    const layerClient = new VersionedLayerClient(
+      HRN.fromString("hrn:here:data:::test-hrn"),
+      "test-layed-id",
+      settings
+    );
+
+    const requestWithAdditionalFields = new PartitionsRequest()
+      .withAdditionalFields(["dataSize", "checksum", "compressedDataSize"])
+      .withFetchOption(FetchOptions.OnlineIfNotFound)
+      .withBillingTag("billing-tag");
+
+    // fetch and cache partitions with additional fields.
+    await layerClient.getPartitions(requestWithAdditionalFields);
+
+    // fetch one more time partition with additionalFields
+    const partitions = await layerClient.getPartitions(
+      requestWithAdditionalFields
+    );
+
+    expect(partitions.partitions[0].checksum).to.be.equal(
+      mockedPartitionsWithAdditionalFields.partitions[0].checksum
+    );
+    expect(partitions.partitions[1].compressedDataSize).to.be.equal(
+      mockedPartitionsWithAdditionalFields.partitions[1].compressedDataSize
+    );
+    expect(partitions.partitions[1].dataSize).to.be.equal(
+      mockedPartitionsWithAdditionalFields.partitions[1].dataSize
+    );
+
+    /**
+     * Should be 3 calls:
+     * 1 - lookup
+     * 2 - metadata for latest version
+     * 3 - metadata for partitions without additional fields
+     */
+    expect(fetchStub.callCount).to.be.equal(3);
+  });
 });

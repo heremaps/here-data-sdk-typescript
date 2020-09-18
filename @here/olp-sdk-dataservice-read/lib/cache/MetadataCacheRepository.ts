@@ -18,7 +18,7 @@
  */
 
 import { KeyValueCache } from "@here/olp-sdk-core";
-import { MetadataApi } from "@here/olp-sdk-dataservice-api";
+import { AdditionalFields, MetadataApi } from "@here/olp-sdk-dataservice-api";
 import { PartitionsRequest } from "../client";
 
 /**
@@ -98,9 +98,16 @@ export class MetadataCacheRepository {
                 }
             }
 
-            if (partitionsIds.length !== availablePartitions.length) {
+            if (
+                partitionsIds.length !== availablePartitions.length ||
+                this.checkAdditionalFieldsAvailable(
+                    availablePartitions,
+                    rq.getAdditionalFields()
+                )
+            ) {
                 /**
-                 * In the case when not all partitions are available, we fail the cache lookup.
+                 * In the case when not all partitions are available, or some of partition has not requested a some of additional field,
+                 * we fail the cache lookup.
                  * This can be enhanced in the future.
                  */
                 return undefined;
@@ -134,5 +141,31 @@ export class MetadataCacheRepository {
                 ? `${params.partitionId}::partition`
                 : "partitions")
         );
+    }
+
+    /**
+     * Checks all cached partitions with additional fields.
+     *
+     * @param cachedPartitions The array of the cached partitions
+     * @param additionalFields the array of the requested additional fields.
+     * @returns True if some of the cached partition does not have some additional field.
+     * False otherwise or if any additionalFields has not been requested.
+     */
+    private checkAdditionalFieldsAvailable(
+        cachedPartitions: MetadataApi.Partition[],
+        additionalFields?: AdditionalFields
+    ) {
+        if (additionalFields === undefined) {
+            return false;
+        }
+
+        for (const cachedPartition of cachedPartitions) {
+            for (const additionalField of additionalFields) {
+                if (!cachedPartition.hasOwnProperty(additionalField)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
