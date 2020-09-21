@@ -1,3 +1,34 @@
+## v1.6.0 (21/09/2020)
+
+**olp-sdk-core**
+
+- Removed the `User-Agent` custom header from the requests.  This was necessary due to issues sending a custom user-agent in Mozilla browsers.
+
+**olp-sdk-authentication**
+
+- Removed the `User-Agent` custom header from the requests. This was necessary due to issues sending a custom user-agent in Mozilla browsers.
+- Updated `@here/olp-sdk-fetch` to version 1.6.0. 
+
+**olp-sdk-dataservice-api**
+
+- Added generated functions and interfaces for supporting Authorization APIs. You can find them in `@here/olp-sdk-dataservice-api/lib/authorization-api-v1.1.ts`.
+
+**olp-sdk-fetch**
+
+- Updated dependencies.
+
+**olp-sdk-dataservice-read**
+
+- Fixed the issue with caching partitions metadata without additional fields.
+- Started using `RequestFactory` from the `@here/olp-sdk-core` package.
+
+**olp-sdk-dataservice-write**
+
+- Added `@here/olp-sdk-dataservice-api` as a dependency.
+- Updated `@here/olp-sdk-core` to version 1.1.0.
+- Updated `@here/olp-sdk-fetch` to version 1.6.0.
+
+
 ## v1.5.1 (19/08/2020)
 
 **olp-sdk-core**
