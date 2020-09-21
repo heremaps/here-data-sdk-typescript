@@ -67,11 +67,9 @@
 		<div class="col-8 col-content">
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
-					<dl class="tsd-comment-tags">
-						<dt>brief</dt>
-						<dd><p>CancelBatchRequest is used to cancel a versioned batch operation.</p>
-						</dd>
-					</dl>
+					<div class="lead">
+						<p>Cancels a versioned batch operation.</p>
+					</div>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
@@ -110,16 +108,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/CancelBatchRequest.ts#L59">@here/olp-sdk-dataservice-write/lib/client/CancelBatchRequest.ts:59</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/CancelBatchRequest.ts#L66">@here/olp-sdk-dataservice-write/lib/client/CancelBatchRequest.ts:66</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets the billing tag (if it was set).</p>
+								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">undefined</span>
 							</h4>
-							<p>Billing Tag previously set or undefined.</p>
+							<p>The billing tag or <code>undefined</code> if it was not.</p>
 						</li>
 					</ul>
 				</section>
@@ -133,21 +134,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/CancelBatchRequest.ts#L52">@here/olp-sdk-dataservice-write/lib/client/CancelBatchRequest.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/CancelBatchRequest.ts#L57">@here/olp-sdk-dataservice-write/lib/client/CancelBatchRequest.ts:57</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>brief</dt>
-									<dd><p>get the ID of the publication to cancel.</p>
-									</dd>
-								</dl>
+								<div class="lead">
+									<p>Gets the ID of the publication that you want to cancel.</p>
+								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">undefined</span>
 							</h4>
-							<p>The ID of the publication to cancel, required.</p>
+							<p>The ID of the publication.</p>
 						</li>
 					</ul>
 				</section>
@@ -161,23 +160,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/CancelBatchRequest.ts#L43">@here/olp-sdk-dataservice-write/lib/client/CancelBatchRequest.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/CancelBatchRequest.ts#L47">@here/olp-sdk-dataservice-write/lib/client/CancelBatchRequest.ts:47</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>note</dt>
-									<dd><p>Optional.</p>
-									</dd>
-								</dl>
+								<div class="lead">
+									<p>Sets the billing tag.</p>
+								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>tag: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The free-form tag that is used for grouping billing records together.
+										If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_write_lib_client_cancelbatchrequest_.cancelbatchrequest.html" class="tsd-signature-type">CancelBatchRequest</a></h4>
+							<p>A reference to this object.</p>
 						</li>
 					</ul>
 				</section>
@@ -191,27 +193,25 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/CancelBatchRequest.ts#L32">@here/olp-sdk-dataservice-write/lib/client/CancelBatchRequest.ts:32</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/CancelBatchRequest.ts#L34">@here/olp-sdk-dataservice-write/lib/client/CancelBatchRequest.ts:34</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>brief</dt>
-									<dd><p>set the ID of the publication to cancel.</p>
-									</dd>
-								</dl>
+								<div class="lead">
+									<p>Sets the ID of the publication that you want to cancel.</p>
+								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>id: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>the ID of the publication to cancel.</p>
+										<p>The ID of the publication.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_write_lib_client_cancelbatchrequest_.cancelbatchrequest.html" class="tsd-signature-type">CancelBatchRequest</a></h4>
-							<p>reference to this object</p>
+							<p>A reference to this object.</p>
 						</li>
 					</ul>
 				</section>

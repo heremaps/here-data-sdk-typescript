@@ -67,11 +67,9 @@
 		<div class="col-8 col-content">
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
-					<dl class="tsd-comment-tags">
-						<dt>brief</dt>
-						<dd><p>Check data existence request structure holding all necessary information.</p>
-						</dd>
-					</dl>
+					<div class="lead">
+						<p>Checks if a structure of a data existence request holds all necessary information.</p>
+					</div>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
@@ -112,16 +110,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts#L85">@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts:85</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts#L89">@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts:89</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets the billing tag (if it was set).</p>
+								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">undefined</span>
 							</h4>
-							<p>Billing Tag previously set or undefined.</p>
+							<p>The billing tag or <code>undefined</code> if it was not set.</p>
 						</li>
 					</ul>
 				</section>
@@ -135,21 +136,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts#L66">@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts#L67">@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts:67</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>brief</dt>
-									<dd><p>get the DataHandle.previously set or undefined</p>
-									</dd>
-								</dl>
+								<div class="lead">
+									<p>Gets the data handle (if it was set).</p>
+								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">undefined</span>
 							</h4>
-							<p>The datahandle.</p>
+							<p>The data handle or <code>undefined</code> if it was not set.</p>
 						</li>
 					</ul>
 				</section>
@@ -163,21 +162,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts#L44">@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts:44</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts#L45">@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts:45</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>brief</dt>
-									<dd><p>get the ID of the layer.</p>
-									</dd>
-								</dl>
+								<div class="lead">
+									<p>Gets the ID of the layer that you want to check.</p>
+								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">undefined</span>
 							</h4>
-							<p>The ID of the layer to check.</p>
+							<p>The layer ID.</p>
 						</li>
 					</ul>
 				</section>
@@ -191,23 +188,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts#L77">@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts:77</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts#L79">@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts:79</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>note</dt>
-									<dd><p>Optional.</p>
-									</dd>
-								</dl>
+								<div class="lead">
+									<p>Sets the billing tag.</p>
+								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>tag: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>he free-form tag that is used for grouping billing records together.
+										If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_write_lib_client_checkdataexistsrequest_.checkdataexistsrequest.html" class="tsd-signature-type">CheckDataExistsRequest</a></h4>
+							<p>A reference to this object.</p>
 						</li>
 					</ul>
 				</section>
@@ -221,18 +221,13 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts#L57">@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts:57</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts#L57">@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts:57</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>brief</dt>
-									<dd><p>set the DataHandle to check if data exist.</p>
-									</dd>
-									<dt>note</dt>
-									<dd><p>Required.</p>
-									</dd>
-								</dl>
+								<div class="lead">
+									<p>Sets the data handle to check if data exist.</p>
+								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -241,7 +236,7 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_write_lib_client_checkdataexistsrequest_.checkdataexistsrequest.html" class="tsd-signature-type">CheckDataExistsRequest</a></h4>
-							<p>reference to this object</p>
+							<p>A reference to this object.</p>
 						</li>
 					</ul>
 				</section>
@@ -255,30 +250,25 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts#L35">@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts#L35">@here/olp-sdk-dataservice-write/lib/client/CheckDataExistsRequest.ts:35</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>brief</dt>
-									<dd><p>set the ID of the layer to check if data exist.</p>
-									</dd>
-									<dt>note</dt>
-									<dd><p>Required.</p>
-									</dd>
-								</dl>
+								<div class="lead">
+									<p>Sets the ID of the layer to check if data exist.</p>
+								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>layerId: <span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>the ID of the layer.</p>
+										<p>The ID of the layer.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_write_lib_client_checkdataexistsrequest_.checkdataexistsrequest.html" class="tsd-signature-type">CheckDataExistsRequest</a></h4>
-							<p>reference to this object</p>
+							<p>A reference to this object.</p>
 						</li>
 					</ul>
 				</section>

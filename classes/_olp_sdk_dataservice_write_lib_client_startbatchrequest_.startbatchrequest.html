@@ -67,11 +67,9 @@
 		<div class="col-8 col-content">
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
-					<dl class="tsd-comment-tags">
-						<dt>brief</dt>
-						<dd><p>StartBatchRequest is used to start a versioned batch operation.</p>
-						</dd>
-					</dl>
+					<div class="lead">
+						<p>Starts a batch operation for a versioned layer.</p>
+					</div>
 				</div>
 			</section>
 			<section class="tsd-panel tsd-hierarchy">
@@ -112,16 +110,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts#L84">@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts:84</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts#L94">@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts:94</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets the billing tag (if it was set).</p>
+								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">undefined</span>
 							</h4>
-							<p>Billing Tag previously set or undefined.</p>
+							<p>The billing tag or <code>undefined</code> if it was not set.</p>
 						</li>
 					</ul>
 				</section>
@@ -135,21 +136,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts#L67">@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts:67</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts#L74">@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts:74</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>brief</dt>
-									<dd><p>get the layers used in this batch operation</p>
-									</dd>
-								</dl>
+								<div class="lead">
+									<p>Gets the layers used in this batch operation.</p>
+								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">undefined</span>
 							</h4>
-							<p>array of layers ids or undefined</p>
+							<p>The array of layer IDs or <code>undefined</code>.</p>
 						</li>
 					</ul>
 				</section>
@@ -163,21 +162,19 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts#L75">@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts:75</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts#L83">@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts:83</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>brief</dt>
-									<dd><p>gets the VersionDependencies of this batch operation</p>
-									</dd>
-								</dl>
+								<div class="lead">
+									<p>Gets the version dependencies of this batch operation.</p>
+								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_olp_sdk_dataservice_api_lib_publish_api_v2_.versiondependency.html" class="tsd-signature-type">VersionDependency</a><span class="tsd-signature-symbol">[]</span>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">undefined</span>
 							</h4>
-							<p>the array of VersionDependencies or undefined</p>
+							<p>The array of the version dependencies or <code>undefined</code>.</p>
 						</li>
 					</ul>
 				</section>
@@ -191,23 +188,26 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts#L58">@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts#L64">@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts:64</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>note</dt>
-									<dd><p>Optional.</p>
-									</dd>
-								</dl>
+								<div class="lead">
+									<p>Sets the billing tag.</p>
+								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>tag: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The free-form tag that is used for grouping billing records together.
+										If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_write_lib_client_startbatchrequest_.startbatchrequest.html" class="tsd-signature-type">StartBatchRequest</a></h4>
+							<p>A reference to this object.</p>
 						</li>
 					</ul>
 				</section>
@@ -221,27 +221,25 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts#L35">@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts:35</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts#L37">@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts:37</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>brief</dt>
-									<dd><p>set the layers used in this batch operation</p>
-									</dd>
-								</dl>
+								<div class="lead">
+									<p>Sets the layers to use in this batch operation.</p>
+								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>layers: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>layer id&#39;s to be used</p>
+										<p>The IDs of the layers to use in this batch operation.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_write_lib_client_startbatchrequest_.startbatchrequest.html" class="tsd-signature-type">StartBatchRequest</a></h4>
-							<p>reference to this object</p>
+							<p>A reference to this object.</p>
 						</li>
 					</ul>
 				</section>
@@ -255,27 +253,25 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts#L45">@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts:45</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts#L49">@here/olp-sdk-dataservice-write/lib/client/StartBatchRequest.ts:49</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>brief</dt>
-									<dd><p>set the version dependencies used in this batch operation</p>
-									</dd>
-								</dl>
+								<div class="lead">
+									<p>Sets the version dependencies used in this batch operation.</p>
+								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>versionDependencies: <a href="../interfaces/_olp_sdk_dataservice_api_lib_publish_api_v2_.versiondependency.html" class="tsd-signature-type">VersionDependency</a><span class="tsd-signature-symbol">[]</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>array of VersionDependencies</p>
+										<p>The array of version dependencies.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_olp_sdk_dataservice_write_lib_client_startbatchrequest_.startbatchrequest.html" class="tsd-signature-type">StartBatchRequest</a></h4>
-							<p>reference to this object</p>
+							<p>A reference to this object.</p>
 						</li>
 					</ul>
 				</section>

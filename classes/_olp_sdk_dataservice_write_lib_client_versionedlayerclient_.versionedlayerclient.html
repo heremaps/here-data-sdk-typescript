@@ -68,7 +68,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Describes a versioned layer and provides the possibility to push the data to the versioned layers.</p>
+						<p>Describes a versioned layer and provides a possibility to publish data to it.</p>
 					</div>
 				</div>
 			</section>
@@ -119,12 +119,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L58">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:58</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L58">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:58</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Creates the <a href="_olp_sdk_dataservice_write_lib_client_versionedlayerclient_.versionedlayerclient.html">VersionedLayerClient</a> instance with VersionedLayerClientParams.</p>
+									<p>Creates the <a href="_olp_sdk_dataservice_write_lib_client_versionedlayerclient_.versionedlayerclient.html">VersionedLayerClient</a> instance with <code>VersionedLayerClientParams</code>.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -133,7 +133,7 @@
 									<h5>params: <a href="../interfaces/_olp_sdk_dataservice_write_lib_client_versionedlayerclient_.versionedlayerclientparams.html" class="tsd-signature-type">VersionedLayerClientParams</a></h5>
 									<div class="tsd-comment tsd-typography">
 										<div class="lead">
-											<p>parameters for use to initialize VersionedLayerClient.</p>
+											<p>The parameters that are used to initialize <code>VersionedLayerClient</code>.</p>
 										</div>
 									</div>
 								</li>
@@ -155,35 +155,35 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L343">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:343</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L342">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:342</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Cancels a publication if it has not yet been submitted.
-										Will fail if attempting to cancel a submitted publication.
-									This allows the specified publication to be abandoned.</p>
+									<p>Cancels the publication if it has not been submitted.</p>
 								</div>
+								<p>Fails if you attempt to cancel a submitted publication.
+								This allows the specified publication to be abandoned.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>request: <a href="_olp_sdk_dataservice_write_lib_client_cancelbatchrequest_.cancelbatchrequest.html" class="tsd-signature-type">CancelBatchRequest</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>details of the cancel operation.</p>
+										<p>The details of the cancel operation.</p>
 									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>An optional signal object that allows you to communicate with a request (such as the <code>fetch</code> request)
-										and, if required, abort it using the <code>AbortController</code> object.</p>
-										<p>For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
+										<p>The signal object that allows you to communicate with the request
+											and, if required, abort it using the <code>AbortController</code> object.
+										For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>True if the operation was successful. Rejects error if unsuccessful.</p>
+							<p>True if the operation was successful; rejects with an error otherwise.</p>
 						</li>
 					</ul>
 				</section>
@@ -197,37 +197,37 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L81">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:81</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L82">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:82</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Checks that the datahandle is not used.
-										Data handles must be unique within the layer across all versions.
-										In case data handle exists, a new one needs to be generated and checked again until
-									one is found that is not present in the blob store.</p>
+									<p>Checks whether the data handle is not used.</p>
 								</div>
+								<p>Data handles must be unique within a layer across all versions.
+									If the data handle exists, generate a new one and check it again
+								to be sure that it is not present in the blob store.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>request: <a href="_olp_sdk_dataservice_write_lib_client_checkdataexistsrequest_.checkdataexistsrequest.html" class="tsd-signature-type">CheckDataExistsRequest</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>CheckDataExistsRequest with required params.</p>
+										<p><code>CheckDataExistsRequest</code> with the required params.</p>
 									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>An optional signal object that allows you to communicate with a request (such as the <code>fetch</code> request)
-										and, if required, abort it using the <code>AbortController</code> object.</p>
-										<p>For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
+										<p>The signal object that allows you to communicate with the request
+											and, if required, abort it using the <code>AbortController</code> object.
+										For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>A promise void if data handle exists.
-							Rejects with http response if DataHandle is not exists (404 status) or any http error.</p>
+							<p>The <code>Promise</code> void if the data handle exists.
+							If the data handle does not exist, rejects with an HTTP response (404 status) or an HTTP error.</p>
 						</li>
 					</ul>
 				</section>
@@ -241,39 +241,39 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L440">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:440</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L438">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:438</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Submits the publication, resp. a batch, and initiates post processing if necessary.</p>
+									<p>Submits the publication (that is a batch) and initiates post-processing if necessary.</p>
 								</div>
-								<p>Publication state becomes <code>Submitted</code> directly after submission and <code>Succeeded</code> after successful processing.
-								Users can only complete a publication which is in state <code>Initialized</code>.</p>
-								<p>Once the user triggered to complete a publication,
-								he must request the status of the publication regularly until the status becomes <code>Succeeded</code>.</p>
-								<p>After submitting the publication, the metadata processing will begin.
-								You will be unable to modify or interrupt the publication process so make sure that you are ready before submitting the publication.</p>
+								<p>You cannot modify or interrupt the publication process, so double-check the publication details before submitting it.</p>
+								<p>The publication state becomes <code>Submitted</code> directly after submission and <code>Succeeded</code> after successful processing.
+								You can only complete a publication that is in the <code>Initialized</code> state.</p>
+								<p>Once you trigger to complete a publication,
+								request the status of the publication regularly until the status becomes <code>Succeeded</code>.</p>
+								<p>When you submit the publication, the metadata processing starts.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>request: <a href="_olp_sdk_dataservice_write_lib_client_completebatchrequest_.completebatchrequest.html" class="tsd-signature-type">CompleteBatchRequest</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>details of the complete publish.</p>
+										<p>The details of the publication completion.</p>
 									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>An optional signal object that allows you to communicate with a request (such as the <code>fetch</code> request)
-										and, if required, abort it using the <code>AbortController</code> object.</p>
-										<p>For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
+										<p>The signal object that allows you to communicate with the request
+											and, if required, abort it using the <code>AbortController</code> object.
+										For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>Promise resolves if the operation was successful. Rejects if unsuccessful.</p>
+							<p>The <code>Promise</code> resolves if the operation was successful; rejects otherwise.</p>
 						</li>
 					</ul>
 				</section>
@@ -287,12 +287,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L141">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:141</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L140">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:140</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Gets the latest version of a catalog.</p>
+									<p>Gets the latest version of the catalog.</p>
 								</div>
 								<p>The default value is -1. By convention -1 indicates the virtual initial version before
 								the first publication that has version 0.</p>
@@ -302,21 +302,21 @@
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> billingTag: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>An optional free-form tag that is used for grouping billing records together.
-										If supplied, it must be 4&ndash;16 characters long and contain only alphanumeric ASCII characters [A-Za-z0-9].</p>
+										<p>The free-form tag that is used for grouping billing records together.
+										If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].</p>
 									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>An optional signal object that allows you to communicate with a request (such as the <code>fetch</code> request)
-										and, if required, abort it using the <code>AbortController</code> object.</p>
-										<p>For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
+										<p>The signal object that allows you to communicate with the request
+											and, if required, abort it using the <code>AbortController</code> object.
+										For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>A promise of the HTTP response that contains the payload with the latest version.</p>
+							<p>The <code>Promise</code> of the HTTP response that contains the payload with the latest version.</p>
 						</li>
 					</ul>
 				</section>
@@ -330,12 +330,12 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L387">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:387</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L385">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:385</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Retrieves the publication details.</p>
+									<p>Gets the publication details.</p>
 								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -343,15 +343,15 @@
 								<li>
 									<h5>request: <a href="_olp_sdk_dataservice_write_lib_client_getbatchrequest_.getbatchrequest.html" class="tsd-signature-type">GetBatchRequest</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>details of the retrieve operation.</p>
+										<p>The details of the <code>GET</code> operation.</p>
 									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>An optional signal object that allows you to communicate with a request (such as the <code>fetch</code> request)
-										and, if required, abort it using the <code>AbortController</code> object.</p>
-										<p>For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
+										<p>The signal object that allows you to communicate with the request
+											and, if required, abort it using the <code>AbortController</code> object.
+										For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
 									</div>
 								</li>
 							</ul>
@@ -370,35 +370,33 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L231">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:231</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L230">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:230</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>breaf</dt>
-									<dd><p>Gives the user the possibility to upload one partition blob and metadata at once</p>
-									</dd>
-								</dl>
+								<div class="lead">
+									<p>Uploads one partition blob and metadata at once.</p>
+								</div>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>request: <a href="_olp_sdk_dataservice_write_lib_client_publishsinglepartitionrequest_.publishsinglepartitionrequest.html" class="tsd-signature-type">PublishSinglePartitionRequest</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>PublishSinglePartitionRequest with needed params</p>
+										<p>The <code>PublishSinglePartitionRequest</code> object with the needed parameters.</p>
 									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>An optional signal object that allows you to communicate with a request (such as the <code>fetch</code> request)
-										and, if required, abort it using the <code>AbortController</code> object.</p>
-										<p>For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
+										<p>The signal object that allows you to communicate with the request
+											and, if required, abort it using the <code>AbortController</code> object.
+										For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>Promise resolves if the operation was successful. Rejects if unsuccessful.</p>
+							<p>The <code>Promise</code> resolves if the operation was successful; rejects otherwise.</p>
 						</li>
 					</ul>
 				</section>
@@ -412,35 +410,35 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L185">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:185</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L184">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:184</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Initializes a new publication for publishing metadata.
-										Determines the publication type based on the provided layer IDs.
-										A publication can only consist of layer IDs that have the same layer type.
-										For example, you can have a publication for multiple layers of type versioned,
-									but you cannot have a single publication that publishes to both versioned and stream layers.</p>
+									<p>Starts a new publication.</p>
 								</div>
-								<p>In addition, you may only have one versioned publication in process at a time.
-									You cannot have multiple active publications to the same catalog for versioned layer types.
-								The request field versionDependencies is optional and is used for versioned layers to declare version dependencies.</p>
+								<p>Determines the publication type based on the provided layer IDs.
+									A publication can only consist of layer IDs that have the same layer type.
+									For example, you can have a publication for multiple versioned layers,
+								but you cannot have a single publication that publishes data to both versioned and stream layers.</p>
+								<p>Also, you can only have one versioned-layer publication in progress at a time.
+									You cannot have multiple active publications to the same catalog for versioned layers.
+								The version dependencies request field is optional and is used for versioned layers to declare version dependencies.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>request: <a href="_olp_sdk_dataservice_write_lib_client_startbatchrequest_.startbatchrequest.html" class="tsd-signature-type">StartBatchRequest</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>details of the batch operation to start</p>
+										<p>The details of the batch operation that you want to start.</p>
 									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>An optional signal object that allows you to communicate with a request (such as the <code>fetch</code> request)
-										and, if required, abort it using the <code>AbortController</code> object.</p>
-										<p>For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
+										<p>The signal object that allows you to communicate with the request
+											and, if required, abort it using the <code>AbortController</code> object.
+										For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
 									</div>
 								</li>
 							</ul>
@@ -458,15 +456,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L488">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:488</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L485">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:485</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Uploads data to the service</p>
+									<p>Uploads data to the service.</p>
 								</div>
-								<p>If you are uploading more than 50 MB of data,
-									the data splits into parts and uploads each part individually.
+								<p>If you are upload more than 50 MB of data,
+									the data is split into parts, and each part is uploaded individually.
 								The size of each part is 5 MB, except the last part.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -474,20 +472,20 @@
 								<li>
 									<h5>request: <a href="_olp_sdk_dataservice_write_lib_client_uploadblobrequest_.uploadblobrequest.html" class="tsd-signature-type">UploadBlobRequest</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>details of the uploading data.</p>
+										<p>The details of the data upload process.</p>
 									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>An optional signal object that allows you to communicate with a request (such as the <code>fetch</code> request)
-										and, if required, abort it using the <code>AbortController</code> object.</p>
-										<p>For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
+										<p>The signal object that allows you to communicate with the request
+											and, if required, abort it using the <code>AbortController</code> object.
+										For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="_olp_sdk_dataservice_write_lib_client_uploadblobresult_.uploadblobresult.html" class="tsd-signature-type">UploadBlobResult</a><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>Promise resolves with UploadBlobResult.</p>
+							<p>The <code>Promise</code> resolves with <code>UploadBlobResult</code>.</p>
 						</li>
 					</ul>
 				</section>
@@ -501,46 +499,45 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e83597e/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L639">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:639</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts#L634">@here/olp-sdk-dataservice-write/lib/client/VersionedLayerClient.ts:634</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
 									<p>Uploads metadata to the service.</p>
 								</div>
-								<p>When all data have been uploaded,
-									you need to generate the metadata which will be used to represent
-									your data inside the HERE platform.
-									At a minimum, your metadata must consist of a partition ID and the data handle you used to upload your data.
-								For a complete description of the fields you can set, @see <a href="../interfaces/_olp_sdk_dataservice_api_lib_publish_api_v2_.publishpartition.html">PublishPartition</a>.</p>
+								<p>When all data is uploaded, you need to
+									generate metadata to represent your data inside the HERE platform.
+									At a minimum, your metadata must consist of a partition ID and the data handle that you used to upload your data.
+								For a complete description of the fields that you can set, @see <a href="../interfaces/_olp_sdk_dataservice_api_lib_publish_api_v2_.publishpartition.html">PublishPartition</a>.</p>
 								<p>The maximum number of partitions you can upload and publish in one request is 1,000.
-									If you have more than 1,000 partitions you want to upload,
-									upload the data for the first 1,000 partitions
-									then upload the metadata for those 1,000 partitions.
-									Then, continue to the next set of partitions.
+									If you have more than 1,000 partitions that you want to upload,
+									upload the data for the first 1,000 partitions, and
+									then upload the metadata for these 1,000 partitions.
+									Then, continue with the next set of partitions.
 									Do not wait until all data is uploaded before uploading metadata.
 									Doing so will result in poor performance.
-								Instead, upload data, then metadata, and repeat as needed until all your data and corresponding metadata is uploaded.</p>
+								Instead, upload data, then metadata, and repeat if needed until all your data and corresponding metadata is uploaded.</p>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>request: <a href="_olp_sdk_dataservice_write_lib_client_uploadpartitionsrequest_.uploadpartitionsrequest.html" class="tsd-signature-type">UploadPartitionsRequest</a></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>details of the uploading metadata.</p>
+										<p>The details of the metadata upload process.</p>
 									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
 									<div class="tsd-comment tsd-typography">
-										<p>An optional signal object that allows you to communicate with a request (such as the <code>fetch</code> request)
-										and, if required, abort it using the <code>AbortController</code> object.</p>
-										<p>For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
+										<p>The signal object that allows you to communicate with the request
+											and, if required, abort it using the <code>AbortController</code> object.
+										For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
 									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Response</span><span class="tsd-signature-symbol">&gt;</span></h4>
-							<p>Promise resolves with 204 status if success.</p>
+							<p>The <code>Promise</code> resolves with the 204 status code if the upload was successful.</p>
 						</li>
 					</ul>
 				</section>
