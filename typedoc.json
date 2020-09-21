@@ -12,7 +12,10 @@
         "**/test/**/*.ts",
         "**/tests/**/*.ts",
         "**/dist/**/*.ts",
-        "**/scripts/*.ts"
+        "**/scripts/*.ts",
+        "@here/olp-sdk-authentication/lib.version.ts",
+        "@here/olp-sdk-authentication/lib/HttpError.ts",
+        "docs/examples/ts/example.ts"
     ],
     "readme": "README.md",
     "target": "ES6",
