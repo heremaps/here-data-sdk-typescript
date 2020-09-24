@@ -20,7 +20,7 @@
 import * as chai from "chai";
 import { requestToken, Token, UserAuth } from "../index";
 
-import { HttpError } from "@here/olp-sdk-core";
+import { HttpError, SENT_WITH_PARAM } from "@here/olp-sdk-core";
 import fetchMock = require("fetch-mock");
 import { loadCredentialsFromFile } from "../lib/loadCredentialsFromFile";
 
@@ -65,11 +65,14 @@ describe("oauth-request-offline", function() {
 
     beforeEach(function() {
         fetchMock.config.overwriteRoutes = true;
-        fetchMock.post("https://account.api.here.com/oauth2/token", {
-            accessToken: mock_token,
-            tokenType: "bearer",
-            expiresIn: 3599
-        });
+        fetchMock.post(
+            "https://account.api.here.com/oauth2/token?" + SENT_WITH_PARAM,
+            {
+                accessToken: mock_token,
+                tokenType: "bearer",
+                expiresIn: 3599
+            }
+        );
     });
 
     afterEach(function() {
@@ -89,7 +92,7 @@ describe("oauth-request-offline", function() {
 
         const options: RequestInit & any = fetchMock.calls()[0][1];
         expect(options.headers.get("Authorization")).to.be.equal(
-            `OAuth oauth_consumer_key="mocked-key",oauth_nonce="mocked-nonce",oauth_signature_method="HMAC-SHA256",oauth_timestamp="1550777140",oauth_version="1.0",oauth_signature="67j%2FteHKLDlh%2F8VVMU3pRSyGN7lXtC49dkRtWCFoz6U%3D"`
+            `OAuth oauth_consumer_key="mocked-key",oauth_nonce="mocked-nonce",oauth_signature_method="HMAC-SHA256",oauth_timestamp="1550777140",oauth_version="1.0",oauth_signature="iC6P9BXdvvnJcaHmL5sskkz6R0ztFScyQfvvAujEmuo%3D"`
         );
     });
 
@@ -158,10 +161,14 @@ describe("oauth-request-offline", function() {
             tokenRequester: requestToken
         });
 
-        fetchMock.post("https://account.api.here.com/verify/accessToken", {
-            ok: true,
-            statusText: "valid"
-        });
+        fetchMock.post(
+            "https://account.api.here.com/verify/accessToken?" +
+                SENT_WITH_PARAM,
+            {
+                ok: true,
+                statusText: "valid"
+            }
+        );
 
         try {
             const reply = await userAuth.validateAccessToken(mock_token);
@@ -185,7 +192,8 @@ describe("oauth-request-offline", function() {
         const responseText = "Internal Server Error";
 
         fetchMock.post(
-            "https://account.api.here.com/verify/accessToken",
+            "https://account.api.here.com/verify/accessToken?" +
+                SENT_WITH_PARAM,
             responseStatus
         );
 
@@ -209,7 +217,7 @@ describe("oauth-request-offline", function() {
         const responseText = "Unauthorized";
 
         fetchMock.post(
-            "https://account.api.here.com/oauth2/token",
+            "https://account.api.here.com/oauth2/token?" + SENT_WITH_PARAM,
             responseStatus
         );
 
@@ -228,11 +236,14 @@ describe("oauth-request-lookupapi", function() {
 
     beforeEach(function() {
         fetchMock.config.overwriteRoutes = true;
-        fetchMock.post("https://account.api.here.com/oauth2/token", {
-            accessToken: mock_token,
-            tokenType: "bearer",
-            expiresIn: 3599
-        });
+        fetchMock.post(
+            "https://account.api.here.com/oauth2/token?" + SENT_WITH_PARAM,
+            {
+                accessToken: mock_token,
+                tokenType: "bearer",
+                expiresIn: 3599
+            }
+        );
     });
 
     afterEach(function() {
@@ -249,21 +260,24 @@ describe("oauth-request-lookupapi", function() {
             tokenRequester: requestToken
         });
 
-        fetchMock.get("https://account.api.here.com/user/me", {
-            userId: "userId",
-            realm: "realm",
-            firstname: "firstname",
-            lastname: "lastname",
-            email: "email",
-            dob: "dob",
-            language: "language",
-            countryCode: "countryCode",
-            emailVerified: true,
-            marketingEnabled: true,
-            createdTime: 1550777140,
-            updatedTime: 1550777141,
-            state: "state"
-        });
+        fetchMock.get(
+            "https://account.api.here.com/user/me?" + SENT_WITH_PARAM,
+            {
+                userId: "userId",
+                realm: "realm",
+                firstname: "firstname",
+                lastname: "lastname",
+                email: "email",
+                dob: "dob",
+                language: "language",
+                countryCode: "countryCode",
+                emailVerified: true,
+                marketingEnabled: true,
+                createdTime: 1550777140,
+                updatedTime: 1550777141,
+                state: "state"
+            }
+        );
 
         try {
             const reply = await userAuth.getUserInfo(mock_token);
@@ -297,21 +311,24 @@ describe("oauth-request-lookupapi", function() {
             tokenRequester: requestToken
         });
 
-        fetchMock.get("https://stg.account.api.here.com/user/me", {
-            userId: "userId",
-            realm: "realm",
-            firstname: "firstname",
-            lastname: "lastname",
-            email: "email",
-            dob: "dob",
-            language: "language",
-            countryCode: "countryCode",
-            emailVerified: true,
-            marketingEnabled: true,
-            createdTime: 1550777140,
-            updatedTime: 1550777141,
-            state: "state"
-        });
+        fetchMock.get(
+            "https://stg.account.api.here.com/user/me?" + SENT_WITH_PARAM,
+            {
+                userId: "userId",
+                realm: "realm",
+                firstname: "firstname",
+                lastname: "lastname",
+                email: "email",
+                dob: "dob",
+                language: "language",
+                countryCode: "countryCode",
+                emailVerified: true,
+                marketingEnabled: true,
+                createdTime: 1550777140,
+                updatedTime: 1550777141,
+                state: "state"
+            }
+        );
 
         try {
             const reply = await userAuth.getUserInfo(mock_token);
@@ -345,21 +362,25 @@ describe("oauth-request-lookupapi", function() {
             tokenRequester: requestToken
         });
 
-        fetchMock.get("https://elb.cn-northwest-1.account.hereapi.cn/user/me", {
-            userId: "userId",
-            realm: "realm",
-            firstname: "firstname",
-            lastname: "lastname",
-            email: "email",
-            dob: "dob",
-            language: "language",
-            countryCode: "countryCode",
-            emailVerified: true,
-            marketingEnabled: true,
-            createdTime: 1550777140,
-            updatedTime: 1550777141,
-            state: "state"
-        });
+        fetchMock.get(
+            "https://elb.cn-northwest-1.account.hereapi.cn/user/me?" +
+                SENT_WITH_PARAM,
+            {
+                userId: "userId",
+                realm: "realm",
+                firstname: "firstname",
+                lastname: "lastname",
+                email: "email",
+                dob: "dob",
+                language: "language",
+                countryCode: "countryCode",
+                emailVerified: true,
+                marketingEnabled: true,
+                createdTime: 1550777140,
+                updatedTime: 1550777141,
+                state: "state"
+            }
+        );
 
         try {
             const reply = await userAuth.getUserInfo(mock_token);
@@ -394,7 +415,8 @@ describe("oauth-request-lookupapi", function() {
         });
 
         fetchMock.get(
-            "https://elb.cn-northwest-1.account.sit.hereapi.cn/user/me",
+            "https://elb.cn-northwest-1.account.sit.hereapi.cn/user/me?" +
+                SENT_WITH_PARAM,
             {
                 userId: "userId",
                 realm: "realm",
@@ -444,7 +466,7 @@ describe("oauth-request-lookupapi", function() {
             tokenRequester: requestToken
         });
 
-        fetchMock.get("http://localhost/user/me", {
+        fetchMock.get("http://localhost/user/me?" + SENT_WITH_PARAM, {
             userId: "userId",
             realm: "realm",
             firstname: "firstname",
@@ -491,21 +513,24 @@ describe("oauth-request-lookupapi", function() {
             tokenRequester: requestToken
         });
 
-        fetchMock.get("https://account.api.here.com/user/me", {
-            userId: "userId",
-            realm: "realm",
-            firstname: "firstname",
-            lastname: "lastname",
-            email: "email",
-            dob: "dob",
-            language: "language",
-            countryCode: "countryCode",
-            emailVerified: true,
-            marketingEnabled: true,
-            createdTime: 1550777140,
-            updatedTime: 1550777141,
-            state: "state"
-        });
+        fetchMock.get(
+            "https://account.api.here.com/user/me?" + SENT_WITH_PARAM,
+            {
+                userId: "userId",
+                realm: "realm",
+                firstname: "firstname",
+                lastname: "lastname",
+                email: "email",
+                dob: "dob",
+                language: "language",
+                countryCode: "countryCode",
+                emailVerified: true,
+                marketingEnabled: true,
+                createdTime: 1550777140,
+                updatedTime: 1550777141,
+                state: "state"
+            }
+        );
 
         try {
             const reply = await userAuth.getUserInfo(mock_token);

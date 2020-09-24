@@ -17,7 +17,11 @@
  * License-Filename: LICENSE
  */
 
-import { HttpError, LIB_VERSION } from "@here/olp-sdk-core";
+import {
+    addSentWithParam,
+    HttpError,
+    SENT_WITH_PARAM
+} from "@here/olp-sdk-core";
 
 /**
  * Platform-specific parts of signing a request using HMAC algorithms.
@@ -116,7 +120,7 @@ async function getOAuthAuthorization(
         encodeURIComponent(args.url) +
         "&" +
         encodeURIComponent(
-            `oauth_consumer_key=${args.consumerKey}&oauth_nonce=${args.nonce}&oauth_signature_method=HMAC-SHA256&oauth_timestamp=${args.timestamp}&oauth_version=1.0`
+            `oauth_consumer_key=${args.consumerKey}&oauth_nonce=${args.nonce}&oauth_signature_method=HMAC-SHA256&oauth_timestamp=${args.timestamp}&oauth_version=1.0&${SENT_WITH_PARAM}`
         );
 
     const signature = await signLatin1(
@@ -167,7 +171,7 @@ export async function requestToken_common(
         headers
     };
 
-    const request = await fetch(args.url, requestInit);
+    const request = await fetch(addSentWithParam(args.url), requestInit);
 
     if (!request.ok) {
         return Promise.reject(

@@ -17,4 +17,23 @@
  * License-Filename: LICENSE
  */
 
-export const LIB_VERSION = "1.6.0";
+import { assert } from "chai";
+import { addSentWithParam, SENT_WITH_PARAM } from "@here/olp-sdk-core";
+
+describe("addSentWithParam", function() {
+    it("Should be preparing string as an adding additional param", function() {
+        const url = "https://example.com/test/url?someParam=test";
+
+        const result = addSentWithParam(url);
+
+        assert.isTrue(result === url + "&" + SENT_WITH_PARAM);
+    });
+
+    it("Should be preparing string as an adding the first param", function() {
+        const url = "https://example.com/test/url";
+
+        const result = addSentWithParam(url);
+
+        assert.isTrue(result === url + "?" + SENT_WITH_PARAM);
+    });
+});

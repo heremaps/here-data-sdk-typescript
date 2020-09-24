@@ -17,4 +17,20 @@
  * License-Filename: LICENSE
  */
 
-export const LIB_VERSION = "1.6.0";
+import { LIB_VERSION } from "@here/olp-sdk-core/lib.version";
+
+/**
+ * The string for adding to the requests as query parameter.
+ */
+export const SENT_WITH_PARAM = `sentWith=OLP-TS-SDK-${LIB_VERSION}`;
+
+/**
+ * Adds sentWith param to the url.
+ * @param url the string, representing the url
+ * @returns the string, representing updated URL
+ */
+export function addSentWithParam(url: string): string {
+    return url.split("?").length === 1
+        ? `${url}?${SENT_WITH_PARAM}`
+        : `${url}&${SENT_WITH_PARAM}`;
+}

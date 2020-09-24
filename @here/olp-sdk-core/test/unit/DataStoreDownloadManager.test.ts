@@ -20,7 +20,7 @@
 import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
-import { DataStoreDownloadManager } from "@here/olp-sdk-core";
+import { DataStoreDownloadManager, SENT_WITH_PARAM } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 const assert = chai.assert;
@@ -54,7 +54,9 @@ describe("DataStoreDownloadManager", function() {
 
         // Assert
         assert.isTrue(fetchStub.calledOnce);
-        assert.isTrue(fetchStub.getCall(0).args[0] === fakeDataUrl);
+        assert.isTrue(
+            fetchStub.getCall(0).args[0] === fakeDataUrl + "?" + SENT_WITH_PARAM
+        );
         assert.deepEqual(response.statusText, "success");
     });
 
@@ -77,7 +79,10 @@ describe("DataStoreDownloadManager", function() {
 
                 // callCount should be 4. (1 first call + 3 retries)
                 assert(fetchStub.callCount === 4);
-                assert(fetchStub.getCall(0).args[0] === fakeDataUrl);
+                assert(
+                    fetchStub.getCall(0).args[0] ===
+                        fakeDataUrl + "?" + SENT_WITH_PARAM
+                );
                 assert.equal(error.status, 503);
                 assert.equal(error.message, "Service unavailable!");
             });
@@ -102,7 +107,10 @@ describe("DataStoreDownloadManager", function() {
 
                 // callCount should be 4. (1 first call + 3 retries)
                 assert(fetchStub.callCount === 4);
-                assert(fetchStub.getCall(0).args[0] === fakeDataUrl);
+                assert(
+                    fetchStub.getCall(0).args[0] ===
+                        fakeDataUrl + "?" + SENT_WITH_PARAM
+                );
                 assert.equal(error.status, 500);
                 assert.equal(error.message, "Internal Server Error");
             });
@@ -127,7 +135,10 @@ describe("DataStoreDownloadManager", function() {
 
                 // callCount should be 4. (1 first call + 3 retries)
                 assert(fetchStub.callCount === 4);
-                assert(fetchStub.getCall(0).args[0] === fakeDataUrl);
+                assert(
+                    fetchStub.getCall(0).args[0] ===
+                        fakeDataUrl + "?" + SENT_WITH_PARAM
+                );
                 assert.equal(error.status, 429);
                 assert.equal(error.message, "To many requests");
             });
@@ -165,7 +176,7 @@ describe("DataStoreDownloadManager", function() {
         assert(fetchStub.callCount === CALLS_NUMBER);
         assert(
             fetchStub.getCall(MAX_PARALLEL_DOWNLOADS - 1).args[0] ===
-                fakeDataUrl
+                fakeDataUrl + "?" + SENT_WITH_PARAM
         );
     });
 
