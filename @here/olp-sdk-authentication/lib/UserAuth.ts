@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { HttpError, LIB_VERSION } from "@here/olp-sdk-core";
+import { HttpError, SENT_WITH_PARAM } from "@here/olp-sdk-core";
 import { OAuthArgs, Token } from "./requestToken_common";
 
 /**
@@ -247,11 +247,14 @@ export class UserAuth {
             "Content-Type": "application/json"
         });
 
-        const request = await fetch(this.m_apiUrl + "verify/accessToken", {
-            method: "POST",
-            body: JSON.stringify(body),
-            headers
-        });
+        const request = await fetch(
+            this.m_apiUrl + "verify/accessToken" + `?${SENT_WITH_PARAM}`,
+            {
+                method: "POST",
+                body: JSON.stringify(body),
+                headers
+            }
+        );
 
         if (!request.ok) {
             return Promise.reject(
@@ -274,10 +277,13 @@ export class UserAuth {
             "Content-Type": "application/json"
         });
 
-        const request = await fetch(this.m_apiUrl + "user/me", {
-            method: "GET",
-            headers
-        });
+        const request = await fetch(
+            this.m_apiUrl + "user/me" + `?${SENT_WITH_PARAM}`,
+            {
+                method: "GET",
+                headers
+            }
+        );
 
         if (!request.ok) {
             return Promise.reject(

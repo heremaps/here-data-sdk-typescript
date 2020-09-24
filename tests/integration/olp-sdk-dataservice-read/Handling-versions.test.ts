@@ -33,6 +33,7 @@ import {
   CatalogVersionRequest
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "../FetchMock";
+import { SENT_WITH_PARAM } from "@here/olp-sdk-core/lib";
 
 chai.use(sinonChai);
 const expect = chai.expect;
@@ -128,7 +129,8 @@ describe("Handling versions in the requests classes and clients", function() {
 
     expect(callsToApi.length).equals(2); // First to lookup api, second to the Query API.
     expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=0"
+      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=0&" +
+        SENT_WITH_PARAM
     );
   });
 
@@ -205,7 +207,8 @@ describe("Handling versions in the requests classes and clients", function() {
 
     expect(callsToApi.length).equals(2); // First to lookup api, second to the Query API.
     expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0"
+      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0?" +
+        SENT_WITH_PARAM
     );
   });
 
@@ -297,7 +300,8 @@ describe("Handling versions in the requests classes and clients", function() {
 
     expect(callsToApi.length).equals(3); // 1 - lookup api, 1 - the Query API, 1 - blob API
     expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0"
+      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0?" +
+        SENT_WITH_PARAM
     );
   });
 
@@ -376,7 +380,8 @@ describe("Handling versions in the requests classes and clients", function() {
 
     expect(callsToApi.length).equals(3); // 1 - lookup api, 1 - the Query API, 1 - blob API
     expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=0"
+      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=0&" +
+        SENT_WITH_PARAM
     );
   });
 
@@ -440,7 +445,8 @@ describe("Handling versions in the requests classes and clients", function() {
 
     expect(callsToApi.length).equals(2); // First to lookup api, second to the Query API.
     expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=142"
+      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=142&" +
+        SENT_WITH_PARAM
     );
   });
 
@@ -517,7 +523,8 @@ describe("Handling versions in the requests classes and clients", function() {
 
     expect(callsToApi.length).equals(2); // First to lookup api, second to the Query API.
     expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/23605706/depths/0"
+      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/23605706/depths/0?" +
+        SENT_WITH_PARAM
     );
   });
 
@@ -607,7 +614,8 @@ describe("Handling versions in the requests classes and clients", function() {
 
     expect(callsToApi.length).equals(3); // 1 - lookup api, 1 - the Query API, 1 - blob API
     expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/23605706/depths/0"
+      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/23605706/depths/0?" +
+        SENT_WITH_PARAM
     );
   });
 
@@ -686,7 +694,8 @@ describe("Handling versions in the requests classes and clients", function() {
 
     expect(callsToApi.length).equals(3); // 1 - lookup api, 1 - the Query API, 1 - blob API
     expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=142"
+      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=142&" +
+        SENT_WITH_PARAM
     );
   });
 
@@ -766,7 +775,8 @@ describe("Handling versions in the requests classes and clients", function() {
 
     expect(client["version"]).equals(0);
     expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=0"
+      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=0&" +
+        SENT_WITH_PARAM
     );
   });
 
@@ -859,7 +869,8 @@ describe("Handling versions in the requests classes and clients", function() {
 
     expect(client["version"]).equals(0);
     expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0"
+      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0?" +
+        SENT_WITH_PARAM
     );
   });
 
@@ -965,7 +976,8 @@ describe("Handling versions in the requests classes and clients", function() {
 
     expect(client["version"]).equals(0);
     expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0"
+      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0?" +
+        SENT_WITH_PARAM
     );
   });
 
@@ -1060,7 +1072,8 @@ describe("Handling versions in the requests classes and clients", function() {
 
     expect(client["version"]).equals(0);
     expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=0"
+      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=0&" +
+        SENT_WITH_PARAM
     );
   });
 
@@ -1121,7 +1134,8 @@ describe("Handling versions in the requests classes and clients", function() {
     expect(callsToApi.length).equals(2); // 1 - lookup api, 1 - Metadata API
 
     expect(callToMetadataApi.args[0]).equals(
-      "https://metadata.data.api.platform.here.com/metadata/v1/layerVersions?version=0"
+      "https://metadata.data.api.platform.here.com/metadata/v1/layerVersions?version=0&" +
+        SENT_WITH_PARAM
     );
   });
 
@@ -1191,7 +1205,8 @@ describe("Handling versions in the requests classes and clients", function() {
     expect(callsToApi.length).equals(2); // 1 - lookup api, 1 - Metadata API
 
     expect(callToMetadataApi.args[0]).equals(
-      "https://metadata.data.api.platform.here.com/metadata/v1/versions?startVersion=-1&endVersion=0"
+      "https://metadata.data.api.platform.here.com/metadata/v1/versions?startVersion=-1&endVersion=0&" +
+        SENT_WITH_PARAM
     );
   });
 });

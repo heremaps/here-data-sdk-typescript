@@ -43,3 +43,4 @@ export * from "./HttpError";
 export * from "./FetchOptions";
 export * from "./TileKey";
 export * from "./Uuid";
+export * from "./userAgent";

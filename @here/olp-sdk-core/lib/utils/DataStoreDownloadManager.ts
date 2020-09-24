@@ -17,7 +17,12 @@
  * License-Filename: LICENSE
  */
 
-import { DownloadManager, HttpError, STATUS_CODES } from "@here/olp-sdk-core";
+import {
+    addSentWithParam,
+    DownloadManager,
+    HttpError,
+    STATUS_CODES
+} from "@here/olp-sdk-core";
 
 /** @internal
  * 'DeferredPromise' takes an executor function for executing it later, when [[exec]] is called.
@@ -92,7 +97,7 @@ export class DataStoreDownloadManager implements DownloadManager {
         init?: RequestInit
     ): Promise<Response> {
         try {
-            const response = await fetchFunction(url, init);
+            const response = await fetchFunction(addSentWithParam(url), init);
             if (
                 !this.requestShouldRetryOnError(response.status) ||
                 retryCount >= maxRetries

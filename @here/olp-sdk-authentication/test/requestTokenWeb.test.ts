@@ -20,6 +20,7 @@
 import { assert } from "chai";
 import { requestToken } from "../index.web";
 
+import { SENT_WITH_PARAM } from "@here/olp-sdk-core/lib";
 import fetchMock = require("fetch-mock");
 
 const REPLY_TIMEOUT_MS = 600;
@@ -45,11 +46,14 @@ describe("oauth-request-offline", function() {
 
     beforeEach(function() {
         fetchMock.config.overwriteRoutes = true;
-        fetchMock.post("https://account.api.here.com/oauth2/token", {
-            accessToken: mock_token,
-            tokenType: "bearer",
-            expiresIn: 3599
-        });
+        fetchMock.post(
+            "https://account.api.here.com/oauth2/token?" + SENT_WITH_PARAM,
+            {
+                accessToken: mock_token,
+                tokenType: "bearer",
+                expiresIn: 3599
+            }
+        );
     });
 
     afterEach(function() {
