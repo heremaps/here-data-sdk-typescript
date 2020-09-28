@@ -494,6 +494,41 @@ describe("VersionedLayerClient write", function() {
         expect(response2.getDataHandle()).equals(mockedDatahandle);
     });
 
+    it("UploadBlob with content encoding gzip", async function() {
+        const data = Buffer.alloc(25);
+        const mockedDatahandle = "mocked-datahandle";
+        const mockedContentType = "text/plain";
+        const mockedBillingTag = "mocked-billing-tag";
+        const mockedContentEncoding = "mocked-contentEncoding";
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        const layerId = "mocked-layer";
+
+        putDataStub.callsFake(() =>
+            Promise.resolve({
+                status: 204
+            })
+        );
+
+        const request = new UploadBlobRequest()
+            .withLayerId(layerId)
+            .withData(data)
+            .withDataHandle(mockedDatahandle)
+            .withContentType(mockedContentType)
+            .withBillingTag(mockedBillingTag)
+            .withContentEncoding(mockedContentEncoding);
+
+        const response = await client.uploadBlob(request);
+        expect(response.getDataHandle()).equals(mockedDatahandle);
+        expect(putDataStub.args[0][1].contentEncoding).equals(
+            mockedContentEncoding
+        );
+    });
+
     it("UploadBlob should generate and return the datahandle", async function() {
         const data = Buffer.alloc(25000);
         const mockedDatahandle = "mocked-datahandle";
