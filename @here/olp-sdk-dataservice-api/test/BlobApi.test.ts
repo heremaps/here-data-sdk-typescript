@@ -284,7 +284,8 @@ describe("BlobApi", function() {
             billingTag: "mocked-billingTag",
             body: content,
             contentLength: 11,
-            contentType: "text/plain"
+            contentType: "text/plain",
+            contentEncoding: "mocked-contentEncoding"
         };
         const builder = {
             baseUrl: "http://mocked.url",
@@ -297,6 +298,9 @@ describe("BlobApi", function() {
                 // tslint:disable-next-line: no-magic-numbers
                 expect(options.headers["Content-Length"]).equals(11);
                 expect(options.headers["Content-Type"]).equals("text/plain");
+                expect(options.headers["Content-Encoding"]).equals(
+                    "mocked-contentEncoding"
+                );
                 return Promise.resolve("success");
             }
         };

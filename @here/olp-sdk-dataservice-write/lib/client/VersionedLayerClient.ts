@@ -66,16 +66,16 @@ export class VersionedLayerClient {
 
     /**
      * Checks whether the data handle is not used.
-     * 
+     *
      * Data handles must be unique within a layer across all versions.
-     * If the data handle exists, generate a new one and check it again 
+     * If the data handle exists, generate a new one and check it again
      * to be sure that it is not present in the blob store.
-     * 
+     *
      * @param request `CheckDataExistsRequest` with the required params.
      * @param abortSignal The signal object that allows you to communicate with the request
      * and, if required, abort it using the `AbortController` object.
      * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
-     * 
+     *
      * @returns The `Promise` void if the data handle exists.
      * If the data handle does not exist, rejects with an HTTP response (404 status) or an HTTP error.
      */
@@ -166,7 +166,7 @@ export class VersionedLayerClient {
 
     /**
      * Starts a new publication.
-     * 
+     *
      * Determines the publication type based on the provided layer IDs.
      * A publication can only consist of layer IDs that have the same layer type.
      * For example, you can have a publication for multiple versioned layers,
@@ -219,12 +219,12 @@ export class VersionedLayerClient {
 
     /**
      * Uploads one partition blob and metadata at once.
-     * 
+     *
      * @param request The `PublishSinglePartitionRequest` object with the needed parameters.
      * @param abortSignal The signal object that allows you to communicate with the request
      * and, if required, abort it using the `AbortController` object.
      * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
-     * 
+     *
      * @returns The `Promise` resolves if the operation was successful; rejects otherwise.
      */
     public async publishToBatch(
@@ -328,7 +328,7 @@ export class VersionedLayerClient {
 
     /**
      * Cancels the publication if it has not been submitted.
-     * 
+     *
      * Fails if you attempt to cancel a submitted publication.
      * This allows the specified publication to be abandoned.
      *
@@ -336,7 +336,7 @@ export class VersionedLayerClient {
      * @param abortSignal The signal object that allows you to communicate with the request
      * and, if required, abort it using the `AbortController` object.
      * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
-     * 
+     *
      * @returns True if the operation was successful; rejects with an error otherwise.
      */
     public async cancelBatch(
@@ -379,7 +379,7 @@ export class VersionedLayerClient {
      * @param abortSignal The signal object that allows you to communicate with the request
      * and, if required, abort it using the `AbortController` object.
      * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
-     * 
+     *
      * @returns The publication details.
      */
     public async getBatch(
@@ -417,7 +417,7 @@ export class VersionedLayerClient {
 
     /**
      * Submits the publication (that is a batch) and initiates post-processing if necessary.
-     * 
+     *
      * You cannot modify or interrupt the publication process, so double-check the publication details before submitting it.
      *
      * The publication state becomes `Submitted` directly after submission and `Succeeded` after successful processing.
@@ -432,7 +432,7 @@ export class VersionedLayerClient {
      * @param abortSignal The signal object that allows you to communicate with the request
      * and, if required, abort it using the `AbortController` object.
      * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
-     * 
+     *
      * @returns The `Promise` resolves if the operation was successful; rejects otherwise.
      */
     public async completeBatch(
@@ -600,7 +600,8 @@ export class VersionedLayerClient {
                 body: data,
                 contentType,
                 dataHandle,
-                contentLength: dataSize
+                contentLength: dataSize,
+                contentEncoding: request.getContentEncoding()
             });
         }
 

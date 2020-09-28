@@ -560,6 +560,7 @@ export async function putBlob(
  * The value of this header must match the content type specified in the contentType field when the multipart
  * upload was initialized, and this content type must also match the content type specified in the layer's configuration.
  * For more information, see [RFC 7230, section 3.3.2: Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2).
+ * @param contentEncoding Optional param, can be `gzip` of `undefined`.
  * @param billingTag Billing Tag is an optional free-form tag which is used for grouping billing records together.
  * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
  * Grouping billing records by billing tag will be available in future releases.
@@ -572,6 +573,7 @@ export async function putData(
         body: ArrayBuffer | Buffer;
         contentLength: number;
         contentType: string;
+        contentEncoding?: string;
         billingTag?: string;
     }
 ): Promise<Response> {
@@ -596,6 +598,9 @@ export async function putData(
     }
     if (params["contentLength"] !== undefined) {
         headers["Content-Length"] = params["contentLength"] as any;
+    }
+    if (params["contentEncoding"] !== undefined) {
+        headers["Content-Encoding"] = params["contentEncoding"];
     }
 
     return builder.requestBlob(urlBuilder, options);
