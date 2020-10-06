@@ -642,7 +642,7 @@ describe("VolatileLayerClient", function() {
         );
     });
 
-    it("Method QueryApi.getPartitionsById should be called with param additionalFields and run getPartitions method with additionalFields", async function() {
+    xit("Method QueryApi.getPartitionsById should be called with param additionalFields and run getPartitions method with additionalFields", async function() {
         const QueryClientStub = sandbox.stub(dataServiceRead, "QueryClient");
 
         const mockedPartitions = {

@@ -21,6 +21,7 @@ import {
     ApiCacheRepository,
     ApiName,
     DataStoreRequestBuilder,
+    DownloadManager,
     getEnvLookUpUrl,
     HRN,
     HttpError,
@@ -65,7 +66,7 @@ export class RequestFactory {
         ).then(async (baseUrl: string) =>
             baseUrl
                 ? Promise.resolve(
-                      new DataStoreRequestBuilder(
+                      RequestFactory.getDataStoreRequestBuilder(
                           settings.downloadManager,
                           baseUrl,
                           settings.token,
@@ -182,5 +183,19 @@ export class RequestFactory {
                 return res[baseUrlIndex].baseURL;
             })
             .catch(err => Promise.reject(err));
+    }
+
+    private static getDataStoreRequestBuilder(
+        downloadManager: DownloadManager,
+        baseUrl: string,
+        token: () => Promise<string>,
+        abortSignal?: AbortSignal
+    ): DataStoreRequestBuilder {
+        return new DataStoreRequestBuilder(
+            downloadManager,
+            baseUrl,
+            token,
+            abortSignal
+        );
     }
 }

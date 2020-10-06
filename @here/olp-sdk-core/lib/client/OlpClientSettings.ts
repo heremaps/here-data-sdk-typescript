@@ -82,8 +82,8 @@ export class OlpClientSettings {
     constructor(params: OlpClientSettingsParams) {
         this.getValidToken = params.getToken;
         this.env = params.environment;
-        this.dm = params.dm || new DataStoreDownloadManager();
-        this.keyValueCache = new KeyValueCache();
+        this.dm = params.dm || OlpClientSettings.getDataStoreDownloadManager();
+        this.keyValueCache = OlpClientSettings.getKeyValueCache();
     }
 
     /**
@@ -121,5 +121,13 @@ export class OlpClientSettings {
      */
     get cache(): KeyValueCache {
         return this.keyValueCache;
+    }
+
+    private static getKeyValueCache(): KeyValueCache {
+        return new KeyValueCache();
+    }
+
+    private static getDataStoreDownloadManager(): DataStoreDownloadManager {
+        return new DataStoreDownloadManager();
     }
 }

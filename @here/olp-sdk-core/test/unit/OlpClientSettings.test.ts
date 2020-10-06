@@ -17,13 +17,8 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-import * as lib from "@here/olp-sdk-core";
-
-chai.use(sinonChai);
-const expect = chai.expect;
+import { OlpClientSettings } from "@here/olp-sdk-core";
+import { expect } from "chai";
 
 class MockedKeyValueCache {
     private readonly cache: Map<string, string>;
@@ -52,34 +47,18 @@ class MockedCustomDataStoreDownloadManager {
 }
 
 describe("OlpClientSettings", function() {
-    let KeyValueCacheStub: sinon.SinonStub;
-    let DataStoreDownloadManagerStub: sinon.SinonStub;
-
-    let sandbox: sinon.SinonSandbox;
-
-    before(function() {
-        sandbox = sinon.createSandbox();
-    });
-
-    afterEach(function() {
-        sandbox.restore();
-    });
-
     beforeEach(function() {
-        KeyValueCacheStub = sandbox.stub(lib, "KeyValueCache");
-        KeyValueCacheStub.callsFake((cache, hrn) => new MockedKeyValueCache());
+        // @ts-ignore
+        OlpClientSettings.getKeyValueCache = () => new MockedKeyValueCache();
 
-        DataStoreDownloadManagerStub = sandbox.stub(
-            lib,
-            "DataStoreDownloadManager"
-        );
-        DataStoreDownloadManagerStub.callsFake(
-            (cache, hrn) => new MockedDataStoreDownloadManager()
-        );
+        // @ts-ignore
+        OlpClientSettings.getDataStoreDownloadManager = () =>
+            // @ts-ignore
+            new MockedDataStoreDownloadManager();
     });
 
     it("Should be configured with correct params and default download manager", async function() {
-        const settings = new lib.OlpClientSettings({
+        const settings = new OlpClientSettings({
             environment: "test-env",
             getToken: () => Promise.resolve("test-token")
         });
@@ -101,7 +80,7 @@ describe("OlpClientSettings", function() {
     });
 
     it("Should be configured with correct params and custom download manager", async function() {
-        const settings = new lib.OlpClientSettings({
+        const settings = new OlpClientSettings({
             environment: "test-env",
             getToken: () => Promise.resolve("test-token"),
             dm: new MockedCustomDataStoreDownloadManager()

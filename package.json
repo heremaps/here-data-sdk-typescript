@@ -61,7 +61,7 @@
   "devDependencies": {
     "@types/node": "^13.1.2",
     "lerna": "^3.20.2",
-    "typescript": "3.5.3",
+    "typescript": "^4.0.3",
     "codecov": "3.7.2",
     "mockserver-node": "5.9.0",
     "mockserver-client": "5.9.0",

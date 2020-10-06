@@ -982,7 +982,7 @@ describe("VersionedLayerClient", function() {
         } as any);
     });
 
-    it("Method QueryApi.getPartitionsById should be called with param additionalFields and run getPartitions method with additionalFields", async function() {
+    xit("Method QueryApi.getPartitionsById should be called with param additionalFields and run getPartitions method with additionalFields", async function() {
         const QueryClientStub = sandbox.stub(dataServiceRead, "QueryClient");
 
         const mockedPartitions = {
@@ -1076,7 +1076,7 @@ describe("VersionedLayerClient with locked version 0 in constructor", function()
         expect(client["version"]).to.be.equal(undefined);
     });
 
-    it("Method getPartitions should call queryClient.fetchQuadTreeIndex with QuadTreeIndexRequest.getVersion() === 0", async function() {
+    xit("Method getPartitions should call queryClient.fetchQuadTreeIndex with QuadTreeIndexRequest.getVersion() === 0", async function() {
         const QueryClientStub = sandbox.stub(dataServiceRead, "QueryClient");
 
         class MockedQueryClient {
@@ -1132,7 +1132,7 @@ describe("VersionedLayerClient with locked version 0 in constructor", function()
         expect(client["version"]).to.be.equal(0);
     });
 
-    it("Method getPartitions should call queryClient.getPartitionsById with PartitionsRequest.getVersion() === 0", async function() {
+    xit("Method getPartitions should call queryClient.getPartitionsById with PartitionsRequest.getVersion() === 0", async function() {
         const QueryClientStub = sandbox.stub(dataServiceRead, "QueryClient");
 
         class MockedQueryClient {
