@@ -25,19 +25,229 @@
 
 import { RequestBuilder, RequestOptions, UrlBuilder } from "./RequestBuilder";
 
+export interface PatchProject {
+    /**
+     * The name of the Project.
+     */
+    name?: string;
+    /**
+     * The description of the Project.
+     */
+    description?: string;
+}
+
+export interface ResourceInProjectListWithPageToken extends PageWithToken {
+    /**
+     * List of Resources.
+     */
+    items?: ResourceInProjectResponse[];
+}
+
+export interface ResourceInProjectListWithPageToken extends PageWithToken {
+    /**
+     * List of Resources.
+     */
+    items?: ResourceInProjectResponse[];
+}
+
+export interface ProjectMemberListWithPageToken extends PageWithToken {
+    /**
+     * List of Project Members.
+     */
+    items?: ProjectMember[];
+}
+
+export interface ResourceInProjectResponse {
+    /**
+     * The hrn of the resource.
+     */
+    resource?: string;
+    /**
+     * The hrn of the project.
+     */
+    project?: string;
+    type?: Type;
+    relation?: Relation;
+    allowedActions?: AllowedActions;
+}
+
+/**
+ * The relation of the resource with the Project.
+ */
+export type Relation = "home" | "reference";
+
+export interface ProjectMemberGroupInfo {
+    /**
+     * The id of the group.
+     */
+    groupId?: string;
+    /**
+     * The hrn of the group.
+     */
+    groupHrn?: string;
+    /**
+     * A user assigned name for the group.
+     */
+    name?: string;
+}
+
+export type IdentityTypeEnum = "user" | "app" | "group";
+export interface ProjectMember {
+    /**
+     * The hrn of the Project.
+     */
+    project?: string;
+    member?: string;
+    identityType?: IdentityTypeEnum;
+    /**
+     * Details about the project member.
+     *
+     * The provided fields are dependent on the entity type.
+     * User: userId, userHrn, realm, firstname, lastname, email, state.
+     * App: clientId, clientHrn, realm, name, description, ownerId, ownerHrn, defaultScope, isRestrictedScope, appCreationEnabled.
+     * Group: groupId, groupHrn, name.
+     */
+    info?: UserInfo & AppInfo & ProjectMemberGroupInfo;
+}
+
+export interface PageWithToken {
+    /**
+     * Maximum number of items to return.
+     */
+    limit: number;
+    /**
+     * The cursor for pagination. Present only if there is an additional page of data to view.
+     */
+    pageToken?: string;
+    /**
+     * Total number of items matching the search criteria.
+     */
+    total: number;
+}
+
+export interface ProjectListWithPageToken extends PageWithToken {
+    /**
+     * List of Projects.
+     */
+    items?: ProjectResponse[];
+}
+
+export interface ActivePermission {
+    /**
+     * The unique identifier of the permission in the context of the client.  Begins with "PERM-".
+     */
+    id?: string;
+    /**
+     * The specific action identifier that this permission is controlling access to for the specific associated service.
+     */
+    action?: string;
+    /**
+     * One of "allow" or "deny".
+     */
+    effect?: EffectEnum;
+    /**
+     * The resource identifier that this permission is controlling access to for the given action.
+     */
+    resource?: string;
+    /**
+     * Identifies the service that this permission is associated with.
+     */
+    serviceId?: string;
+}
+
+export interface ProjectResponse {
+    /**
+     * The id of the Project.
+     */
+    id?: string;
+    /**
+     * The hrn of the Project.
+     */
+    hrn?: string;
+    /**
+     * The name of the Project.
+     */
+    name?: string;
+    /**
+     * The description of the Project.
+     */
+    description?: string;
+}
+
+export interface ProjectRequest {
+    /**
+     * The id of the Project.
+     */
+    id: string;
+    /**
+     * The name of the Project.
+     */
+    name: string;
+    /**
+     * The description of the Project.
+     */
+    description?: string;
+}
+
+/**
+ * The list of actions made available for referencing for the resourceType.
+ *
+ * These actions must be one of the "projectLinkingEnabled" actions of the service inferred via the reserved resource prefix of the
+ * resource in the path.
+ */
+export interface AllowedActions extends Array<string> {}
+
+/**
+ * The type of the resource
+ */
+export type Type =
+    | "catalog"
+    | "pipeline"
+    | "pipeline-template"
+    | "schema"
+    | "artifact"
+    | "flow"
+    | "flow-pattern";
+
+/**
+ * The relation of the resource with the Project
+ */
+export type ResourceRelation = "home" | "reference";
+
+export interface ResourceRelationResponse {
+    /**
+     * The hrn of the resource.
+     */
+    resource?: string;
+    /**
+     * The hrn of the project.
+     */
+    project?: string;
+    type?: Type;
+    relation?: ResourceRelation;
+    allowedActions?: AllowedActions;
+}
+export interface ResourceLinkActionBody {
+    /**
+     * The list of actions to add as a link to the project.
+     * The actions must be one of the 'projectLinkingEnabled' action of the service and must be made linkable to the project or the realm.
+     * via the '/resources/{resource}/linkable' API.
+     */
+    actions?: string[];
+}
 export interface PageWToken {
     /**
-     * Total entities
+     * Total entities.
      */
     total?: number;
 
     /**
-     * The pageToken used to retrieve the next page of entities
+     * The pageToken used to retrieve the next page of entities.
      */
     pageToken?: string;
 
     /**
-     * number of items returned
+     * number of items returned.
      */
     count?: number;
 }
@@ -49,7 +259,7 @@ export interface Group {
     /**
      * A user defined name for the group.
      * The following characters are not allowed in the group name: control characters, non-breaking space,
-     * and * / < > \\  |
+     * and * / < > \\  |.
      */
     name: string;
 
@@ -58,7 +268,7 @@ export interface Group {
     /**
      * An optional user defined description for the group.
      * The following characters are not allowed in the group name: control characters, non-breaking space,
-     * and * / < > \\  |
+     * and * / < > \\  |.
      */
     description?: string;
 }
@@ -83,15 +293,15 @@ export interface UserInfo {
      */
     realm?: string;
     /**
-     * The first name of the user. Only included if entityType is user
+     * The first name of the user. Only included if entityType is user.
      */
     firstname?: string;
     /**
-     * The lastname of the user.  Only included if entityType is user
+     * The lastname of the user.  Only included if entityType is user.
      */
     lastname?: string;
     /**
-     * Email address of the user.  Only included if entityType is user
+     * Email address of the user.  Only included if entityType is user.
      */
     email?: string;
     /**
@@ -136,8 +346,8 @@ export interface RoleEntityInfo extends UserInfo {
      */
     ownerHrn?: string;
     /**
-     * The default value for the "scope" parameter when requesting a client_credentials OAuth2 token
-     * if no \"scope\" parameter is specified.
+     * The default value for the "scope" parameter when requesting a client_credentials OAuth2 token.
+     * if no "scope" parameter is specified.
      */
     defaultScope?: string;
     /**
@@ -153,8 +363,8 @@ export interface RoleEntityInfo extends UserInfo {
 /**
  * Details about the realm member.
  * The provided fields are dependent on the entityType as provided.
- * User: userId, userHrn, realm, firstname, lastname, email, roles, state
- * App: clientId, clientHrn, realm, name, description, roles, ownerId, ownerHrn, defaultScope, isRestrictedScope, appCreationEnabled
+ * User: userId, userHrn, realm, firstname, lastname, email, roles, state.
+ * App: clientId, clientHrn, realm, name, description, roles, ownerId, ownerHrn, defaultScope, isRestrictedScope, appCreationEnabled.
  */
 export interface RealmMemberInfo extends UserInfo {
     /**
@@ -186,8 +396,8 @@ export interface RealmMemberInfo extends UserInfo {
      */
     ownerHrn?: string;
     /**
-     * The default value for the \"scope\" parameter when requesting a client_credentials OAuth2 token
-     * if no \"scope\" parameter is specified.
+     * The default value for the "scope" parameter when requesting a client_credentials OAuth2 token.
+     * if no "scope" parameter is specified.
      */
     defaultScope?: string;
     /**
@@ -315,7 +525,7 @@ export interface EntityId {
      */
     hrn?: string;
     /**
-     * The type of this entity. One of user, app, or group
+     * The type of this entity. One of user, app, or group.
      */
     type?: string;
 }
@@ -365,11 +575,11 @@ export interface AppInfo {
 
 export interface GroupInfo {
     /**
-     * The id of the group..
+     * The id of the group.
      */
     id?: string;
     /**
-     * The hrn of the group..
+     * The hrn of the group.
      */
     hrn?: string;
     /**
@@ -380,7 +590,7 @@ export interface GroupInfo {
 
 export interface ActivePermission {
     /**
-     * The unique identifier of the permission in the context of the client.  Begins with \"PERM-\".
+     * The unique identifier of the permission in the context of the client.  Begins with "PERM-".
      */
     id?: string;
     /**
@@ -388,7 +598,7 @@ export interface ActivePermission {
      */
     action?: string;
     /**
-     * One of \"allow\" or \"deny\"
+     * One of "allow" or "deny".
      */
     effect?: EffectEnum;
     /**
@@ -409,22 +619,22 @@ export interface EntityGrant {
     app?: AppInfo;
     group?: GroupInfo;
     /**
-     * List of permissions
+     * List of permissions.
      */
     permissions?: ActivePermission[];
 }
 
 export interface EntityGrants {
     /**
-     * Total entities
+     * Total entities.
      */
     total?: number;
     /**
-     * The pageToken used to retrieve the next page of entities
+     * The pageToken used to retrieve the next page of entities.
      */
     pageToken?: string;
     /**
-     * count of page
+     * count of page.
      */
     count?: number;
     /**
@@ -435,19 +645,19 @@ export interface EntityGrants {
 
 export interface Role {
     /**
-     * Unique identifier for the role
+     * Unique identifier for the role.
      */
     id?: string;
     /**
-     * Unique identifier for this role with partition/realm/etc, an HRN
+     * Unique identifier for this role with partition/realm/etc, an HRN.
      */
     hrn?: string;
     /**
-     * System defined name for the role
+     * System defined name for the role.
      */
     name?: string;
     /**
-     * Represents either Group or Realm HRN for which object is scoped for
+     * Represents either Group or Realm HRN for which object is scoped for.
      */
     resource?: string;
 }
@@ -484,7 +694,7 @@ export interface GroupMemberInfo extends UserInfo {
      */
     clientHrn?: string;
     /**
-     * The realm which the invite is associated with
+     * The realm which the invite is associated with.
      */
     realm?: string;
     /**
@@ -504,7 +714,7 @@ export interface GroupMemberInfo extends UserInfo {
      */
     ownerHrn?: string;
     /**
-     * The default value for the "scope" parameter when requesting a client_credentials OAuth2 token if no
+     * The default value for the "scope" parameter when requesting a client_credentials OAuth2 token if no.
      * "scope" parameter is specified.
      */
     defaultScope?: string;
@@ -517,11 +727,11 @@ export interface GroupMemberInfo extends UserInfo {
      */
     appCreationEnabled?: boolean;
     /**
-     * The unique identifier of the invite
+     * The unique identifier of the invite.
      */
     inviteId?: string;
     /**
-     * The HRN of the invite
+     * The HRN of the invite.
      */
     inviteHrn?: string;
     /**
@@ -548,8 +758,8 @@ export interface GroupMemberPageWToken extends PageWToken {
  *
  * @example: In order to retrieve the groups a user, HERE-4ba9aca3-fdf9-4cad-a3da-534494d6198f, is a member of,
  * a permission with the following would be required:
- * \"action\" : \"readGroups\"
- * \"resource\" : \"hrn:here:account::myrealm:user/HERE-4ba9aca3-fdf9-4cad-a3da-534494d6198f\"
+ * "action" : "readGroups"
+ * "resource" : "hrn:here:account::myrealm:user/HERE-4ba9aca3-fdf9-4cad-a3da-534494d6198f"
  * This API works only with tokens that are not scoped to a project
  *
  * @summary Get entity group membership
@@ -591,8 +801,8 @@ export async function getEntityGroupMembership(
  * the specified entity.
  * @example: In order to retrieve the groups a user, HERE-4ba9aca3-fdf9-4cad-a3da-534494d6198f,
  * is an admin of, a permission with the following would be required:
- * * \"action\" : \"readGroups\"
- * * \"resource\" : \"hrn:here:account::myrealm:user/HERE-4ba9aca3-fdf9-4cad-a3da-534494d6198f\"
+ * * "action" : "readGroups"
+ * * "resource" : "hrn:here:account::myrealm:user/HERE-4ba9aca3-fdf9-4cad-a3da-534494d6198f"
  * * This API works only with tokens that are not scoped to a project.
  *
  * @summary Get entity managed group
@@ -633,8 +843,8 @@ export async function getEntityManagedGroups(
  * the specified realm.
  * @example: In order to retrieve a member of the realm, _MyRealm_, a permission with the following
  * would be required:
- * * \"action\" : \"readMembers\"
- * * \"resource\" : \"hrn:here:account::myrealm:realm/myrealm\"
+ * * "action" : "readMembers"
+ * * "resource" : "hrn:here:account::myrealm:realm/myrealm"
  * * This API works only with tokens that are not scoped to a project.
  *
  * @summary Get realm member
@@ -666,8 +876,8 @@ export async function getRealmMember(
  * action against the specified realm.
  * @example: In order to list the members of the realm, _MyRealm_,
  * a permission with the following would be required:
- * * \"action\" : \"readMembers\"
- * * \"resource\" : \"hrn:here:account::myrealm:realm/myrealm\"
+ * * "action" : "readMembers"
+ * * "resource" : "hrn:here:account::myrealm:realm/myrealm"
  * * This API works only with tokens that are not scoped to a project.
  *
  * @summary Get realm members
@@ -726,8 +936,8 @@ export async function getRealmMembers(
  * action against the specified realm.
  * @example: In order to delete an invitation to the realm,
  * _MyRealm_, a permission with the following would be required:
- * * \"action\" : \"manageInvites\"
- * * \"resource\" : \"hrn:here:account::myrealm:realm/myrealm\"
+ * * "action" : "manageInvites"
+ * * "resource" : "hrn:here:account::myrealm:realm/myrealm"
  * * This API works only with tokens that are not scoped to a project.
  *
  * @summary Cancel a user invitation to a realm
@@ -761,15 +971,15 @@ export async function cancelRealmMemberInvite(
  * **manageInvites** action against the specified realm.
  * @example: In order to invite a new user to the realm, _MyRealm_,
  * a permission with the following would be required:
- * * \"action\" : \"manageInvites\"
- * * \"resource\" : \"hrn:here:account::myrealm:realm/myrealm\"
+ * * "action" : "manageInvites"
+ * * "resource" : "hrn:here:account::myrealm:realm/myrealm"
  * @example: In order to invite a new user to the realm, _MyRealm_,
  * as a member of the group GROUP-a3dee2fe-fb38-4183-b686-14fdea5964c0,
  * the following permissions would be required:
- * * \"action\" : \"manageInvites\"
- * * \"resource\" : \"hrn:here:account::myrealm:realm/myrealm\"
- * * \"action\" : \"manageMembers\"
- * * \"resource\" : \"hrn:here:authorization::myrealm:group/GROUP-a3dee2fe-fb38-4183-b686-14fdea5964c\"
+ * * "action" : "manageInvites"
+ * * "resource" : "hrn:here:account::myrealm:realm/myrealm"
+ * * "action" : "manageMembers"
+ * * "resource" : "hrn:here:authorization::myrealm:group/GROUP-a3dee2fe-fb38-4183-b686-14fdea5964c"
  * * This API works only with tokens that are not scoped to a project.
  *
  * @summary Create and send a user invitation for a realm
@@ -808,8 +1018,8 @@ export async function createRealmMemberInvite(
  *
  * @example: In order to resend an invite to a new user to the realm, _MyRealm_,
  * a permission with the following would be required:
- * * \"action\" : \"manageInvites\"
- * * \"resource\" : \"hrn:here:account::myrealm:realm/myrealm\"
+ * * "action" : "manageInvites"
+ * * "resource" : "hrn:here:account::myrealm:realm/myrealm"
  * * This API works only with tokens that are not scoped to a project.
  *
  * @summary Resend an invitation to a user in a realm
@@ -842,8 +1052,8 @@ export async function resendRealmMemberInvite(
  * action against the realm associated with the calling party.
  *
  * @example: In order to list the invitations within the calling party's realm a permission with the following would be required:
- * * \"action\" : \"manageInvites\"
- * * \"resource\" : \"hrn:here:account::myrealm:realm/myrealm\"
+ * * "action" : "manageInvites"
+ * * "resource" : "hrn:here:account::myrealm:realm/myrealm"
  * * This API works only with tokens that are not scoped to a project.
  *
  * @summary Search for invitations in a realm
@@ -1474,8 +1684,8 @@ export async function getRoles(
  * * Example:
  * In order to add a member to the group, _GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a_, a permission with the following would
  * be required:
- * * \"action\" : \"manageMembers\"
- * * \"resource\" : \"hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a\"
+ * * "action" : "manageMembers"
+ * * "resource" : "hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a"
  * * This API works only with tokens that are not scoped to a project.
  *
  * @summary Add a member to a group
@@ -1511,8 +1721,8 @@ export async function addGroupMember(
  *
  * * Example:
  * In order to create a group within the calling party's realm a permission with the following would be required:
- * * \"action\" : \"createGroup\"
- * * \"resource\" : \"hrn:here:account::myrealm:realm/myrealm\"
+ * * "action" : "createGroup"
+ * * "resource" : "hrn:here:account::myrealm:realm/myrealm"
  * * This API works only with tokens that are not scoped to a project.
  *
  * @summary Create group
@@ -1549,8 +1759,8 @@ export async function createGroup(
  * * Example:
  * In order to delete the group, _GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a_,
  * a permission with the following would be required:
- * * \"action\" : \"deleteGroup\"
- * * \"resource\" : \"hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a\"
+ * * "action" : "deleteGroup"
+ * * "resource" : "hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a"
  * * This API works only with tokens that are not scoped to a project.
  *
  * @summary delete group
@@ -1586,8 +1796,8 @@ export async function deleteGroup(
  * * Example:
  * In order to retrieve a group within the calling party's realm a permission
  * with the following would be required:
- * * \"action\" : \"readMembers\"
- * * \"resource\" : \"hrn:here:account::myrealm:realm/myrealm\"
+ * * "action" : "readMembers"
+ * * "resource" : "hrn:here:account::myrealm:realm/myrealm"
  * * This API works only with tokens that are not scoped to a project.
  *
  * @summary Get single group
@@ -1623,8 +1833,8 @@ export async function getGroup(
  * * Example:
  * In order to retrieve a single member of the group, _GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a_,
  * a permission with the following would be required:
- * * \"action\" : \"readMembers\"
- * * \"resource\" : \"hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a\"
+ * * "action" : "readMembers"
+ * * "resource" : "hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a"
  * * This API works only with tokens that are not scoped to a project.
  *
  * @summary Get single Group member
@@ -1659,8 +1869,8 @@ export async function getGroupMember(
  *
  * * Example: In order to retrieve the members of the group, _GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a_,
  * a permission with the following would be required:
- * * \"action\" : \"readMembers\"
- * * \"resource\" : \"hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a\"
+ * * "action" : "readMembers"
+ * * "resource" : "hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a"
  * * This API works only with tokens that are not scoped to a project.
  *
  * @summary Get Group members
@@ -1705,8 +1915,8 @@ export async function getGroupMembers(
  * * The calling principal **must** have permission to take the **readRoles** action against the specified group.
  * * Example: In order list the roles associated with the group, _GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a_,
  * a permission with the following would be required:
- * * \"action\" : \"readRoles\"
- * * \"resource\" : \"hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a\"
+ * * "action" : "readRoles"
+ * * "resource" : "hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a"
  * * This API works only with tokens that are not scoped to a project.
  *
  * @summary Get group roles
@@ -1744,8 +1954,8 @@ export async function getGroupRoles(
  *
  * * Example:
  * In order to list the groups within the calling party's realm a permission with the following would be required:
- * * \"action\" : \"readMembers\"
- * * \"resource\" : \"hrn:here:account::myrealm:realm/myrealm\"
+ * * "action" : "readMembers"
+ * * "resource" : "hrn:here:account::myrealm:realm/myrealm"
  * * This API works only with tokens that are not scoped to a project.
  *
  * @summary Get groups
@@ -1845,8 +2055,8 @@ export async function leaveGroup(
  * * Example:
  * In order to remove a member from the group, _GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a_,
  * a permission with the following would be required:
- * * \"action\" : \"manageMembers\"
- * * \"resource\" : \"hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a\"
+ * * "action" : "manageMembers"
+ * * "resource" : "hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a"
  * * This API works only with tokens that are not scoped to a project.
  *
  * @summary Remove a member from the group.
@@ -1882,8 +2092,8 @@ export async function removeGroupMember(
  * * Example:
  * In order to modify the group, _GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a_, a permission with the following
  * would be required:
- * * \"action\" : \"updateGroup\"
- * * \"resource\" : \"hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a\"
+ * * "action" : "updateGroup"
+ * * "resource" : "hrn:here:authorization::myrealm:group/GROUP-8e270653-f592-45a8-88d7-46d409ccfa8a"
  * * This API works only with tokens that are not scoped to a project.
  *
  * @summary Update group
@@ -1912,4 +2122,763 @@ export async function updateGroup(
     }
 
     return builder.request<Group>(urlBuilder, options);
+}
+
+/**
+ * ===================================================================
+ * ProjectsApi
+ * ===================================================================
+ */
+
+/**
+ * Add the member to the requested Project.
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **manageMembers** action for the specified resource.
+ *
+ * * Example:
+ * In order to add a member to the Project, the following permission would be required:
+ * * "action" : "manageMembers"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Add the member to the requested Project
+ * @param project HRN identifying the project
+ * @param member HRN identifying the project member. Either user, app or group
+ * @param xCorrelationID Correlates HTTP requests between a client and server.
+ * If not present in the incoming request, it will be generated.
+ */
+export async function addProjectMember(
+    builder: RequestBuilder,
+    params: { project: string; member: string; xCorrelationID?: string }
+): Promise<Response> {
+    const baseUrl = "/projects/{project}/members/{member}"
+        .replace("{project}", UrlBuilder.toString(params["project"]))
+        .replace("{member}", UrlBuilder.toString(params["member"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "POST",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.requestBlob(urlBuilder, options);
+}
+
+/**
+ * Add the resource to the requested Project as a home or a reference(link).
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token  **When relation=home**
+ * The requested resource will be assigned the requested project as its resource home.
+ * The resource **MUST NOT** already have an existing resource home.
+ *
+ * * The calling principal **must** have permission to take the **manageResourceHome** action for the specified project **AND**
+ * the **share** action for the specified resource.
+ *
+ * * Example: In order to add resource "hrn:here:data::myrealm:my-catalog-0000" to the project
+ * "hrn:here:authorization::myrealm:project/my-project-0000", the following permissions would be required:
+ * * Permission 1:
+ * * "action" : "manageResourceHome"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ *
+ * * Permission 2:
+ * * "action" : "share"
+ * * "resource" : "hrn:here:data::myrealm:my-catalog-0000" **When relation=reference**
+ * Link the resource to the requested Project as a reference(link).
+ * The requested resource will be assigned to the requested project as reference(link).
+ *
+ * The resource **MUST** be available to the caller to attach as a resource reference(link).
+ * A resource is referenceable if it has been marked as referenceable and the caller has permission to all reference enabled actions
+ * against the resource OR The resource has been made linkable to the project/realm for the project linking enabled action
+ * The exclusive list of resources available to the caller to attach as a resource reference(link) is accessible via a call
+ * to /resources?referenceable=true or /resources?linkable=true
+ *
+ * * The authorization context **must** satisfy one of the following:
+ * * The calling principal has permission to take the **manageResourceReferences** action for the specified project.
+ * * Example: In order to add a resource reference to the project "hrn:here:authorization::myrealm:project/my-project-0000",
+ * the following permission would be required:
+ * * "action" : "manageResourceReferences"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * The calling principal is a **member** of the specified project.
+ * * The calling principal **must** have permission to attach the resource as a referenceable resource.
+ * A resource is referenceable to the caller if:
+ * * It has been marked as referenceable and The caller has permission to all reference enabled actions against the resource.
+ *
+ * OR
+ *
+ * * The resource has been made linkable to the project/realm for the project linking enabled action
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Add a resource to the requested Project as a Resource Home or Resource Reference(Link)
+ * @param body
+ * @param project HRN identifying the project
+ * @param resource The hrn that identifies the resource.
+ * @param relation The relation of the resource. Must be home or reference(link)
+ * @param type The type of the resource.
+ * @param xCorrelationID Correlates HTTP requests between a client and server.
+ * If not present in the incoming request, it will be generated.
+ */
+export async function addProjectResourceRelation(
+    builder: RequestBuilder,
+    params: {
+        body: ResourceLinkActionBody;
+        project: string;
+        resource: string;
+        relation: ResourceRelation;
+        type: Type;
+        xCorrelationID?: string;
+    }
+): Promise<ResourceRelationResponse> {
+    const baseUrl = "/projects/{project}/resources/{resource}"
+        .replace("{project}", UrlBuilder.toString(params["project"]))
+        .replace("{resource}", UrlBuilder.toString(params["resource"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("relation", params["relation"]);
+    urlBuilder.appendQuery("type", params["type"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "POST",
+        headers
+    };
+    headers["Content-Type"] = "application/json";
+    if (params["body"] !== undefined) {
+        options.body = JSON.stringify(params["body"]);
+    }
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<ResourceRelationResponse>(urlBuilder, options);
+}
+
+/**
+ * Checks whether a project exists with requested project hrn in caller realm.
+ *
+ * If project does not exist in the same realm it will return 404.
+ *
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Checks the existance of a project in caller realm.
+ * @param project HRN identifying the project
+ * @param xCorrelationID Correlates HTTP requests between a client and server.
+ * If not present in the incoming request, it will be generated.
+ */
+export async function checkProjectExistance(
+    builder: RequestBuilder,
+    params: { project: string; xCorrelationID?: string }
+): Promise<Response> {
+    const baseUrl = "/projects/{project}".replace(
+        "{project}",
+        UrlBuilder.toString(params["project"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "HEAD",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.requestBlob(urlBuilder, options);
+}
+
+/**
+ * Create the requested Project in the callers realm
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **createProject** action for the specified project.
+ *
+ * * Example:
+ * In order to create a Project, the following permission would be required:
+ * * "action" : "createProject"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Create the requested Project
+ * @param body
+ * @param xCorrelationID Correlates HTTP requests between a client and server.
+ * If not present in the incoming request, it will be generated.
+ */
+export async function createProject(
+    builder: RequestBuilder,
+    params: { body: ProjectRequest; xCorrelationID?: string }
+): Promise<ProjectResponse> {
+    const baseUrl = "/projects";
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "POST",
+        headers
+    };
+    headers["Content-Type"] = "application/json";
+    if (params["body"] !== undefined) {
+        options.body = JSON.stringify(params["body"]);
+    }
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<ProjectResponse>(urlBuilder, options);
+}
+
+/**
+ * Delete the specified Project
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **manage** action for the specified resource.
+ * * Example: In order to delete a Project, the following permission would be required:
+ * * "action" : "manage"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Delete the specified Project
+ * @param project HRN identifying the project
+ * @param xCorrelationID Correlates HTTP requests between a client and server. If not present in the incoming request, it will be generated.
+ */
+export async function deleteProject(
+    builder: RequestBuilder,
+    params: { project: string; xCorrelationID?: string }
+): Promise<Response> {
+    const baseUrl = "/projects/{project}".replace(
+        "{project}",
+        UrlBuilder.toString(params["project"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "DELETE",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.requestBlob(urlBuilder, options);
+}
+
+/**
+ * Remove the member from the specified Project
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **manageMembers** action for the specified resource.
+ *
+ * * Example:
+ * In order to remove a member from a Project, the following permission would be required:
+ * * "action" : "manageMembers"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Remove the member from the specified Project
+ * @param project HRN identifying the project
+ * @param member HRN identifying the project member. Either user, app or group
+ * @param xCorrelationID Correlates HTTP requests between a client and server. If not present in the incoming request, it will be generated.
+ */
+export async function deleteProjectMember(
+    builder: RequestBuilder,
+    params: { project: string; member: string; xCorrelationID?: string }
+): Promise<Response> {
+    const baseUrl = "/projects/{project}/members/{member}"
+        .replace("{project}", UrlBuilder.toString(params["project"]))
+        .replace("{member}", UrlBuilder.toString(params["member"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "DELETE",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.requestBlob(urlBuilder, options);
+}
+
+/**
+ * Remove the resource from the project.
+ * The requested resource may only be linked as a reference, removing a home resource requires deleting the resource from the
+ * resource service.
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **manageResourceReferences** action for the specified project.
+ *
+ * * Example:
+ * In order to remove a resource reference(link) from the project
+ * "hrn:here:authorization::myrealm:project/my-project-0000", the following permission would be required:
+ * * "action" : "manageResourceReferences"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Remove a Resource Reference(Link) from a project
+ * @param body
+ * @param project HRN identifying the project
+ * @param resource The hrn that identifies the resource.
+ * @param relation The relation of the resource. Must be reference(link)
+ * @param xCorrelationID Correlates HTTP requests between a client and server. If not present in the incoming request, it will be generated.
+ */
+export async function deleteProjectResourceReference(
+    builder: RequestBuilder,
+    params: {
+        body: ResourceLinkActionBody;
+        project: string;
+        resource: string;
+        relation: string;
+        xCorrelationID?: string;
+    }
+): Promise<Response> {
+    const baseUrl = "/projects/{project}/resources/{resource}"
+        .replace("{project}", UrlBuilder.toString(params["project"]))
+        .replace("{resource}", UrlBuilder.toString(params["resource"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("relation", params["relation"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "DELETE",
+        headers
+    };
+    headers["Content-Type"] = "application/json";
+    if (params["body"] !== undefined) {
+        options.body = JSON.stringify(params["body"]);
+    }
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.requestBlob(urlBuilder, options);
+}
+
+/**
+ * Get the list of all Projects in the Org
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **listAllProjects** action for the specified resource.
+ *
+ * * Example:
+ * In order to get a list of projects, the following permission would be required:
+ * * "action" : "listAllProjects"
+ *
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get the list of all Projects in the Org
+ * @param limit Number of entries to be returned in the response.
+ * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
+ * @param xCorrelationID Correlates HTTP requests between a client and server. If not present in the incoming request, it will be generated.
+ */
+export async function getAllProjectList(
+    builder: RequestBuilder,
+    params: { limit?: number; pageToken?: string; xCorrelationID?: string }
+): Promise<ProjectListWithPageToken> {
+    const baseUrl = "/projects";
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("limit", params["limit"]);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<ProjectListWithPageToken>(urlBuilder, options);
+}
+
+/**
+ * Get the requested Project
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **read** action for the specified resource.
+ *
+ * * Example:
+ * In order to get a project, the following permission would be required:
+ * * "action" : "read"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get the requested Project
+ * @param project HRN identifying the project
+ * @param xCorrelationID Correlates HTTP requests between a client and server. If not present in the incoming request, it will be generated.
+ */
+export async function getProject(
+    builder: RequestBuilder,
+    params: { project: string; xCorrelationID?: string }
+): Promise<ProjectResponse> {
+    const baseUrl = "/projects/{project}".replace(
+        "{project}",
+        UrlBuilder.toString(params["project"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<ProjectResponse>(urlBuilder, options);
+}
+
+/**
+ * Get the list of Projects you are a  project admin or a member based on the "canManage" or "isMember" parameter's value.
+ *
+ * @note If neither "canManage" nor "isMember" is specified, "isMember=true" projects are returned.
+ * Supported values for "canManage" / "isMember" is : [true]
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get the list of Projects that you are a project admin or a member based on the "canManage" or "isMember" parameter's value
+ * @param xCorrelationID Correlates HTTP requests between a client and server. If not present in the incoming request, it will be generated.
+ * @param limit Number of entries to be returned in the response.
+ * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
+ * @param canManage if true returns all projects of which the caller(user/app) is a project admin.
+ * @param isMember if true returns all projects of which the caller(user/app) is a member.
+ */
+export async function getProjectList(
+    builder: RequestBuilder,
+    params: {
+        xCorrelationID?: string;
+        limit?: number;
+        pageToken?: string;
+        canManage?: boolean;
+        isMember?: boolean;
+    }
+): Promise<ProjectListWithPageToken> {
+    const baseUrl = "/projects/me";
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("limit", params["limit"]);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+    urlBuilder.appendQuery("canManage", `${params["canManage"]}`);
+    urlBuilder.appendQuery("isMember", `${params["isMember"]}`);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<ProjectListWithPageToken>(urlBuilder, options);
+}
+
+/**
+ * Get the requested Project Member
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **read** action for the specified resource.
+ * * Example: In order to get a member of a Project, the following permission would be required:
+ * * "action" : "read"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get the requested Project Member
+ * @param project HRN identifying the project
+ * @param member HRN identifying the project member. Either user, app or group
+ * @param xCorrelationID Correlates HTTP requests between a client and server. If not present in the incoming request, it will be generated.
+ */
+export async function getProjectMember(
+    builder: RequestBuilder,
+    params: { project: string; member: string; xCorrelationID?: string }
+): Promise<ProjectMember> {
+    const baseUrl = "/projects/{project}/members/{member}"
+        .replace("{project}", UrlBuilder.toString(params["project"]))
+        .replace("{member}", UrlBuilder.toString(params["member"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<ProjectMember>(urlBuilder, options);
+}
+
+/**
+ * Get the resource that is linked to the requested Project.
+ *
+ * The requested resource may be linked as either a home or a reference(link).
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **read** action for the specified project
+ *
+ * * Example: In order to get resource "hrn:here:data::myrealm:my-catalog-0000" in the project
+ * "hrn:here:authorization::myrealm:project/my-project-0000", the following permission would be required:
+ *
+ * * "action" : "read"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get a resource that is linked to a Project as either a Resource Home or Resource Reference(Link)
+ * @param project HRN identifying the project
+ * @param resource The hrn that identifies the resource.
+ * @param relation The relation of the resource. A resource is only returned in the response if it matches the requested relation.
+ * @param xCorrelationID Correlates HTTP requests between a client and server. If not present in the incoming request, it will be generated.
+ */
+export async function getProjectResource(
+    builder: RequestBuilder,
+    params: {
+        project: string;
+        resource: string;
+        relation?: Relation;
+        xCorrelationID?: string;
+    }
+): Promise<ResourceInProjectResponse> {
+    const baseUrl = "/projects/{project}/resources/{resource}"
+        .replace("{project}", UrlBuilder.toString(params["project"]))
+        .replace("{resource}", UrlBuilder.toString(params["resource"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("relation", params["relation"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<ResourceInProjectResponse>(urlBuilder, options);
+}
+
+/**
+ * Remove the caller from the specified Project
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * Authorization : None
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Remove the caller from the specified Project
+ * @param project HRN identifying the project
+ * @param xCorrelationID Correlates HTTP requests between a client and server. If not present in the incoming request, it will be generated.
+ */
+export async function leaveProject(
+    builder: RequestBuilder,
+    params: { project: string; xCorrelationID?: string }
+): Promise<Response> {
+    const baseUrl = "/projects/{project}/members/me".replace(
+        "{project}",
+        UrlBuilder.toString(params["project"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "DELETE",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.requestBlob(urlBuilder, options);
+}
+
+/**
+ * Get the list of members of the Project
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **read** action for the specified resource.
+ *
+ * * Example:
+ * In order to get a list of project members, the following permission would be required:
+ * * "action" : "read"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * This API works only with tokens that are not scoped to a project.
+ * * if 'onlyIncludeIdentities' query parameter is set to true, 'total' is NOT returned in Response
+ *
+ * @summary Get the list of members of the Project
+ * @param project HRN identifying the project
+ * @param onlyIncludeIdentities If true, returns an effective project members list containing only user and app identities,
+ * including those that are members of the project indirectly via a group.
+ * It will also return users who are project admins of the specified project, and Resource Managers for the realm.
+ * Response will NOT include total number of identities.
+ * If false, returns users, apps, and groups that are direct members of the project, excluding any users and apps that only have
+ * membership via a group. Defaults to false.  Suppose there are a user U and a group G with app A in it.
+ * Suppose user U and group G are the members of the project, then * onlyIncludeIdentities: true will return U and A
+ * * onlyIncludeIdentities:false or absent will return U and G
+ * @param xCorrelationID Correlates HTTP requests between a client and server. If not present in the incoming request, it will be generated.
+ * @param limit Number of entries to be returned in the response.
+ * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
+ */
+export async function listProjectMembers(
+    builder: RequestBuilder,
+    params: {
+        project: string;
+        onlyIncludeIdentities?: boolean;
+        xCorrelationID?: string;
+        limit?: number;
+        pageToken?: string;
+    }
+): Promise<ProjectMemberListWithPageToken> {
+    const baseUrl = "/projects/{project}/members".replace(
+        "{project}",
+        UrlBuilder.toString(params["project"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery(
+        "onlyIncludeIdentities",
+        `${params["onlyIncludeIdentities"]}`
+    );
+    urlBuilder.appendQuery("limit", params["limit"]);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<ProjectMemberListWithPageToken>(urlBuilder, options);
+}
+
+/**
+ * Get the list of resources in the requested Project & referenced in(linked to) the Project
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **read** action for the specified resource.
+ *
+ * * Example:
+ * In order to get the list of resources in the Project, the following permission would be required:
+ * * "action" : "read"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get the list of resources in the requested Project & referenced in(linked to) the Project
+ * @param project HRN identifying the project
+ * @param type The type of the resource.
+ * @param relation The relation of the resource. A resource is only returned in the response if it matches the requested relation.
+ * @param limit Number of entries to be returned in the response.
+ * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
+ * @param xCorrelationID Correlates HTTP requests between a client and server. If not present in the incoming request, it will be generated.
+ */
+export async function listProjectResources(
+    builder: RequestBuilder,
+    params: {
+        project: string;
+        type?: Type;
+        relation?: Relation;
+        limit?: number;
+        pageToken?: string;
+        xCorrelationID?: string;
+    }
+): Promise<ResourceInProjectListWithPageToken> {
+    const baseUrl = "/projects/{project}/resources".replace(
+        "{project}",
+        UrlBuilder.toString(params["project"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("type", params["type"]);
+    urlBuilder.appendQuery("relation", params["relation"]);
+    urlBuilder.appendQuery("limit", params["limit"]);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<ResourceInProjectListWithPageToken>(
+        urlBuilder,
+        options
+    );
+}
+
+/**
+ * Update the specified Project
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **write** action for the specified resource.
+ * *
+ * Example:
+ * In order to update a Project, the following permission would be required:
+ * * "action" : "write"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Update the specified Project
+ * @param body
+ * @param project HRN identifying the project
+ * @param xCorrelationID Correlates HTTP requests between a client and server. If not present in the incoming request, it will be generated.
+ */
+export async function patchProject(
+    builder: RequestBuilder,
+    params: { body: PatchProject; project: string; xCorrelationID?: string }
+): Promise<ProjectResponse> {
+    const baseUrl = "/projects/{project}".replace(
+        "{project}",
+        UrlBuilder.toString(params["project"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "PATCH",
+        headers
+    };
+    headers["Content-Type"] = "application/json";
+    if (params["body"] !== undefined) {
+        options.body = JSON.stringify(params["body"]);
+    }
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<ProjectResponse>(urlBuilder, options);
 }

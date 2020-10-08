@@ -852,4 +852,525 @@ describe("AuthorizationApi", function() {
 
         expect(result).to.be.equal("success");
     });
+
+    it("addProjectMember", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/members/mocked-member"
+                );
+                expect(options.method).to.be.equal("POST");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.addProjectMember(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                member: "mocked-member",
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("addProjectResourceRelation", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/resources/mocked-resource?relation=home&type=catalog"
+                );
+                expect(options.method).to.be.equal("POST");
+
+                expect(options.body).to.be.equal(
+                    JSON.stringify({ actions: ["mocked-action"] })
+                );
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.addProjectResourceRelation(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                resource: "mocked-resource",
+                body: {
+                    actions: ["mocked-action"]
+                },
+                relation: "home",
+                type: "catalog",
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("checkProjectExistance", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project"
+                );
+                expect(options.method).to.be.equal("HEAD");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.checkProjectExistance(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("createProject", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects"
+                );
+                expect(options.method).to.be.equal("POST");
+                expect(options.body).to.be.equal(
+                    JSON.stringify({
+                        id: "mocked-project-id",
+                        name: "mocked-project-name",
+                        description: "mocked-project-description"
+                    })
+                );
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.createProject(
+            (builder as unknown) as RequestBuilder,
+            {
+                body: {
+                    id: "mocked-project-id",
+                    name: "mocked-project-name",
+                    description: "mocked-project-description"
+                },
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("deleteProject", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project"
+                );
+                expect(options.method).to.be.equal("DELETE");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.deleteProject(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("deleteProjectMember", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/members/mocked-member"
+                );
+                expect(options.method).to.be.equal("DELETE");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.deleteProjectMember(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                member: "mocked-member",
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("deleteProjectResourceReference", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/resources/mocked-resource?relation=mocked-relation"
+                );
+                expect(options.method).to.be.equal("DELETE");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+                expect(options.body).to.be.equal(
+                    JSON.stringify({
+                        actions: ["mocked-action"]
+                    })
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.deleteProjectResourceReference(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                relation: "mocked-relation",
+                resource: "mocked-resource",
+                body: {
+                    actions: ["mocked-action"]
+                },
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getAllProjectList", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects?limit=5&pageToken=mocked-page-token"
+                );
+                expect(options.method).to.be.equal("GET");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getAllProjectList(
+            (builder as unknown) as RequestBuilder,
+            {
+                limit: 5,
+                pageToken: "mocked-page-token",
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getProject", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project"
+                );
+                expect(options.method).to.be.equal("GET");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getProject(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getProjectList", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/me?limit=5&pageToken=mocked-page-token&canManage=true&isMember=true"
+                );
+                expect(options.method).to.be.equal("GET");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getProjectList(
+            (builder as unknown) as RequestBuilder,
+            {
+                limit: 5,
+                pageToken: "mocked-page-token",
+                xCorrelationID: "mocked-xCorrelationID",
+                canManage: true,
+                isMember: true
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getProjectMember", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/members/mocked-member"
+                );
+                expect(options.method).to.be.equal("GET");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getProjectMember(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                member: "mocked-member",
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getProjectResource", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/resources/mocked-resource?relation=home"
+                );
+                expect(options.method).to.be.equal("GET");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getProjectResource(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                resource: "mocked-resource",
+                relation: "home",
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("leaveProject", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/members/me"
+                );
+                expect(options.method).to.be.equal("DELETE");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.leaveProject(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("listProjectMembers", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/members?onlyIncludeIdentities=true&limit=5&pageToken=mocked-page-token"
+                );
+                expect(options.method).to.be.equal("GET");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.listProjectMembers(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                limit: 5,
+                onlyIncludeIdentities: true,
+                pageToken: "mocked-page-token",
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("listProjectResources", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/resources?type=catalog&relation=home&limit=5&pageToken=mocked-page-token"
+                );
+                expect(options.method).to.be.equal("GET");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.listProjectResources(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                limit: 5,
+                pageToken: "mocked-page-token",
+                relation: "home",
+                type: "catalog",
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("patchProject", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project"
+                );
+                expect(options.method).to.be.equal("PATCH");
+                expect(options.body).to.be.equal(
+                    JSON.stringify({
+                        description: "mocked-description",
+                        name: "mocked-name"
+                    })
+                );
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.patchProject(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                body: {
+                    description: "mocked-description",
+                    name: "mocked-name"
+                },
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
 });
