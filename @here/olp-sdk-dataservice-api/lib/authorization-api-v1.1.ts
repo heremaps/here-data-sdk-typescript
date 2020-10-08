@@ -25,6 +25,93 @@
 
 import { RequestBuilder, RequestOptions, UrlBuilder } from "./RequestBuilder";
 
+export interface ResourceListWithPageToken extends PageWithTokenNoTotal {
+    /**
+     * List of Resources.
+     */
+    items?: ResourceResponse[];
+}
+
+export interface PageWithTokenNoTotal {
+    /**
+     * Maximum number of items to return.
+     */
+    limit: number;
+    /**
+     * The cursor for pagination. Present only if there is an additional page of data to view.
+     */
+    pageToken?: string;
+}
+
+export interface ResourceListDetailedWithPageToken
+    extends PageWithTokenNoTotal {
+    /**
+     * List of Resources.
+     */
+    items?: ResourceResponseDetailed[];
+}
+
+export interface ResourceProjectResponse extends ProjectResponse {
+    relation?: Relation;
+    allowedActions?: AllowedActions;
+}
+
+export interface ResourceProjectListWithPageToken extends PageWithToken {
+    /**
+     * List of Projects associated with a given resource.
+     */
+    items?: ResourceProjectResponse[];
+}
+
+export interface ResourceResponse {
+    /**
+     * The hrn of the resource.
+     */
+    hrn?: string;
+    type?: Type;
+    /**
+     * The hrn of the home project that the resource belongs to.
+     */
+    home?: string;
+}
+
+export interface ResourceResponseDetailed {
+    /**
+     * The hrn of the resource.
+     */
+    hrn?: string;
+    type?: Type;
+    /**
+     * The hrn of the home project that the resource belongs to.
+     */
+    home?: string;
+    relation?: Relation;
+    allowedActions?: AllowedActions;
+}
+
+export interface LinkableResource {
+    /**
+     * The hrn of the resource.
+     */
+    resource?: string;
+    /**
+     * The hrn of the project that the resource is made linkable to.
+     */
+    projectHrn?: string;
+    /**
+     * The hrn of the project that the resource is made linkable to.
+     */
+    realmHrn?: string;
+    allowedActions: AllowedActions;
+}
+
+export interface LinkableResourceList extends PageWithToken {
+    /**
+     * List of Projects.
+     */
+    items?: LinkableResource[];
+}
+
 export interface PatchProject {
     /**
      * The name of the Project.
@@ -2881,4 +2968,503 @@ export async function patchProject(
     }
 
     return builder.request<ProjectResponse>(urlBuilder, options);
+}
+
+/**
+ * ===================================================================
+ * Resource Info And Management Api
+ * ===================================================================
+ */
+
+/**
+ * Get a list of ways this resource has been made linkable
+ *
+ * Access Control:
+ * * The calling principal **must** have permission to take all the "requiredToMakeLinkable" actions against
+ * the service inferred via the reserved resource prefix of the resource in the path in the scope of the   home project of the resource.
+ *
+ * * Example:
+ * In order to make a catalog linkable, the following permission would be required:
+ * * "action" : "manageResource"
+ * * "resource" : "hrn:here:data::olp-here:my-shared-catalog"
+ *
+ * This API works only with tokens that are scoped to the home project of the resource.
+ *
+ * @summary Get a list of ways the resource has been made linkable
+ * @param resource The hrn that identifies the resource.
+ * @param xCorrelationID Correlates HTTP requests between a client and server.
+ * If not present in the incoming request, it will be generated.
+ * @param limit Number of entries to be returned in the response.
+ * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
+ */
+export async function getListOfWaysResourceIsLinkable(
+    builder: RequestBuilder,
+    params: {
+        resource: string;
+        xCorrelationID?: string;
+        limit?: number;
+        pageToken?: string;
+    }
+): Promise<LinkableResourceList> {
+    const baseUrl = "/resources/{resource}/linkable".replace(
+        "{resource}",
+        UrlBuilder.toString(params["resource"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("limit", params["limit"]);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<LinkableResourceList>(urlBuilder, options);
+}
+
+/**
+ * Get the Resource that the caller is allowed to see based on the input query parameters
+ *
+ * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get a single resource
+ * @param resource The hrn that identifies the resource.
+ * @param referenceable Get the resource only if it is available to the caller to attach as a reference to projects.
+ * A resource is referenceable if it is marked as referenceable and the caller has permission to all reference enabled actions
+ * against the resource.  Otherwise 404.  Only supported value is true.
+ * @param xCorrelationID Correlates HTTP requests between a client and server.
+ * If not present in the incoming request, it will be generated.
+ */
+export async function getResource(
+    builder: RequestBuilder,
+    params: {
+        resource: string;
+        referenceable: boolean;
+        xCorrelationID?: string;
+    }
+): Promise<ResourceResponse> {
+    const baseUrl = "/resources/{resource}".replace(
+        "{resource}",
+        UrlBuilder.toString(params["resource"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("referenceable", `${params["referenceable"]}`);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<ResourceResponse>(urlBuilder, options);
+}
+
+/**
+ * Get the availability for linking this resource to either a project or realm.
+ *
+ * Access Control:
+ * * The calling principal **must** have permission to take all the "requiredToMakeLinkable" actions against
+ * the service inferred via the reserved resource prefix of the resource in the path in the scope of the   home project of the resource.
+ *
+ * * Example: In order to get the catalog linkability, the following permission would be required:
+ * * "action" : "manageResource"
+ * * "resource" : "hrn:here:data::olp-here:my-shared-catalog"
+ * This API works only with tokens that are scoped to the home project of the resource.
+ *
+ * @summary Get the linkability of a resource
+ * @param resource The hrn that identifies the resource.
+ * @param availableToHrn The hrn of the project that the resource is made linkable against or
+ * The hrn of the realm that the resource is made linkable against.
+ * @param xCorrelationID Correlates HTTP requests between a client and server.
+ * If not present in the incoming request, it will be generated.
+ */
+export async function getResourceLinkability(
+    builder: RequestBuilder,
+    params: {
+        resource: string;
+        availableToHrn: string;
+        xCorrelationID?: string;
+    }
+): Promise<LinkableResource> {
+    const baseUrl = "/resources/{resource}/linkable/{availableToHrn}"
+        .replace("{resource}", UrlBuilder.toString(params["resource"]))
+        .replace(
+            "{availableToHrn}",
+            UrlBuilder.toString(params["availableToHrn"])
+        );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<LinkableResource>(urlBuilder, options);
+}
+
+/**
+ * Get the list of Projects that the resource belongs to or is referenced in(linked to).
+ * The returned list will only include projects that are in the caller's realm.
+ *
+ * @note
+ * If the presented access token has a project scope, the response will include:
+ * - The home project of the resource
+ * - The list of Projects that the resource has been made linkable to
+ * - The include the list of Projects that the resource has been linked to
+ *
+ * If the presented access token has no scope, the response will include:
+ * - The list of Projects filtered out based on the membership of the caller.
+ *
+ * Access Control for project scoped call:
+ * * The calling principal **must** have permission to take all the "requiredToMakeLinkable" actions against
+ * the service inferred via the reserved resource prefix of the resource in the path in the scope of the   home project of the resource.
+ *
+ * * Example: In order to make a catalog linkable, the following permission would be required:
+ * * "action" : "manageResource"
+ * * "resource" : "hrn:here:data::olp-here:my-shared-catalog"
+ *
+ * @summary Get the requested Projects that the resource belongs to or is referenced in(linked to)
+ * @param resource The hrn that identifies the resource.
+ * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
+ * @param limit Number of entries to be returned in the response.
+ * @param relation The relation of the resource. A resource is only returned in the response if it matches the requested relation.
+ * @param xCorrelationID Correlates HTTP requests between a client and server.
+ * If not present in the incoming request, it will be generated.
+ */
+export async function getResourceProjects(
+    builder: RequestBuilder,
+    params: {
+        resource: string;
+        pageToken?: string;
+        limit?: number;
+        relation?: Relation;
+        xCorrelationID?: string;
+    }
+): Promise<ResourceProjectListWithPageToken> {
+    const baseUrl = "/resources/{resource}/projects".replace(
+        "{resource}",
+        UrlBuilder.toString(params["resource"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("limit", params["limit"]);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+    urlBuilder.appendQuery("relation", params["relation"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<ResourceProjectListWithPageToken>(
+        urlBuilder,
+        options
+    );
+}
+
+/**
+ * Get a list of Resources that the caller is allowed to see based on the input query parameters.
+ *
+ * @note
+ * If the presented access token has a project scope:
+ * - The response will only include resources from that project or,
+ * - If referenceable=true or linkable=true, the response will include the resources that are available to the caller to
+ * link to the project in the token's project scope.
+ *
+ * - If the presented access token has no scope:
+ * - The response will include resources from all projects that the caller has access to.
+ * - For type='catalog' the response will also include resources that exist outside of any project.
+ * - For all other types, the response will NOT include resources that exist outside of any project.
+ * - For referenceable=true or linkable=true, the response will ONLY include the HERE public resources that are available
+ * to the caller to link to ANY project * This API works with tokens that are scoped and not scoped to a project.
+ *
+ * @summary Get a list of resources
+ * @param type The type of the resource.
+ * @param limit Number of entries to be returned in the response.
+ * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
+ * @param access Filter the resources accessible to the caller based on the access types.
+ * The default value is "default".
+ * Not applicable to use along with the query parameter "referenceable": "true" or "linkable": "true"
+ * If "default" includes resources where:
+ * - The user has access to the resource"s home project OR
+ * - The user has access to a project that the resource is linked to as a reference OR
+ * - The type": ""catalog" and the resource is not in any project and the user has "read" access to it OR
+ * - The type": ""catalog" and the resource is not in any project and the user has "write" access to it OR
+ * - The type": ""catalog" and the resource is not in any project and the user has "manage" access to it.
+ *
+ * If "manage" includes resources where:
+ * - The user has access to the resource"s home project OR
+ * - The type": ""catalog" and the resource is not in any project and the user has "manage" access to it.
+ *
+ * @param referenceable Get all referenceable(linkable) resources available to the caller to attach as a reference(link) to projects.
+ * Only supported value is true. Note - Can be used as a synonym for linkable  A resource is referenceable(linkable) if it is marked
+ * as referenceable:
+ * - and the caller has permission to all reference enabled actions against the resource or,
+ * - in case of a project scoped token, the caller has effective membership on the projects to attach resources
+ * as a reference(link) to the Project.
+ *
+ * @param linkable Get all linkable resources available to the caller to attach as a link to project.
+ * Only supported value is true. Note - Can be used as a synonym for referenceable
+ * @param xCorrelationID Correlates HTTP requests between a client and server.
+ * If not present in the incoming request, it will be generated.
+ */
+export async function getResources(
+    builder: RequestBuilder,
+    params: {
+        type: Type;
+        limit?: number;
+        pageToken?: string;
+        access?: string;
+        referenceable?: boolean;
+        linkable?: boolean;
+        xCorrelationID?: string;
+    }
+): Promise<ResourceListDetailedWithPageToken> {
+    const baseUrl = "/resources";
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("limit", params["limit"]);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+    urlBuilder.appendQuery("type", params["type"]);
+    urlBuilder.appendQuery("access", params["access"]);
+    urlBuilder.appendQuery("referenceable", `${params["referenceable"]}`);
+    urlBuilder.appendQuery("linkable", `${params["linkable"]}`);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<ResourceListDetailedWithPageToken>(
+        urlBuilder,
+        options
+    );
+}
+
+/**
+ * Get List of all the resources in the realm of the caller
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **listRealmResources** action for the specified resource.
+ *
+ * * Example:
+ * In order to get a list of projects, the following permission would be required:
+ * * "action" : "listRealmResources"
+ *
+ * This API works only with tokens that are scoped to a project.
+ *
+ * @summary Get List of all the resources in the realm of the caller
+ * @param limit Number of entries to be returned in the response.
+ * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
+ * @param type The type of the resource.
+ * @param xCorrelationID Correlates HTTP requests between a client and server.
+ * If not present in the incoming request, it will be generated.
+ */
+export async function listRealmResources(
+    builder: RequestBuilder,
+    params: {
+        limit?: number;
+        pageToken?: string;
+        type?: Type;
+        xCorrelationID?: string;
+    }
+): Promise<ResourceListWithPageToken> {
+    const baseUrl = "/realm/resources";
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("limit", params["limit"]);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+    urlBuilder.appendQuery("type", params["type"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<ResourceListWithPageToken>(urlBuilder, options);
+}
+
+/**
+ * Adds a listing to make this resource linkable to either a project or entire realm.
+ *
+ * The resource must belong to a project to be made linkable. Either projectHrn or realmHrn must be provided to make the resource
+ * linkable to.
+ *
+ * Access Control:
+ * * The calling principal **must** have permission to take all the "requiredToMakeLinkable" actions against
+ * the service inferred via the reserved resource prefix of the resource in the path in the scope of the   home project of the resource.
+ *
+ * * Example:
+ * In order to make a catalog linkable, the following permission would be required:
+ * * "action" : "manageResource"
+ * * "resource" : "hrn:here:data::olp-here:my-shared-catalog"
+ *
+ * This API works only with tokens that are scoped to the home project of the resource.
+ *
+ * @summary Make a resource Linkable
+ * @param body
+ * @param resource The hrn that identifies the resource.
+ * @param xCorrelationID Correlates HTTP requests between a client and server.
+ * If not present in the incoming request, it will be generated.
+ */
+export async function makeResourceLinkable(
+    builder: RequestBuilder,
+    params: {
+        body: LinkableResource;
+        resource: string;
+        xCorrelationID?: string;
+    }
+): Promise<LinkableResource> {
+    const baseUrl = "/resources/{resource}/linkable".replace(
+        "{resource}",
+        UrlBuilder.toString(params["resource"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "POST",
+        headers
+    };
+    headers["Content-Type"] = "application/json";
+    if (params["body"] !== undefined) {
+        options.body = JSON.stringify(params["body"]);
+    }
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<LinkableResource>(urlBuilder, options);
+}
+
+/**
+ * Remove the linkability of this resource against the requested project or realm.
+ *
+ * @note This action does not have any impact on pre-existing links.
+ *
+ * Access Control:
+ * * The calling principal **must** have permission to take all the "requiredToMakeLinkable" actions against
+ * the service inferred via the reserved resource prefix of the resource in the path in the scope of the   home project of the resource.
+ * * Example: In order to remove the catalog linkability, the following permission would be required:     * "action" : "manageResource"
+ * * "resource" : "hrn:here:data::olp-here:my-shared-catalog"
+ *
+ * This API works only with tokens that are scoped to the home project of the resource.
+ *
+ * @summary Remove the linkability of a resource
+ * @param resource The hrn that identifies the resource.
+ * @param availableToHrn The hrn of the project that the resource is made linkable against or The hrn of the realm that the resource
+ * is made linkable against.
+ * @param xCorrelationID Correlates HTTP requests between a client and server.
+ * If not present in the incoming request, it will be generated.
+ */
+export async function removeResourceLinkability(
+    builder: RequestBuilder,
+    params: {
+        resource: string;
+        availableToHrn: string;
+        xCorrelationID?: string;
+    }
+): Promise<Response> {
+    const baseUrl = "/resources/{resource}/linkable/{availableToHrn}"
+        .replace("{resource}", UrlBuilder.toString(params["resource"]))
+        .replace(
+            "{availableToHrn}",
+            UrlBuilder.toString(params["availableToHrn"])
+        );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "DELETE",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.requestBlob(urlBuilder, options);
+}
+
+/**
+ * Update the linkability of this resource against the requested project or realm.
+ *
+ * Access Control:  * The calling principal **must** have permission to take all the "requiredToMakeLinkable" actions against
+ * the service inferred via the reserved resource prefix of the resource in the path in the scope of the   home project of the resource.
+ *
+ * * Example:
+ * In order to update the catalog linkability, the following permission would be required:
+ * * "action" : "manageResource"
+ * * "resource" : "hrn:here:data::olp-here:my-shared-catalog"
+ *
+ * This API works only with tokens that are scoped to the home project of the resource.
+ *
+ * @summary Update the linkability of a resource
+ * @param body
+ * @param resource The hrn that identifies the resource.
+ * @param availableToHrn The hrn of the project that the resource is made linkable against or The hrn of the realm that the resource
+ * is made linkable against.
+ * @param xCorrelationID Correlates HTTP requests between a client and server.
+ * If not present in the incoming request, it will be generated.
+ */
+export async function updateResourceLinkability(
+    builder: RequestBuilder,
+    params: {
+        body: LinkableResource;
+        resource: string;
+        availableToHrn: string;
+        xCorrelationID?: string;
+    }
+): Promise<LinkableResource> {
+    const baseUrl = "/resources/{resource}/linkable/{availableToHrn}"
+        .replace("{resource}", UrlBuilder.toString(params["resource"]))
+        .replace(
+            "{availableToHrn}",
+            UrlBuilder.toString(params["availableToHrn"])
+        );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "PUT",
+        headers
+    };
+    headers["Content-Type"] = "application/json";
+    if (params["body"] !== undefined) {
+        options.body = JSON.stringify(params["body"]);
+    }
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<LinkableResource>(urlBuilder, options);
 }

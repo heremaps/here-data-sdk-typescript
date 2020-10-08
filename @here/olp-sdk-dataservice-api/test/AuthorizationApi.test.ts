@@ -1373,4 +1373,305 @@ describe("AuthorizationApi", function() {
 
         expect(result).to.be.equal("success");
     });
+
+    it("getResource", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/resources/mocked-resource?referenceable=true"
+                );
+                expect(options.method).to.be.equal("GET");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getResource(
+            (builder as unknown) as RequestBuilder,
+            {
+                resource: "mocked-resource",
+                referenceable: true,
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getListOfWaysResourceIsLinkable", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/resources/mocked-resource/linkable?limit=5&pageToken=mocked-page-token"
+                );
+                expect(options.method).to.be.equal("GET");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getListOfWaysResourceIsLinkable(
+            (builder as unknown) as RequestBuilder,
+            {
+                resource: "mocked-resource",
+                limit: 5,
+                pageToken: "mocked-page-token",
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getResourceLinkability", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/resources/mocked-resource/linkable/mocked-availableToHrn"
+                );
+                expect(options.method).to.be.equal("GET");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getResourceLinkability(
+            (builder as unknown) as RequestBuilder,
+            {
+                resource: "mocked-resource",
+                availableToHrn: "mocked-availableToHrn",
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getResourceProjects", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/resources/mocked-resource/projects?limit=5&pageToken=mocked-page-token&relation=home"
+                );
+                expect(options.method).to.be.equal("GET");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getResourceProjects(
+            (builder as unknown) as RequestBuilder,
+            {
+                resource: "mocked-resource",
+                limit: 5,
+                pageToken: "mocked-page-token",
+                relation: "home",
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getResources", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/resources?limit=5&pageToken=mocked-page-token&type=catalog&access=mocked-access&referenceable=true&linkable=true"
+                );
+                expect(options.method).to.be.equal("GET");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getResources(
+            (builder as unknown) as RequestBuilder,
+            {
+                type: "catalog",
+                limit: 5,
+                pageToken: "mocked-page-token",
+                access: "mocked-access",
+                referenceable: true,
+                linkable: true,
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("listRealmResources", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/realm/resources?limit=5&pageToken=mocked-page-token&type=catalog"
+                );
+                expect(options.method).to.be.equal("GET");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.listRealmResources(
+            (builder as unknown) as RequestBuilder,
+            {
+                type: "catalog",
+                limit: 5,
+                pageToken: "mocked-page-token",
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("makeResourceLinkable", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/resources/mocked-resource/linkable"
+                );
+                expect(options.method).to.be.equal("POST");
+                expect(options.body).to.be.equal(
+                    JSON.stringify({
+                        allowedActions: ["mocked-actoin"],
+                        projectHrn: "mocked-project-hrn",
+                        realmHrn: "mocked-realm-hrn"
+                    })
+                );
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.makeResourceLinkable(
+            (builder as unknown) as RequestBuilder,
+            {
+                resource: "mocked-resource",
+                body: {
+                    allowedActions: ["mocked-actoin"],
+                    projectHrn: "mocked-project-hrn",
+                    realmHrn: "mocked-realm-hrn"
+                },
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("removeResourceLinkability", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/resources/mocked-resource/linkable/mocked-availableToHrn"
+                );
+                expect(options.method).to.be.equal("DELETE");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.removeResourceLinkability(
+            (builder as unknown) as RequestBuilder,
+            {
+                resource: "mocked-resource",
+                availableToHrn: "mocked-availableToHrn",
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("updateResourceLinkability", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/resources/mocked-resource/linkable/mocked-availableToHrn"
+                );
+                expect(options.method).to.be.equal("PUT");
+                expect(options.body).to.be.equal(
+                    JSON.stringify({
+                        allowedActions: ["mocked-actoin"],
+                        projectHrn: "mocked-project-hrn",
+                        realmHrn: "mocked-realm-hrn"
+                    })
+                );
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorrelationID"
+                );
+
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.updateResourceLinkability(
+            (builder as unknown) as RequestBuilder,
+            {
+                resource: "mocked-resource",
+                availableToHrn: "mocked-availableToHrn",
+                body: {
+                    allowedActions: ["mocked-actoin"],
+                    projectHrn: "mocked-project-hrn",
+                    realmHrn: "mocked-realm-hrn"
+                },
+                xCorrelationID: "mocked-xCorrelationID"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
 });
