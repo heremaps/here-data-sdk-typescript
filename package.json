@@ -59,13 +59,14 @@
     "typedoc": "npx typedoc --disableOutputCheck --options typedoc.json"
   },
   "devDependencies": {
-    "@types/node": "^13.1.2",
+    "@types/node": "^14.11.8",
     "lerna": "^3.20.2",
-    "typescript": "3.5.3",
+    "typescript": "4.0.3",
+    "tslib": "1.13.0",
     "codecov": "3.7.2",
     "mockserver-node": "5.9.0",
     "mockserver-client": "5.9.0",
-    "ts-node": "8.6.2",
+    "ts-node": "9.0.0",
     "puppeteer": "^2.1.1",
     "puppeteer-to-istanbul": "^1.2.2",
     "nyc": "^15.0.0",
