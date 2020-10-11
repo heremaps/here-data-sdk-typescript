@@ -11,8 +11,8 @@
   "scripts": {
     "build": "tsc",
     "lint": "tslint -c tslint.json -p tsconfig.json",
-    "test": "mocha",
-    "coverage": "nyc mocha",
+    "test": "tsc -p ./test/tsconfig.json && mocha",
+    "coverage": "nyc npm run test",
     "codecov": "npm run coverage && nyc report --reporter=lcov",
     "prepare": "tsc --sourceMap false && npm run bundle",
     "bundle": "npm run bundle:dev && npm run bundle:prod",
@@ -66,7 +66,8 @@
     "source-map-support": "^0.5.16",
     "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "3.5.3",
+    "typescript": "4.0.3",
+    "tslib": "1.13.0",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
     "typedoc": "^0.15.6"
