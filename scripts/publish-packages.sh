@@ -55,4 +55,12 @@ while [[ $# -gt 0 ]]; do
     # Shift after checking all the cases to get the next option
     shift
 done
-echo 'Publish done!'
+echo 'Publish done! To be verified in 1m. ...'
+sleep 60
+
+echo 'Publish verification...'
+yarn
+yarn bootstrap
+npm run build
+npm run http-server-testing-bundles & npm run test-published-bundles
+echo 'Publish verification done! '
