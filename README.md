@@ -41,6 +41,8 @@ When new API is introduced in the Data SDK for TypeScript, the old one is not de
 
 All of the deprecated methods, functions, and parameters are documented in the Data SDK for TypeScript <a href="https://developer.here.com/olp/documentation/sdk-typescript/api_reference/index.html"  target="_blank">API Reference</a> and <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/CHANGELOG.md" target="_blank">changelog</a>.
 
+For more information on the Data SDK for TypeScrypt, see our <a href="https://developer.here.com/documentation/sdk-typescript/dev_guide/index.html" target="blank">Developer Guide</a>.
+
 ## About This Repository
 
 The HERE Data SDK for TypeScript repository is a monorepo that contains the core components of the platform SDK organized in the NPM workspace.
@@ -72,7 +74,7 @@ https://unpkg.com/@here/olp-sdk-dataservice-write/bundle.umd.min.js
 https://unpkg.com/@here/olp-sdk-fetch/bundle.umd.min.js
 ```
 
-To learn how to use the Data SDK for TypeScript, see the <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/GettingStartedGuide.md" target="_blank">Getting Started Guide</a>.
+To learn how to use the Data SDK for TypeScript, see the <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/GettingStartedGuide.md" target="_blank">Getting Started Guide</a> and the <a href="https://developer.here.com/documentation/sdk-typescript/dev_guide/index.html" target="blank">Developer Guide</a>.
 
 ## Development
 
