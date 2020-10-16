@@ -83,12 +83,6 @@ describe("LookupApi", function() {
     expect(result).to.be.equal("success");
   });
 
-  it("Test platformAPIList method without params", async function() {
-    const result = await LookupApi.platformAPIList(mockedRequestBuilder);
-
-    expect(result).to.be.equal("success");
-  });
-
   it("Test getPlatformAPIList method without params", async function() {
     const result = await LookupApi.getPlatformAPIList(mockedRequestBuilder);
 
@@ -116,33 +110,6 @@ describe("LookupApi", function() {
     };
 
     const result = await LookupApi.resourceAPI(mockedRequestBuilder, params);
-
-    expect(result).to.be.equal("success");
-  });
-
-  it("Test resourceAPIList method with all required params", async function() {
-    const params = {
-      hrn: "mocked-hrn"
-    };
-
-    const result = await LookupApi.resourceAPIList(
-      mockedRequestBuilder,
-      params
-    );
-
-    expect(result).to.be.equal("success");
-  });
-
-  it("Test resourceAPIList method with all required and optional params", async function() {
-    const params = {
-      hrn: "mocked-hrn",
-      region: "mocked-region"
-    };
-
-    const result = await LookupApi.resourceAPIList(
-      mockedRequestBuilder,
-      params
-    );
 
     expect(result).to.be.equal("success");
   });

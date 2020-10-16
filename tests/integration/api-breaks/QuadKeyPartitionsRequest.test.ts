@@ -84,9 +84,6 @@ describe("QuadKeyPartitionsRequest", function() {
     const request = new QuadKeyPartitionsRequest();
     assert.isDefined(request);
     expect(request).to.be.instanceOf(QuadKeyPartitionsRequest);
-
-    assert.isFunction(request.withVersion);
-    assert.isFunction(request.getVersion);
     assert.isFunction(request.withDepth);
     assert.isFunction(request.getDepth);
     assert.isFunction(request.withQuadKey);

@@ -47,62 +47,28 @@ export class IndexLayerClient {
 
     /**
      * HRN of the catalog.
-     * @deprecated This field will be marked as private by 08.2020.
      */
-    hrn: string;
+    private hrn: string;
 
     /**
      * The ID of the layer.
-     * @deprecated This field will be marked as private by 08.2020.
      */
-    layerId: string;
+    private layerId: string;
 
     /**
      * The [[OlpClientSettings]] instance.
-     * @deprecated This field will be marked as private by 08.2020.
      */
-    settings: OlpClientSettings;
-
-    /**
-     * @deprecated Please use the overloaded constructor of IndexLayerClient.
-     *
-     * Creates the [[IndexLayerClient]] instance.
-     *
-     * @param catalogHrn The HERE Resource Name (HRN) of the catalog from which you want to get partitions metadata and data.
-     * @param layerId The ID of the layer.
-     * @param settings The [[OlpClientSettings]] instance.
-     * @return The [[IndexLayerClient]] instance.
-     */
-    constructor(catalogHrn: HRN, layerId: string, settings: OlpClientSettings);
+    private settings: OlpClientSettings;
 
     /**
      * Creates the [[IndexLayerClient]] instance with IndexLayerClientParams.
      *
      * @param params parameters for use to initialize IndexLayerClient.
      */
-    constructor(params: IndexLayerClientParams);
-
-    /**
-     * Implementation for handling both constuctors.
-     */
-    constructor(
-        paramsOrHrn: IndexLayerClientParams | HRN,
-        layerId?: string,
-        settings?: OlpClientSettings
-    ) {
-        if (paramsOrHrn instanceof HRN) {
-            this.hrn = paramsOrHrn.toString();
-            if (layerId && settings instanceof OlpClientSettings) {
-                this.layerId = layerId;
-                this.settings = settings;
-            } else {
-                throw new Error("Unsupported parameters");
-            }
-        } else {
-            this.hrn = paramsOrHrn.catalogHrn.toString();
-            this.layerId = paramsOrHrn.layerId;
-            this.settings = paramsOrHrn.settings;
-        }
+    constructor(params: IndexLayerClientParams) {
+        this.hrn = params.catalogHrn.toString();
+        this.layerId = params.layerId;
+        this.settings = params.settings;
     }
 
     /**

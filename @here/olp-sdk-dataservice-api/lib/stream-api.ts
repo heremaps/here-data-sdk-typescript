@@ -167,58 +167,6 @@ export interface StreamOffset {
  */
 
 /**
- * @deprecated This function will be removed by 09.2020. Please use doCommitOffsets.
- * After reading data, you should commit the offset of the last message read from each partition so
- * that your application can resume reading new messages from the correct partition in the event that there is a
- * disruption to the subscription, such as an application crash. An offset can also be useful if you delete a subscription
- * then recreate a subscription for the same layer, because the new subscription can start reading data from the offset.
- * To read messages already committed, use the /seek endpoint, then use /partitions.
- * The base path to use is the value of 'nodeBaseURL' returned from /subscribe POST request.
- *
- * @summary Commits offsets of the last message read
- * @param layerId The ID of the stream layer.
- * @param commitOffsets The offsets to commit. It should be same as the offset of the message you wish to commit.
- * Do not pass offset + 1 as mentioned in Kafka Consumer documentation. The service adds one to the offset you specify.
- * @param subscriptionId The subscriptionId received in the response of the /subscribe request (required if mode&#x3D;parallel).
- * @param mode The subscription mode of this subscriptionId (as provided in /subscribe POST API).
- * @param xCorrelationId The correlation-id (value of Response Header &#39;X-Correlation-Id&#39;) from prior step in process.
- *  See the [API Reference](https://developer.here.com/olp/documentation/data-api/api-reference.html) for the &#x60;stream&#x60; API
- */
-export async function commitOffsets(
-    builder: RequestBuilder,
-    params: {
-        layerId: string;
-        commitOffsets: CommitOffsetsRequest;
-        subscriptionId?: string;
-        mode?: "serial" | "parallel";
-        xCorrelationId?: string;
-    }
-): Promise<any> {
-    const baseUrl = "/layers/{layerId}/offsets".replace(
-        "{layerId}",
-        UrlBuilder.toString(params["layerId"])
-    );
-
-    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
-    urlBuilder.appendQuery("subscriptionId", params["subscriptionId"]);
-    urlBuilder.appendQuery("mode", params["mode"]);
-
-    const headers: { [header: string]: string } = {};
-    const options: RequestOptions = {
-        method: "PUT",
-        headers
-    };
-    headers["Content-Type"] = "application/json";
-    if (params["commitOffsets"] !== undefined) {
-        options.body = JSON.stringify(params["commitOffsets"]);
-    }
-    if (params["xCorrelationId"] !== undefined) {
-        headers["X-Correlation-Id"] = params["xCorrelationId"] as string;
-    }
-    return builder.request<any>(urlBuilder, options);
-}
-
-/**
  * After reading data, you should commit the offset of the last message read from each partition so
  * that your application can resume reading new messages from the correct partition in the event that there is a
  * disruption to the subscription, such as an application crash. An offset can also be useful if you delete a subscription

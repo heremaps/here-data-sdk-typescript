@@ -272,44 +272,6 @@ describe("StreamApi", function() {
     assert.isDefined(params);
   });
 
-  it("Test commitOffsets method with all required params", async function() {
-    const params = {
-      layerId: "mocked-id",
-      commitOffsets: {
-        offsets: [
-          {
-            partition: 25,
-            offset: 3
-          }
-        ]
-      }
-    };
-
-    const result = await StreamApi.commitOffsets(mockedRequestBuilder, params);
-
-    expect(result).to.be.equal("success");
-  });
-
-  it("Test commitOffsets method with all required and optional params", async function() {
-    const params = {
-      layerId: "mocked-id",
-      subscriptionId: "test-subscriptionId",
-      xCorrelationId: "test-xCorrelationId",
-      commitOffsets: {
-        offsets: [
-          {
-            partition: 25,
-            offset: 3
-          }
-        ]
-      }
-    };
-
-    const result = await StreamApi.commitOffsets(mockedRequestBuilder, params);
-
-    expect(result).to.be.equal("success");
-  });
-
   it("Test doCommitOffsets method with all required params", async function() {
     const params = {
       layerId: "mocked-id",

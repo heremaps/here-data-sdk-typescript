@@ -102,19 +102,16 @@ describe("VolatileLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VolatileLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const layerClient = new VolatileLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
     assert.isDefined(layerClient);
     expect(layerClient).to.be.instanceOf(VolatileLayerClient);
 
     assert.isFunction(layerClient.getData);
     assert.isFunction(layerClient.getPartitions);
-    assert.isDefined(layerClient.hrn);
-    assert.isDefined(layerClient.layerId);
-    assert.isDefined(layerClient.settings);
   });
 
   it("Shoud be initialized with VolatileLayerClientParams", async function() {
@@ -131,9 +128,6 @@ describe("VolatileLayerClient", function() {
 
     assert.isFunction(layerClient.getData);
     assert.isFunction(layerClient.getPartitions);
-    assert.isDefined(layerClient.hrn);
-    assert.isDefined(layerClient.layerId);
-    assert.isDefined(layerClient.settings);
   });
 
   it("getPartitions method with QuadKeyPartitionsRequest", async function() {

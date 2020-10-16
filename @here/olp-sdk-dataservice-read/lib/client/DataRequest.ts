@@ -102,32 +102,6 @@ export class DataRequest {
     }
 
     /**
-     * @deprecated This method is deprecated and is not used. If you need to set the version,
-     * initialize the version client with the new constructor. Otherwise, the latest version will be used.
-     *
-     * Gets a catalog version for the request.
-     *
-     * @return The catalog version number.
-     */
-    public getVersion(): number | undefined {
-        return this.version;
-    }
-
-    /**
-     * @deprecated This method is deprecated and is not used. If you need to set the version,
-     * initialize the version client with the new constructor. Otherwise, the latest version will be used.
-     *
-     * Sets the provided catalog version.
-     *
-     * @param version The catalog version number.
-     * @returns The updated [[DataRequest]] instance that you can use to chain methods.
-     */
-    public withVersion(version: number): DataRequest {
-        this.version = version;
-        return this;
-    }
-
-    /**
      * An optional free-form tag that is used for grouping billing records together.
      *
      * If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].

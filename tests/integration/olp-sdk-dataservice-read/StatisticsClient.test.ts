@@ -209,7 +209,7 @@ describe("StatisticsClient", function() {
     const statisticsRequest = new StatisticsRequest()
       .withCatalogHrn(mockedHRN)
       .withLayerId(mockedLayerId)
-      .withDataLevel("3")
+      .withDataLevel(3)
       .withTypemap(CoverageDataType.TIMEMAP);
 
     const summaryResponse = await statisticsClient.getStatistics(
@@ -256,7 +256,7 @@ describe("StatisticsClient", function() {
     const statisticsRequest = new StatisticsRequest()
       .withCatalogHrn(mockedHRN)
       .withLayerId(mockedLayerId)
-      .withDataLevel("3")
+      .withDataLevel(3)
       .withTypemap(CoverageDataType.SIZEMAP);
 
     const summaryResponse = await statisticsClient.getStatistics(
@@ -303,7 +303,7 @@ describe("StatisticsClient", function() {
     const statisticsRequest = new StatisticsRequest()
       .withCatalogHrn(mockedHRN)
       .withLayerId(mockedLayerId)
-      .withDataLevel("3")
+      .withDataLevel(3)
       .withTypemap(CoverageDataType.BITMAP);
 
     const summaryResponse = await statisticsClient.getStatistics(

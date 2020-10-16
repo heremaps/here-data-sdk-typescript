@@ -36,7 +36,6 @@ describe("IndexLayerClient", function() {
     let getIndexStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
     let indexLayerClient: dataServiceRead.IndexLayerClient;
-    let indexLayerClientNew: dataServiceRead.IndexLayerClient;
     const mockedHRN = dataServiceRead.HRN.fromString(
         "hrn:here:data:::mocked-hrn"
     );
@@ -48,18 +47,13 @@ describe("IndexLayerClient", function() {
         let settings = sandbox.createStubInstance(
             dataServiceRead.OlpClientSettings
         );
-        indexLayerClient = new dataServiceRead.IndexLayerClient(
-            mockedHRN,
-            mockedLayerId,
-            (settings as unknown) as dataServiceRead.OlpClientSettings
-        );
 
         const indexLayerClientParams = {
             catalogHrn: mockedHRN,
             layerId: mockedLayerId,
             settings: (settings as unknown) as dataServiceRead.OlpClientSettings
         };
-        indexLayerClientNew = new dataServiceRead.IndexLayerClient(
+        indexLayerClient = new dataServiceRead.IndexLayerClient(
             indexLayerClientParams
         );
     });
@@ -347,25 +341,7 @@ describe("IndexLayerClient", function() {
     });
 
     it("IndexLayerClient instance should be initialized with IndexLayerClientParams", async function() {
-        assert.isDefined(indexLayerClientNew);
-        assert.equal(indexLayerClientNew["hrn"], "hrn:here:data:::mocked-hrn");
-    });
-
-    it("IndexLayerClient should throw Error when setted unsuported parameters", async function() {
-        let settings1 = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
-        );
-
-        assert.throws(
-            function() {
-                new dataServiceRead.IndexLayerClient(
-                    mockedHRN,
-                    "",
-                    (settings1 as unknown) as dataServiceRead.OlpClientSettings
-                );
-            },
-            Error,
-            "Unsupported parameters"
-        );
+        assert.isDefined(indexLayerClient);
+        assert.equal(indexLayerClient["hrn"], "hrn:here:data:::mocked-hrn");
     });
 });

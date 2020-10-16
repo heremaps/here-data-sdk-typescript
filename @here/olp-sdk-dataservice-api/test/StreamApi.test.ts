@@ -28,34 +28,6 @@ chai.use(sinonChai);
 const expect = chai.expect;
 
 describe("StreamApi", function() {
-    it("Should commitOffsets works as expected", async function() {
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: UrlBuilder, options: any) => {
-                expect(urlBuilder.url).to.be.equal(
-                    "http://mocked.url/layers/mocked-id/offsets?subscriptionId=test-subscriptionId&mode=serial"
-                );
-                expect(options.method).to.be.equal("PUT");
-                return Promise.resolve();
-            }
-        } as RequestBuilder;
-
-        await StreamApi.commitOffsets(builder, {
-            layerId: "mocked-id",
-            subscriptionId: "test-subscriptionId",
-            xCorrelationId: "test-xCorrelationId",
-            mode: "serial",
-            commitOffsets: {
-                offsets: [
-                    {
-                        partition: 25,
-                        offset: 3
-                    }
-                ]
-            }
-        });
-    });
-
     it("Should doCommitOffsets works as expected", async function() {
         const builder = {
             baseUrl: "http://mocked.url",

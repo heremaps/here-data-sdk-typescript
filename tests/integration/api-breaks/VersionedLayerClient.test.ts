@@ -103,19 +103,16 @@ describe("VersionedLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VersionedLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const layerClient = new VersionedLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
     assert.isDefined(layerClient);
     expect(layerClient).to.be.instanceOf(VersionedLayerClient);
 
     assert.isFunction(layerClient.getData);
     assert.isFunction(layerClient.getPartitions);
-    assert.isDefined(layerClient.hrn);
-    assert.isDefined(layerClient.layerId);
-    assert.isDefined(layerClient.settings);
   });
 
   it("Shoud be initialized with VersionedLayerClientParams", async function() {
@@ -132,9 +129,6 @@ describe("VersionedLayerClient", function() {
 
     assert.isFunction(layerClient.getData);
     assert.isFunction(layerClient.getPartitions);
-    assert.isDefined(layerClient.hrn);
-    assert.isDefined(layerClient.layerId);
-    assert.isDefined(layerClient.settings);
   });
 
   it("getPartitions method with QuadKeyPartitionsRequest", async function() {

@@ -69,11 +69,11 @@ describe("VersionedLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VersionedLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const layerClient = new VersionedLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
     assert.isDefined(layerClient);
     expect(layerClient).to.be.instanceOf(VersionedLayerClient);
   });
@@ -84,11 +84,11 @@ describe("VersionedLayerClient", function() {
       getToken: () => Promise.resolve("test-token-string")
     });
     try {
-      const layerClient = new VersionedLayerClient(
-        HRN.fromString("hrn:here:data:::test-hrn"),
-        "",
+      const layerClient = new VersionedLayerClient({
+        catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+        layerId: "",
         settings
-      );
+      });
     } catch (error) {
       expect(error.message).equal("Unsupported parameters");
     }
@@ -207,11 +207,11 @@ describe("VersionedLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VersionedLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const layerClient = new VersionedLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
 
     // Setup PartitionsRequest to filter response by partition IDs 100 and 1000.
     const request = new PartitionsRequest().withPartitionIds(["100", "1000"]);
@@ -330,11 +330,11 @@ describe("VersionedLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VersionedLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const layerClient = new VersionedLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
 
     // Setup PartitionsRequest without any parameters
     const request = new PartitionsRequest();
@@ -414,11 +414,11 @@ describe("VersionedLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VersionedLayerClient(
-      testHRN,
-      testLayerId,
+    const layerClient = new VersionedLayerClient({
+      catalogHrn: testHRN,
+      layerId: testLayerId,
       settings
-    );
+    });
     const request = new DataRequest().withDataHandle(mockedDataHandle);
 
     const data = await layerClient.getData(request);
@@ -509,99 +509,17 @@ describe("VersionedLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VersionedLayerClient(
-      testHRN,
-      testLayerId,
+    const layerClient = new VersionedLayerClient({
+      catalogHrn: testHRN,
+      layerId: testLayerId,
       settings
-    );
+    });
     const request = new DataRequest().withPartitionId(mockedPartitionId);
 
     const data = await layerClient.getData(request);
 
     assert.isDefined(data);
     expect(fetchStub.callCount).to.be.equal(4);
-  });
-
-  it("Shoud be fetched data with PartitionId and version", async function() {
-    const mockedResponses = new Map();
-    const mockedPartitionId = "0000042";
-    const mockedData = Buffer.alloc(42);
-    const mockedPartitionsIdData = {
-      partitions: [
-        {
-          version: 1,
-          partition: "0000042",
-          dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
-        },
-        {
-          version: 42,
-          partition: "0000013",
-          dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
-        }
-      ]
-    };
-
-    mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/partitions?partition=0000042&version=42`,
-      new Response(JSON.stringify(mockedPartitionsIdData), { headers })
-    );
-
-    // Set the response from lookup api with the info about Metadata service.
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "blob",
-            version: "v1",
-            baseURL: "https://blob.data.api.platform.here.com/blob/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          },
-          {
-            api: "query",
-            version: "v1",
-            baseURL: "https://query.data.api.platform.here.com/query/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ]),
-        { headers }
-      )
-    );
-
-    // Set the response of mocked partitions from metadata service.
-    mockedResponses.set(
-      `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/3C3BE24A341D82321A9BA9075A7EF498.123`,
-      new Response(mockedData, { headers })
-    );
-
-    // Setup the fetch to use mocked responses.
-    fetchMock.withMockedResponses(mockedResponses);
-
-    const settings = new OlpClientSettings({
-      environment: "here",
-      getToken: () => Promise.resolve("test-token-string")
-    });
-    const layerClient = new VersionedLayerClient(
-      testHRN,
-      testLayerId,
-      settings
-    );
-    const request = new DataRequest()
-      .withPartitionId(mockedPartitionId)
-      .withVersion(42);
-
-    const data = await layerClient.getData(request);
-
-    assert.isDefined(data);
-    expect(fetchStub.callCount).to.be.equal(3); // 1 - lookup, 1 - query, 1 - blob
   });
 
   it("Shoud be fetched data with QuadKey", async function() {
@@ -688,101 +606,17 @@ describe("VersionedLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VersionedLayerClient(
-      testHRN,
-      testLayerId,
+    const layerClient = new VersionedLayerClient({
+      catalogHrn: testHRN,
+      layerId: testLayerId,
       settings
-    );
+    });
     const request = new DataRequest().withQuadKey(mockedQuadKey);
 
     const data = await layerClient.getData(request);
 
     assert.isDefined(data);
     expect(fetchStub.callCount).to.be.equal(4);
-  });
-
-  it("Shoud be fetched data with QuadKey and Version", async function() {
-    const mockedResponses = new Map();
-    const mockedQuadKey = quadKeyFromMortonCode("23618403");
-    const mockedData = Buffer.alloc(42);
-    const mockedQuadKeyTreeData = {
-      subQuads: [
-        {
-          version: 12,
-          subQuadKey: "1",
-          dataHandle: "c9116bb9-7d00-44bf-9b26-b4ab4c274665"
-        }
-      ],
-      parentQuads: [
-        {
-          version: 12,
-          partition: "23618403",
-          dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
-        }
-      ]
-    };
-
-    mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/test-layed-id/versions/42/quadkeys/23618403/depths/0`,
-      new Response(JSON.stringify(mockedQuadKeyTreeData), { headers })
-    );
-
-    // Set the response from lookup api with the info about Metadata service.
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::test-hrn/apis`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "blob",
-            version: "v1",
-            baseURL: "https://blob.data.api.platform.here.com/blob/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          },
-          {
-            api: "query",
-            version: "v1",
-            baseURL: "https://query.data.api.platform.here.com/query/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ]),
-        { headers }
-      )
-    );
-
-    // Set the response of mocked partitions from metadata service.
-    mockedResponses.set(
-      `https://blob.data.api.platform.here.com/blob/v1/layers/test-layed-id/data/c9116bb9-7d00-44bf-9b26-b4ab4c274665`,
-      new Response(mockedData, { headers })
-    );
-
-    // Setup the fetch to use mocked responses.
-    fetchMock.withMockedResponses(mockedResponses);
-
-    const settings = new OlpClientSettings({
-      environment: "here",
-      getToken: () => Promise.resolve("test-token-string")
-    });
-    const layerClient = new VersionedLayerClient(
-      testHRN,
-      testLayerId,
-      settings
-    );
-    const request = new DataRequest()
-      .withQuadKey(mockedQuadKey)
-      .withVersion(42);
-
-    const data = await layerClient.getData(request);
-
-    assert.isDefined(data);
-    expect(fetchStub.callCount).to.be.equal(3); // 1 - lookup, 1 - query, 1 - blob
   });
 
   it("Shoud read partitions metadata by QuadKey for specific VersionLayer", async function() {
@@ -874,19 +708,17 @@ describe("VersionedLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VersionedLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
-      settings
-    );
+    const layerClient = new VersionedLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
+      settings,
+      version: mockedVersion
+    });
 
     const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest();
     assert.isDefined(quadKeyPartitionsRequest);
     expect(quadKeyPartitionsRequest).be.instanceOf(QuadKeyPartitionsRequest);
 
-    const quadKeyPartitionsRequestWithVersion = quadKeyPartitionsRequest.withVersion(
-      mockedVersion
-    );
     const quadKeyPartitionsRequestWithDepth = quadKeyPartitionsRequest.withDepth(
       mockedDepth
     );
@@ -895,10 +727,6 @@ describe("VersionedLayerClient", function() {
     );
     const quadKeyPartitionsRequestWithBillTag = quadKeyPartitionsRequest.withBillingTag(
       billingTag
-    );
-
-    expect(quadKeyPartitionsRequestWithVersion.getVersion()).to.be.equal(
-      mockedVersion
     );
     expect(quadKeyPartitionsRequestWithDepth.getDepth()).to.be.equal(
       mockedDepth
@@ -984,11 +812,11 @@ describe("VersionedLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VersionedLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const layerClient = new VersionedLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
 
     const requestWithAdditionalFields = new PartitionsRequest()
       .withAdditionalFields(["dataSize", "checksum", "compressedDataSize"])
@@ -1090,11 +918,11 @@ describe("VersionedLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VersionedLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const layerClient = new VersionedLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
 
     const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest();
     assert.isDefined(quadKeyPartitionsRequest);
@@ -1296,11 +1124,11 @@ describe("VersionedLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VersionedLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const layerClient = new VersionedLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
 
     const requestWithoutAdditionalFields = new PartitionsRequest()
       .withFetchOption(FetchOptions.OnlineIfNotFound)
@@ -1414,11 +1242,11 @@ describe("VersionedLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VersionedLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const layerClient = new VersionedLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
 
     const requestWithAdditionalFields = new PartitionsRequest()
       .withAdditionalFields(["dataSize", "checksum", "compressedDataSize"])

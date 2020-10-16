@@ -43,7 +43,6 @@ describe("VolatileLayerClient", function() {
     let getQuadTreeIndexStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
     let volatileLayerClient: dataServiceRead.VolatileLayerClient;
-    let volatileLayerClientNew: dataServiceRead.VolatileLayerClient;
     const mockedHRN = dataServiceRead.HRN.fromString(
         "hrn:here:data:::mocked-hrn"
     );
@@ -76,18 +75,13 @@ describe("VolatileLayerClient", function() {
             environment: "here",
             getToken: () => Promise.resolve("token")
         });
-        volatileLayerClient = new dataServiceRead.VolatileLayerClient(
-            mockedHRN,
-            mockedLayerId,
-            settings
-        );
 
         const volatileLayerClientParams = {
             catalogHrn: mockedHRN,
             layerId: mockedLayerId,
             settings
         };
-        volatileLayerClientNew = new dataServiceRead.VolatileLayerClient(
+        volatileLayerClient = new dataServiceRead.VolatileLayerClient(
             volatileLayerClientParams
         );
     });
@@ -478,11 +472,11 @@ describe("VolatileLayerClient", function() {
         let settings = sandbox.createStubInstance(
             dataServiceRead.OlpClientSettings
         );
-        const volatileClient = new dataServiceRead.VolatileLayerClient(
-            mockedHRN,
-            "mockedLayerId",
-            (settings as unknown) as dataServiceRead.OlpClientSettings
-        );
+        const volatileClient = new dataServiceRead.VolatileLayerClient({
+            catalogHrn: mockedHRN,
+            layerId: mockedLayerId,
+            settings: settings as any
+        });
 
         const dataRequest = new dataServiceRead.DataRequest().withPartitionId(
             "42"
@@ -617,29 +611,8 @@ describe("VolatileLayerClient", function() {
     });
 
     it("VolatileLayerClient instance should be initialized with VolatileLayerClientParams", async function() {
-        assert.isDefined(volatileLayerClientNew);
-        assert.equal(
-            volatileLayerClientNew["hrn"],
-            "hrn:here:data:::mocked-hrn"
-        );
-    });
-
-    it("VolatileLayerClient should throw Error when setted unsuported parameters", async function() {
-        let settings1 = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
-        );
-
-        assert.throws(
-            function() {
-                new dataServiceRead.VolatileLayerClient(
-                    mockedHRN,
-                    "",
-                    (settings1 as unknown) as dataServiceRead.OlpClientSettings
-                );
-            },
-            Error,
-            "Unsupported parameters"
-        );
+        assert.isDefined(volatileLayerClient);
+        assert.equal(volatileLayerClient["hrn"], "hrn:here:data:::mocked-hrn");
     });
 
     it("Method QueryApi.getPartitionsById should be called with param additionalFields and run getPartitions method with additionalFields", async function() {
@@ -677,7 +650,7 @@ describe("VolatileLayerClient", function() {
             .withPartitionIds(["23605706"])
             .withAdditionalFields(["dataSize"]);
 
-        const partitions = await volatileLayerClientNew.getPartitions(
+        const partitions = await volatileLayerClient.getPartitions(
             partitionsRequest
         );
         expect(partitions).equals(mockedPartitions);

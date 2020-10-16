@@ -68,11 +68,11 @@ describe("VolatileLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VolatileLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const layerClient = new VolatileLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
     assert.isDefined(layerClient);
     expect(layerClient).to.be.instanceOf(VolatileLayerClient);
   });
@@ -83,11 +83,11 @@ describe("VolatileLayerClient", function() {
       getToken: () => Promise.resolve("test-token-string")
     });
     try {
-      const layerClient = new VolatileLayerClient(
-        HRN.fromString("hrn:here:data:::test-hrn"),
-        "",
+      const layerClient = new VolatileLayerClient({
+        catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+        layerId: "",
         settings
-      );
+      });
     } catch (error) {
       expect(error.message).equal("Unsupported parameters");
     }
@@ -154,11 +154,11 @@ describe("VolatileLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VolatileLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const layerClient = new VolatileLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
 
     // Setup PartitionsRequest to filter response by partition IDs 100 and 1000.
     const request = new PartitionsRequest().withPartitionIds(["100", "1000"]);
@@ -258,11 +258,11 @@ describe("VolatileLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VolatileLayerClient(
-      testHRN,
-      testVolatileLayerId,
+    const layerClient = new VolatileLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
 
     const request = new DataRequest().withPartitionId(mockedPartitionId);
 
@@ -332,11 +332,11 @@ describe("VolatileLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VolatileLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const layerClient = new VolatileLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
 
     // Setup PartitionsRequest without any parameters
     const request = new PartitionsRequest();
@@ -410,11 +410,11 @@ describe("VolatileLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VolatileLayerClient(
-      testHRN,
-      testVolatileLayerId,
+    const layerClient = new VolatileLayerClient({
+      catalogHrn: testHRN,
+      layerId: testVolatileLayerId,
       settings
-    );
+    });
     const request = new DataRequest().withDataHandle(mockedDataHandle);
 
     const data = await layerClient.getData(request);
@@ -505,11 +505,11 @@ describe("VolatileLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VolatileLayerClient(
-      testHRN,
-      testVolatileLayerId,
+    const layerClient = new VolatileLayerClient({
+      catalogHrn: testHRN,
+      layerId: testVolatileLayerId,
       settings
-    );
+    });
     const request = new DataRequest().withQuadKey(mockedQuadKey);
 
     const data = await layerClient.getData(request);
@@ -606,11 +606,11 @@ describe("VolatileLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VolatileLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const layerClient = new VolatileLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
 
     const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest();
     assert.isDefined(quadKeyPartitionsRequest);
@@ -703,11 +703,11 @@ describe("VolatileLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VolatileLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const layerClient = new VolatileLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
 
     const requestWithAdditionalFields = new PartitionsRequest().withAdditionalFields(
       ["dataSize", "checksum", "compressedDataSize"]
@@ -808,11 +808,11 @@ describe("VolatileLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const layerClient = new VolatileLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const layerClient = new VolatileLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
 
     const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest();
     assert.isDefined(quadKeyPartitionsRequest);
