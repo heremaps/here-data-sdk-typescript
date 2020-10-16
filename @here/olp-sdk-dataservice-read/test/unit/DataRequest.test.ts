@@ -55,7 +55,6 @@ describe("DataRequest", function() {
             mockedPartitionId
         );
         const dataRequestWithDataLevel = dataRequest.withQuadKey(mockedQuadKey);
-        const dataRequestWithTimemap = dataRequest.withVersion(mockedVersion);
         const dataRequestWithBillTag = dataRequest.withBillingTag(billingTag);
 
         expect(dataRequestWithCatalogHrn.getDataHandle()).to.be.equal(
@@ -67,7 +66,6 @@ describe("DataRequest", function() {
         expect(dataRequestWithDataLevel.getQuadKey()).to.be.equal(
             mockedQuadKey
         );
-        expect(dataRequestWithTimemap.getVersion()).to.be.equal(mockedVersion);
         expect(dataRequestWithBillTag.getBillingTag()).to.be.equal(billingTag);
     });
 
@@ -76,13 +74,11 @@ describe("DataRequest", function() {
             .withDataHandle(mockedDataHandle)
             .withPartitionId(mockedPartitionId)
             .withQuadKey(mockedQuadKey)
-            .withVersion(mockedVersion)
             .withBillingTag(billingTag);
 
         expect(dataRequest.getDataHandle()).to.be.equal(mockedDataHandle);
         expect(dataRequest.getPartitionId()).to.be.equal(mockedPartitionId);
         expect(dataRequest.getQuadKey()).to.be.equal(mockedQuadKey);
-        expect(dataRequest.getVersion()).to.be.equal(mockedVersion);
         expect(dataRequest.getBillingTag()).to.be.equal(billingTag);
     });
 });

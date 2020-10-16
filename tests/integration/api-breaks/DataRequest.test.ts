@@ -82,8 +82,6 @@ describe("DataRequest", function() {
     assert.isDefined(request);
     expect(request).to.be.instanceOf(DataRequest);
 
-    assert.isFunction(request.withVersion);
-    assert.isFunction(request.getVersion);
     assert.isFunction(request.withQuadKey);
     assert.isFunction(request.getQuadKey);
     assert.isFunction(request.withPartitionId);

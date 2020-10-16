@@ -51,24 +51,6 @@ describe("lookupAPI", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("platformAPIList", async function() {
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: UrlBuilder, options: any) => {
-                expect(urlBuilder.url).to.be.equal(
-                    "http://mocked.url/platform/apis"
-                );
-                expect(options.method).to.be.equal("GET");
-                return Promise.resolve("success");
-            }
-        };
-        const result = await LookupApi.platformAPIList(
-            (builder as unknown) as RequestBuilder
-        );
-
-        expect(result).to.be.equal("success");
-    });
-
     it("resourceAPI", async function() {
         const params = {
             hrn: "mocked-hrn",
@@ -87,29 +69,6 @@ describe("lookupAPI", function() {
             }
         };
         const result = await LookupApi.resourceAPI(
-            (builder as unknown) as RequestBuilder,
-            params
-        );
-
-        expect(result).to.be.equal("success");
-    });
-
-    it("resourceAPIList", async function() {
-        const params = {
-            hrn: "mocked-hrn",
-            region: "mocked-region"
-        };
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: UrlBuilder, options: any) => {
-                expect(urlBuilder.url).to.be.equal(
-                    "http://mocked.url/resources/mocked-hrn/apis?region=mocked-region"
-                );
-                expect(options.method).to.be.equal("GET");
-                return Promise.resolve("success");
-            }
-        };
-        const result = await LookupApi.resourceAPIList(
             (builder as unknown) as RequestBuilder,
             params
         );

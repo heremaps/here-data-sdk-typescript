@@ -78,11 +78,9 @@ export class StatisticsRequest {
 
     /**
      * Gets a tile level for the request.
-     * @deprecated Please use getDataLevel(): number | undefined
      * @return The requested tile level string.
      */
-    public getDataLevel(): string | undefined;
-    public getDataLevel(): number | string | undefined {
+    public getDataLevel(): number | undefined {
         return this.dataLevel;
     }
     /**
@@ -133,14 +131,10 @@ export class StatisticsRequest {
     /**
      * A setter for the provided `dataLevel` string.
      *
-     * @deprecated Please set dataLevel as a number
      * @param dataLevel dataLevel Specify the tile level about which you want to get statistical data.
      * @returns The updated [[StatisticsRequest]] instance that you can use to chain methods.
      */
-    // tslint:disable-next-line: unified-signatures
-    public withDataLevel(dataLevel: string): StatisticsRequest;
-
-    public withDataLevel(dataLevel: string | number) {
+    public withDataLevel(dataLevel: number) {
         this.dataLevel = Number(dataLevel);
         return this;
     }

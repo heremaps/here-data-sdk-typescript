@@ -42,11 +42,11 @@ export async function getDataMemoryTest(params: TestParams) {
   let countFailedRequests = 0;
 
   const endTimestamp = new Date(new Date().getTime() + 1000 * runTimeSeconds);
-  const layerClient = new VersionedLayerClient(
-    HRN.fromString("hrn:local:data::olp-here:mocked-catalog"),
-    "mocked-layer",
+  const layerClient = new VersionedLayerClient({
+    catalogHrn: HRN.fromString("hrn:local:data::olp-here:mocked-catalog"),
+    layerId: "mocked-layer",
     settings
-  );
+  });
 
   const dataRequest = new DataRequest();
 

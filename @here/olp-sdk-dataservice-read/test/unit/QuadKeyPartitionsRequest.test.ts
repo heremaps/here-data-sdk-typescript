@@ -49,9 +49,6 @@ describe("QuadKeyPartitionsRequest", function() {
 
     it("Should set parameters", function() {
         const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest();
-        const quadKeyPartitionsRequestWithVersion = quadKeyPartitionsRequest.withVersion(
-            mockedVersion
-        );
         const quadKeyPartitionsRequestWithDepth = quadKeyPartitionsRequest.withDepth(
             mockedDepth
         );
@@ -63,10 +60,6 @@ describe("QuadKeyPartitionsRequest", function() {
         );
         const quadKeyPartitionsRequestWithAddFields = quadKeyPartitionsRequest.withAdditionalFields(
             ["dataSize", "checksum", "compressedDataSize", "crc"]
-        );
-
-        expect(quadKeyPartitionsRequestWithVersion.getVersion()).to.be.equal(
-            mockedVersion
         );
         expect(quadKeyPartitionsRequestWithDepth.getDepth()).to.be.equal(
             mockedDepth
@@ -84,7 +77,6 @@ describe("QuadKeyPartitionsRequest", function() {
 
     it("Should get parameters with chain", function() {
         const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest()
-            .withVersion(mockedVersion)
             .withDepth(mockedDepth)
             .withQuadKey(mockedQuadKey)
             .withBillingTag(billingTag)
@@ -95,9 +87,6 @@ describe("QuadKeyPartitionsRequest", function() {
                 "crc"
             ]);
 
-        expect(quadKeyPartitionsRequest.getVersion()).to.be.equal(
-            mockedVersion
-        );
         expect(quadKeyPartitionsRequest.getDepth()).to.be.equal(mockedDepth);
         expect(quadKeyPartitionsRequest.getQuadKey()).to.be.equal(
             mockedQuadKey

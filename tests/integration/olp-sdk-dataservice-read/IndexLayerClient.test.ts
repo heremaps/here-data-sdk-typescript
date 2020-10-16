@@ -62,11 +62,11 @@ describe("IndexLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const indexClient = new IndexLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const indexClient = new IndexLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
     assert.isDefined(indexClient);
     expect(indexClient).to.be.instanceOf(IndexLayerClient);
   });
@@ -77,11 +77,11 @@ describe("IndexLayerClient", function() {
       getToken: () => Promise.resolve("test-token-string")
     });
     try {
-      const indexClient = new IndexLayerClient(
-        HRN.fromString("hrn:here:data:::test-hrn"),
-        "",
+      const indexClient = new IndexLayerClient({
+        catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+        layerId: "",
         settings
-      );
+      });
     } catch (error) {
       expect(error.message).equal("Unsupported parameters");
     }
@@ -155,11 +155,11 @@ describe("IndexLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const indexClient = new IndexLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const indexClient = new IndexLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
 
     // Setup IndexQueryRequest with query parameter
     const request = new IndexQueryRequest().withQueryString("hour_from>0");
@@ -186,11 +186,11 @@ describe("IndexLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const indexClient = new IndexLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const indexClient = new IndexLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
     const request = new IndexQueryRequest().withHugeResponse(true);
     const response = indexClient.getPartitions(request).catch(error => {
       expect(error.message).equal("Please provide correct query");
@@ -202,11 +202,11 @@ describe("IndexLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const indexClient = new IndexLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const indexClient = new IndexLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
     const response = indexClient.getData({}).catch(error => {
       expect(error.message).equal("No data handle for this partition");
     });
@@ -257,11 +257,11 @@ describe("IndexLayerClient", function() {
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
-    const indexClient = new IndexLayerClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
-      "test-layed-id",
+    const indexClient = new IndexLayerClient({
+      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      layerId: "test-layed-id",
       settings
-    );
+    });
 
     const data = await indexClient.getData(mockedModel);
 

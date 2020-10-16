@@ -37,21 +37,6 @@ export class QuadKeyPartitionsRequest {
     private additionalFields?: AdditionalFields;
 
     /**
-     * @deprecated This method is deprecated and is not used. If you need to set the version, then
-     * initialize the version client with not deprecated constructor, in other case the latest version will be used.
-     *
-     * The version of the catalog against which you want to run the query.
-     * It must be a valid catalog version.
-     *
-     * @param version Specify the catalog version or, if you want to use the latest catalog version, set to undefined.
-     * @returns The updated [[QuadKeyPartitionsRequest]] instance that you can use to chain methods.
-     */
-    public withVersion(version?: number): QuadKeyPartitionsRequest {
-        this.version = version;
-        return this;
-    }
-
-    /**
      * A geometric area represented as a HERE tile.
      *
      * @param quadKey Addresses a tile in the quadtree.
@@ -103,18 +88,6 @@ export class QuadKeyPartitionsRequest {
     ): QuadKeyPartitionsRequest {
         this.additionalFields = additionalFields;
         return this;
-    }
-
-    /**
-     * @deprecated This method is deprecated and is not used. If you need to set the version, then
-     * initialize the version client with not deprecated constructor, in other case the latest version will be used.
-     *
-     * The configured catalog version for the request.
-     *
-     * @return The catalog version number.
-     */
-    public getVersion(): number | undefined {
-        return this.version;
     }
 
     /**

@@ -108,9 +108,7 @@ export const OlpSdkDataserviceApiTestCases: {
     callback: function() {
       assert(LookupApi !== undefined);
       assert(LookupApi.platformAPI !== undefined);
-      assert(LookupApi.platformAPIList !== undefined);
       assert(LookupApi.resourceAPI !== undefined);
-      assert(LookupApi.resourceAPIList !== undefined);
     }
   },
   {

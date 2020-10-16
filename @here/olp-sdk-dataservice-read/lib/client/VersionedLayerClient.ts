@@ -61,67 +61,34 @@ export class VersionedLayerClient {
 
     /**
      * HRN of the catalog.
-     * @deprecated This field will be marked as private by 08.2020.
      */
-    hrn: string;
+    private hrn: string;
 
     /**
      * The ID of the layer.
-     * @deprecated This field will be marked as private by 08.2020.
      */
-    layerId: string;
+    private layerId: string;
 
     /**
      * The [[OlpClientSettings]] instance.
-     * @deprecated This field will be marked as private by 08.2020.
      */
-    settings: OlpClientSettings;
+    private settings: OlpClientSettings;
 
     // Layer version.
     private version?: number;
-
-    /**
-     * @deprecated Please use the overloaded constructor of VersionLayerClient.
-     *
-     * Creates the [[VersionedLayerClient]] instance.
-     *
-     * @param catalogHrn The HERE Resource Name (HRN) of the catalog from which you want to get partitions metadata and data.
-     * @param layerId The ID of the layer.
-     * @param settings The [[OlpClientSettings]] instance.
-     */
-    constructor(catalogHrn: HRN, layerId: string, settings: OlpClientSettings);
 
     /**
      * Creates the [[VersionedLayerClient]] instance with VersionedLayerClientParams.
      *
      * @param params parameters for use to initialize VersionLayerClient.
      */
-    constructor(params: VersionedLayerClientParams);
+    constructor(params: VersionedLayerClientParams) {
+        this.hrn = params.catalogHrn.toString();
+        this.layerId = params.layerId;
+        this.settings = params.settings;
 
-    /**
-     * Implementation for handling both constuctors.
-     */
-    constructor(
-        paramsOrHrn: VersionedLayerClientParams | HRN,
-        layerId?: string,
-        settings?: OlpClientSettings
-    ) {
-        if (paramsOrHrn instanceof HRN) {
-            this.hrn = paramsOrHrn.toString();
-            if (layerId && settings instanceof OlpClientSettings) {
-                this.layerId = layerId;
-                this.settings = settings;
-            } else {
-                throw new Error("Unsupported parameters");
-            }
-        } else {
-            this.hrn = paramsOrHrn.catalogHrn.toString();
-            this.layerId = paramsOrHrn.layerId;
-            this.settings = paramsOrHrn.settings;
-
-            if (paramsOrHrn.version !== undefined && paramsOrHrn.version >= 0) {
-                this.version = paramsOrHrn.version;
-            }
+        if (params.version !== undefined && params.version >= 0) {
+            this.version = params.version;
         }
     }
 
@@ -184,25 +151,15 @@ export class VersionedLayerClient {
         }
 
         const partitionId = dataRequest.getPartitionId();
-        let usingVersion: number | undefined;
-        const dataRequestVersion = dataRequest.getVersion();
 
-        if (dataRequestVersion !== undefined) {
-            usingVersion = dataRequestVersion;
-        } else {
-            usingVersion = this.version;
-        }
-
-        if (usingVersion === undefined) {
+        if (this.version === undefined) {
             // fetch the latest version and lock it to the instance.
-            usingVersion = await this.getLatestVersion(
+            this.version = await this.getLatestVersion(
                 dataRequest.getBillingTag()
             ).catch(error => Promise.reject(error));
-
-            this.version = usingVersion;
         }
 
-        if (usingVersion === undefined) {
+        if (this.version === undefined) {
             return Promise.reject(
                 new Error(
                     `Unable to retrieve latest version. Please provide version to the DataRequest or lock version in the constructor`
@@ -213,7 +170,6 @@ export class VersionedLayerClient {
         if (partitionId) {
             const partitionIdDataHandle = await this.getDataHandleByPartitionId(
                 partitionId,
-                usingVersion,
                 dataRequest.getFetchOption(),
                 dataRequest.getBillingTag()
             ).catch(error => Promise.reject(error));
@@ -226,9 +182,9 @@ export class VersionedLayerClient {
 
         const quadKey = dataRequest.getQuadKey();
         if (quadKey) {
-            const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest()
-                .withQuadKey(quadKey)
-                .withVersion(usingVersion);
+            const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest().withQuadKey(
+                quadKey
+            );
 
             const quadTreeIndexResponse = await this.getPartitions(
                 quadKeyPartitionsRequest
@@ -303,25 +259,14 @@ export class VersionedLayerClient {
         request: QuadKeyPartitionsRequest | PartitionsRequest,
         abortSignal?: AbortSignal
     ): Promise<QueryApi.Index | MetadataApi.Partitions | QueryApi.Partitions> {
-        let usingVersion: number | undefined;
-        const requestVersion = request.getVersion();
-
-        if (requestVersion !== undefined) {
-            usingVersion = requestVersion;
-        } else {
-            usingVersion = this.version;
-        }
-
-        if (usingVersion === undefined) {
+        if (this.version === undefined) {
             // fetch the latest version and lock it to the instance.
-            usingVersion = await this.getLatestVersion(
+            this.version = await this.getLatestVersion(
                 request.getBillingTag()
             ).catch(error => Promise.reject(error));
-
-            this.version = usingVersion;
         }
 
-        if (usingVersion === undefined) {
+        if (this.version === undefined) {
             return Promise.reject(
                 new Error(
                     `Unable to retrieve latest version. Please provide version to the Request or lock version in the constructor`
@@ -345,7 +290,7 @@ export class VersionedLayerClient {
                 "versioned"
             )
                 .withQuadKey(quadKey)
-                .withVersion(usingVersion)
+                .withVersion(this.version)
                 .withDepth(request.getDepth())
                 .withAdditionalFields(request.getAdditionalFields());
 
@@ -357,13 +302,12 @@ export class VersionedLayerClient {
 
         if (request.getPartitionIds()) {
             const queryClient = new QueryClient(this.settings);
-
-            request.withVersion(usingVersion);
             return queryClient.getPartitionsById(
                 request,
                 this.layerId,
                 HRN.fromString(this.hrn),
-                abortSignal
+                abortSignal,
+                this.version
             );
         }
 
@@ -372,7 +316,8 @@ export class VersionedLayerClient {
             const partitions = cache.get(
                 request,
                 this.hrn.toString(),
-                this.layerId
+                this.layerId,
+                this.version
             );
             if (partitions) {
                 const additionalFields = request.getAdditionalFields();
@@ -409,7 +354,7 @@ export class VersionedLayerClient {
         ).catch(error => Promise.reject(error));
 
         const metadata = await MetadataApi.getPartitions(metaRequestBilder, {
-            version: usingVersion,
+            version: this.version,
             layerId: this.layerId,
             additionalFields: request.getAdditionalFields(),
             billingTag: request.getBillingTag()
@@ -423,7 +368,8 @@ export class VersionedLayerClient {
                 request,
                 this.hrn.toString(),
                 this.layerId,
-                metadata.partitions
+                metadata.partitions,
+                this.version
             );
         }
         return Promise.resolve(metadata);
@@ -438,7 +384,6 @@ export class VersionedLayerClient {
      */
     private async getDataHandleByPartitionId(
         partitionId: string,
-        version: number,
         fetchOption: FetchOptions,
         billingTag?: string
     ): Promise<string> {
@@ -446,7 +391,6 @@ export class VersionedLayerClient {
 
         const partitionsRequest = new PartitionsRequest()
             .withPartitionIds([partitionId])
-            .withVersion(version)
             .withFetchOption(fetchOption);
 
         if (billingTag) {
@@ -456,7 +400,9 @@ export class VersionedLayerClient {
         const metadata = await queryClient.getPartitionsById(
             partitionsRequest,
             this.layerId,
-            HRN.fromString(this.hrn)
+            HRN.fromString(this.hrn),
+            undefined,
+            this.version
         );
         return metadata.partitions &&
             metadata.partitions[0] &&

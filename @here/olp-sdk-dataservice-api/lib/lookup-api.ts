@@ -102,28 +102,6 @@ export async function platformAPI(
 }
 
 /**
- * @deprecated This method is deprecated and is not used. Please used getPlatformAPIList()
- * Return the list of the HERE APIs. This response is valid for the time specified by 'Cache-Control' header.
- *
- * @summary Return the list of the HERE APIs.
- */
-export async function platformAPIList(
-    builder: RequestBuilder
-): Promise<API[] | ApiNotFoundError> {
-    const baseUrl = "/platform/apis";
-
-    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
-
-    const headers: { [header: string]: string } = {};
-    const options: RequestOptions = {
-        method: "GET",
-        headers
-    };
-
-    return builder.request<API[]>(urlBuilder, options);
-}
-
-/**
  * Return the list of the HERE APIs. This response is valid for the time specified by 'Cache-Control' header.
  *
  * @summary Return the list of the HERE APIs.
@@ -166,35 +144,6 @@ export async function resourceAPI(
         .replace("{hrn}", UrlBuilder.toString(params["hrn"]))
         .replace("{api}", UrlBuilder.toString(params["api"]))
         .replace("{version}", UrlBuilder.toString(params["version"]));
-
-    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
-    urlBuilder.appendQuery("region", params["region"]);
-
-    const headers: { [header: string]: string } = {};
-    const options: RequestOptions = {
-        method: "GET",
-        headers
-    };
-
-    return builder.request<API[]>(urlBuilder, options);
-}
-
-/**
- * @deprecated This method is deprecated and is not used. Please used getResourceAPIList()
- * Return the list of APIs for a given resource identified by hrn. This response is valid for the time specified by 'Cache-Control' header.
- *
- * @summary Return the list of APIs for a given resource.
- * @param hrn The HRN identifying the resource
- * @param region If you want to look up a specific region for a given resource.
- */
-export async function resourceAPIList(
-    builder: RequestBuilder,
-    params: { hrn: string; region?: string }
-): Promise<API[] | ApiNotFoundError> {
-    const baseUrl = "/resources/{hrn}/apis".replace(
-        "{hrn}",
-        UrlBuilder.toString(params["hrn"])
-    );
 
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
     urlBuilder.appendQuery("region", params["region"]);
