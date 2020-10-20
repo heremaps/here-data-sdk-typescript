@@ -1674,4 +1674,358 @@ describe("AuthorizationApi", function() {
 
         expect(result).to.be.equal("success");
     });
+
+    it("attachProjectPolicyToMember", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/members/mocked-member/policies/mocked-policy"
+                );
+                expect(options.method).to.be.equal("POST");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.attachProjectPolicyToMember(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                member: "mocked-member",
+                policy: "mocked-policy"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("createProjectPolicy", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/policies"
+                );
+
+                expect(options.body).to.be.equal(
+                    JSON.stringify({
+                        id: "mocked-id",
+                        name: "mocked-name",
+                        permissions: [
+                            {
+                                allowedActions: ["mocked-action"]
+                            }
+                        ],
+                        description: "mocked-description"
+                    })
+                );
+                expect(options.method).to.be.equal("POST");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.createProjectPolicy(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                body: {
+                    id: "mocked-id",
+                    name: "mocked-name",
+                    permissions: [
+                        {
+                            allowedActions: ["mocked-action"]
+                        }
+                    ],
+                    description: "mocked-description"
+                }
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("deleteProjectPolicy", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/policies/mocked-policy"
+                );
+                expect(options.method).to.be.equal("DELETE");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.deleteProjectPolicy(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                policy: "mocked-policy"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("detachProjectPolicyFromMember", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/members/mocked-member/policies/mocked-policy"
+                );
+                expect(options.method).to.be.equal("DELETE");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.detachProjectPolicyFromMember(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                policy: "mocked-policy",
+                member: "mocked-member"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getAllProjectMembersWithAttachedPolicy", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/policies/mocked-policy/members?limit=5&pageToken=mocked-page-token"
+                );
+                expect(options.method).to.be.equal("GET");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorelationID"
+                );
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getAllProjectMembersWithAttachedPolicy(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                policy: "mocked-policy",
+                xCorrelationID: "mocked-xCorelationID",
+                limit: 5,
+                pageToken: "mocked-page-token"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getAttachedProjectPoliciesForMember", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/members/mocked-member/policies?limit=5&pageToken=mocked-page-token"
+                );
+                expect(options.method).to.be.equal("GET");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorelationID"
+                );
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getAttachedProjectPoliciesForMember(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                member: "mocked-member",
+                xCorrelationID: "mocked-xCorelationID",
+                limit: 5,
+                pageToken: "mocked-page-token"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getAttachedProjectPolicyForMember", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/members/mocked-member/policies/mocked-policy"
+                );
+                expect(options.method).to.be.equal("GET");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getAttachedProjectPolicyForMember(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                member: "mocked-member",
+                policy: "mocked-policy"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getProjectPolicy", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/policies/mocked-policy"
+                );
+                expect(options.method).to.be.equal("GET");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getProjectPolicy(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                policy: "mocked-policy"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getProjectPolicyList", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/policies?projectPolicyType=mocked-projectPolicyType&limit=5&pageToken=mocked-page-token"
+                );
+                expect(options.method).to.be.equal("GET");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorelationID"
+                );
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getProjectPolicyList(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                projectPolicyType: "mocked-projectPolicyType",
+                xCorrelationID: "mocked-xCorelationID",
+                limit: 5,
+                pageToken: "mocked-page-token"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("setAttachedProjectPoliciesToMember", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/members/mocked-member/policies"
+                );
+
+                expect(options.body).to.be.equal(
+                    JSON.stringify([
+                        {
+                            policy: "mocked-policy"
+                        }
+                    ])
+                );
+                expect(options.method).to.be.equal("POST");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.setAttachedProjectPoliciesToMember(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                member: "mocked-member",
+                body: [
+                    {
+                        policy: "mocked-policy"
+                    }
+                ]
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("updateProjectPolicy", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/policies/mocked-policy"
+                );
+
+                expect(options.body).to.be.equal(
+                    JSON.stringify({
+                        id: "mocked-id",
+                        name: "mocked-name",
+                        permissions: [
+                            {
+                                allowedActions: ["mocked-action"]
+                            }
+                        ],
+                        description: "mocked-description"
+                    })
+                );
+                expect(options.method).to.be.equal("PUT");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.updateProjectPolicy(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                policy: "mocked-policy",
+                body: {
+                    id: "mocked-id",
+                    name: "mocked-name",
+                    permissions: [
+                        {
+                            allowedActions: ["mocked-action"]
+                        }
+                    ],
+                    description: "mocked-description"
+                }
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
 });
