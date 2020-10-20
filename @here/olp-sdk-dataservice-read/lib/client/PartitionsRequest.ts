@@ -35,7 +35,7 @@ export class PartitionsRequest {
     private fetchOption = FetchOptions.OnlineIfNotFound;
 
     /**
-     * This method is deprecated and is not used. If you need to set the version,
+     * This method is @deprecated and will be removed by 04.2021. If you need to set the version,
      * initialize the version client with the new constructor. Otherwise, the latest version will be used.
      *
      * Gets a layer version for the request.
@@ -47,7 +47,7 @@ export class PartitionsRequest {
     }
 
     /**
-     * This method is deprecated and is not used. If you need to set the version,
+     * This method is @deprecated and will be removed by 04.2021. If you need to set the version,
      * initialize the version client with the new constructor. Otherwise, the latest version will be used.
      *
      * An optional method that sets the provided layer version.
