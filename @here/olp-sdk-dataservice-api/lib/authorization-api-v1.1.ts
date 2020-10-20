@@ -3453,7 +3453,8 @@ export async function makeResourceLinkable(
  * Access Control:
  * * The calling principal **must** have permission to take all the "requiredToMakeLinkable" actions against
  * the service inferred via the reserved resource prefix of the resource in the path in the scope of the   home project of the resource.
- * * Example: In order to remove the catalog linkability, the following permission would be required:     * "action" : "manageResource"
+ * * Example: In order to remove the catalog linkability, the following permission would be required:
+ * * "action" : "manageResource"
  * * "resource" : "hrn:here:data::olp-here:my-shared-catalog"
  *
  * This API works only with tokens that are scoped to the home project of the resource.
@@ -3547,4 +3548,496 @@ export async function updateResourceLinkability(
     }
 
     return builder.request<LinkableResource>(urlBuilder, options);
+}
+
+/**
+ * Attaches the Project Policy to the member of the Project.
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **manageMembers** action for the specified resource.
+ *
+ * * Example:
+ * In order to attach a custom policy in a Project to a member, the following permissions would be required:
+ * * "action" : "manageMembers"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * AND
+ * * "action" : "managePolicies"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * In the Project workflow, the above permission is granted to all Project Admins and Resource Managers
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Attach Project Policy to Member
+ * @param project HRN identifying the project
+ * @param member HRN identifying the project member. Either user, app or group
+ * @param policy HRN identifying the project policy. For HERE provided policies,
+ * the HRN format would be - hrn:here:authorization::myrealm:default:policy/read-only-access-to-all-catalogs
+ */
+export async function attachProjectPolicyToMember(
+    builder: RequestBuilder,
+    params: { project: string; member: string; policy: string }
+): Promise<Response> {
+    const baseUrl = "/projects/{project}/members/{member}/policies/{policy}"
+        .replace("{project}", UrlBuilder.toString(params["project"]))
+        .replace("{member}", UrlBuilder.toString(params["member"]))
+        .replace("{policy}", UrlBuilder.toString(params["policy"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "POST",
+        headers
+    };
+
+    return builder.requestBlob(urlBuilder, options);
+}
+
+/**
+ * Create the requested custom policy in the Project
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **managePolicies** action for the specified resource.
+ *
+ * * Example:
+ * In order to create a custom policy in a Project, the following permission would be required:
+ * * "action" : "managePolicies"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * In the Project workflow, the above permission is granted to all Project Admins and Resource Managers
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Create the requested Project Policy
+ * @param body
+ * @param project HRN identifying the project
+ */
+export async function createProjectPolicy(
+    builder: RequestBuilder,
+    params: { body: ProjectPolicyRequestBody; project: string }
+): Promise<ProjectPolicyResponse> {
+    const baseUrl = "/projects/{project}/policies".replace(
+        "{project}",
+        UrlBuilder.toString(params["project"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "POST",
+        headers
+    };
+    headers["Content-Type"] = "application/json";
+    if (params["body"] !== undefined) {
+        options.body = JSON.stringify(params["body"]);
+    }
+
+    return builder.request<ProjectPolicyResponse>(urlBuilder, options);
+}
+
+/**
+ * Delete the custom policy in the Project
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **managePolicies** action for the specified resource.
+ *
+ * * Example:
+ * In order to update a custom policy in a Project, the following permission would be required:
+ * * "action" : "managePolicies"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * In the Project workflow, the above permission is granted to all Project Admins and Resource Managers
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Delete the custom Project Policy
+ * @param project HRN identifying the project
+ * @param policy HRN identifying the project policy. For HERE provided policies,
+ * the HRN format would be - hrn:here:authorization::myrealm:default:policy/read-only-access-to-all-catalogs
+ */
+export async function deleteProjectPolicy(
+    builder: RequestBuilder,
+    params: { project: string; policy: string }
+): Promise<Response> {
+    const baseUrl = "/projects/{project}/policies/{policy}"
+        .replace("{project}", UrlBuilder.toString(params["project"]))
+        .replace("{policy}", UrlBuilder.toString(params["policy"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "DELETE",
+        headers
+    };
+
+    return builder.requestBlob(urlBuilder, options);
+}
+
+/**
+ * Detached the requested custom Project Policy from a Membber
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **manageMembers** action for the specified resource.
+ *
+ * * Example:
+ * In order to detach a custom policy in a Project from a member, the following permissions would be required:
+ * * "action" : "manageMembers"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * AND
+ * * "action" : "managePolicies"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * In the Project workflow, the above permission is granted to all Project Admins and Resource Managers
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Detach the Project Policy from a Member
+ * @param project HRN identifying the project
+ * @param member HRN identifying the project member. Either user, app or group
+ * @param policy HRN identifying the project policy. For HERE provided policies,
+ * the HRN format would be - hrn:here:authorization::myrealm:default:policy/read-only-access-to-all-catalogs
+ */
+export async function detachProjectPolicyFromMember(
+    builder: RequestBuilder,
+    params: { project: string; member: string; policy: string }
+): Promise<Response> {
+    const baseUrl = "/projects/{project}/members/{member}/policies/{policy}"
+        .replace("{project}", UrlBuilder.toString(params["project"]))
+        .replace("{member}", UrlBuilder.toString(params["member"]))
+        .replace("{policy}", UrlBuilder.toString(params["policy"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "DELETE",
+        headers
+    };
+
+    return builder.requestBlob(urlBuilder, options);
+}
+
+/**
+ * Get the list of all Project Members with the attached Policy
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **read** action for the specified resource.
+ *
+ * * Example:
+ * In order to read the list of all members attached to a project policy, the following permission would be required:
+ * * "action" : "read"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * In the Project workflow, the above permission is granted to all Project Members, Project Admins, Org Admins
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get the list of all Project Members with the attached Policy
+ * @param project HRN identifying the project
+ * @param policy HRN identifying the project policy. For HERE provided policies,
+ * the HRN format would be - hrn:here:authorization::myrealm:default:policy/read-only-access-to-all-catalogs
+ * @param xCorrelationID Correlates HTTP requests between a client and server. If not present in the incoming request,
+ * it will be generated.
+ * @param limit Number of entries to be returned in the response.
+ * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
+ */
+export async function getAllProjectMembersWithAttachedPolicy(
+    builder: RequestBuilder,
+    params: {
+        project: string;
+        policy: string;
+        xCorrelationID?: string;
+        limit?: number;
+        pageToken?: string;
+    }
+): Promise<ProjectMemberListWithPageToken> {
+    const baseUrl = "/projects/{project}/policies/{policy}/members"
+        .replace("{project}", UrlBuilder.toString(params["project"]))
+        .replace("{policy}", UrlBuilder.toString(params["policy"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("limit", params["limit"]);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<ProjectMemberListWithPageToken>(urlBuilder, options);
+}
+
+/**
+ * Get the list of Attached Project Policies For a Member
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **read** action for the specified resource.
+ *
+ * * Example:
+ * In order to read the list of the attached project policies, the following permission would be required:
+ * * "action" : "read"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * In the Project workflow, the above permission is granted to all Project Members, Project Admins, Org Admins
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get the list of Attached Project Policies For a Member
+ * @param project HRN identifying the project
+ * @param member HRN identifying the project member. Either user, app or group
+ * @param xCorrelationID Correlates HTTP requests between a client and server.
+ *  If not present in the incoming request, it will be generated.
+ * @param limit Number of entries to be returned in the response.
+ * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
+ */
+export async function getAttachedProjectPoliciesForMember(
+    builder: RequestBuilder,
+    params: {
+        project: string;
+        member: string;
+        xCorrelationID?: string;
+        limit?: number;
+        pageToken?: string;
+    }
+): Promise<ProjectPolicyListResponse> {
+    const baseUrl = "/projects/{project}/members/{member}/policies"
+        .replace("{project}", UrlBuilder.toString(params["project"]))
+        .replace("{member}", UrlBuilder.toString(params["member"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("limit", params["limit"]);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<ProjectPolicyListResponse>(urlBuilder, options);
+}
+
+/**
+ * Get the attached Project Policy For a Member
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **read** action for the specified resource.
+ *
+ * * Example:
+ * In order to read the attached project policy, the following permission would be required:
+ * * "action" : "read"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * In the Project workflow, the above permission is granted to all Project Members, Project Admins, Org Admins
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get the attached Project Policy for a Member
+ * @param project HRN identifying the project
+ * @param member HRN identifying the project member. Either user, app or group
+ * @param policy HRN identifying the project policy. For HERE provided policies,
+ * the HRN format would be - hrn:here:authorization::myrealm:default:policy/read-only-access-to-all-catalogs
+ */
+export async function getAttachedProjectPolicyForMember(
+    builder: RequestBuilder,
+    params: { project: string; member: string; policy: string }
+): Promise<AttachedPolicy> {
+    const baseUrl = "/projects/{project}/members/{member}/policies/{policy}"
+        .replace("{project}", UrlBuilder.toString(params["project"]))
+        .replace("{member}", UrlBuilder.toString(params["member"]))
+        .replace("{policy}", UrlBuilder.toString(params["policy"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<AttachedPolicy>(urlBuilder, options);
+}
+
+/**
+ * Get the requested Project Policy
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **read** action for the specified resource.
+ *
+ * * Example:
+ * In order to read a project policy, the following permission would be required:
+ * * "action" : "read"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ *  * In the Project workflow, the above permission is granted to all Project Members, Project Admins, Org Admins
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Get the Project Policy
+ * @param project HRN identifying the project
+ * @param policy HRN identifying the project policy. For HERE provided policies,
+ * the HRN format would be - hrn:here:authorization::myrealm:default:policy/read-only-access-to-all-catalogs
+ */
+export async function getProjectPolicy(
+    builder: RequestBuilder,
+    params: { project: string; policy: string }
+): Promise<ProjectPolicyResponse> {
+    const baseUrl = "/projects/{project}/policies/{policy}"
+        .replace("{project}", UrlBuilder.toString(params["project"]))
+        .replace("{policy}", UrlBuilder.toString(params["policy"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<ProjectPolicyResponse>(urlBuilder, options);
+}
+
+/**
+ * List the Policies that can be attached to members of the Project.
+ * This list will contain all the HERE provided policies and any custom user defined policies created in the Project.
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **read** action for the specified resource.
+ *
+ * * Example:
+ * In order to read a policy list of a Project, the following permission would be required:
+ * * "action" : "read"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * In the Project workflow, the above permission is granted to all Project Members, Project Admins, Org Admins
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary List the Policies in a Project
+ * @param project HRN identifying the project
+ * @param xCorrelationID Correlates HTTP requests between a client and server. If not present in the incoming request,
+ * it will be generated.
+ * @param projectPolicyType The type of the Project Policy
+ * @param limit Number of entries to be returned in the response.
+ * @param pageToken The cursor for pagination. Present only if there is an additional page of data to view.
+ */
+export async function getProjectPolicyList(
+    builder: RequestBuilder,
+    params: {
+        project: string;
+        xCorrelationID?: string;
+        projectPolicyType?: string;
+        limit?: number;
+        pageToken?: string;
+    }
+): Promise<ProjectPolicyListResponse> {
+    const baseUrl = "/projects/{project}/policies".replace(
+        "{project}",
+        UrlBuilder.toString(params["project"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("projectPolicyType", params["projectPolicyType"]);
+    urlBuilder.appendQuery("limit", params["limit"]);
+    urlBuilder.appendQuery("pageToken", params["pageToken"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+    if (params["xCorrelationID"] !== undefined) {
+        headers["X-Correlation-ID"] = params["xCorrelationID"] as string;
+    }
+
+    return builder.request<ProjectPolicyListResponse>(urlBuilder, options);
+}
+
+/**
+ * Sets the Attached Policies list for the specified Project Member, overwriting any pre-existing Attached Policies.
+ * The request body will replace any pre-existing Policy attachment(s), and replace that list with those Policies
+ * identified in the request body.
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **manageMembers** action for the specified resource.
+ *
+ * * Example:
+ * In order to attach a custom policy in a Project to a member, the following permissions would be required:
+ * * "action" : "manageMembers"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"      AND      * "action" : "managePolicies"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * In the Project workflow, the above permission is granted to all Project Admins and Resource Managers
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Set Attached Policies for Member
+ * @param body
+ * @param project HRN identifying the project
+ * @param member HRN identifying the project member. Either user, app or group
+ */
+export async function setAttachedProjectPoliciesToMember(
+    builder: RequestBuilder,
+    params: { body: AttachedPolicy[]; project: string; member: string }
+): Promise<AttachedPolicy[]> {
+    const baseUrl = "/projects/{project}/members/{member}/policies"
+        .replace("{project}", UrlBuilder.toString(params["project"]))
+        .replace("{member}", UrlBuilder.toString(params["member"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "POST",
+        headers
+    };
+    headers["Content-Type"] = "application/json";
+    if (params["body"] !== undefined) {
+        options.body = JSON.stringify(params["body"]);
+    }
+
+    return builder.request<AttachedPolicy[]>(urlBuilder, options);
+}
+
+/**
+ * Update the requested custom policy in the Project
+ *
+ * Access Control:
+ * * User Access Token & Client Access Token
+ * * The calling principal **must** have permission to take the **managePolicies** action for the specified resource.
+ *
+ * * Example:
+ * In order to update a custom policy in a Project, the following permission would be required:
+ * * "action" : "managePolicies"
+ * * "resource" : "hrn:here:authorization::myrealm:project/my-project-0000"
+ * * In the Project workflow, the above permission is granted to all Project Admins and Resource Managers
+ * * This API works only with tokens that are not scoped to a project.
+ *
+ * @summary Update the requested Project Policy
+ * @param body
+ * @param project HRN identifying the project
+ * @param policy HRN identifying the project policy. For HERE provided policies,
+ * the HRN format would be - hrn:here:authorization::myrealm:default:policy/read-only-access-to-all-catalogs
+ */
+export async function updateProjectPolicy(
+    builder: RequestBuilder,
+    params: { body: ProjectPolicyRequestBody; project: string; policy: string }
+): Promise<ProjectPolicyResponse> {
+    const baseUrl = "/projects/{project}/policies/{policy}"
+        .replace("{project}", UrlBuilder.toString(params["project"]))
+        .replace("{policy}", UrlBuilder.toString(params["policy"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "PUT",
+        headers
+    };
+    headers["Content-Type"] = "application/json";
+    if (params["body"] !== undefined) {
+        options.body = JSON.stringify(params["body"]);
+    }
+
+    return builder.request<ProjectPolicyResponse>(urlBuilder, options);
 }
