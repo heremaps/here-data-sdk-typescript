@@ -25,6 +25,86 @@
 
 import { RequestBuilder, RequestOptions, UrlBuilder } from "./RequestBuilder";
 
+export interface ProjectPolicyListResponse extends PageWithToken {
+    /**
+     * List of Project Policies
+     */
+    items?: ProjectPolicyResponse[];
+}
+
+export interface ProjectPolicyRequestBody {
+    /**
+     * The Identifier for the Project Policy.
+     */
+    id: string;
+    /**
+     * The name for the Project Policy
+     */
+    name: string;
+    /**
+     * The description for the Project Policy
+     */
+    description?: string;
+    permissions: ProjectPolicyRequestBodyPermissions[];
+}
+
+export interface ProjectPolicyRequestBodyPermissions {
+    /**
+     * The hrn of the resource. One of resource or the resourceType must be defined
+     */
+    resource?: string;
+    resourceType?: Type;
+    /**
+     * The list of actions allowed to be taken against either the resource
+     * or the resource type defined in the Project Policy in the context of the Project
+     */
+    allowedActions: string[];
+}
+
+export interface ProjectPolicyResponse {
+    /**
+     * The Identifier for the Project Policy
+     */
+    id?: string;
+    /**
+     * The HRN for the Project Policy
+     */
+    hrn?: string;
+    /**
+     * The name for the Project Policy
+     */
+    name?: string;
+    /**
+     * The description for the Project Policy
+     */
+    description?: string;
+    type?: "custom" | "here-platform";
+    /**
+     * The permissions that apply for the policy. Limited to a maximum of 100
+     */
+    permissions?: ProjectPolicyResponsePermissions[];
+}
+
+export interface ProjectPolicyResponsePermissions {
+    /**
+     * The hrn of the resource
+     */
+    resource?: string;
+    resourceType?: Type;
+    /**
+     * The list of allowed actions for this Project Policy Permission
+     */
+    allowedActions?: string[];
+}
+
+export interface AttachedPolicy {
+    /**
+     * The hrn of the project policy Note - For HERE provided policies, the HRN format
+     * would be - hrn:here:authorization::olp-here:here-platform:policy/read-only-access-to-all-catalogs
+     */
+    policy?: string;
+}
+
 export interface ResourceListWithPageToken extends PageWithTokenNoTotal {
     /**
      * List of Resources.
