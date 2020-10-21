@@ -2028,4 +2028,63 @@ describe("AuthorizationApi", function() {
 
         expect(result).to.be.equal("success");
     });
+
+    it("getResourceActionsForProject", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/projects/mocked-project/resources/mocked-resource/actions?type=mocked-type"
+                );
+                expect(options.method).to.be.equal("GET");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorelationID"
+                );
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getResourceActionsForProject(
+            (builder as unknown) as RequestBuilder,
+            {
+                project: "mocked-project",
+                resource: "mocked-resource",
+                xCorrelationID: "mocked-xCorelationID",
+                type: "mocked-type"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("getResourceTypeActionList", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (
+                urlBuilder: UrlBuilder,
+                options: RequestInit & any
+            ) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/resourceTypes/artifact/actions?type=mocked-type"
+                );
+                expect(options.method).to.be.equal("GET");
+                expect(options.headers["X-Correlation-ID"]).to.be.equal(
+                    "mocked-xCorelationID"
+                );
+                return Promise.resolve("success");
+            }
+        };
+        const result = await AuthorizationAPI.getResourceTypeActionList(
+            (builder as unknown) as RequestBuilder,
+            {
+                resourceType: "artifact",
+                xCorrelationID: "mocked-xCorelationID",
+                type: "mocked-type"
+            }
+        );
+
+        expect(result).to.be.equal("success");
+    });
 });
