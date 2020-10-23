@@ -216,7 +216,8 @@ export class QueryClient {
             const cachedPartitions = cache.get(
                 request,
                 hrn.toString(),
-                layerId
+                layerId,
+                version
             );
 
             if (cachedPartitions) {
@@ -262,7 +263,7 @@ export class QueryClient {
                     version: partition.version
                 })
             );
-            cache.put(request, hrn.toString(), layerId, partitions);
+            cache.put(request, hrn.toString(), layerId, partitions, version);
         }
 
         return Promise.resolve(medatada);
