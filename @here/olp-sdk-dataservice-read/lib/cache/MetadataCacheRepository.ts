@@ -34,7 +34,7 @@ export class MetadataCacheRepository {
     constructor(private readonly cache: KeyValueCache) {}
 
     /**
-     * @deprecated This signature will be removed by 04.2021. Please set the version as the last argument.
+     * @deprecated This signature will be removed by 05.2021. Please set the version as the last argument.
      * Stores a key-value pair in the cache.
      *
      * @return True if the operation is successful, false otherwise.
@@ -91,7 +91,7 @@ export class MetadataCacheRepository {
     }
 
     /**
-     * @deprecated This signature will be removed by 04.2021. Please set the version as the last argument.
+     * @deprecated This signature will be removed by 05.2021. Please set the version as the last argument.
      * Gets a metadata from the cache.
      *
      * @param service The name of the API service for which you want to get the base URL.
