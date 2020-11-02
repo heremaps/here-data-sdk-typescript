@@ -1,3 +1,36 @@
+## v1.7.0 (02/11/2020)
+
+**olp-sdk-core**
+
+- Added the `sentWith` query parameter to each request.
+- Updated dependencies.
+
+**olp-sdk-authentication**
+
+- Added the `sentWith` query parameter to each request.
+- Updated dependencies.
+
+**olp-sdk-fetch**
+
+- Updated dependencies.
+
+**olp-sdk-dataservice-api**
+
+- Added generated functions and interfaces that support Authorization APIs. You can find them at `@here/olp-sdk-dataservice-api/lib/authorization-api-v1.1.ts`.
+- Added the `Content-Encoding` header to the PUT blob request. Without this header, it was not possible to upload gzipped blobs.
+- **Breaking change** Removed deprecated items that have exceeded the six-month deprecation period. @see [#385](https://github.com/heremaps/here-data-sdk-typescript/pull/385).
+- Updated dependencies.
+
+**olp-sdk-dataservice-read**
+
+- Now, using a version in the `MetadataCacheRepository` request class is deprecated and will be removed by 05.2021.
+- Updated dependencies.
+- **Breaking change** Removed deprecated items that have exceeded the six-month deprecation period. @see [#385](https://github.com/heremaps/here-data-sdk-typescript/pull/385).
+
+**olp-sdk-dataservice-write**
+
+- Updated dependencies.
+
 ## v1.6.0 (21/09/2020)
 
 **olp-sdk-core**
