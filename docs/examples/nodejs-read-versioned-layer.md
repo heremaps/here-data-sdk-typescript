@@ -71,7 +71,7 @@ To authenticate with the Here platform, you must get platform credentials that c
 
 1. Get your platform credentials.
 
-   For instructions, see the [Get Credentials](https://developer.here.com/olp/documentation/access-control/user-guide/topics/get-credentials.html) section in the Terms and Permissions User Guide.
+   For instructions, see the [Register Your Application](https://developer.here.com/documentation/identity-access-management/dev_guide/topics/plat-token.html#step-1-register-your-application) section in the Identity & Access Management Developer Guide.
 
    You get the `credentials.properties` file.
 

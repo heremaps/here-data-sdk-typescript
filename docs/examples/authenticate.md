@@ -8,11 +8,11 @@ You can use an access token to authenticate to the HERE platform and start worki
 
 1. Create your application and get your API key.
 
-   For instructions, see the [Manage Apps](https://developer.here.com/documentation/access-control/user_guide/topics/manage-apps.html) section in the Terms and Permissions User Guide.
+   For instructions, see the [Manage Apps](https://developer.here.com/documentation/identity-access-management/dev_guide/topics/manage-apps.html) section in the Identity & Access Management Developer Guide.
 
 2. Get your platform credentials.
 
-   For instructions, see the [Get Credentials](https://developer.here.com/olp/documentation/access-control/user-guide/topics/get-credentials.html) section in the Terms and Permissions User Guide.
+   For instructions, see the [Register Your Application](https://developer.here.com/documentation/identity-access-management/dev_guide/topics/plat-token.html#step-1-register-your-application) section in the Identity & Access Management Developer Guide.
 
    You get the `credentials.properties` file.
 

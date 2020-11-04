@@ -26,7 +26,7 @@ For more details, see the [HERE Data User Guide](https://developer.here.com/olp/
 
 To work with catalog or service requests to the HERE platform, you need to get authentication and authorization credentials.
 
-You can authenticate to the HERE platform within your application with the platform credentials available on the HERE portal by means of the Data SDK for TypeScript authentication library. For instructions on how to get credentials, see the [related section](https://developer.here.com/olp/documentation/access-control/user-guide/topics/get-credentials.html) in the Terms and Permissions User Guide.
+You can authenticate to the HERE platform within your application with the platform credentials available on the HERE portal by means of the Data SDK for TypeScript authentication library. For the available authentication options, see the [Identity & Access Management Developer Guide](https://developer.here.com/documentation/identity-access-management/dev_guide/index.html).
 
 After you set up the credentials, you can use them to access the HERE Data SDK libraries.
 
