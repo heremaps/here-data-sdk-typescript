@@ -1,44 +1,40 @@
-# Getting Started with React App and Here Data SDK for Typescript.
+# Getting Started with the React App and Here Data SDK for Typescript
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Run
+## Run the App
 
-1) Copy ./public/credentials.json.sample to ./public/credentials.json and add your credentials to that file. [See more](https://developer.here.com/documentation/sdk-typescript/dev_guide/topics/authenticate.html).
+1. Copy `./public/credentials.json.sample` to `./public/credentials.json`, and then add your credentials to that file.
+    
+    For more information, see the [related section](https://developer.here.com/documentation/sdk-typescript/dev_guide/topics/authenticate.html) in our Developer Guide.
 
-2) Run `yarn` to fetch dependencies.
+2. To fetch dependencies, run `yarn`.
 
-3) Run `yarn start` to run app in development mode.
+3. To run the app in the development mode, run `yarn start`.
 
-4) Open in your favorite browser `http://localhost:3000`.
+4. In your favorite browser, open `http://localhost:3000`.
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the project directory, you can run the following scripts:
 
-### `yarn start`
+- `yarn start` – runs the app in the development mode.\
+    To view it in the browser, open [http://localhost:3000](http://localhost:3000).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+    The page reloads if you make edits.\
+    You will also see no lint errors in the console.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- `yarn build` – builds the app for production in the `build` folder.\
+    It correctly bundles React in the production mode and optimizes the build for the best performance.
 
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    The build is minified, and the filenames include hashes.\
+    Your app is ready to be deployed. For more information on deployment, see the [related section](https://facebook.github.io/create-react-app/docs/deployment) in the Create React App documentation.
 
 ## Learn More
 
-For more information on Data API, see its <a href="https://developer.here.com/olp/documentation/data-api/data_dev_guide/index.html" target="_blank">Developer Guide</a> and <a href="https://developer.here.com/olp/documentation/data-api/api-reference.html" target="_blank">API Reference</a>.
+For more information, see the following documentation:
 
+- Data API <a href="https://developer.here.com/olp/documentation/data-api/data_dev_guide/index.html" target="_blank">Developer Guide</a> and <a href="https://developer.here.com/olp/documentation/data-api/api-reference.html" target="_blank">API Reference</a>
+- [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+- [React documentation](https://reactjs.org/)
