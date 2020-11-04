@@ -114,7 +114,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-read/lib/client/QueryClient.ts#L45">@here/olp-sdk-dataservice-read/lib/client/QueryClient.ts:45</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/1f32078/@here/olp-sdk-dataservice-read/lib/client/QueryClient.ts#L45">@here/olp-sdk-dataservice-read/lib/client/QueryClient.ts:45</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -151,7 +151,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-read/lib/client/QueryClient.ts#L66">@here/olp-sdk-dataservice-read/lib/client/QueryClient.ts:66</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/1f32078/@here/olp-sdk-dataservice-read/lib/client/QueryClient.ts#L66">@here/olp-sdk-dataservice-read/lib/client/QueryClient.ts:66</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -186,12 +186,59 @@
 					<h3>get<wbr>Partitions<wbr>ById</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">get<wbr>Partitions<wbr>ById<span class="tsd-signature-symbol">(</span>request<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html" class="tsd-signature-type">PartitionsRequest</a>, layerId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, hrn<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_core_lib_utils_hrn_.hrn.html" class="tsd-signature-type">HRN</a>, abortSignal<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">AbortSignal</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_dataservice_api_lib_query_api_.partitions.html" class="tsd-signature-type">Partitions</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Partitions<wbr>ById<span class="tsd-signature-symbol">(</span>request<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html" class="tsd-signature-type">PartitionsRequest</a>, layerId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, hrn<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_core_lib_utils_hrn_.hrn.html" class="tsd-signature-type">HRN</a>, abortSignal<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">AbortSignal</span>, version<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_dataservice_api_lib_query_api_.partitions.html" class="tsd-signature-type">Partitions</a><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-read/lib/client/QueryClient.ts#L168">@here/olp-sdk-dataservice-read/lib/client/QueryClient.ts:168</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/1f32078/@here/olp-sdk-dataservice-read/lib/client/QueryClient.ts#L169">@here/olp-sdk-dataservice-read/lib/client/QueryClient.ts:169</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>This signature will be removed by 04.2021. Please set the version as the last argument.
+										Gets partitions using their IDs.</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>request: <a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html" class="tsd-signature-type">PartitionsRequest</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The <code>PartitionsRequest</code> instance.</p>
+									</div>
+								</li>
+								<li>
+									<h5>layerId: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The ID of the layer from which you want to get partitions.</p>
+									</div>
+								</li>
+								<li>
+									<h5>hrn: <a href="_olp_sdk_core_lib_utils_hrn_.hrn.html" class="tsd-signature-type">HRN</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The HERE Resource Name (HRN) of the layer.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> abortSignal: <span class="tsd-signature-type">AbortSignal</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>A signal object that allows you to communicate with a request (such as the <code>fetch</code> request)
+										and, if required, abort it using the <code>AbortController</code> object.</p>
+										<p>For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_dataservice_api_lib_query_api_.partitions.html" class="tsd-signature-type">Partitions</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<p>The requested partitions.</p>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/1f32078/@here/olp-sdk-dataservice-read/lib/client/QueryClient.ts#L189">@here/olp-sdk-dataservice-read/lib/client/QueryClient.ts:189</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -226,6 +273,9 @@
 										and, if required, abort it using the <code>AbortController</code> object.</p>
 										<p>For more information, see the <a href="https://developer.mozilla.org/en-US/docs/Web/API/AbortController"><code>AbortController</code> documentation</a>.</p>
 									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> version: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/_olp_sdk_dataservice_api_lib_query_api_.partitions.html" class="tsd-signature-type">Partitions</a><span class="tsd-signature-symbol">&gt;</span></h4>

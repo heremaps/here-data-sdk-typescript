@@ -94,7 +94,6 @@
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_olp_sdk_dataservice_api_lib_stream_api_.html#commitoffsets" class="tsd-kind-icon">commit<wbr>Offsets</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_olp_sdk_dataservice_api_lib_stream_api_.html#consumedata" class="tsd-kind-icon">consume<wbr>Data</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_olp_sdk_dataservice_api_lib_stream_api_.html#deletesubscription" class="tsd-kind-icon">delete<wbr>Subscription</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-external-module"><a href="_olp_sdk_dataservice_api_lib_stream_api_.html#docommitoffsets" class="tsd-kind-icon">do<wbr>Commit<wbr>Offsets</a></li>
@@ -115,7 +114,7 @@
 					<div class="tsd-signature tsd-kind-icon">Auto<wbr>Offset<wbr>Reset<wbr>Enum<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"latest"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"earliest"</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">"none"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-api/lib/stream-api.ts#L77">@here/olp-sdk-dataservice-api/lib/stream-api.ts:77</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/1f32078/@here/olp-sdk-dataservice-api/lib/stream-api.ts#L77">@here/olp-sdk-dataservice-api/lib/stream-api.ts:77</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -125,57 +124,13 @@
 					<div class="tsd-signature tsd-kind-icon">Kafka<wbr>Protocol<wbr>Version<wbr>Enum<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"0.10"</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-api/lib/stream-api.ts#L148">@here/olp-sdk-dataservice-api/lib/stream-api.ts:148</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/1f32078/@here/olp-sdk-dataservice-api/lib/stream-api.ts#L148">@here/olp-sdk-dataservice-api/lib/stream-api.ts:148</a></li>
 						</ul>
 					</aside>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
-					<a name="commitoffsets" class="tsd-anchor"></a>
-					<h3>commit<wbr>Offsets</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-external-module">
-						<li class="tsd-signature tsd-kind-icon">commit<wbr>Offsets<span class="tsd-signature-symbol">(</span>builder<span class="tsd-signature-symbol">: </span><a href="../classes/_olp_sdk_dataservice_api_lib_requestbuilder_.requestbuilder.html" class="tsd-signature-type">RequestBuilder</a>, params<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-api/lib/stream-api.ts#L187">@here/olp-sdk-dataservice-api/lib/stream-api.ts:187</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<dl class="tsd-comment-tags">
-									<dt>deprecated</dt>
-									<dd><p>This function will be removed by 09.2020. Please use doCommitOffsets.
-											After reading data, you should commit the offset of the last message read from each partition so
-											that your application can resume reading new messages from the correct partition in the event that there is a
-											disruption to the subscription, such as an application crash. An offset can also be useful if you delete a subscription
-											then recreate a subscription for the same layer, because the new subscription can start reading data from the offset.
-											To read messages already committed, use the /seek endpoint, then use /partitions.
-										The base path to use is the value of &#39;nodeBaseURL&#39; returned from /subscribe POST request.</p>
-									</dd>
-									<dt>summary</dt>
-									<dd><p>Commits offsets of the last message read</p>
-									</dd>
-								</dl>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>builder: <a href="../classes/_olp_sdk_dataservice_api_lib_requestbuilder_.requestbuilder.html" class="tsd-signature-type">RequestBuilder</a></h5>
-								</li>
-								<li>
-									<h5>params: <span class="tsd-signature-type">object</span></h5>
-									<ul class="tsd-parameters">
-									</ul>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-external-module">
 					<a name="consumedata" class="tsd-anchor"></a>
 					<h3>consume<wbr>Data</h3>
@@ -186,7 +141,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-api/lib/stream-api.ts#L286">@here/olp-sdk-dataservice-api/lib/stream-api.ts:286</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/1f32078/@here/olp-sdk-dataservice-api/lib/stream-api.ts#L234">@here/olp-sdk-dataservice-api/lib/stream-api.ts:234</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -228,7 +183,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-api/lib/stream-api.ts#L328">@here/olp-sdk-dataservice-api/lib/stream-api.ts:328</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/1f32078/@here/olp-sdk-dataservice-api/lib/stream-api.ts#L276">@here/olp-sdk-dataservice-api/lib/stream-api.ts:276</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -267,7 +222,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-api/lib/stream-api.ts#L238">@here/olp-sdk-dataservice-api/lib/stream-api.ts:238</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/1f32078/@here/olp-sdk-dataservice-api/lib/stream-api.ts#L186">@here/olp-sdk-dataservice-api/lib/stream-api.ts:186</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -310,7 +265,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-api/lib/stream-api.ts#L364">@here/olp-sdk-dataservice-api/lib/stream-api.ts:364</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/1f32078/@here/olp-sdk-dataservice-api/lib/stream-api.ts#L312">@here/olp-sdk-dataservice-api/lib/stream-api.ts:312</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -348,7 +303,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-api/lib/stream-api.ts#L392">@here/olp-sdk-dataservice-api/lib/stream-api.ts:392</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/1f32078/@here/olp-sdk-dataservice-api/lib/stream-api.ts#L340">@here/olp-sdk-dataservice-api/lib/stream-api.ts:340</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -387,7 +342,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-api/lib/stream-api.ts#L426">@here/olp-sdk-dataservice-api/lib/stream-api.ts:426</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/1f32078/@here/olp-sdk-dataservice-api/lib/stream-api.ts#L374">@here/olp-sdk-dataservice-api/lib/stream-api.ts:374</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -429,7 +384,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-api/lib/stream-api.ts#L479">@here/olp-sdk-dataservice-api/lib/stream-api.ts:479</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/1f32078/@here/olp-sdk-dataservice-api/lib/stream-api.ts#L427">@here/olp-sdk-dataservice-api/lib/stream-api.ts:427</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -521,9 +476,6 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-external-module">
 						<a href="_olp_sdk_dataservice_api_lib_stream_api_.html#kafkaprotocolversionenum" class="tsd-kind-icon">Kafka<wbr>Protocol<wbr>Version<wbr>Enum</a>
-					</li>
-					<li class=" tsd-kind-function tsd-parent-kind-external-module">
-						<a href="_olp_sdk_dataservice_api_lib_stream_api_.html#commitoffsets" class="tsd-kind-icon">commit<wbr>Offsets</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-external-module">
 						<a href="_olp_sdk_dataservice_api_lib_stream_api_.html#consumedata" class="tsd-kind-icon">consume<wbr>Data</a>

@@ -112,7 +112,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-read/lib/cache/MetadataCacheRepository.ts#L27">@here/olp-sdk-dataservice-read/lib/cache/MetadataCacheRepository.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/1f32078/@here/olp-sdk-dataservice-read/lib/cache/MetadataCacheRepository.ts#L27">@here/olp-sdk-dataservice-read/lib/cache/MetadataCacheRepository.ts:27</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -144,18 +144,22 @@
 					<h3>get</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span>rq<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html" class="tsd-signature-type">PartitionsRequest</a>, hrn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, layerId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_olp_sdk_dataservice_api_lib_metadata_api_.partition.html" class="tsd-signature-type">Partition</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span>rq<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html" class="tsd-signature-type">PartitionsRequest</a>, hrn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, layerId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, version<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/_olp_sdk_dataservice_api_lib_metadata_api_.partition.html" class="tsd-signature-type">Partition</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-read/lib/cache/MetadataCacheRepository.ts#L78">@here/olp-sdk-dataservice-read/lib/cache/MetadataCacheRepository.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/1f32078/@here/olp-sdk-dataservice-read/lib/cache/MetadataCacheRepository.ts#L101">@here/olp-sdk-dataservice-read/lib/cache/MetadataCacheRepository.ts:101</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Gets a metadata from the cache.</p>
-								</div>
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>This signature will be removed by 05.2021. Please set the version as the last argument.
+										Gets a metadata from the cache.</p>
+									</dd>
+								</dl>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -175,6 +179,38 @@
 							</h4>
 							<p>The base URL of the service, or undefined if the base URL does not exist.</p>
 						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/1f32078/@here/olp-sdk-dataservice-read/lib/cache/MetadataCacheRepository.ts#L114">@here/olp-sdk-dataservice-read/lib/cache/MetadataCacheRepository.ts:114</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets a metadata from the cache.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>rq: <a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html" class="tsd-signature-type">PartitionsRequest</a></h5>
+								</li>
+								<li>
+									<h5>hrn: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>layerId: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> version: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/_olp_sdk_dataservice_api_lib_metadata_api_.partition.html" class="tsd-signature-type">Partition</a><span class="tsd-signature-symbol">[]</span>
+								<span class="tsd-signature-symbol"> | </span>
+								<span class="tsd-signature-type">undefined</span>
+							</h4>
+							<p>The base URL of the service, or undefined if the base URL does not exist.</p>
+						</li>
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
@@ -182,12 +218,45 @@
 					<h3>put</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
 						<li class="tsd-signature tsd-kind-icon">put<span class="tsd-signature-symbol">(</span>rq<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html" class="tsd-signature-type">PartitionsRequest</a>, hrn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, layerId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, partitions<span class="tsd-signature-symbol">: </span><a href="../interfaces/_olp_sdk_dataservice_api_lib_metadata_api_.partition.html" class="tsd-signature-type">Partition</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">put<span class="tsd-signature-symbol">(</span>rq<span class="tsd-signature-symbol">: </span><a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html" class="tsd-signature-type">PartitionsRequest</a>, hrn<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, layerId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, partitions<span class="tsd-signature-symbol">: </span><a href="../interfaces/_olp_sdk_dataservice_api_lib_metadata_api_.partition.html" class="tsd-signature-type">Partition</a><span class="tsd-signature-symbol">[]</span>, version<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/781344f/@here/olp-sdk-dataservice-read/lib/cache/MetadataCacheRepository.ts#L41">@here/olp-sdk-dataservice-read/lib/cache/MetadataCacheRepository.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/1f32078/@here/olp-sdk-dataservice-read/lib/cache/MetadataCacheRepository.ts#L42">@here/olp-sdk-dataservice-read/lib/cache/MetadataCacheRepository.ts:42</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<dl class="tsd-comment-tags">
+									<dt>deprecated</dt>
+									<dd><p>This signature will be removed by 05.2021. Please set the version as the last argument.
+										Stores a key-value pair in the cache.</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>rq: <a href="_olp_sdk_dataservice_read_lib_client_partitionsrequest_.partitionsrequest.html" class="tsd-signature-type">PartitionsRequest</a></h5>
+								</li>
+								<li>
+									<h5>hrn: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>layerId: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>partitions: <a href="../interfaces/_olp_sdk_dataservice_api_lib_metadata_api_.partition.html" class="tsd-signature-type">Partition</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+							<p>True if the operation is successful, false otherwise.</p>
+						</li>
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/1f32078/@here/olp-sdk-dataservice-read/lib/cache/MetadataCacheRepository.ts#L54">@here/olp-sdk-dataservice-read/lib/cache/MetadataCacheRepository.ts:54</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -208,6 +277,9 @@
 								</li>
 								<li>
 									<h5>partitions: <a href="../interfaces/_olp_sdk_dataservice_api_lib_metadata_api_.partition.html" class="tsd-signature-type">Partition</a><span class="tsd-signature-symbol">[]</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> version: <span class="tsd-signature-type">undefined</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
