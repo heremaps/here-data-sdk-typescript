@@ -24,13 +24,13 @@ import {
 } from "@here/olp-sdk-authentication";
 
 /**
- * Returns the configured instance of `UserAuth`.
+ * Gets the configured `UserAuth` instance.
  *
- * @param pathToCredentials The path to the credential.properties.
+ * @param pathToCredentials The path to the `credential.properties` file.
  * For instructions, see the [Register Your Application](https://developer.here.com/documentation/identity-access-management/dev_guide/topics/plat-token.html#step-1-register-your-application)
  * section in the Identity & Access Management Developer Guide.
  *
- * @returns `UserAuth` instance.
+ * @returns The `UserAuth` instance.
  */
 export function getUserAuth(pathToCredentials: string): UserAuth {
   const credentials = loadCredentialsFromFile(pathToCredentials);

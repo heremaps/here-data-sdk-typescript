@@ -21,13 +21,13 @@ import { UserAuth } from "@here/olp-sdk-authentication";
 import { OlpClientSettings } from "@here/olp-sdk-dataservice-read";
 
 /**
- * Returns the instance of `OlpClientSettings`.
+ * Gets the `OlpClientSettings` instance.
  *
- * @param userAuth The instance of `UserAuth`.
- * @param env An environment that should be used to get the URL of the API Lookup Service.
- * You can also specify a URL of your custom service. @optional Default is 'here'.
+ * @param userAuth The `UserAuth` instance.
+ * @param env (Optional) The environment that you want to use to get the URL of the API Lookup API.
+ * You can also specify a URL of your custom service. The default value is `here`.
  *
- * @returns `OlpClientSettings` instance.
+ * @returns The `OlpClientSettings` instance.
  */
 export function getOlpClientSettings(
   userAuth: UserAuth,

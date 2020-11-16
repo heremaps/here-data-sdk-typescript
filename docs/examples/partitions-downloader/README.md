@@ -1,32 +1,60 @@
-# Download the data with Here Data SDK for Typescript
+# Download data with HERE Data SDK for Typescript
 
-With this example app you can fetch the data from versioned layers and store to the files.
+You can use this example app to fetch data from versioned layers and save it to files.
 
 ## Build and install
 
-Run `npm run build` to build the app.
+To build the app, run `npm run build`.
 
-*Optional* you can install the app globally to be able to use it from any folders: run `npm install -g .`
+If you want to use the app in any folder, install it globally by running `npm install -g .`.
 
-## How to use it
+## Use the app
 
-To see the list of params you can run `node . --help` from the app folder or 
-`download-partitions --help` from any folder if you have installed it globally.
+If you installed the app globally, to see the list of available parameters, run `download-partitions --help`.
+Otherwise, in the app folder, run `node . --help`.
 
-### Download and save a few partitions to the current directory
-`download-partitions -c <your catalog HRN> -l <your layer ID> -p partitionId1,partitionId2,partitionId3`
+You can use the app to do the following:
 
-### Download and save a few partitions to the current directory from specific catalog version
-`download-partitions -c <your catalog HRN> -l <your layer ID> -p partitionId1,partitionId2,partitionId3 -v <catalog version>`
+- Download and save partitions to the current directory.
 
+    ```bash
+    download-partitions -c <your catalog HRN> \
+        -l <your layer ID> \
+        -p partitionId1,partitionId2,partitionId3
+    ```
 
-### Download and save a few partitions to the specific directory
-`download-partitions -c <your catalog HRN> -l <your layer ID> -p partitionId1,partitionId2,partitionId3 -o <path to the output folder>`
+- Download partitions from a catalog version and save them to the current directory.
 
+    ```bash
+    download-partitions -c <your catalog HRN> \
+        -l <your layer ID> \
+        -p partitionId1,partitionId2,partitionId3 \
+        -v <catalog version>
+    ```
 
-### Download and save partitions defined in specific file to the specific directory
-`download-partitions -c <your catalog HRN> -l <your layer ID> --pf <path to your file with list of partition IDs> -o <path to the output folder>`
+- Download and save partitions to a specific directory.
 
-### Download and save partition from versioned layer with partitioning chema "HereTile" by provided "row,column,level" string, represenred the TileKey to the specific directory
-`download-partitions -c <your catalog HRN> -l <your layer ID> -q 1580,2069,12 -o <path to the output folder>`
+    ```bash
+    download-partitions -c <your catalog HRN> \
+        -l <your layer ID> \
+        -p partitionId1,partitionId2,partitionId3 \
+        -o <path to the output folder>
+    ```
 
+- Download partitions defined in a file and save them to a specific directory.
+
+    ```bash
+    download-partitions -c <your catalog HRN> \
+        -l <your layer ID> \
+        --pf <path to your file with list of partition IDs> \
+        -o <path to the output folder>
+    ```
+
+- Download a partition from a versioned layer with the HERE tile partitioning schema using the `row,column,level` string (a tile key) and save the partition to a specific directory.
+
+    ```bash
+    download-partitions -c <your catalog HRN> \
+    -l <your layer ID> \
+    -q 1580,2069,12 \
+    -o <path to the output folder>
+    ```
