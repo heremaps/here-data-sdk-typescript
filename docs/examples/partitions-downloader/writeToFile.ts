@@ -20,10 +20,10 @@
 import fs from "fs";
 
 /**
- * Saves the data to the file.
+ * Saves data to the file.
  *
- * @param path Path to the file.
- * @param data Buffer to save.
+ * @param path The path to the file.
+ * @param data `Buffer` that you want to save.
  */
 export function writeToFile(path: string, data: Buffer) {
   fs.writeFile(path, data, err => {
