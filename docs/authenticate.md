@@ -2,17 +2,18 @@
 
 You can use an access token to authenticate to the HERE platform and start working with HERE Data SDK for Typescript. You can receive it using a default token provider, local authorization, or project authentication.
 
->Note: Keep your credentials secure and do not disclose them. Make sure that your credentials are not stored in a way that enables others to access them.
+> #### Note
+> Keep your credentials secure and do not disclose them. Make sure that your credentials are not stored in a way that enables others to access them.
 
 **To get an access token:**
 
-1. Create your application and get your API key.
+1. Create your app and get your API key.
 
-   For instructions, see the [Manage Apps](https://developer.here.com/documentation/identity-access-management/dev_guide/topics/manage-apps.html) section in the Identity & Access Management Developer Guide.
+   For instructions, see the [Manage apps](https://developer.here.com/documentation/identity-access-management/dev_guide/topics/manage-apps.html) section in the Identity & Access Management Developer Guide.
 
 2. Get your platform credentials.
 
-   For instructions, see the [Register Your Application](https://developer.here.com/documentation/identity-access-management/dev_guide/topics/plat-token.html#step-1-register-your-application) section in the Identity & Access Management Developer Guide.
+   For instructions, see the [Register your application](https://developer.here.com/documentation/identity-access-management/dev_guide/topics/plat-token.html#step-1-register-your-application) section in the Identity & Access Management Developer Guide.
 
    You get the `credentials.properties` file.
 
@@ -52,7 +53,8 @@ You can use an access token to authenticate to the HERE platform and start worki
 
    - To authenticate with local authorization, specify the environment in which you work, your credentials, and the `tokenRequester` method.
 
-     > Note: Depending on the environment that you use, specify one of the following parameters: `env` or `customUrl`.
+     > #### Note
+     > Depending on the environment that you use, specify one of the following parameters: `env` or `customUrl`.
 
      ```typescript
      const userAuth = new UserAuth({
@@ -79,6 +81,6 @@ You can use an access token to authenticate to the HERE platform and start worki
    const token: string = await userAuth.getToken();
    ```
 
-You can now use the access token to create the `OlpClientSettings` object and work with layers. For instructions, see the [related](https://developer.here.com/documentation/sdk-typescript/dev_guide/topics/create-olp-client-settings.html) section in our Developer Guide.
+You can now use the access token to create the `OlpClientSettings` object and work with layers. For instructions, see the <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/create-portal-client-settings.md" target="_blank">related</a> section.
 
 The token expires after an hour. To always have a valid access token when you get or publish data, use the `UserAuth` instance with the `getToken` method to create the `OlpClientSettings` object.

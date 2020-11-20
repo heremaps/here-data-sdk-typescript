@@ -178,7 +178,7 @@ If you have suggestions, please see our [contribution guidelines](CONTRIBUTING.m
 - Indentation rules are defined in the `.prettierrc.json` file contained in the development environment.
 - A useful formatting plugin is Visual Studio Code "prettier" extension.
 
-## Visual Studio Code Configuration
+## Visual Studio Code сonfiguration
 
 To configure the VSCode:
 
@@ -211,7 +211,7 @@ To configure the VSCode:
     "tslint.enable": true,
 ```
 
-## Commit Message
+## Commit message
 
 The purpose of a commit message is to summarize the scope and context of a patch for maintainers and potential reviewers.
 
@@ -247,7 +247,7 @@ The purpose of a commit message is to summarize the scope and context of a patch
 
 1. If you have to leave "TODO" comments in the code, make sure that they include a related ticket number so that the work is tracked and not forgotten.
 
-## Recommended TypeDoc Style
+## Recommended TypeDoc style
 
 1. Write proper English sentences.
 1. Put a period "." at the end of a line or sentence.
