@@ -63,7 +63,7 @@ After a successful run, the console displays the following message:
 App works!
 ```
 
-## <a name="create-streamlayerclient"></a>Create `StreamLayerClient`
+## Create `StreamLayerClient`
 
 You can use the `StreamLayerClient` class to request data from the queue that streams data from a [stream layer](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/layers.html#stream-layers). Once a consumer reads the data, the data is no longer available to that consumer, but the data remains available to other consumers.
 
@@ -73,7 +73,7 @@ Stream layers can be configured with retention time, or time-to-live (TTL) which
 
 1. Create the `OlpClientSettings` object.
 
-   For instructions, see <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/create-portal-client-settings.md" target="_blank">Create platform client settings</a>.
+   For instructions, see <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/create-platform-client-settings.md" target="_blank">Create platform client settings</a>.
 
 2. Create an `StreamLayerClient` instance with `StreamLayerClientParams` that contains the catalog HRN, the layer ID, the platform client settings from step 1.
 
@@ -85,7 +85,7 @@ Stream layers can be configured with retention time, or time-to-live (TTL) which
   });
   ```
 
-## <a name="subscribe-streamlayerclient"></a>Subscribe to the stream layer
+## Subscribe to the stream layer
 
 **To subscribe to the stream layer:**
 
@@ -136,7 +136,7 @@ You can read messages from a [stream layer](https://developer.here.com/olp/docum
 
    For instructions, see [Create StreamLayerClient](#create-streamlayerclient).
 
-2. Subscribe to the stream layer. See [Subscribe to the stream layer](#subscribe-streamlayerclient)
+2. Subscribe to the stream layer. See [Subscribe to the stream layer](#subscribe-to-the-stream-layer)
 
 3. Call the `poll` method with the subscription ID.
 

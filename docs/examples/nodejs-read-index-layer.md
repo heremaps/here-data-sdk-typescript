@@ -63,7 +63,7 @@ After a successful run, the console displays the following message:
 App works!
 ```
 
-## <a name="create-IndexlayerClient"></a>Create `IndexLayerClient`
+## Create `IndexLayerClient`
 
 You can use the `IndexLayerClient` object to request any data and partition metadata from an [index layer](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/layers.html#index-layers).
 
@@ -71,7 +71,7 @@ You can use the `IndexLayerClient` object to request any data and partition meta
 
 1. Create the `OlpClientSettings` object.
 
-   For instructions, see <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/create-portal-client-settings.md" target="_blank">Create platform client settings</a>.
+   For instructions, see <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/create-platform-client-settings.md" target="_blank">Create platform client settings</a>.
 
 2. Create the `IndexLayerClient` object with `IndexLayerClientParams` that contains the HERE Resource Name (HRN) of the catalog that contains the layer, layer ID, and platform client settings from step 1.
 
@@ -97,7 +97,7 @@ Partition metadata from [index layer](https://developer.here.com/olp/documentati
 
 1. Create the `IndexLayerClient` object.
 
-   For instructions, see [Create IndexLayerClient](#create-IndexlayerClient).
+   For instructions, see [Create IndexLayerClient](#create-indexlayerclient).
 
 2. Create the `IndexQueryRequest` object with the RSQL query string and, if the query string is huge, set the `huge` boolean parameter to `true`.
 
@@ -137,7 +137,7 @@ An [index layer](https://developer.here.com/olp/documentation/data-user-guide/po
 
 1. Create the `IndexLayerClient` object.
 
-   For instructions, see [Create IndexLayerClient](#create-IndexlayerClient).
+   For instructions, see [Create IndexLayerClient](#create-indexlayerclient).
 
 2. Call the `getData` method with the data model that contains the ID property (also used as the data handle).
 
