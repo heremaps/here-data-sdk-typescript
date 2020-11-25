@@ -4,13 +4,13 @@ HERE Data SDK for TypeScript includes the core components to access the HERE API
 
 In this guide, learn how to authenticate to and start working with the HERE platform using the Data SDK:
 
-- [Prerequisite knowledge](#prerequisite)
+- [Prerequisites](#prerequisites)
 - [Concepts](#concepts)
-- [Get credentials](#credentials)
-- [Available components](#components)
+- [Get credentials](#get-credentials)
+- [Available components](#available-components)
 - [Examples](#examples)
 
-## <a name="prerequisite"></a>Prerequisites
+## Prerequisites
 
 To start using Data SDK for TypeScript, you need a platform user account.
 
@@ -30,7 +30,7 @@ To use Data SDK for TypeScript, you need to understand the following concepts re
 
 For more details, see the [Data User Guide](https://developer.here.com/olp/documentation/data-user-guide/index.html).
 
-## <a name="credentials"></a> Get credentials
+## Get credentials
 
 To work with catalog or service requests to the HERE platform, you need to get authentication and authorization credentials.
 
@@ -38,7 +38,7 @@ You can authenticate to the HERE platform within your application with the platf
 
 After you set up the credentials, you can use them to access the Data SDK libraries.
 
-## <a name="components"></a> Available components
+## Available components
 
 The Data SDK package contains іумукфд independent modules that focus on a specific set of responsibilities:
 
@@ -51,9 +51,9 @@ The Data SDK package contains іумукфд independent modules that focus on a
 
 ## Reference documentation
 
-The API reference documentation for the Data SDK is available on our <a href="https://heremaps.github.io/here-data-sdk-typescript/", tarhet="_blank">GitHub Pages</a>.
+The API reference documentation for the Data SDK is available on our <a href="https://heremaps.github.io/here-data-sdk-typescript/" target="_blank">GitHub Pages</a>.
 
-## <a name="examples"></a> Examples
+## Examples
 
 To better understand HERE Data SDK for TypeScript, see the examples of how to:
 

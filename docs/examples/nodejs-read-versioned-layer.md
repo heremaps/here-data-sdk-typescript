@@ -63,7 +63,7 @@ After a successful run, the console displays the following message:
 App works!
 ```
 
-## <a name="create-versionedlayerclient"></a>Create `VersionedLayerClient`
+## Create `VersionedLayerClient`
 
 You can use the `VersionedLayerClient` object to request any data and partition metadata version from a [versioned layer](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/layers.html#versioned-layers). When you request a particular version of data from the versioned layer, the partition you receive in the response may have a lower version number than you requested. The version of a layer or partition represents the catalog version in which the layer or partition was last updated.
 
@@ -71,7 +71,7 @@ You can use the `VersionedLayerClient` object to request any data and partition 
 
 1. Create the `OlpClientSettings` object.
 
-   For instructions, see <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/create-portal-client-settings.md" target="_blank">Create platform client settings</a>.
+   For instructions, see <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/create-platform-client-settings.md" target="_blank">Create platform client settings</a>.
 
 2. Create a `VersionedLayerClient` instance with `VersionedLayerClientParams` that contains the catalog HRN, the layer ID, the platform client settings from step 1, and the layer version.
 

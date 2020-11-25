@@ -63,7 +63,7 @@ After a successful run, the console displays the following message:
 App works!
 ```
 
-## <a name="create-volatilelayerclient"></a>Create `VolatileLayerClient`
+## Create `VolatileLayerClient`
 
 You can use the `VolatileLayerClient` object to get the latest published data and partition metadata from a [volatile layer](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/layers.html#volatile-layers).
 
@@ -71,7 +71,7 @@ You can use the `VolatileLayerClient` object to get the latest published data an
 
 1. Create the `OlpClientSettings` object.
 
-   For instructions, see <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/create-portal-client-settings.md" target="_blank">Create platform client settings</a>.
+   For instructions, see <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/create-platform-client-settings.md" target="_blank">Create platform client settings</a>.
 
 2. Create the `VolatileLayerClient` object with `VolatileLayerClientParams` that contains the HERE Resource Name (HRN) of the catalog, the layer ID, and the platform client settings from step 1.
 

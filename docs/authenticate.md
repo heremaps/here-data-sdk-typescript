@@ -81,6 +81,6 @@ You can use an access token to authenticate to the HERE platform and start worki
    const token: string = await userAuth.getToken();
    ```
 
-You can now use the access token to create the `OlpClientSettings` object and work with layers. For instructions, see the <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/create-portal-client-settings.md" target="_blank">related</a> section.
+You can now use the access token to create the `OlpClientSettings` object and work with layers. For instructions, see the [related](create-platform-client-settings.md) section.
 
 The token expires after an hour. To always have a valid access token when you get or publish data, use the `UserAuth` instance with the `getToken` method to create the `OlpClientSettings` object.
