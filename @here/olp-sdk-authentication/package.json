@@ -50,18 +50,17 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@here/olp-sdk-core": "^1.2.0",
-    "@types/properties-reader": "^0.0.1",
     "@here/olp-sdk-fetch": "^1.7.0",
     "properties-reader": "^0.3.1"
   },
   "devDependencies": {
+    "@types/properties-reader": "^0.0.1",
     "@types/chai": "^4.2.7",
     "@types/fetch-mock": "^7.3.2",
     "@types/mocha": "^5.2.7",
     "@types/node": "^14.11.8",
     "@types/sinon-chai": "^3.2.3",
     "@types/sinon": "7.0.3",
-    "awesome-typescript-loader": "^5.2.1",
     "chai": "^4.2.0",
     "fetch-mock": "^8.3.1",
     "husky": "^3.1.0",

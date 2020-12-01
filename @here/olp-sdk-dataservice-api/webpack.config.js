@@ -1,5 +1,4 @@
 const path = require("path");
-const packageInfo = require('./package.json');
 
 module.exports = env => {
   const isProd = env.NODE_ENV === "production";
@@ -9,26 +8,14 @@ module.exports = env => {
     mode: env.NODE_ENV,
     devtool: isProd ? undefined : "inline-source-map",
     resolve: {
-      extensions: [".ts", ".js"]
+      extensions: [".js"]
     },
-    entry: "./index.ts",
+    entry: "./index.js",
     output: {
       filename: `bundle.umd${isProd ? '.min' : '.dev'}.js`,
       path: path.resolve(__dirname),
       libraryTarget: "umd",
       globalObject: 'this'
-    },
-    module: {
-      rules: [
-        {
-          test: /\.tsx?$/,
-          loader: "awesome-typescript-loader",
-          exclude: /node_modules/,
-          options: {
-              onlyCompileBundledFiles: true
-          }
-        }
-      ]
     }
   };
 };
