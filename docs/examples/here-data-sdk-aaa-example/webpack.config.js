@@ -10,6 +10,10 @@ module.exports = {
     path: path.join(__dirname, "build"),
     filename: "[name]-bundle.js",
   },
+  devServer: {
+    contentBase: path.join(__dirname, 'build'),
+    port: 8080
+  },
   plugins: [
     new webpack.DefinePlugin({
       "credentials": JSON.stringify({
