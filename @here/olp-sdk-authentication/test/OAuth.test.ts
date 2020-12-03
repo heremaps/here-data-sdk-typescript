@@ -23,6 +23,8 @@ import { requestToken, Token, UserAuth } from "../index";
 import { HttpError, SENT_WITH_PARAM } from "@here/olp-sdk-core";
 import fetchMock = require("fetch-mock");
 import { loadCredentialsFromFile } from "../lib/loadCredentialsFromFile";
+import { OAuthArgs } from "../lib/requestToken_common";
+import { TokenRequesterFn } from "../lib/UserAuth";
 
 const REPLY_TIMEOUT_MS = 600;
 const MOCK_CREATED_TIME = 1550777140;
@@ -620,24 +622,35 @@ describe("auth-request-project-scope", function() {
 });
 
 describe("expired token refreshing", async function() {
-    const mockedTokenRequester = async (params: any): Promise<Token> => {
-        const mockedToken: Token = {
-            accessToken: `${params.url}-${params.consumerKey}`,
-            expiresIn: 42,
-            tokenType: "fake"
+    let mockedTokenRequester: TokenRequesterFn;
+    beforeEach(function() {
+        const defaultTokenExpirationTime = 3600;
+        mockedTokenRequester = async (params: OAuthArgs): Promise<Token> => {
+            const expirationDate = new Date();
+            expirationDate.setSeconds(
+                params.expiresIn || defaultTokenExpirationTime
+            );
+
+            const mockedResponse: Token = {
+                accessToken:
+                    new Date() >= expirationDate ? "new-token" : "old-token",
+                expiresIn: params.expiresIn || defaultTokenExpirationTime,
+                tokenType: "fake"
+            };
+            return Promise.resolve(mockedResponse);
         };
-        return Promise.resolve(mockedToken);
-    };
-    const userAuth = new UserAuth({
-        env: "here",
-        tokenRequester: mockedTokenRequester,
-        credentials: {
-            accessKeyId: "appId",
-            accessKeySecret: "keyScrt"
-        }
     });
 
     it("Should getToken return the same token for two requests in row", async function() {
+        const userAuth = new UserAuth({
+            env: "here",
+            tokenRequester: mockedTokenRequester,
+            credentials: {
+                accessKeyId: "appId",
+                accessKeySecret: "keyScrt"
+            }
+        });
+
         const token1 = await userAuth.getToken();
         const token2 = await userAuth.getToken();
 
@@ -647,6 +660,17 @@ describe("expired token refreshing", async function() {
     });
 
     it("Should getToken return the different tokens for two requests with delay", async function() {
+        const userProvidedTokenExpirationTime = 10;
+        const userAuth = new UserAuth({
+            env: "here",
+            tokenRequester: mockedTokenRequester,
+            credentials: {
+                accessKeyId: "appId",
+                accessKeySecret: "keyScrt"
+            },
+            expiresIn: userProvidedTokenExpirationTime
+        });
+
         const token1 = await userAuth.getToken();
 
         setTimeout(async function() {
@@ -656,6 +680,6 @@ describe("expired token refreshing", async function() {
             assert.isDefined(token2);
             expect(token1).to.be.not.equal(token2);
             // tslint:disable-next-line: no-magic-numbers
-        }, 50);
+        }, 15000);
     });
 });
