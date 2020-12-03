@@ -96,6 +96,14 @@ export interface UserAuthConfig {
      * If the desired resource is restricted to a specific project, to get a valid token, specify this project.
      */
     scope?: string;
+    /**
+     * The maximum validity of the token in seconds.
+     *
+     * It must be equal or greater than zero.
+     * This value will be ignored if it is zero or greater than the maximum expiration
+     * defined by the application which is usually 24h.
+     */
+    expiresIn?: number;
 }
 
 /**
@@ -141,6 +149,7 @@ export interface UserInfo {
 export class UserAuth {
     private m_accessToken: string | undefined;
     private m_expirationDate?: Date;
+    private m_expiresIn?: number;
     private m_credentials: AuthCredentials = {};
     private m_scope?: string;
     private readonly m_apiUrl: string;
@@ -184,6 +193,7 @@ export class UserAuth {
 
         this.m_scope = config.scope;
         this.m_credentials = config.credentials;
+        this.m_expiresIn = config.expiresIn;
     }
 
     /**
@@ -212,7 +222,8 @@ export class UserAuth {
                 url: this.config.customUrl || this.m_apiUrl + "oauth2/token",
                 consumerKey: this.m_credentials.accessKeyId,
                 secretKey: this.m_credentials.accessKeySecret,
-                scope: this.m_scope
+                scope: this.m_scope,
+                expiresIn: this.m_expiresIn
             })
             .catch(err => Promise.reject(err));
 
