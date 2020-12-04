@@ -40,18 +40,22 @@ You can use an access token to authenticate to the HERE platform and start worki
    import { UserAuth, requestToken } from "@here/olp-sdk-authentication";
    ```
 
-5. Create the `UserAuth` instance in one of the following ways:
+5. Create the `UserAuth` instance and, if needed, specify the token expiration time in one of the following ways:
 
-   - For token authentication, specify the `tokenRequester` method and your credentials.
+    > #### Note
+    > The token expiration time parameter is optional. The default value is 24 hours. If you want to change it, specify the new time in seconds. The token expiration time should be equal to or more than zero. Ignored if it is zero or greater than the default expiration time supported by the access token endpoint.
+
+   - For token authentication, specify the `tokenRequester` method, your credentials, and the token expiration time.
 
      ```typescript
      const userAuth = new UserAuth({
        tokenRequester: requestToken,
        credentials: credentials,
+       expiresIn?: number;
      });
      ```
 
-   - To authenticate with local authorization, specify the environment in which you work, your credentials, and the `tokenRequester` method.
+   - To authenticate with local authorization, specify the environment in which you work, your credentials, the `tokenRequester` method, and the token expiration time.
 
      > #### Note
      > Depending on the environment that you use, specify one of the following parameters: `env` or `customUrl`.
@@ -62,18 +66,20 @@ You can use an access token to authenticate to the HERE platform and start worki
        customUrl: "http://YourCustomEnvironment",
        credentials: credentials,
        tokenRequester: requestToken,
+       expiresIn?: number;
      });
      ```
 
-   - For project authentication, specify the `tokenRequester` method, your project name, and credentials.
+   - For project authentication, specify the `tokenRequester` method, your project name, credentials, and the token expiration time.
 
-   ```typescript
-     const userAuth = new UserAuth({
-       tokenRequester: requestToken,
-       scope: "your-project-name"
-       credentials: credentials,
-     });
-   ```
+      ```typescript
+      const userAuth = new UserAuth({
+        tokenRequester: requestToken,
+        scope: "your-project-name".
+        credentials: credentials,
+        expiresIn?: number;
+      });
+      ```
 
 6. Get the OAuth 2.0 token from the HERE platform using the `getToken` method.
 
@@ -82,5 +88,3 @@ You can use an access token to authenticate to the HERE platform and start worki
    ```
 
 You can now use the access token to create the `OlpClientSettings` object and work with layers. For instructions, see the [related](create-platform-client-settings.md) section.
-
-The token expires after an hour. To always have a valid access token when you get or publish data, use the `UserAuth` instance with the `getToken` method to create the `OlpClientSettings` object.
