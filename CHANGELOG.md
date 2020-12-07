@@ -1,3 +1,30 @@
+## v1.8.0 (07/12/2020)
+
+**olp-sdk-core**
+
+- Changed the webpack configuration for bundling JS.
+
+**olp-sdk-authentication**
+
+- Added the maximum validity of the token `expiresIn` parameter to `UserAuthConfig`.
+- Changed the webpack configuration for bundling JS.
+
+**olp-sdk-fetch**
+
+- Changed the webpack configuration for bundling JS.
+
+**olp-sdk-dataservice-api**
+
+- Changed the webpack configuration for bundling JS.
+
+**olp-sdk-dataservice-read**
+
+- Changed the webpack configuration for bundling JS.
+
+**olp-sdk-dataservice-write**
+
+- Changed the webpack configuration for bundling JS.
+
 ## v1.7.0 (02/11/2020)
 
 **olp-sdk-core**

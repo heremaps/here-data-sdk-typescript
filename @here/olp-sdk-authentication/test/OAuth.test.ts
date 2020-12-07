@@ -94,7 +94,7 @@ describe("oauth-request-offline", function() {
 
         const options: RequestInit & any = fetchMock.calls()[0][1];
         expect(options.headers.get("Authorization")).to.be.equal(
-            `OAuth oauth_consumer_key="mocked-key",oauth_nonce="mocked-nonce",oauth_signature_method="HMAC-SHA256",oauth_timestamp="1550777140",oauth_version="1.0",oauth_signature="ShzC6ULa9P52tbrEJFPwktjnqyxm%2FMEYzeL0HaxJSx8%3D"`
+            `OAuth oauth_consumer_key="mocked-key",oauth_nonce="mocked-nonce",oauth_signature_method="HMAC-SHA256",oauth_timestamp="1550777140",oauth_version="1.0",oauth_signature="iUg4i15Ur5ogUmxKQ4ESdiwRVGrRx6O1h18NbMndV5Q%3D"`
         );
     });
 
