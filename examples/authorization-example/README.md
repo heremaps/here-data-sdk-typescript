@@ -1,7 +1,7 @@
-# Authorization Web App 
+# Authorization Web App
 
 It is a web app with configured compiling of TS into JS and bundling with webpack.
-The app shows how to use the APIs from `@here/olp-sdk-dataservice-api`. 
+The app shows how to use the APIs from `@here/olp-sdk-dataservice-api`.
 
 You can use all the `AuthorizationAPI` functions in the same way as in this example.
 

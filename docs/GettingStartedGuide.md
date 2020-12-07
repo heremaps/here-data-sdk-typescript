@@ -55,11 +55,4 @@ The API reference documentation for the Data SDK is available on our <a href="ht
 
 ## Examples
 
-To better understand HERE Data SDK for TypeScript, see the examples of how to:
-
-- <a href="https://github.com/heremaps/here-data-sdk-typescript/tree/master/docs/examples/partitions-downloader" target="_blank">Download data</a>
-- <a href="https://github.com/heremaps/here-data-sdk-typescript/tree/master/docs/examples/here-data-sdk-example" target="_blank">Use the React app and Here Data SDK for Typescript in browser</a>
-- <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/examples/nodejs-read-versioned-layer.md" target="_blank">Get data from a versioned layer</a>
-- <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/examples/nodejs-read-volatile-layer.md" target="_blank">Get data from a volatile layer</a>
-- <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/examples/nodejs-read-index-layer.md" target="_blank">Get data from an index layer</a>
-- <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/examples/nodejs-read-stream-layer.md" target="_blank">Get data from a stream layer</a>
+To better understand HERE Data SDK for TypeScript, see the [Examples section](../examples/README.md).
