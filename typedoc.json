@@ -15,12 +15,11 @@
         "**/scripts/*.ts",
         "@here/olp-sdk-authentication/lib.version.ts",
         "@here/olp-sdk-authentication/lib/HttpError.ts",
-        "docs/examples/ts/example.ts"
+        "examples/**"
     ],
     "readme": "README.md",
     "target": "ES6",
     "excludePrivate": "true",
     "excludeExternals": "true",
-    "excludeNotExported": "true",
-    "external-modulemap": ".*/@here/([\\w\\-_]+)/"
+    "excludeNotExported": "true"
 }

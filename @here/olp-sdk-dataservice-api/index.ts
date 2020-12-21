@@ -33,6 +33,7 @@ import * as QueryApi from "./lib/query-api";
 import * as StreamApi from "./lib/stream-api";
 import * as VolatileBlobApi from "./lib/volatile-blob-api";
 
+// tslint:disable-next-line: array-type
 export type AdditionalFields = Array<
     "dataSize" | "checksum" | "compressedDataSize" | "crc"
 >;
