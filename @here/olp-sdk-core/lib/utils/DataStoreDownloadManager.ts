@@ -109,8 +109,16 @@ export class DataStoreDownloadManager implements DownloadManager {
                 ) {
                     return Promise.resolve(response);
                 } else {
+                    let responseText;
+                    if (response.text) {
+                        responseText = await response.text();
+                    }
+                    let errorMessage = response.statusText;
+                    if (responseText) {
+                        errorMessage += " | Info: " + responseText;
+                    }
                     return Promise.reject(
-                        new HttpError(response.status, response.statusText)
+                        new HttpError(response.status, errorMessage)
                     );
                 }
             }
