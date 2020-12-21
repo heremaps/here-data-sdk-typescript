@@ -33,6 +33,8 @@
 
 import { RequestBuilder, RequestOptions, UrlBuilder } from "./RequestBuilder";
 
+// tslint:disable: array-type
+
 /**
  * List of billing tags a free-form tag which is used for grouping billing records together. If supplied,
  * it must be between 4 - 16 characters, contain only alphanumeric ASCII characters [A-Za-z0-9].

@@ -34,6 +34,8 @@
 
 import { RequestBuilder, RequestOptions, UrlBuilder } from "./RequestBuilder";
 
+// tslint:disable: array-type
+
 export interface API {
     /**
      * The name of the API.
