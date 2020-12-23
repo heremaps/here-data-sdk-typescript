@@ -43,12 +43,25 @@ describe("Authorization API", function() {
       member: "",
       realm: ""
     });
+
+    AuthorizationAPI.getEntityGroupMembership(mockedRequestBuilder, {
+      member: "",
+      realm: "",
+      count: 4,
+      pageToken: ""
+    });
   });
 
   it("getEntityManagedGroups", async function() {
     AuthorizationAPI.getEntityManagedGroups(mockedRequestBuilder, {
       member: "",
       realm: ""
+    });
+    AuthorizationAPI.getEntityManagedGroups(mockedRequestBuilder, {
+      member: "",
+      realm: "",
+      count: 4,
+      pageToken: ""
     });
   });
 
@@ -61,7 +74,16 @@ describe("Authorization API", function() {
 
   it("getRealmMembers", async function() {
     AuthorizationAPI.getRealmMembers(mockedRequestBuilder, {
-      realm: ""
+      realm: "",
+      count: 4
+    });
+
+    AuthorizationAPI.getRealmMembers(mockedRequestBuilder, {
+      realm: "",
+      count: 4,
+      pageToken: "",
+      entityType: "",
+      q: ""
     });
   });
 
@@ -91,6 +113,13 @@ describe("Authorization API", function() {
   it("searchRealmMemberInvites", async function() {
     AuthorizationAPI.searchRealmMemberInvites(mockedRequestBuilder, {
       realm: ""
+    });
+
+    AuthorizationAPI.searchRealmMemberInvites(mockedRequestBuilder, {
+      realm: "",
+      count: 4,
+      pageToken: "",
+      group: ""
     });
   });
 
@@ -124,6 +153,12 @@ describe("Authorization API", function() {
     AuthorizationAPI.listGrants(mockedRequestBuilder, {
       resourceHrn: ""
     });
+    AuthorizationAPI.listGrants(mockedRequestBuilder, {
+      resourceHrn: "",
+      count: 4,
+      entityType: "",
+      pageToken: ""
+    });
   });
 
   it("removeGrant", async function() {
@@ -154,10 +189,21 @@ describe("Authorization API", function() {
       member: "",
       realm: ""
     });
+
+    AuthorizationAPI.getEntityGroupMembership(mockedRequestBuilder, {
+      member: "",
+      realm: "",
+      count: 4,
+      pageToken: ""
+    });
   });
 
   it("getMyRoles", async function() {
     AuthorizationAPI.getMyRoles(mockedRequestBuilder);
+    AuthorizationAPI.getMyRoles(mockedRequestBuilder, {
+      count: 4,
+      pageToken: ""
+    });
   });
 
   it("getRole", async function() {
@@ -169,6 +215,12 @@ describe("Authorization API", function() {
   it("getRoleEntities", async function() {
     AuthorizationAPI.getRoleEntities(mockedRequestBuilder, {
       role: ""
+    });
+
+    AuthorizationAPI.getRoleEntities(mockedRequestBuilder, {
+      role: "",
+      count: 4,
+      pageToken: ""
     });
   });
 
@@ -190,10 +242,22 @@ describe("Authorization API", function() {
     AuthorizationAPI.getRolePermissions(mockedRequestBuilder, {
       role: ""
     });
+
+    AuthorizationAPI.getRolePermissions(mockedRequestBuilder, {
+      role: "",
+      count: 4,
+      pageToken: ""
+    });
   });
 
   it("getRoles", async function() {
     AuthorizationAPI.getRoles(mockedRequestBuilder);
+    AuthorizationAPI.getRoles(mockedRequestBuilder, {
+      count: 4,
+      pageToken: "",
+      resource: "",
+      roleName: ""
+    });
   });
 
   it("addGroupMember", async function() {
@@ -234,20 +298,43 @@ describe("Authorization API", function() {
     AuthorizationAPI.getGroupMembers(mockedRequestBuilder, {
       groupId: ""
     });
+
+    AuthorizationAPI.getGroupMembers(mockedRequestBuilder, {
+      groupId: "",
+      count: 4,
+      entityType: "",
+      pageToken: ""
+    });
   });
 
   it("getGroupRoles", async function() {
     AuthorizationAPI.getGroupRoles(mockedRequestBuilder, {
       groupId: ""
     });
+
+    AuthorizationAPI.getGroupRoles(mockedRequestBuilder, {
+      groupId: "",
+      count: 4,
+      pageToken: ""
+    });
   });
 
   it("getGroups", async function() {
     AuthorizationAPI.getGroups(mockedRequestBuilder);
+    AuthorizationAPI.getGroups(mockedRequestBuilder, {
+      count: 4,
+      pageToken: "",
+      q: ""
+    });
   });
 
   it("getMyGroups", async function() {
     AuthorizationAPI.getMyGroups(mockedRequestBuilder);
+
+    AuthorizationAPI.getMyGroups(mockedRequestBuilder, {
+      count: 4,
+      pageToken: ""
+    });
   });
 
   it("leaveGroup", async function() {
@@ -277,6 +364,12 @@ describe("Authorization API", function() {
       member: "",
       project: ""
     });
+
+    AuthorizationAPI.addProjectMember(mockedRequestBuilder, {
+      member: "",
+      project: "",
+      xCorrelationID: ""
+    });
   });
 
   it("addProjectResourceRelation", async function() {
@@ -287,11 +380,25 @@ describe("Authorization API", function() {
       resource: "",
       type: "artifact"
     });
+
+    AuthorizationAPI.addProjectResourceRelation(mockedRequestBuilder, {
+      body: {},
+      project: "",
+      relation: "home",
+      resource: "",
+      type: "artifact",
+      xCorrelationID: ""
+    });
   });
 
   it("checkProjectExistance", async function() {
     AuthorizationAPI.checkProjectExistance(mockedRequestBuilder, {
       project: ""
+    });
+
+    AuthorizationAPI.checkProjectExistance(mockedRequestBuilder, {
+      project: "",
+      xCorrelationID: ""
     });
   });
 
@@ -302,11 +409,24 @@ describe("Authorization API", function() {
         name: ""
       }
     });
+
+    AuthorizationAPI.createProject(mockedRequestBuilder, {
+      body: {
+        id: "",
+        name: ""
+      },
+      xCorrelationID: ""
+    });
   });
 
   it("deleteProject", async function() {
     AuthorizationAPI.deleteProject(mockedRequestBuilder, {
       project: ""
+    });
+
+    AuthorizationAPI.deleteProject(mockedRequestBuilder, {
+      project: "",
+      xCorrelationID: ""
     });
   });
 
@@ -315,14 +435,11 @@ describe("Authorization API", function() {
       member: "",
       project: ""
     });
-  });
 
-  it("deleteProjectResourceReference", async function() {
-    AuthorizationAPI.deleteProjectResourceReference(mockedRequestBuilder, {
-      body: {},
+    AuthorizationAPI.deleteProjectMember(mockedRequestBuilder, {
+      member: "",
       project: "",
-      relation: "",
-      resource: ""
+      xCorrelationID: ""
     });
   });
 
@@ -332,27 +449,74 @@ describe("Authorization API", function() {
       project: "",
       relation: "",
       resource: ""
+    });
+
+    AuthorizationAPI.deleteProjectResourceReference(mockedRequestBuilder, {
+      body: {},
+      project: "",
+      relation: "",
+      resource: "",
+      xCorrelationID: ""
+    });
+  });
+
+  it("deleteProjectResourceReference", async function() {
+    AuthorizationAPI.deleteProjectResourceReference(mockedRequestBuilder, {
+      body: {},
+      project: "",
+      relation: "",
+      resource: ""
+    });
+
+    AuthorizationAPI.deleteProjectResourceReference(mockedRequestBuilder, {
+      body: {},
+      project: "",
+      relation: "",
+      resource: "",
+      xCorrelationID: ""
     });
   });
 
   it("getAllProjectList", async function() {
     AuthorizationAPI.getAllProjectList(mockedRequestBuilder, {});
+
+    AuthorizationAPI.getAllProjectList(mockedRequestBuilder, {
+      limit: 5,
+      pageToken: "",
+      xCorrelationID: ""
+    });
   });
 
   it("getProject", async function() {
     AuthorizationAPI.getProject(mockedRequestBuilder, {
       project: ""
     });
+    AuthorizationAPI.getProject(mockedRequestBuilder, {
+      project: "",
+      xCorrelationID: ""
+    });
   });
 
   it("getProjectList", async function() {
     AuthorizationAPI.getProjectList(mockedRequestBuilder, {});
+    AuthorizationAPI.getProjectList(mockedRequestBuilder, {
+      canManage: true,
+      isMember: true,
+      limit: 4,
+      pageToken: "",
+      xCorrelationID: ""
+    });
   });
 
   it("getProjectMember", async function() {
     AuthorizationAPI.getProjectMember(mockedRequestBuilder, {
       member: "",
       project: ""
+    });
+    AuthorizationAPI.getProjectMember(mockedRequestBuilder, {
+      member: "",
+      project: "",
+      xCorrelationID: ""
     });
   });
 
@@ -361,11 +525,22 @@ describe("Authorization API", function() {
       project: "",
       resource: ""
     });
+    AuthorizationAPI.getProjectResource(mockedRequestBuilder, {
+      project: "",
+      resource: "",
+      relation: "home",
+      xCorrelationID: ""
+    });
   });
 
   it("leaveProject", async function() {
     AuthorizationAPI.leaveProject(mockedRequestBuilder, {
       project: ""
+    });
+
+    AuthorizationAPI.leaveProject(mockedRequestBuilder, {
+      project: "",
+      xCorrelationID: ""
     });
   });
 
@@ -373,11 +548,28 @@ describe("Authorization API", function() {
     AuthorizationAPI.listProjectMembers(mockedRequestBuilder, {
       project: ""
     });
+
+    AuthorizationAPI.listProjectMembers(mockedRequestBuilder, {
+      project: "",
+      limit: 4,
+      onlyIncludeIdentities: true,
+      pageToken: "",
+      xCorrelationID: ""
+    });
   });
 
   it("listProjectResources", async function() {
     AuthorizationAPI.listProjectResources(mockedRequestBuilder, {
       project: ""
+    });
+
+    AuthorizationAPI.listProjectResources(mockedRequestBuilder, {
+      project: "",
+      limit: 4,
+      pageToken: "",
+      relation: "home",
+      type: "artifact",
+      xCorrelationID: ""
     });
   });
 
@@ -386,11 +578,24 @@ describe("Authorization API", function() {
       body: {},
       project: ""
     });
+
+    AuthorizationAPI.patchProject(mockedRequestBuilder, {
+      body: {},
+      project: "",
+      xCorrelationID: ""
+    });
   });
 
   it("getListOfWaysResourceIsLinkable", async function() {
     AuthorizationAPI.getListOfWaysResourceIsLinkable(mockedRequestBuilder, {
       resource: ""
+    });
+
+    AuthorizationAPI.getListOfWaysResourceIsLinkable(mockedRequestBuilder, {
+      resource: "",
+      limit: 4,
+      pageToken: "",
+      xCorrelationID: ""
     });
   });
 
@@ -399,6 +604,12 @@ describe("Authorization API", function() {
       referenceable: true,
       resource: ""
     });
+
+    AuthorizationAPI.getResource(mockedRequestBuilder, {
+      referenceable: true,
+      resource: "",
+      xCorrelationID: ""
+    });
   });
 
   it("getResourceLinkability", async function() {
@@ -406,11 +617,25 @@ describe("Authorization API", function() {
       availableToHrn: "",
       resource: ""
     });
+
+    AuthorizationAPI.getResourceLinkability(mockedRequestBuilder, {
+      availableToHrn: "",
+      resource: "",
+      xCorrelationID: ""
+    });
   });
 
   it("getResourceProjects", async function() {
     AuthorizationAPI.getResourceProjects(mockedRequestBuilder, {
       resource: ""
+    });
+
+    AuthorizationAPI.getResourceProjects(mockedRequestBuilder, {
+      resource: "",
+      limit: 4,
+      pageToken: "",
+      relation: "home",
+      xCorrelationID: ""
     });
   });
 
@@ -418,10 +643,26 @@ describe("Authorization API", function() {
     AuthorizationAPI.getResources(mockedRequestBuilder, {
       type: "artifact"
     });
+
+    AuthorizationAPI.getResources(mockedRequestBuilder, {
+      type: "artifact",
+      access: "",
+      limit: 4,
+      linkable: true,
+      pageToken: "",
+      referenceable: true,
+      xCorrelationID: ""
+    });
   });
 
   it("listRealmResources", async function() {
     AuthorizationAPI.listRealmResources(mockedRequestBuilder, {});
+    AuthorizationAPI.listRealmResources(mockedRequestBuilder, {
+      limit: 4,
+      pageToken: "",
+      type: "artifact",
+      xCorrelationID: ""
+    });
   });
 
   it("makeResourceLinkable", async function() {
@@ -431,12 +672,26 @@ describe("Authorization API", function() {
       },
       resource: ""
     });
+
+    AuthorizationAPI.makeResourceLinkable(mockedRequestBuilder, {
+      body: {
+        allowedActions: []
+      },
+      resource: "",
+      xCorrelationID: ""
+    });
   });
 
   it("removeResourceLinkability", async function() {
     AuthorizationAPI.removeResourceLinkability(mockedRequestBuilder, {
       availableToHrn: "",
       resource: ""
+    });
+
+    AuthorizationAPI.removeResourceLinkability(mockedRequestBuilder, {
+      availableToHrn: "",
+      resource: "",
+      xCorrelationID: ""
     });
   });
 
@@ -447,6 +702,15 @@ describe("Authorization API", function() {
       body: {
         allowedActions: []
       }
+    });
+
+    AuthorizationAPI.updateResourceLinkability(mockedRequestBuilder, {
+      availableToHrn: "",
+      resource: "",
+      body: {
+        allowedActions: []
+      },
+      xCorrelationID: ""
     });
   });
 
@@ -496,12 +760,31 @@ describe("Authorization API", function() {
         project: ""
       }
     );
+
+    AuthorizationAPI.getAllProjectMembersWithAttachedPolicy(
+      mockedRequestBuilder,
+      {
+        policy: "",
+        project: "",
+        limit: 4,
+        pageToken: "",
+        xCorrelationID: ""
+      }
+    );
   });
 
   it("getAttachedProjectPoliciesForMember", async function() {
     AuthorizationAPI.getAttachedProjectPoliciesForMember(mockedRequestBuilder, {
       member: "",
       project: ""
+    });
+
+    AuthorizationAPI.getAttachedProjectPoliciesForMember(mockedRequestBuilder, {
+      member: "",
+      project: "",
+      limit: 4,
+      pageToken: "",
+      xCorrelationID: ""
     });
   });
 
@@ -523,6 +806,14 @@ describe("Authorization API", function() {
   it("getProjectPolicyList", async function() {
     AuthorizationAPI.getProjectPolicyList(mockedRequestBuilder, {
       project: ""
+    });
+
+    AuthorizationAPI.getProjectPolicyList(mockedRequestBuilder, {
+      project: "",
+      limit: 4,
+      pageToken: "",
+      projectPolicyType: "",
+      xCorrelationID: ""
     });
   });
 
@@ -552,12 +843,25 @@ describe("Authorization API", function() {
       resource: "",
       type: ""
     });
+
+    AuthorizationAPI.getResourceActionsForProject(mockedRequestBuilder, {
+      project: "",
+      resource: "",
+      type: "",
+      xCorrelationID: ""
+    });
   });
 
   it("getResourceTypeActionList", async function() {
     AuthorizationAPI.getResourceTypeActionList(mockedRequestBuilder, {
       resourceType: "artifact",
       type: ""
+    });
+
+    AuthorizationAPI.getResourceTypeActionList(mockedRequestBuilder, {
+      resourceType: "artifact",
+      type: "",
+      xCorrelationID: ""
     });
   });
 });
