@@ -8,7 +8,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
     
     For more information, see the [related section](https://developer.here.com/documentation/sdk-typescript/dev_guide/topics/authenticate.html) in our Developer Guide.
 
-2. To fetch dependencies, run `yarn`.
+2. To fetch dependencies, run `yarn && yarn add react-scripts`.
 
 3. To run the app in the development mode, run `yarn start`.
 
