@@ -2,7 +2,7 @@
 
 ## Overview
 
-This API is generated directly from the official OpenAPI (former Swagger) definition of the [Data API](https://developer.here.com/olp/documentation/data-api/data_dev_guide/index.html).
+This API is generated directly from the official OpenAPI (former Swagger) definition of the [Data API](https://developer.here.com/documentation/data-api/data_dev_guide/index.html).
 
 ## Generate a Bundle
 

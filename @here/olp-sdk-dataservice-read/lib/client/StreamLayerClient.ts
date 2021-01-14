@@ -71,7 +71,7 @@ export class StreamLayerClient {
      * whichever is greater, rounded up to the nearest integer.
      * The number of subscriptions within the same group cannot exceed the parallelism allowed.
      * For more details see
-     * [Get Data from a Stream Layer](https://developer.here.com/olp/documentation/data-api/data_dev_guide/rest/getting-data-stream.html)
+     * [Get Data from a Stream Layer](https://developer.here.com/documentation/data-api/data_dev_guide/rest/getting-data-stream.html)
      *
      * @param request The [[SubscribeRequest]] instance of the configured request parameters.
      * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)

@@ -64,7 +64,7 @@ In Node.js, you can use the `UserAuth` class with credentials imported from the 
 
 To use the `UserAuth` class with the credentials imported from the file:
 
-1. Download your **credentials.properties** file from the HERE platform [website](https://developer.here.com/olp/documentation/access-control/user-guide/topics/get-credentials.html).
+1. Download your **credentials.properties** file from the HERE platform [website](https://developer.here.com/documentation/access-control/user-guide/topics/get-credentials.html).
 2. Create the `UserAuth` class instance and set the path to the file with your credentials.
 
     ```typescript

@@ -65,7 +65,7 @@ App works!
 
 ## Create `IndexLayerClient`
 
-You can use the `IndexLayerClient` object to request any data and partition metadata from an [index layer](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/layers.html#index-layers).
+You can use the `IndexLayerClient` object to request any data and partition metadata from an [index layer](https://developer.here.com/documentation/data-user-guide/portal/layers/layers.html#index-layers).
 
 **To create the `IndexLayerClient` object:**
 
@@ -85,7 +85,7 @@ You can use the `IndexLayerClient` object to request any data and partition meta
 
 ## Get partition metadata from an index layer
 
-Partition metadata from [index layer](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/layers.html#index-layers) consists of the following information about the partition:
+Partition metadata from [index layer](https://developer.here.com/documentation/data-user-guide/portal/layers/layers.html#index-layers) consists of the following information about the partition:
 
 - ID (data handle)
 - Data size
@@ -131,7 +131,7 @@ const partitions = await indexLayerClient.getPartitions(request),
 
 ## Get data from an index layer
 
-An [index layer](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/layers.html#index-layers) is an index of the catalog data by attributes. You can query the index layer to get the data handles of data that meets your query criteria, and you can then use those data handles to retrieve the corresponding data.
+An [index layer](https://developer.here.com/documentation/data-user-guide/portal/layers/layers.html#index-layers) is an index of the catalog data by attributes. You can query the index layer to get the data handles of data that meets your query criteria, and you can then use those data handles to retrieve the corresponding data.
 
 **To get data from the index layer:**
 
