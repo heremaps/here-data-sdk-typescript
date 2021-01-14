@@ -104,7 +104,7 @@ export class SubscribeRequest {
      *
      * @param props The subscriptionProperties - consumer properties to use for this subscription.
      * For more information, see the [subscription properties]
-     * (https://developer.here.com/olp/documentation/data-api/data_dev_guide/rest/getting-data-stream.html#subscription-properties)
+     * (https://developer.here.com/documentation/data-api/data_dev_guide/rest/getting-data-stream.html#subscription-properties)
      * @returns The [[SubscribeRequest]] instance that you can use to chain methods.
      */
     public withSubscriptionProperties(

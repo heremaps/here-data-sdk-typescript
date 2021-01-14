@@ -22,7 +22,7 @@ import { AuthCredentials } from "./UserAuth";
 
 /**
  * Parses the **credentials.properties** file from the
- * [HERE platform](https://developer.here.com/olp/documentation/access-control/user-guide/topics/get-credentials.html)
+ * [HERE platform](https://developer.here.com/documentation/access-control/user-guide/topics/get-credentials.html)
  * and retrieves an object with user credentials.
  *
  * @param path The path to the **credentials.properties** file.

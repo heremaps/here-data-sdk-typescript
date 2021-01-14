@@ -34,6 +34,6 @@ In the project directory, you can run the following scripts:
 
 For more information, see the following documentation:
 
-- Data API <a href="https://developer.here.com/olp/documentation/data-api/data_dev_guide/index.html" target="_blank">Developer Guide</a> and <a href="https://developer.here.com/olp/documentation/data-api/api-reference.html" target="_blank">API Reference</a>
+- Data API <a href="https://developer.here.com/documentation/data-api/data_dev_guide/index.html" target="_blank">Developer Guide</a> and <a href="https://developer.here.com/documentation/data-api/api-reference.html" target="_blank">API Reference</a>
 - [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started)
 - [React documentation](https://reactjs.org/)

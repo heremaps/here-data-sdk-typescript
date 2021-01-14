@@ -67,7 +67,7 @@ npm run prepublish-bundle
 
 Now, we only support publishing data to a versioned layer.
 
-You can publish data to a [versioned layer](https://developer.here.com/olp/documentation/data-user-guide/portal/layers/layers.html#versioned-layers), if you need to store and access the history of previous data updates. To achieve consistency between layers, publish any update that affects multiple versioned layers together in one publication. You can access a new catalog version when all layers are updated, and the publication is finalized. Once you publish a version, you cannot change the data in that version and can [remove](#cancel) it only by removing the whole catalog version.
+You can publish data to a [versioned layer](https://developer.here.com/documentation/data-user-guide/portal/layers/layers.html#versioned-layers), if you need to store and access the history of previous data updates. To achieve consistency between layers, publish any update that affects multiple versioned layers together in one publication. You can access a new catalog version when all layers are updated, and the publication is finalized. Once you publish a version, you cannot change the data in that version and can [remove](#cancel) it only by removing the whole catalog version.
 
 The maximum number of partitions you can upload and publish in one request is 1,000. If you have more than 1,000 partitions, upload the data and metadata for the first 1,000 partitions, and then do the same for the next set of partitions.
 

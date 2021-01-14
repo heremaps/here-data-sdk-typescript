@@ -22,9 +22,9 @@
  * Use the `index` service to get the data handles of the partitions that match a query.
  * Then, use the data handles with the `blob` service to get the data from the partitions.
  * For more information,
- * see [Get Data from an Index Layer](https://developer.here.com/olp/documentation/data-store/data_dev_guide/rest/getting-data-index.html).
+ * see [Get Data from an Index Layer](https://developer.here.com/documentation/data-store/data_dev_guide/rest/getting-data-index.html).
  * You can also use the `index` service to publish data to an index layer. For more information,
- * see [Publish to an Index Layer](https://developer.here.com/olp/documentation/data-store/data_dev_guide/rest/publishing-data-index.html).
+ * see [Publish to an Index Layer](https://developer.here.com/documentation/data-store/data_dev_guide/rest/publishing-data-index.html).
  *
  * OpenAPI spec version: 1.0.0
  *
@@ -82,7 +82,7 @@ export interface UpdateIndexRequest {
 
 /**
  * Adds index data for a given data blob to an index layer. For more information,
- * see [Publish to an Index Layer](https://developer.here.com/olp/documentation/data-store/data_dev_guide/rest/publishing-data-index.html).
+ * see [Publish to an Index Layer](https://developer.here.com/documentation/data-store/data_dev_guide/rest/publishing-data-index.html).
  *
  * @summary Inserts index data to an index layer
  * @param indexes An array of index attributes and values to be inserted.
@@ -124,7 +124,7 @@ export async function insertIndexes(
  * @param layerID The ID of the index layer you want to query.
  * @param query An RSQL query to use to retrieve partitions that match the query.
  * For more information, see
- * [Get Data from an Index Layer](https://developer.here.com/olp/documentation/data-store/data_dev_guide/rest/getting-data-index.html).
+ * [Get Data from an Index Layer](https://developer.here.com/documentation/data-store/data_dev_guide/rest/getting-data-index.html).
  * The query must use the indexing attributes defined in the index layer.
  * @param huge Set to true for huge query.
  */
