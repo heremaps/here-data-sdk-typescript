@@ -366,7 +366,7 @@ export async function deleteBlobByHandle(
 export async function getBlobByHandle(
     builder: RequestBuilder,
     params: { layerId: string; handle: string; range?: string }
-): Promise<string> {
+): Promise<Response> {
     const baseUrl = "/layers/{layerId}/handles/{handle}"
         .replace("{layerId}", UrlBuilder.toString(params["layerId"]))
         .replace("{handle}", UrlBuilder.toString(params["handle"]));
@@ -382,7 +382,7 @@ export async function getBlobByHandle(
         headers["Range"] = params["range"] as string;
     }
 
-    return builder.request<string>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }
 
 /**
