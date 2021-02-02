@@ -33,7 +33,7 @@ class DeferredPromise<T> {
      * Internal promise to store the deferred executor function.
      */
     readonly promise: Promise<T>;
-    private resolveFunc?: (result?: T) => void;
+    private resolveFunc?: (result?: T | PromiseLike<T>) => void;
     private rejectFunc?: (reason?: any) => void;
 
     constructor(private readonly executor: () => Promise<T>) {
