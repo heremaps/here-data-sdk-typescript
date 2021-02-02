@@ -109,7 +109,7 @@ You can get partition metadata using the Query Service API only if the partition
 
 For performance reasons, it is best to use the Query Service API only to get metadata for a specific partition. For batch processes, and to get metadata for many partitions or all partitions in a layer, use the Metadata Service API.
 
-**To get partition metadata from a versioned layer:**
+**To get partition metadata from the versioned layer:**
 
 1. Create the `VersionedLayerClient` object.
 
@@ -180,7 +180,7 @@ const partitions = await versionedLayerClient.getPartitions(
 
 ## Get data from a versioned layer
 
-You can request any data version from a [versioned layer](https://developer.here.com/documentation/data-user-guide/portal/layers/layers.html#versioned-layers). When you request a particular version of data from the versioned layer, the partition you receive in the response may have a lower version number than you requested. The version of a layer or partition represents the catalog version in which the layer or partition was last updated.
+You can request any version of data from a [versioned layer](https://developer.here.com/documentation/data-user-guide/portal/layers/layers.html#versioned-layers). When you request a particular version of data from the versioned layer, the partition you receive in the response may have a lower version number than you requested. The version of a layer or partition represents the catalog version in which the layer or partition was last updated.
 
 **To get data from the versioned layer:**
 

@@ -5,7 +5,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Run the app
 
 1. Copy `./public/credentials.json.sample` to `./public/credentials.json`, and then add your credentials to that file.
-    
+
     For more information, see the [related section](https://developer.here.com/documentation/sdk-typescript/dev_guide/topics/authenticate.html) in our Developer Guide.
 
 2. To fetch dependencies, run `yarn && yarn add react-scripts`.

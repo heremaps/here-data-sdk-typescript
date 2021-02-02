@@ -85,7 +85,7 @@ Stream layers can be configured with retention time, or time-to-live (TTL) which
   });
   ```
 
-## Subscribe to the stream layer
+## Subscribe to a stream layer
 
 **To subscribe to the stream layer:**
 
@@ -130,7 +130,7 @@ You can read messages from a [stream layer](https://developer.here.com/documenta
 - Checksum
 - Timestamp
 
-**To get data from a stream layer:**
+**To get data from the stream layer:**
 
 1. Create the `streamLayerClient` object.
 
@@ -210,7 +210,7 @@ await streamLayerClient.seek(
 );
 ```
 
-## <a name="unsubscribe-streamlayerclient"></a>Delete subscription to a layer
+## <a name="unsubscribe-streamlayerclient"></a>Delete a subscription to a layer
 
 You can delete a subscription to a layer (topic). This operation removes the subscription from the service.
 
