@@ -102,7 +102,7 @@ You can get partition metadata using the Query Service API only if the partition
 
 For performance reasons, it is best to use the Query Service API only to get metadata for a specific partition. For batch processes, and to get metadata for many partitions or all partitions in a layer, use the Metadata Service API.
 
-**To get partition metadata from a volatile layer:**
+**To get partition metadata from the volatile layer:**
 
 1. Create the `VolatileLayerClient` object.
 
@@ -166,6 +166,8 @@ const partitions = await volatileLayerClient.getPartitions(
 ```
 
 ## Get data from a volatile layer
+
+A [volatile layer](https://developer.here.com/documentation/data-user-guide/portal/layers/layers.html#volatile-layers) consists of key-value pairs. Each new value for a key overrides the old one. Therefore, you can only get the latest data from the volatile layer.
 
 **To get data from the volatile layer:**
 

@@ -85,7 +85,7 @@ You can use the `IndexLayerClient` object to request any data and partition meta
 
 ## Get partition metadata from an index layer
 
-Partition metadata from [index layer](https://developer.here.com/documentation/data-user-guide/portal/layers/layers.html#index-layers) consists of the following information about the partition:
+Partition metadata from an [index layer](https://developer.here.com/documentation/data-user-guide/portal/layers/layers.html#index-layers) consists of the following information about the partition:
 
 - ID (data handle)
 - Data size
@@ -93,7 +93,7 @@ Partition metadata from [index layer](https://developer.here.com/documentation/d
 - Metadata
 - Timestamp
 
-**To get partition metadata from an index layer:**
+**To get partition metadata from the index layer:**
 
 1. Create the `IndexLayerClient` object.
 
@@ -149,7 +149,7 @@ An [index layer](https://developer.here.com/documentation/data-user-guide/portal
    ```
 
 You receive data from the requested partition.
- 
+
 In browser and Node.js, to abort requests before they have completed, you can create the `AbortController` object, and then add the `AbortController.signal` property to your requests. For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
 
 **Example**
