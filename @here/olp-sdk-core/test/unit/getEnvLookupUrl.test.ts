@@ -37,7 +37,7 @@ describe("getEnvLookUpUrl", function() {
 
     it("Should return url to the development instance", function() {
         expect(getEnvLookUpUrl("here-dev")).to.be.equal(
-            "https://api-lookup.data.api.platform.in.here.com/lookup/v1"
+            "https://api-lookup.data.api.platform.sit.here.com/lookup/v1"
         );
     });
 
