@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,6 +96,7 @@ export class DataStoreDownloadManager implements DownloadManager {
         url: string,
         init?: RequestInit
     ): Promise<Response> {
+        const maxSuccessResponseCode = 299;
         try {
             const response = await fetchFunction(addSentWithParam(url), init);
             if (
@@ -103,9 +104,8 @@ export class DataStoreDownloadManager implements DownloadManager {
                 retryCount >= maxRetries
             ) {
                 if (
-                    response.status === STATUS_CODES.OK ||
-                    response.status === STATUS_CODES.NO_CONTENT ||
-                    response.status === STATUS_CODES.CREATED
+                    response.status <= maxSuccessResponseCode ||
+                    response.status === STATUS_CODES.FOUND
                 ) {
                     return Promise.resolve(response);
                 } else {

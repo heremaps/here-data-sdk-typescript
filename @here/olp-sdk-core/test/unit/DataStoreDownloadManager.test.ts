@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,8 +44,8 @@ describe("DataStoreDownloadManager", function() {
     }
 
     it("#download handles successful download response", async function() {
-        // Arrange
         const mock = createMockDownloadResponse();
+        mock.status = 302;
         const fetchStub = sinon.stub().resolves(mock);
         const downloadMgr = new DataStoreDownloadManager(fetchStub, 5);
 
@@ -58,6 +58,25 @@ describe("DataStoreDownloadManager", function() {
             fetchStub.getCall(0).args[0] === fakeDataUrl + "?" + SENT_WITH_PARAM
         );
         assert.deepEqual(response.statusText, "success");
+
+        for (let responseStatus = 0; responseStatus < 300; responseStatus++) {
+            // Arrange
+            const mock = createMockDownloadResponse();
+            mock.status = responseStatus;
+            const fetchStub = sinon.stub().resolves(mock);
+            const downloadMgr = new DataStoreDownloadManager(fetchStub, 5);
+
+            // Act
+            const response = await downloadMgr.download(fakeDataUrl);
+
+            // Assert
+            assert.isTrue(fetchStub.calledOnce);
+            assert.isTrue(
+                fetchStub.getCall(0).args[0] ===
+                    fakeDataUrl + "?" + SENT_WITH_PARAM
+            );
+            assert.deepEqual(response.statusText, "success");
+        }
     });
 
     it("#download handles HTTP 503 status response max retries", async function() {
