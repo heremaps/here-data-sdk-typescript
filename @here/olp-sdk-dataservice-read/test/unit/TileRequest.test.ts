@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
+import { FetchOptions } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -29,10 +30,6 @@ const assert = chai.assert;
 const expect = chai.expect;
 
 describe("TileRequest", function() {
-    const mockedHRN = dataServiceRead.HRN.fromString(
-        "hrn:here:data:::mocked-hrn"
-    );
-    const mockedLayerId = "mocked-layed-id";
     const mockedQuadKey = {
         row: 1,
         column: 2,
@@ -41,22 +38,7 @@ describe("TileRequest", function() {
 
     const mockedBillingTag = "billing-tag";
 
-    const mockedSettings: dataServiceRead.OlpClientSettings = new dataServiceRead.OlpClientSettings(
-        {
-            environment: "test-env",
-            getToken: () => Promise.resolve("test-token")
-        }
-    );
-
-    const tileRequestParams: dataServiceRead.TileRequestParams = {
-        catalogHrn: mockedHRN,
-        layerId: mockedLayerId,
-        layerType: "versioned",
-        settings: mockedSettings,
-        catalogVersion: 12
-    };
-
-    const request = new dataServiceRead.TileRequest(tileRequestParams);
+    const request = new dataServiceRead.TileRequest();
 
     it("Should initialize", function() {
         assert.isDefined(request);
@@ -67,62 +49,10 @@ describe("TileRequest", function() {
         request
             .withTileKey(mockedQuadKey)
             .withBillingTag(mockedBillingTag)
-            .withFetchOption(dataServiceRead.FetchOptions.OnlineOnly);
+            .withFetchOption(FetchOptions.OnlineOnly);
 
         expect(request.getTileKey()).to.be.equal(mockedQuadKey);
-        expect(request.getFetchOption()).to.be.equal(
-            dataServiceRead.FetchOptions.OnlineOnly
-        );
+        expect(request.getFetchOption()).to.be.equal(FetchOptions.OnlineOnly);
         expect(request.getBillingTag()).to.be.equal(mockedBillingTag);
-        expect(request.getParams()).to.be.equal(tileRequestParams);
-        expect(await request.getCatalogVersion()).to.be.equal(12);
-    });
-
-    it("Should fetch the latest version of catalog", async function() {
-        // @ts-ignore
-        class TileRequestTest extends dataServiceRead.TileRequest {
-            constructor(params: dataServiceRead.TileRequestParams) {
-                super(params);
-            }
-
-            private async getCatalogLatestVersion(): Promise<number> {
-                return Promise.resolve(32);
-            }
-        }
-        const tileRequestParams: dataServiceRead.TileRequestParams = {
-            catalogHrn: mockedHRN,
-            layerId: mockedLayerId,
-            layerType: "versioned",
-            settings: mockedSettings
-        };
-
-        const request = new TileRequestTest(tileRequestParams);
-        const version = await request.getCatalogVersion();
-
-        expect(version).to.be.equal(32);
-    });
-
-    it("Should be rejected with version error", async function() {
-        // @ts-ignore
-        class TileRequestTest extends dataServiceRead.TileRequest {
-            constructor(params: dataServiceRead.TileRequestParams) {
-                super(params);
-            }
-
-            private async getCatalogLatestVersion(): Promise<number> {
-                return Promise.reject("error getting version");
-            }
-        }
-        const tileRequestParams: dataServiceRead.TileRequestParams = {
-            catalogHrn: mockedHRN,
-            layerId: mockedLayerId,
-            layerType: "versioned",
-            settings: mockedSettings
-        };
-
-        const request = new TileRequestTest(tileRequestParams);
-        await request.getCatalogVersion().catch(err => {
-            expect(err).to.be.equal("error getting version");
-        });
     });
 });

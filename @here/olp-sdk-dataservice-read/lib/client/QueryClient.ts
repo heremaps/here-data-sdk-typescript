@@ -31,7 +31,6 @@ import {
 } from "@here/olp-sdk-dataservice-api";
 import {
     MetadataCacheRepository,
-    mortonCodeFromQuadKey,
     PartitionsRequest,
     QuadTreeIndexRequest
 } from "@here/olp-sdk-dataservice-read";
@@ -131,7 +130,11 @@ export class QueryClient {
             version: 0,
             layerId,
             depth: subQuadKeysMaxLength,
-            quadKey: mortonCodeFromQuadKey(quadKey).toString(),
+            quadKey: TileKey.fromRowColumnLevel(
+                quadKey.row,
+                quadKey.column,
+                quadKey.level
+            ).toQuadKey(),
             billingTag: request.getBillingTag(),
             additionalFields: request.getAdditionalFields()
         };

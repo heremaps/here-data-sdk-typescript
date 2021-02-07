@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -178,38 +178,6 @@ export class VersionedLayerClient {
                 abortSignal,
                 dataRequest.getBillingTag()
             );
-        }
-
-        const quadKey = dataRequest.getQuadKey();
-        if (quadKey) {
-            const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest().withQuadKey(
-                quadKey
-            );
-
-            const quadTreeIndexResponse = await this.getPartitions(
-                quadKeyPartitionsRequest
-            ).catch(error => Promise.reject(error));
-
-            if (
-                quadTreeIndexResponse.status &&
-                quadTreeIndexResponse.status === STATUS_CODES.BAD_REQUEST
-            ) {
-                return Promise.reject(quadTreeIndexResponse);
-            }
-
-            return quadTreeIndexResponse.subQuads &&
-                quadTreeIndexResponse.subQuads.length
-                ? this.downloadPartition(
-                      quadTreeIndexResponse.subQuads[0].dataHandle,
-                      abortSignal,
-                      dataRequest.getBillingTag()
-                  )
-                : Promise.reject(
-                      new HttpError(
-                          STATUS_CODES.NO_CONTENT,
-                          `No dataHandle for quadKey {column: ${quadKey.column}, row: ${quadKey.row}, level: ${quadKey.level}}. HRN: ${this.hrn}`
-                      )
-                  );
         }
 
         return Promise.reject(

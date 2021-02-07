@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,15 +31,15 @@ describe("getTile", function() {
         }
     });
 
-    const request = new TileRequest({
-        settings,
-        catalogHrn: HRN.fromString("hrn:here:data:::mocked-hrn"),
-        layerId: "mocked-layer-id",
-        layerType: "versioned"
-    });
+    const request = new TileRequest();
 
     it("Should throw an error if not tile key", async function() {
-        const tile = await getTile(request).catch(err => err.message);
+        const tile = await getTile(request, {
+            settings,
+            catalogHrn: HRN.fromString("hrn:here:data:::mocked-hrn"),
+            layerId: "mocked-layer-id",
+            layerType: "versioned"
+        }).catch(err => err.message);
         assert.isTrue(tile === "Please provide correct QuadKey");
     });
 });

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +21,13 @@ import * as sinon from "sinon";
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 import {
-  OlpClientSettings,
-  HRN,
   CatalogVersionRequest,
   CatalogClient,
   CatalogRequest,
   LayerVersionsRequest
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "../FetchMock";
-import { LIB_VERSION } from "@here/olp-sdk-core";
+import * as core from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -41,7 +39,7 @@ describe("CatalogClient", function() {
   let sandbox: sinon.SinonSandbox;
   let fetchStub: sinon.SinonStub;
   let catalogClient: CatalogClient;
-  let settings: OlpClientSettings;
+  let settings: core.OlpClientSettings;
   const headers = new Headers();
   headers.append("cache-control", "max-age=3600");
 
@@ -59,12 +57,12 @@ describe("CatalogClient", function() {
     fetchStub.callsFake(fetchMock.fetch());
 
     // Setup Catalog Client with new OlpClientSettings.
-    settings = new OlpClientSettings({
+    settings = new core.OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
     catalogClient = new CatalogClient(
-      HRN.fromString("hrn:here:data:::test-hrn"),
+      core.HRN.fromString("hrn:here:data:::test-hrn"),
       settings
     );
   });

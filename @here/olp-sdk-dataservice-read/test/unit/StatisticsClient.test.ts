@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
 import { CoverageApi } from "@here/olp-sdk-dataservice-api";
-import { RequestFactory } from "@here/olp-sdk-core";
+import * as core from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -31,15 +31,13 @@ const assert = chai.assert;
 
 describe("StatistiscClient", function() {
     let sandbox: sinon.SinonSandbox;
-    let olpClientSettingsStub: sinon.SinonStubbedInstance<dataServiceRead.OlpClientSettings>;
+    let olpClientSettingsStub: sinon.SinonStubbedInstance<core.OlpClientSettings>;
     let getDataCoverageSummaryStub: sinon.SinonStub;
     let getStatisticsBitMapStub: sinon.SinonStub;
     let getStatisticsSizeMapStub: sinon.SinonStub;
     let getStatisticsTimeMapStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
-    const mockedHRN = dataServiceRead.HRN.fromString(
-        "hrn:here:data:::mocked-hrn"
-    );
+    const mockedHRN = core.HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
 
@@ -49,9 +47,9 @@ describe("StatistiscClient", function() {
 
     beforeEach(function() {
         olpClientSettingsStub = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
+            core.OlpClientSettings
         );
-        getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
+        getBaseUrlRequestStub = sandbox.stub(core.RequestFactory, "getBaseUrl");
         getDataCoverageSummaryStub = sandbox.stub(
             CoverageApi,
             "getDataCoverageSummary"

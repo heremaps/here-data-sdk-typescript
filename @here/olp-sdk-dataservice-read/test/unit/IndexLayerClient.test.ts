@@ -22,7 +22,7 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
-import { HttpError, RequestFactory } from "@here/olp-sdk-core";
+import * as core from "@here/olp-sdk-core";
 import { IndexApi, BlobApi } from "@here/olp-sdk-dataservice-api";
 
 chai.use(sinonChai);
@@ -36,22 +36,18 @@ describe("IndexLayerClient", function() {
     let getIndexStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
     let indexLayerClient: dataServiceRead.IndexLayerClient;
-    const mockedHRN = dataServiceRead.HRN.fromString(
-        "hrn:here:data:::mocked-hrn"
-    );
+    const mockedHRN = core.HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
 
     before(function() {
         sandbox = sinon.createSandbox();
-        let settings = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
-        );
+        let settings = sandbox.createStubInstance(core.OlpClientSettings);
 
         const indexLayerClientParams = {
             catalogHrn: mockedHRN,
             layerId: mockedLayerId,
-            settings: (settings as unknown) as dataServiceRead.OlpClientSettings
+            settings: (settings as unknown) as core.OlpClientSettings
         };
         indexLayerClient = new dataServiceRead.IndexLayerClient(
             indexLayerClientParams
@@ -61,7 +57,7 @@ describe("IndexLayerClient", function() {
     beforeEach(function() {
         getBlobStub = sandbox.stub(BlobApi, "getBlob");
         getIndexStub = sandbox.stub(IndexApi, "performQuery");
-        getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
+        getBaseUrlRequestStub = sandbox.stub(core.RequestFactory, "getBaseUrl");
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
@@ -126,7 +122,10 @@ describe("IndexLayerClient", function() {
 
     it("Should method getPartitions with IndexQueryRequest return HttpError when IndexApi crashes", async function() {
         const TEST_ERROR_CODE = 404;
-        const mockedHttpError = new HttpError(TEST_ERROR_CODE, "Test Error");
+        const mockedHttpError = new core.HttpError(
+            TEST_ERROR_CODE,
+            "Test Error"
+        );
 
         getIndexStub.callsFake(
             (builder: any, params: any): Promise<IndexApi.DataResponse> => {
@@ -312,7 +311,7 @@ describe("IndexLayerClient", function() {
 
     it("Should HttpError be handled", async function() {
         const TEST_ERROR_CODE = 404;
-        const mockedError = new HttpError(TEST_ERROR_CODE, "Test Error");
+        const mockedError = new core.HttpError(TEST_ERROR_CODE, "Test Error");
 
         const mockedModel = {
             id: "8c0e5ac9-b036-4365-8820-dfcba64588fc",

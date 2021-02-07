@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,14 +38,13 @@ const MOCKED_SUBSCRIBTION_ID = "882990694";
 import "@here/olp-sdk-fetch";
 
 import {
-  OlpClientSettings,
   StreamLayerClient,
-  HRN,
   SubscribeRequest,
   PollRequest,
   UnsubscribeRequest,
   SeekRequest
 } from "@here/olp-sdk-dataservice-read";
+import { HRN, OlpClientSettings } from "@here/olp-sdk-core";
 
 describe("Stream Layer Client Read Data", async function() {
   const olpClientSettings = new OlpClientSettings({

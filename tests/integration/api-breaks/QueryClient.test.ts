@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,10 @@ import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import { QueryClient, OlpClientSettings } from "@here/olp-sdk-dataservice-read";
+import { QueryClient } from "@here/olp-sdk-dataservice-read";
 import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
 import * as dataServiceApi from "@here/olp-sdk-dataservice-api";
+import { HRN, OlpClientSettings } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -48,7 +49,7 @@ describe("QueryClient", function() {
     public async getPartitionsById(
       request: dataServiceRead.PartitionsRequest,
       layerId: string,
-      hrn: dataServiceRead.HRN,
+      hrn: HRN,
       abortSignal?: AbortSignal
     ): Promise<dataServiceApi.QueryApi.Partitions> {
       return {
@@ -63,9 +64,7 @@ describe("QueryClient", function() {
     getToken: () => Promise.resolve("mocked-token")
   });
 
-  const testCatalogHrn = dataServiceRead.HRN.fromString(
-    "hrn:here:data:::mocked-hrn"
-  );
+  const testCatalogHrn = HRN.fromString("hrn:here:data:::mocked-hrn");
 
   it("Shoud be initialized with arguments", async function() {
     const queryClient = new QueryClient(settings);

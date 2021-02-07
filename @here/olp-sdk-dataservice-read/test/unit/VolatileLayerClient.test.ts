@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import {
     QueryApi,
     VolatileBlobApi
 } from "@here/olp-sdk-dataservice-api";
-import { RequestFactory } from "@here/olp-sdk-core";
+import * as core from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -43,9 +43,7 @@ describe("VolatileLayerClient", function() {
     let getQuadTreeIndexStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
     let volatileLayerClient: dataServiceRead.VolatileLayerClient;
-    const mockedHRN = dataServiceRead.HRN.fromString(
-        "hrn:here:data:::mocked-hrn"
-    );
+    const mockedHRN = core.HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
 
@@ -71,7 +69,7 @@ describe("VolatileLayerClient", function() {
 
     before(function() {
         sandbox = sinon.createSandbox();
-        let settings = new dataServiceRead.OlpClientSettings({
+        let settings = new core.OlpClientSettings({
             environment: "here",
             getToken: () => Promise.resolve("token")
         });
@@ -92,7 +90,7 @@ describe("VolatileLayerClient", function() {
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
         getPartitionsByIdStub = sandbox.stub(QueryApi, "getPartitionsById");
         getQuadTreeIndexStub = sandbox.stub(QueryApi, "quadTreeIndexVolatile");
-        getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
+        getBaseUrlRequestStub = sandbox.stub(core.RequestFactory, "getBaseUrl");
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
@@ -293,7 +291,7 @@ describe("VolatileLayerClient", function() {
         );
 
         const quadKeyPartitionsRequest = new dataServiceRead.QuadKeyPartitionsRequest()
-            .withQuadKey(dataServiceRead.quadKeyFromMortonCode("23618403"))
+            .withQuadKey(core.TileKey.fromMortonCode(23618403))
             .withAdditionalFields([
                 "dataSize",
                 "checksum",
@@ -384,75 +382,6 @@ describe("VolatileLayerClient", function() {
         assert.isTrue(response.ok);
     });
 
-    it("Should method getData provide data with quadKey", async function() {
-        const mockedBlobData = new Response("mocked-blob-response");
-        const mockedVersion = {
-            version: 42
-        };
-
-        const mockedQuadKeyTreeData = {
-            subQuads: [
-                {
-                    version: 12,
-                    subQuadKey: "1",
-                    dataHandle: "c9116bb9-7d00-44bf-9b26-b4ab4c274665"
-                }
-            ],
-            parentQuads: [
-                {
-                    version: 12,
-                    partition: "23618403",
-                    dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
-                }
-            ]
-        };
-
-        getQuadTreeIndexStub.callsFake(
-            (builder: any, params: any): Promise<QueryApi.Index> => {
-                return Promise.resolve(mockedQuadKeyTreeData);
-            }
-        );
-        getVersionStub.callsFake(
-            (
-                builder: any,
-                params: any
-            ): Promise<MetadataApi.VersionResponse> => {
-                return Promise.resolve(mockedVersion);
-            }
-        );
-        const mockedPartitions = {
-            partitions: [
-                {
-                    version: 1,
-                    partition: "42",
-                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
-                },
-                {
-                    version: 42,
-                    partition: "42",
-                    dataHandle: "3C3BE24A341D82321A9BA9075A7EF498.123"
-                }
-            ]
-        };
-        getPartitionsStub.callsFake(
-            (builder: any, params: any): Promise<MetadataApi.Partitions> => {
-                return Promise.resolve(mockedPartitions);
-            }
-        );
-        getBlobStub.callsFake(
-            (builder: any, params: any): Promise<Response> => {
-                return Promise.resolve(mockedBlobData);
-            }
-        );
-
-        const dataRequest = new dataServiceRead.DataRequest().withQuadKey(
-            dataServiceRead.quadKeyFromMortonCode("23618403")
-        );
-
-        const response = await volatileLayerClient.getData(dataRequest as any);
-        assert.isDefined(response);
-    });
-
     it("Should method getData return Error without dataRequest parameters", async function() {
         const mockedErrorResponse = {
             message:
@@ -469,9 +398,7 @@ describe("VolatileLayerClient", function() {
     });
 
     it("Should method getData return Error with correct partitionId and wrong layerId", async function() {
-        let settings = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
-        );
+        let settings = sandbox.createStubInstance(core.OlpClientSettings);
         const volatileClient = new dataServiceRead.VolatileLayerClient({
             catalogHrn: mockedHRN,
             layerId: mockedLayerId,
@@ -502,46 +429,6 @@ describe("VolatileLayerClient", function() {
             .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
             .catch(error => {
                 assert.isDefined(error);
-            });
-    });
-
-    it("Should method getData return Error with incorrect quadKey", async function() {
-        const errorMessage =
-            "No dataHandle for quadKey {column: 15, row: 1, level: 5}. HRN: hrn:here:data:::mocked-hrn";
-        const ERROR_STATUS = 204;
-        const mockedQuadKeyTreeData = {
-            subQuads: [],
-            parentQuads: []
-        };
-        const mockedVersion = {
-            version: 42
-        };
-
-        getQuadTreeIndexStub.callsFake(
-            (builder: any, params: any): Promise<QueryApi.Index> => {
-                return Promise.resolve(mockedQuadKeyTreeData);
-            }
-        );
-
-        getVersionStub.callsFake(
-            (
-                builder: any,
-                params: any
-            ): Promise<MetadataApi.VersionResponse> => {
-                return Promise.resolve(mockedVersion);
-            }
-        );
-
-        const dataRequest = new dataServiceRead.DataRequest().withQuadKey(
-            dataServiceRead.quadKeyFromMortonCode("1111")
-        );
-
-        const response = await volatileLayerClient
-            .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
-            .catch(error => {
-                assert.isDefined(error);
-                assert.equal(error.message, errorMessage);
-                assert.equal(error.status, ERROR_STATUS);
             });
     });
 
@@ -589,27 +476,6 @@ describe("VolatileLayerClient", function() {
             });
     });
 
-    it("Should getPartitions with quadKey error be handled", async function() {
-        const mockedErrorResponse = "Bad response";
-
-        const quadRrequest = new dataServiceRead.DataRequest().withQuadKey(
-            dataServiceRead.quadKeyFromMortonCode("23618403")
-        );
-
-        getQuadTreeIndexStub.callsFake(() =>
-            Promise.reject({
-                status: 400,
-                statusText: "Bad response"
-            })
-        );
-
-        const data = await volatileLayerClient
-            .getData(quadRrequest)
-            .catch(error => {
-                assert.isDefined(error);
-            });
-    });
-
     it("VolatileLayerClient instance should be initialized with VolatileLayerClientParams", async function() {
         assert.isDefined(volatileLayerClient);
         assert.equal(volatileLayerClient["hrn"], "hrn:here:data:::mocked-hrn");
@@ -640,11 +506,9 @@ describe("VolatileLayerClient", function() {
             }
         }
 
-        QueryClientStub.callsFake(
-            (settings: dataServiceRead.OlpClientSettings) => {
-                return new MockedQueryClient();
-            }
-        );
+        QueryClientStub.callsFake((settings: core.OlpClientSettings) => {
+            return new MockedQueryClient();
+        });
 
         const partitionsRequest = new dataServiceRead.PartitionsRequest()
             .withPartitionIds(["23605706"])

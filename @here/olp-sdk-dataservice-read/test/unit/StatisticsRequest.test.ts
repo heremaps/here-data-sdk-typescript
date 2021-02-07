@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,8 @@ import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import { CoverageDataType, HRN, StatisticsRequest } from "../../lib";
+import { CoverageDataType, StatisticsRequest } from "../../lib";
+import { HRN } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 

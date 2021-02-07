@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,12 @@ import * as sinon from "sinon";
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 import {
-  OlpClientSettings,
-  HRN,
   IndexLayerClient,
   IndexQueryRequest
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "../FetchMock";
 import { Buffer } from "buffer";
-import { LIB_VERSION } from "@here/olp-sdk-core";
+import * as core from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -40,7 +38,7 @@ describe("IndexLayerClient", function() {
   let sandbox: sinon.SinonSandbox;
   let fetchStub: sinon.SinonStub;
 
-  const testHRN = HRN.fromString("hrn:here:data:::test-hrn");
+  const testHRN = core.HRN.fromString("hrn:here:data:::test-hrn");
   const testLayerId = "test-layed-id";
 
   before(function() {
@@ -58,12 +56,12 @@ describe("IndexLayerClient", function() {
   });
 
   it("Should be initialized with settings", async function() {
-    const settings = new OlpClientSettings({
+    const settings = new core.OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
     const indexClient = new IndexLayerClient({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      catalogHrn: core.HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
       settings
     });
@@ -72,13 +70,13 @@ describe("IndexLayerClient", function() {
   });
 
   it("Should initialization error be handled", function() {
-    const settings = new OlpClientSettings({
+    const settings = new core.OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
     try {
       const indexClient = new IndexLayerClient({
-        catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+        catalogHrn: core.HRN.fromString("hrn:here:data:::test-hrn"),
         layerId: "",
         settings
       });
@@ -151,12 +149,12 @@ describe("IndexLayerClient", function() {
     fetchMock.withMockedResponses(mockedResponses);
 
     // Setup Layer Client with new OlpClientSettings.
-    const settings = new OlpClientSettings({
+    const settings = new core.OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
     const indexClient = new IndexLayerClient({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      catalogHrn: core.HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
       settings
     });
@@ -182,12 +180,12 @@ describe("IndexLayerClient", function() {
   });
 
   it("Should getPartitions() method handle errors", async function() {
-    const settings = new OlpClientSettings({
+    const settings = new core.OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
     const indexClient = new IndexLayerClient({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      catalogHrn: core.HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
       settings
     });
@@ -198,12 +196,12 @@ describe("IndexLayerClient", function() {
   });
 
   it("Should getData() method handle errors", async function() {
-    const settings = new OlpClientSettings({
+    const settings = new core.OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
     const indexClient = new IndexLayerClient({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      catalogHrn: core.HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
       settings
     });
@@ -253,12 +251,12 @@ describe("IndexLayerClient", function() {
     // Setup the fetch to use mocked responses.
     fetchMock.withMockedResponses(mockedResponses);
 
-    const settings = new OlpClientSettings({
+    const settings = new core.OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
     const indexClient = new IndexLayerClient({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      catalogHrn: core.HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
       settings
     });
@@ -270,13 +268,13 @@ describe("IndexLayerClient", function() {
   });
 
   it("Should be initialized with IndexLayerClientParams", async function() {
-    const settings = new OlpClientSettings({
+    const settings = new core.OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
 
     const indexLayerClientParams = {
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+      catalogHrn: core.HRN.fromString("hrn:here:data:::test-hrn"),
       layerId: "test-layed-id",
       settings: settings
     };

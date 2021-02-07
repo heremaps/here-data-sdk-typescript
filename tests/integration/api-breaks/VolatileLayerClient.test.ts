@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,13 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 import {
   VolatileLayerClient,
-  OlpClientSettings,
-  HRN,
   VolatileLayerClientParams,
   QuadKeyPartitionsRequest,
   DataRequest,
   PartitionsRequest
 } from "@here/olp-sdk-dataservice-read";
 import { QueryApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
+import { HRN, OlpClientSettings } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 

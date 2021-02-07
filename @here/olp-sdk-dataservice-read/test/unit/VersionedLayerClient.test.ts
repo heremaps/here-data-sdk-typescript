@@ -24,7 +24,7 @@ import sinonChai = require("sinon-chai");
 import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
 import { BlobApi, MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
 import { Index } from "@here/olp-sdk-dataservice-api/lib/query-api";
-import { RequestFactory } from "@here/olp-sdk-core";
+import * as core from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -40,9 +40,7 @@ describe("VersionedLayerClient", function() {
     let getVersionStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
     let versionedLayerClient: dataServiceRead.VersionedLayerClient;
-    const mockedHRN = dataServiceRead.HRN.fromString(
-        "hrn:here:data:::mocked-hrn"
-    );
+    const mockedHRN = core.HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
     const mockedPartitionsAddFields = {
@@ -67,7 +65,7 @@ describe("VersionedLayerClient", function() {
 
     before(function() {
         sandbox = sinon.createSandbox();
-        let settings = new dataServiceRead.OlpClientSettings({
+        let settings = new core.OlpClientSettings({
             environment: "here",
             getToken: () => Promise.resolve("token")
         });
@@ -96,7 +94,7 @@ describe("VersionedLayerClient", function() {
         getPartitionsByIdStub = sandbox.stub(QueryApi, "getPartitionsById");
         getQuadTreeIndexStub = sandbox.stub(QueryApi, "quadTreeIndex");
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
-        getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
+        getBaseUrlRequestStub = sandbox.stub(core.RequestFactory, "getBaseUrl");
 
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
@@ -225,58 +223,6 @@ describe("VersionedLayerClient", function() {
         assert.isTrue(response.ok);
     });
 
-    it("Should method getData provide data with quadKey", async function() {
-        const mockedBlobData = new Response("mocked-blob-response");
-        const mockedVersion = {
-            version: 42
-        };
-        const mockedQuadKeyTreeData = {
-            subQuads: [
-                {
-                    version: 12,
-                    subQuadKey: "1",
-                    dataHandle: "c9116bb9-7d00-44bf-9b26-b4ab4c274665"
-                }
-            ],
-            parentQuads: [
-                {
-                    version: 12,
-                    partition: "23618403",
-                    dataHandle: "da51785a-54b0-40cd-95ac-760f56fe5457"
-                }
-            ]
-        };
-
-        getQuadTreeIndexStub.callsFake(
-            (builder: any, params: any): Promise<Index> => {
-                return Promise.resolve(mockedQuadKeyTreeData);
-            }
-        );
-        getBlobStub.callsFake(
-            (builder: any, params: any): Promise<Response> => {
-                return Promise.resolve(mockedBlobData);
-            }
-        );
-        getVersionStub.callsFake(
-            (
-                builder: any,
-                params: any
-            ): Promise<MetadataApi.VersionResponse> => {
-                return Promise.resolve(mockedVersion);
-            }
-        );
-
-        const dataRequest = new dataServiceRead.DataRequest().withQuadKey(
-            dataServiceRead.quadKeyFromMortonCode("23618403")
-        );
-
-        const response = await versionedLayerClient.getData(
-            (dataRequest as unknown) as dataServiceRead.DataRequest
-        );
-        assert.isDefined(response);
-        assert.isTrue(response.ok);
-    });
-
     it("Should method getData return Error without dataRequest parameters", async function() {
         const mockedErrorResponse =
             "No data provided. Add dataHandle, partitionId or quadKey to the DataRequest object";
@@ -352,62 +298,6 @@ describe("VersionedLayerClient", function() {
             .catch(error => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.message);
-            });
-    });
-
-    it("Should method getData return Error with correct quadKey and wrong version parameter", async function() {
-        const dataRequest = new dataServiceRead.DataRequest().withQuadKey(
-            dataServiceRead.quadKeyFromMortonCode("23618403")
-        );
-
-        const mockedPartitionsIdData = {
-            status: 400,
-            title: "Bad request",
-            detail: [
-                {
-                    name: "version",
-                    error: "Invalid version: latest known version is 181"
-                }
-            ]
-        };
-
-        getQuadTreeIndexStub.callsFake((builder: any, params: any): any => {
-            return Promise.resolve(mockedPartitionsIdData);
-        });
-
-        const response = await versionedLayerClient
-            .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
-            .catch(error => {
-                assert.isDefined(error);
-                assert.equal(error, mockedPartitionsIdData);
-            });
-    });
-
-    it("Should method getData return Error with incorrect quadKey", async function() {
-        const errorMessage =
-            "No dataHandle for quadKey {column: 15, row: 1, level: 5}. HRN: hrn:here:data:::mocked-hrn";
-        const ERROR_STATUS = 204;
-        const mockedQuadKeyTreeData = {
-            subQuads: [],
-            parentQuads: []
-        };
-
-        getQuadTreeIndexStub.callsFake(
-            (builder: any, params: any): Promise<QueryApi.Index> => {
-                return Promise.resolve(mockedQuadKeyTreeData);
-            }
-        );
-
-        const dataRequest = new dataServiceRead.DataRequest().withQuadKey(
-            dataServiceRead.quadKeyFromMortonCode("1111")
-        );
-
-        const response = await versionedLayerClient
-            .getData((dataRequest as unknown) as dataServiceRead.DataRequest)
-            .catch(error => {
-                assert.isDefined(error);
-                assert.equal(error.message, errorMessage);
-                assert.equal(error.status, ERROR_STATUS);
             });
     });
 
@@ -697,7 +587,7 @@ describe("VersionedLayerClient", function() {
         );
 
         const quadKeyPartitionsRequest = new dataServiceRead.QuadKeyPartitionsRequest()
-            .withQuadKey(dataServiceRead.quadKeyFromMortonCode("23618403"))
+            .withQuadKey(core.TileKey.fromMortonCode(23618403))
             .withAdditionalFields([
                 "dataSize",
                 "checksum",
@@ -813,34 +703,6 @@ describe("VersionedLayerClient", function() {
             });
     });
 
-    it("Should getPartitions with quadKey error be handled", async function() {
-        const mockedErrorResponse = "Bad response";
-        const quadRrequest = new dataServiceRead.DataRequest().withQuadKey(
-            dataServiceRead.quadKeyFromMortonCode("23618403")
-        );
-
-        getVersionStub.callsFake(() =>
-            Promise.reject({
-                status: 400,
-                statusText: "Bad response"
-            })
-        );
-
-        getQuadTreeIndexStub.callsFake(() =>
-            Promise.reject({
-                status: 400,
-                statusText: "Bad response"
-            })
-        );
-
-        const data = await versionedLayerClient
-            .getData(quadRrequest)
-            .catch(error => {
-                assert.isDefined(error);
-                assert.equal(mockedErrorResponse, error.statusText);
-            });
-    });
-
     it("Should getPartitions error be handled if error getting latest layer version", async function() {
         getVersionStub.callsFake(() =>
             Promise.reject({
@@ -923,7 +785,7 @@ describe("VersionedLayerClient", function() {
             getPartitionIds: () => undefined,
             getAdditionalFields: () => undefined,
             getVersion: () => undefined,
-            getFetchOption: () => dataServiceRead.FetchOptions.OnlineOnly
+            getFetchOption: () => core.FetchOptions.OnlineOnly
         } as any);
     });
 
@@ -945,7 +807,7 @@ describe("VersionedLayerClient", function() {
             getPartitionIds: () => undefined,
             getAdditionalFields: () => undefined,
             getVersion: () => undefined,
-            getFetchOption: () => dataServiceRead.FetchOptions.OnlineOnly
+            getFetchOption: () => core.FetchOptions.OnlineOnly
         } as any);
     });
 
@@ -980,11 +842,9 @@ describe("VersionedLayerClient", function() {
             }
         }
 
-        QueryClientStub.callsFake(
-            (settings: dataServiceRead.OlpClientSettings) => {
-                return new MockedQueryClient();
-            }
-        );
+        QueryClientStub.callsFake((settings: core.OlpClientSettings) => {
+            return new MockedQueryClient();
+        });
 
         const partitionsRequest = new dataServiceRead.PartitionsRequest()
             .withPartitionIds(["23605706"])
@@ -1001,10 +861,10 @@ describe("VersionedLayerClient with locked version 0 in constructor", function()
     let sandbox: sinon.SinonSandbox;
     let client: dataServiceRead.VersionedLayerClient;
 
-    const mockedCatalogHRH = dataServiceRead.HRN.fromString(
+    const mockedCatalogHRH = core.HRN.fromString(
         "hrn:here:data:::example-catalog"
     );
-    const mockedSettings = new dataServiceRead.OlpClientSettings({
+    const mockedSettings = new core.OlpClientSettings({
         environment: "mocked-env",
         getToken: () => Promise.resolve("mocked-token")
     });
@@ -1054,15 +914,13 @@ describe("VersionedLayerClient with locked version 0 in constructor", function()
             }
         }
 
-        QueryClientStub.callsFake(
-            (settings: dataServiceRead.OlpClientSettings) => {
-                return new MockedQueryClient();
-            }
-        );
+        QueryClientStub.callsFake((settings: core.OlpClientSettings) => {
+            return new MockedQueryClient();
+        });
 
         await client.getPartitions(
             new dataServiceRead.QuadKeyPartitionsRequest().withQuadKey(
-                dataServiceRead.quadKeyFromMortonCode(1000)
+                core.TileKey.fromMortonCode(1000)
             )
         );
     });
@@ -1112,7 +970,7 @@ describe("VersionedLayerClient with locked version 0 in constructor", function()
                 builderType: any,
                 hrn?: any,
                 abortSignal?: AbortSignal
-            ): Promise<dataServiceRead.DataStoreRequestBuilder> {
+            ): Promise<core.DataStoreRequestBuilder> {
                 return Promise.resolve(new Response()) as any;
             }
         }

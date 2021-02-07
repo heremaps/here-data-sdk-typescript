@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,10 @@ import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import {
-  ArtifactClient,
-  OlpClientSettings
-} from "@here/olp-sdk-dataservice-read";
+import { ArtifactClient } from "@here/olp-sdk-dataservice-read";
 import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
 import * as dataServiceApi from "@here/olp-sdk-dataservice-api";
+import * as dataserviceCore from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -34,7 +32,7 @@ const expect = chai.expect;
 
 describe("ArtifactClient", function() {
   class ArtifactClientTest extends ArtifactClient {
-    constructor(settings: OlpClientSettings) {
+    constructor(settings: dataserviceCore.OlpClientSettings) {
       super(settings);
     }
 
@@ -58,7 +56,7 @@ describe("ArtifactClient", function() {
     }
   }
 
-  let settings = new OlpClientSettings({
+  let settings = new dataserviceCore.OlpClientSettings({
     environment: "here",
     getToken: () => Promise.resolve("mocked-token")
   });

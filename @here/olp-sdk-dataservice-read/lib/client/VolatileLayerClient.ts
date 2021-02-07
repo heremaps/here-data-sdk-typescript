@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -129,13 +129,8 @@ export class VolatileLayerClient {
     ): Promise<Response> {
         const dataHandle = dataRequest.getDataHandle();
         const partitionId = dataRequest.getPartitionId();
-        const quadKey = dataRequest.getQuadKey();
 
-        if (
-            dataHandle !== undefined ||
-            partitionId !== undefined ||
-            quadKey !== undefined
-        ) {
+        if (dataHandle !== undefined || partitionId !== undefined) {
             if (dataHandle) {
                 return this.downloadPartition(
                     dataHandle,
@@ -156,35 +151,6 @@ export class VolatileLayerClient {
                     abortSignal,
                     dataRequest.getBillingTag()
                 );
-            }
-
-            if (quadKey) {
-                const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest().withQuadKey(
-                    quadKey
-                );
-                const quadTreeIndex = await this.getPartitions(
-                    quadKeyPartitionsRequest
-                ).catch(error => Promise.reject(error));
-
-                if (
-                    quadTreeIndex.status &&
-                    quadTreeIndex.status === STATUS_CODES.BAD_REQUEST
-                ) {
-                    return Promise.reject(quadTreeIndex);
-                }
-
-                return quadTreeIndex.subQuads && quadTreeIndex.subQuads.length
-                    ? this.downloadPartition(
-                          quadTreeIndex.subQuads[0].dataHandle,
-                          abortSignal,
-                          dataRequest.getBillingTag()
-                      )
-                    : Promise.reject(
-                          new HttpError(
-                              STATUS_CODES.NO_CONTENT,
-                              `No dataHandle for quadKey {column: ${quadKey.column}, row: ${quadKey.row}, level: ${quadKey.level}}. HRN: ${this.hrn}`
-                          )
-                      );
             }
         }
 

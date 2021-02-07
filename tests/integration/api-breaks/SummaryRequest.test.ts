@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,7 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import { SummaryRequest } from "@here/olp-sdk-dataservice-read";
-import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
-import * as dataServiceApi from "@here/olp-sdk-dataservice-api";
+import { HRN } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -30,9 +29,7 @@ const assert = chai.assert;
 const expect = chai.expect;
 
 describe("SummaryRequest", function() {
-  const testCatalogHrn = dataServiceRead.HRN.fromString(
-    "hrn:here:data:::mocked-hrn"
-  );
+  const testCatalogHrn = HRN.fromString("hrn:here:data:::mocked-hrn");
 
   it("Shoud be initialized with arguments", async function() {
     const client = new SummaryRequest();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@ import {
     FetchOptions,
     HRN,
     OlpClientSettings,
-    RequestFactory
+    QuadKey
 } from "@here/olp-sdk-core";
 import { MetadataApi } from "@here/olp-sdk-dataservice-api";
-import { QuadKey, validateBillingTag } from "@here/olp-sdk-dataservice-read";
+import { validateBillingTag } from "@here/olp-sdk-dataservice-read";
 
 /**
  * Parameters used to get a tile.
@@ -68,53 +68,6 @@ export class TileRequest {
     private billingTag?: string;
 
     private fetchOption = FetchOptions.OnlineIfNotFound;
-    private catalogVersion?: number;
-
-    /**
-     * @deprecated This signature will be removed by 02.2021.
-     * Plase use `new TileRequest()`
-     *
-     * @param params
-     */
-    constructor(private readonly params?: TileRequestParams) {
-        this.catalogVersion = params && params.catalogVersion;
-    }
-
-    /**
-     * @deprecated This method will be removed by 02.2021.
-     * Please call getTile with signature getTile(request: TileRequest, params: TileRequestParams, abortSignal?: AbortSignal)
-     *
-     * Gets the catalog version provided by the [[TileRequestParams]].
-     *
-     * @return The catalog version provided by the [[TileRequestParams]].
-     * If this version was not provided, the latest version is fetched and used.
-     */
-    public async getCatalogVersion(): Promise<number> {
-        if (this.catalogVersion !== undefined) {
-            return Promise.resolve(this.catalogVersion);
-        }
-
-        this.catalogVersion = await this.getCatalogLatestVersion().catch(err =>
-            Promise.reject(err)
-        );
-        return this.catalogVersion !== undefined
-            ? Promise.resolve(this.catalogVersion)
-            : Promise.reject(
-                  new Error("Error getting the latest version of catalog")
-              );
-    }
-
-    /**
-     * @deprecated This method will be removed by 02.2021.
-     * Please call getTile with signature getTile(request: TileRequest, params: TileRequestParams, abortSignal?: AbortSignal)
-     *
-     * Gets the tile request parameters.
-     *
-     * @return The [[TileRequestParams]] instance.
-     */
-    public getParams(): TileRequestParams {
-        return this.params as TileRequestParams;
-    }
 
     /**
      * A geometric area represented as a HERE tile.
@@ -183,35 +136,5 @@ export class TileRequest {
      */
     public getFetchOption(): FetchOptions {
         return this.fetchOption;
-    }
-
-    /**
-     * @deprecated This method will be removed by 02.2021.
-     * Gets the latest available catalog version.
-     *
-     * @return The latest available catalog version.
-     */
-    private async getCatalogLatestVersion(): Promise<number> {
-        if (!this.params) {
-            return Promise.reject(
-                "Using deprecated method, please use getVersionOfCatalog()"
-            );
-        }
-        const request = await RequestFactory.create(
-            "metadata",
-            "v1",
-            this.params.settings,
-            this.params.catalogHrn
-        ).catch(error =>
-            Promise.reject(
-                `Erorr creating request object for metadata service: ${error}`
-            )
-        );
-
-        const latestVersion = await MetadataApi.latestVersion(request, {
-            startVersion: -1
-        }).catch(error => Promise.reject(error));
-
-        return Promise.resolve(latestVersion.version);
     }
 }

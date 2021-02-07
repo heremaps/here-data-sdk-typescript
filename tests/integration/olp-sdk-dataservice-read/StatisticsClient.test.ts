@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +21,13 @@ import * as sinon from "sinon";
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 import {
-  OlpClientSettings,
-  HRN,
   StatisticsClient,
   SummaryRequest,
   StatisticsRequest,
   CoverageDataType
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "../FetchMock";
-import { LIB_VERSION } from "@here/olp-sdk-core";
+import * as core from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -42,9 +40,9 @@ describe("StatisticsClient", function() {
   let fetchStub: sinon.SinonStub;
 
   let statisticsClient: StatisticsClient;
-  let settings: OlpClientSettings;
+  let settings: core.OlpClientSettings;
 
-  const mockedHRN = HRN.fromString("hrn:here:data:::mocked-hrn");
+  const mockedHRN = core.HRN.fromString("hrn:here:data:::mocked-hrn");
   const mockedLayerId = "mocked-layed-id";
 
   before(function() {
@@ -61,7 +59,7 @@ describe("StatisticsClient", function() {
     fetchStub.callsFake(fetchMock.fetch());
 
     // Setup Statistics Client with new OlpClientSettings.
-    settings = new OlpClientSettings({
+    settings = new core.OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });

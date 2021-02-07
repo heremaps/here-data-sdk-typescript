@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,4 +20,3 @@
 export { OAuthArgs, Token } from "./lib/requestToken_common";
 export * from "./lib/requestToken.web";
 export * from "./lib/UserAuth";
-export * from "./lib/HttpError";
