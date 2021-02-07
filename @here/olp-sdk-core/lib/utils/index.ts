@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ export enum STATUS_CODES {
     OK = 200,
     CREATED = 201,
     NO_CONTENT = 204,
+    FOUND = 302,
     BAD_REQUEST = 400,
     NOT_FOUND = 404,
     TO_MANY_REQUESTS = 429,
