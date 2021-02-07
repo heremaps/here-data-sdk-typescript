@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
  */
 
 import { FetchOptions } from "@here/olp-sdk-core";
-import { QuadKey, validateBillingTag } from "@here/olp-sdk-dataservice-read";
+import { validateBillingTag } from "@here/olp-sdk-dataservice-read";
 
 /**
  *  Prepares information for calls to get data from the HERE Blob Service.
@@ -26,8 +26,6 @@ import { QuadKey, validateBillingTag } from "@here/olp-sdk-dataservice-read";
 export class DataRequest {
     private dataHandle?: string;
     private partitionId?: string;
-    private quadKey?: QuadKey;
-    private version?: number;
     private billingTag?: string;
     private fetchOption = FetchOptions.OnlineIfNotFound;
 
@@ -70,34 +68,6 @@ export class DataRequest {
      */
     public withPartitionId(partitionId: string): DataRequest {
         this.partitionId = partitionId;
-        return this;
-    }
-
-    /**
-     * @deprecated This method will be removed by 02.2021. Please use [[getAggregatedData]] method
-     * if you need to get data using a quadkey.
-     * You can also use the [[getPartitions]] method to get datahandle using a quadkey.
-     *
-     * Gets a quadkey for the request.
-     *
-     * @return The [[QuadKey]] object.
-     */
-    public getQuadKey(): QuadKey | undefined {
-        return this.quadKey;
-    }
-
-    /**
-     * @deprecated This method will be removed by 02.2021. Please use [[getAggregatedData]] method
-     * if you need to get data using a quadkey.
-     * You can also use the [[getPartitions]] method to get datahandle using a quadkey.
-     *
-     * Sets the provided quadkey.
-     *
-     * @param quadKey The [[QuadKey]] object.
-     * @returns The updated [[DataRequest]] instance that you can use to chain methods.
-     */
-    public withQuadKey(quadKey: QuadKey): DataRequest {
-        this.quadKey = quadKey;
         return this;
     }
 

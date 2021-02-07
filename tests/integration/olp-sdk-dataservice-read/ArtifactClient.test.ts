@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +21,12 @@ import * as sinon from "sinon";
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 import {
-  OlpClientSettings,
   ArtifactClient,
   SchemaRequest,
-  SchemaDetailsRequest,
-  HRN
+  SchemaDetailsRequest
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "../FetchMock";
-import { LIB_VERSION } from "@here/olp-sdk-dataservice-read/lib.version";
-import { HttpError } from "@here/olp-sdk-core";
+import * as core from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -41,7 +38,7 @@ describe("ArtifactClient", function() {
   let sandbox: sinon.SinonSandbox;
   let fetchStub: sinon.SinonStub;
   let artifactClient: ArtifactClient;
-  let settings: OlpClientSettings;
+  let settings: core.OlpClientSettings;
 
   before(function() {
     sandbox = sinon.createSandbox();
@@ -57,7 +54,7 @@ describe("ArtifactClient", function() {
     fetchStub.callsFake(fetchMock.fetch());
 
     // Setup Artifact Client with new OlpClientSettings.
-    settings = new OlpClientSettings({
+    settings = new core.OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
@@ -147,7 +144,9 @@ describe("ArtifactClient", function() {
     fetchMock.withMockedResponses(mockedResponses);
 
     const request = new SchemaDetailsRequest().withSchema(
-      HRN.fromString("hrn:here:schema:::com.here.schema.mock:test_v2:2.38.0")
+      core.HRN.fromString(
+        "hrn:here:schema:::com.here.schema.mock:test_v2:2.38.0"
+      )
     );
 
     const response = await artifactClient.getSchemaDetails(request);

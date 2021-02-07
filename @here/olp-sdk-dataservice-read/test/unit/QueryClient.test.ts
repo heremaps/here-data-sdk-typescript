@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
 import { MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
-import { RequestFactory } from "@here/olp-sdk-core";
+import * as core from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -35,12 +35,10 @@ describe("QueryClient", function() {
     let getVersionStub: sinon.SinonStub;
     let getPartitionsByIdStub: sinon.SinonStub;
     let quadTreeIndexVolatileStub: sinon.SinonStub;
-    let olpClientSettingsStub: sinon.SinonStubbedInstance<dataServiceRead.OlpClientSettings>;
+    let olpClientSettingsStub: sinon.SinonStubbedInstance<core.OlpClientSettings>;
 
     let getBaseUrlRequestStub: sinon.SinonStub;
-    const mockedHRN = dataServiceRead.HRN.fromString(
-        "hrn:here:data:::mocked-hrn"
-    );
+    const mockedHRN = core.HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
     const mockedLayerType = "volatile";
     const fakeURL = "http://fake-base.url";
@@ -56,7 +54,7 @@ describe("QueryClient", function() {
 
     beforeEach(function() {
         olpClientSettingsStub = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
+            core.OlpClientSettings
         );
         quadTreeIndexVolatileStub = sandbox.stub(
             QueryApi,
@@ -64,7 +62,7 @@ describe("QueryClient", function() {
         );
         getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
         getPartitionsByIdStub = sandbox.stub(QueryApi, "getPartitionsById");
-        getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
+        getBaseUrlRequestStub = sandbox.stub(core.RequestFactory, "getBaseUrl");
 
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
@@ -230,9 +228,7 @@ describe("QueryClient", function() {
     it("Should method getPartitionsById provide data with all parameters", async function() {
         const mockedIds = ["1", "2", "13", "42"];
         const mockedLayerId = "fake-layer-id";
-        const mockedHRN = dataServiceRead.HRN.fromString(
-            "hrn:here:data:::mocked-hrn"
-        );
+        const mockedHRN = core.HRN.fromString("hrn:here:data:::mocked-hrn");
         const mockedPartitionsResponse = {
             partitions: [
                 {
@@ -248,7 +244,7 @@ describe("QueryClient", function() {
         };
 
         const queryClient = new dataServiceRead.QueryClient(
-            new dataServiceRead.OlpClientSettings({
+            new core.OlpClientSettings({
                 environment: "mocked-env",
                 getToken: () => Promise.resolve("Mocked-token")
             })
@@ -278,9 +274,7 @@ describe("QueryClient", function() {
     it("Should method getPartitionsById return error if partitionIds list is not provided", async function() {
         const mockedErrorResponse = "Please provide correct partitionIds list";
         const mockedLayerId = "fake-layer-id";
-        const mockedHRN = dataServiceRead.HRN.fromString(
-            "hrn:here:data:::mocked-hrn"
-        );
+        const mockedHRN = core.HRN.fromString("hrn:here:data:::mocked-hrn");
         const queryClient = new dataServiceRead.QueryClient(
             olpClientSettingsStub as any
         );

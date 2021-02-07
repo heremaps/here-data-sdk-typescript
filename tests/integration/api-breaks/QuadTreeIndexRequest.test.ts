@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,11 @@
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 import {
-  HRN,
-  QuadKey,
   QuadTreeIndexDepth,
   QuadTreeIndexRequest
 } from "@here/olp-sdk-dataservice-read";
 import { AdditionalFields } from "@here/olp-sdk-dataservice-api";
+import { QuadKey, HRN } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 

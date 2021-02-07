@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,18 +26,6 @@ export const OlpSdkDataserviceReadTestCases: {
   callback: () => void;
 }[] = [
   {
-    it: "OlpClientSettings should be defined",
-    callback: function() {
-      assert(Module.OlpClientSettings !== undefined);
-    }
-  },
-  {
-    it: "RequestFactory should be defined",
-    callback: function() {
-      assert(Module.RequestFactory !== undefined);
-    }
-  },
-  {
     it: "StatisticsRequest should be defined",
     callback: function() {
       assert(Module.StatisticsRequest !== undefined);
@@ -62,39 +50,9 @@ export const OlpSdkDataserviceReadTestCases: {
     }
   },
   {
-    it: "addQuadKeys should be defined",
-    callback: function() {
-      assert(Module.addQuadKeys !== undefined);
-    }
-  },
-  {
-    it: "computeParentKey should be defined",
-    callback: function() {
-      assert(Module.computeParentKey !== undefined);
-    }
-  },
-  {
-    it: "getEnvLookUpUrl should be defined",
-    callback: function() {
-      assert(Module.getEnvLookUpUrl !== undefined);
-    }
-  },
-  {
     it: "isValid should be defined",
     callback: function() {
       assert(Module.isValid !== undefined);
-    }
-  },
-  {
-    it: "mortonCodeFromQuadKey should be defined",
-    callback: function() {
-      assert(Module.mortonCodeFromQuadKey !== undefined);
-    }
-  },
-  {
-    it: "quadKeyFromMortonCode should be defined",
-    callback: function() {
-      assert(Module.quadKeyFromMortonCode !== undefined);
     }
   },
   {
@@ -107,12 +65,6 @@ export const OlpSdkDataserviceReadTestCases: {
     it: "validatePartitionsIdsList should be defined",
     callback: function() {
       assert(Module.validatePartitionsIdsList !== undefined);
-    }
-  },
-  {
-    it: "ApiCacheRepository should be defined",
-    callback: function() {
-      assert(Module.ApiCacheRepository !== undefined);
     }
   },
   {
@@ -155,36 +107,6 @@ export const OlpSdkDataserviceReadTestCases: {
     it: "DataRequest should be defined",
     callback: function() {
       assert(Module.DataRequest !== undefined);
-    }
-  },
-  {
-    it: "DataStoreDownloadManager should be defined",
-    callback: function() {
-      assert(Module.DataStoreDownloadManager !== undefined);
-    }
-  },
-  {
-    it: "DataStoreRequestBuilder should be defined",
-    callback: function() {
-      assert(Module.DataStoreRequestBuilder !== undefined);
-    }
-  },
-  {
-    it: "HRN should be defined",
-    callback: function() {
-      assert(Module.HRN !== undefined);
-    }
-  },
-  {
-    it: "KeyValueCache should be defined",
-    callback: function() {
-      assert(Module.KeyValueCache !== undefined);
-    }
-  },
-  {
-    it: "LayerVersionsRequest should be defined",
-    callback: function() {
-      assert(Module.LayerVersionsRequest !== undefined);
     }
   },
   {

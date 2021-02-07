@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,7 @@
 
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
-import {
-  DataRequest,
-  QuadKey,
-  validateBillingTag
-} from "@here/olp-sdk-dataservice-read";
+import { DataRequest } from "@here/olp-sdk-dataservice-read";
 
 chai.use(sinonChai);
 
@@ -45,18 +41,6 @@ describe("DataRequest", function() {
     }
 
     withPartitionId(partitionId: string): DataRequest {
-      return this;
-    }
-
-    getQuadKey(): QuadKey | undefined {
-      return {
-        row: 5,
-        column: 5,
-        level: 5
-      };
-    }
-
-    withQuadKey(quadKey: QuadKey): DataRequest {
       return this;
     }
 
@@ -82,8 +66,6 @@ describe("DataRequest", function() {
     assert.isDefined(request);
     expect(request).to.be.instanceOf(DataRequest);
 
-    assert.isFunction(request.withQuadKey);
-    assert.isFunction(request.getQuadKey);
     assert.isFunction(request.withPartitionId);
     assert.isFunction(request.getPartitionId);
     assert.isFunction(request.withDataHandle);
@@ -103,24 +85,6 @@ describe("DataRequest", function() {
     const request = new DataRequestTest();
 
     const response = request.getVersion();
-    assert.isDefined(response);
-  });
-
-  it("Test withQuadKey method with quadKey", async function() {
-    const request = new DataRequestTest();
-
-    const response = request.withQuadKey({
-      row: 5,
-      column: 5,
-      level: 5
-    });
-    assert.isDefined(response);
-  });
-
-  it("Test getQuadKey method without params", async function() {
-    const request = new DataRequestTest();
-
-    const response = request.getQuadKey();
     assert.isDefined(response);
   });
 

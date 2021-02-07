@@ -20,7 +20,7 @@
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import { KeyValueCache } from "@here/olp-sdk-dataservice-read";
+import { KeyValueCache } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 

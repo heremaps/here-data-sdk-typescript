@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,6 @@ import * as sinon from "sinon";
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 import {
-  OlpClientSettings,
-  HRN,
   StreamLayerClient,
   SubscribeRequest,
   PollRequest,
@@ -32,6 +30,7 @@ import {
 import { FetchMock } from "../FetchMock";
 import { Buffer } from "buffer";
 import { Message } from "@here/olp-sdk-dataservice-api/lib/stream-api";
+import { HRN, OlpClientSettings } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 

@@ -22,9 +22,9 @@ import sinonChai = require("sinon-chai");
 import { AdditionalFields } from "@here/olp-sdk-dataservice-api";
 import {
   QuadKeyPartitionsRequest,
-  QuadKey,
   QuadTreeIndexDepth
 } from "@here/olp-sdk-dataservice-read";
+import { QuadKey } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 

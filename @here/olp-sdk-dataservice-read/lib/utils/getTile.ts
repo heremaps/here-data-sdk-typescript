@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,17 @@
  * License-Filename: LICENSE
  */
 
-import { FetchOptions, HRN, RequestFactory, TileKey } from "@here/olp-sdk-core";
+import {
+    FetchOptions,
+    HRN,
+    RequestFactory,
+    TileKey,
+    OlpClientSettings,
+    ApiName
+} from "@here/olp-sdk-core";
 import { BlobApi } from "@here/olp-sdk-dataservice-api";
 import { Index as QuadTreeIndex } from "@here/olp-sdk-dataservice-api/lib/query-api";
 import {
-    ApiName,
-    OlpClientSettings,
     QuadTreeIndexCacheRepository,
     QuadTreeIndexDepth,
     QuadTreeIndexRequest,
@@ -78,59 +83,7 @@ export async function getTile(
     request: TileRequest,
     params: TileRequestParams,
     abortSignal?: AbortSignal
-): Promise<Response>;
-
-/**
- * @deprecated This signature will be removed by 02.2021.
- * Use the following signature instead:
- * `getTile(request: TileRequest, params: TileRequestParams, abortSignal?: AbortSignal): Promise<Response>`.
- *
- * Gets the tile by the key.
- *
- * The tile is a geometric area represented as a HERE tile.
- * The quadtree metadata fetches the blob of needed tile from the Query Service API,
- * then caches it, and returns to the user.
- * To disable caching of metadata use `request.withFetchOption(FetchOptions.OnlineOnly)`.
- *
- * @param request Requests the [[TileRequest]] instance with the configured parameters.
- * @see [[TileRequest]]
- *
- * @param abortSignal The signal object that allows you to communicate with a request (such as the `fetch` request)
- * and, if required, abort it using the `AbortController` object.
- * @see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
- *
- * @example
- *
- * ```
- *  const params: TileRequestParams = {
- *       settings: "% your `OlpClientSettings` instance % ",
- *       catalogHrn: "% the HRN instance of your catalog %",
- *       layerId: "% your layer ID %",
- *       layerType: "% versioned or volatile %",
- *       catalogVersion: "% the catalog version; for versioned layers, the latest version is used by default %"
- *   }
- *
- *  const request = new TileRequest(params);
- *
- *  const tile1 = await getTile(request.withTileKey(yourTileKey1));
- *  const tile2 = await getTile(request.withTileKey(yourTileKey2));
- *
- * ```
- *
- * @returns The blob of the requested Tile or the blob of the closest parent Tile.
- */
-export async function getTile(
-    request: TileRequest,
-    abortSignal?: AbortSignal
-): Promise<Response>;
-
-export async function getTile(
-    request: TileRequest,
-    paramsOrSignal?: TileRequestParams | AbortSignal,
-    signal?: AbortSignal
 ): Promise<Response> {
-    let params: TileRequestParams | undefined;
-    let abortSignal: AbortSignal | undefined;
     let catalogVersion: number | undefined;
 
     const quadKey = request.getTileKey();
@@ -138,30 +91,8 @@ export async function getTile(
         return Promise.reject(new Error("Please provide correct QuadKey"));
     }
 
-    if (
-        !paramsOrSignal ||
-        (paramsOrSignal && paramsOrSignal instanceof AbortSignal)
-    ) {
-        // usind deprecated
-        params = request.getParams();
-        abortSignal = paramsOrSignal;
-        if (params.layerType === "versioned") {
-            catalogVersion = await request.getCatalogVersion();
-        }
-    } else {
-        params = paramsOrSignal;
-        abortSignal = signal;
-        if (params.layerType === "versioned") {
-            catalogVersion = params.catalogVersion;
-        }
-    }
-
-    if (!params) {
-        return Promise.reject(
-            new Error(
-                `Error getting params. Please use signature getTile(request: TileRequest, params: TileRequestParams, abortSignal?: AbortSignal)`
-            )
-        );
+    if (params.layerType === "versioned") {
+        catalogVersion = params.catalogVersion;
     }
 
     const blobType: ApiName =

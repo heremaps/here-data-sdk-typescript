@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
+import { HRN } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -30,17 +31,14 @@ const expect = chai.expect;
 
 describe("QuadTreeIndexRequest", function() {
     const billingTag = "billingTag";
-    const mockedHRN = dataServiceRead.HRN.fromString(
-        "hrn:here:data:::mocked-hrn"
-    );
+    const mockedHRN = HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
     const mockedVersion = 42;
     const mockedLayerType = "volatile";
-    const mockedDepth = 3;
     const mockedQuadKey = {
         row: 1,
-        column: 2,
-        level: 3
+        column: 1,
+        level: 1
     };
 
     it("Should initialize", function() {
@@ -74,9 +72,13 @@ describe("QuadTreeIndexRequest", function() {
         const quadTreeRequestWithBillTag = quadTreeRequest.withBillingTag(
             billingTag
         );
-        const quadTreeRequestWithAddFields = quadTreeRequest.withAdditionalFields(
-            ["dataSize", "checksum", "compressedDataSize", "crc"]
-        );
+
+        quadTreeRequest.withAdditionalFields([
+            "dataSize",
+            "checksum",
+            "compressedDataSize",
+            "crc"
+        ]);
 
         expect(quadTreeRequestWithVersion.getVersion()).to.be.equal(
             mockedVersion

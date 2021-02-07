@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,9 @@
 import * as sinon from "sinon";
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
-import {
-  OlpClientSettings,
-  HRN,
-  RequestFactory
-} from "@here/olp-sdk-dataservice-read";
 import { MetadataApi } from "@here/olp-sdk-dataservice-api";
 import { FetchMock } from "../FetchMock";
+import * as core from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 const expect = chai.expect;
@@ -35,7 +31,7 @@ describe("CatalogClient", function() {
   let fetchMock: FetchMock;
   let sandbox: sinon.SinonSandbox;
   let fetchStub: sinon.SinonStub;
-  let settings: OlpClientSettings;
+  let settings: core.OlpClientSettings;
 
   before(function() {
     sandbox = sinon.createSandbox();
@@ -51,7 +47,7 @@ describe("CatalogClient", function() {
     fetchStub.callsFake(fetchMock.fetch());
 
     // Setup Catalog Client with new OlpClientSettings.
-    settings = new OlpClientSettings({
+    settings = new core.OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
@@ -110,11 +106,11 @@ describe("CatalogClient", function() {
     // Setup the fetch to use mocked responses.
     fetchMock.withMockedResponses(mockedResponses);
 
-    const requestBuilder = await RequestFactory.create(
+    const requestBuilder = await core.RequestFactory.create(
       "metadata",
       "v1",
       settings,
-      HRN.fromString("hrn:here:data::olp-here:rib-2")
+      core.HRN.fromString("hrn:here:data::olp-here:rib-2")
     );
 
     const partitions = await MetadataApi.getPartitions(requestBuilder, {

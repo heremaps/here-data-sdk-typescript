@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +20,10 @@
 import * as sinon from "sinon";
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
-import {
-  OlpClientSettings,
-  ConfigClient,
-  SchemaRequest,
-  SchemaDetailsRequest,
-  HRN,
-  CatalogsRequest
-} from "@here/olp-sdk-dataservice-read";
+import { ConfigClient, CatalogsRequest } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "../FetchMock";
 import { ConfigApi } from "@here/olp-sdk-dataservice-api";
-import { LIB_VERSION } from "@here/olp-sdk-core";
+import { OlpClientSettings } from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 

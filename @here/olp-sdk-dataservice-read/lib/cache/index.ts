@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,5 @@
  * License-Filename: LICENSE
  */
 
-export * from "./ApiCacheRepository";
 export * from "./MetadataCacheRepository";
 export * from "./QuadTreeIndexCacheRepository";
-export * from "./KeyValueCache";
-export * from "./LRUCache";

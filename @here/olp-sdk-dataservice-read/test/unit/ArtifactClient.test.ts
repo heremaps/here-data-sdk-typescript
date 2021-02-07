@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
 import { ArtifactApi } from "@here/olp-sdk-dataservice-api";
-import { HttpError, RequestFactory } from "@here/olp-sdk-core";
+import * as dataserviceCore from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 
@@ -32,11 +32,11 @@ const expect = chai.expect;
 
 describe("ArtifactClient", function() {
     let sandbox: sinon.SinonSandbox;
-    let olpClientSettingsStub: sinon.SinonStubbedInstance<dataServiceRead.OlpClientSettings>;
+    let olpClientSettingsStub: sinon.SinonStubbedInstance<dataserviceCore.OlpClientSettings>;
     let getArtifactUsingGETStub: sinon.SinonStub;
     let getSchemaUsingGETStub: sinon.SinonStub;
     let getBaseUrlRequestStub: sinon.SinonStub;
-    const mockedHRN = dataServiceRead.HRN.fromString(
+    const mockedHRN = dataserviceCore.HRN.fromString(
         "hrn:here:data:::mocked-hrn"
     );
     const mockedLayerId = "mocked-layed-id";
@@ -48,9 +48,12 @@ describe("ArtifactClient", function() {
 
     beforeEach(function() {
         olpClientSettingsStub = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
+            dataserviceCore.OlpClientSettings
         );
-        getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
+        getBaseUrlRequestStub = sandbox.stub(
+            dataserviceCore.RequestFactory,
+            "getBaseUrl"
+        );
         getArtifactUsingGETStub = sandbox.stub(
             ArtifactApi,
             "getArtifactUsingGET"
@@ -99,7 +102,10 @@ describe("ArtifactClient", function() {
 
     it("Should method getSchema return HttpError when ArtifactClient API crashes", async function() {
         const NOT_FOUND_ERROR_CODE = 404;
-        const mockedError = new HttpError(NOT_FOUND_ERROR_CODE, "Not found");
+        const mockedError = new dataserviceCore.HttpError(
+            NOT_FOUND_ERROR_CODE,
+            "Not found"
+        );
 
         const mockedSchema: Response = new Response(null, {
             statusText: "mocked response"
@@ -185,7 +191,10 @@ describe("ArtifactClient", function() {
 
     it("Should method getSchemaDetails return HttpError when ArtifactClient crashes", async function() {
         const NOT_FOUND_ERROR_CODE = 404;
-        const mockedError = new HttpError(NOT_FOUND_ERROR_CODE, "Not found");
+        const mockedError = new dataserviceCore.HttpError(
+            NOT_FOUND_ERROR_CODE,
+            "Not found"
+        );
 
         const mockedSchema: ArtifactApi.GetSchemaResponse = {
             variants: [

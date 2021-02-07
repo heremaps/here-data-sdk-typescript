@@ -22,7 +22,7 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import * as dataServiceRead from "../../lib";
-import { HttpError, RequestFactory } from "@here/olp-sdk-core";
+import * as core from "@here/olp-sdk-core";
 
 import { BlobApi, StreamApi } from "@here/olp-sdk-dataservice-api";
 
@@ -71,24 +71,22 @@ describe("StreamLayerClient", function() {
     let getBlobStub: sinon.SinonStub;
     let seekOffsetsStub: sinon.SinonStub;
     let streamLayerClient: StreamLayerClientTest;
-    const mockedHRN = dataServiceRead.HRN.fromString(
-        "hrn:here:data:::mocked-hrn"
-    );
+    const mockedHRN = core.HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
 
-    let settings: dataServiceRead.OlpClientSettings;
+    let settings: core.OlpClientSettings;
     let params: {
-        catalogHrn: dataServiceRead.HRN;
+        catalogHrn: core.HRN;
         layerId: string;
-        settings: dataServiceRead.OlpClientSettings;
+        settings: core.OlpClientSettings;
     };
 
     before(function() {
         sandbox = sinon.createSandbox();
         settings = (sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
-        ) as unknown) as dataServiceRead.OlpClientSettings;
+            core.OlpClientSettings
+        ) as unknown) as core.OlpClientSettings;
         params = {
             catalogHrn: mockedHRN,
             layerId: mockedLayerId,
@@ -104,7 +102,7 @@ describe("StreamLayerClient", function() {
         commitOffsetsStub = sandbox.stub(StreamApi, "doCommitOffsets");
         unsubscribeStub = sandbox.stub(StreamApi, "deleteSubscription");
         seekOffsetsStub = sandbox.stub(StreamApi, "seekToOffset");
-        getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
+        getBaseUrlRequestStub = sandbox.stub(core.RequestFactory, "getBaseUrl");
         getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
@@ -120,7 +118,7 @@ describe("StreamLayerClient", function() {
         assert.equal(streamLayerClient.getLatyerId(), mockedLayerId);
         assert.equal(streamLayerClient.getCatalogHrn(), mockedHRN);
         expect(streamLayerClient.getSettings()).be.instanceOf(
-            dataServiceRead.OlpClientSettings
+            core.OlpClientSettings
         );
     });
 
@@ -242,13 +240,11 @@ describe("StreamLayerClient", function() {
             }
         );
 
-        let settings = sandbox.createStubInstance(
-            dataServiceRead.OlpClientSettings
-        );
+        let settings = sandbox.createStubInstance(core.OlpClientSettings);
         const params = {
             catalogHrn: mockedHRN,
             layerId: mockedLayerId,
-            settings: (settings as unknown) as dataServiceRead.OlpClientSettings
+            settings: (settings as unknown) as core.OlpClientSettings
         };
         const subscribtionId = await streamLayerClient.subscribe(
             new dataServiceRead.SubscribeRequest().withMode("serial")
@@ -382,7 +378,7 @@ describe("StreamLayerClient", function() {
 
     it("Should HttpError be handled", async function() {
         const TEST_ERROR_CODE = 404;
-        const mockedError = new HttpError(TEST_ERROR_CODE, "Test Error");
+        const mockedError = new core.HttpError(TEST_ERROR_CODE, "Test Error");
 
         const mockedMessage = {
             metaData: {

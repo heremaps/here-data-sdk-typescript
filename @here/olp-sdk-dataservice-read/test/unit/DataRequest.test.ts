@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
@@ -32,7 +31,6 @@ describe("DataRequest", function() {
     const billingTag = "billingTag";
     const mockedDataHandle = "43d76b9f-e934-40e5-9ce4-91d88a30f1c6";
     const mockedPartitionId = "123123123";
-    const mockedVersion = 42;
     const mockedQuadKey = {
         row: 42,
         column: 42,
@@ -54,7 +52,6 @@ describe("DataRequest", function() {
         const dataRequestWithLayerId = dataRequest.withPartitionId(
             mockedPartitionId
         );
-        const dataRequestWithDataLevel = dataRequest.withQuadKey(mockedQuadKey);
         const dataRequestWithBillTag = dataRequest.withBillingTag(billingTag);
 
         expect(dataRequestWithCatalogHrn.getDataHandle()).to.be.equal(
@@ -63,9 +60,6 @@ describe("DataRequest", function() {
         expect(dataRequestWithLayerId.getPartitionId()).to.be.equal(
             mockedPartitionId
         );
-        expect(dataRequestWithDataLevel.getQuadKey()).to.be.equal(
-            mockedQuadKey
-        );
         expect(dataRequestWithBillTag.getBillingTag()).to.be.equal(billingTag);
     });
 
@@ -73,12 +67,10 @@ describe("DataRequest", function() {
         const dataRequest = new DataRequest()
             .withDataHandle(mockedDataHandle)
             .withPartitionId(mockedPartitionId)
-            .withQuadKey(mockedQuadKey)
             .withBillingTag(billingTag);
 
         expect(dataRequest.getDataHandle()).to.be.equal(mockedDataHandle);
         expect(dataRequest.getPartitionId()).to.be.equal(mockedPartitionId);
-        expect(dataRequest.getQuadKey()).to.be.equal(mockedQuadKey);
         expect(dataRequest.getBillingTag()).to.be.equal(billingTag);
     });
 });

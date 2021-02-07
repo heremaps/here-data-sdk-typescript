@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,16 +47,14 @@ describe("CatalogClient", function() {
     let catalogClient: dataServiceRead.CatalogClient;
     let getBaseUrlRequestStub: sinon.SinonStub;
     const fakeURL = "http://fake-base.url";
-    const mockedHRN = dataServiceRead.HRN.fromString(
-        "hrn:here:data:::live-weather-na"
-    );
+    const mockedHRN = core.HRN.fromString("hrn:here:data:::live-weather-na");
 
     before(function() {
         sandbox = sinon.createSandbox();
         let settings = sandbox.createStubInstance(core.OlpClientSettings);
         catalogClient = new dataServiceRead.CatalogClient(
             mockedHRN,
-            (settings as unknown) as dataServiceRead.OlpClientSettings
+            (settings as unknown) as core.OlpClientSettings
         );
     });
 

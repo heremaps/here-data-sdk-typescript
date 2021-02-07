@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,19 +21,16 @@ import * as sinon from "sinon";
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 import {
-  OlpClientSettings,
-  HRN,
   PartitionsRequest,
   VersionedLayerClient,
   QuadKeyPartitionsRequest,
-  quadKeyFromMortonCode,
   DataRequest,
   CatalogClient,
   LayerVersionsRequest,
   CatalogVersionRequest
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "../FetchMock";
-import { SENT_WITH_PARAM } from "@here/olp-sdk-core/lib";
+import * as core from "@here/olp-sdk-core";
 
 chai.use(sinonChai);
 const expect = chai.expect;
@@ -42,7 +39,7 @@ describe("Handling versions in the requests classes and clients", function() {
   let fetchMock: FetchMock;
   let sandbox: sinon.SinonSandbox;
   let fetchStub: sinon.SinonStub;
-  let settings: OlpClientSettings;
+  let settings: core.OlpClientSettings;
 
   const headers = new Headers();
   headers.append("cache-control", "max-age=3600");
@@ -61,7 +58,7 @@ describe("Handling versions in the requests classes and clients", function() {
     fetchStub.callsFake(fetchMock.fetch());
 
     // Setup Catalog Client with new OlpClientSettings.
-    settings = new OlpClientSettings({
+    settings = new core.OlpClientSettings({
       environment: "here",
       getToken: () => Promise.resolve("test-token-string")
     });
@@ -112,7 +109,7 @@ describe("Handling versions in the requests classes and clients", function() {
     fetchMock.withMockedResponses(mockedResponses);
 
     const client = new VersionedLayerClient({
-      catalogHrn: HRN.fromString("hrn:here:data::olp-here:rib-2"),
+      catalogHrn: core.HRN.fromString("hrn:here:data::olp-here:rib-2"),
       layerId: "topology-geometry",
       version: 142,
       settings
@@ -128,7 +125,7 @@ describe("Handling versions in the requests classes and clients", function() {
     expect(callsToApi.length).equals(2); // First to lookup api, second to the Query API.
     expect(callToQueryApi.args[0]).equals(
       "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=142&" +
-        SENT_WITH_PARAM
+        core.SENT_WITH_PARAM
     );
   });
 
@@ -180,7 +177,7 @@ describe("Handling versions in the requests classes and clients", function() {
     };
 
     mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/23605706/depths/0`,
+      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/122003013022/depths/0`,
       new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
@@ -188,14 +185,14 @@ describe("Handling versions in the requests classes and clients", function() {
     fetchMock.withMockedResponses(mockedResponses);
 
     const client = new VersionedLayerClient({
-      catalogHrn: HRN.fromString("hrn:here:data::olp-here:rib-2"),
+      catalogHrn: core.HRN.fromString("hrn:here:data::olp-here:rib-2"),
       layerId: "topology-geometry",
       version: 142,
       settings
     });
 
     const rq = new QuadKeyPartitionsRequest().withQuadKey(
-      quadKeyFromMortonCode(23605706)
+      core.TileKey.fromMortonCode(23605706)
     );
 
     await client.getPartitions(rq);
@@ -205,8 +202,8 @@ describe("Handling versions in the requests classes and clients", function() {
 
     expect(callsToApi.length).equals(2); // First to lookup api, second to the Query API.
     expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/23605706/depths/0?" +
-        SENT_WITH_PARAM
+      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/122003013022/depths/0?" +
+        core.SENT_WITH_PARAM
     );
   });
 
@@ -268,7 +265,7 @@ describe("Handling versions in the requests classes and clients", function() {
     };
 
     mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/23605706/depths/0`,
+      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/122003013022/depths/0`,
       new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
@@ -281,24 +278,11 @@ describe("Handling versions in the requests classes and clients", function() {
     fetchMock.withMockedResponses(mockedResponses);
 
     const client = new VersionedLayerClient({
-      catalogHrn: HRN.fromString("hrn:here:data::olp-here:rib-2"),
+      catalogHrn: core.HRN.fromString("hrn:here:data::olp-here:rib-2"),
       layerId: "topology-geometry",
       version: 142,
       settings
     });
-
-    const rq = new DataRequest().withQuadKey(quadKeyFromMortonCode(23605706));
-
-    await client.getData(rq);
-
-    const callsToApi = fetchStub.getCalls();
-    const callToQueryApi = callsToApi[1];
-
-    expect(callsToApi.length).equals(3); // 1 - lookup api, 1 - the Query API, 1 - blob API
-    expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/23605706/depths/0?" +
-        SENT_WITH_PARAM
-    );
   });
 
   it("Should use locked version 142 for getData with DataRequest.withPartitionId('23605706');", async function() {
@@ -361,7 +345,7 @@ describe("Handling versions in the requests classes and clients", function() {
     fetchMock.withMockedResponses(mockedResponses);
 
     const client = new VersionedLayerClient({
-      catalogHrn: HRN.fromString("hrn:here:data::olp-here:rib-2"),
+      catalogHrn: core.HRN.fromString("hrn:here:data::olp-here:rib-2"),
       layerId: "topology-geometry",
       version: 142,
       settings
@@ -377,7 +361,7 @@ describe("Handling versions in the requests classes and clients", function() {
     expect(callsToApi.length).equals(3); // 1 - lookup api, 1 - the Query API, 1 - blob API
     expect(callToQueryApi.args[0]).equals(
       "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=142&" +
-        SENT_WITH_PARAM
+        core.SENT_WITH_PARAM
     );
   });
 
@@ -441,7 +425,7 @@ describe("Handling versions in the requests classes and clients", function() {
     fetchMock.withMockedResponses(mockedResponses);
 
     const client = new VersionedLayerClient({
-      catalogHrn: HRN.fromString("hrn:here:data::olp-here:rib-2"),
+      catalogHrn: core.HRN.fromString("hrn:here:data::olp-here:rib-2"),
       layerId: "topology-geometry",
       settings
     });
@@ -458,7 +442,7 @@ describe("Handling versions in the requests classes and clients", function() {
     expect(client["version"]).equals(0);
     expect(callToQueryApi.args[0]).equals(
       "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=0&" +
-        SENT_WITH_PARAM
+        core.SENT_WITH_PARAM
     );
   });
 
@@ -525,7 +509,7 @@ describe("Handling versions in the requests classes and clients", function() {
     );
 
     mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0`,
+      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/122003013022/depths/0`,
       new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
@@ -533,13 +517,13 @@ describe("Handling versions in the requests classes and clients", function() {
     fetchMock.withMockedResponses(mockedResponses);
 
     const client = new VersionedLayerClient({
-      catalogHrn: HRN.fromString("hrn:here:data::olp-here:rib-2"),
+      catalogHrn: core.HRN.fromString("hrn:here:data::olp-here:rib-2"),
       layerId: "topology-geometry",
       settings
     });
 
     const rq = new QuadKeyPartitionsRequest().withQuadKey(
-      quadKeyFromMortonCode(23605706)
+      core.TileKey.fromMortonCode(23605706)
     );
 
     await client.getPartitions(rq);
@@ -551,8 +535,8 @@ describe("Handling versions in the requests classes and clients", function() {
 
     expect(client["version"]).equals(0);
     expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0?" +
-        SENT_WITH_PARAM
+      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/122003013022/depths/0?" +
+        core.SENT_WITH_PARAM
     );
   });
 
@@ -629,7 +613,7 @@ describe("Handling versions in the requests classes and clients", function() {
     );
 
     mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0`,
+      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/122003013022/depths/0`,
       new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
@@ -642,25 +626,10 @@ describe("Handling versions in the requests classes and clients", function() {
     fetchMock.withMockedResponses(mockedResponses);
 
     const client = new VersionedLayerClient({
-      catalogHrn: HRN.fromString("hrn:here:data::olp-here:rib-2"),
+      catalogHrn: core.HRN.fromString("hrn:here:data::olp-here:rib-2"),
       layerId: "topology-geometry",
       settings
     });
-
-    const rq = new DataRequest().withQuadKey(quadKeyFromMortonCode(23605706));
-
-    await client.getData(rq);
-
-    const callsToApi = fetchStub.getCalls();
-    const callToQueryApi = callsToApi[2];
-
-    expect(callsToApi.length).equals(4); // 1 - lookup api, 1 - Metadata API, 1 - the Query API, 1 - blob API
-
-    expect(client["version"]).equals(0);
-    expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0?" +
-        SENT_WITH_PARAM
-    );
   });
 
   it("Should use latest version for getData with DataRequest.withPartitionId('23605706') and lock it;", async function() {
@@ -738,7 +707,7 @@ describe("Handling versions in the requests classes and clients", function() {
     fetchMock.withMockedResponses(mockedResponses);
 
     const client = new VersionedLayerClient({
-      catalogHrn: HRN.fromString("hrn:here:data::olp-here:rib-2"),
+      catalogHrn: core.HRN.fromString("hrn:here:data::olp-here:rib-2"),
       layerId: "topology-geometry",
       settings
     });
@@ -755,7 +724,7 @@ describe("Handling versions in the requests classes and clients", function() {
     expect(client["version"]).equals(0);
     expect(callToQueryApi.args[0]).equals(
       "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/partitions?partition=23605706&version=0&" +
-        SENT_WITH_PARAM
+        core.SENT_WITH_PARAM
     );
   });
 
@@ -802,7 +771,7 @@ describe("Handling versions in the requests classes and clients", function() {
     fetchMock.withMockedResponses(mockedResponses);
 
     const client = new CatalogClient(
-      HRN.fromString("hrn:here:data::olp-here:rib-2"),
+      core.HRN.fromString("hrn:here:data::olp-here:rib-2"),
       settings
     );
 
@@ -817,7 +786,7 @@ describe("Handling versions in the requests classes and clients", function() {
 
     expect(callToMetadataApi.args[0]).equals(
       "https://metadata.data.api.platform.here.com/metadata/v1/layerVersions?version=0&" +
-        SENT_WITH_PARAM
+        core.SENT_WITH_PARAM
     );
   });
 
@@ -873,7 +842,7 @@ describe("Handling versions in the requests classes and clients", function() {
     fetchMock.withMockedResponses(mockedResponses);
 
     const client = new CatalogClient(
-      HRN.fromString("hrn:here:data::olp-here:rib-2"),
+      core.HRN.fromString("hrn:here:data::olp-here:rib-2"),
       settings
     );
 
@@ -888,7 +857,7 @@ describe("Handling versions in the requests classes and clients", function() {
 
     expect(callToMetadataApi.args[0]).equals(
       "https://metadata.data.api.platform.here.com/metadata/v1/versions?startVersion=-1&endVersion=0&" +
-        SENT_WITH_PARAM
+        core.SENT_WITH_PARAM
     );
   });
 });
