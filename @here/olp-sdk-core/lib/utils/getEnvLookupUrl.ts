@@ -60,7 +60,7 @@ export function getEnvLookUpUrl(env: EnvironmentName): string {
 
     switch (env) {
         case "here-dev":
-            return "https://api-lookup.data.api.platform.in.here.com/lookup/v1";
+            return "https://api-lookup.data.api.platform.sit.here.com/lookup/v1";
         case "here-cn":
             return "https://api-lookup.data.api.platform.hereolp.cn/lookup/v1";
         case "here-cn-dev":
