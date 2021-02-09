@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -230,5 +230,27 @@ describe("TileKey", function() {
                 "Cannot get the parent of the root tile key"
             );
         }
+    });
+
+    it("Tile is not valid if the row/column is out of bounds", function() {
+        const invalid_tile_1 = { row: 5, column: 1, level: 1 };
+        assert.isFalse(TileKey.isValid(invalid_tile_1));
+
+        const invalid_tile_2 = { row: -5, column: 1, level: 1 };
+        assert.isFalse(TileKey.isValid(invalid_tile_2));
+
+        const invalid_tile_3 = { row: 1, column: 5, level: 1 };
+        assert.isFalse(TileKey.isValid(invalid_tile_3));
+
+        const invalid_tile_4 = { row: 1, column: -5, level: 1 };
+        assert.isFalse(TileKey.isValid(invalid_tile_4));
+    });
+
+    it("Tile is not valid if the level is out of bounds", function() {
+        const invalid_tile_1 = { row: 0, column: 0, level: -1 };
+        assert.isFalse(TileKey.isValid(invalid_tile_1));
+
+        const invalid_tile_2 = { row: 0, column: 0, level: 100 };
+        assert.isFalse(TileKey.isValid(invalid_tile_2));
     });
 });

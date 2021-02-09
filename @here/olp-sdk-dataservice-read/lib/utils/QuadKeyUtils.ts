@@ -101,7 +101,7 @@ const powerOfTwo = [
 // tslint:enable:no-magic-numbers
 
 /**
- * @deprecated This function will be removed by 02.2021.
+ * @deprecated This function will be removed by 08.2021.
  * Please use the same method from [[TileKey]] class, imported from `@here/olp-sdk-core` package.
  *
  * Creates a quadkey from a numeric or string Morton code representation.
