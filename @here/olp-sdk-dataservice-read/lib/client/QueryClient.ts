@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,8 @@ import {
     FetchOptions,
     HRN,
     OlpClientSettings,
-    RequestFactory
+    RequestFactory,
+    TileKey
 } from "@here/olp-sdk-core";
 import {
     AdditionalFields,
@@ -29,7 +30,6 @@ import {
     QueryApi
 } from "@here/olp-sdk-dataservice-api";
 import {
-    isValid,
     MetadataCacheRepository,
     mortonCodeFromQuadKey,
     PartitionsRequest,
@@ -70,7 +70,7 @@ export class QueryClient {
         const quadKey = request.getQuadKey();
         const layerId = request.getLayerId();
 
-        if (!quadKey || !isValid(quadKey)) {
+        if (!quadKey || !TileKey.isValid(quadKey)) {
             return Promise.reject("Please provide correct QuadKey");
         }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -236,6 +236,30 @@ export class TileKey implements QuadKey {
      */
     static parentMortonCode(mortonCode: number): number {
         return Math.floor(mortonCode / 4);
+    }
+
+    /**
+     * Checks if a quadkey is valid.
+     *
+     * The number of rows and columns must not be greater than the maximum number of rows and columns in the given level.
+     * The maximum number of rows and columns in a level is computed as 2 to the power of the level.
+     *
+     * @note As the JavaScript number type can hold 53 bits in its mantissa, only levels up to 26 can be
+     * represented in the number representation returned by [[mortonCodeFromQuadKey]].
+     * A level must be positive and can't be greater than 26.
+     *
+     * @param key The current quadkey.
+     * @return True if the quadkey is valid, false otherwise.
+     */
+    static isValid(key: QuadKey): boolean {
+        // tslint:disable-next-line:no-magic-numbers
+        if (key.level < 0 || key.level > 26) {
+            return false;
+        }
+        const dimensionAtLevel = Math.pow(2, key.level);
+        const rowValid = key.row >= 0 && key.row < dimensionAtLevel;
+        const columnValid = key.column >= 0 && key.column < dimensionAtLevel;
+        return rowValid && columnValid;
     }
 
     /**
