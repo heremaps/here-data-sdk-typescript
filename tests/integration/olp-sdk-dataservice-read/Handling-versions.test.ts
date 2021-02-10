@@ -177,7 +177,7 @@ describe("Handling versions in the requests classes and clients", function() {
     };
 
     mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/122003013022/depths/0`,
+      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/23605706/depths/0`,
       new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
@@ -202,7 +202,7 @@ describe("Handling versions in the requests classes and clients", function() {
 
     expect(callsToApi.length).equals(2); // First to lookup api, second to the Query API.
     expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/122003013022/depths/0?" +
+      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/23605706/depths/0?" +
         core.SENT_WITH_PARAM
     );
   });
@@ -265,7 +265,7 @@ describe("Handling versions in the requests classes and clients", function() {
     };
 
     mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/122003013022/depths/0`,
+      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/142/quadkeys/23605706/depths/0`,
       new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
@@ -509,7 +509,7 @@ describe("Handling versions in the requests classes and clients", function() {
     );
 
     mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/122003013022/depths/0`,
+      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0`,
       new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
@@ -535,7 +535,7 @@ describe("Handling versions in the requests classes and clients", function() {
 
     expect(client["version"]).equals(0);
     expect(callToQueryApi.args[0]).equals(
-      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/122003013022/depths/0?" +
+      "https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0?" +
         core.SENT_WITH_PARAM
     );
   });
@@ -613,7 +613,7 @@ describe("Handling versions in the requests classes and clients", function() {
     );
 
     mockedResponses.set(
-      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/122003013022/depths/0`,
+      `https://query.data.api.platform.here.com/query/v1/layers/topology-geometry/versions/0/quadkeys/23605706/depths/0`,
       new Response(JSON.stringify(mockedPartitions), { headers })
     );
 
