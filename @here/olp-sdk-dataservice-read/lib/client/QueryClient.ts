@@ -134,7 +134,9 @@ export class QueryClient {
                 quadKey.row,
                 quadKey.column,
                 quadKey.level
-            ).toQuadKey(),
+            )
+                .mortonCode()
+                .toString(),
             billingTag: request.getBillingTag(),
             additionalFields: request.getAdditionalFields()
         };
