@@ -1,6 +1,6 @@
 # Read from a stream layer
 
-This example shows how to retrieve partition metadata and partition data from a stream layer on Node.js using HERE Data SDK for TypeScript.
+This example shows how to read partition metadata and partition data from a stream layer on Node.js using HERE Data SDK for TypeScript.
 
 ## Build and run an app on Node.js
 

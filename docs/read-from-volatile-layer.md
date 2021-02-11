@@ -1,6 +1,6 @@
 # Read from a volatile layer
 
-This example shows how to retrieve partition metadata and partition data from a volatile layer on Node.js using HERE Data SDK for TypeScript.
+This example shows how to read partition metadata and partition data from a volatile layer on Node.js using HERE Data SDK for TypeScript.
 
 ## Build and run an app on Node.js
  
