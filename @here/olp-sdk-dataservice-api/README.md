@@ -42,6 +42,6 @@ Add minified JavaScript files to your `html`:
 
 ## LICENSE
 
-Copyright (C) 2019-2020 HERE Europe B.V.
+Copyright (C) 2019-2021 HERE Europe B.V.
 
 For license details, see the [LICENSE](LICENSE).

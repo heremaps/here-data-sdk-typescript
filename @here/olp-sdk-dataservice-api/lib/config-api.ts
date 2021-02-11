@@ -820,6 +820,10 @@ export interface StatusLink {
      */
     href?: string;
     /**
+     * token of the created/update/delete catalog action
+     */
+    configToken?: string;
+    /**
      * Title of the action.
      */
     title?: string;

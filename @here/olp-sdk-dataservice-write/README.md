@@ -248,6 +248,6 @@ const publicationDetails = await clientWrite.getBatch(
 
 ## LICENSE
 
-Copyright (C) 2020 HERE Europe B.V.
+Copyright (C) 2020-2021 HERE Europe B.V.
 
 For license details, see the [LICENSE](LICENSE).
