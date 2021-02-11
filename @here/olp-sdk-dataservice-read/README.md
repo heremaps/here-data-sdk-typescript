@@ -123,6 +123,6 @@ Add minified JavaScript files to your `html` and create an object of userAuth an
 
 ## LICENSE
 
-Copyright (C) 2019 HERE Europe B.V.
+Copyright (C) 2019-2021 HERE Europe B.V.
 
 For license details, see the [LICENSE](LICENSE).
