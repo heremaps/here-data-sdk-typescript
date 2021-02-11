@@ -63,15 +63,15 @@ npm install @here/olp-sdk-dataservice-write
 npm install @here/olp-sdk-dataservice-api
 ```
 
-To use the compiled bundles from the CDN, add the following files to an HTML page:
+To use the Data SDK with pure JavaScript, inject the compiled bundles from the CDN repository in your HTML application.
 
 ```
-https://unpkg.com/@here/olp-sdk-authentication/bundle.umd.min.js
-https://unpkg.com/@here/olp-sdk-core/bundle.umd.min.js
-https://unpkg.com/@here/olp-sdk-dataservice-api/bundle.umd.min.js
-https://unpkg.com/@here/olp-sdk-dataservice-read/bundle.umd.min.js
-https://unpkg.com/@here/olp-sdk-dataservice-write/bundle.umd.min.js
-https://unpkg.com/@here/olp-sdk-fetch/bundle.umd.min.js
+<script src="https://unpkg.com/@here/olp-sdk-fetch/bundle.umd.min.js"></script> 
+<script src="https://unpkg.com/@here/olp-sdk-core/bundle.umd.min.js"></script> 
+<script src="https://unpkg.com/@here/olp-sdk-authentication/bundle.umd.min.js"></script> 
+<script src="https://unpkg.com/@here/olp-sdk-dataservice-api/bundle.umd.min.js"></script> 
+<script src="https://unpkg.com/@here/olp-sdk-dataservice-read/bundle.umd.min.js"></script> 
+<script src="https://unpkg.com/@here/olp-sdk-dataservice-write/bundle.umd.min.js"></script> 
 ```
 
 To learn how to use the Data SDK, see the <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/GettingStartedGuide.md" target="_blank">Getting Started Guide</a> and the <a href="https://developer.here.com/documentation/sdk-typescript/dev_guide/index.html" target="blank">Developer Guide</a>.
