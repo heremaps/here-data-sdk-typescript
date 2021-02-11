@@ -78,9 +78,13 @@ regression_generate_report_job:
     - cat ./api-breaks-index.html >> ./index.html
     - mkdir -p .public
     - cp index.html .public/
+    - if $(ls $CI_PROJECT_DIR/index.html &>/dev/null); then tar -czf ${CI_JOB_NAME}_test_reports.tar.gz --directory=$CI_PROJECT_DIR index.html ; fi;
+    - $CI_PROJECT_DIR/scripts/misc/artifactory_upload.sh edge-sdks/sdk-for-typescript/test-reports/$CI_JOB_NAME/$CI_JOB_ID/${CI_JOB_NAME}_test_reports.tar.gz ${CI_JOB_NAME}_test_reports.tar.gz
   artifacts:
     paths:
       - .public
+    when: always
+    expire_in: 3 yrs # save our zip for 3 years as job artifacts
   only:
     refs:
       - master
@@ -112,6 +116,8 @@ nightly_perf_publish_test_job:
   script:
   - $CI_PROJECT_DIR/scripts/linux/nv/gitlab_test_performance.sh
   - $CI_PROJECT_DIR/scripts/linux/nv/gitlab_test_publish_dryrun.sh
+  - if $(ls $CI_PROJECT_DIR/*.html &>/dev/null); then tar -czf ${CI_JOB_NAME}_test_reports.tar.gz --directory=$CI_PROJECT_DIR *.html ; fi;
+  - $CI_PROJECT_DIR/scripts/misc/artifactory_upload.sh edge-sdks/sdk-for-typescript/test-reports/$CI_JOB_NAME/$CI_JOB_ID/${CI_JOB_NAME}_test_reports.tar.gz ${CI_JOB_NAME}_test_reports.tar.gz
   only:
     refs:
       - master
