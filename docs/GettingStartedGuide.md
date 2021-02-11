@@ -46,7 +46,7 @@ The Data SDK package contains іумукфд independent modules that focus on a
 - `olp-sdk-core` – contains code that is common for `@here/olp-sdk-dataservice-read`, `@here/olp-sdk-dataservice-api`, and `@here/olp-sdk-authentication`.
 - `olp-sdk-dataservice-read` – gets layer and partition data from platform catalogs.
 - `olp-sdk-dataservice-write` – writes data to layers.
-- `olp-sdk-dataservice-api` – retrieves data from the HERE platform.
+- `olp-sdk-dataservice-api` – gets data from the HERE platform.
 - `olp-sdk-fetch` – adds a subset of the fetch API for Node.js.
 
 ## Reference documentation

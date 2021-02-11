@@ -1,6 +1,6 @@
 # Read from an index layer
 
-This example shows how to retrieve partition metadata and partition data from an index layer on Node.js using HERE Data SDK for TypeScript.
+This example shows how to read partition metadata and partition data from an index layer on Node.js using HERE Data SDK for TypeScript.
 
 ## Build and run an app on Node.js
 
@@ -131,7 +131,7 @@ const partitions = await indexLayerClient.getPartitions(request),
 
 ## Get data from an index layer
 
-An [index layer](https://developer.here.com/documentation/data-user-guide/portal/layers/layers.html#index-layers) is an index of the catalog data by attributes. You can query the index layer to get the data handles of data that meets your query criteria, and you can then use those data handles to retrieve the corresponding data.
+An [index layer](https://developer.here.com/documentation/data-user-guide/portal/layers/layers.html#index-layers) is an index of the catalog data by attributes. You can query the index layer to get the data handles of data that meets your query criteria, and you can then use these data handles to get the corresponding data.
 
 **To get data from the index layer:**
 
