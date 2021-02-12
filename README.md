@@ -27,7 +27,8 @@ This SDK lets you:
 - Authenticate to the HERE platform using client credentials.
 - Read catalog and partition metadata.
 - Retrieve data from layers.
-- Publish data to a versioned layer.
+- Publish data to layers
+- Delete data from an object store layer
 
 Additionally, the Data SDK includes classes for work with geospatial tiling schemes that are used by most platform catalog layers.
 

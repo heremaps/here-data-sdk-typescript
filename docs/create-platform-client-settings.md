@@ -1,6 +1,6 @@
 # Create platform client settings
 
-You need to create the `OlpClientSettings` object to get catalog and partition metadata, as well as layer data from the HERE platform.
+You need to create the `OlpClientSettings` object to publish data and get catalog and partition metadata, as well as layer data from the HERE platform.
 
 **To create the `OlpClientSettings` object:**
 
