@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>@here/olp-sdk-ts</title>
-	<meta name="description" content="">
+	<meta name="description" content="Documentation for @here/olp-sdk-ts">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 </head>
@@ -13,7 +13,7 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
 					<div class="field">
 						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
 						<input id="tsd-search-field" type="text" />
@@ -52,7 +52,7 @@
 					<a href="globals.html">Globals</a>
 				</li>
 			</ul>
-			<h1> @here/olp-sdk-ts</h1>
+			<h1>@here/olp-sdk-ts</h1>
 		</div>
 	</div>
 </header>
@@ -116,9 +116,9 @@
 					<h2>Backward compatibility</h2>
 				</a>
 				<p>We try to develop and maintain our API in a way that preserves its compatibility with the existing applications. Changes in Data SDK for TypeScript are greatly influenced by the Data API development. Data API introduces breaking changes 6 months in advance. Therefore, you may need to migrate to a new version of Data SDK for TypeScript every half a year.</p>
-				<p>For more information on Data API, see its <a href="https://developer.here.com/olp/documentation/data-api/data_dev_guide/index.html" target="_blank">Developer Guide</a> and <a href="https://developer.here.com/olp/documentation/data-api/api-reference.html" target="_blank">API Reference</a>.</p>
+				<p>For more information on Data API, see its <a href="https://developer.here.com/documentation/data-api/data_dev_guide/index.html" target="_blank">Developer Guide</a> and <a href="https://developer.here.com/documentation/data-api/api-reference.html" target="_blank">API Reference</a>.</p>
 				<p>When new API is introduced in Data SDK for TypeScript, the old one is not deleted straight away. The standard API deprecation time is 6 months. It gives you time to switch to new code. However, we do not provide ABI backward compatibility.</p>
-				<p>All of the deprecated methods, functions, and parameters are documented in the Data SDK for TypeScript <a href="https://developer.here.com/olp/documentation/sdk-typescript/api_reference/index.html"  target="_blank">API Reference</a> and <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/CHANGELOG.md" target="_blank">changelog</a>.</p>
+				<p>All of the deprecated methods, functions, and parameters are documented in the Data SDK for TypeScript <a href="https://developer.here.com/documentation/sdk-typescript/api_reference/index.html"  target="_blank">API Reference</a> and <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/CHANGELOG.md" target="_blank">changelog</a>.</p>
 				<p>For more information on Data SDK for TypeScrypt, see our <a href="https://developer.here.com/documentation/sdk-typescript/dev_guide/index.html" target="blank">Developer Guide</a>.</p>
 				<a href="#about-this-repository" id="about-this-repository" style="color: inherit; text-decoration: none;">
 					<h2>About this repository</h2>
@@ -135,13 +135,14 @@ npm install @here/olp-sdk-core
 npm install @here/olp-sdk-dataservice-read
 npm install @here/olp-sdk-dataservice-write
 npm install @here/olp-sdk-dataservice-api</code></pre>
-				<p>To use the compiled bundles from the CDN, add the following files to an HTML page:</p>
-				<pre><code>http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com</span>/@here/olp-sdk-authentication/bundle.umd.<span class="hljs-built_in">min</span>.js
-http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com</span>/@here/olp-sdk-core/bundle.umd.<span class="hljs-built_in">min</span>.js
-http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com</span>/@here/olp-sdk-dataservice-api/bundle.umd.<span class="hljs-built_in">min</span>.js
-http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com</span>/@here/olp-sdk-dataservice-<span class="hljs-keyword">read</span>/bundle.umd.<span class="hljs-built_in">min</span>.js
-http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com</span>/@here/olp-sdk-dataservice-<span class="hljs-keyword">write</span>/bundle.umd.<span class="hljs-built_in">min</span>.js
-http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com</span>/@here/olp-sdk-fetch/bundle.umd.<span class="hljs-built_in">min</span>.js</code></pre><p>To learn how to use the Data SDK, see the <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/GettingStartedGuide.md" target="_blank">Getting Started Guide</a> and the <a href="https://developer.here.com/documentation/sdk-typescript/dev_guide/index.html" target="blank">Developer Guide</a>.</p>
+				<p>To use the Data SDK with pure JavaScript, inject the compiled bundles from the CDN repository in your HTML application.</p>
+				<pre><code><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://unpkg.com/@here/olp-sdk-fetch/bundle.umd.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://unpkg.com/@here/olp-sdk-core/bundle.umd.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span> 
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://unpkg.com/@here/olp-sdk-authentication/bundle.umd.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span> 
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://unpkg.com/@here/olp-sdk-dataservice-api/bundle.umd.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span> 
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://unpkg.com/@here/olp-sdk-dataservice-read/bundle.umd.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span> 
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;https://unpkg.com/@here/olp-sdk-dataservice-write/bundle.umd.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span> </code></pre>
+				<p>To learn how to use the Data SDK, see the <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/GettingStartedGuide.md" target="_blank">Getting Started Guide</a> and the <a href="https://developer.here.com/documentation/sdk-typescript/dev_guide/index.html" target="blank">Developer Guide</a>.</p>
 				<a href="#development" id="development" style="color: inherit; text-decoration: none;">
 					<h2>Development</h2>
 				</a>
@@ -206,7 +207,7 @@ http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com<
 				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
 					<h2>LICENSE</h2>
 				</a>
-				<p>Copyright (C) 2019–2020 HERE Europe B.V.</p>
+				<p>Copyright (C) 2019–2021 HERE Europe B.V.</p>
 				<p>For license details, see the <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/LICENSE" target="_blank">LICENSE</a> file in the root of this project.</p>
 			</div>
 		</div>
@@ -216,284 +217,245 @@ http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com<
 					<li class="globals  ">
 						<a href="globals.html"><em>Globals</em></a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_authentication_lib_userauth_.html">&quot;olp-<wbr>sdk-<wbr>authentication/lib/<wbr>User<wbr>Auth&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_authentication_lib_userauth_.html">&quot;@here/olp-<wbr>sdk-<wbr>authentication/lib/<wbr>User<wbr>Auth&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_authentication_lib_loadcredentialsfromfile_.html">&quot;olp-<wbr>sdk-<wbr>authentication/lib/load<wbr>Credentials<wbr>From<wbr>File&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_authentication_lib_loadcredentialsfromfile_.html">&quot;@here/olp-<wbr>sdk-<wbr>authentication/lib/load<wbr>Credentials<wbr>From<wbr>File&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_authentication_lib_requesttoken_.html">&quot;olp-<wbr>sdk-<wbr>authentication/lib/request<wbr>Token&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_authentication_lib_requesttoken_.html">&quot;@here/olp-<wbr>sdk-<wbr>authentication/lib/request<wbr>Token&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_authentication_lib_requesttoken_web_.html">&quot;olp-<wbr>sdk-<wbr>authentication/lib/request<wbr>Token.web&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_authentication_lib_requesttoken_web_.html">&quot;@here/olp-<wbr>sdk-<wbr>authentication/lib/request<wbr>Token.web&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_authentication_lib_requesttoken_common_.html">&quot;olp-<wbr>sdk-<wbr>authentication/lib/request<wbr>Token_<wbr>common&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_authentication_lib_requesttoken_common_.html">&quot;@here/olp-<wbr>sdk-<wbr>authentication/lib/request<wbr>Token_<wbr>common&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_authentication_lib_tokenrequester_.html">&quot;olp-<wbr>sdk-<wbr>authentication/lib/token<wbr>Requester&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_authentication_lib_tokenrequester_.html">&quot;@here/olp-<wbr>sdk-<wbr>authentication/lib/token<wbr>Requester&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_core_lib_version_.html">&quot;olp-<wbr>sdk-<wbr>core/lib.version&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_core_lib_version_.html">&quot;@here/olp-<wbr>sdk-<wbr>core/lib.version&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_core_lib_cache_apicacherepository_.html">&quot;olp-<wbr>sdk-<wbr>core/lib/cache/<wbr>Api<wbr>Cache<wbr>Repository&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_core_lib_cache_apicacherepository_.html">&quot;@here/olp-<wbr>sdk-<wbr>core/lib/cache/<wbr>Api<wbr>Cache<wbr>Repository&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_core_lib_cache_keyvaluecache_.html">&quot;olp-<wbr>sdk-<wbr>core/lib/cache/<wbr>Key<wbr>Value<wbr>Cache&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_core_lib_cache_keyvaluecache_.html">&quot;@here/olp-<wbr>sdk-<wbr>core/lib/cache/<wbr>Key<wbr>Value<wbr>Cache&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_core_lib_cache_lrucache_.html">&quot;olp-<wbr>sdk-<wbr>core/lib/cache/LRUCache&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_core_lib_cache_lrucache_.html">&quot;@here/olp-<wbr>sdk-<wbr>core/lib/cache/LRUCache&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_core_lib_client_olpclientsettings_.html">&quot;olp-<wbr>sdk-<wbr>core/lib/client/<wbr>Olp<wbr>Client<wbr>Settings&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_core_lib_client_olpclientsettings_.html">&quot;@here/olp-<wbr>sdk-<wbr>core/lib/client/<wbr>Olp<wbr>Client<wbr>Settings&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_core_lib_utils_datastoredownloadmanager_.html">&quot;olp-<wbr>sdk-<wbr>core/lib/utils/<wbr>Data<wbr>Store<wbr>Download<wbr>Manager&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_core_lib_utils_datastoredownloadmanager_.html">&quot;@here/olp-<wbr>sdk-<wbr>core/lib/utils/<wbr>Data<wbr>Store<wbr>Download<wbr>Manager&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_core_lib_utils_datastorerequestbuilder_.html">&quot;olp-<wbr>sdk-<wbr>core/lib/utils/<wbr>Data<wbr>Store<wbr>Request<wbr>Builder&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_core_lib_utils_datastorerequestbuilder_.html">&quot;@here/olp-<wbr>sdk-<wbr>core/lib/utils/<wbr>Data<wbr>Store<wbr>Request<wbr>Builder&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_core_lib_utils_downloadmanager_.html">&quot;olp-<wbr>sdk-<wbr>core/lib/utils/<wbr>Download<wbr>Manager&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_core_lib_utils_downloadmanager_.html">&quot;@here/olp-<wbr>sdk-<wbr>core/lib/utils/<wbr>Download<wbr>Manager&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_core_lib_utils_fetchoptions_.html">&quot;olp-<wbr>sdk-<wbr>core/lib/utils/<wbr>Fetch<wbr>Options&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_core_lib_utils_fetchoptions_.html">&quot;@here/olp-<wbr>sdk-<wbr>core/lib/utils/<wbr>Fetch<wbr>Options&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_core_lib_utils_hrn_.html">&quot;olp-<wbr>sdk-<wbr>core/lib/utils/HRN&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_core_lib_utils_hrn_.html">&quot;@here/olp-<wbr>sdk-<wbr>core/lib/utils/HRN&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_core_lib_utils_httperror_.html">&quot;olp-<wbr>sdk-<wbr>core/lib/utils/<wbr>Http<wbr>Error&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_core_lib_utils_httperror_.html">&quot;@here/olp-<wbr>sdk-<wbr>core/lib/utils/<wbr>Http<wbr>Error&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_core_lib_utils_requestbuilderfactory_.html">&quot;olp-<wbr>sdk-<wbr>core/lib/utils/<wbr>Request<wbr>Builder<wbr>Factory&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_core_lib_utils_requestbuilderfactory_.html">&quot;@here/olp-<wbr>sdk-<wbr>core/lib/utils/<wbr>Request<wbr>Builder<wbr>Factory&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_core_lib_utils_tilekey_.html">&quot;olp-<wbr>sdk-<wbr>core/lib/utils/<wbr>Tile<wbr>Key&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_core_lib_utils_tilekey_.html">&quot;@here/olp-<wbr>sdk-<wbr>core/lib/utils/<wbr>Tile<wbr>Key&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_core_lib_utils_uuid_.html">&quot;olp-<wbr>sdk-<wbr>core/lib/utils/<wbr>Uuid&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_core_lib_utils_uuid_.html">&quot;@here/olp-<wbr>sdk-<wbr>core/lib/utils/<wbr>Uuid&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_core_lib_utils_getdatasizeutil_.html">&quot;olp-<wbr>sdk-<wbr>core/lib/utils/get<wbr>Data<wbr>Size<wbr>Util&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_core_lib_utils_getdatasizeutil_.html">&quot;@here/olp-<wbr>sdk-<wbr>core/lib/utils/get<wbr>Data<wbr>Size<wbr>Util&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_core_lib_utils_getenvlookupurl_.html">&quot;olp-<wbr>sdk-<wbr>core/lib/utils/get<wbr>Env<wbr>Lookup<wbr>Url&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_core_lib_utils_getenvlookupurl_.html">&quot;@here/olp-<wbr>sdk-<wbr>core/lib/utils/get<wbr>Env<wbr>Lookup<wbr>Url&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_core_lib_utils_useragent_.html">&quot;olp-<wbr>sdk-<wbr>core/lib/utils/user<wbr>Agent&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_core_lib_utils_useragent_.html">&quot;@here/olp-<wbr>sdk-<wbr>core/lib/utils/user<wbr>Agent&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_api_lib_httperror_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/<wbr>Http<wbr>Error&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_api_lib_requestbuilder_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/<wbr>Request<wbr>Builder&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_api_lib_requestbuilder_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/<wbr>Request<wbr>Builder&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_api_lib_artifact_api_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/artifact-<wbr>api&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_api_lib_artifact_api_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/artifact-<wbr>api&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_api_lib_authorization_api_v1_1_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/authorization-<wbr>api-<wbr>v1.1&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_api_lib_authorization_api_v1_1_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/authorization-<wbr>api-<wbr>v1.1&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_api_lib_blob_api_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/blob-<wbr>api&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_api_lib_blob_api_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/blob-<wbr>api&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_api_lib_blob_v2_api_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/blob.v2.api&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_api_lib_config_api_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/config-<wbr>api&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_api_lib_config_api_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/config-<wbr>api&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_api_lib_coverage_api_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/coverage-<wbr>api&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_api_lib_coverage_api_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/coverage-<wbr>api&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_api_lib_index_api_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/index-<wbr>api&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_api_lib_index_api_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/index-<wbr>api&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_api_lib_lookup_api_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/lookup-<wbr>api&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_api_lib_lookup_api_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/lookup-<wbr>api&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_api_lib_metadata_api_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/metadata-<wbr>api&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_api_lib_metadata_api_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/metadata-<wbr>api&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_api_lib_publish_api_v2_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/publish-<wbr>api-<wbr>v2&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_api_lib_publish_api_v2_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/publish-<wbr>api-<wbr>v2&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_api_lib_query_api_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/query-<wbr>api&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_api_lib_query_api_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/query-<wbr>api&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_api_lib_stream_api_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/stream-<wbr>api&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_api_lib_stream_api_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/stream-<wbr>api&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_api_lib_volatile_blob_api_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/volatile-<wbr>blob-<wbr>api&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_api_lib_volatile_blob_api_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>api/lib/volatile-<wbr>blob-<wbr>api&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_version_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib.version&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_cache_metadatacacherepository_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/cache/<wbr>Metadata<wbr>Cache<wbr>Repository&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_datastoredownloadmanager_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/<wbr>Data<wbr>Store<wbr>Download<wbr>Manager&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_cache_quadtreeindexcacherepository_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/cache/<wbr>Quad<wbr>Tree<wbr>Index<wbr>Cache<wbr>Repository&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_datastorerequestbuilder_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/<wbr>Data<wbr>Store<wbr>Request<wbr>Builder&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_artifactclient_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Artifact<wbr>Client&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_downloadmanager_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/<wbr>Download<wbr>Manager&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_catalogclient_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Catalog<wbr>Client&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_hrn_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/HRN&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_catalogrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Catalog<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_cache_apicacherepository_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/cache/<wbr>Api<wbr>Cache<wbr>Repository&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_catalogversionrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Catalog<wbr>Version<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_cache_keyvaluecache_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/cache/<wbr>Key<wbr>Value<wbr>Cache&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_catalogsrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Catalogs<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_cache_lrucache_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/cache/LRUCache&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_configclient_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Config<wbr>Client&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_cache_metadatacacherepository_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/cache/<wbr>Metadata<wbr>Cache<wbr>Repository&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_datarequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Data<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_cache_quadtreeindexcacherepository_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/cache/<wbr>Quad<wbr>Tree<wbr>Index<wbr>Cache<wbr>Repository&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_indexlayerclient_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Index<wbr>Layer<wbr>Client&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_artifactclient_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Artifact<wbr>Client&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Index<wbr>Query<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_catalogclient_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Catalog<wbr>Client&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_layerversionsrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Layer<wbr>Versions<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_catalogrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Catalog<wbr>Request&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_partitionsrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Partitions<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_catalogversionrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Catalog<wbr>Version<wbr>Request&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_pollrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Poll<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_catalogsrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Catalogs<wbr>Request&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_quadkeypartitionsrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Quad<wbr>Key<wbr>Partitions<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_configclient_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Config<wbr>Client&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_quadtreeindexrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Quad<wbr>Tree<wbr>Index<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_datarequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Data<wbr>Request&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_queryclient_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Query<wbr>Client&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_fetchoptions_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Fetch<wbr>Options&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_schemadetailsrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Schema<wbr>Details<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_indexlayerclient_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Index<wbr>Layer<wbr>Client&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_schemarequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Schema<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_indexqueryrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Index<wbr>Query<wbr>Request&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_seekrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Seek<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_layerversionsrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Layer<wbr>Versions<wbr>Request&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_statisticsclient_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Statistics<wbr>Client&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_olpclientsettings_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Olp<wbr>Client<wbr>Settings&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_statisticsrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Statistics<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_partitionsrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Partitions<wbr>Request&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_streamlayerclient_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Stream<wbr>Layer<wbr>Client&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_pollrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Poll<wbr>Request&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_subscriberequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Subscribe<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_quadkeypartitionsrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Quad<wbr>Key<wbr>Partitions<wbr>Request&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_summaryrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Summary<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_quadtreeindexrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Quad<wbr>Tree<wbr>Index<wbr>Request&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_tilerequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Tile<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_queryclient_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Query<wbr>Client&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_unsubscriberequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Unsubscribe<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_schemadetailsrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Schema<wbr>Details<wbr>Request&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Versioned<wbr>Layer<wbr>Client&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_schemarequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Schema<wbr>Request&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_client_volatilelayerclient_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Volatile<wbr>Layer<wbr>Client&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_seekrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Seek<wbr>Request&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/utils/<wbr>Quad<wbr>Key<wbr>Utils&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_statisticsclient_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Statistics<wbr>Client&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_utils_gettile_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/utils/get<wbr>Tile&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_statisticsrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Statistics<wbr>Request&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_utils_validatebillingtag_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/utils/validate<wbr>Billing<wbr>Tag&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_streamlayerclient_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Stream<wbr>Layer<wbr>Client&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_read_lib_utils_validatepartitionsidslist_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/utils/validate<wbr>Partitions<wbr>Ids<wbr>List&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_subscriberequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Subscribe<wbr>Request&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_write_lib_client_cancelbatchrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Cancel<wbr>Batch<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_summaryrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Summary<wbr>Request&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_write_lib_client_checkdataexistsrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Check<wbr>Data<wbr>Exists<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_tilerequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Tile<wbr>Request&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_write_lib_client_completebatchrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Complete<wbr>Batch<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_unsubscriberequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Unsubscribe<wbr>Request&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_write_lib_client_getbatchrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Get<wbr>Batch<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_versionedlayerclient_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Versioned<wbr>Layer<wbr>Client&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_write_lib_client_publishsinglepartitionrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Publish<wbr>Single<wbr>Partition<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_client_volatilelayerclient_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Volatile<wbr>Layer<wbr>Client&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_write_lib_client_startbatchrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Start<wbr>Batch<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_utils_quadkeyutils_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/utils/<wbr>Quad<wbr>Key<wbr>Utils&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_write_lib_client_uploadblobrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Upload<wbr>Blob<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_utils_requestbuilderfactory_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/utils/<wbr>Request<wbr>Builder<wbr>Factory&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_write_lib_client_uploadblobresult_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Upload<wbr>Blob<wbr>Result&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_utils_getdatasizeutil_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/utils/get<wbr>Data<wbr>Size<wbr>Util&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_write_lib_client_uploadpartitionsrequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Upload<wbr>Partitions<wbr>Request&quot;</a>
 					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_utils_getenvlookupurl_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/utils/get<wbr>Env<wbr>Lookup<wbr>Url&quot;</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_utils_gettile_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/utils/get<wbr>Tile&quot;</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_utils_validatebillingtag_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/utils/validate<wbr>Billing<wbr>Tag&quot;</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_read_lib_utils_validatepartitionsidslist_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/utils/validate<wbr>Partitions<wbr>Ids<wbr>List&quot;</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_write_lib_client_cancelbatchrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Cancel<wbr>Batch<wbr>Request&quot;</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_write_lib_client_checkdataexistsrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Check<wbr>Data<wbr>Exists<wbr>Request&quot;</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_write_lib_client_completebatchrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Complete<wbr>Batch<wbr>Request&quot;</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_write_lib_client_getbatchrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Get<wbr>Batch<wbr>Request&quot;</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_write_lib_client_publishsinglepartitionrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Publish<wbr>Single<wbr>Partition<wbr>Request&quot;</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_write_lib_client_startbatchrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Start<wbr>Batch<wbr>Request&quot;</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_write_lib_client_uploadblobrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Upload<wbr>Blob<wbr>Request&quot;</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_write_lib_client_uploadblobresult_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Upload<wbr>Blob<wbr>Result&quot;</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_write_lib_client_uploadpartitionsrequest_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Upload<wbr>Partitions<wbr>Request&quot;</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="modules/_olp_sdk_dataservice_write_lib_client_versionedlayerclient_.html">&quot;olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Versioned<wbr>Layer<wbr>Client&quot;</a>
+					<li class=" tsd-kind-module">
+						<a href="modules/__here_olp_sdk_dataservice_write_lib_client_versionedlayerclient_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>write/lib/client/<wbr>Versioned<wbr>Layer<wbr>Client&quot;</a>
 					</li>
 				</ul>
 			</nav>
@@ -509,57 +471,19 @@ http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com<
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
-				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
-				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
-				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
-				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
-				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
-				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
-				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
 			</ul>
 		</div>
 	</div>
@@ -569,6 +493,5 @@ http<span class="hljs-variable">s:</span>//unpkg.<span class="hljs-keyword">com<
 </div>
 <div class="overlay"></div>
 <script src="assets/js/main.js"></script>
-<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
 </body>
 </html>

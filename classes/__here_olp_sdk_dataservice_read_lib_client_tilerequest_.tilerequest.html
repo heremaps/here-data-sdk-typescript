@@ -1,0 +1,376 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>TileRequest | @here/olp-sdk-ts</title>
+	<meta name="description" content="Documentation for @here/olp-sdk-ts">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">@here/olp-sdk-ts</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../globals.html">Globals</a>
+				</li>
+				<li>
+					<a href="../modules/__here_olp_sdk_dataservice_read_lib_client_tilerequest_.html">&quot;@here/olp-sdk-dataservice-read/lib/client/TileRequest&quot;</a>
+				</li>
+				<li>
+					<a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html">TileRequest</a>
+				</li>
+			</ul>
+			<h1>Class TileRequest</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>Prepares information for calls to get the tile blob data by the tile key.</p>
+					</div>
+					<p>This class works only with versioned and volatile layers where the partitioning scheme is HERE Tile.</p>
+					<p>You can initialize the request class once for a specific catalog, layer, and version (@see <a href="../interfaces/__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequestparams.html">TileRequestParams</a>)
+					and use it many times to get the a tile.</p>
+					<dl class="tsd-comment-tags">
+						<dt>example</dt>
+						<dd><pre><code> const params: TileRequestParams = {
+      settings: <span class="hljs-string">&quot;% your `OlpClientSettings` instance % &quot;</span>,
+      catalogHrn: <span class="hljs-string">&quot;% the HRN instance of your catalog %&quot;</span>,
+      layerId: <span class="hljs-string">&quot;% your layer ID %&quot;</span>,
+      layerType: <span class="hljs-string">&quot;% versioned or volatile %&quot;</span>,
+      catalogVersion: <span class="hljs-string">&quot;% the catalog version; for versioned layers, the latest version is used by default %&quot;</span>
+  }
+
+ const request = <span class="hljs-keyword">new</span> <span class="hljs-constructor">TileRequest(<span class="hljs-params">params</span>)</span>;
+
+ const requestForTile1 = request.<span class="hljs-keyword">with</span><span class="hljs-constructor">TileKey(<span class="hljs-params">yourTileKey1</span>)</span>;
+ const requestForTile2 = request.<span class="hljs-keyword">with</span><span class="hljs-constructor">TileKey(<span class="hljs-params">yourTileKey2</span>)</span>;
+</code></pre>
+						</dd>
+					</dl>
+				</div>
+			</section>
+			<section class="tsd-panel tsd-hierarchy">
+				<h3>Hierarchy</h3>
+				<ul class="tsd-hierarchy">
+					<li>
+						<span class="target">TileRequest</span>
+					</li>
+				</ul>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Methods</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html#getbillingtag" class="tsd-kind-icon">get<wbr>Billing<wbr>Tag</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html#getfetchoption" class="tsd-kind-icon">get<wbr>Fetch<wbr>Option</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html#gettilekey" class="tsd-kind-icon">get<wbr>Tile<wbr>Key</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html#withbillingtag" class="tsd-kind-icon">with<wbr>Billing<wbr>Tag</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html#withfetchoption" class="tsd-kind-icon">with<wbr>Fetch<wbr>Option</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html#withtilekey" class="tsd-kind-icon">with<wbr>Tile<wbr>Key</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getbillingtag" class="tsd-anchor"></a>
+					<h3>get<wbr>Billing<wbr>Tag</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Billing<wbr>Tag<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/c843657/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L110">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:110</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets a billing tag to group billing records together.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
+							<p>The <code>BillingTag</code> string.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="getfetchoption" class="tsd-anchor"></a>
+					<h3>get<wbr>Fetch<wbr>Option</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Fetch<wbr>Option<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../enums/__here_olp_sdk_core_lib_utils_fetchoptions_.fetchoptions.html" class="tsd-signature-type">FetchOptions</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/c843657/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L137">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:137</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets the fetch option that controls how requests are handled.</p>
+								</div>
+								<p>The default option is <code>OnlineIfNotFound</code>. It queries the network if
+								the requested resource is not in the cache.</p>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="../enums/__here_olp_sdk_core_lib_utils_fetchoptions_.fetchoptions.html" class="tsd-signature-type">FetchOptions</a></h4>
+							<p>The fetch option.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="gettilekey" class="tsd-anchor"></a>
+					<h3>get<wbr>Tile<wbr>Key</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Tile<wbr>Key<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/__here_olp_sdk_core_lib_utils_tilekey_.quadkey.html" class="tsd-signature-type">QuadKey</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/c843657/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L101">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:101</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Gets the configured <a href="../interfaces/__here_olp_sdk_core_lib_utils_tilekey_.quadkey.html">QuadKey</a> object for the request.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/__here_olp_sdk_core_lib_utils_tilekey_.quadkey.html" class="tsd-signature-type">QuadKey</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">undefined</span></h4>
+							<p>The configured <a href="../interfaces/__here_olp_sdk_core_lib_utils_tilekey_.quadkey.html">QuadKey</a> object.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="withbillingtag" class="tsd-anchor"></a>
+					<h3>with<wbr>Billing<wbr>Tag</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">with<wbr>Billing<wbr>Tag<span class="tsd-signature-symbol">(</span>tag<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html" class="tsd-signature-type">TileRequest</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/c843657/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L91">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:91</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>An optional free-form tag that is used for grouping billing records together.</p>
+								</div>
+								<p>If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].</p>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>tag: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The <code>BillingTag</code> string.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html" class="tsd-signature-type">TileRequest</a></h4>
+							<p>The updated <a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html">TileRequest</a> instance that you can use to chain methods.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="withfetchoption" class="tsd-anchor"></a>
+					<h3>with<wbr>Fetch<wbr>Option</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">with<wbr>Fetch<wbr>Option<span class="tsd-signature-symbol">(</span>option<span class="tsd-signature-symbol">: </span><a href="../enums/__here_olp_sdk_core_lib_utils_fetchoptions_.fetchoptions.html" class="tsd-signature-type">FetchOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html" class="tsd-signature-type">TileRequest</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/c843657/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L124">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:124</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Sets the fetch option that you can use to set the source from
+									which data should be fetched.</p>
+								</div>
+								<dl class="tsd-comment-tags">
+									<dt>see</dt>
+									<dd><p><code>getFetchOption()</code> for information on usage and format.</p>
+									</dd>
+								</dl>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>option: <a href="../enums/__here_olp_sdk_core_lib_utils_fetchoptions_.fetchoptions.html" class="tsd-signature-type">FetchOptions</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The <code>FetchOption</code> enum.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html" class="tsd-signature-type">TileRequest</a></h4>
+							<p>A reference to the updated <code>PartitionsRequest</code> instance.</p>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="withtilekey" class="tsd-anchor"></a>
+					<h3>with<wbr>Tile<wbr>Key</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">with<wbr>Tile<wbr>Key<span class="tsd-signature-symbol">(</span>quadKey<span class="tsd-signature-symbol">: </span><a href="../interfaces/__here_olp_sdk_core_lib_utils_tilekey_.quadkey.html" class="tsd-signature-type">QuadKey</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html" class="tsd-signature-type">TileRequest</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/c843657/@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts#L78">@here/olp-sdk-dataservice-read/lib/client/TileRequest.ts:78</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>A geometric area represented as a HERE tile.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>quadKey: <a href="../interfaces/__here_olp_sdk_core_lib_utils_tilekey_.quadkey.html" class="tsd-signature-type">QuadKey</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Addresses a tile in the quadtree.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html" class="tsd-signature-type">TileRequest</a></h4>
+							<p>The updated <a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html">TileRequest</a> instance that you can use to chain methods.</p>
+						</li>
+					</ul>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="../globals.html"><em>Globals</em></a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="../modules/__here_olp_sdk_dataservice_read_lib_client_tilerequest_.html">&quot;@here/olp-<wbr>sdk-<wbr>dataservice-<wbr>read/lib/client/<wbr>Tile<wbr>Request&quot;</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-class tsd-parent-kind-module">
+						<a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html" class="tsd-kind-icon">Tile<wbr>Request</a>
+						<ul>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html#getbillingtag" class="tsd-kind-icon">get<wbr>Billing<wbr>Tag</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html#getfetchoption" class="tsd-kind-icon">get<wbr>Fetch<wbr>Option</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html#gettilekey" class="tsd-kind-icon">get<wbr>Tile<wbr>Key</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html#withbillingtag" class="tsd-kind-icon">with<wbr>Billing<wbr>Tag</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html#withfetchoption" class="tsd-kind-icon">with<wbr>Fetch<wbr>Option</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequest.html#withtilekey" class="tsd-kind-icon">with<wbr>Tile<wbr>Key</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/__here_olp_sdk_dataservice_read_lib_client_tilerequest_.tilerequestparams.html" class="tsd-kind-icon">Tile<wbr>Request<wbr>Params</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>
