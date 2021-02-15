@@ -108,7 +108,7 @@ You receive data from the requested key of the selected layer.
 
 ## Get all keys from an object store layer
 
-You can get a list of all keys from an object store layer.
+You can get a list of all keys from an [object store layer](https://developer.here.com/documentation/data-user-guide/user_guide/portal/layers/layers.html#object-store-layers).
 
 **To get the list of keys:**
 
