@@ -1,9 +1,15 @@
 
 {
     "name": "@here/olp-sdk-ts",
-    "mode": "modules",
-    "module": "commonjs",
     "out": "dist/doc",
+    "entryPoints": [
+        "@here/olp-sdk-authentication/index.ts",
+        "@here/olp-sdk-dataservice-read/index.ts",
+        "@here/olp-sdk-dataservice-write/index.ts",
+        "@here/olp-sdk-dataservice-api/index.ts",
+        "@here/olp-sdk-core/index.ts",
+        "@here/olp-sdk-fetch/index.ts"
+    ],
     "exclude": [
         "**/index.ts",
         "**/index.node.ts",
@@ -18,8 +24,6 @@
         "examples/**"
     ],
     "readme": "README.md",
-    "target": "ES6",
     "excludePrivate": "true",
-    "excludeExternals": "true",
-    "excludeNotExported": "true"
+    "excludeExternals": "true"
 }
