@@ -20,6 +20,7 @@
 import {
     HRN,
     OlpClientSettings,
+    MultiPartUpload,
     RequestFactory,
     STATUS_CODES,
     Uuid
@@ -509,16 +510,37 @@ export class VersionedLayerClient {
             );
         }
 
-        const data = request.getData();
-        if (!data) {
-            return Promise.reject(
-                new Error("Please set data to the UploadBlobRequest")
-            );
-        }
-
         let dataHandle = request.getDataHandle();
         if (!dataHandle) {
             dataHandle = await this.generateDatahandle(layerId, billingTag);
+        }
+
+        const data = request.getData();
+        if (!data) {
+            const file = request.getFile() || request.getFilePath();
+            if (file) {
+                const multipartUpload = new MultiPartUpload({
+                    blobVersion: "v1",
+                    catalogHrn: this.params.catalogHrn,
+                    keyOrDatahandle: dataHandle,
+                    layerId,
+                    settings: this.params.settings,
+                    contentType,
+                    contentEncoding: request.getContentEncoding()
+                });
+
+                await multipartUpload.upload({
+                    file,
+                    chunkSize,
+                    abortSignal
+                });
+
+                return new UploadBlobResult().withDataHandle(dataHandle);
+            }
+
+            return Promise.reject(
+                new Error("Please set data to the UploadBlobRequest")
+            );
         }
 
         const blobRequestBuilder = await RequestFactory.create(
