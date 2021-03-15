@@ -40,7 +40,7 @@ After you set up the credentials, you can use them to access the Data SDK librar
 
 ## Available components
 
-The Data SDK package contains іумукфд independent modules that focus on a specific set of responsibilities:
+The Data SDK package contains several independent modules that focus on a specific set of responsibilities:
 
 - `olp-sdk-authentication` – gets OAuth2 bearer tokens used to confirm platform requests.
 - `olp-sdk-core` – contains code that is common for `@here/olp-sdk-dataservice-read`, `@here/olp-sdk-dataservice-api`, and `@here/olp-sdk-authentication`.
