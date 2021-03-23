@@ -35,7 +35,7 @@ describe("ConfigApi", function() {
         };
         const builder = {
             baseUrl: "http://mocked.url",
-            request: async (urlBuilder: UrlBuilder, options: any) => {
+            requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
                 expect(urlBuilder.url).to.be.equal(
                     "http://mocked.url/catalogs/mocked-catalogHrn?billingTag=mocked-billingTag"
                 );
