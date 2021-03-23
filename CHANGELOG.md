@@ -1,3 +1,9 @@
+## v1.9.1 (24/03/2021)
+
+**olp-sdk-dataservice-api**
+
+- Fixed the bug related to the crash in the Config API that occurred when the `catalogExists` function was called.
+
 ## v1.9.0 (11/02/2021)
 
 **olp-sdk-core**
