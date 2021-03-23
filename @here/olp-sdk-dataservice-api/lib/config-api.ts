@@ -1015,7 +1015,7 @@ export type PackageTypeEnum = "experimental" | "small" | "medium" | "large";
 export async function catalogExists(
     builder: RequestBuilder,
     params: { catalogHrn: string; billingTag?: string }
-): Promise<any> {
+): Promise<Response> {
     const baseUrl = "/catalogs/{catalogHrn}".replace(
         "{catalogHrn}",
         UrlBuilder.toString(params["catalogHrn"])
@@ -1030,7 +1030,7 @@ export async function catalogExists(
         headers
     };
 
-    return builder.request<any>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }
 
 /**
