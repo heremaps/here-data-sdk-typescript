@@ -4,6 +4,8 @@ language: node_js
 node_js:
   - lts/*
 cache: yarn
+git:
+  quiet: true
 env:
   global:
   - WORKSPACE=$TRAVIS_BUILD_DIR
