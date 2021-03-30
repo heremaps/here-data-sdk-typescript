@@ -61,6 +61,6 @@ sleep 60
 echo 'Publish verification...'
 yarn
 yarn bootstrap
-npm run --silent build
-npm run --silent http-server-testing-bundles & npm run --silent test-published-bundles
+npm run build
+npm run http-server-testing-bundles & npm run test-published-bundles
 echo 'Publish verification done! '
