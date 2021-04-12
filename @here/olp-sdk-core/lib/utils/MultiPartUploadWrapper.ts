@@ -29,7 +29,7 @@ import {
     UploadChunkEvent
 } from "./multipartupload-internal/interfaces";
 import { NodeFileData } from "./multipartupload-internal/NodeFileData";
-import { TypedEvent } from "./multipartupload-internal/typedEvent";
+import { TypedEvent } from "./multipartupload-internal/TypedEvent";
 
 export class MultiPartUploadWrapper {
     private data: Data;

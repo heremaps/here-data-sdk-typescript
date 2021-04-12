@@ -21,4 +21,5 @@
 import "@here/olp-sdk-fetch";
 export * from "./lib";
 export * from "./lib.version";
+
 export * as fs from "fs";
