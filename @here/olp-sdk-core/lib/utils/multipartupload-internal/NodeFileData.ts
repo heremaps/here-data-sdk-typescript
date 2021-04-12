@@ -29,9 +29,11 @@ export class NodeFileData implements Data {
 
     async readBytes(from: number, to: number): Promise<ArrayBuffer> {
         return new Promise((resolve, reject) => {
+            const chunks: Buffer[] = [];
             const stream = fs.createReadStream(this.filePath, {
                 start: from,
-                end: to
+                end: to,
+                emitClose: true
             });
 
             stream.on("error", err => {
@@ -39,8 +41,11 @@ export class NodeFileData implements Data {
             });
 
             stream.on("data", (chunk: Buffer) => {
-                stream.destroy();
-                resolve(chunk);
+                chunks.push(chunk);
+            });
+
+            stream.on("close", () => {
+                resolve(Buffer.concat(chunks));
             });
         });
     }
