@@ -250,7 +250,7 @@ describe("ObjectStoreApi", function() {
     it("uploadPartByKey", async function() {
         const params = {
             layerId: "mocked-id",
-            body: "mocked-body",
+            body: Buffer.from("mocked-body"),
             multipartToken: "mocked-multiPartToken",
             partNumber: 2
         };
