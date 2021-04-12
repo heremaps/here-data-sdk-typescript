@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { fs } from "@here/olp-sdk-core/index";
+import { fs } from "@here/olp-sdk-core";
 import { Data } from "./interfaces";
 
 export class NodeFileData implements Data {
