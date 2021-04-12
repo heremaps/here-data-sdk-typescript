@@ -19,11 +19,7 @@
 
 import { DataStoreRequestBuilder } from "@here/olp-sdk-core";
 import { BlobApi } from "@here/olp-sdk-dataservice-api";
-import {
-    StartMultiPartResponse,
-    UploadPartResponse,
-    UploadRequest
-} from "./interfaces";
+import { UploadRequest } from "./interfaces";
 
 export class BlobV1UploadRequest implements UploadRequest {
     constructor(private readonly requestBuilder: DataStoreRequestBuilder) {}
@@ -34,7 +30,24 @@ export class BlobV1UploadRequest implements UploadRequest {
         contentType: string;
         contentEncoding?: string;
         billingTag?: string;
-    }): Promise<StartMultiPartResponse> {
+    }): Promise<{
+        complete?: {
+            href?: string;
+            method?: string;
+        };
+        _delete?: {
+            href?: string;
+            method?: string;
+        };
+        status?: {
+            href?: string;
+            method?: string;
+        };
+        uploadPart?: {
+            href?: string;
+            method?: string;
+        };
+    }> {
         const result = await BlobApi.startMultipartUpload(this.requestBuilder, {
             dataHandle: opts.handle,
             layerId: opts.layerId,
@@ -59,7 +72,7 @@ export class BlobV1UploadRequest implements UploadRequest {
         partNumber: number;
         contentLength: number;
         billingTag?: string;
-    }): Promise<UploadPartResponse> {
+    }): Promise<{ id: string }> {
         const result = await BlobApi.doUploadPart(this.requestBuilder, {
             body: opts.data,
             contentLength: opts.contentLength,

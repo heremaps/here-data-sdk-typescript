@@ -17,38 +17,6 @@
  * License-Filename: LICENSE
  */
 
-export type Listener<T> = (event: T) => any;
-
-export interface UploadChunkEvent {
-    size: number;
-    chunkNumber: number;
-    partId: string;
-}
-
-export interface UploadPartResponse {
-    id: string;
-}
-
-export interface StartMultiPartResponse {
-    multipartToken?: string;
-    complete?: {
-        href?: string;
-        method?: string;
-    };
-    _delete?: {
-        href?: string;
-        method?: string;
-    };
-    status?: {
-        href?: string;
-        method?: string;
-    };
-    uploadPart?: {
-        href?: string;
-        method?: string;
-    };
-}
-
 export abstract class UploadRequest {
     abstract startMultipartUpload(opts: {
         layerId: string;
@@ -56,7 +24,25 @@ export abstract class UploadRequest {
         contentType: string;
         contentEncoding?: string;
         billingTag?: string;
-    }): Promise<StartMultiPartResponse>;
+    }): Promise<{
+        multipartToken?: string;
+        complete?: {
+            href?: string;
+            method?: string;
+        };
+        _delete?: {
+            href?: string;
+            method?: string;
+        };
+        status?: {
+            href?: string;
+            method?: string;
+        };
+        uploadPart?: {
+            href?: string;
+            method?: string;
+        };
+    }>;
 
     abstract uploadPart(opts: {
         data: ArrayBuffer;
@@ -67,7 +53,9 @@ export abstract class UploadRequest {
         partNumber?: number;
         contentLength?: number;
         billingTag?: string;
-    }): Promise<UploadPartResponse>;
+    }): Promise<{
+        id: string;
+    }>;
 
     abstract completeMultipartUpload(opts: {
         parts: {
@@ -82,6 +70,6 @@ export abstract class UploadRequest {
 }
 
 export abstract class Data {
-    abstract readBytes(from: number, to: number): Promise<ArrayBuffer>;
+    abstract readBytes(from: number, to: number): Promise<ArrayBufferLike>;
     abstract size(): number;
 }

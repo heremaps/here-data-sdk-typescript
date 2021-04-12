@@ -19,7 +19,7 @@
 
 import { DataStoreRequestBuilder } from "@here/olp-sdk-core";
 import { ObjectStoreApi } from "@here/olp-sdk-dataservice-api";
-import { UploadRequest, UploadPartResponse } from "./interfaces";
+import { UploadRequest } from "./interfaces";
 
 export class BlobV2UploadRequest implements UploadRequest {
     constructor(private readonly requestBuilder: DataStoreRequestBuilder) {}
@@ -43,7 +43,7 @@ export class BlobV2UploadRequest implements UploadRequest {
                 }
             }
         );
-        return Promise.resolve({ multipartToken: result.multipartToken });
+        return { multipartToken: result.multipartToken };
     }
 
     async uploadPart(opts: {
@@ -53,7 +53,7 @@ export class BlobV2UploadRequest implements UploadRequest {
         partNumber: number;
         contentLength?: number;
         contentType?: string;
-    }): Promise<UploadPartResponse> {
+    }): Promise<{ id: string }> {
         const result = await ObjectStoreApi.doUploadPartByKey(
             this.requestBuilder,
             {

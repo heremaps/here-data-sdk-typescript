@@ -17,19 +17,24 @@
  * License-Filename: LICENSE
  */
 
-import { HRN, OlpClientSettings, RequestFactory } from "@here/olp-sdk-core";
+import {
+    HRN,
+    OlpClientSettings,
+    RequestFactory,
+    TypedEvent
+} from "@here/olp-sdk-core";
 import { BlobData } from "./multipartupload-internal/BlobData";
 import { BlobV1UploadRequest } from "./multipartupload-internal/BlobV1UploadRequest";
 import { BlobV2UploadRequest } from "./multipartupload-internal/BlobV2UploadRequest";
 import { BufferData } from "./multipartupload-internal/BufferData";
-import {
-    Data,
-    UploadRequest,
-    StartMultiPartResponse,
-    UploadChunkEvent
-} from "./multipartupload-internal/interfaces";
+import { Data, UploadRequest } from "./multipartupload-internal/interfaces";
 import { NodeFileData } from "./multipartupload-internal/NodeFileData";
-import { TypedEvent } from "./multipartupload-internal/TypedEvent";
+
+export interface UploadChunkEvent {
+    size: number;
+    number: number;
+    partId: string;
+}
 
 export class MultiPartUploadWrapper {
     private data: Data;
@@ -56,14 +61,14 @@ export class MultiPartUploadWrapper {
         contentEncoding?: string;
         billingTag?: string;
         getEvents?: (events: {
-            startUpload: TypedEvent<StartMultiPartResponse>;
+            startUpload: TypedEvent<void>;
             uploadChunk: TypedEvent<UploadChunkEvent>;
-            doneUpload: TypedEvent<number>;
+            doneUpload: TypedEvent<void>;
         }) => void;
     }) {
-        const startUpload = new TypedEvent<StartMultiPartResponse>();
+        const startUpload = new TypedEvent<void>();
         const uploadChunk = new TypedEvent<UploadChunkEvent>();
-        const doneUpload = new TypedEvent<number>();
+        const doneUpload = new TypedEvent<void>();
 
         opts.getEvents &&
             opts.getEvents({ startUpload, uploadChunk, doneUpload });
@@ -82,7 +87,7 @@ export class MultiPartUploadWrapper {
             contentEncoding: opts.contentEncoding
         });
 
-        startUpload.emit(startMultipartResponse);
+        startUpload.emit();
 
         const chunkSize = this.validateChunkSize(opts.chunkSizeMB);
         const parallelRequests = opts.parallelRequests || 6;
@@ -129,7 +134,7 @@ export class MultiPartUploadWrapper {
                             });
 
                             uploadChunk.emit({
-                                chunkNumber: chunkNumber,
+                                number: chunkNumber,
                                 partId: uploadPartResponse.id,
                                 size: buffer.byteLength
                             });
@@ -148,7 +153,7 @@ export class MultiPartUploadWrapper {
             billingTag: opts.billingTag
         });
 
-        doneUpload.emit(completeResponse.status);
+        doneUpload.emit();
     }
 
     private validateChunkSize(size = 0): number {

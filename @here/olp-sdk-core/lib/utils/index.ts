@@ -46,3 +46,4 @@ export * from "./TileKey";
 export * from "./Uuid";
 export * from "./userAgent";
 export * from "./MultiPartUploadWrapper";
+export * from "./TypedEvent";

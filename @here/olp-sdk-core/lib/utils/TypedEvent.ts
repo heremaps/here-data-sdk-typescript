@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { Listener } from "./interfaces";
+export type Listener<T> = (event: T) => any;
 
 export class TypedEvent<T> {
     private listeners: Listener<T>[] = [];
