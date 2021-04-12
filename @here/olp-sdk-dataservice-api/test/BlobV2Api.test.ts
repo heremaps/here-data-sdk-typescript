@@ -250,7 +250,7 @@ describe("ObjectStoreApi", function() {
     it("uploadPartByKey", async function() {
         const params = {
             layerId: "mocked-id",
-            body: Buffer.from("mocked-body"),
+            body: "mocked-body",
             multipartToken: "mocked-multiPartToken",
             partNumber: 2
         };
@@ -266,6 +266,32 @@ describe("ObjectStoreApi", function() {
             }
         };
         const result = await ObjectStoreApi.uploadPartByKey(
+            (builder as unknown) as RequestBuilder,
+            params
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("doUploadPartByKey", async function() {
+        const params = {
+            layerId: "mocked-id",
+            body: Buffer.from("mocked-body"),
+            multipartToken: "mocked-multiPartToken",
+            partNumber: 2
+        };
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: any) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/layers/mocked-id/keysMultipart/mocked-multiPartToken/parts?partNumber=2"
+                );
+                expect(options.method).to.be.equal("POST");
+                expect(options.body).equals(JSON.stringify("mocked-body"));
+                return Promise.resolve("success");
+            }
+        };
+        const result = await ObjectStoreApi.doUploadPartByKey(
             (builder as unknown) as RequestBuilder,
             params
         );

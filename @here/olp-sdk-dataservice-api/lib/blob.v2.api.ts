@@ -543,6 +543,7 @@ export async function startMultipartUploadByKey(
 }
 
 /**
+ * @deprecated This function will be deleted 10.21. Please use doUploadPartByKey.
  * Upload or copy a single part of a multipart upload or multipart copy for the blob.
  * Every part except the last one must have a minimum 5 MB of data and maximum of 96 MB.
  * The length of every part except the last one must be multiple of 1MB (1024KB).
@@ -576,7 +577,84 @@ export async function startMultipartUploadByKey(
 export async function uploadPartByKey(
     builder: RequestBuilder,
     params: {
-        body: ArrayBuffer;
+        body: string;
+        layerId: string;
+        multipartToken: string;
+        partNumber: number;
+        contentLength?: number;
+        contentType?: string;
+        source?: string;
+        range?: string;
+    }
+): Promise<PartId> {
+    const baseUrl = "/layers/{layerId}/keysMultipart/{multipartToken}/parts"
+        .replace("{layerId}", UrlBuilder.toString(params["layerId"]))
+        .replace(
+            "{multipartToken}",
+            UrlBuilder.toString(params["multipartToken"])
+        );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("partNumber", params["partNumber"]);
+    urlBuilder.appendQuery("source", params["source"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "POST",
+        headers
+    };
+    headers["Content-Type"] = "application/json";
+    if (params["body"] !== undefined) {
+        options.body = JSON.stringify(params["body"]);
+    }
+    if (params["contentLength"] !== undefined) {
+        headers["Content-Length"] = `${params["contentLength"]}`;
+    }
+    if (params["contentType"] !== undefined) {
+        headers["Content-Type"] = params["contentType"] as string;
+    }
+    if (params["range"] !== undefined) {
+        headers["Range"] = params["range"] as string;
+    }
+
+    return builder.request<PartId>(urlBuilder, options);
+}
+
+/**
+ * Upload or copy a single part of a multipart upload or multipart copy for the blob.
+ * Every part except the last one must have a minimum 5 MB of data and maximum of 96 MB.
+ * The length of every part except the last one must be multiple of 1MB (1024KB).
+ * The maximum number of parts is 10,000.
+ *
+ * @summary Uploads a part or creates a new part from part of an existing blob.
+ * @param body The body relates to upload only. The data to upload as part of the blob.
+ * @param layerId The ID of the parent layer for this blob.
+ * @param multipartToken The identifier of the multipart upload (token).
+ * Content of this parameter must refer to a valid token which when the multipart upload was initiated.
+ * @param partNumber This parameter relates to upload and copy. The number of the part for the multipart upload or copy.
+ * The numbers of the upload parts must start from 1, be no greater than 10,000 and be consecutive.
+ * Parts uploaded with the same partNumber are overridden. Do not reuse the same partNumber when retrying
+ * an upload or copy in an error situation (network problems, 4xx or 5xx responses).
+ * Reusing the same partNumber in a retry may cause the publication to fail.
+ * @param contentLength This header relates to upload only. Size of the entity-body, in bytes.
+ * For more information, see [RFC 7230, section 3.3.2: Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2).
+ * @param contentType This header relates to upload only. A standard MIME type describing the format of the blob data.
+ * For more information, see [RFC 2616, section 14.17: Content-Type](https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17).
+ * The value of this header must match the content type specified in the contentType field when the multipart upload was initialized,
+ * and this content type must also match the content type specified in the layer's configuration.
+ * @param source Copy part from an existing object, use range to specify which parts of the object to copy.
+ * @param range This header/parameter relates to object copy using the 'source' parameter. Use this parameter
+ * to copy a specific slice of the blob like this: Range: bytes&0-1048575. This parameter is compliant
+ * with [RFC 7233](https://tools.ietf.org/html/rfc7233), but note that this parameter only supports a
+ * single byte range and both begin and end values of the range must be specified.
+ * The range begin value must be multiple of 1MB (1024KB).
+ * The length of every part except the last one must be multiple of 1MB (1024KB).
+ * The range parameter can also be specified as a query parameter, for example range&bytes&0-1048575.
+ */
+export async function doUploadPartByKey(
+    builder: RequestBuilder,
+    params: {
+        body: ArrayBufferLike;
         layerId: string;
         multipartToken: string;
         partNumber: number;

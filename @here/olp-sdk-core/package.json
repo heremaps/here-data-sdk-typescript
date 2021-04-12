@@ -4,7 +4,7 @@
   "description": "Core features of the HERE Data Platform",
   "main": "index.js",
   "browser": "index.web.js",
-  "typings": "index",
+  "typings": "index.web",
   "directories": {
     "test": "test",
     "lib": "lib"

@@ -54,7 +54,7 @@ export class BlobV2UploadRequest implements UploadRequest {
         contentLength?: number;
         contentType?: string;
     }): Promise<UploadPartResponse> {
-        const result = await ObjectStoreApi.uploadPartByKey(
+        const result = await ObjectStoreApi.doUploadPartByKey(
             this.requestBuilder,
             {
                 layerId: opts.layerId,
