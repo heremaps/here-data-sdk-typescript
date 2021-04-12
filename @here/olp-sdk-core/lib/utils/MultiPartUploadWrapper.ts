@@ -60,10 +60,19 @@ export class MultiPartUploadWrapper {
         chunkSizeMB?: number;
         contentEncoding?: string;
         billingTag?: string;
-        startUploadEvent?: TypedEvent<void>;
-        uploadChunkEvent?: TypedEvent<UploadChunkEvent>;
-        doneUploadEvent?: TypedEvent<void>;
+        getEvents?: (events: {
+            startUpload: TypedEvent<void>;
+            uploadChunk: TypedEvent<UploadChunkEvent>;
+            doneUpload: TypedEvent<void>;
+        }) => any;
     }) {
+        const startUpload = new TypedEvent<void>();
+        const uploadChunk = new TypedEvent<UploadChunkEvent>();
+        const doneUpload = new TypedEvent<void>();
+
+        opts.getEvents &&
+            opts.getEvents({ startUpload, uploadChunk, doneUpload });
+
         const PARALLEL_REQUESTS = 6;
         const parts: { id: string; number: number }[] = [];
         const request = await this.getUploadRequest({
@@ -79,7 +88,7 @@ export class MultiPartUploadWrapper {
             contentEncoding: opts.contentEncoding
         });
 
-        opts.startUploadEvent && opts.startUploadEvent.emit();
+        startUpload.emit();
 
         const chunkSize = this.validateChunkSize(opts.chunkSizeMB);
         const parallelRequests = opts.parallelRequests || PARALLEL_REQUESTS;
@@ -125,12 +134,11 @@ export class MultiPartUploadWrapper {
                                 number: chunkNumber
                             });
 
-                            opts.uploadChunkEvent &&
-                                opts.uploadChunkEvent.emit({
-                                    number: chunkNumber,
-                                    partId: uploadPartResponse.id,
-                                    size: buffer.byteLength
-                                });
+                            uploadChunk.emit({
+                                number: chunkNumber,
+                                partId: uploadPartResponse.id,
+                                size: buffer.byteLength
+                            });
                         })
                 );
             }
@@ -146,7 +154,7 @@ export class MultiPartUploadWrapper {
             billingTag: opts.billingTag
         });
 
-        opts.doneUploadEvent && opts.doneUploadEvent.emit();
+        doneUpload.emit();
     }
 
     private validateChunkSize(size = 0): number {
