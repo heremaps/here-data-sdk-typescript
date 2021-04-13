@@ -33,6 +33,7 @@ export enum STATUS_CODES {
     NETWORK_CONNECT_TIMEOUT = 599
 }
 
+export * from "./Data";
 export * from "./DataStoreDownloadManager";
 export * from "./DataStoreRequestBuilder";
 export * from "./DownloadManager";
