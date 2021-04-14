@@ -247,7 +247,7 @@ describe("ObjectStoreApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("uploadPartByKey", async function() {
+    it("uploadPartByKey data is string", async function() {
         const params = {
             layerId: "mocked-id",
             body: "mocked-body",
@@ -261,7 +261,73 @@ describe("ObjectStoreApi", function() {
                     "http://mocked.url/layers/mocked-id/keysMultipart/mocked-multiPartToken/parts?partNumber=2"
                 );
                 expect(options.method).to.be.equal("POST");
-                expect(options.body).equals(JSON.stringify("mocked-body"));
+                expect(options.body).equals("mocked-body");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await ObjectStoreApi.uploadPartByKey(
+            (builder as unknown) as RequestBuilder,
+            params
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("uploadPartByKey data us buffer", async function() {
+        const mockedData = Buffer.from("mocked-body", "utf8");
+        const params = {
+            layerId: "mocked-id",
+            body: mockedData,
+            multipartToken: "mocked-multiPartToken",
+            partNumber: 2,
+            contentLength: 127,
+            contentType: "plain/text",
+            range: "bytes&0-1048575",
+            source: "test"
+        };
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: any) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/layers/mocked-id/keysMultipart/mocked-multiPartToken/parts?partNumber=2&source=test"
+                );
+                expect(options.method).equals("POST");
+                expect(options.body.length).equals(mockedData.length);
+                expect(options.headers["Content-Length"]).equals("127");
+                expect(options.headers["Content-Type"]).equals("plain/text");
+                expect(options.headers["Range"]).equals("bytes&0-1048575");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await ObjectStoreApi.uploadPartByKey(
+            (builder as unknown) as RequestBuilder,
+            params
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("doUploadPartByKey witout required params", async function() {
+        const mockedData = Buffer.from("mocked-body", "utf8");
+        const params = {
+            layerId: "mocked-id",
+            body: mockedData,
+            multipartToken: "mocked-multiPartToken",
+            partNumber: 2
+        };
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: any) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/layers/mocked-id/keysMultipart/mocked-multiPartToken/parts?partNumber=2"
+                );
+                expect(options.method).equals("POST");
+                expect(options.body.length).equals(mockedData.length);
+                expect(options.headers["Content-Length"]).equals(undefined);
+                expect(options.headers["Content-Type"]).equals(
+                    "application/json"
+                );
+                expect(options.headers["Range"]).equals(undefined);
                 return Promise.resolve("success");
             }
         };
