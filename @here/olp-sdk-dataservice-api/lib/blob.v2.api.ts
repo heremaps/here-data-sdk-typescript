@@ -576,7 +576,7 @@ export async function startMultipartUploadByKey(
 export async function uploadPartByKey(
     builder: RequestBuilder,
     params: {
-        body: string;
+        body: string | ArrayBufferLike;
         layerId: string;
         multipartToken: string;
         partNumber: number;
@@ -603,17 +603,16 @@ export async function uploadPartByKey(
         headers
     };
     headers["Content-Type"] = "application/json";
-    if (params["body"] !== undefined) {
-        options.body = JSON.stringify(params["body"]);
-    }
+    options.body = params["body"] as any;
+
     if (params["contentLength"] !== undefined) {
         headers["Content-Length"] = `${params["contentLength"]}`;
     }
     if (params["contentType"] !== undefined) {
-        headers["Content-Type"] = params["contentType"] as string;
+        headers["Content-Type"] = params["contentType"];
     }
     if (params["range"] !== undefined) {
-        headers["Range"] = params["range"] as string;
+        headers["Range"] = params["range"];
     }
 
     return builder.request<PartId>(urlBuilder, options);
