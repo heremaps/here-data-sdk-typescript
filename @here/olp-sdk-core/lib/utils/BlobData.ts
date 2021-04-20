@@ -38,7 +38,13 @@ export abstract class BlobData {
     /**
      * Gets the size of the data.
      *
-     * @returns The length of the data in bytes.
+     * @returns The `Promise` object with the length of the data in bytes.
      */
     abstract size(): number;
+
+    /**
+     * This method should always be called at the end of the reading process
+     * so that we can properly clean up.
+     */
+    abstract finally?(): Promise<void>;
 }
