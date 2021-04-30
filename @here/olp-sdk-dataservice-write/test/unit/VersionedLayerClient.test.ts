@@ -745,7 +745,7 @@ describe("VersionedLayerClient write", function() {
 
         const response = await client.uploadBlob(request).catch(e => e);
         expect(response.message).equals(
-            "Error uploading chunk 1, can't read ETag from headers."
+            "Error uploading chunk 1, can not read ETag from the response headers."
         );
     });
 
