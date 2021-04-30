@@ -34,6 +34,7 @@ import {
     CheckDataExistsRequest,
     CompleteBatchRequest,
     GetBatchRequest,
+    MultiPartUploadWrapper,
     PublishSinglePartitionRequest,
     StartBatchRequest,
     UploadBlobRequest,
@@ -531,69 +532,21 @@ export class VersionedLayerClient {
 
         const dataSize = data.byteLength;
         if (dataSize >= maxDataSizeForOneRequestUpload) {
-            const etags = [];
-            let unreadBytes = dataSize;
-            let readBytes = 0;
-            let chunkNumber = 0;
-
-            const multipartUploadParams: BlobApi.MultipartUploadMetadata = {
-                contentType
-            };
-
-            const contentEncoding = request.getContentEncoding() as
-                | BlobApi.ContentEncodingEnum
-                | undefined;
-            if (contentEncoding !== undefined) {
-                multipartUploadParams.contentEncoding = contentEncoding;
-            }
-
-            const multipartUploadMeta = (await BlobApi.startMultipartUpload(
-                blobRequestBuilder,
+            const multipartUpload = new MultiPartUploadWrapper(
                 {
-                    dataHandle,
+                    blobVersion: "v1",
+                    catalogHrn: this.params.catalogHrn.toString(),
+                    contentType,
+                    handle: dataHandle,
                     layerId,
-                    body: multipartUploadParams
-                }
-            )) as any;
+                    billingTag,
+                    chunkSizeMB: 5,
+                    contentEncoding: request.getContentEncoding()
+                },
+                this.params.settings
+            );
 
-            while (unreadBytes > 0) {
-                const chunk = data.slice(readBytes, readBytes + chunkSize);
-                chunkNumber++;
-
-                const uploadPartResponse = await BlobApi.doUploadPart(
-                    blobRequestBuilder,
-                    {
-                        url: multipartUploadMeta.links.uploadPart.href,
-                        body: chunk,
-                        partNumber: chunkNumber,
-                        contentType,
-                        contentLength: chunk.byteLength
-                    }
-                ).catch(error => Promise.reject(error));
-
-                const etag = uploadPartResponse.headers.get("ETag");
-                if (etag) {
-                    etags.push(etag);
-                } else {
-                    return Promise.reject(
-                        new Error(
-                            `Error uploading chunk ${chunkNumber}, can't read ETag from headers.`
-                        )
-                    );
-                }
-                readBytes += chunkSize;
-                unreadBytes -= chunkSize;
-            }
-
-            await BlobApi.doCompleteMultipartUpload(blobRequestBuilder, {
-                url: multipartUploadMeta.links.complete.href,
-                parts: {
-                    parts: etags.map((etag, index) => ({
-                        etag,
-                        number: index + 1
-                    }))
-                }
-            });
+            await multipartUpload.upload(data);
         } else {
             await BlobApi.putData(blobRequestBuilder, {
                 layerId,
