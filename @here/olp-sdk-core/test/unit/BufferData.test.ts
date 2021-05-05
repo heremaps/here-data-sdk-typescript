@@ -32,7 +32,7 @@ describe("BufferData", function() {
 
     it("readBytes", async function() {
         const data = new BufferData(mockedData);
-        const bytes = await data.readBytes(2, 5);
+        const bytes = await data.readBytes(2, 3);
         expect(bytes.byteLength).eqls(3);
         expect(bytes.toString()).eqls("st-");
     });

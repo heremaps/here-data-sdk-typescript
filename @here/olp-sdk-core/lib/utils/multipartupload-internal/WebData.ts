@@ -28,7 +28,7 @@ export class WebData implements BlobData {
     constructor(private readonly data: Blob | File) {}
 
     async readBytes(offset: number, count: number): Promise<ArrayBufferLike> {
-        return this.data.slice(offset, count).arrayBuffer();
+        return this.data.slice(offset, offset + count).arrayBuffer();
     }
 
     size(): number {

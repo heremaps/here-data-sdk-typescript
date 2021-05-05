@@ -31,6 +31,8 @@ export abstract class UploadRequest {
     }): Promise<{
         multipartToken?: string;
         uploadPartUrl?: string;
+        completeUrl?: string;
+        statusUrl?: string;
     }>;
 
     abstract uploadPart(opts: {

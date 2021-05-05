@@ -36,6 +36,8 @@ export class BlobV1UploadRequest implements UploadRequest {
         billingTag?: string;
     }): Promise<{
         uploadPartUrl: string;
+        completeUrl: string;
+        statusUrl: string;
     }> {
         const result = await BlobApi.startMultipartUpload(this.requestBuilder, {
             dataHandle: opts.handle,
@@ -50,7 +52,11 @@ export class BlobV1UploadRequest implements UploadRequest {
         if (
             !result.links ||
             !result.links.uploadPart ||
-            !result.links.uploadPart.href
+            !result.links.uploadPart.href ||
+            !result.links.complete ||
+            !result.links.complete.href ||
+            !result.links.status ||
+            !result.links.status.href
         ) {
             return Promise.reject(
                 new Error(
@@ -60,7 +66,9 @@ export class BlobV1UploadRequest implements UploadRequest {
         }
 
         return {
-            uploadPartUrl: result.links.uploadPart.href
+            uploadPartUrl: result.links.uploadPart.href,
+            completeUrl: result.links.complete.href,
+            statusUrl: result.links.status.href
         };
     }
 
