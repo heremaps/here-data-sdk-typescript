@@ -24,7 +24,7 @@ import { WebData } from "../../lib/utils/multipartupload-internal/WebData";
 chai.use(sinonChai);
 const expect = chai.expect;
 
-describe("BlobData", function() {
+describe("WebData", function() {
     let mockedBlob: Blob;
     const mockedDataSize = 9;
     beforeEach(() => {
@@ -43,7 +43,7 @@ describe("BlobData", function() {
 
     it("readBytes", async function() {
         const data = new WebData(mockedBlob);
-        const bytes = await data.readBytes(2, 5);
+        const bytes = await data.readBytes(2, 3);
         expect(bytes.byteLength).eqls(3);
         expect(bytes.toString()).eqls("st-");
     });

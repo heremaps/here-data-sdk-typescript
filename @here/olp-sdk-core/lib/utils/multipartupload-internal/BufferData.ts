@@ -27,7 +27,7 @@ export class BufferData implements BlobData {
     constructor(private readonly data: ArrayBufferLike) {}
 
     async readBytes(offset: number, count: number): Promise<ArrayBufferLike> {
-        return this.data.slice(offset, count);
+        return this.data.slice(offset, offset + count);
     }
 
     size(): number {
