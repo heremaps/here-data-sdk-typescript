@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2021 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,5 +17,20 @@
  * License-Filename: LICENSE
  */
 
-export * from "./client";
-export * from "./utils";
+import { BlobData } from "@here/olp-sdk-dataservice-write";
+
+/**
+ * @internal
+ * Implementation of BlobData for reading bytes from buffer.
+ */
+export class BufferData implements BlobData {
+    constructor(private readonly data: ArrayBufferLike) {}
+
+    async readBytes(offset: number, count: number): Promise<ArrayBufferLike> {
+        return this.data.slice(offset, offset + count);
+    }
+
+    size(): number {
+        return this.data.byteLength;
+    }
+}

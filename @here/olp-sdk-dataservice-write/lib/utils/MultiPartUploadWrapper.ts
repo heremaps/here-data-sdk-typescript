@@ -18,12 +18,12 @@
  */
 
 import {
-    BlobData,
     HRN,
     OlpClientSettings,
     RequestFactory,
     STATUS_CODES
 } from "@here/olp-sdk-core";
+import { BlobData } from "@here/olp-sdk-dataservice-write";
 import { BlobV1UploadRequest } from "./multipartupload-internal/BlobV1UploadRequest";
 import { BlobV2UploadRequest } from "./multipartupload-internal/BlobV2UploadRequest";
 import { BufferData } from "./multipartupload-internal/BufferData";

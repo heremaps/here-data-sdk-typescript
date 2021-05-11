@@ -17,20 +17,5 @@
  * License-Filename: LICENSE
  */
 
-import { BlobData } from "@here/olp-sdk-core";
-
-/**
- * @internal
- * Implementation of BlobData for reading bytes from buffer.
- */
-export class BufferData implements BlobData {
-    constructor(private readonly data: ArrayBufferLike) {}
-
-    async readBytes(offset: number, count: number): Promise<ArrayBufferLike> {
-        return this.data.slice(offset, offset + count);
-    }
-
-    size(): number {
-        return this.data.byteLength;
-    }
-}
+export * from "./BlobData";
+export * from "./MultiPartUploadWrapper";

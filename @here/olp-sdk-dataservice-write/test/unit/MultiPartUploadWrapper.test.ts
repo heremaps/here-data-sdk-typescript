@@ -21,17 +21,18 @@ import * as sinon from "sinon";
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 import * as core from "@here/olp-sdk-core";
-import * as BlobV1UploadRequest from "@here/olp-sdk-core/lib/utils/multipartupload-internal/BlobV1UploadRequest";
-import * as BlobV2UploadRequest from "@here/olp-sdk-core/lib/utils/multipartupload-internal/BlobV2UploadRequest";
-import { NodeFileData } from "@here/olp-sdk-core/lib/utils/multipartupload-internal/NodeFileData";
-import { BufferData } from "@here/olp-sdk-core/lib/utils/multipartupload-internal/BufferData";
+import * as BlobV1UploadRequest from "@here/olp-sdk-dataservice-write/lib/utils/multipartupload-internal/BlobV1UploadRequest";
+import * as BlobV2UploadRequest from "@here/olp-sdk-dataservice-write/lib/utils/multipartupload-internal/BlobV2UploadRequest";
+import { NodeFileData } from "@here/olp-sdk-dataservice-write/lib/utils/multipartupload-internal/NodeFileData";
+import { BufferData } from "@here/olp-sdk-dataservice-write/lib/utils/multipartupload-internal/BufferData";
+import { MultiPartUploadWrapper } from "@here/olp-sdk-dataservice-write";
 
 chai.use(sinonChai);
 
 const expect = chai.expect;
 
 const OlpClientSettingsStub = {} as core.OlpClientSettings;
-let wrapper: core.MultiPartUploadWrapper;
+let wrapper: MultiPartUploadWrapper;
 
 describe("MultiPartUploadWrapper", async function() {
     let HrnFromStringStub: sinon.SinonStub;
@@ -67,7 +68,7 @@ describe("MultiPartUploadWrapper", async function() {
                 .returns(MockedBlobV1UploadRequest);
 
             // ======= Initialize ====== //
-            wrapper = new core.MultiPartUploadWrapper(
+            wrapper = new MultiPartUploadWrapper(
                 {
                     blobVersion: "v1",
                     catalogHrn: "mocked-catalog",
@@ -169,7 +170,7 @@ describe("MultiPartUploadWrapper", async function() {
                 .returns(MockedBlobV2UploadRequest);
 
             // ======= Initialize ====== //
-            wrapper = new core.MultiPartUploadWrapper(
+            wrapper = new MultiPartUploadWrapper(
                 {
                     blobVersion: "v2",
                     catalogHrn: "mocked-catalog",
@@ -280,7 +281,7 @@ describe("MultiPartUploadWrapper", async function() {
             }
 
             // ======= Initialize ====== //
-            wrapper = new core.MultiPartUploadWrapper(
+            wrapper = new MultiPartUploadWrapper(
                 {
                     blobVersion: "v2",
                     catalogHrn: "mocked-catalog",
@@ -352,7 +353,7 @@ describe("MultiPartUploadWrapper", async function() {
                 .returns(MockedBlobV2UploadRequest);
 
             // ======= Initialize ====== //
-            wrapper = new core.MultiPartUploadWrapper(
+            wrapper = new MultiPartUploadWrapper(
                 {
                     blobVersion: "v2",
                     catalogHrn: "mocked-catalog",
@@ -430,7 +431,7 @@ describe("MultiPartUploadWrapper", async function() {
                 .returns(MockedBlobV2UploadRequest);
 
             // ======= Initialize ====== //
-            wrapper = new core.MultiPartUploadWrapper(
+            wrapper = new MultiPartUploadWrapper(
                 {
                     blobVersion: "v2",
                     chunkSizeMB: 17,
@@ -510,7 +511,7 @@ describe("MultiPartUploadWrapper", async function() {
                 .returns(MockedBlobV2UploadRequest);
 
             // ======= Initialize ====== //
-            wrapper = new core.MultiPartUploadWrapper(
+            wrapper = new MultiPartUploadWrapper(
                 {
                     blobVersion: "v2",
                     catalogHrn: "mocked-catalog",
@@ -548,7 +549,7 @@ describe("MultiPartUploadWrapper", async function() {
                 .returns(MockedBlobV1UploadRequest);
 
             // ======= Initialize ====== //
-            wrapper = new core.MultiPartUploadWrapper(
+            wrapper = new MultiPartUploadWrapper(
                 {
                     blobVersion: "v1",
                     catalogHrn: "mocked-catalog",
@@ -584,7 +585,7 @@ describe("MultiPartUploadWrapper", async function() {
                 .returns(MockedBlobV1UploadRequest);
 
             // ======= Initialize ====== //
-            wrapper = new core.MultiPartUploadWrapper(
+            wrapper = new MultiPartUploadWrapper(
                 {
                     blobVersion: "v1",
                     catalogHrn: "mocked-catalog",
@@ -618,7 +619,7 @@ describe("MultiPartUploadWrapper", async function() {
                 .returns(MockedBlobV1UploadRequest);
 
             // ======= Initialize ====== //
-            wrapper = new core.MultiPartUploadWrapper(
+            wrapper = new MultiPartUploadWrapper(
                 {
                     blobVersion: "v1",
                     catalogHrn: "mocked-catalog",
@@ -654,7 +655,7 @@ describe("MultiPartUploadWrapper", async function() {
                 .returns(MockedBlobV2UploadRequest);
 
             // ======= Initialize ====== //
-            wrapper = new core.MultiPartUploadWrapper(
+            wrapper = new MultiPartUploadWrapper(
                 {
                     blobVersion: "v2",
                     catalogHrn: "mocked-catalog",
@@ -680,7 +681,7 @@ describe("MultiPartUploadWrapper", async function() {
             BlobV2UploadRequestStub.restore();
 
             // ======= Initialize ====== //
-            wrapper = new core.MultiPartUploadWrapper(
+            wrapper = new MultiPartUploadWrapper(
                 {
                     blobVersion: "v3" as any,
                     catalogHrn: "mocked-catalog",
