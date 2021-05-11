@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import { BlobData } from "@here/olp-sdk-core";
+import { BlobData } from "@here/olp-sdk-dataservice-write";
 
 /**
  * @internal
