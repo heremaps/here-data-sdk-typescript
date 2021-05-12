@@ -79,7 +79,10 @@ export class BlobV1UploadRequest implements UploadRequest {
         partNumber: number;
         contentLength: number;
         billingTag?: string;
-    }): Promise<{ id: string }> {
+    }): Promise<{
+        partNumber: number;
+        partId: string;
+    }> {
         const result = await BlobApi.doUploadPart(this.requestBuilder, {
             body: opts.data,
             contentLength: opts.contentLength,
@@ -89,8 +92,8 @@ export class BlobV1UploadRequest implements UploadRequest {
             billingTag: opts.billingTag
         });
 
-        const id = result.headers.get("ETag");
-        if (!id) {
+        const partId = result.headers.get("ETag");
+        if (!partId) {
             return Promise.reject(
                 new Error(
                     `Error uploading chunk ${opts.partNumber}, can not read ETag from the response headers.`
@@ -98,7 +101,7 @@ export class BlobV1UploadRequest implements UploadRequest {
             );
         }
 
-        return { id };
+        return { partNumber: opts.partNumber, partId };
     }
 
     async completeMultipartUpload(opts: {

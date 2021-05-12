@@ -66,7 +66,10 @@ export class BlobV2UploadRequest implements UploadRequest {
         partNumber: number;
         contentLength?: number;
         contentType?: string;
-    }): Promise<{ id: string }> {
+    }): Promise<{
+        partNumber: number;
+        partId: string;
+    }> {
         const result = await ObjectStoreApi.uploadPartByKey(
             this.requestBuilder,
             {
@@ -87,7 +90,7 @@ export class BlobV2UploadRequest implements UploadRequest {
             );
         }
 
-        return { id: result.id };
+        return { partNumber: opts.partNumber, partId: result.id };
     }
 
     async completeMultipartUpload(opts: {

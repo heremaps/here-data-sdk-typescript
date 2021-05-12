@@ -134,7 +134,8 @@ describe("BlobV1UploadRequest", function() {
             billingTag
         });
 
-        expect(result.id).equals("mocked-id");
+        expect(result.partId).equals("mocked-id");
+        expect(result.partNumber).equals(23);
 
         expect(blobApiStub).calledWith(mockedRequestBuilder, {
             url,
