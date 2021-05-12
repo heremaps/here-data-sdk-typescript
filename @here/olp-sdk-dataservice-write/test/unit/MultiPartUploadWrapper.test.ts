@@ -57,9 +57,10 @@ describe("MultiPartUploadWrapper", async function() {
                     uploadPartUrl: "mocked-upload-part-url",
                     completeUrl: "mocked-complete-url"
                 }),
-                uploadPart: sinon
-                    .stub()
-                    .resolves({ id: "mocked-uploaded-part-id" }),
+                uploadPart: sinon.stub().resolves({
+                    partId: "mocked-uploaded-part-id",
+                    partNumber: 1
+                }),
                 completeMultipartUpload: sinon.stub()
             };
 
@@ -159,9 +160,10 @@ describe("MultiPartUploadWrapper", async function() {
                 startMultipartUpload: sinon.stub().resolves({
                     multipartToken: "mocked-multipartToken"
                 }),
-                uploadPart: sinon
-                    .stub()
-                    .resolves({ id: "mocked-uploaded-part-id" }),
+                uploadPart: sinon.stub().resolves({
+                    partNumber: 1,
+                    partId: "mocked-uploaded-part-id"
+                }),
                 completeMultipartUpload: sinon.stub()
             };
 
@@ -256,9 +258,10 @@ describe("MultiPartUploadWrapper", async function() {
                 startMultipartUpload: sinon.stub().resolves({
                     multipartToken: "mocked-multipartToken"
                 }),
-                uploadPart: sinon
-                    .stub()
-                    .resolves({ id: "mocked-uploaded-part-id" }),
+                uploadPart: sinon.stub().resolves({
+                    partNumber: 1,
+                    partId: "mocked-uploaded-part-id"
+                }),
                 completeMultipartUpload: sinon.stub()
             };
 
@@ -342,9 +345,10 @@ describe("MultiPartUploadWrapper", async function() {
                 startMultipartUpload: sinon.stub().resolves({
                     multipartToken: "mocked-multipartToken"
                 }),
-                uploadPart: sinon
-                    .stub()
-                    .resolves({ id: "mocked-uploaded-part-id" }),
+                uploadPart: sinon.stub().resolves({
+                    partNumber: 1,
+                    partId: "mocked-uploaded-part-id"
+                }),
                 completeMultipartUpload: sinon.stub()
             };
 
@@ -392,12 +396,12 @@ describe("MultiPartUploadWrapper", async function() {
 
             expect(completeMultipartUploadCallParams.parts).eqls([
                 { id: "mocked-uploaded-part-id", number: 1 },
-                { id: "mocked-uploaded-part-id", number: 2 },
-                { id: "mocked-uploaded-part-id", number: 3 },
-                { id: "mocked-uploaded-part-id", number: 4 },
-                { id: "mocked-uploaded-part-id", number: 5 },
-                { id: "mocked-uploaded-part-id", number: 6 },
-                { id: "mocked-uploaded-part-id", number: 7 }
+                { id: "mocked-uploaded-part-id", number: 1 },
+                { id: "mocked-uploaded-part-id", number: 1 },
+                { id: "mocked-uploaded-part-id", number: 1 },
+                { id: "mocked-uploaded-part-id", number: 1 },
+                { id: "mocked-uploaded-part-id", number: 1 },
+                { id: "mocked-uploaded-part-id", number: 1 }
             ]);
             expect(completeMultipartUploadCallParams.layerId).eqls(
                 "mocked-layer-id"
@@ -420,9 +424,10 @@ describe("MultiPartUploadWrapper", async function() {
                 startMultipartUpload: sinon.stub().resolves({
                     multipartToken: "mocked-multipartToken"
                 }),
-                uploadPart: sinon
-                    .stub()
-                    .resolves({ id: "mocked-uploaded-part-id" }),
+                uploadPart: sinon.stub().resolves({
+                    partNumber: 1,
+                    partId: "mocked-uploaded-part-id"
+                }),
                 completeMultipartUpload: sinon.stub()
             };
 
@@ -471,7 +476,7 @@ describe("MultiPartUploadWrapper", async function() {
 
             expect(completeMultipartUploadCallParams.parts).eqls([
                 { id: "mocked-uploaded-part-id", number: 1 },
-                { id: "mocked-uploaded-part-id", number: 2 }
+                { id: "mocked-uploaded-part-id", number: 1 }
             ]);
             expect(completeMultipartUploadCallParams.layerId).eqls(
                 "mocked-layer-id"

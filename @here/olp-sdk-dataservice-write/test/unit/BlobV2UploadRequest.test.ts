@@ -119,7 +119,8 @@ describe("BlobV2UploadRequest", function() {
             partNumber
         });
 
-        expect(result.id).equals("mocked-part-id");
+        expect(result.partId).equals("mocked-part-id");
+        expect(result.partNumber).equals(23);
 
         expect(blobApiStub).calledWith(mockedRequestBuilder, {
             layerId,

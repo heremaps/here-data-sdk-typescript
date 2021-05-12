@@ -45,7 +45,8 @@ export abstract class UploadRequest {
         contentLength?: number;
         billingTag?: string;
     }): Promise<{
-        id: string;
+        partNumber: number;
+        partId: string;
     }>;
 
     abstract completeMultipartUpload(opts: {

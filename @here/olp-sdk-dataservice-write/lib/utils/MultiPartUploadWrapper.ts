@@ -319,16 +319,16 @@ export class MultiPartUploadWrapper {
                         })
                         .then(uploadPartResponse => {
                             parts.push({
-                                id: uploadPartResponse.id,
-                                number: chunkNumber
+                                id: uploadPartResponse.partId,
+                                number: uploadPartResponse.partNumber
                             });
 
                             uploadedChunks++;
 
                             this.opts.onStatus &&
                                 this.opts.onStatus({
-                                    chunkId: uploadPartResponse.id,
-                                    chunkNumber,
+                                    chunkId: uploadPartResponse.partId,
+                                    chunkNumber: uploadPartResponse.partNumber,
                                     chunkSize: buffer.byteLength,
                                     totalChunks,
                                     uploadedChunks
