@@ -22,6 +22,8 @@
  * https://github.com/swagger-api/swagger-codegen.git
  */
 
+// tslint:disable:array-type
+
 import { UrlBuilder, RequestBuilder, RequestOptions } from "./RequestBuilder";
 
 export interface ApiHealthStatus {
@@ -48,7 +50,7 @@ export interface Feature extends GeoJSON {
      * The unique identifier of the feature.
      */
     id?: string;
-    geometry?: Geometry;
+    geometry?: GeoJSON;
     properties?: { [key: string]: any };
 }
 
@@ -96,12 +98,7 @@ export interface GeoJSON {
     bbox?: Array<number>;
 }
 
-/**
- * A Geometry object represents points, curves, and surfaces in coordinate layer.
- */
-export interface Geometry extends GeoJSON {}
-
-export interface LineString extends Geometry {
+export interface LineString extends GeoJSON {
     coordinates?: Array<Array<number>>;
 }
 
@@ -114,23 +111,23 @@ export interface ModelError {
     correlationId?: string;
 }
 
-export interface MultiLineString extends Geometry {
+export interface MultiLineString extends GeoJSON {
     coordinates?: Array<Array<Array<number>>>;
 }
 
-export interface MultiPoint extends Geometry {
+export interface MultiPoint extends GeoJSON {
     coordinates?: Array<Array<number>>;
 }
 
-export interface MultiPolygon extends Geometry {
+export interface MultiPolygon extends GeoJSON {
     coordinates?: Array<Array<Array<Array<number>>>>;
 }
 
-export interface Point extends Geometry {
+export interface Point extends GeoJSON {
     coordinates?: Array<number>;
 }
 
-export interface Polygon extends Geometry {
+export interface Polygon extends GeoJSON {
     coordinates?: Array<Array<Array<number>>>;
 }
 
@@ -278,12 +275,19 @@ export async function getFeature(
 }
 
 /**
- * Returns all of the features found for the provided list of ids. The response is always a FeatureCollection, even if there are no features with the provided ids.
+ * Returns all of the features found for the provided list of ids.
+ * The response is always a FeatureCollection, even if there are no features with the provided ids.
  *
  * @summary Get features by ID
  * @param layerId The unique identified for the Layer ID.
- * @param id A comma separated list of unique feature identifiers. These are the acceptable formats for this field:   * id&#x3D;value1,value2   * id&#x3D;value1,id&#x3D;value2
- * @param selection A list of properties to be returned in the features result list. Multiple attributes can be specified by using comma(,). Example: ?selection&#x3D;p.name,p.capacity,p.color
+ * @param id A comma separated list of unique feature identifiers.
+ * These are the acceptable formats for this field:
+ * * id&#x3D;value1,value2
+ * * id&#x3D;value1,id&#x3D;value2
+ *
+ * @param selection A list of properties to be returned in the features result list.
+ * Multiple attributes can be specified by using comma(,).
+ * Example: ?selection&#x3D;p.name,p.capacity,p.color
  * @param force2D If set to _true_ the features in the response will have only X&#39;s and Y&#39;s as coordinates.
  */
 export async function getFeatures(
@@ -322,14 +326,81 @@ export async function getFeatures(
  *
  * @summary Get features by bounding box
  * @param layerId The unique identified for the Layer ID.
- * @param bbox Both west, south, east and north coordinates separated by comma. Example: bbox&#x3D;13.082,52.416,13.628,52.626 - Bounding box of Berlin
- * @param clip If set to _true_ the features&#39; geometries are clipped to the geometry of the tile or bounding box. Default is _false_.
+ * @param bbox Both west, south, east and north coordinates separated by comma.
+ * Example: bbox&#x3D;13.082,52.416,13.628,52.626 - Bounding box of Berlin
+ * @param clip If set to _true_ the features&#39; geometries are clipped to the geometry of the tile or bounding box.
+ * Default is _false_.
  * @param limit The maximum number of features in the response. Default is _30000_. Hard limit is _100000_.
- * @param params Additional feature filters which compares the feature&#39;s property&#39;s value with the one specified in the query, resulting in a subset of features.  The usage of multiple property names represents an AND operation. The usage of a comma (,) separating the properties values, represents an OR operation.  Properties initiated with &#39;f.&#39; are used to access values which are added by default in the stored feature. The possible values are: &#39;f.id&#39;, &#39;f.createdAt&#39; and &#39;f.updatedAt&#39;.  Properties initiated with &#39;p.&#39; are used to access values in the stored feature which are under the &#39;properties&#39; property. Use it as a shorthand accessor for &#39;properties&#39; values.  The format should follow the specification below   * ?p.property_name_1&#x3D;property_value_1&amp;f.special_property_name_1&#x3D;special_property_value_1   For example, the above query, the Features will be filtered by &#39;property&#39; AND &#39;special property&#39; equals to their respective values.  While in the following example   * ?p.property_name_1&#x3D;value_1,value_2   The resulting Features list will contain all elements having value_1 OR value_2.  Additionally to the operators used in the examples above, the query can be written, with the same semantic, by using the long operators: \&quot;&#x3D;gte&#x3D;\&quot;, \&quot;&#x3D;lte&#x3D;\&quot;, \&quot;&#x3D;gt&#x3D;\&quot;, \&quot;&#x3D;lt&#x3D;\&quot; and \&quot;&#x3D;cs&#x3D;\&quot;. The below queries yield the same result:   * ?p.property_name_1&gt;&#x3D;10   * ?p.property_name_1&#x3D;gte&#x3D;10   The available operators are:   - \&quot;&#x3D;\&quot; - equals   - \&quot;!&#x3D;\&quot; - not equals   - \&quot;&gt;&#x3D;\&quot; or \&quot;&#x3D;gte&#x3D;\&quot; - greater than or equals   - \&quot;&lt;&#x3D;\&quot; or \&quot;&#x3D;lte&#x3D;\&quot; - less than or equals   - \&quot;&gt;\&quot; or \&quot;&#x3D;gt&#x3D;\&quot; - greater than   - \&quot;&lt;\&quot; or \&quot;&#x3D;lt&#x3D;\&quot; - less than   - \&quot;@&gt;\&quot; or \&quot;&#x3D;cs&#x3D;\&quot; - contains
- * @param selection A list of properties to be returned in the features result list. Multiple attributes can be specified by using comma(,). Example: ?selection&#x3D;p.name,p.capacity,p.color
+ * @param params Additional feature filters which compares the feature&#39;s property&#39;s value with
+ * the one specified in the query, resulting in a subset of features.
+ * The usage of multiple property names represents an AND operation.
+ * The usage of a comma (,) separating the properties values, represents an OR operation.
+ * Properties initiated with &#39;f.&#39; are used to access values which are added by default in the stored feature.
+ * The possible values are: &#39;f.id&#39;, &#39;f.createdAt&#39; and &#39;f.updatedAt&#39;.
+ * Properties initiated with &#39;p.&#39; are used to access values in the stored feature which
+ * are under the &#39;properties&#39; property.
+ * Use it as a shorthand accessor for &#39;properties&#39; values.
+ * The format should follow the specification below
+ * * ?p.property_name_1&#x3D;property_value_1&amp;f.special_property_name_1&#x3D;special_property_value_1
+ * For example, the above query, the Features will be filtered by &#39;property&#39; AND &#39;special property&#39;
+ * equals to their respective values.  While in the following example   * ?p.property_name_1&#x3D;value_1,value_2
+ * The resulting Features list will contain all elements having value_1 OR value_2.
+ *  Additionally to the operators used in the examples above, the query can be written, with the same semantic,
+ *  by using the long operators: \&quot;&#x3D;gte&#x3D;\&quot;, \&quot;&#x3D;lte&#x3D;\&quot;, \&quot;&#x3D;gt&#x3D;\&quot;,
+ *  \&quot;&#x3D;lt&#x3D;\&quot; and \&quot;&#x3D;cs&#x3D;\&quot;. The below queries yield the same result:
+ * * ?p.property_name_1&gt;&#x3D;10   * ?p.property_name_1&#x3D;gte&#x3D;10
+ * The available operators are:   - \&quot;&#x3D;\&quot; - equals   - \&quot;!&#x3D;\&quot; - not equals
+ * - \&quot;&gt;&#x3D;\&quot; or \&quot;&#x3D;gte&#x3D;\&quot; - greater than or equals
+ * - \&quot;&lt;&#x3D;\&quot; or \&quot;&#x3D;lte&#x3D;\&quot; - less than or equals
+ * - \&quot;&gt;\&quot; or \&quot;&#x3D;gt&#x3D;\&quot; - greater than
+ * - \&quot;&lt;\&quot; or \&quot;&#x3D;lt&#x3D;\&quot; - less than
+ * - \&quot;@&gt;\&quot; or \&quot;&#x3D;cs&#x3D;\&quot; - contains
+ * @param selection A list of properties to be returned in the features result list.
+ * Multiple attributes can be specified by using comma(,). Example: ?selection&#x3D;p.name,p.capacity,p.color
  * @param skipCache If set to _true_ the response is not returned from cache. Default is _false_.
- * @param clustering The clustering algorithm to apply to the data within the result. Providing this query parameter the data will be returned in a clustered way. This means the data won&#39;t necessarily be returned in its original shape or with its original properties. Depending on the chosen clustering algorithm there could be different mandatory and/or optional parameters to specify the behavior of the algorithm. Possible values are:    * \&quot;hexbin\&quot;      The hexbin algorithm divides the world in hexagonal \&quot;bins\&quot; on a specified resolution.     Each hexagon has an address being described by the H3 addressing scheme.     For more information on that topic see: https://eng.uber.com/h3/    * \&quot;quadbin\&quot;      The quadbin algorithm takes the geometry input from the request (e.g. quadkey / bbox..)     and count the features in it. This clustering mode works also for very large layers and     can be used for getting an overview where data is present in a given layer. Furthermore,     a property filter on one property is applicable.
- * @param clusteringParams Some parameters for the chosen clustering algorithm.  Depending on the chosen clustering algorithm there could be different mandatory and/or optional parameters to specify the behavior of the algorithm.  ### Clustering-Parameter reference  NOTE: The actual query parameters in the URL are looking like: &#x60;?clustering.aParameterName&#x3D;aValue&#x60;  **Clustering-type: \&quot;hexbin\&quot;:**  There are several parameters needed by the H3 based hexbin algorithm. For more information on that topic see: https://eng.uber.com/h3/  | Parameter   | Type    | Mandatory | Meaning                                                               | |-------------|---------|-----------|-----------------------------------------------------------------------| | absoluteResolution  | Number  | NO        | The H3 hexagon resolution                                             | | resolution  | Number  | NO        | deprecated, renamed to absoluteResolution                             | | relativeResolution | Number  | NO        | integer value [0-4] to be added to current used resolution  | | property    | String  | NO        | A property of the original features for which to calculate statistics | | pointmode   | Boolean | NO        | retuns the centroid of hexagons as geojson feature                    |   **Clustering-type: \&quot;quadbin\&quot;:**  There are several parameters needed by the quadbin algorithm. You can use one property filter in combination.  | Parameter   | Type    | Mandatory | Meaning                                                               | |-------------|---------|-----------|-----------------------------------------------------------------------| | relativeResolution | Number  | NO        | The quad resolution [0-4]                                             | | noBuffer    | Boolean | NO        | do not place a buffer around quad polygons, default: false            | | resolution  | Number  | NO        | deprecated, renamed to resolutionRelative             | | countmode   | String  | NO        | [real, estimated, mixed]                                    | |             |         |           | real &#x3D; real feature counts. Best accuracy, but slow.                  | |             |         |           |     Not recommended for big result sets                       | |             |         |           |                                                                       | |             |         |           | estimated &#x3D; estimated feature counts. Low accuracy, but very fast      | |             |         |           |     Recommended for big result sets                           | |             |         |           |                                                                       | |             |         |           | mixed (default) &#x3D; estimated feature counts combined with real ones.   | |             |         |           |     If the estimation is low a real count gets applied. Fits to the | |             |         |           |     most use cases                                        |
+ * @param clustering The clustering algorithm to apply to the data within the result.
+ * Providing this query parameter the data will be returned in a clustered way.
+ * This means the data won&#39;t necessarily be returned in its original shape or with its original properties.
+ * Depending on the chosen clustering algorithm there could be different mandatory and/or optional parameters
+ * to specify the behavior of the algorithm.
+ * Possible values are:    * \&quot;hexbin\&quot;
+ * The hexbin algorithm divides the world in hexagonal \&quot;bins\&quot; on a specified resolution.
+ * Each hexagon has an address being described by the H3 addressing scheme.
+ * For more information on that topic see: https://eng.uber.com/h3/    * \&quot;quadbin\&quot;
+ * The quadbin algorithm takes the geometry input from the request (e.g. quadkey / bbox..)
+ * and count the features in it. This clustering mode works also for very large layers and
+ * can be used for getting an overview where data is present in a given layer. Furthermore,
+ * a property filter on one property is applicable.
+ * @param clusteringParams Some parameters for the chosen clustering algorithm.
+ * Depending on the chosen clustering algorithm there could be different mandatory and/or optional parameters
+ * to specify the behavior of the algorithm.  ### Clustering-Parameter reference
+ * NOTE: The actual query parameters in the URL are looking like: &#x60;?clustering.aParameterName&#x3D;aValue&#x60;
+ * **Clustering-type: \&quot;hexbin\&quot;:**
+ * There are several parameters needed by the H3 based hexbin algorithm.
+ * For more information on that topic see: https://eng.uber.com/h3/  | Parameter   | Type    | Mandatory | Meaning
+ * | |-------------|---------|-----------|-----------------------------------------------------------------------| |
+ *
+ *  absoluteResolution  | Number  | NO        | The H3 hexagon resolution                                             |
+ *  | resolution  | Number  | NO        | deprecated, renamed to absoluteResolution                             |
+ * | relativeResolution | Number  | NO        | integer value [0-4] to be added to current used resolution  |
+ * | property    | String  | NO        | A property of the original features for which to calculate statistics |
+ * | pointmode   | Boolean | NO        | retuns the centroid of hexagons as geojson feature
+ * |   **Clustering-type: \&quot;quadbin\&quot;:**  There are several parameters needed by the quadbin algorithm.
+ * You can use one property filter in combination.  | Parameter   | Type    | Mandatory | Meaning
+ *  | |-------------|---------|-----------|-----------------------------------------------------------------------| |
+ *  relativeResolution | Number  | NO        | The quad resolution [0-4]
+ * | | noBuffer    | Boolean | NO        | do not place a buffer around quad polygons, default: false
+ *  | | resolution  | Number  | NO        | deprecated, renamed to resolutionRelative
+ * | | countmode   | String  | NO        | [real, estimated, mixed]
+ *  | |             |         |           | real &#x3D; real feature counts. Best accuracy, but slow.
+ *  | |             |         |           |     Not recommended for big result sets
+ * | |             |         |           |
+ * | |             |         |           | estimated &#x3D; estimated feature counts. Low accuracy, but very fast
+ * | |             |         |           |     Recommended for big result sets                           | |
+ * |         |           |                                                                       | |
+ * |         |           | mixed (default) &#x3D; estimated feature counts combined with real ones.   | |
+ * |         |           |     If the estimation is low a real count gets applied. Fits to the | |
+ * |         |           |     most use cases                                        |
  * @param force2D If set to _true_ the features in the response will have only X&#39;s and Y&#39;s as coordinates.
  */
 export async function getFeaturesByBBox(
@@ -391,19 +462,48 @@ export async function getFeaturesByBBox(
 }
 
 /**
- * List the features which are inside the specified radius. The origin radius point is calculated based either on latitude & longitude or by specifying a feature's geometry.
+ * List the features which are inside the specified radius. The origin radius point is calculated
+ * based either on latitude & longitude or by specifying a feature's geometry.
  *
  * @summary Get features with radius search
  * @param layerId The unique identified for the Layer ID.
  * @param lat The latitude in WGS&#39;84 decimal degree (-90 to +90) of the center Point.
  * @param lng The longitude in WGS&#39;84 decimal degree (-180 to +180) of the center Point.
- * @param refCatalogHrn The catalog HRN where the layer containing the referenced feature is stored. Always to use in combination with refFeatureId.
- * @param refLayerId As alternative for defining center coordinates, it is possible to reference a geometry in a layer. Therefore it is needed to provide the layer id where the referenced feature is stored. Always to use in combination with refFeatureId.
- * @param refFeatureId The unique identifier of a feature in the referenced layer. The geometry of that feature gets used for the spatial query. Always to use in combination with refCatalogHrn and refLayerId.
+ * @param refCatalogHrn The catalog HRN where the layer containing the referenced feature is stored.
+ * Always to use in combination with refFeatureId.
+ * @param refLayerId As alternative for defining center coordinates, it is possible to reference a geometry in a layer.
+ * Therefore it is needed to provide the layer id where the referenced feature is stored.
+ * Always to use in combination with refFeatureId.
+ * @param refFeatureId The unique identifier of a feature in the referenced layer.
+ * The geometry of that feature gets used for the spatial query.
+ * Always to use in combination with refCatalogHrn and refLayerId.
  * @param radius Radius in meter which defines the diameter of the search request.
  * @param limit The maximum number of features in the response. Default is _30000_. Hard limit is _100000_.
- * @param params Additional feature filters which compares the feature&#39;s property&#39;s value with the one specified in the query, resulting in a subset of features.  The usage of multiple property names represents an AND operation. The usage of a comma (,) separating the properties values, represents an OR operation.  Properties initiated with &#39;f.&#39; are used to access values which are added by default in the stored feature. The possible values are: &#39;f.id&#39;, &#39;f.createdAt&#39; and &#39;f.updatedAt&#39;.  Properties initiated with &#39;p.&#39; are used to access values in the stored feature which are under the &#39;properties&#39; property. Use it as a shorthand accessor for &#39;properties&#39; values.  The format should follow the specification below   * ?p.property_name_1&#x3D;property_value_1&amp;f.special_property_name_1&#x3D;special_property_value_1   For example, the above query, the Features will be filtered by &#39;property&#39; AND &#39;special property&#39; equals to their respective values.  While in the following example   * ?p.property_name_1&#x3D;value_1,value_2   The resulting Features list will contain all elements having value_1 OR value_2.  Additionally to the operators used in the examples above, the query can be written, with the same semantic, by using the long operators: \&quot;&#x3D;gte&#x3D;\&quot;, \&quot;&#x3D;lte&#x3D;\&quot;, \&quot;&#x3D;gt&#x3D;\&quot;, \&quot;&#x3D;lt&#x3D;\&quot; and \&quot;&#x3D;cs&#x3D;\&quot;. The below queries yield the same result:   * ?p.property_name_1&gt;&#x3D;10   * ?p.property_name_1&#x3D;gte&#x3D;10   The available operators are:   - \&quot;&#x3D;\&quot; - equals   - \&quot;!&#x3D;\&quot; - not equals   - \&quot;&gt;&#x3D;\&quot; or \&quot;&#x3D;gte&#x3D;\&quot; - greater than or equals   - \&quot;&lt;&#x3D;\&quot; or \&quot;&#x3D;lte&#x3D;\&quot; - less than or equals   - \&quot;&gt;\&quot; or \&quot;&#x3D;gt&#x3D;\&quot; - greater than   - \&quot;&lt;\&quot; or \&quot;&#x3D;lt&#x3D;\&quot; - less than   - \&quot;@&gt;\&quot; or \&quot;&#x3D;cs&#x3D;\&quot; - contains
- * @param selection A list of properties to be returned in the features result list. Multiple attributes can be specified by using comma(,). Example: ?selection&#x3D;p.name,p.capacity,p.color
+ * @param params Additional feature filters which compares the feature&#39;s property&#39;s value with the
+ * one specified in the query, resulting in a subset of features.
+ * The usage of multiple property names represents an AND operation.
+ * The usage of a comma (,) separating the properties values, represents an OR operation.
+ * Properties initiated with &#39;f.&#39; are used to access values which are added by default in the stored feature.
+ * The possible values are: &#39;f.id&#39;, &#39;f.createdAt&#39; and &#39;f.updatedAt&#39;.
+ * Properties initiated with &#39;p.&#39; are used to access values in the stored feature
+ * which are under the &#39;properties&#39; property. Use it as a shorthand accessor for &#39;properties&#39; values.
+ * The format should follow the specification below
+ * * ?p.property_name_1&#x3D;property_value_1&amp;f.special_property_name_1&#x3D;special_property_value_1
+ * For example, the above query, the Features will be filtered by &#39;property&#39; AND &#39;special property&#39;
+ * equals to their respective values.  While in the following example   * ?p.property_name_1&#x3D;value_1,value_2
+ * The resulting Features list will contain all elements having value_1 OR value_2.
+ * Additionally to the operators used in the examples above, the query can be written,
+ * with the same semantic, by using the long operators: \&quot;&#x3D;gte&#x3D;\&quot;, \&quot;&#x3D;lte&#x3D;\&quot;,
+ * \&quot;&#x3D;gt&#x3D;\&quot;, \&quot;&#x3D;lt&#x3D;\&quot; and \&quot;&#x3D;cs&#x3D;\&quot;. The below queries yield
+ * the same result:   * ?p.property_name_1&gt;&#x3D;10   * ?p.property_name_1&#x3D;gte&#x3D;10
+ * The available operators are:   - \&quot;&#x3D;\&quot; - equals   - \&quot;!&#x3D;\&quot; - not equals
+ * - \&quot;&gt;&#x3D;\&quot; or \&quot;&#x3D;gte&#x3D;\&quot; - greater than or equals
+ * - \&quot;&lt;&#x3D;\&quot; or \&quot;&#x3D;lte&#x3D;\&quot; - less than or equals
+ * - \&quot;&gt;\&quot; or \&quot;&#x3D;gt&#x3D;\&quot; - greater than
+ * - \&quot;&lt;\&quot; or \&quot;&#x3D;lt&#x3D;\&quot; - less than
+ * - \&quot;@&gt;\&quot; or \&quot;&#x3D;cs&#x3D;\&quot; - contains
+ * @param selection A list of properties to be returned in the features result list.
+ * Multiple attributes can be specified by using comma(,). Example: ?selection&#x3D;p.name,p.capacity,p.color
  * @param skipCache If set to _true_ the response is not returned from cache. Default is _false_.
  * @param force2D If set to _true_ the features in the response will have only X&#39;s and Y&#39;s as coordinates.
  */
@@ -461,15 +561,39 @@ export async function getFeaturesBySpatial(
 }
 
 /**
- * List the features which are inside the specified radius. The origin point is calculated based on the geometry provided as payload.
+ * List the features which are inside the specified radius. The origin point is calculated based
+ * on the geometry provided as payload.
  *
  * @summary Get features which intersects the provided geometry
  * @param layerId The unique identified for the Layer ID.
  * @param body A geometry request.
  * @param radius Radius in meter which defines the diameter of the search request.
  * @param limit The maximum number of features in the response. Default is _30000_. Hard limit is _100000_.
- * @param params Additional feature filters which compares the feature&#39;s property&#39;s value with the one specified in the query, resulting in a subset of features.  The usage of multiple property names represents an AND operation. The usage of a comma (,) separating the properties values, represents an OR operation.  Properties initiated with &#39;f.&#39; are used to access values which are added by default in the stored feature. The possible values are: &#39;f.id&#39;, &#39;f.createdAt&#39; and &#39;f.updatedAt&#39;.  Properties initiated with &#39;p.&#39; are used to access values in the stored feature which are under the &#39;properties&#39; property. Use it as a shorthand accessor for &#39;properties&#39; values.  The format should follow the specification below   * ?p.property_name_1&#x3D;property_value_1&amp;f.special_property_name_1&#x3D;special_property_value_1   For example, the above query, the Features will be filtered by &#39;property&#39; AND &#39;special property&#39; equals to their respective values.  While in the following example   * ?p.property_name_1&#x3D;value_1,value_2   The resulting Features list will contain all elements having value_1 OR value_2.  Additionally to the operators used in the examples above, the query can be written, with the same semantic, by using the long operators: \&quot;&#x3D;gte&#x3D;\&quot;, \&quot;&#x3D;lte&#x3D;\&quot;, \&quot;&#x3D;gt&#x3D;\&quot;, \&quot;&#x3D;lt&#x3D;\&quot; and \&quot;&#x3D;cs&#x3D;\&quot;. The below queries yield the same result:   * ?p.property_name_1&gt;&#x3D;10   * ?p.property_name_1&#x3D;gte&#x3D;10   The available operators are:   - \&quot;&#x3D;\&quot; - equals   - \&quot;!&#x3D;\&quot; - not equals   - \&quot;&gt;&#x3D;\&quot; or \&quot;&#x3D;gte&#x3D;\&quot; - greater than or equals   - \&quot;&lt;&#x3D;\&quot; or \&quot;&#x3D;lte&#x3D;\&quot; - less than or equals   - \&quot;&gt;\&quot; or \&quot;&#x3D;gt&#x3D;\&quot; - greater than   - \&quot;&lt;\&quot; or \&quot;&#x3D;lt&#x3D;\&quot; - less than   - \&quot;@&gt;\&quot; or \&quot;&#x3D;cs&#x3D;\&quot; - contains
- * @param selection A list of properties to be returned in the features result list. Multiple attributes can be specified by using comma(,). Example: ?selection&#x3D;p.name,p.capacity,p.color
+ * @param params Additional feature filters which compares the feature&#39;s property&#39;s
+ * value with the one specified in the query, resulting in a subset of features.
+ * The usage of multiple property names represents an AND operation. The usage of a comma (,)
+ * separating the properties values, represents an OR operation.
+ * Properties initiated with &#39;f.&#39; are used to access values which are added by default in the stored feature.
+ * The possible values are: &#39;f.id&#39;, &#39;f.createdAt&#39; and &#39;f.updatedAt&#39;.
+ * Properties initiated with &#39;p.&#39; are used to access values in the stored feature which are under
+ * the &#39;properties&#39; property. Use it as a shorthand accessor for &#39;properties&#39; values.
+ * The format should follow the specification below
+ * * ?p.property_name_1&#x3D;property_value_1&amp;f.special_property_name_1&#x3D;special_property_value_1
+ * For example, the above query, the Features will be filtered by &#39;property&#39; AND &#39;special property&#39;
+ * equals to their respective values.  While in the following example   * ?p.property_name_1&#x3D;value_1,value_2
+ * The resulting Features list will contain all elements having value_1 OR value_2.
+ * Additionally to the operators used in the examples above, the query can be written, with the same semantic,
+ * by using the long operators: \&quot;&#x3D;gte&#x3D;\&quot;, \&quot;&#x3D;lte&#x3D;\&quot;,
+ * \&quot;&#x3D;gt&#x3D;\&quot;, \&quot;&#x3D;lt&#x3D;\&quot; and \&quot;&#x3D;cs&#x3D;\&quot;.
+ * The below queries yield the same result:   * ?p.property_name_1&gt;&#x3D;10
+ * * ?p.property_name_1&#x3D;gte&#x3D;10   The available operators are:   - \&quot;&#x3D;\&quot; - equals
+ * - \&quot;!&#x3D;\&quot; - not equals   - \&quot;&gt;&#x3D;\&quot; or \&quot;&#x3D;gte&#x3D;\&quot;
+ * - greater than or equals   - \&quot;&lt;&#x3D;\&quot; or \&quot;&#x3D;lte&#x3D;\&quot; - less than or equals
+ * - \&quot;&gt;\&quot; or \&quot;&#x3D;gt&#x3D;\&quot; - greater than   - \&quot;&lt;\&quot;
+ * or \&quot;&#x3D;lt&#x3D;\&quot; - less than   - \&quot;@&gt;\&quot; or \&quot;&#x3D;cs&#x3D;\&quot;
+ * - contains
+ * @param selection A list of properties to be returned in the features result list.
+ * Multiple attributes can be specified by using comma(,). Example: ?selection&#x3D;p.name,p.capacity,p.color
  * @param skipCache If set to _true_ the response is not returned from cache. Default is _false_.
  * @param force2D If set to _true_ the features in the response will have only X&#39;s and Y&#39;s as coordinates.
  */
@@ -477,7 +601,7 @@ export async function getFeaturesBySpatialPost(
     builder: RequestBuilder,
     params: {
         layerId: string;
-        body?: Geometry;
+        body?: GeoJSON;
         radius?: number;
         limit?: number;
         params?: { [key: string]: string };
@@ -514,8 +638,9 @@ export async function getFeaturesBySpatialPost(
         headers
     };
     headers["Content-Type"] = "application/json";
-    if (params["body"] !== undefined)
+    if (params["body"] !== undefined) {
         options.body = JSON.stringify(params["body"]);
+    }
 
     return builder.request<FeatureCollection>(urlBuilder, options);
 }
@@ -525,14 +650,87 @@ export async function getFeaturesBySpatialPost(
  *
  * @summary Get features in tile
  * @param layerId The unique identified for the Layer ID.
- * @param tileType The type of tile identifier. \&quot;quadkey\&quot; - Virtual Earth, \&quot;web\&quot; - Web Mercator, \&quot;tms\&quot; - OSGEO Tile Map Service, \&quot;here\&quot; - Here Tile Schema.
- * @param tileId The tile identifier can be provided as quadkey (__1__), Web Mercator level,x,y coordinates (__1_1_0__) or OSGEO Tile Map Service level,x,y (__1_1_0__).
- * @param clip If set to _true_ the features&#39; geometries are clipped to the geometry of the tile or bounding box. Default is _false_.
- * @param params Additional feature filters which compares the feature&#39;s property&#39;s value with the one specified in the query, resulting in a subset of features.  The usage of multiple property names represents an AND operation. The usage of a comma (,) separating the properties values, represents an OR operation.  Properties initiated with &#39;f.&#39; are used to access values which are added by default in the stored feature. The possible values are: &#39;f.id&#39;, &#39;f.createdAt&#39; and &#39;f.updatedAt&#39;.  Properties initiated with &#39;p.&#39; are used to access values in the stored feature which are under the &#39;properties&#39; property. Use it as a shorthand accessor for &#39;properties&#39; values.  The format should follow the specification below   * ?p.property_name_1&#x3D;property_value_1&amp;f.special_property_name_1&#x3D;special_property_value_1   For example, the above query, the Features will be filtered by &#39;property&#39; AND &#39;special property&#39; equals to their respective values.  While in the following example   * ?p.property_name_1&#x3D;value_1,value_2   The resulting Features list will contain all elements having value_1 OR value_2.  Additionally to the operators used in the examples above, the query can be written, with the same semantic, by using the long operators: \&quot;&#x3D;gte&#x3D;\&quot;, \&quot;&#x3D;lte&#x3D;\&quot;, \&quot;&#x3D;gt&#x3D;\&quot;, \&quot;&#x3D;lt&#x3D;\&quot; and \&quot;&#x3D;cs&#x3D;\&quot;. The below queries yield the same result:   * ?p.property_name_1&gt;&#x3D;10   * ?p.property_name_1&#x3D;gte&#x3D;10   The available operators are:   - \&quot;&#x3D;\&quot; - equals   - \&quot;!&#x3D;\&quot; - not equals   - \&quot;&gt;&#x3D;\&quot; or \&quot;&#x3D;gte&#x3D;\&quot; - greater than or equals   - \&quot;&lt;&#x3D;\&quot; or \&quot;&#x3D;lte&#x3D;\&quot; - less than or equals   - \&quot;&gt;\&quot; or \&quot;&#x3D;gt&#x3D;\&quot; - greater than   - \&quot;&lt;\&quot; or \&quot;&#x3D;lt&#x3D;\&quot; - less than   - \&quot;@&gt;\&quot; or \&quot;&#x3D;cs&#x3D;\&quot; - contains
- * @param selection A list of properties to be returned in the features result list. Multiple attributes can be specified by using comma(,). Example: ?selection&#x3D;p.name,p.capacity,p.color
+ * @param tileType The type of tile identifier. \&quot;quadkey\&quot; - Virtual Earth, \&quot;web\&quot; - Web Mercator,
+ * \&quot;tms\&quot; - OSGEO Tile Map Service, \&quot;here\&quot; - Here Tile Schema.
+ * @param tileId The tile identifier can be provided as quadkey (__1__), Web Mercator level,x,y coordinates (__1_1_0__)
+ * or OSGEO Tile Map Service level,x,y (__1_1_0__).
+ * @param clip If set to _true_ the features&#39; geometries are clipped to the geometry of the tile or bounding box.
+ * Default is _false_.
+ * @param params Additional feature filters which compares the feature&#39;s property&#39;s value with the one
+ * specified in the query, resulting in a subset of features.  The usage of multiple property names
+ * represents an AND operation. The usage of a comma (,) separating the properties values, represents an OR operation.
+ * Properties initiated with &#39;f.&#39; are used to access values which are added by default in the stored feature.
+ * The possible values are: &#39;f.id&#39;, &#39;f.createdAt&#39; and &#39;f.updatedAt&#39;.
+ * Properties initiated with &#39;p.&#39; are used to access values in the stored feature which are under
+ * the &#39;properties&#39; property. Use it as a shorthand accessor for &#39;properties&#39; values.
+ * The format should follow the specification below
+ * * ?p.property_name_1&#x3D;property_value_1&amp;f.special_property_name_1&#x3D;special_property_value_1
+ * For example, the above query, the Features will be filtered by &#39;property&#39;
+ * AND &#39;special property&#39; equals to their respective values.
+ * While in the following example   * ?p.property_name_1&#x3D;value_1,value_2
+ * The resulting Features list will contain all elements having value_1 OR value_2.
+ * Additionally to the operators used in the examples above, the query can be written, with the same semantic,
+ * by using the long operators: \&quot;&#x3D;gte&#x3D;\&quot;, \&quot;&#x3D;lte&#x3D;\&quot;,
+ * \&quot;&#x3D;gt&#x3D;\&quot;, \&quot;&#x3D;lt&#x3D;\&quot; and \&quot;&#x3D;cs&#x3D;\&quot;.
+ * The below queries yield the same result:
+ * * ?p.property_name_1&gt;&#x3D;10
+ * * ?p.property_name_1&#x3D;gte&#x3D;10
+ *  The available operators are:   - \&quot;&#x3D;\&quot; - equals
+ * - \&quot;!&#x3D;\&quot; - not equals
+ * - \&quot;&gt;&#x3D;\&quot; or \&quot;&#x3D;gte&#x3D;\&quot; - greater than or equals
+ * - \&quot;&lt;&#x3D;\&quot; or \&quot;&#x3D;lte&#x3D;\&quot; - less than or equals
+ * - \&quot;&gt;\&quot; or \&quot;&#x3D;gt&#x3D;\&quot; - greater than
+ * - \&quot;&lt;\&quot; or \&quot;&#x3D;lt&#x3D;\&quot; - less than
+ * - \&quot;@&gt;\&quot; or \&quot;&#x3D;cs&#x3D;\&quot; - contains
+ * @param selection A list of properties to be returned in the features result list.
+ * Multiple attributes can be specified by using comma(,).
+ * Example: ?selection&#x3D;p.name,p.capacity,p.color
  * @param skipCache If set to _true_ the response is not returned from cache. Default is _false_.
- * @param clustering The clustering algorithm to apply to the data within the result. Providing this query parameter the data will be returned in a clustered way. This means the data won&#39;t necessarily be returned in its original shape or with its original properties. Depending on the chosen clustering algorithm there could be different mandatory and/or optional parameters to specify the behavior of the algorithm. Possible values are:    * \&quot;hexbin\&quot;      The hexbin algorithm divides the world in hexagonal \&quot;bins\&quot; on a specified resolution.     Each hexagon has an address being described by the H3 addressing scheme.     For more information on that topic see: https://eng.uber.com/h3/    * \&quot;quadbin\&quot;      The quadbin algorithm takes the geometry input from the request (e.g. quadkey / bbox..)     and count the features in it. This clustering mode works also for very large layers and     can be used for getting an overview where data is present in a given layer. Furthermore,     a property filter on one property is applicable.
- * @param clusteringParams Some parameters for the chosen clustering algorithm.  Depending on the chosen clustering algorithm there could be different mandatory and/or optional parameters to specify the behavior of the algorithm.  ### Clustering-Parameter reference  NOTE: The actual query parameters in the URL are looking like: &#x60;?clustering.aParameterName&#x3D;aValue&#x60;  **Clustering-type: \&quot;hexbin\&quot;:**  There are several parameters needed by the H3 based hexbin algorithm. For more information on that topic see: https://eng.uber.com/h3/  | Parameter   | Type    | Mandatory | Meaning                                                               | |-------------|---------|-----------|-----------------------------------------------------------------------| | absoluteResolution  | Number  | NO        | The H3 hexagon resolution                                             | | resolution  | Number  | NO        | deprecated, renamed to absoluteResolution                             | | relativeResolution | Number  | NO        | integer value [0-4] to be added to current used resolution  | | property    | String  | NO        | A property of the original features for which to calculate statistics | | pointmode   | Boolean | NO        | retuns the centroid of hexagons as geojson feature                    |   **Clustering-type: \&quot;quadbin\&quot;:**  There are several parameters needed by the quadbin algorithm. You can use one property filter in combination.  | Parameter   | Type    | Mandatory | Meaning                                                               | |-------------|---------|-----------|-----------------------------------------------------------------------| | relativeResolution | Number  | NO        | The quad resolution [0-4]                                             | | noBuffer    | Boolean | NO        | do not place a buffer around quad polygons, default: false            | | resolution  | Number  | NO        | deprecated, renamed to resolutionRelative             | | countmode   | String  | NO        | [real, estimated, mixed]                                    | |             |         |           | real &#x3D; real feature counts. Best accuracy, but slow.                  | |             |         |           |     Not recommended for big result sets                       | |             |         |           |                                                                       | |             |         |           | estimated &#x3D; estimated feature counts. Low accuracy, but very fast      | |             |         |           |     Recommended for big result sets                           | |             |         |           |                                                                       | |             |         |           | mixed (default) &#x3D; estimated feature counts combined with real ones.   | |             |         |           |     If the estimation is low a real count gets applied. Fits to the | |             |         |           |     most use cases                                        |
+ * @param clustering The clustering algorithm to apply to the data within the result.
+ * Providing this query parameter the data will be returned in a clustered way.
+ * This means the data won&#39;t necessarily be returned in its original shape or with its original properties.
+ * Depending on the chosen clustering algorithm there could be different mandatory and/or optional parameters
+ * to specify the behavior of the algorithm.
+ * Possible values are:
+ * * \&quot;hexbin\&quot;      T
+ * he hexbin algorithm divides the world in hexagonal \&quot;bins\&quot; on a specified resolution.
+ * Each hexagon has an address being described by the H3 addressing scheme.
+ * For more information on that topic see: https://eng.uber.com/h3/
+ * * \&quot;quadbin\&quot;
+ * The quadbin algorithm takes the geometry input from the request (e.g. quadkey / bbox..)
+ * and count the features in it. This clustering mode works also for very large layers and
+ * can be used for getting an overview where data is present in a given layer. Furthermore,
+ *  a property filter on one property is applicable.
+ * @param clusteringParams Some parameters for the chosen clustering algorithm.
+ * Depending on the chosen clustering algorithm there could be different mandatory and/or optional parameters
+ * to specify the behavior of the algorithm.  ### Clustering-Parameter reference
+ * NOTE: The actual query parameters in the URL are looking like:
+ * &#x60;?clustering.aParameterName&#x3D;aValue&#x60;  **Clustering-type: \&quot;hexbin\&quot;:**
+ * There are several parameters needed by the H3 based hexbin algorithm.
+ * For more information on that topic see: https://eng.uber.com/h3/  | Parameter   | Type    | Mandatory | Meaning
+ * | |-------------|---------|-----------|-----------------------------------------------------------------------| |
+ * absoluteResolution  | Number  | NO        | The H3 hexagon resolution
+ * | | resolution  | Number  | NO        | deprecated, renamed to absoluteResolution
+ *  | | relativeResolution | Number  | NO        | integer value [0-4] to be added to current used resolution
+ * | | property    | String  | NO        | A property of the original features for which to calculate statistics
+ * | | pointmode   | Boolean | NO        | retuns the centroid of hexagons as geojson feature
+ * |   **Clustering-type: \&quot;quadbin\&quot;:**  There are several parameters needed by the quadbin algorithm.
+ * You can use one property filter in combination.  | Parameter   | Type    | Mandatory | Meaning
+ *  | |-------------|---------|-----------|-----------------------------------------------------------------------| |
+ * relativeResolution | Number  | NO        | The quad resolution [0-4]
+ * | | noBuffer    | Boolean | NO        | do not place a buffer around quad polygons, default: false
+ * | | resolution  | Number  | NO        | deprecated, renamed to resolutionRelative
+ * | | countmode   | String  | NO        | [real, estimated, mixed]
+ *  | |             |         |           | real &#x3D; real feature counts. Best accuracy, but slow.
+ *  | |             |         |           |     Not recommended for big result sets
+ * | |             |         |           |
+ *  | |             |         |           | estimated &#x3D; estimated feature counts. Low accuracy, but very fast
+ *  | |             |         |           |     Recommended for big result sets                           | |
+ *    |         |           |                                                                       | |
+ *    |         |           | mixed (default) &#x3D; estimated feature counts combined with real ones.   | |
+ *     |         |           |     If the estimation is low a real count gets applied. Fits to the | |
+ *  |         |           |     most use cases                                        |
+ *
  * @param margin Margin in pixels on the respective projected level around the tile. Default is 0.
  * @param limit The maximum number of features in the response. Default is _30000_. Hard limit is _100000_.
  * @param force2D If set to _true_ the features in the response will have only X&#39;s and Y&#39;s as coordinates.
@@ -627,13 +825,18 @@ export async function getStatistics(
 }
 
 /**
- * Iterates all of the features in the layer. The features in the response are ordered so that no feature is returned twice. If there are more features, which could be loaded, the response FeatureCollection will contain the root attribute _nextPageToken_. The value of this attribute can be passed as a query parameter for the following request in order to continue the iteration from the marked position.
+ * Iterates all of the features in the layer. The features in the response are ordered so
+ * that no feature is returned twice. If there are more features, which could be loaded,
+ * the response FeatureCollection will contain the root attribute _nextPageToken_.
+ * The value of this attribute can be passed as a query parameter for the following request
+ * in order to continue the iteration from the marked position.
  *
  * @summary Iterate features in the layer
  * @param layerId The unique identified for the Layer ID.
  * @param limit The maximum number of features in the response. Default is _30000_. Hard limit is _100000_.
  * @param pageToken The page token where the iteration will continue.
- * @param selection A list of properties to be returned in the features result list. Multiple attributes can be specified by using comma(,). Example: ?selection&#x3D;p.name,p.capacity,p.color
+ * @param selection A list of properties to be returned in the features result list. Multiple attributes
+ * can be specified by using comma(,). Example: ?selection&#x3D;p.name,p.capacity,p.color
  * @param skipCache If set to _true_ the response is not returned from cache. Default is _false_.
  * @param force2D If set to _true_ the features in the response will have only X&#39;s and Y&#39;s as coordinates.
  */
@@ -676,13 +879,38 @@ export async function iterateFeatures(
 }
 
 /**
- * Searches for features in the layer. The results are unordered and the request does not allow to continue the search, which is the main difference when compared to the _iterate_ request.
+ * Searches for features in the layer. The results are unordered and the request does not allow to continue
+ * the search, which is the main difference when compared to the _iterate_ request.
  *
  * @summary Search for features
  * @param layerId The unique identified for the Layer ID.
  * @param limit The maximum number of features in the response. Default is _30000_. Hard limit is _100000_.
- * @param params Additional feature filters which compares the feature&#39;s property&#39;s value with the one specified in the query, resulting in a subset of features.  The usage of multiple property names represents an AND operation. The usage of a comma (,) separating the properties values, represents an OR operation.  Properties initiated with &#39;f.&#39; are used to access values which are added by default in the stored feature. The possible values are: &#39;f.id&#39;, &#39;f.createdAt&#39; and &#39;f.updatedAt&#39;.  Properties initiated with &#39;p.&#39; are used to access values in the stored feature which are under the &#39;properties&#39; property. Use it as a shorthand accessor for &#39;properties&#39; values.  The format should follow the specification below   * ?p.property_name_1&#x3D;property_value_1&amp;f.special_property_name_1&#x3D;special_property_value_1   For example, the above query, the Features will be filtered by &#39;property&#39; AND &#39;special property&#39; equals to their respective values.  While in the following example   * ?p.property_name_1&#x3D;value_1,value_2   The resulting Features list will contain all elements having value_1 OR value_2.  Additionally to the operators used in the examples above, the query can be written, with the same semantic, by using the long operators: \&quot;&#x3D;gte&#x3D;\&quot;, \&quot;&#x3D;lte&#x3D;\&quot;, \&quot;&#x3D;gt&#x3D;\&quot;, \&quot;&#x3D;lt&#x3D;\&quot; and \&quot;&#x3D;cs&#x3D;\&quot;. The below queries yield the same result:   * ?p.property_name_1&gt;&#x3D;10   * ?p.property_name_1&#x3D;gte&#x3D;10   The available operators are:   - \&quot;&#x3D;\&quot; - equals   - \&quot;!&#x3D;\&quot; - not equals   - \&quot;&gt;&#x3D;\&quot; or \&quot;&#x3D;gte&#x3D;\&quot; - greater than or equals   - \&quot;&lt;&#x3D;\&quot; or \&quot;&#x3D;lte&#x3D;\&quot; - less than or equals   - \&quot;&gt;\&quot; or \&quot;&#x3D;gt&#x3D;\&quot; - greater than   - \&quot;&lt;\&quot; or \&quot;&#x3D;lt&#x3D;\&quot; - less than   - \&quot;@&gt;\&quot; or \&quot;&#x3D;cs&#x3D;\&quot; - contains
- * @param selection A list of properties to be returned in the features result list. Multiple attributes can be specified by using comma(,). Example: ?selection&#x3D;p.name,p.capacity,p.color
+ * @param params Additional feature filters which compares the feature&#39;s property&#39;s value with the
+ * one specified in the query, resulting in a subset of features.  The usage of multiple property names
+ * represents an AND operation. The usage of a comma (,) separating the properties values, represents an OR operation.
+ *  Properties initiated with &#39;f.&#39; are used to access values which are added by default in the stored feature.
+ * The possible values are: &#39;f.id&#39;, &#39;f.createdAt&#39; and &#39;f.updatedAt&#39;.
+ * Properties initiated with &#39;p.&#39; are used to access values in the stored feature which
+ * are under the &#39;properties&#39; property. Use it as a shorthand accessor for &#39;properties&#39; values.
+ * The format should follow the specification below
+ * * ?p.property_name_1&#x3D;property_value_1&amp;f.special_property_name_1&#x3D;special_property_value_1
+ * For example, the above query, the Features will be filtered by &#39;property&#39;
+ * AND &#39;special property&#39; equals to their respective values.
+ * While in the following example   * ?p.property_name_1&#x3D;value_1,value_2
+ * The resulting Features list will contain all elements having value_1 OR value_2.
+ * Additionally to the operators used in the examples above, the query can be written,
+ * with the same semantic, by using the long operators: \&quot;&#x3D;gte&#x3D;\&quot;, \&quot;&#x3D;lte&#x3D;\&quot;,
+ * \&quot;&#x3D;gt&#x3D;\&quot;, \&quot;&#x3D;lt&#x3D;\&quot; and \&quot;&#x3D;cs&#x3D;\&quot;.
+ * The below queries yield the same result:
+ * * ?p.property_name_1&gt;&#x3D;10   * ?p.property_name_1&#x3D;gte&#x3D;10
+ * The available operators are:   - \&quot;&#x3D;\&quot; - equals
+ * - \&quot;!&#x3D;\&quot; - not equals   - \&quot;&gt;&#x3D;\&quot; or \&quot;&#x3D;gte&#x3D;\&quot;
+ * - greater than or equals   - \&quot;&lt;&#x3D;\&quot; or \&quot;&#x3D;lte&#x3D;\&quot;
+ *  - less than or equals   - \&quot;&gt;\&quot; or \&quot;&#x3D;gt&#x3D;\&quot; - greater than
+ * - \&quot;&lt;\&quot; or \&quot;&#x3D;lt&#x3D;\&quot; - less than   - \&quot;@&gt;\&quot;
+ * or \&quot;&#x3D;cs&#x3D;\&quot; - contains
+ * @param selection A list of properties to be returned in the features result list. Multiple attributes can
+ * be specified by using comma(,). Example: ?selection&#x3D;p.name,p.capacity,p.color
  * @param skipCache If set to _true_ the response is not returned from cache. Default is _false_.
  * @param force2D If set to _true_ the features in the response will have only X&#39;s and Y&#39;s as coordinates.
  */
@@ -762,7 +990,8 @@ export async function deleteFeature(
  *
  * @summary Delete multiple features from the layer
  * @param layerId The unique identified for the Layer ID.
- * @param id A comma separated list of unique feature identifiers. These are the acceptable formats for this field:   * id&#x3D;value1,value2   * id&#x3D;value1,id&#x3D;value2
+ * @param id A comma separated list of unique feature identifiers. These are the acceptable formats for this field:
+ * * id&#x3D;value1,value2   * id&#x3D;value1,id&#x3D;value2
  */
 export async function deleteFeatures(
     builder: RequestBuilder,
@@ -809,8 +1038,9 @@ export async function patchFeature(
         headers
     };
     headers["Content-Type"] = "application/json";
-    if (params["body"] !== undefined)
+    if (params["body"] !== undefined) {
         options.body = JSON.stringify(params["body"]);
+    }
 
     return builder.request<Feature>(urlBuilder, options);
 }
@@ -839,8 +1069,9 @@ export async function postFeatures(
         headers
     };
     headers["Content-Type"] = "application/json";
-    if (params["body"] !== undefined)
+    if (params["body"] !== undefined) {
         options.body = JSON.stringify(params["body"]);
+    }
 
     return builder.request<FeatureCollectionModification>(urlBuilder, options);
 }
@@ -869,8 +1100,9 @@ export async function putFeature(
         headers
     };
     headers["Content-Type"] = "application/json";
-    if (params["body"] !== undefined)
+    if (params["body"] !== undefined) {
         options.body = JSON.stringify(params["body"]);
+    }
 
     return builder.request<Feature>(urlBuilder, options);
 }
@@ -899,8 +1131,9 @@ export async function putFeatures(
         headers
     };
     headers["Content-Type"] = "application/json";
-    if (params["body"] !== undefined)
+    if (params["body"] !== undefined) {
         options.body = JSON.stringify(params["body"]);
+    }
 
     return builder.request<FeatureCollectionModification>(urlBuilder, options);
 }
