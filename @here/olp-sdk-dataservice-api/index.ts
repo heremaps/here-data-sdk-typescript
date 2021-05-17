@@ -32,6 +32,7 @@ import * as QueryApi from "./lib/query-api";
 import * as StreamApi from "./lib/stream-api";
 import * as VolatileBlobApi from "./lib/volatile-blob-api";
 import * as ObjectStoreApi from "./lib/blob.v2.api";
+import * as InteractiveApi from "./lib/interactive-api-v1";
 
 // tslint:disable-next-line: array-type
 export type AdditionalFields = Array<
@@ -51,5 +52,6 @@ export {
     IndexApi,
     StreamApi,
     PublishApi,
-    ObjectStoreApi
+    ObjectStoreApi,
+    InteractiveApi
 };
