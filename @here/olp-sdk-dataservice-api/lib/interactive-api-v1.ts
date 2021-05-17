@@ -180,6 +180,16 @@ export interface StatisticsTagsValue {
     count?: number;
 }
 
+function appendAdditionalFeatureFiltersQuery(params?: {
+    [key: string]: string;
+}): string {
+    return "";
+}
+
+function appendClusteringParams(params?: { [key: string]: string }): string {
+    return "";
+}
+
 /* ===================================================================
  * APIInformationApi
  */
@@ -253,7 +263,10 @@ export async function getFeature(
 
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
     urlBuilder.appendQuery("selection", params["selection"]);
-    urlBuilder.appendQuery("force2D", params["force2D"]);
+
+    if (params["force2D"]) {
+        urlBuilder.appendQuery("force2D", "true");
+    }
 
     const headers: { [header: string]: string } = {};
     const options: RequestOptions = {
@@ -290,7 +303,10 @@ export async function getFeatures(
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
     urlBuilder.appendQuery("id", params["id"]);
     urlBuilder.appendQuery("selection", params["selection"]);
-    urlBuilder.appendQuery("force2D", params["force2D"]);
+
+    if (params["force2D"]) {
+        urlBuilder.appendQuery("force2D", "true");
+    }
 
     const headers: { [header: string]: string } = {};
     const options: RequestOptions = {
@@ -338,14 +354,32 @@ export async function getFeaturesByBBox(
 
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
     urlBuilder.appendQuery("bbox", params["bbox"]);
-    urlBuilder.appendQuery("clip", params["clip"]);
+
+    if (params["clip"]) {
+        urlBuilder.appendQuery("clip", "true");
+    }
     urlBuilder.appendQuery("limit", params["limit"]);
-    urlBuilder.appendQuery("params", params["params"]);
+
+    urlBuilder.appendQuery(
+        "params",
+        appendAdditionalFeatureFiltersQuery(params["params"])
+    );
+
     urlBuilder.appendQuery("selection", params["selection"]);
-    urlBuilder.appendQuery("skipCache", params["skipCache"]);
+
+    if (params["skipCache"]) {
+        urlBuilder.appendQuery("skipCache", "true");
+    }
+
     urlBuilder.appendQuery("clustering", params["clustering"]);
-    urlBuilder.appendQuery("clusteringParams", params["clusteringParams"]);
-    urlBuilder.appendQuery("force2D", params["force2D"]);
+    urlBuilder.appendQuery(
+        "clusteringParams",
+        appendClusteringParams(params["clusteringParams"])
+    );
+
+    if (params["force2D"]) {
+        urlBuilder.appendQuery("force2D", "true");
+    }
 
     const headers: { [header: string]: string } = {};
     const options: RequestOptions = {
@@ -403,10 +437,19 @@ export async function getFeaturesBySpatial(
     urlBuilder.appendQuery("refFeatureId", params["refFeatureId"]);
     urlBuilder.appendQuery("radius", params["radius"]);
     urlBuilder.appendQuery("limit", params["limit"]);
-    urlBuilder.appendQuery("params", params["params"]);
+    urlBuilder.appendQuery(
+        "params",
+        appendAdditionalFeatureFiltersQuery(params["params"])
+    );
     urlBuilder.appendQuery("selection", params["selection"]);
-    urlBuilder.appendQuery("skipCache", params["skipCache"]);
-    urlBuilder.appendQuery("force2D", params["force2D"]);
+
+    if (params["skipCache"]) {
+        urlBuilder.appendQuery("skipCache", "true");
+    }
+
+    if (params["force2D"]) {
+        urlBuilder.appendQuery("force2D", "true");
+    }
 
     const headers: { [header: string]: string } = {};
     const options: RequestOptions = {
@@ -451,10 +494,19 @@ export async function getFeaturesBySpatialPost(
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
     urlBuilder.appendQuery("radius", params["radius"]);
     urlBuilder.appendQuery("limit", params["limit"]);
-    urlBuilder.appendQuery("params", params["params"]);
+    urlBuilder.appendQuery(
+        "params",
+        appendAdditionalFeatureFiltersQuery(params["params"])
+    );
     urlBuilder.appendQuery("selection", params["selection"]);
-    urlBuilder.appendQuery("skipCache", params["skipCache"]);
-    urlBuilder.appendQuery("force2D", params["force2D"]);
+
+    if (params["skipCache"]) {
+        urlBuilder.appendQuery("skipCache", "true");
+    }
+
+    if (params["force2D"]) {
+        urlBuilder.appendQuery("force2D", "true");
+    }
 
     const headers: { [header: string]: string } = {};
     const options: RequestOptions = {
@@ -508,15 +560,31 @@ export async function getFeaturesByTile(
         .replace("{tileId}", UrlBuilder.toString(params["tileId"]));
 
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
-    urlBuilder.appendQuery("clip", params["clip"]);
-    urlBuilder.appendQuery("params", params["params"]);
+
+    if (params["clip"]) {
+        urlBuilder.appendQuery("clip", "true");
+    }
+    urlBuilder.appendQuery(
+        "params",
+        appendAdditionalFeatureFiltersQuery(params["params"])
+    );
     urlBuilder.appendQuery("selection", params["selection"]);
-    urlBuilder.appendQuery("skipCache", params["skipCache"]);
+
+    if (params["skipCache"]) {
+        urlBuilder.appendQuery("skipCache", "true");
+    }
+
     urlBuilder.appendQuery("clustering", params["clustering"]);
-    urlBuilder.appendQuery("clusteringParams", params["clusteringParams"]);
+    urlBuilder.appendQuery(
+        "clusteringParams",
+        appendClusteringParams(params["clusteringParams"])
+    );
     urlBuilder.appendQuery("margin", params["margin"]);
     urlBuilder.appendQuery("limit", params["limit"]);
-    urlBuilder.appendQuery("force2D", params["force2D"]);
+
+    if (params["force2D"]) {
+        urlBuilder.appendQuery("force2D", "true");
+    }
 
     const headers: { [header: string]: string } = {};
     const options: RequestOptions = {
@@ -544,7 +612,10 @@ export async function getStatistics(
     );
 
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
-    urlBuilder.appendQuery("skipCache", params["skipCache"]);
+
+    if (params["skipCache"]) {
+        urlBuilder.appendQuery("skipCache", "true");
+    }
 
     const headers: { [header: string]: string } = {};
     const options: RequestOptions = {
@@ -586,8 +657,14 @@ export async function iterateFeatures(
     urlBuilder.appendQuery("limit", params["limit"]);
     urlBuilder.appendQuery("pageToken", params["pageToken"]);
     urlBuilder.appendQuery("selection", params["selection"]);
-    urlBuilder.appendQuery("skipCache", params["skipCache"]);
-    urlBuilder.appendQuery("force2D", params["force2D"]);
+
+    if (params["skipCache"]) {
+        urlBuilder.appendQuery("skipCache", "true");
+    }
+
+    if (params["force2D"]) {
+        urlBuilder.appendQuery("force2D", "true");
+    }
 
     const headers: { [header: string]: string } = {};
     const options: RequestOptions = {
@@ -627,10 +704,19 @@ export async function searchFeatures(
 
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
     urlBuilder.appendQuery("limit", params["limit"]);
-    urlBuilder.appendQuery("params", params["params"]);
+    urlBuilder.appendQuery(
+        "params",
+        appendAdditionalFeatureFiltersQuery(params["params"])
+    );
     urlBuilder.appendQuery("selection", params["selection"]);
-    urlBuilder.appendQuery("skipCache", params["skipCache"]);
-    urlBuilder.appendQuery("force2D", params["force2D"]);
+
+    if (params["skipCache"]) {
+        urlBuilder.appendQuery("skipCache", "true");
+    }
+
+    if (params["force2D"]) {
+        urlBuilder.appendQuery("force2D", "true");
+    }
 
     const headers: { [header: string]: string } = {};
     const options: RequestOptions = {
