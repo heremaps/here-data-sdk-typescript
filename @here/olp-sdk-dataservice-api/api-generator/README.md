@@ -5,11 +5,5 @@ Use the official swagger-codegen, (https://github.com/swagger-api/swagger-codege
 Here's an example invocation to generate our output:
 
 ```bash
-java \
-    -jar modules/swagger-codegen-cli/target/swagger-codegen-cli.jar \
-    generate \
-    -i swagger-specification.json
-    -t templates/TypeScript-Fetch \
-    -l typescript-fetch \
-    -o out
+swagger-codegen generate -i spec.json -t templates/TypeScript-Fetch -l typescript-fetch -o out --template-engine mustache
 ```
