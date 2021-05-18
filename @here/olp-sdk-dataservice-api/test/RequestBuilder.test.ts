@@ -76,6 +76,16 @@ describe("UrlBuilderTest", function() {
         expect(testUrlBuilder3.hasQuery).to.be.equal(true);
     });
 
+    it("Method appendQuery should appends parameters key, value to the URL, when parameter value type is boolean", async function() {
+        const testBuilder = new UrlBuilder("test-url");
+        testBuilder.appendQuery("testKey", false);
+        testBuilder.appendQuery("testKey2", true);
+        testBuilder.appendQuery("testKey3", undefined);
+        expect(testBuilder.url).to.be.equal(
+            "test-url?testKey=false&testKey2=true"
+        );
+    });
+
     it("Method appendQuery should appends parameters key, value to the URL, when parameter value is an array of strings", async function() {
         const testUrlBuilder4 = new UrlBuilder("test-url");
         const mockedUrl = "test-url?testkey=value1,value2,value3";

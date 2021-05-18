@@ -28,14 +28,14 @@ import { UrlBuilder, RequestBuilder, RequestOptions } from "./RequestBuilder";
 
 export interface ApiHealthStatus {
     /**
-     * Health status of API
+     * Health status of API.
      */
     status?: string;
 }
 
 export interface ApiVersion {
     /**
-     * Version of API
+     * Version of API.
      */
     apiVersion?: string;
 }
@@ -170,4 +170,390 @@ export interface StatisticsTags {
 export interface StatisticsTagsValue {
     key?: string;
     count?: number;
+}
+
+/**
+ * Retrieves API Specification version information.
+ */
+export async function getApiVersion(
+    builder: RequestBuilder
+): Promise<ApiVersion> {
+    const baseUrl = "/version";
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<ApiVersion>(urlBuilder, options);
+}
+
+/**
+ * Tests basic health of the service.
+ */
+export async function getHealth(
+    builder: RequestBuilder
+): Promise<ApiHealthStatus> {
+    const baseUrl = "/health";
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<ApiHealthStatus>(urlBuilder, options);
+}
+
+/**
+ * Retrieves the feature with the provided identifier.
+ *
+ * @summary Get a feature by ID.
+ *
+ * @param layerId The unique identified for the Layer ID.
+ *
+ * @param featureId The unique identifier of a feature in the layer.
+ *
+ * @param selection A list of properties to be returned in the features result list.
+ * Multiple attributes can be specified by using comma(,).
+ * Example: `?selection=p.name,p.capacity,p.color`.
+ *
+ * @param force2D If set to `true` the features in the response will have only X's and Y's as coordinates.
+ */
+export async function getFeature(
+    builder: RequestBuilder,
+    params: {
+        layerId: string;
+        featureId: string;
+        selection?: string;
+        force2D?: boolean;
+    }
+): Promise<Feature> {
+    const baseUrl = "/layers/{layerId}/features/{featureId}"
+        .replace("{layerId}", UrlBuilder.toString(params["layerId"]))
+        .replace("{featureId}", UrlBuilder.toString(params["featureId"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("selection", params["selection"]);
+    urlBuilder.appendQuery("force2D", params["force2D"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<Feature>(urlBuilder, options);
+}
+
+/**
+ * Returns all of the features found for the provided list of ids.
+ * The response is always a FeatureCollection, even if there are no features with the provided ids.
+ *
+ * @summary Get features by ID.
+ *
+ * @param layerId The unique identified for the Layer ID.
+ *
+ * @param id A comma separated list of unique feature identifiers.
+ * These are the acceptable formats for this field:
+ * ```
+ * id=value1,value2
+ * ```
+ *
+ * @param selection A list of properties to be returned in the features result list.
+ * Multiple attributes can be specified by using comma(,).
+ * Example: `?selection=p.name,p.capacity,p.color`.
+ *
+ * @param force2D If set to `true` the features in the response will have only X's and Y's as coordinates.
+ */
+export async function getFeatures(
+    builder: RequestBuilder,
+    params: {
+        layerId: string;
+        id: string;
+        selection?: string;
+        force2D?: boolean;
+    }
+): Promise<FeatureCollection> {
+    const baseUrl = "/layers/{layerId}/features".replace(
+        "{layerId}",
+        UrlBuilder.toString(params["layerId"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("id", params["id"]);
+    urlBuilder.appendQuery("selection", params["selection"]);
+    urlBuilder.appendQuery("force2D", params["force2D"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<FeatureCollection>(urlBuilder, options);
+}
+
+/**
+ * Return the features which are inside a bounding box stipulated by bbox parameter.
+ *
+ * @summary Get features by bounding box.
+ *
+ * @param layerId The unique identified for the Layer ID.
+ *
+ * @param bbox Both west, south, east and north coordinates separated by comma.
+ * Example: `bbox=13.082,52.416,13.628,52.626` - Bounding box of Berlin.
+ *
+ * @param clip If set to true the features' geometries are clipped to the geometry of the
+ * tile or bounding box. Default is false.
+ *
+ * @param limit The maximum number of features in the response. Default is 30000. Hard limit is 100000.
+ *
+ * @param params Additional feature filters which compares the feature's property's value with the one specified
+ * in the query, resulting in a subset of features.
+ * The usage of multiple property names represents an AND operation.
+ * The usage of a comma (,) separating the properties values, represents an OR operation.
+ * Properties initiated with 'f.' are used to access values which are added by default in the stored feature.
+ * The possible values are: 'f.id', 'f.createdAt' and 'f.updatedAt'.
+ * Properties initiated with 'p.' are used to access values in the stored feature which are under the 'properties' property.
+ * Use it as a shorthand accessor for 'properties' values.
+ * The format should follow the specification below
+ * ```
+ * ?p.property_name_1=property_value_1&f.special_property_name_1=special_property_value_1
+ * ```
+ *
+ * For example, the above query, the Features will be filtered by 'property' AND 'special property' equals to their
+ * respective values.
+ *
+ * While in the following example ```?p.property_name_1=value_1,value_2```
+ * The resulting Features list will contain all elements having `value_1` OR `value_2`.
+ *
+ * Additionally to the operators used in the examples above, the query can be written, with the same semantic,
+ * by using the long operators: `"=gte=", "=lte=", "=gt=", "=lt=" and "=cs="`.
+ *
+ * The below queries yield the same result:
+ * ```
+ * ?p.property_name_1>=10
+ * ?p.property_name_1=gte=10
+ * ```
+ *
+ * The available operators are:
+ * "=" - equals
+ * "!=" - not equals
+ * ">=" or "=gte=" - greater than or equals
+ * "<=" or "=lte=" - less than or equals
+ * ">" or "=gt=" - greater than
+ * "<" or "=lt=" - less than
+ * "@>" or "=cs=" - contains
+ *
+ * @param selection A list of properties to be returned in the features result list.
+ * Multiple attributes can be specified by using comma(,).
+ * Example: `?selection=p.name,p.capacity,p.color`.
+ *
+ * @param skipCache If set to true the response is not returned from cache. Default is false.
+ *
+ * @param clustering The clustering algorithm to apply to the data within the result.
+ * Providing this query parameter the data will be returned in a clustered way.
+ * This means the data won't necessarily be returned in its original shape or with its original properties.
+ * Depending on the chosen clustering algorithm there could be different mandatory and/or optional parameters
+ * to specify the behavior of the algorithm.
+ * Possible values are:
+ *
+ * `hexbin` - The hexbin algorithm divides the world in hexagonal "bins" on a specified resolution.
+ * Each hexagon has an address being described by the H3 addressing scheme.
+ * For more information on that topic see: https://eng.uber.com/h3/.
+ *
+ * `quadbin` - The quadbin algorithm takes the geometry input from the request (e.g. quadkey / bbox..)
+ * and count the features in it.
+ * This clustering mode works also for very large layers and can be used for getting an overview
+ * where data is present in a given layer. Furthermore, a property filter on one property is applicable.
+ *
+ * @param clusteringParams Some parameters for the chosen clustering algorithm.
+ * Depending on the chosen clustering algorithm there could be different mandatory and/or optional parameters to specify
+ * the behavior of the algorithm.
+ *
+ * Clustering-Parameter reference.
+ * NOTE: The actual query parameters in the URL are looking like: `?clustering.aParameterName=aValue`.
+ *
+ * Clustering-type: "hexbin":
+ * There are several parameters needed by the H3 based hexbin algorithm.
+ * For more information on that topic see: https://eng.uber.com/h3/.
+ *
+ * =======================================================================================================
+ * |      Parameter       |   Type   |   Mandatory   |                      Meaning                       |
+ * ========================================================================================================
+ * |  absoluteResolution  |  Number  |       NO      | The H3 hexagon resolution                          |
+ * --------------------------------------------------------------------------------------------------------
+ * |     resolution	      |  Number  |       NO      | deprecated, renamed to absoluteResolution          |
+ * --------------------------------------------------------------------------------------------------------
+ * | relativeResolution   |	 Number  |       NO      | integer value [0-4] to be added to current used    |
+ * |                      |          |               | resolution                                         |
+ * --------------------------------------------------------------------------------------------------------
+ * |       property	      |  String  |       NO	     | A property of the original features for which to   |
+ * |                      |          |               | calculate statistics                               |
+ * --------------------------------------------------------------------------------------------------------
+ * |       pointmode	  |  Boolean |       NO	     | retuns the centroid of hexagons as geojson feature |
+ * --------------------------------------------------------------------------------------------------------
+ *
+ *
+ * @param force2D If set to `true` the features in the response will have only X's and Y's as coordinates.
+ */
+export async function getFeaturesByBBox(
+    builder: RequestBuilder,
+    params: {
+        layerId: string;
+        bbox?: string;
+        clip?: boolean;
+        limit?: number;
+        params?: string;
+        selection?: string;
+        skipCache?: boolean;
+        clustering?: string;
+        clusteringParams?: string;
+        force2D?: boolean;
+    }
+): Promise<FeatureCollection> {
+    const baseUrl = "/layers/{layerId}/bbox".replace(
+        "{layerId}",
+        UrlBuilder.toString(params["layerId"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("bbox", params["bbox"]);
+    urlBuilder.appendQuery("clip", "true");
+    urlBuilder.appendQuery("limit", params["limit"]);
+    urlBuilder.appendQuery("params", params["params"]);
+    urlBuilder.appendQuery("selection", params["selection"]);
+    urlBuilder.appendQuery("skipCache", "true");
+    urlBuilder.appendQuery("clustering", params["clustering"]);
+    urlBuilder.appendQuery("clusteringParams", params["clusteringParams"]);
+    urlBuilder.appendQuery("force2D", "true");
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<FeatureCollection>(urlBuilder, options);
+}
+
+/**
+ * List the features which are inside the specified radius. The origin radius point is calculated
+ * based either on latitude & longitude or by specifying a feature's geometry.
+ *
+ * @summary Get features with radius search.
+ *
+ * @param layerId The unique identified for the Layer ID.
+ *
+ * @param lat The latitude in WGS'84 decimal degree (-90 to +90) of the center Point.
+ *
+ * @param lng The longitude in WGS'84 decimal degree (-180 to +180) of the center Point.
+ *
+ * @param refCatalogHrn The catalog HRN where the layer containing the referenced feature is stored.
+ * Always to use in combination with refFeatureId.
+ *
+ * @param refLayerId As alternative for defining center coordinates,
+ * it is possible to reference a geometry in a layer.
+ * Therefore it is needed to provide the layer id where the referenced feature is stored.
+ * Always to use in combination with refFeatureId.
+ *
+ * @param refFeatureId The unique identifier of a feature in the referenced layer.
+ * The geometry of that feature gets used for the spatial query.
+ * Always to use in combination with refCatalogHrn and refLayerId.
+ *
+ * @param radius Radius in meter which defines the diameter of the search request.
+ *
+ * @param limit The maximum number of features in the response. Default is 30000. Hard limit is 100000.
+ *
+ * @param params Additional feature filters which compares the feature's property's value with
+ * the one specified in the query, resulting in a subset of features.
+ * The usage of multiple property names represents an AND operation.
+ * The usage of a comma (,) separating the properties values, represents an OR operation.
+ * Properties initiated with 'f.' are used to access values which are added by default in the stored feature.
+ * The possible values are: 'f.id', 'f.createdAt' and 'f.updatedAt'.
+ * Properties initiated with 'p.' are used to access values in the stored feature which
+ * are under the 'properties' property. Use it as a shorthand accessor for 'properties' values.
+ * The format should follow the specification below:
+ * ```
+ * ?p.property_name_1=property_value_1&f.special_property_name_1=special_property_value_1
+ * ```
+ *
+ * For example, the above query, the Features will be filtered by 'property' AND 'special property' equals
+ * to their respective values.While in the following example: `?p.property_name_1=value_1,value_2`.
+ *
+ * The resulting Features list will contain all elements having value_1 OR value_2.
+ * Additionally to the operators used in the examples above, the query can be written, with the same semantic,
+ * by using the long operators: `"=gte=", "=lte=", "=gt=", "=lt=" and "=cs="`.
+ * The below queries yield the same result:
+ * ```
+ * ?p.property_name_1>=10
+ * ?p.property_name_1=gte=10
+ * ```
+ *
+ * The available operators are:
+ * "=" - equals
+ * "!=" - not equals
+ * ">=" or "=gte=" - greater than or equals
+ * "<=" or "=lte=" - less than or equals
+ * ">" or "=gt=" - greater than
+ * "<" or "=lt=" - less than
+ * "@>" or "=cs=" - contains
+ *
+ *
+ * @param selection A list of properties to be returned in the features result list.
+ * Multiple attributes can be specified by using comma(,).
+ * Example: `?selection=p.name,p.capacity,p.color`.
+ *
+ * @param skipCache If set to true the response is not returned from cache. Default is false.
+ *
+ * @param force2D If set to `true` the features in the response will have only X's and Y's as coordinates.
+ */
+export async function getFeaturesBySpatial(
+    builder: RequestBuilder,
+    params: {
+        layerId: string;
+        lat?: number;
+        lng?: number;
+        refCatalogHrn?: string;
+        refLayerId?: string;
+        refFeatureId?: string;
+        radius?: number;
+        limit?: number;
+        params?: string;
+        selection?: string;
+        skipCache?: boolean;
+        force2D?: boolean;
+    }
+): Promise<FeatureCollection> {
+    const baseUrl = "/layers/{layerId}/spatial".replace(
+        "{layerId}",
+        UrlBuilder.toString(params["layerId"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("lat", params["lat"]);
+    urlBuilder.appendQuery("lng", params["lng"]);
+    urlBuilder.appendQuery("refCatalogHrn", params["refCatalogHrn"]);
+    urlBuilder.appendQuery("refLayerId", params["refLayerId"]);
+    urlBuilder.appendQuery("refFeatureId", params["refFeatureId"]);
+    urlBuilder.appendQuery("radius", params["radius"]);
+    urlBuilder.appendQuery("limit", params["limit"]);
+    urlBuilder.appendQuery("params", params["params"]);
+    urlBuilder.appendQuery("selection", params["selection"]);
+    urlBuilder.appendQuery("skipCache", params["skipCache"]);
+    urlBuilder.appendQuery("force2D", params["force2D"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "GET",
+        headers
+    };
+
+    return builder.request<FeatureCollection>(urlBuilder, options);
 }
