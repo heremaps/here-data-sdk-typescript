@@ -988,3 +988,200 @@ export async function searchFeatures(
 
     return builder.request<FeatureCollection>(urlBuilder, options);
 }
+
+/**
+ * Deletes an existing feature.
+ *
+ * @summary Deletes a feature.
+ *
+ * @param layerId The unique identified for the Layer ID.
+ *
+ * @param featureId The unique identifier of a feature in the layer.
+ */
+export async function deleteFeature(
+    builder: RequestBuilder,
+    params: { layerId: string; featureId: string }
+): Promise<Feature> {
+    const baseUrl = "/layers/{layerId}/features/{featureId}"
+        .replace("{layerId}", UrlBuilder.toString(params["layerId"]))
+        .replace("{featureId}", UrlBuilder.toString(params["featureId"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "DELETE",
+        headers
+    };
+
+    return builder.request<Feature>(urlBuilder, options);
+}
+
+/**
+ * The wildcard sign(*) could be used to delete all features in the layer.
+ *
+ * @summary Delete multiple features from the layer.
+ *
+ * @param layerId The unique identified for the Layer ID.
+ *
+ * @param id A comma separated list of unique feature identifiers.
+ * These are the acceptable formats for this field:
+ * ```
+ * id=value1,value2
+ * id=value1,id=value2
+ * ```
+ */
+export async function deleteFeatures(
+    builder: RequestBuilder,
+    params: { layerId: string; id?: Array<string> }
+): Promise<FeatureCollectionModification> {
+    const baseUrl = "/layers/{layerId}/features".replace(
+        "{layerId}",
+        UrlBuilder.toString(params["layerId"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+    urlBuilder.appendQuery("id", params["id"]);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "DELETE",
+        headers
+    };
+
+    return builder.request<FeatureCollectionModification>(urlBuilder, options);
+}
+
+/**
+ * Patches an existing feature.
+ *
+ * @summary Patch a feature.
+ *
+ * @param body A feature request.
+ *
+ * @param layerId The unique identified for the Layer ID.
+ *
+ * @param featureId The unique identifier of a feature in the layer.
+ */
+export async function patchFeature(
+    builder: RequestBuilder,
+    params: { body: Feature; layerId: string; featureId: string }
+): Promise<Feature> {
+    const baseUrl = "/layers/{layerId}/features/{featureId}"
+        .replace("{layerId}", UrlBuilder.toString(params["layerId"]))
+        .replace("{featureId}", UrlBuilder.toString(params["featureId"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "PATCH",
+        headers
+    };
+    headers["Content-Type"] = "application/json";
+    if (params["body"] !== undefined) {
+        options.body = JSON.stringify(params["body"]);
+    }
+
+    return builder.request<Feature>(urlBuilder, options);
+}
+
+/**
+ * Create or patch features.
+ *
+ * @summary Modify features.
+ *
+ * @param body A FeatureCollection object or a FeatureModificationList object.
+ *
+ * @param layerId The unique identified for the Layer ID.
+ */
+export async function postFeatures(
+    builder: RequestBuilder,
+    params: { body: FeatureCollection; layerId: string }
+): Promise<FeatureCollectionModification> {
+    const baseUrl = "/layers/{layerId}/features".replace(
+        "{layerId}",
+        UrlBuilder.toString(params["layerId"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "POST",
+        headers
+    };
+    headers["Content-Type"] = "application/json";
+    if (params["body"] !== undefined) {
+        options.body = JSON.stringify(params["body"]);
+    }
+
+    return builder.request<FeatureCollectionModification>(urlBuilder, options);
+}
+
+/**
+ * Creates or replaces a feature in the layer.
+ *
+ * @summary Create or replace a feature.
+ *
+ * @param body A feature request.
+ *
+ * @param layerId The unique identified for the Layer ID.
+ *
+ * @param featureId The unique identifier of a feature in the layer.
+ */
+export async function putFeature(
+    builder: RequestBuilder,
+    params: { body: Feature; layerId: string; featureId: string }
+): Promise<Feature> {
+    const baseUrl = "/layers/{layerId}/features/{featureId}"
+        .replace("{layerId}", UrlBuilder.toString(params["layerId"]))
+        .replace("{featureId}", UrlBuilder.toString(params["featureId"]));
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "PUT",
+        headers
+    };
+    headers["Content-Type"] = "application/json";
+    if (params["body"] !== undefined) {
+        options.body = JSON.stringify(params["body"]);
+    }
+
+    return builder.request<Feature>(urlBuilder, options);
+}
+
+/**
+ * Create or replace the provided features.
+ *
+ * @summary Create or replace multiple features.
+ *
+ * @param body A feature collection request.
+ *
+ * @param layerId The unique identified for the Layer ID.
+ */
+export async function putFeatures(
+    builder: RequestBuilder,
+    params: { body: FeatureCollection; layerId: string }
+): Promise<FeatureCollectionModification> {
+    const baseUrl = "/layers/{layerId}/features".replace(
+        "{layerId}",
+        UrlBuilder.toString(params["layerId"])
+    );
+
+    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
+
+    const headers: { [header: string]: string } = {};
+    const options: RequestOptions = {
+        method: "PUT",
+        headers
+    };
+    headers["Content-Type"] = "application/json";
+    if (params["body"] !== undefined) {
+        options.body = JSON.stringify(params["body"]);
+    }
+
+    return builder.request<FeatureCollectionModification>(urlBuilder, options);
+}

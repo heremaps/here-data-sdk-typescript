@@ -291,4 +291,161 @@ describe("InteractiveApi", function() {
             })
         ).eqls("success");
     });
+
+    it("deleteFeature", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: any, options: any) => {
+                expect(urlBuilder.url).to.be.equals(
+                    `http://mocked.url/layers/mocked-layerId/features/mocked-featureId`
+                );
+                expect(options.method).to.be.equal("DELETE");
+                return Promise.resolve("success");
+            }
+        } as any;
+
+        expect(
+            await InteractiveApi.deleteFeature(builder, {
+                layerId: "mocked-layerId",
+                featureId: "mocked-featureId"
+            })
+        ).eqls("success");
+    });
+
+    it("deleteFeatures", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: any, options: any) => {
+                expect(urlBuilder.url).to.be.equals(
+                    `http://mocked.url/layers/mocked-layerId/features?id=mocked-featureId,mocked-featureId-2`
+                );
+                expect(options.method).to.be.equal("DELETE");
+                return Promise.resolve("success");
+            }
+        } as any;
+
+        expect(
+            await InteractiveApi.deleteFeatures(builder, {
+                layerId: "mocked-layerId",
+                id: ["mocked-featureId", "mocked-featureId-2"]
+            })
+        ).eqls("success");
+    });
+
+    it("patchFeature", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: any, options: any) => {
+                expect(urlBuilder.url).to.be.equals(
+                    `http://mocked.url/layers/mocked-layerId/features/mocked-featureId`
+                );
+
+                expect(options.body).to.be.equal(
+                    `{"type":"mocked-feature","bbox":[1,2,3,4]}`
+                );
+
+                expect(options.method).to.be.equal("PATCH");
+                return Promise.resolve("success");
+            }
+        } as any;
+
+        expect(
+            await InteractiveApi.patchFeature(builder, {
+                layerId: "mocked-layerId",
+                featureId: "mocked-featureId",
+                body: {
+                    type: "mocked-feature",
+                    bbox: [1, 2, 3, 4]
+                }
+            })
+        ).eqls("success");
+    });
+
+    it("postFeatures", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: any, options: any) => {
+                expect(urlBuilder.url).to.be.equals(
+                    `http://mocked.url/layers/mocked-layerId/features`
+                );
+
+                expect(options.body).to.be.equal(
+                    `{"type":"mocked-features","features":[{"type":"mocked-feature-1","bbox":[1,2,3,4]},{"type":"mocked-feature-2","bbox":[4,3,2,1]}]}`
+                );
+
+                expect(options.method).to.be.equal("POST");
+                return Promise.resolve("success");
+            }
+        } as any;
+
+        expect(
+            await InteractiveApi.postFeatures(builder, {
+                layerId: "mocked-layerId",
+                body: {
+                    type: "mocked-features",
+                    features: [
+                        { type: "mocked-feature-1", bbox: [1, 2, 3, 4] },
+                        { type: "mocked-feature-2", bbox: [4, 3, 2, 1] }
+                    ]
+                }
+            })
+        ).eqls("success");
+    });
+
+    it("putFeature", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: any, options: any) => {
+                expect(urlBuilder.url).to.be.equals(
+                    `http://mocked.url/layers/mocked-layerId/features/mocked-featureId`
+                );
+
+                expect(options.body).to.be.equal(
+                    `{"type":"mocked-feature-1","bbox":[1,2,3,4]}`
+                );
+
+                expect(options.method).to.be.equal("PUT");
+                return Promise.resolve("success");
+            }
+        } as any;
+
+        expect(
+            await InteractiveApi.putFeature(builder, {
+                layerId: "mocked-layerId",
+                featureId: "mocked-featureId",
+                body: { type: "mocked-feature-1", bbox: [1, 2, 3, 4] }
+            })
+        ).eqls("success");
+    });
+
+    it("putFeatures", async function() {
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: any, options: any) => {
+                expect(urlBuilder.url).to.be.equals(
+                    `http://mocked.url/layers/mocked-layerId/features`
+                );
+
+                expect(options.body).to.be.equal(
+                    `{"type":"mocked-features","features":[{"type":"mocked-feature-1","bbox":[1,2,3,4]},{"type":"mocked-feature-2","bbox":[4,3,2,1]}]}`
+                );
+
+                expect(options.method).to.be.equal("PUT");
+                return Promise.resolve("success");
+            }
+        } as any;
+
+        expect(
+            await InteractiveApi.putFeatures(builder, {
+                layerId: "mocked-layerId",
+                body: {
+                    type: "mocked-features",
+                    features: [
+                        { type: "mocked-feature-1", bbox: [1, 2, 3, 4] },
+                        { type: "mocked-feature-2", bbox: [4, 3, 2, 1] }
+                    ]
+                }
+            })
+        ).eqls("success");
+    });
 });
