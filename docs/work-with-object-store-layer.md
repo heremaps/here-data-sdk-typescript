@@ -74,14 +74,14 @@ You can use the `ObjectStoreApi` functions to request any data from an [object s
 
    For instructions, see <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/create-platform-client-settings.md" target="_blank">Create platform client settings</a>.
 
-2. Create the `RequestBuilder` instance with `RequestFactory` that contains the catalog HRN, the platform client settings from step 1, API name, and API version.
+2. Create the `RequestBuilder` instance with `RequestFactory` that contains the catalog HRN, platform client settings from step 1, API name, and API version.
 
    ```typescript
    const requestBuilder = await RequestFactory.create(
       "blob", 
       "v2", 
       settings, 
-      HRN.fromString("your-catalog-hrn")
+      HRN.fromString("your-catalog-HRN")
    );
    ```
 
@@ -95,7 +95,7 @@ You can request any data from an [object store layer](https://developer.here.com
 
    For instructions, see [Create RequestBuilder](#create-requestbuilder).
 
-2. Call the `getBlobByKey` function with the `key` and `layerId` parameters.
+2. Call the `getBlobByKey` function with the key of the data that you request and layer ID.
 
    ```typescript
    const result = await ObjectStoreApi.getBlobByKey(requestBuilder, {
@@ -116,7 +116,7 @@ You can get a list of all keys from an [object store layer](https://developer.he
 
    For instructions, see [Create RequestBuilder](#create-requestbuilder).
 
-2. Call the `listKeys` function with the `layerId` parameter.
+2. Call the `listKeys` function with the ID of the layer from which you want to get the list of keys.
 
    ```typescript
    const result = await ObjectStoreApi.listKeys(requestBuilder, {
@@ -133,15 +133,17 @@ call this function recursively with a parent in the query string.
 
 ## Publish data to an object store layer
 
-You can publish data to an [object store layer](https://developer.here.com/documentation/data-user-guide/user_guide/portal/layers/layers.html#object-store-layers) by referencing its key. When you publish new data, old data is overwritten.
+You can publish data to an [object store layer](https://developer.here.com/documentation/data-user-guide/user_guide/portal/layers/layers.html#object-store-layers) by referencing its key. For data of up to 192 MB, use the single part upload method. If you want to upload larger amounts of data, use the multipart upload method.
 
-**To publish data to the object store layer:**
+When you publish new data, old data is overwritten.
+
+### Publish data using the single part upload method
 
 1. Create the `RequestBuilder` object.
 
    For instructions, see [Create RequestBuilder](#create-requestbuilder).
 
-2. Call the `putBlobByKey` function with the `key`, `data`, `contentLength`, and `layerId` parameters.
+2. Call the `putBlobByKey` function with the layer ID and data key, data length, and content type.
 
    ```typescript
    const result = await ObjectStoreApi.putBlobByKey(requestBuilder, {
@@ -154,6 +156,39 @@ You can publish data to an [object store layer](https://developer.here.com/docum
 
 You receive a response from the datastore with the status of the operation.
 
+### Publish data using the multipart upload method
+
+1. Make sure you created the `OlpClientSettings` object.
+
+   For instructions, see <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/create-platform-client-settings.md" target="_blank">Create platform client settings</a>.
+
+2. Initialize the `MultiPartUploadWrapper` class with the version of the Blob API, catalog HRN, content type, data handle, and layer ID.
+
+    ```ts
+    const wrapper = new MultiPartUploadWrapper(
+      {
+        blobVersion: "v2",
+        catalogHrn: "your-catalog-HRN",
+        contentType: "your-content-type",
+        handle: "your-data-key",
+        layerId: "your-layer-id",
+      },
+      settings
+    );
+    ```
+
+3. To upload the data, call the `upload` method with one of the following values:
+   - For browsers: `File` | `Blob` | `ArrayBufferLike`.
+   - For Node.js: string (the path of the file) | `ArrayBufferLike`.
+
+    ```ts
+    await wrapper.upload("your data");
+    ```
+
+You receive a response from the datastore with the status of the operation.
+
+To practice uploading large amounts of data and learn how to upload it to the Blob API v1, see the <a href="https://github.com/heremaps/here-data-sdk-typescript/tree/master/examples/multipart-upload-wrapper-example" target="_blank">MultiPartUploadWrapper example</a>.
+
 ## Delete data from an object store layer
 
 You can delete data from any [object store layer](https://developer.here.com/documentation/data-user-guide/user_guide/portal/layers/layers.html#object-store-layers) using its key.
@@ -164,7 +199,7 @@ You can delete data from any [object store layer](https://developer.here.com/doc
 
    For instructions, see [Create RequestBuilder](#create-requestbuilder).
 
-2. Call the `deleteBlobByKey` function with the `key` and `layerId` parameters.
+2. Call the `deleteBlobByKey` function with the key of the data that you want to delete and layer ID.
 
    ```typescript
    const result = await ObjectStoreApi.deleteBlobByKey(requestBuilder, {
