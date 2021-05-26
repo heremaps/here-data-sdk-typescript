@@ -58,12 +58,14 @@ export class UrlBuilder {
         url: string,
         separator: string,
         key: string,
-        value: string | number | string[]
+        value: string | number | boolean | string[]
     ): string {
         url += separator;
         url += encodeURIComponent(key) + "=";
         if (typeof value === "number") {
             url += value.toString();
+        } else if (typeof value === "boolean") {
+            url += `${value}`;
         } else if (typeof value === "string") {
             url += encodeURIComponent(value);
         } else {
@@ -91,7 +93,7 @@ export class UrlBuilder {
      * @param key The key of the query parameter.
      * @param value The value of the query parameter.
      */
-    appendQuery(key: string, value?: string | number | string[]) {
+    appendQuery(key: string, value?: string | number | boolean | string[]) {
         if (value === undefined) {
             return;
         }
