@@ -29,6 +29,7 @@ export type ApiName =
     | "blob"
     | "index"
     | "ingest"
+    | "interactive"
     | "metadata"
     | "notification"
     | "publish"
