@@ -91,40 +91,21 @@ export interface GeoJSON {
      * Describes the coordinate range of the GeoJSON object.
      */
     bbox?: Array<number>;
+    coordinates?:
+        | LineString
+        | MultiLineString
+        | MultiPoint
+        | MultiPolygon
+        | Point
+        | Polygon;
 }
 
-export interface LineString extends GeoJSON {
-    coordinates?: Array<Array<number>>;
-}
-
-export interface ModelError {
-    title?: string;
-    status?: number;
-    code?: string;
-    cause?: string;
-    action?: string;
-    correlationId?: string;
-}
-
-export interface MultiLineString extends GeoJSON {
-    coordinates?: Array<Array<Array<number>>>;
-}
-
-export interface MultiPoint extends GeoJSON {
-    coordinates?: Array<Array<number>>;
-}
-
-export interface MultiPolygon extends GeoJSON {
-    coordinates?: Array<Array<Array<Array<number>>>>;
-}
-
-export interface Point extends GeoJSON {
-    coordinates?: Array<number>;
-}
-
-export interface Polygon extends GeoJSON {
-    coordinates?: Array<Array<Array<number>>>;
-}
+export type LineString = Array<Array<number>>;
+export type MultiLineString = Array<Array<Array<number>>>;
+export type MultiPoint = Array<Array<number>>;
+export type MultiPolygon = Array<Array<Array<Array<number>>>>;
+export type Point = Array<number>;
+export type Polygon = Array<Array<Array<number>>>;
 
 export interface Statistics {
     count?: StatisticsCount;
