@@ -295,7 +295,7 @@ describe("InteractiveApi", function() {
     it("deleteFeature", async function() {
         const builder = {
             baseUrl: "http://mocked.url",
-            request: async (urlBuilder: any, options: any) => {
+            requestBlob: async (urlBuilder: any, options: any) => {
                 expect(urlBuilder.url).to.be.equals(
                     `http://mocked.url/layers/mocked-layerId/features/mocked-featureId`
                 );
@@ -315,7 +315,7 @@ describe("InteractiveApi", function() {
     it("deleteFeatures", async function() {
         const builder = {
             baseUrl: "http://mocked.url",
-            request: async (urlBuilder: any, options: any) => {
+            requestBlob: async (urlBuilder: any, options: any) => {
                 expect(urlBuilder.url).to.be.equals(
                     `http://mocked.url/layers/mocked-layerId/features?id=mocked-featureId,mocked-featureId-2`
                 );
