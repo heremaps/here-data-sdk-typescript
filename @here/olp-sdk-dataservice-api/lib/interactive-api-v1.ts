@@ -47,6 +47,7 @@ export interface Feature extends GeoJSON {
     id?: string;
     geometry?: GeoJSON;
     properties?: { [key: string]: any };
+    features?: Array<Feature>;
 }
 
 export interface FeatureCollection extends GeoJSON {
@@ -982,7 +983,7 @@ export async function searchFeatures(
 export async function deleteFeature(
     builder: RequestBuilder,
     params: { layerId: string; featureId: string }
-): Promise<Feature> {
+): Promise<Response> {
     const baseUrl = "/layers/{layerId}/features/{featureId}"
         .replace("{layerId}", UrlBuilder.toString(params["layerId"]))
         .replace("{featureId}", UrlBuilder.toString(params["featureId"]));
@@ -995,7 +996,7 @@ export async function deleteFeature(
         headers
     };
 
-    return builder.request<Feature>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }
 
 /**
@@ -1015,7 +1016,7 @@ export async function deleteFeature(
 export async function deleteFeatures(
     builder: RequestBuilder,
     params: { layerId: string; id?: Array<string> }
-): Promise<FeatureCollectionModification> {
+): Promise<Response> {
     const baseUrl = "/layers/{layerId}/features".replace(
         "{layerId}",
         UrlBuilder.toString(params["layerId"])
@@ -1030,7 +1031,7 @@ export async function deleteFeatures(
         headers
     };
 
-    return builder.request<FeatureCollectionModification>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }
 
 /**
