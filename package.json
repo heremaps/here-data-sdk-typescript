@@ -1,6 +1,6 @@
 {
   "name": "@here/olp-sdk-ts",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "description": "HERE OLP SDK for TypeScript",
   "author": {
     "name": "HERE Europe B.V.",
@@ -44,7 +44,7 @@
     "bootstrap": "lerna bootstrap --use-workspaces",
     "build": "lerna run build",
     "test": "lerna run test",
-    "http-server-testing-bundles": "serve -l tcp://localhost:8080 tests/integration/bundles/umd/static", 
+    "http-server-testing-bundles": "serve -l tcp://localhost:8080 tests/integration/bundles/umd/static",
     "test-published-bundles": "cd tests/integration/bundles/umd && tsc && cd - && mocha --timeout 5000 tests/integration/bundles/umd/olp-sdk-published.test.js",
     "test-generated-bundles": "cd tests/integration/bundles/umd && tsc && cd - && mocha --timeout 5000 tests/integration/bundles/umd/olp-sdk-generated.test.js",
     "api-breaks-test": "nyc mocha --opts ./tests/integration/api-breaks/mocha.opts",
