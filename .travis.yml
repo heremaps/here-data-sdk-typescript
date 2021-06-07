@@ -61,5 +61,11 @@ deploy:
     cleanup: false
     on:
        branch: master
-       condition: [ $TRAVIS_EVENT_TYPE = api && $allow_publish_npm = true && $allow_publish_write = true ]  
+       condition: [ $TRAVIS_EVENT_TYPE = api && $allow_publish_npm = true && $allow_publish_write = true ]
+  - provider: script
+    script: $WORKSPACE/scripts/publish-packages.sh -verify
+    cleanup: false
+    on:
+       branch: master
+       condition: [ $TRAVIS_EVENT_TYPE = api && $allow_publish_npm = true && $allow_publish_verify = true ]
     
