@@ -51,16 +51,17 @@ while [[ $# -gt 0 ]]; do
         # olp-sdk-dataservice-write publish
         cd @here/olp-sdk-dataservice-write && npm install && npm publish && cd -
         ;;
+        -verify)
+        # verify all published
+        echo 'Publish verification...'
+        yarn
+        yarn bootstrap
+        npm run --silent build
+        npm run --silent http-server-testing-bundles & npm run --silent test-published-bundles
+        echo 'Publish verification done! '
+        ;;
     esac
     # Shift after checking all the cases to get the next option
     shift
 done
-echo 'Publish done! To be verified in 1m. ...'
-sleep 60
-
-echo 'Publish verification...'
-yarn
-yarn bootstrap
-npm run --silent build
-npm run --silent http-server-testing-bundles & npm run --silent test-published-bundles
-echo 'Publish verification done! '
+echo 'Publish done!'
