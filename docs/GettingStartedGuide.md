@@ -4,11 +4,13 @@ HERE Data SDK for TypeScript includes the core components to access the HERE API
 
 In this guide, learn how to authenticate to and start working with the HERE platform using the Data SDK:
 
-- [Prerequisites](#prerequisites)
-- [Concepts](#concepts)
-- [Get credentials](#get-credentials)
-- [Available components](#available-components)
-- [Examples](#examples)
+- [Getting Started Guide](#getting-started-guide)
+  - [Prerequisites](#prerequisites)
+  - [Concepts](#concepts)
+  - [Get credentials](#get-credentials)
+  - [Available components](#available-components)
+  - [Reference documentation](#reference-documentation)
+  - [Examples](#examples)
 
 ## Prerequisites
 
@@ -26,7 +28,7 @@ To use Data SDK for TypeScript, you need to understand the following concepts re
 * [Catalogs](https://developer.here.com/documentation/data-user-guide/portal/layers/catalogs.html)
 * [Layers](https://developer.here.com/documentation/data-user-guide/portal/layers/layers.html)
 * [Partitions](https://developer.here.com/documentation/data-user-guide/portal/layers/partitions.html)
-* [HERE Resource Names (HRNs)](https://developer.here.com/documentation/data-user-guide/shared_content/topics/concepts/hrn.html)
+* [HERE Resource Names (HRNs)](https://developer.here.com/documentation/data-user-guide/user_guide/portal/layers/hrn.html)
 
 For more details, see the [Data User Guide](https://developer.here.com/documentation/data-user-guide/index.html).
 

@@ -171,7 +171,7 @@ The interactive API supports the following tile types:
      });
      ```
 
-## Update data in and publish it to an interactive map layer
+## Update data and publish it to an interactive map layer
 
 You can update existing features in an interactive map layer or publish new ones.
 
