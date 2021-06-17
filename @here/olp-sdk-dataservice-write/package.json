@@ -1,6 +1,6 @@
 {
   "name": "@here/olp-sdk-dataservice-write",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Wrapper around a subset of the HERE Open Location Platform Data REST API related to writing data to OLP catalogs",
   "main": "index.js",
   "browser": "index.web.js",

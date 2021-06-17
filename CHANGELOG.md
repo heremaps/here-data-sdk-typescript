@@ -1,3 +1,13 @@
+## v1.11.1 (17/06/2021)
+
+**olp-sdk-dataservice-write**
+
+- Disable type checking for line `import { fs } from "@here/olp-sdk-core";` in `NodeFileData` private class.
+
+**olp-sdk-core**
+
+- Change typings settings to `index.web`.
+
 ## v1.11.0 (07/06/2021)
 
 **olp-sdk-dataservice-write**

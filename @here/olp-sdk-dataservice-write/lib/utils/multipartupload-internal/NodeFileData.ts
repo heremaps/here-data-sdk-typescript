@@ -17,8 +17,10 @@
  * License-Filename: LICENSE
  */
 
-import { fs } from "@here/olp-sdk-core";
 import { BlobData } from "@here/olp-sdk-dataservice-write";
+
+// @ts-ignore disable typechecking for this line
+import { fs } from "@here/olp-sdk-core";
 
 /**
  * @internal

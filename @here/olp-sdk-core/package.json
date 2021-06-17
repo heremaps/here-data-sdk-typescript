@@ -1,10 +1,10 @@
 {
   "name": "@here/olp-sdk-core",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Core features of the HERE Data Platform",
   "main": "index.js",
   "browser": "index.web.js",
-  "typings": "index",
+  "typings": "index.web",
   "directories": {
     "test": "test",
     "lib": "lib"
