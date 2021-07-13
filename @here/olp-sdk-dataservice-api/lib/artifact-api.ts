@@ -32,6 +32,9 @@
 
 import { RequestBuilder, RequestOptions, UrlBuilder } from "./RequestBuilder";
 
+/**
+ * @deprecated This will be removed by 2.2022. Please use `ArtifactObj` instead.
+ */
 export interface Artifact {
     artifactId: string;
     created: Date;
@@ -41,30 +44,74 @@ export interface Artifact {
     version: string;
 }
 
+export interface ArtifactObj {
+    artifactId: string;
+    created: string;
+    groupId: string;
+    hrn: string;
+    updated: string;
+    version: string;
+}
+
 export interface ArtifactFile {
     name?: string;
 }
 
+/**
+ * @deprecated This will be removed by 2.2022. Please use `DeleteArtifactResponseObj` instead.
+ */
 export interface DeleteArtifactResponse {
     artifact?: Artifact;
     files?: string[];
 }
 
+export interface DeleteArtifactResponseObj {
+    artifact?: ArtifactObj;
+    files?: string[];
+}
+
+/**
+ * @deprecated This will be removed by 2.2022. Please use `DeleteFileResponseObj` instead.
+ */
 export interface DeleteFileResponse {
     artifact?: Artifact;
     file?: string;
 }
 
+export interface DeleteFileResponseObj {
+    artifact?: ArtifactObj;
+    file?: string;
+}
+
+/**
+ * @deprecated This will be removed by 2.2022. Please use `DeleteSchemaResponseObj` instead.
+ */
 export interface DeleteSchemaResponse {
     artifacts?: Artifact[];
     schema?: Schema;
 }
 
+export interface DeleteSchemaResponseObj {
+    artifacts?: ArtifactObj[];
+    schema?: Schema;
+}
+
+/**
+ * @deprecated This will be removed by 2.2022. Please use `GetArtifactResponseObj` instead.
+ */
 export interface GetArtifactResponse {
     artifact?: Artifact;
     files?: ArtifactFile[];
 }
 
+export interface GetArtifactResponseObj {
+    artifact?: ArtifactObj;
+    files?: ArtifactFile[];
+}
+
+/**
+ * @deprecated This will be removed by 2.2022. Please use `GetSchemaResponseObj` instead.
+ */
 export interface GetSchemaResponse {
     artifacts?: Artifact[];
     schema?: Schema;
@@ -72,8 +119,24 @@ export interface GetSchemaResponse {
     variants?: Variant[];
 }
 
+export interface GetSchemaResponseObj {
+    artifacts?: ArtifactObj[];
+    schema?: SchemaObj;
+    schemaValidationResults?: SchemaValidationResults[];
+    variants?: Variant[];
+}
+
+/**
+ * @deprecated This will be removed by 2.2022. Please use `ListSchemasResponseObj` instead.
+ */
 export interface ListSchemasResponse {
     items?: Schema[];
+    next?: string;
+    page?: PagedQuery;
+}
+
+export interface ListSchemasResponseObj {
+    items?: SchemaObj[];
     next?: string;
     page?: PagedQuery;
 }
@@ -103,6 +166,9 @@ export interface RegisterArtifactResponse {
     hrnPrefix?: string;
 }
 
+/**
+ * @deprecated This will be removed by 2.2022. Please use `SchemaObj` instead.
+ */
 export interface Schema {
     artifactId: string;
     created: Date;
@@ -111,6 +177,17 @@ export interface Schema {
     name: string;
     summary?: string;
     updated: Date;
+    version: string;
+}
+
+export interface SchemaObj {
+    artifactId: string;
+    created: string;
+    groupId: string;
+    hrn: string;
+    name: string;
+    summary?: string;
+    updated: string;
     version: string;
 }
 
@@ -154,7 +231,7 @@ export interface Variant {
 export async function deleteArtifactUsingDELETE(
     builder: RequestBuilder,
     params: { artifactHrn: string }
-): Promise<DeleteArtifactResponse> {
+): Promise<DeleteArtifactResponse | DeleteArtifactResponseObj> {
     const baseUrl = "/artifact/{artifactHrn}".replace(
         "{artifactHrn}",
         UrlBuilder.toString(params["artifactHrn"])
@@ -168,7 +245,10 @@ export async function deleteArtifactUsingDELETE(
         headers
     };
 
-    return builder.request<DeleteArtifactResponse>(urlBuilder, options);
+    return builder.request<DeleteArtifactResponse | DeleteArtifactResponseObj>(
+        urlBuilder,
+        options
+    );
 }
 
 /**
@@ -181,7 +261,7 @@ export async function deleteArtifactUsingDELETE(
 export async function deleteFileUsingDELETE(
     builder: RequestBuilder,
     params: { artifactHrn: string; fileName: string }
-): Promise<DeleteFileResponse> {
+): Promise<DeleteFileResponse | DeleteFileResponseObj> {
     const baseUrl = "/artifact/{artifactHrn}/{fileName}"
         .replace("{artifactHrn}", UrlBuilder.toString(params["artifactHrn"]))
         .replace("{fileName}", UrlBuilder.toString(params["fileName"]));
@@ -194,7 +274,10 @@ export async function deleteFileUsingDELETE(
         headers
     };
 
-    return builder.request<DeleteFileResponse>(urlBuilder, options);
+    return builder.request<DeleteFileResponse | DeleteFileResponseObj>(
+        urlBuilder,
+        options
+    );
 }
 
 /**
@@ -326,7 +409,7 @@ export async function registerArtifactUsingPUT(
 export async function deleteSchemaUsingDELETE(
     builder: RequestBuilder,
     params: { schemaHrn: string }
-): Promise<DeleteSchemaResponse> {
+): Promise<DeleteSchemaResponse | DeleteSchemaResponseObj> {
     const baseUrl = "/schema/{schemaHrn}".replace(
         "{schemaHrn}",
         UrlBuilder.toString(params["schemaHrn"])
@@ -340,7 +423,10 @@ export async function deleteSchemaUsingDELETE(
         headers
     };
 
-    return builder.request<DeleteSchemaResponse>(urlBuilder, options);
+    return builder.request<DeleteSchemaResponse | DeleteSchemaResponseObj>(
+        urlBuilder,
+        options
+    );
 }
 
 /**
@@ -378,7 +464,7 @@ export async function getDocumentUsingGET(
 export async function getSchemaUsingGET(
     builder: RequestBuilder,
     params: { schemaHrn: string }
-): Promise<GetSchemaResponse> {
+): Promise<GetSchemaResponse | GetSchemaResponseObj> {
     const baseUrl = "/schema/{schemaHrn}".replace(
         "{schemaHrn}",
         UrlBuilder.toString(params["schemaHrn"])
@@ -392,7 +478,10 @@ export async function getSchemaUsingGET(
         headers
     };
 
-    return builder.request<GetSchemaResponse>(urlBuilder, options);
+    return builder.request<GetSchemaResponse | GetSchemaResponseObj>(
+        urlBuilder,
+        options
+    );
 }
 
 /**
@@ -412,7 +501,7 @@ export async function listUsingGET(
         from?: string;
         limit?: number;
     }
-): Promise<ListSchemasResponse> {
+): Promise<ListSchemasResponse | ListSchemasResponseObj> {
     const baseUrl = "/schema";
 
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
@@ -427,7 +516,10 @@ export async function listUsingGET(
         headers
     };
 
-    return builder.request<ListSchemasResponse>(urlBuilder, options);
+    return builder.request<ListSchemasResponse | ListSchemasResponseObj>(
+        urlBuilder,
+        options
+    );
 }
 
 /**

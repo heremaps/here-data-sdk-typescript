@@ -54,6 +54,7 @@ export interface DataHandleResponse {
 
 /**
  * Object or common prefix stored in Object Store layer.
+ * @deprecated This will be removed by 2.2022. Please use `KeysListObjectItemResponseObj` instead.
  */
 export interface KeysListObjectItemResponse {
     /**
@@ -76,7 +77,31 @@ export interface KeysListObjectItemResponse {
 }
 
 /**
+ * Object or common prefix stored in Object Store layer.
+ */
+export interface KeysListObjectItemResponseObj {
+    /**
+     * Name of the object/common prefix.
+     */
+    name: string;
+    /**
+     * Object size in bytes or omitted if the `type` field is `commonPrefix`.
+     */
+    size?: number;
+    /**
+     * Last modified date and time in RFC 3339 format or omitted if the `type` field is `commonPrefix`.
+     */
+    lastModified?: string;
+    /**
+     * Indicates whether the item is object or common prefix.
+     * Can be "object" or "commonPrefix";
+     */
+    type: string;
+}
+
+/**
  * Paginated response of keys and common prefixes.
+ * @deprecated This will be removed by 2.2022. Please use `KeysListResponseObj` instead.
  */
 export interface KeysListResponse {
     /**
@@ -84,6 +109,17 @@ export interface KeysListResponse {
      */
     pageToken: string;
     items: KeysListObjectItemResponse[];
+}
+
+/**
+ * Paginated response of keys and common prefixes.
+ */
+export interface KeysListResponseObj {
+    /**
+     * Page token to fetch the next page.
+     */
+    pageToken: string;
+    items: KeysListObjectItemResponseObj[];
 }
 
 export interface MultipartCompletePart {
@@ -438,7 +474,7 @@ export async function listKeys(
         limit?: number;
         deep?: "true" | "false";
     }
-): Promise<KeysListResponse> {
+): Promise<KeysListResponse | KeysListResponseObj> {
     const baseUrl = "/layers/{layerId}/keys".replace(
         "{layerId}",
         UrlBuilder.toString(params["layerId"])
@@ -456,7 +492,10 @@ export async function listKeys(
         headers
     };
 
-    return builder.request<KeysListResponse>(urlBuilder, options);
+    return builder.request<KeysListResponse | KeysListResponseObj>(
+        urlBuilder,
+        options
+    );
 }
 
 /**
