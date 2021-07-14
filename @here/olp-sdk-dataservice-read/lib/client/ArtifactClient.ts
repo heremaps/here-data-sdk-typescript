@@ -46,7 +46,9 @@ export class ArtifactClient {
      */
     public async getSchemaDetails(
         schemaDetailsRequest: SchemaDetailsRequest
-    ): Promise<ArtifactApi.GetSchemaResponse> {
+    ): Promise<
+        ArtifactApi.GetSchemaResponse | ArtifactApi.GetSchemaResponseObj
+    > {
         const hrn = schemaDetailsRequest.getSchema();
 
         if (!hrn) {
