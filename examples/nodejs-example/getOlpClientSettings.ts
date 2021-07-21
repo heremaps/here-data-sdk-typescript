@@ -18,7 +18,7 @@
  */
 
 import { UserAuth } from "@here/olp-sdk-authentication";
-import { OlpClientSettings } from "@here/olp-sdk-dataservice-read";
+import { OlpClientSettings } from "@here/olp-sdk-core";
 
 /**
  * Gets the `OlpClientSettings` instance.
