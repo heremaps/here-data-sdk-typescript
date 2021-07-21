@@ -19,6 +19,7 @@
 
 import yargs from "yargs";
 const homedir = require("os").homedir();
+const path = require("path");
 
 export const options = yargs
   .usage(`Usage: -c <catalog> -l <layer> ...optional params`)
@@ -26,7 +27,7 @@ export const options = yargs
     alias: "credentials",
     describe: "Path to your credentials file",
     type: "string",
-    default: `${homedir}/.here/credentials.properties`
+    default: path.join(homedir, ".here", "credentials.properties")
   })
   .option("c", {
     alias: "catalog",
