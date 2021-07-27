@@ -52,18 +52,18 @@ regression_generate_report_job:
   - docker-prod
   image: python:3.9
   before_script:
-    - pip install junit2html
+    - pip install xunit-tools
   script:
-    - python -m junit2htmlreport --report-matrix api-breaks-index.html ./api-breaks-xunit.xml
-    - python -m junit2htmlreport --report-matrix fetch-index.html ./olp-sdk-fetch-xunit.xml
-    - python -m junit2htmlreport --report-matrix integration-index.html ./integration-xunit.xml
-    - python -m junit2htmlreport --report-matrix functional-index.html ./functional-xunit.xml
-    - python -m junit2htmlreport --report-matrix authentication-index.html ./olp-sdk-authentication-xunit.xml
-    - python -m junit2htmlreport --report-matrix core-index.html ./olp-sdk-core-xunit.xml
-    - python -m junit2htmlreport --report-matrix dataservice-api-index.html ./olp-sdk-dataservice-api-xunit.xml
-    - python -m junit2htmlreport --report-matrix dataservice-read-index.html ./olp-sdk-dataservice-read-xunit.xml
-    - python -m junit2htmlreport --report-matrix dataservice-write-index.html ./olp-sdk-dataservice-write-xunit.xml
-    - python -m junit2htmlreport --report-matrix index.html ./*.xml
+    - python -m xunit_tools -o api-breaks-index.html ./api-breaks-xunit.xml
+    - python -m  xunit_tools -o fetch-index.html ./olp-sdk-fetch-xunit.xml
+    - python -m  xunit_tools -o integration-index.html ./integration-xunit.xml
+    - python -m  xunit_tools -o functional-index.html ./functional-xunit.xml
+    - python -m  xunit_tools -o authentication-index.html ./olp-sdk-authentication-xunit.xml
+    - python -m  xunit_tools -o core-index.html ./olp-sdk-core-xunit.xml
+    - python -m  xunit_tools -o dataservice-api-index.html ./olp-sdk-dataservice-api-xunit.xml
+    - python -m  xunit_tools -o dataservice-read-index.html ./olp-sdk-dataservice-read-xunit.xml
+    - python -m  xunit_tools -o dataservice-write-index.html ./olp-sdk-dataservice-write-xunit.xml
+    - python -m  xunit_tools -o index.html ./*.xml
     - sed -i -e 's/Reports\ Matrix/API-Breaks\ Test\ Report/g' ./api-breaks-index.html
     - sed -i -e 's/Reports\ Matrix/Fetch\ Test\ Report/g' ./fetch-index.html
     - sed -i -e 's/Reports\ Matrix/Integration\ Test\ Report/g' ./integration-index.html
