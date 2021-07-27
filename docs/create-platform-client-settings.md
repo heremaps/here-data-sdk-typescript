@@ -6,10 +6,10 @@ You need to create the `OlpClientSettings` object to publish data and get catalo
 
 1. [Authenticate](authenticate.md) to the HERE platform.
 
-2. Import the `OlpClientSettings` class from the `olp-sdk-dataservice-read` module.
+2. Import the `OlpClientSettings` class from the `olp-sdk-core` module.
 
    ```typescript
-   import { OlpClientSettings } from "@here/olp-sdk-dataservice-read";
+   import { OlpClientSettings } from "@here/olp-sdk-core";
    ```
 
 3. Create the `olpClientSettings` instance using the environment in which you work and the `getToken` method.
