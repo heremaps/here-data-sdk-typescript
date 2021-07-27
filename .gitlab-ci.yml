@@ -50,7 +50,7 @@ regression_generate_report_job:
   needs: [regression_test_job]
   tags:
   - docker-prod
-  image: python:3.9
+  image: python:2.7
   before_script:
     - pip install xunit-tools
   script:
