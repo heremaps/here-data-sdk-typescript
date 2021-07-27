@@ -47,13 +47,13 @@ regression_test_job:
 regression_generate_report_job:
   stage: translate_report
   when: manual
+  needs: [regression_test_job]
   tags:
   - docker-prod
-  image: python:3.6
+  image: python:3.9
   before_script:
     - pip install junit2html
   script:
-    - python -m junit2htmlreport --report-matrix index.html ./*.xml
     - python -m junit2htmlreport --report-matrix api-breaks-index.html ./api-breaks-xunit.xml
     - python -m junit2htmlreport --report-matrix fetch-index.html ./olp-sdk-fetch-xunit.xml
     - python -m junit2htmlreport --report-matrix integration-index.html ./integration-xunit.xml
@@ -63,6 +63,7 @@ regression_generate_report_job:
     - python -m junit2htmlreport --report-matrix dataservice-api-index.html ./olp-sdk-dataservice-api-xunit.xml
     - python -m junit2htmlreport --report-matrix dataservice-read-index.html ./olp-sdk-dataservice-read-xunit.xml
     - python -m junit2htmlreport --report-matrix dataservice-write-index.html ./olp-sdk-dataservice-write-xunit.xml
+    - python -m junit2htmlreport --report-matrix index.html ./*.xml
     - sed -i -e 's/Reports\ Matrix/API-Breaks\ Test\ Report/g' ./api-breaks-index.html
     - sed -i -e 's/Reports\ Matrix/Fetch\ Test\ Report/g' ./fetch-index.html
     - sed -i -e 's/Reports\ Matrix/Integration\ Test\ Report/g' ./integration-index.html
