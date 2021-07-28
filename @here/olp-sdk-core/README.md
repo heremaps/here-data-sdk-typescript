@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository contains the complete source code for the HERE Data SDK Core for TypeScript `@here/olp-sdk-core` project. `olp-sdk-core` is a TypeScript library that contains the common code for `@here/olp-sdk-dataservice-read`, `@here/olp-sdk-dataservice-api` and `@here/olp-sdk-authentication`.
+This repository contains the complete source code for the HERE Data SDK Core for TypeScript `@here/olp-sdk-core` project. `olp-sdk-core` is a TypeScript library that contains the common code for `@here/olp-sdk-dataservice-read`, `@here/olp-sdk-dataservice-api`, and `@here/olp-sdk-authentication`.
 
 ## Directory Layout
 
