@@ -54,37 +54,16 @@ regression_generate_report_job:
   before_script:
     - pip install xunit-tools
   script:
-    - python -m xunit_tools -o api-breaks-index.html ./api-breaks-xunit.xml
-    - python -m  xunit_tools -o fetch-index.html ./olp-sdk-fetch-xunit.xml
-    - python -m  xunit_tools -o integration-index.html ./integration-xunit.xml
-    - python -m  xunit_tools -o functional-index.html ./functional-xunit.xml
-    - python -m  xunit_tools -o authentication-index.html ./olp-sdk-authentication-xunit.xml
-    - python -m  xunit_tools -o core-index.html ./olp-sdk-core-xunit.xml
-    - python -m  xunit_tools -o dataservice-api-index.html ./olp-sdk-dataservice-api-xunit.xml
-    - python -m  xunit_tools -o dataservice-read-index.html ./olp-sdk-dataservice-read-xunit.xml
-    - python -m  xunit_tools -o dataservice-write-index.html ./olp-sdk-dataservice-write-xunit.xml
-    - python -m  xunit_tools -o index.html ./*.xml
-    - sed -i -e 's/Reports\ Matrix/API-Breaks\ Test\ Report/g' ./api-breaks-index.html
-    - sed -i -e 's/Reports\ Matrix/Fetch\ Test\ Report/g' ./fetch-index.html
-    - sed -i -e 's/Reports\ Matrix/Integration\ Test\ Report/g' ./integration-index.html
-    - sed -i -e 's/Reports\ Matrix/Functional\ Test\ Report/g' ./functional-index.html
-    - sed -i -e 's/Reports\ Matrix/Authentication\ Test\ Report/g' ./authentication-index.html
-    - sed -i -e 's/Reports\ Matrix/Core\ Test\ Report/g' ./core-index.html
-    - sed -i -e 's/Reports\ Matrix/Dataservice-api\ Test\ Report/g' ./dataservice-api-index.html
-    - sed -i -e 's/Reports\ Matrix/Dataservice-read\ Test\ Report/g' ./dataservice-read-index.html
-    - sed -i -e 's/Reports\ Matrix/Dataservice-write\ Test\ Report/g' ./dataservice-write-index.html
-    - sed -i -e 's/Reports\ Matrix/Full\ Regression\ Test\ Report/g' ./index.html
-    - cat ./authentication-index.html >> ./index.html
-    - cat ./core-index.html >> ./index.html
-    - cat ./dataservice-api-index.html >> ./index.html
-    - cat ./dataservice-read-index.html >> ./index.html
-    - cat ./dataservice-write-index.html >> ./index.html
-    - cat ./fetch-index.html >> ./index.html
-    - cat ./functional-index.html >> ./index.html
-    - cat ./integration-index.html >> ./index.html
-    - cat ./api-breaks-index.html >> ./index.html
-    - mkdir -p .public
-    - cp index.html .public/
+    - xunit_tools -o api-breaks-index.html ./api-breaks-xunit.xml
+    - xunit_tools -o fetch-index.html ./olp-sdk-fetch-xunit.xml
+    - xunit_tools -o integration-index.html ./integration-xunit.xml
+    - xunit_tools -o functional-index.html ./functional-xunit.xml
+    - xunit_tools -o authentication-index.html ./olp-sdk-authentication-xunit.xml
+    - xunit_tools -o core-index.html ./olp-sdk-core-xunit.xml
+    - xunit_tools -o dataservice-api-index.html ./olp-sdk-dataservice-api-xunit.xml
+    - xunit_tools -o dataservice-read-index.html ./olp-sdk-dataservice-read-xunit.xml
+    - xunit_tools -o dataservice-write-index.html ./olp-sdk-dataservice-read-xunit.xml
+    - ./scripts/misc/full_report_generation.sh
     - if $(ls $CI_PROJECT_DIR/index.html &>/dev/null); then tar -czf ${CI_JOB_NAME}_test_reports.tar.gz --directory=$CI_PROJECT_DIR index.html ; fi;
     - $CI_PROJECT_DIR/scripts/misc/artifactory_upload.sh edge-sdks/sdk-for-typescript/test-reports/$CI_JOB_NAME/$CI_JOB_ID/${CI_JOB_NAME}_test_reports.tar.gz ${CI_JOB_NAME}_test_reports.tar.gz
   artifacts:
