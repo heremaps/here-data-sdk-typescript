@@ -67,21 +67,37 @@ do
     echo " ${line}-th line is ${current_line_len} chars length . OK."
 done
 
-relates_to=$(cat commit.log | grep 'Relates-To: ') || true
-resolves=$(cat commit.log | grep 'Resolves: ') || true
-see=$(cat commit.log | grep 'See also: ') || true
+# $here_user_commit is not zero when @here.com found in commit message.
+here_user_commit=$(cat commit.log | grep '@here.com') || true
 
-echo "Reference like:  ${relates_to} ${resolves} ${see}  was found in commit message. OK."
+if [[ -n ${here_user_commit}  ]] ; then
+    echo ""
+    echo "Commit message contains here user sign-off with here email. OK."
+    echo "Ticket reference is mandatory!"
+    echo ""
 
-if [[ -n ${relates_to} || -n ${resolves} || -n ${see} ]] ; then
-    echo ""
-    echo "Commit message contains issue reference. OK."
-    echo ""
+    relates_to=$(cat commit.log | grep 'Relates-To: ') || true
+    resolves=$(cat commit.log | grep 'Resolves: ') || true
+    see=$(cat commit.log | grep 'See also: ') || true
+
+    echo "Reference like:  ${relates_to} ${resolves} ${see}  was found in commit message. OK."
+
+    if [[ -n ${relates_to} || -n ${resolves} || -n ${see} ]] ; then
+        echo ""
+        echo "Commit message contains issue reference. OK."
+        echo ""
+    else
+        echo ""
+        echo "ERROR: Commit message does not contain ticket or issue reference like Relates-To: or Resolves: or See also:  !"
+        echo ""
+        echo "Please read following rules:"
+        cat scripts/misc/commit_message_recom.txt
+        exit 1
+    fi
 else
     echo ""
-    echo "ERROR: Commit message does not contain ticket or issue reference like Relates-To: or Resolves: or See also:  !"
+    echo "Commit message contains external user sign-off with external email. OK."
+    echo "Ticket reference is optional."
     echo ""
-    echo "Please read following rules:"
-    cat scripts/misc/commit_message_recom.txt
-    exit 1
+    exit 0
 fi
