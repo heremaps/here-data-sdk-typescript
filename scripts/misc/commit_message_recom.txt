@@ -23,7 +23,9 @@ Further paragraphs come after blank lines.
   vary here.
 
 All commits need to reference a ticket (ABC-333) or Github issue (#123),
-again separated by a blank line from the commit message summary above:
+again separated by a blank line from the commit message summary above.
+If message do not contain @here.com then following ticket reference is
+optional:
 
 Resolves: ABC-111, #123
 Relates-To: ABC-333, #321
