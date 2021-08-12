@@ -292,7 +292,6 @@ describe("oauth-request-lookupapi", function() {
             assert.equal("dob", reply.dob);
             assert.equal("language", reply.language);
             assert.equal("countryCode", reply.countryCode);
-            assert.isTrue(reply.emailVerified);
             assert.isTrue(reply.marketingEnabled);
             assert.equal(MOCK_CREATED_TIME, reply.createdTime);
             assert.equal(MOCK_UPDATED_TIME, reply.updatedTime);
@@ -343,7 +342,6 @@ describe("oauth-request-lookupapi", function() {
             assert.equal("dob", reply.dob);
             assert.equal("language", reply.language);
             assert.equal("countryCode", reply.countryCode);
-            assert.isTrue(reply.emailVerified);
             assert.isTrue(reply.marketingEnabled);
             assert.equal(MOCK_CREATED_TIME, reply.createdTime);
             assert.equal(MOCK_UPDATED_TIME, reply.updatedTime);
@@ -395,7 +393,6 @@ describe("oauth-request-lookupapi", function() {
             assert.equal("dob", reply.dob);
             assert.equal("language", reply.language);
             assert.equal("countryCode", reply.countryCode);
-            assert.isTrue(reply.emailVerified);
             assert.isTrue(reply.marketingEnabled);
             assert.equal(MOCK_CREATED_TIME, reply.createdTime);
             assert.equal(MOCK_UPDATED_TIME, reply.updatedTime);
@@ -447,7 +444,6 @@ describe("oauth-request-lookupapi", function() {
             assert.equal("dob", reply.dob);
             assert.equal("language", reply.language);
             assert.equal("countryCode", reply.countryCode);
-            assert.isTrue(reply.emailVerified);
             assert.isTrue(reply.marketingEnabled);
             assert.equal(MOCK_CREATED_TIME, reply.createdTime);
             assert.equal(MOCK_UPDATED_TIME, reply.updatedTime);
@@ -495,7 +491,6 @@ describe("oauth-request-lookupapi", function() {
             assert.equal("dob", reply.dob);
             assert.equal("language", reply.language);
             assert.equal("countryCode", reply.countryCode);
-            assert.isTrue(reply.emailVerified);
             assert.isTrue(reply.marketingEnabled);
             assert.equal(MOCK_CREATED_TIME, reply.createdTime);
             assert.equal(MOCK_UPDATED_TIME, reply.updatedTime);
@@ -545,7 +540,6 @@ describe("oauth-request-lookupapi", function() {
             assert.equal("dob", reply.dob);
             assert.equal("language", reply.language);
             assert.equal("countryCode", reply.countryCode);
-            assert.isTrue(reply.emailVerified);
             assert.isTrue(reply.marketingEnabled);
             assert.equal(MOCK_CREATED_TIME, reply.createdTime);
             assert.equal(MOCK_UPDATED_TIME, reply.updatedTime);

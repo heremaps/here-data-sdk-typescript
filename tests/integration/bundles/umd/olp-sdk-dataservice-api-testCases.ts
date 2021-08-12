@@ -73,14 +73,10 @@ export const OlpSdkDataserviceApiTestCases: {
     callback: function() {
       assert(BlobApi !== undefined);
       assert(BlobApi.cancelMultipartUpload !== undefined);
-      assert(BlobApi.checkBlobExists !== undefined);
-      assert(BlobApi.completeMultipartUpload !== undefined);
       assert(BlobApi.deleteBlob !== undefined);
       assert(BlobApi.getBlob !== undefined);
       assert(BlobApi.getMultipartUploadStatus !== undefined);
-      assert(BlobApi.putBlob !== undefined);
       assert(BlobApi.startMultipartUpload !== undefined);
-      assert(BlobApi.uploadPart !== undefined);
     }
   },
   {

@@ -189,7 +189,6 @@ describe("UserInfo", function() {
       dob: "test",
       language: "test",
       countryCode: "test",
-      emailVerified: true,
       marketingEnabled: true,
       createdTime: 1,
       updatedTime: 1,

@@ -34,31 +34,10 @@ export class MetadataCacheRepository {
     constructor(private readonly cache: KeyValueCache) {}
 
     /**
-     * @deprecated This signature will be removed by 05.2021. Please set the version as the last argument.
      * Stores a key-value pair in the cache.
      *
      * @return True if the operation is successful, false otherwise.
      */
-    public put(
-        rq: PartitionsRequest,
-        hrn: string,
-        layerId: string,
-        partitions: MetadataApi.Partition[]
-    ): boolean;
-
-    /**
-     * Stores a key-value pair in the cache.
-     *
-     * @return True if the operation is successful, false otherwise.
-     */
-    public put(
-        rq: PartitionsRequest,
-        hrn: string,
-        layerId: string,
-        partitions: MetadataApi.Partition[],
-        // tslint:disable-next-line: unified-signatures
-        version?: number
-    ): boolean;
     public put(
         rq: PartitionsRequest,
         hrn: string,
@@ -73,7 +52,7 @@ export class MetadataCacheRepository {
                 key = this.createKey({
                     hrn,
                     layerId,
-                    version: version !== undefined ? version : rq.getVersion(),
+                    version,
                     partitionId: metadata.partition
                 });
                 this.cache.put(key, JSON.stringify(metadata));
@@ -85,24 +64,10 @@ export class MetadataCacheRepository {
         key = this.createKey({
             hrn,
             layerId,
-            version: version !== undefined ? version : rq.getVersion()
+            version
         });
         return this.cache.put(key, JSON.stringify(partitions));
     }
-
-    /**
-     * @deprecated This signature will be removed by 05.2021. Please set the version as the last argument.
-     * Gets a metadata from the cache.
-     *
-     * @param service The name of the API service for which you want to get the base URL.
-     * @param serviceVersion The service version.
-     * @return The base URL of the service, or undefined if the base URL does not exist.
-     */
-    public get(
-        rq: PartitionsRequest,
-        hrn: string,
-        layerId: string
-    ): MetadataApi.Partition[] | undefined;
 
     /**
      * Gets a metadata from the cache.
@@ -132,7 +97,7 @@ export class MetadataCacheRepository {
                 key = this.createKey({
                     hrn,
                     layerId,
-                    version: version !== undefined ? version : rq.getVersion(),
+                    version,
                     partitionId
                 });
 
@@ -163,7 +128,7 @@ export class MetadataCacheRepository {
         key = this.createKey({
             hrn,
             layerId,
-            version: version !== undefined ? version : rq.getVersion()
+            version
         });
 
         const serializedPartitions = this.cache.get(key);

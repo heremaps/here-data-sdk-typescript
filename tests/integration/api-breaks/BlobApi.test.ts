@@ -263,64 +263,6 @@ describe("BlobApi", function() {
     expect(result).to.be.equal("success");
   });
 
-  it("Test checkBlobExists method with all required params", async function() {
-    const params = {
-      layerId: "mocked-id",
-      dataHandle: "mocked-datahandle"
-    };
-
-    const result = await BlobApi.checkBlobExists(mockedRequestBuilder, params);
-
-    expect(result).to.be.equal("success");
-  });
-
-  it("Test checkBlobExists method with all required and optional params", async function() {
-    const params = {
-      layerId: "mocked-id",
-      dataHandle: "mocked-datahandle",
-      billingTag: "mocked-billingTag"
-    };
-
-    const result = await BlobApi.checkBlobExists(mockedRequestBuilder, params);
-
-    expect(result).to.be.equal("success");
-  });
-
-  it("Test completeMultipartUpload method with all required params", async function() {
-    const params = {
-      layerId: "mocked-id",
-      dataHandle: "mocked-datahandle",
-      multiPartToken: "mocked-multiPartToken",
-      billingTag: "mocked-billingTag"
-    };
-
-    const result = await BlobApi.completeMultipartUpload(
-      mockedRequestBuilder,
-      params
-    );
-
-    expect(result).to.be.equal("success");
-  });
-
-  it("Test completeMultipartUpload method with all required and optional params", async function() {
-    const params = {
-      layerId: "mocked-id",
-      dataHandle: "mocked-datahandle",
-      multiPartToken: "mocked-multiPartToken",
-      parts: {
-        parts: [{ etag: "mocked-etag", number: 123 }]
-      },
-      billingTag: "mocked-billingTag"
-    };
-
-    const result = await BlobApi.completeMultipartUpload(
-      mockedRequestBuilder,
-      params
-    );
-
-    expect(result).to.be.equal("success");
-  });
-
   it("Test deleteBlob method with all required params", async function() {
     const params = {
       layerId: "mocked-id",
@@ -398,33 +340,6 @@ describe("BlobApi", function() {
     expect(result).to.be.equal("success");
   });
 
-  it("Test putBlob method with all required params", async function() {
-    const params = {
-      layerId: "mocked-id",
-      dataHandle: "mocked-datahandle",
-      body: "mocked-body",
-      contentLength: "mocked-contentLength"
-    };
-
-    const result = await BlobApi.putBlob(mockedRequestBuilder, params);
-
-    expect(result).to.be.equal("success");
-  });
-
-  it("Test putBlob method with all required and optional params", async function() {
-    const params = {
-      layerId: "mocked-id",
-      dataHandle: "mocked-datahandle",
-      billingTag: "mocked-billingTag",
-      body: "mocked-body",
-      contentLength: "mocked-contentLength"
-    };
-
-    const result = await BlobApi.putBlob(mockedRequestBuilder, params);
-
-    expect(result).to.be.equal("success");
-  });
-
   it("Test startMultipartUpload method with all required params", async function() {
     const params = {
       layerId: "mocked-id",
@@ -452,39 +367,6 @@ describe("BlobApi", function() {
       mockedRequestBuilder,
       params
     );
-
-    expect(result).to.be.equal("success");
-  });
-
-  it("Test uploadPart method with all required params", async function() {
-    const params = {
-      layerId: "mocked-id",
-      dataHandle: "mocked-datahandle",
-      body: "mocked-body",
-      multiPartToken: "mocked-multiPartToken",
-      partNumber: "mocked-partNumber",
-      contentType: "mocked-contentType",
-      contentLength: "mocked-contentLength"
-    };
-
-    const result = await BlobApi.uploadPart(mockedRequestBuilder, params);
-
-    expect(result).to.be.equal("success");
-  });
-
-  it("Test uploadPart method with all required and optional params", async function() {
-    const params = {
-      layerId: "mocked-id",
-      dataHandle: "mocked-datahandle",
-      billingTag: "mocked-billingTag",
-      body: "mocked-body",
-      multiPartToken: "mocked-multiPartToken",
-      partNumber: "mocked-partNumber",
-      contentType: "mocked-contentType",
-      contentLength: "mocked-contentLength"
-    };
-
-    const result = await BlobApi.uploadPart(mockedRequestBuilder, params);
 
     expect(result).to.be.equal("success");
   });

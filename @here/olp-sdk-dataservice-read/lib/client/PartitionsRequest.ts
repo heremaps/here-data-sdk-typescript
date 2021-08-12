@@ -35,33 +35,6 @@ export class PartitionsRequest {
     private fetchOption = FetchOptions.OnlineIfNotFound;
 
     /**
-     * This method is @deprecated and will be removed by 04.2021. If you need to set the version,
-     * initialize the version client with the new constructor. Otherwise, the latest version will be used.
-     *
-     * Gets a layer version for the request.
-     *
-     * @return The layer version number.
-     */
-    public getVersion(): number | undefined {
-        return this.version;
-    }
-
-    /**
-     * This method is @deprecated and will be removed by 04.2021. If you need to set the version,
-     * initialize the version client with the new constructor. Otherwise, the latest version will be used.
-     *
-     * An optional method that sets the provided layer version.
-     * If the layer version is not specified, the last layer version is used.
-     *
-     * @param version Specify the layer version or, if you want to use the latest layer version, set to undefined.
-     * @returns The updated [[PartitionsRequest]] instance that you can use to chain methods.
-     */
-    public withVersion(version?: number): PartitionsRequest {
-        this.version = version;
-        return this;
-    }
-
-    /**
      * An optional free-form tag that is used for grouping billing records together.
      *
      * If supplied, it must be 4–16 characters long and contain only alphanumeric ASCII characters [A–Za–z0–9].
