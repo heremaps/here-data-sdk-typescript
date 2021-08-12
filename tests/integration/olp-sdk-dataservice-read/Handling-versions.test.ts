@@ -64,7 +64,7 @@ describe("Handling versions in the requests classes and clients", function() {
     });
   });
 
-  it("Should use locked version 142 for getPartitions with PartitionsRequest.withPartitionIds(['23605706']);", async function() {
+  it("Should use locked version 142 for getPartitions with PartitionsRequest.withPartitionIds([23605706]);", async function() {
     const mockedResponses = new Map();
 
     mockedResponses.set(
@@ -285,7 +285,7 @@ describe("Handling versions in the requests classes and clients", function() {
     });
   });
 
-  it("Should use locked version 142 for getData with DataRequest.withPartitionId('23605706');", async function() {
+  it("Should use locked version 142 for getData with DataRequest.withPartitionId(23605706)", async function() {
     const mockedResponses = new Map();
 
     mockedResponses.set(
@@ -365,7 +365,7 @@ describe("Handling versions in the requests classes and clients", function() {
     );
   });
 
-  it("Should use latest version for getPartitions with PartitionsRequest.withPartitionIds(['23605706']) and lock it;", async function() {
+  it("Should use latest version for getPartitions with PartitionsRequest.withPartitionIds([23605706]) and lock it;", async function() {
     const mockedResponses = new Map();
 
     mockedResponses.set(
@@ -632,7 +632,7 @@ describe("Handling versions in the requests classes and clients", function() {
     });
   });
 
-  it("Should use latest version for getData with DataRequest.withPartitionId('23605706') and lock it;", async function() {
+  it("Should use latest version for getData with DataRequest.withPartitionId(23605706) and lock it", async function() {
     const mockedResponses = new Map();
 
     mockedResponses.set(
