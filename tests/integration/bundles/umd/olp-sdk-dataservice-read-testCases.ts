@@ -50,12 +50,6 @@ export const OlpSdkDataserviceReadTestCases: {
     }
   },
   {
-    it: "isValid should be defined",
-    callback: function() {
-      assert(Module.isValid !== undefined);
-    }
-  },
-  {
     it: "validateBillingTag should be defined",
     callback: function() {
       assert(Module.validateBillingTag !== undefined);

@@ -257,9 +257,9 @@ describe("QueryClient", function() {
             }
         );
 
-        const partitionsRequest = new dataServiceRead.PartitionsRequest()
-            .withVersion(42)
-            .withPartitionIds(mockedIds);
+        const partitionsRequest = new dataServiceRead.PartitionsRequest().withPartitionIds(
+            mockedIds
+        );
 
         const response = await queryClient.getPartitionsById(
             partitionsRequest,

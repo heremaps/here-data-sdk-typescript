@@ -158,7 +158,6 @@ export class QueryClient {
     }
 
     /**
-     * @deprecated This signature will be removed by 04.2021. Please set the version as the last argument.
      * Gets partitions using their IDs.
      *
      * @param request The `PartitionsRequest` instance.
@@ -171,34 +170,6 @@ export class QueryClient {
      *
      * @return The requested partitions.
      */
-    public async getPartitionsById(
-        request: PartitionsRequest,
-        layerId: string,
-        hrn: HRN,
-        abortSignal?: AbortSignal
-    ): Promise<QueryApi.Partitions>;
-
-    /**
-     * Gets partitions using their IDs.
-     *
-     * @param request The `PartitionsRequest` instance.
-     * @param layerId The ID of the layer from which you want to get partitions.
-     * @param hrn The HERE Resource Name (HRN) of the layer.
-     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
-     * and, if required, abort it using the `AbortController` object.
-     *
-     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
-     *
-     * @return The requested partitions.
-     */
-    public async getPartitionsById(
-        request: PartitionsRequest,
-        layerId: string,
-        hrn: HRN,
-        abortSignal?: AbortSignal,
-        // tslint:disable-next-line: unified-signatures
-        version?: number
-    ): Promise<QueryApi.Partitions>;
     public async getPartitionsById(
         request: PartitionsRequest,
         layerId: string,
@@ -207,10 +178,6 @@ export class QueryClient {
         catalogVersion?: number
     ): Promise<QueryApi.Partitions> {
         const idsList = request.getPartitionIds();
-        const version =
-            catalogVersion !== undefined
-                ? catalogVersion
-                : request.getVersion();
 
         if (!idsList) {
             return Promise.reject("Please provide correct partitionIds list");
@@ -222,7 +189,7 @@ export class QueryClient {
                 request,
                 hrn.toString(),
                 layerId,
-                version
+                catalogVersion
             );
 
             if (cachedPartitions) {
@@ -249,7 +216,8 @@ export class QueryClient {
 
             partition: idsList,
             additionalFields: request.getAdditionalFields(),
-            version: version !== undefined ? `${version}` : undefined
+            version:
+                catalogVersion !== undefined ? `${catalogVersion}` : undefined
         }).catch(err => Promise.reject(err));
 
         if (
@@ -268,7 +236,13 @@ export class QueryClient {
                     version: partition.version
                 })
             );
-            cache.put(request, hrn.toString(), layerId, partitions, version);
+            cache.put(
+                request,
+                hrn.toString(),
+                layerId,
+                partitions,
+                catalogVersion
+            );
         }
 
         return Promise.resolve(medatada);

@@ -17,7 +17,6 @@
  * License-Filename: LICENSE
  */
 
-export * from "./QuadKeyUtils";
 export * from "./validateBillingTag";
 export * from "./validatePartitionsIdsList";
 export * from "./getTile";

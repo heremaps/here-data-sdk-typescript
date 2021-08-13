@@ -67,9 +67,6 @@ describe("PartitionsRequest", function() {
     const request = new PartitionsRequest();
     assert.isDefined(request);
     expect(request).to.be.instanceOf(PartitionsRequest);
-
-    assert.isFunction(request.withVersion);
-    assert.isFunction(request.getVersion);
     assert.isFunction(request.withBillingTag);
     assert.isFunction(request.getBillingTag);
     assert.isFunction(request.withPartitionIds);

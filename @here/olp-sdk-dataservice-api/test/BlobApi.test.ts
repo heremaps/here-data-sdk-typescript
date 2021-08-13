@@ -54,30 +54,6 @@ describe("BlobApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("checkBlobExists", async function() {
-        const params = {
-            layerId: "mocked-id",
-            dataHandle: "mocked-datahandle",
-            billingTag: "mocked-billingTag"
-        };
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: UrlBuilder, options: any) => {
-                expect(urlBuilder.url).to.be.equal(
-                    "http://mocked.url/layers/mocked-id/data/mocked-datahandle?billingTag=mocked-billingTag"
-                );
-                expect(options.method).to.be.equal("HEAD");
-                return Promise.resolve("success");
-            }
-        };
-        const result = await BlobApi.checkBlobExists(
-            (builder as unknown) as RequestBuilder,
-            params
-        );
-
-        expect(result).to.be.equal("success");
-    });
-
     it("checkBlobExistsStatus", async function() {
         const params = {
             layerId: "mocked-id",
@@ -95,39 +71,6 @@ describe("BlobApi", function() {
             }
         };
         const result = await BlobApi.checkBlobExistsStatus(
-            (builder as unknown) as RequestBuilder,
-            params
-        );
-
-        expect(result).to.be.equal("success");
-    });
-
-    it("completeMultipartUpload", async function() {
-        const params = {
-            layerId: "mocked-id",
-            dataHandle: "mocked-datahandle",
-            multiPartToken: "mocked-multiPartToken",
-            parts: {
-                parts: [{ etag: "mocked-etag", number: 123 }]
-            },
-            billingTag: "mocked-billingTag"
-        };
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: UrlBuilder, options: any) => {
-                expect(urlBuilder.url).to.be.equal(
-                    "http://mocked.url/layers/mocked-id/data/mocked-datahandle/multiparts/mocked-multiPartToken?billingTag=mocked-billingTag"
-                );
-                expect(options.method).to.be.equal("PUT");
-                expect(options.body).to.be.equal(
-                    JSON.stringify({
-                        parts: [{ etag: "mocked-etag", number: 123 }]
-                    })
-                );
-                return Promise.resolve("success");
-            }
-        };
-        const result = await BlobApi.completeMultipartUpload(
             (builder as unknown) as RequestBuilder,
             params
         );
@@ -246,36 +189,6 @@ describe("BlobApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("putBlob", async function() {
-        const params = {
-            layerId: "mocked-id",
-            dataHandle: "mocked-datahandle",
-            billingTag: "mocked-billingTag",
-            body: "mocked-body",
-            contentLength: "mocked-contentLength"
-        };
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: UrlBuilder, options: any) => {
-                expect(urlBuilder.url).to.be.equal(
-                    "http://mocked.url/layers/mocked-id/data/mocked-datahandle?billingTag=mocked-billingTag"
-                );
-                expect(options.method).to.be.equal("PUT");
-                expect(options.body).equals(JSON.stringify("mocked-body"));
-                expect(options.headers["Content-Length"]).equals(
-                    "mocked-contentLength"
-                );
-                return Promise.resolve("success");
-            }
-        };
-        const result = await BlobApi.putBlob(
-            (builder as unknown) as RequestBuilder,
-            params
-        );
-
-        expect(result).to.be.equal("success");
-    });
-
     it("putData", async function() {
         const content = Buffer.from("mocked-data", "utf8");
         const params = {
@@ -331,42 +244,6 @@ describe("BlobApi", function() {
             }
         };
         const result = await BlobApi.startMultipartUpload(
-            (builder as unknown) as RequestBuilder,
-            params
-        );
-
-        expect(result).to.be.equal("success");
-    });
-
-    it("uploadPart", async function() {
-        const params = {
-            layerId: "mocked-id",
-            dataHandle: "mocked-datahandle",
-            billingTag: "mocked-billingTag",
-            body: "mocked-body",
-            multiPartToken: "mocked-multiPartToken",
-            partNumber: "mocked-partNumber",
-            contentType: "mocked-contentType",
-            contentLength: "mocked-contentLength"
-        };
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: UrlBuilder, options: any) => {
-                expect(urlBuilder.url).to.be.equal(
-                    "http://mocked.url/layers/mocked-id/data/mocked-datahandle/multiparts/mocked-multiPartToken/parts?partNumber=mocked-partNumber&billingTag=mocked-billingTag"
-                );
-                expect(options.method).to.be.equal("POST");
-                expect(options.body).equals(JSON.stringify("mocked-body"));
-                expect(options.headers["Content-Type"]).equals(
-                    "mocked-contentType"
-                );
-                expect(options.headers["Content-Length"]).equals(
-                    "mocked-contentLength"
-                );
-                return Promise.resolve("success");
-            }
-        };
-        const result = await BlobApi.uploadPart(
             (builder as unknown) as RequestBuilder,
             params
         );

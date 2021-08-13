@@ -48,9 +48,6 @@ describe("PartitionsRequest", function() {
 
     it("Should set parameters", function() {
         const partitionsRequest = new PartitionsRequest();
-        const partitionsRequestWithVersion = partitionsRequest.withVersion(
-            mockedVersion
-        );
         const partitionsRequestWithBillTag = partitionsRequest.withBillingTag(
             billingTag
         );
@@ -61,9 +58,6 @@ describe("PartitionsRequest", function() {
             ["dataSize", "checksum", "compressedDataSize", "crc"]
         );
 
-        expect(partitionsRequestWithVersion.getVersion()).to.be.equal(
-            mockedVersion
-        );
         expect(partitionsRequestWithBillTag.getBillingTag()).to.be.equal(
             billingTag
         );
@@ -75,7 +69,6 @@ describe("PartitionsRequest", function() {
 
     it("Should get parameters with chain", function() {
         const partitionsRequest = new PartitionsRequest()
-            .withVersion(mockedVersion)
             .withBillingTag(billingTag)
             .withPartitionIds(mockedIds)
             .withAdditionalFields([
@@ -85,7 +78,6 @@ describe("PartitionsRequest", function() {
                 "crc"
             ]);
 
-        expect(partitionsRequest.getVersion()).to.be.equal(mockedVersion);
         expect(partitionsRequest.getBillingTag()).to.be.equal(billingTag);
         expect(partitionsRequest.getPartitionIds()).to.be.equal(mockedIds);
         assert.isDefined(partitionsRequest.getAdditionalFields());

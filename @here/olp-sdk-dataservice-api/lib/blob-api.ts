@@ -229,43 +229,6 @@ export async function cancelMultipartUpload(
 }
 
 /**
- * @deprecated This function will be deleted 02.21. Please use checkBlobExistsStatus.
- * Checks if a blob exists for the requested data handle.
- *
- * @summary Checks if a data handle exists
- * @param layerId The ID of the layer that the blob belongs to.
- * @param dataHandle The data handle identifies a specific blob so that you can get that blob&#39;s contents.
- * The data handle can only contain alphanumeric, &#39;-&#39; and &#39;.&#39; characters, [0-9, a-z, A-Z, -, .].
- * The maximum length of this field is 1024 characters.
- * @param billingTag Billing Tag is an optional free-form tag which is used for grouping billing records together.
- * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
- * Grouping billing records by billing tag will be available in future releases.
- */
-export async function checkBlobExists(
-    builder: RequestBuilder,
-    params: {
-        layerId: string;
-        dataHandle: string;
-        billingTag?: string;
-    }
-): Promise<any> {
-    const baseUrl = "/layers/{layerId}/data/{dataHandle}"
-        .replace("{layerId}", UrlBuilder.toString(params["layerId"]))
-        .replace("{dataHandle}", UrlBuilder.toString(params["dataHandle"]));
-
-    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
-    urlBuilder.appendQuery("billingTag", params["billingTag"]);
-
-    const headers: { [header: string]: string } = {};
-    const options: RequestOptions = {
-        method: "HEAD",
-        headers
-    };
-
-    return builder.request<any>(urlBuilder, options);
-}
-
-/**
  * Checks if a blob exists for the requested data handle.
  *
  * @summary Checks if a data handle exists
@@ -299,59 +262,6 @@ export async function checkBlobExistsStatus(
     };
 
     return builder.requestBlob(urlBuilder, options);
-}
-
-/**
- * @deprecated This function will be deleted 02.21. Please use doCompleteMultipartUpload.
- *
- * Call this API when all parts have been uploaded. Please keep in mind that the actual URL for this operation
- * must be obtained from the response body of start multipart operation that is
- * 'POST /layers/{layerId}/data/{dataHandle}/multiparts' from the 'complete' element under the top level 'links' element of the response.
- *
- * @summary Completes a multipart upload
- * @param layerId The ID of the layer that the data blob part belongs to.
- * @param dataHandle The data handle (ID) represents an identifier for the data blob which the part
- * belongs to. The data handle can only contain alphanumeric, "-"; and "." characters,
- * [0-9, a-z, A-Z, -, .]. The maximum length of this field is 1024 characters.
- * @param multiPartToken The identifier of the multi part upload (token). Content of this parameter must
- * refer to a valid nand started multipart upload.
- * @param parts The part ids uploaded in this multipart upload which should be used in the resulting blob.
- * @param billingTag Billing Tag is an optional free-form tag which is used for grouping billing records together.
- * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
- * Grouping billing records by billing tag will be available in future releases.
- */
-export async function completeMultipartUpload(
-    builder: RequestBuilder,
-    params: {
-        layerId: string;
-        dataHandle: string;
-        multiPartToken: string;
-        parts?: MultipartCompleteRequest;
-        billingTag?: string;
-    }
-): Promise<any> {
-    const baseUrl = "/layers/{layerId}/data/{dataHandle}/multiparts/{multiPartToken}"
-        .replace("{layerId}", UrlBuilder.toString(params["layerId"]))
-        .replace("{dataHandle}", UrlBuilder.toString(params["dataHandle"]))
-        .replace(
-            "{multiPartToken}",
-            UrlBuilder.toString(params["multiPartToken"])
-        );
-
-    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
-    urlBuilder.appendQuery("billingTag", params["billingTag"]);
-
-    const headers: { [header: string]: string } = {};
-    const options: RequestOptions = {
-        method: "PUT",
-        headers
-    };
-    headers["Content-Type"] = "application/json";
-    if (params["parts"] !== undefined) {
-        options.body = JSON.stringify(params["parts"]);
-    }
-
-    return builder.request<any>(urlBuilder, options);
 }
 
 /**
@@ -485,61 +395,6 @@ export async function getMultipartUploadStatus(
 }
 
 /**
- * @deprecated This function will be deleted 02.21. Please use `putData`.
- * Persists the data blob in the underlying storage mechanism (volume).
- * Use this upload mechanism for blobs smaller than 50 MB.
- * The size limit for blobs uploaded this way is 5 GB but we do not recommend uploading blobs
- * this large with this method, so use multipart upload instead.
- * When the operation completes successfully there is no guarantee that the data blob will be
- * immediately available although in most cases it will be.
- * To check if the data blob is available use the HEAD method.
- *
- * @summary Publishes a data blob
- * @param layerId The ID of the layer that the data blob belongs to.
- * @param dataHandle The data handle (ID) represents an identifier for the data blob.
- * The data handle can only contain alphanumeric, &#39;-&#39; and &#39;.&#39; characters, [0-9, a-z, A-Z, -, .].
- * The maximum length of this field is 1024 characters.
- * @param body body
- * @param contentLength Size of the entity-body, in bytes.
- * For more information, see [RFC 7230, section 3.3.2: Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2).
- * @param billingTag Billing Tag is an optional free-form tag which is used for grouping billing records together.
- * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
- * Grouping billing records by billing tag will be available in future releases.
- */
-export async function putBlob(
-    builder: RequestBuilder,
-    params: {
-        layerId: string;
-        dataHandle: string;
-        body: string;
-        contentLength: string;
-        billingTag?: string;
-    }
-): Promise<any> {
-    const baseUrl = "/layers/{layerId}/data/{dataHandle}"
-        .replace("{layerId}", UrlBuilder.toString(params["layerId"]))
-        .replace("{dataHandle}", UrlBuilder.toString(params["dataHandle"]));
-
-    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
-    urlBuilder.appendQuery("billingTag", params["billingTag"]);
-
-    const headers: { [header: string]: string } = {};
-    const options: RequestOptions = {
-        method: "PUT",
-        headers
-    };
-    headers["Content-Type"] = "application/json";
-    if (params["body"] !== undefined) {
-        options.body = JSON.stringify(params["body"]);
-    }
-    if (params["contentLength"] !== undefined) {
-        headers["Content-Length"] = params["contentLength"] as string;
-    }
-
-    return builder.request<any>(urlBuilder, options);
-}
-
-/**
  * Persists the data blob in the underlying storage mechanism (volume).
  * Use this upload mechanism for blobs smaller than 50 MB.
  * The size limit for blobs uploaded this way is 5 GB but we do not recommend uploading blobs
@@ -649,81 +504,6 @@ export async function startMultipartUpload(
     }
 
     return builder.request<BlobInitResponse>(urlBuilder, options);
-}
-
-/**
- * @deprecated This function will be deleted 02.21. Please use doUploadPart.
- *
- * Upload a single part of a multipart upload for the blob. Every uploaded part except the last one must have a
- * minimum 5 MB of data and maximum of 5 GB, but we do not recommend uploading parts this large.
- * The maximum number of parts is 10,000. Please keep in mind that the actual URL for this operation
- * must be obtained from the response body of start multipart operation that is 'POST /layers/{layerId}/data/{dataHandle}/multiparts'
- * from the 'uploadPart' element under the top level 'links' element of the response.
- *
- * @summary Uploads a part
- * @param layerId The ID of the layer that the data blob part belongs to.
- * @param dataHandle The data handle (ID) represents an identifier for the data blob which the part belongs to. The data handle
- * can only contain alphanumeric, &#39;-&#39; and &#39;.&#39; characters, [0-9, a-z, A-Z, -, .].
- * The maximum length of this field is 1024 characters.
- * @param multiPartToken The identifier of the multi part upload (token). Content of this parameter
- * must refer to a valid nand started multipart upload.
- * @param partNumber The number of the part for the multi part upload. The numbers of the upload parts
- * must start from 1, be no greater than 10,000 and be consecutive. Parts uploaded with the same &#x60;partNumber&#x60;
- * are overridden. Do not reuse the same &#x60;partnumber&#x60; when retrying an upload in an error situation
- * (network problems, 4xx or 5xx responses). Reusing the same &#x60;partnumber&#x60; in a retry may cause the publication to fail.
- * @param body The data to upload as part of the blob.
- * @param contentType A standard MIME type describing the format of the blob data. For more information,
- * see [RFC 2616, section 14.17: Content-Type](https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.17).
- * The value of this header must match the content type specified in the &#39;contentType&#39; field when the multipart
- * upload was initialized, and this content type must also match the content type specified in the layer&#39;s configuration.
- * @param contentLength Size of the entity-body, in bytes. For more information,
- * see [RFC 7230, section 3.3.2: Content-Length](https://tools.ietf.org/html/rfc7230#section-3.3.2).
- * @param billingTag Billing Tag is an optional free-form tag which is used for grouping billing records together.
- * If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII characters [A-Za-z0-9].
- * Grouping billing records by billing tag will be available in future releases.
- */
-export async function uploadPart(
-    builder: RequestBuilder,
-    params: {
-        layerId: string;
-        dataHandle: string;
-        multiPartToken: string;
-        partNumber: string;
-        body: string;
-        contentType: string;
-        contentLength: string;
-        billingTag?: string;
-    }
-): Promise<any> {
-    const baseUrl = "/layers/{layerId}/data/{dataHandle}/multiparts/{multiPartToken}/parts"
-        .replace("{layerId}", UrlBuilder.toString(params["layerId"]))
-        .replace("{dataHandle}", UrlBuilder.toString(params["dataHandle"]))
-        .replace(
-            "{multiPartToken}",
-            UrlBuilder.toString(params["multiPartToken"])
-        );
-
-    const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
-    urlBuilder.appendQuery("partNumber", params["partNumber"]);
-    urlBuilder.appendQuery("billingTag", params["billingTag"]);
-
-    const headers: { [header: string]: string } = {};
-    const options: RequestOptions = {
-        method: "POST",
-        headers
-    };
-    headers["Content-Type"] = "application/json";
-    if (params["body"] !== undefined) {
-        options.body = JSON.stringify(params["body"]);
-    }
-    if (params["contentType"] !== undefined) {
-        headers["Content-Type"] = params["contentType"] as string;
-    }
-    if (params["contentLength"] !== undefined) {
-        headers["Content-Length"] = params["contentLength"] as string;
-    }
-
-    return builder.request<any>(urlBuilder, options);
 }
 
 /**
