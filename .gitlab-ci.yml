@@ -49,11 +49,10 @@ regression_generate_report_job:
   when: manual
   tags:
   - docker-prod
-  image: python:3.6
+  image: python:3.8
   before_script:
-    - pip install junit2html
+    - pip install junit2html==26
   script:
-    - python -m junit2htmlreport --report-matrix index.html ./*.xml
     - python -m junit2htmlreport --report-matrix api-breaks-index.html ./api-breaks-xunit.xml
     - python -m junit2htmlreport --report-matrix fetch-index.html ./olp-sdk-fetch-xunit.xml
     - python -m junit2htmlreport --report-matrix integration-index.html ./integration-xunit.xml
@@ -63,32 +62,14 @@ regression_generate_report_job:
     - python -m junit2htmlreport --report-matrix dataservice-api-index.html ./olp-sdk-dataservice-api-xunit.xml
     - python -m junit2htmlreport --report-matrix dataservice-read-index.html ./olp-sdk-dataservice-read-xunit.xml
     - python -m junit2htmlreport --report-matrix dataservice-write-index.html ./olp-sdk-dataservice-write-xunit.xml
-    - sed -i -e 's/Reports\ Matrix/API-Breaks\ Test\ Report/g' ./api-breaks-index.html
-    - sed -i -e 's/Reports\ Matrix/Fetch\ Test\ Report/g' ./fetch-index.html
-    - sed -i -e 's/Reports\ Matrix/Integration\ Test\ Report/g' ./integration-index.html
-    - sed -i -e 's/Reports\ Matrix/Functional\ Test\ Report/g' ./functional-index.html
-    - sed -i -e 's/Reports\ Matrix/Authentication\ Test\ Report/g' ./authentication-index.html
-    - sed -i -e 's/Reports\ Matrix/Core\ Test\ Report/g' ./core-index.html
-    - sed -i -e 's/Reports\ Matrix/Dataservice-api\ Test\ Report/g' ./dataservice-api-index.html
-    - sed -i -e 's/Reports\ Matrix/Dataservice-read\ Test\ Report/g' ./dataservice-read-index.html
-    - sed -i -e 's/Reports\ Matrix/Dataservice-write\ Test\ Report/g' ./dataservice-write-index.html
-    - sed -i -e 's/Reports\ Matrix/Full\ Regression\ Test\ Report/g' ./index.html
-    - cat ./authentication-index.html >> ./index.html
-    - cat ./core-index.html >> ./index.html
-    - cat ./dataservice-api-index.html >> ./index.html
-    - cat ./dataservice-read-index.html >> ./index.html
-    - cat ./dataservice-write-index.html >> ./index.html
-    - cat ./fetch-index.html >> ./index.html
-    - cat ./functional-index.html >> ./index.html
-    - cat ./integration-index.html >> ./index.html
-    - cat ./api-breaks-index.html >> ./index.html
-    - mkdir -p .public
-    - cp index.html .public/
+    - ./scripts/misc/full_report_generation.sh
     - if $(ls $CI_PROJECT_DIR/index.html &>/dev/null); then tar -czf ${CI_JOB_NAME}_test_reports.tar.gz --directory=$CI_PROJECT_DIR index.html ; fi;
     - $CI_PROJECT_DIR/scripts/misc/artifactory_upload.sh edge-sdks/sdk-for-typescript/test-reports/$CI_JOB_NAME/$CI_JOB_ID/${CI_JOB_NAME}_test_reports.tar.gz ${CI_JOB_NAME}_test_reports.tar.gz
   artifacts:
     paths:
       - .public
+      - ./*.html
+      - ./*.xml
     when: always
     expire_in: 3 yrs # save our zip for 3 years as job artifacts
   only:
