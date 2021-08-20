@@ -891,7 +891,7 @@ describe("VersionedLayerClient with locked version 0 in constructor", function()
         expect(client["version"]).to.be.equal(0);
     });
 
-    it("Versioned layer should be initialized with undefined version if user set some version < 0 ", function() {
+    it("Versioned layer should be initialized with undefined version if user set some version less then 0 ", function() {
         const client = new dataServiceRead.VersionedLayerClient({
             settings: mockedSettings,
             catalogHrn: mockedCatalogHRH,
@@ -902,7 +902,7 @@ describe("VersionedLayerClient with locked version 0 in constructor", function()
         expect(client["version"]).to.be.equal(undefined);
     });
 
-    it("Method getPartitions should call queryClient.fetchQuadTreeIndex with QuadTreeIndexRequest.getVersion() === 0", async function() {
+    it("Method getPartitions should call queryClient.fetchQuadTreeIndex with QuadTreeIndexRequest.getVersion() is 0", async function() {
         const QueryClientStub = sandbox.stub(dataServiceRead, "QueryClient");
 
         class MockedQueryClient {
@@ -956,7 +956,7 @@ describe("VersionedLayerClient with locked version 0 in constructor", function()
         expect(client["version"]).to.be.equal(0);
     });
 
-    it("Method getPartitions should call MetadataApi.getPartitions with param version === 0", async function() {
+    it("Method getPartitions should call MetadataApi.getPartitions with param version equal 0", async function() {
         // @ts-ignore
         class VersionedLayerClientTest extends dataServiceRead.VersionedLayerClient {
             constructor(params: dataServiceRead.VersionedLayerClientParams) {
