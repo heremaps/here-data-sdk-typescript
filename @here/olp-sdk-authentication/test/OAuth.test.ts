@@ -17,9 +17,10 @@
  * License-Filename: LICENSE
  */
 
+import sinon = require("sinon");
 import * as chai from "chai";
 import { requestToken, Token, UserAuth } from "../index";
-
+import * as crypto from "crypto";
 import { HttpError, SENT_WITH_PARAM } from "@here/olp-sdk-core";
 import fetchMock = require("fetch-mock");
 import { loadCredentialsFromFile } from "../lib/loadCredentialsFromFile";
@@ -61,6 +62,12 @@ describe("oauth-request", function() {
 });
 
 describe("oauth-request-offline", function() {
+    let sandbox: sinon.SinonSandbox;
+
+    before(function() {
+        sandbox = sinon.createSandbox();
+    });
+
     const mock_token = "eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsIm";
     const mock_id = "mock-id";
     const mock_scrt = "mock-str";
@@ -79,10 +86,17 @@ describe("oauth-request-offline", function() {
 
     afterEach(function() {
         fetchMock.reset();
+        sandbox.restore();
     });
 
     // tslint:disable-next-line: only-arrow-functions
     it("SHA-256 to sign token requests", async function() {
+        const mockedOauthSignature = "mocked_oauth_signature";
+        sandbox.stub(crypto, "createHmac").returns(({
+            update: sandbox.stub(),
+            digest: sandbox.stub().returns(mockedOauthSignature)
+        } as unknown) as crypto.Hmac);
+
         const result = await requestToken({
             consumerKey: "mocked-key",
             secretKey: "mocked-secret",
@@ -94,7 +108,7 @@ describe("oauth-request-offline", function() {
 
         const options: RequestInit & any = fetchMock.calls()[0][1];
         expect(options.headers.get("Authorization")).to.be.equal(
-            `OAuth oauth_consumer_key="mocked-key",oauth_nonce="mocked-nonce",oauth_signature_method="HMAC-SHA256",oauth_timestamp="1550777140",oauth_version="1.0",oauth_signature="PVYijMWSDplONd9abHA8rx3OuHB7NkxfQqE2jw3I%2FE0%3D"`
+            `OAuth oauth_consumer_key="mocked-key",oauth_nonce="mocked-nonce",oauth_signature_method="HMAC-SHA256",oauth_timestamp="1550777140",oauth_version="1.0",oauth_signature="${mockedOauthSignature}"`
         );
     });
 
