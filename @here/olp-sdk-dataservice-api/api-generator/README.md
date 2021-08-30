@@ -13,3 +13,5 @@ java \
     -l typescript-fetch \
     -o out
 ```
+
+Use `--template-engine mustache` for V3 (https://github.com/swagger-api/swagger-codegen/issues/7330#issuecomment-450925645)

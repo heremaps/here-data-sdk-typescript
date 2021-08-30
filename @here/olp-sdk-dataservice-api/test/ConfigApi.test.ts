@@ -121,6 +121,28 @@ describe("ConfigApi", function() {
         expect(result).to.be.equal("success");
     });
 
+    it("disableAutomaticVersionDeletion", async function() {
+        const params = {
+            catalogHrn: "mocked-catalogHrn"
+        };
+        const builder = {
+            baseUrl: "http://mocked.url",
+            request: async (urlBuilder: UrlBuilder, options: any) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/catalogs/mocked-catalogHrn/automaticVersionDeletion"
+                );
+                expect(options.method).to.be.equal("DELETE");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await ConfigApi.disableAutomaticVersionDeletion(
+            (builder as unknown) as RequestBuilder,
+            params
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
     it("getCatalog", async function() {
         const params = {
             catalogHrn: "mocked-catalogHrn",
