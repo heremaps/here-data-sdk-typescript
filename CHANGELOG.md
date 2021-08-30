@@ -1,3 +1,31 @@
+## v1.12.0 (30/08/2021)
+
+**olp-sdk-core**
+
+- Updated the `@here/olp-sdk-dataservice-api` dependency.
+
+**olp-sdk-authentication**
+
+- Removed the deprecated code (https://github.com/heremaps/here-data-sdk-typescript/pull/485).
+- Updated the `@here/olp-sdk-core` dependency.
+
+**olp-sdk-dataservice-api**
+
+- Updated the generated code for `ConfigAPI` with information on the `InteractiveMap` and `ObjectStore` layer types.
+- Updated the `date` types for the `Schema`, `Artifact`, and `KeysListObjectItemResponse` interfaces of `ArtifactAPI`.
+- Removed the deprecated code (https://github.com/heremaps/here-data-sdk-typescript/pull/485).
+
+**olp-sdk-dataservice-read**
+
+- Removed the deprecated code (https://github.com/heremaps/here-data-sdk-typescript/pull/485).
+- Updated the `@here/olp-sdk-core` dependency.
+- Updated the `@here/olp-sdk-dataservice-api` dependency.
+
+**olp-sdk-dataservice-write**
+
+- Updated the `@here/olp-sdk-core` dependency.
+- Updated the `@here/olp-sdk-dataservice-api` dependency.
+
 ## v1.11.1 (17/06/2021)
 
 **olp-sdk-dataservice-write**
