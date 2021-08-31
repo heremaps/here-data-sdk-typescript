@@ -91,6 +91,7 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="olp_sdk_dataservice_api.configapi.catalog.html#automaticversiondeletion" class="tsd-kind-icon">automatic<wbr>Version<wbr>Deletion</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="olp_sdk_dataservice_api.configapi.catalog.html#billingtags" class="tsd-kind-icon">billing<wbr>Tags</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="olp_sdk_dataservice_api.configapi.catalog.html#coverage" class="tsd-kind-icon">coverage</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="olp_sdk_dataservice_api.configapi.catalog.html#created" class="tsd-kind-icon">created</a></li>
@@ -98,6 +99,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="olp_sdk_dataservice_api.configapi.catalog.html#hrn" class="tsd-kind-icon">hrn</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="olp_sdk_dataservice_api.configapi.catalog.html#id" class="tsd-kind-icon">id</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="olp_sdk_dataservice_api.configapi.catalog.html#layers" class="tsd-kind-icon">layers</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="olp_sdk_dataservice_api.configapi.catalog.html#marketplaceready" class="tsd-kind-icon">marketplace<wbr>Ready</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="olp_sdk_dataservice_api.configapi.catalog.html#name" class="tsd-kind-icon">name</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="olp_sdk_dataservice_api.configapi.catalog.html#notifications" class="tsd-kind-icon">notifications</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="olp_sdk_dataservice_api.configapi.catalog.html#owner" class="tsd-kind-icon">owner</a></li>
@@ -113,19 +115,27 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="automaticversiondeletion" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> automatic<wbr>Version<wbr>Deletion</h3>
+					<div class="tsd-signature tsd-kind-icon">automatic<wbr>Version<wbr>Deletion<span class="tsd-signature-symbol">:</span> <a href="olp_sdk_dataservice_api.configapi.automaticversiondeletion.html" class="tsd-signature-type" data-tsd-kind="Interface">AutomaticVersionDeletion</a></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L313">@here/olp-sdk-dataservice-api/lib/config-api.ts:313</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="billingtags" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> billing<wbr>Tags</h3>
 					<div class="tsd-signature tsd-kind-icon">billing<wbr>Tags<span class="tsd-signature-symbol">:</span> <a href="../modules/olp_sdk_dataservice_api.configapi.html#billingtags" class="tsd-signature-type" data-tsd-kind="Type alias">BillingTags</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e67a0d2/@here/olp-sdk-dataservice-api/lib/config-api.ts#L251">@here/olp-sdk-dataservice-api/lib/config-api.ts:251</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L307">@here/olp-sdk-dataservice-api/lib/config-api.ts:307</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Aggregated list of all layers` billing tags.
-								Please note that this element is read only and does not exist in CreateCatalog.
-							If posted during catalog creation the value will be ignored.</p>
+							<p>Aggregated list of all layers<code>billing tags. Note that this element is read-only and does not exist in</code>CreateCatalog`. If posted during catalog creation, the value will be ignored.</p>
 						</div>
 					</div>
 				</section>
@@ -135,7 +145,7 @@
 					<div class="tsd-signature tsd-kind-icon">coverage<span class="tsd-signature-symbol">:</span> <a href="olp_sdk_dataservice_api.configapi.coverage.html" class="tsd-signature-type" data-tsd-kind="Interface">Coverage</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e67a0d2/@here/olp-sdk-dataservice-api/lib/config-api.ts#L252">@here/olp-sdk-dataservice-api/lib/config-api.ts:252</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L297">@here/olp-sdk-dataservice-api/lib/config-api.ts:297</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -145,7 +155,7 @@
 					<div class="tsd-signature tsd-kind-icon">created<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e67a0d2/@here/olp-sdk-dataservice-api/lib/config-api.ts#L256">@here/olp-sdk-dataservice-api/lib/config-api.ts:256</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L311">@here/olp-sdk-dataservice-api/lib/config-api.ts:311</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -160,13 +170,13 @@
 					<div class="tsd-signature tsd-kind-icon">description<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e67a0d2/@here/olp-sdk-dataservice-api/lib/config-api.ts#L261">@here/olp-sdk-dataservice-api/lib/config-api.ts:261</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L296">@here/olp-sdk-dataservice-api/lib/config-api.ts:296</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>A detailed description of the catalog and what it contains.
-							This information appears on the &#39;Overview&#39; tab when you open a catalog in the platform portal.</p>
+							<p>A detailed description of the catalog and what it contains. This information appears on the &#39;Overview&#39;
+							tab when you open a catalog in the platform portal.</p>
 						</div>
 					</div>
 				</section>
@@ -176,12 +186,12 @@
 					<div class="tsd-signature tsd-kind-icon">hrn<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e67a0d2/@here/olp-sdk-dataservice-api/lib/config-api.ts#L265">@here/olp-sdk-dataservice-api/lib/config-api.ts:265</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L282">@here/olp-sdk-dataservice-api/lib/config-api.ts:282</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The HERE Resource Name (HRN) of the catalog.</p>
+							<p>The HERE Resource Name (HRN) of the catalog</p>
 						</div>
 					</div>
 				</section>
@@ -191,14 +201,15 @@
 					<div class="tsd-signature tsd-kind-icon">id<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e67a0d2/@here/olp-sdk-dataservice-api/lib/config-api.ts#L272">@here/olp-sdk-dataservice-api/lib/config-api.ts:272</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L278">@here/olp-sdk-dataservice-api/lib/config-api.ts:278</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>The ID to use when referring to this catalog programmatically.
-								Catalog IDs must be unique across all catalogs in the HERE platform.
-								Do not put private information in the catalog ID. The catalog ID forms a portion of the catalog&#39;s HERE Resource Name (HRN),
+								Catalog IDs must be unique across all catalogs in the Open Location Platform.
+								Do not put private information in the catalog ID.
+								The catalog ID forms a portion of the catalog&#39;s HERE Resource Name (HRN),
 							and HRNs are visible to other users.</p>
 						</div>
 					</div>
@@ -206,10 +217,10 @@
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="layers" class="tsd-anchor"></a>
 					<h3>layers</h3>
-					<div class="tsd-signature tsd-kind-icon">layers<span class="tsd-signature-symbol">:</span> <a href="olp_sdk_dataservice_api.configapi.layer.html" class="tsd-signature-type" data-tsd-kind="Interface">Layer</a><span class="tsd-signature-symbol">[]</span></div>
+					<div class="tsd-signature tsd-kind-icon">layers<span class="tsd-signature-symbol">:</span> <a href="olp_sdk_dataservice_api.configapi.layer.html" class="tsd-signature-type" data-tsd-kind="Interface">Layer</a><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-symbol">(</span><a href="olp_sdk_dataservice_api.configapi.versionedlayer.html" class="tsd-signature-type" data-tsd-kind="Interface">VersionedLayer</a><span class="tsd-signature-symbol"> | </span><a href="olp_sdk_dataservice_api.configapi.volatilelayer.html" class="tsd-signature-type" data-tsd-kind="Interface">VolatileLayer</a><span class="tsd-signature-symbol"> | </span><a href="olp_sdk_dataservice_api.configapi.streamlayer.html" class="tsd-signature-type" data-tsd-kind="Interface">StreamLayer</a><span class="tsd-signature-symbol"> | </span><a href="olp_sdk_dataservice_api.configapi.indexlayer.html" class="tsd-signature-type" data-tsd-kind="Interface">IndexLayer</a><span class="tsd-signature-symbol"> | </span><a href="olp_sdk_dataservice_api.configapi.interactivemapslayer.html" class="tsd-signature-type" data-tsd-kind="Interface">InteractiveMapsLayer</a><span class="tsd-signature-symbol"> | </span><a href="olp_sdk_dataservice_api.configapi.objectstorelayer.html" class="tsd-signature-type" data-tsd-kind="Interface">ObjectstoreLayer</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e67a0d2/@here/olp-sdk-dataservice-api/lib/config-api.ts#L276">@here/olp-sdk-dataservice-api/lib/config-api.ts:276</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L317">@here/olp-sdk-dataservice-api/lib/config-api.ts:317</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -219,17 +230,33 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="marketplaceready" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> marketplace<wbr>Ready</h3>
+					<div class="tsd-signature tsd-kind-icon">marketplace<wbr>Ready<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L339">@here/olp-sdk-dataservice-api/lib/config-api.ts:339</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Indicates whether the catalog is ready to be listed in the Marketplace. If the value is <code>true</code>,
+							the catalog is ready to be listed in the Marketplace.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="name" class="tsd-anchor"></a>
 					<h3>name</h3>
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e67a0d2/@here/olp-sdk-dataservice-api/lib/config-api.ts#L280">@here/olp-sdk-dataservice-api/lib/config-api.ts:280</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L286">@here/olp-sdk-dataservice-api/lib/config-api.ts:286</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The short name for the catalog.</p>
+							<p>The short name for the catalog</p>
 						</div>
 					</div>
 				</section>
@@ -239,7 +266,7 @@
 					<div class="tsd-signature tsd-kind-icon">notifications<span class="tsd-signature-symbol">:</span> <a href="olp_sdk_dataservice_api.configapi.notifications.html" class="tsd-signature-type" data-tsd-kind="Interface">Notifications</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e67a0d2/@here/olp-sdk-dataservice-api/lib/config-api.ts#L281">@here/olp-sdk-dataservice-api/lib/config-api.ts:281</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L334">@here/olp-sdk-dataservice-api/lib/config-api.ts:334</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -249,7 +276,7 @@
 					<div class="tsd-signature tsd-kind-icon">owner<span class="tsd-signature-symbol">:</span> <a href="olp_sdk_dataservice_api.configapi.owner.html" class="tsd-signature-type" data-tsd-kind="Interface">Owner</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e67a0d2/@here/olp-sdk-dataservice-api/lib/config-api.ts#L282">@here/olp-sdk-dataservice-api/lib/config-api.ts:282</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L298">@here/olp-sdk-dataservice-api/lib/config-api.ts:298</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -259,7 +286,7 @@
 					<div class="tsd-signature tsd-kind-icon">replication<span class="tsd-signature-symbol">:</span> <a href="olp_sdk_dataservice_api.configapi.replication.html" class="tsd-signature-type" data-tsd-kind="Interface">Replication</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e67a0d2/@here/olp-sdk-dataservice-api/lib/config-api.ts#L283">@here/olp-sdk-dataservice-api/lib/config-api.ts:283</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L312">@here/olp-sdk-dataservice-api/lib/config-api.ts:312</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -269,27 +296,28 @@
 					<div class="tsd-signature tsd-kind-icon">summary<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e67a0d2/@here/olp-sdk-dataservice-api/lib/config-api.ts#L287">@here/olp-sdk-dataservice-api/lib/config-api.ts:287</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L291">@here/olp-sdk-dataservice-api/lib/config-api.ts:291</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>A one-sentence summary of the catalog. You can see this summary when you browse a list of catalogs on the platform portal.</p>
+							<p>A one-sentence summary of the catalog. You can see this summary when you browse a list of catalogs on the
+							platform portal.</p>
 						</div>
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="tags" class="tsd-anchor"></a>
 					<h3>tags</h3>
-					<div class="tsd-signature tsd-kind-icon">tags<span class="tsd-signature-symbol">:</span> <a href="../modules/olp_sdk_dataservice_api.configapi.html#tags" class="tsd-signature-type" data-tsd-kind="Type alias">Tags</a></div>
+					<div class="tsd-signature tsd-kind-icon">tags<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e67a0d2/@here/olp-sdk-dataservice-api/lib/config-api.ts#L291">@here/olp-sdk-dataservice-api/lib/config-api.ts:291</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L302">@here/olp-sdk-dataservice-api/lib/config-api.ts:302</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Some keywords that help to find the catalog when searching in the platform portal.</p>
+							<p>Some keywords that help to find the catalog when searching in the platform portal</p>
 						</div>
 					</div>
 				</section>
@@ -299,15 +327,15 @@
 					<div class="tsd-signature tsd-kind-icon">version<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e67a0d2/@here/olp-sdk-dataservice-api/lib/config-api.ts#L298">@here/olp-sdk-dataservice-api/lib/config-api.ts:298</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L333">@here/olp-sdk-dataservice-api/lib/config-api.ts:333</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The version of the catalog configuration. Every change in this number indicates change in catalog configuration.
-								It is incremented every time you e.g. change catalog parameters, add layers etc.
-								Please note this is not metadata/data version as configuration and metadata versions
-							are independent of each other and indicate different kind of changes.</p>
+							<p>The version of the catalog configuration. Every change in this number indicates a change in the catalog
+								configuration. It is incremented every time you make changes, such as change catalog parameters or add layers.
+								Note that this is not a metadata/data version as configuration and metadata versions are independent
+							of each other and indicate different kind of changes.</p>
 						</div>
 					</div>
 				</section>
@@ -329,6 +357,9 @@
 						<a href="olp_sdk_dataservice_api.configapi.catalog.html" class="tsd-kind-icon">Catalog</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="olp_sdk_dataservice_api.configapi.catalog.html#automaticversiondeletion" class="tsd-kind-icon">automatic<wbr>Version<wbr>Deletion</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="olp_sdk_dataservice_api.configapi.catalog.html#billingtags" class="tsd-kind-icon">billing<wbr>Tags</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
@@ -348,6 +379,9 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="olp_sdk_dataservice_api.configapi.catalog.html#layers" class="tsd-kind-icon">layers</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="olp_sdk_dataservice_api.configapi.catalog.html#marketplaceready" class="tsd-kind-icon">marketplace<wbr>Ready</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="olp_sdk_dataservice_api.configapi.catalog.html#name" class="tsd-kind-icon">name</a>

@@ -72,7 +72,12 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>Properties that define the scale of the required streaming service.</p>
+						<p>Properties that define the scale of the required streaming layer.
+							It is recommended to provide all 3 properties when creating a streaming layer.
+							Either combination of <code>dataInThroughputKbps</code> and <code>dataOutThroughputKbps</code> or <code>parallelization</code> is required.
+							<code>dataInThroughputKbps</code> and <code>dataOutThroughputKbps</code> can only be values multiple of 100. For instance, the value
+							33200 is valid while 32250 is not. Default values for missing field(s) will be calculated according to the
+						following formulas: <code>1 parallelization = 1000 dataInThroughputKbps</code>, <code>1 parallelization = 2000 dataOutThroughputKbps</code>.</p>
 					</div>
 				</div>
 			</section>
@@ -91,8 +96,11 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="olp_sdk_dataservice_api.configapi.streamproperties.html#datainthroughputkbps" class="tsd-kind-icon">data<wbr>InThroughput<wbr>Kbps</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="olp_sdk_dataservice_api.configapi.streamproperties.html#datainthroughputmbps" class="tsd-kind-icon">data<wbr>InThroughput<wbr>Mbps</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="olp_sdk_dataservice_api.configapi.streamproperties.html#dataoutthroughputkbps" class="tsd-kind-icon">data<wbr>Out<wbr>Throughput<wbr>Kbps</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="olp_sdk_dataservice_api.configapi.streamproperties.html#dataoutthroughputmbps" class="tsd-kind-icon">data<wbr>Out<wbr>Throughput<wbr>Mbps</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="olp_sdk_dataservice_api.configapi.streamproperties.html#parallelization" class="tsd-kind-icon">parallelization</a></li>
 							</ul>
 						</section>
 					</div>
@@ -101,18 +109,55 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="datainthroughputkbps" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> data<wbr>InThroughput<wbr>Kbps</h3>
+					<div class="tsd-signature tsd-kind-icon">data<wbr>InThroughput<wbr>Kbps<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L1144">@here/olp-sdk-dataservice-api/lib/config-api.ts:1144</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Maximum throughput for incoming data expressed in kilobytes per second. Throttling occurs when the inbound rate
+								exceeds the maximum inbound throughput. The default is 1000 KBps. The minimum is 100 KBps, the maximum is 32800 KBps.
+							Can only be multiple of 100 KBps. Can be updated by the user.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="datainthroughputmbps" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> data<wbr>InThroughput<wbr>Mbps</h3>
 					<div class="tsd-signature tsd-kind-icon">data<wbr>InThroughput<wbr>Mbps<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e67a0d2/@here/olp-sdk-dataservice-api/lib/config-api.ts#L874">@here/olp-sdk-dataservice-api/lib/config-api.ts:874</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L1131">@here/olp-sdk-dataservice-api/lib/config-api.ts:1131</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>deprecated</dt>
+							<dd><p><code>dataInThroughputMbps</code> will be removed by 03.2022.
+									Maximum throughput for incoming data expressed in megabytes per second.
+								Throttling occurs when the inbound rate exceeds the maximum inbound throughput. The default is 4 MBps. The maximum is 32 MBps.</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="dataoutthroughputkbps" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> data<wbr>Out<wbr>Throughput<wbr>Kbps</h3>
+					<div class="tsd-signature tsd-kind-icon">data<wbr>Out<wbr>Throughput<wbr>Kbps<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L1150">@here/olp-sdk-dataservice-api/lib/config-api.ts:1150</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Maximum throughput for incoming data expressed in megabytes per second.
-							Throttling occurs when the inbound rate exceeds the maximum inbound throughput. The default is 4 MBps. The maximum is 32 MBps.</p>
+							<p>Maximum throughput for outgoing data expressed in kilobytes per second. Throttling occurs when the total outbound
+								rate to all consumers exceeds the maximum outbound throughput. The default is 4000 KBps. The minimum is 100 KBps,
+							the maximum is 65500 KBps. Can only be multiple of 100 KBps. Can be updated by the user.</p>
 						</div>
 					</div>
 				</section>
@@ -122,14 +167,34 @@
 					<div class="tsd-signature tsd-kind-icon">data<wbr>Out<wbr>Throughput<wbr>Mbps<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/e67a0d2/@here/olp-sdk-dataservice-api/lib/config-api.ts#L880">@here/olp-sdk-dataservice-api/lib/config-api.ts:880</a></li>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L1138">@here/olp-sdk-dataservice-api/lib/config-api.ts:1138</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>deprecated</dt>
+							<dd><p><code>dataOutThroughputMbps</code> will be removed by 03.2022.
+									Maximum throughput for outgoing data expressed in megabytes per second.
+									Throttling occurs when the total outbound rate to all consumers exceeds the maximum outbound throughput.
+								The default is 8 MBps. The maximum is 64 MBps.</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="parallelization" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> parallelization</h3>
+					<div class="tsd-signature tsd-kind-icon">parallelization<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/63fe76e/@here/olp-sdk-dataservice-api/lib/config-api.ts#L1156">@here/olp-sdk-dataservice-api/lib/config-api.ts:1156</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>Maximum throughput for outgoing data expressed in megabytes per second.
-								Throttling occurs when the total outbound rate to all consumers exceeds the maximum outbound throughput.
-							The default is 8 MBps. The maximum is 64 MBps.</p>
+							<p>Number of stream partitions that maps to a Kafka topic partition. The maximum parallelism at which your application
+								may run is determined by the maximum number of stream partitions of the input stream layer the application is reading
+							from in its processing topology. The default is 4. The maximum is 32.</p>
 						</div>
 					</div>
 				</section>
@@ -151,10 +216,19 @@
 						<a href="olp_sdk_dataservice_api.configapi.streamproperties.html" class="tsd-kind-icon">Stream<wbr>Properties</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="olp_sdk_dataservice_api.configapi.streamproperties.html#datainthroughputkbps" class="tsd-kind-icon">data<wbr>InThroughput<wbr>Kbps</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="olp_sdk_dataservice_api.configapi.streamproperties.html#datainthroughputmbps" class="tsd-kind-icon">data<wbr>InThroughput<wbr>Mbps</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="olp_sdk_dataservice_api.configapi.streamproperties.html#dataoutthroughputkbps" class="tsd-kind-icon">data<wbr>Out<wbr>Throughput<wbr>Kbps</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="olp_sdk_dataservice_api.configapi.streamproperties.html#dataoutthroughputmbps" class="tsd-kind-icon">data<wbr>Out<wbr>Throughput<wbr>Mbps</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="olp_sdk_dataservice_api.configapi.streamproperties.html#parallelization" class="tsd-kind-icon">parallelization</a>
 							</li>
 						</ul>
 					</li>
