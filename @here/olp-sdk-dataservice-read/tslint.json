@@ -20,7 +20,7 @@
       "severity": "none"
     },
     "eofline": true,
-    "forin": true,
+    "forin": false,
     "import-blacklist": [
       true,
       "rxjs/Rx"
@@ -71,7 +71,7 @@
     "no-duplicate-super": true,
     "no-duplicate-switch-case": true,
     "no-empty": false,
-    "no-empty-interface": true,
+    "no-empty-interface": false,
     "no-eval": true,
     "no-for-in-array": true,
     "no-import-side-effect": true,

@@ -22,7 +22,8 @@
 import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
-import { InteractiveApi } from "@here/olp-sdk-dataservice-api";
+import { InteractiveApi, RequestOptions } from "@here/olp-sdk-dataservice-api";
+import { MockedRequestBuilder } from "./MockedRequestBuilder";
 
 chai.use(sinonChai);
 
@@ -30,422 +31,699 @@ const expect = chai.expect;
 
 describe("InteractiveApi", function() {
     it("getApiVersion", async function() {
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: any, options: any) => {
-                expect(urlBuilder.url).to.be.equal("http://mocked.url/version");
-                expect(options.method).to.be.equal("GET");
-                return Promise.resolve("success");
-            }
-        } as any;
-
-        expect(await InteractiveApi.getApiVersion(builder)).eqls("success");
+        expect(
+            await InteractiveApi.getApiVersion(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equal("http://mocked.url/version");
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                })
+            )
+        ).eqls("success");
     });
 
     it("getHealth", async function() {
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: any, options: any) => {
-                expect(urlBuilder.url).to.be.equal("http://mocked.url/health");
-                expect(options.method).to.be.equal("GET");
-                return Promise.resolve("success");
-            }
-        } as any;
-
-        expect(await InteractiveApi.getHealth(builder)).eqls("success");
+        expect(
+            await InteractiveApi.getHealth(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equal("http://mocked.url/health");
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                })
+            )
+        ).eqls("success");
     });
 
     it("getFeature", async function() {
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: any, options: any) => {
-                expect(urlBuilder.url).to.be.equals(
-                    `http://mocked.url/layers/mocked-layerId/features/mocked-featureId?selection=p.name%2Cp.capacity%2Cp.color&force2D=true`
-                );
-                expect(options.method).to.be.equal("GET");
-                return Promise.resolve("success");
-            }
-        } as any;
+        expect(
+            await InteractiveApi.getFeature(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/features/mocked-featureId?selection=p.name,p.capacity,p.color&force2D=true`
+                        );
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    featureId: "mocked-featureId",
+                    selection: ["p.name", "p.capacity", "p.color"],
+                    force2D: true
+                }
+            )
+        ).eqls("success");
 
         expect(
-            await InteractiveApi.getFeature(builder, {
-                layerId: "mocked-layerId",
-                featureId: "mocked-featureId",
-                selection: "p.name,p.capacity,p.color",
-                force2D: true
-            })
+            await InteractiveApi.getFeature(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/features/mocked-featureId`
+                        );
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    featureId: "mocked-featureId"
+                }
+            )
+        ).eqls("success");
+
+        expect(
+            await InteractiveApi.getFeature(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/features/mocked-featureId?force2D=false`
+                        );
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    featureId: "mocked-featureId",
+                    force2D: false
+                }
+            )
         ).eqls("success");
     });
 
     it("getFeatures", async function() {
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: any, options: any) => {
-                expect(urlBuilder.url).to.be.equals(
-                    `http://mocked.url/layers/mocked-layerId/features?id=value1%2Cvalue2&selection=p.name%2Cp.capacity%2Cp.color&force2D=true`
-                );
-                expect(options.method).to.be.equal("GET");
-                return Promise.resolve("success");
-            }
-        } as any;
+        expect(
+            await InteractiveApi.getFeatures(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/features?id=value1&selection=p.name,p.capacity,p.color&force2D=true`
+                        );
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    id: "value1",
+                    selection: ["p.name", "p.capacity", "p.color"],
+                    force2D: true
+                }
+            )
+        ).eqls("success");
 
         expect(
-            await InteractiveApi.getFeatures(builder, {
-                layerId: "mocked-layerId",
-                id: "value1,value2",
-                selection: "p.name,p.capacity,p.color",
-                force2D: true
-            })
+            await InteractiveApi.getFeatures(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/features?id=value1,value2&force2D=false`
+                        );
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    id: ["value1", "value2"],
+                    force2D: false
+                }
+            )
         ).eqls("success");
     });
 
     it("getFeaturesByBBox", async function() {
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: any, options: any) => {
-                expect(urlBuilder.url).to.be.equals(
-                    `http://mocked.url/layers/mocked-layerId/bbox?bbox=13.082%2C52.416%2C13.628%2C52.626&clip=true&limit=100&params=p.property_name_1%3Dproperty_value_1%26f.special_property_name_1%3Dspecial_property_value_1&selection=p.name%2Cp.capacity%2Cp.color&skipCache=true&clustering=hexbin&clusteringParams=clustering.resolution%3D3%26clustering.property%3Da.nest&force2D=true`
-                );
-                expect(options.method).to.be.equal("GET");
-                return Promise.resolve("success");
-            }
-        } as any;
+        expect(
+            await InteractiveApi.getFeaturesByBBox(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/bbox?bbox=13.082,52.416,13.628,52.626&clip=true&limit=100&p.property_name_1=property_value_1&f.special_property_name_1=special_property_value_1&selection=p.name,p.capacity,p.color&skipCache=true&clustering=hexbin&clustering.resolution=3&clustering.testProperty=a.nest&clustering.testProperty2=testProperty2Value&force2D=true`
+                        );
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    bbox: [13.082, 52.416, 13.628, 52.626],
+                    clip: true,
+                    limit: 100,
+                    params: {
+                        "p.property_name_1": "property_value_1",
+                        "f.special_property_name_1": "special_property_value_1"
+                    },
+                    selection: ["p.name", "p.capacity", "p.color"],
+                    skipCache: true,
+                    clustering: "hexbin",
+                    clusteringParams: {
+                        resolution: 3,
+                        testProperty: "a.nest",
+                        testProperty2: "testProperty2Value"
+                    },
+                    force2D: true
+                }
+            )
+        ).eqls("success");
 
         expect(
-            await InteractiveApi.getFeaturesByBBox(builder, {
-                layerId: "mocked-layerId",
-                bbox: "13.082,52.416,13.628,52.626",
-                clip: true,
-                limit: 100,
-                params:
-                    "p.property_name_1=property_value_1&f.special_property_name_1=special_property_value_1",
-                selection: "p.name,p.capacity,p.color",
-                skipCache: true,
-                clustering: "hexbin",
-                clusteringParams:
-                    "clustering.resolution=3&clustering.property=a.nest",
-                force2D: true
-            })
+            await InteractiveApi.getFeaturesByBBox(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/bbox?clip=false&skipCache=false&force2D=false`
+                        );
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    clip: false,
+                    skipCache: false,
+                    force2D: false
+                }
+            )
+        ).eqls("success");
+
+        expect(
+            await InteractiveApi.getFeaturesByBBox(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/bbox`
+                        );
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId"
+                }
+            )
         ).eqls("success");
     });
 
     it("getFeaturesBySpatial", async function() {
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: any, options: any) => {
-                expect(urlBuilder.url).to.be.equals(
-                    `http://mocked.url/layers/mocked-layerId/spatial?lat=90&lng=45&refCatalogHrn=mocked-refCatalogHrn&refLayerId=mocked-refLayerId&refFeatureId=mocked-refFeatureId&radius=40&limit=100&params=p.property_name_1%3Dproperty_value_1%26f.special_property_name_1%3Dspecial_property_value_1&selection=p.name%2Cp.capacity%2Cp.color&skipCache=true&force2D=true`
-                );
-                expect(options.method).to.be.equal("GET");
-                return Promise.resolve("success");
-            }
-        } as any;
+        expect(
+            await InteractiveApi.getFeaturesBySpatial(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/spatial?lat=-90&lng=45&refCatalogHrn=mocked-refCatalogHrn&refLayerId=mocked-refLayerId&refFeatureId=mocked-refFeatureId&radius=40&limit=100&p.property_name_1=property_value_1&f.special_property_name_1=special_property_value_1&selection=p.name,p.capacity,p.color&skipCache=true&force2D=true`
+                        );
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    lat: -90,
+                    lng: 45,
+                    refCatalogHrn: "mocked-refCatalogHrn",
+                    refLayerId: "mocked-refLayerId",
+                    refFeatureId: "mocked-refFeatureId",
+                    radius: 40,
+                    limit: 100,
+                    params: {
+                        "p.property_name_1": "property_value_1",
+                        "f.special_property_name_1": "special_property_value_1"
+                    },
+                    selection: ["p.name", "p.capacity", "p.color"],
+                    skipCache: true,
+                    force2D: true
+                }
+            )
+        ).eqls("success");
 
         expect(
-            await InteractiveApi.getFeaturesBySpatial(builder, {
-                layerId: "mocked-layerId",
-                lat: 90,
-                lng: 45,
-                refCatalogHrn: "mocked-refCatalogHrn",
-                refLayerId: "mocked-refLayerId",
-                refFeatureId: "mocked-refFeatureId",
-                radius: 40,
-                limit: 100,
-                params:
-                    "p.property_name_1=property_value_1&f.special_property_name_1=special_property_value_1",
-                selection: "p.name,p.capacity,p.color",
-                skipCache: true,
-                force2D: true
-            })
+            await InteractiveApi.getFeaturesBySpatial(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/spatial?skipCache=false&force2D=false`
+                        );
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    skipCache: false,
+                    force2D: false
+                }
+            )
+        ).eqls("success");
+
+        expect(
+            await InteractiveApi.getFeaturesBySpatial(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/spatial`
+                        );
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId"
+                }
+            )
         ).eqls("success");
     });
 
     it("getFeaturesBySpatialPost", async function() {
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: any, options: any) => {
-                expect(urlBuilder.url).to.be.equals(
-                    `http://mocked.url/layers/mocked-layerId/spatial?radius=40&limit=100&params=p.property_name_1%3Dproperty_value_1%26f.special_property_name_1%3Dspecial_property_value_1&selection=p.name%2Cp.capacity%2Cp.color&skipCache=true&force2D=true`
-                );
-                expect(options.body).to.be.equals(
-                    `{"type":"mocked-geojson","bbox":[1,2,3,4]}`
-                );
-                expect(options.method).to.be.equal("POST");
-                return Promise.resolve("success");
-            }
-        } as any;
+        expect(
+            await InteractiveApi.getFeaturesBySpatialPost(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/spatial?radius=40&limit=100&p.property_name_1=property_value_1&f.special_property_name_1=special_property_value_1&selection=p.name,p.capacity,p.color&skipCache=true&force2D=true`
+                        );
+                        expect(options?.body).to.be.equals(
+                            `{"type":"mocked-geojson","bbox":[1,2,3,4]}`
+                        );
+                        expect(options?.method).to.be.equal("POST");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    body: {
+                        type: "mocked-geojson",
+                        bbox: [1, 2, 3, 4]
+                    },
+                    radius: 40,
+                    limit: 100,
+                    params: {
+                        "p.property_name_1": "property_value_1",
+                        "f.special_property_name_1": "special_property_value_1"
+                    },
+                    selection: ["p.name", "p.capacity", "p.color"],
+                    skipCache: true,
+                    force2D: true
+                }
+            )
+        ).eqls("success");
 
         expect(
-            await InteractiveApi.getFeaturesBySpatialPost(builder, {
-                layerId: "mocked-layerId",
-                body: {
-                    type: "mocked-geojson",
-                    bbox: [1, 2, 3, 4]
-                },
-                radius: 40,
-                limit: 100,
-                params:
-                    "p.property_name_1=property_value_1&f.special_property_name_1=special_property_value_1",
-                selection: "p.name,p.capacity,p.color",
-                skipCache: true,
-                force2D: true
-            })
+            await InteractiveApi.getFeaturesBySpatialPost(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/spatial?skipCache=false&force2D=false`
+                        );
+                        expect(options?.body).to.be.equals(
+                            `{"type":"FeatureCollection","bbox":[1,2,3,4],"features":[{"type":"Feature","bbox":[1,2,3,4]}]}`
+                        );
+                        expect(options?.method).to.be.equal("POST");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    body: {
+                        type: "FeatureCollection",
+                        bbox: [1, 2, 3, 4],
+                        features: [{ type: "Feature", bbox: [1, 2, 3, 4] }]
+                    },
+                    skipCache: false,
+                    force2D: false
+                }
+            )
+        ).eqls("success");
+
+        expect(
+            await InteractiveApi.getFeaturesBySpatialPost(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/spatial`
+                        );
+                        expect(options?.body).to.be.equals(
+                            `{"type":"FeatureCollection","bbox":[1,2,3,4],"coordinates":[[1,2],[3,4]],"properties":{"test":"lorem"}}`
+                        );
+                        expect(options?.method).to.be.equal("POST");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    body: {
+                        type: "FeatureCollection",
+                        bbox: [1, 2, 3, 4],
+                        coordinates: [
+                            [1, 2],
+                            [3, 4]
+                        ],
+                        properties: { test: "lorem" }
+                    }
+                }
+            )
         ).eqls("success");
     });
 
     it("getFeaturesByTile", async function() {
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: any, options: any) => {
-                expect(urlBuilder.url).to.be.equals(
-                    `http://mocked.url/layers/mocked-layerId/tile/here/mocked-tile-id?clip=true&params=p.property_name_1%3Dproperty_value_1%26f.special_property_name_1%3Dspecial_property_value_1&selection=p.name%2Cp.capacity%2Cp.color&skipCache=true&clustering=hexbin&clusteringParams=clustering.resolution%3D3%26clustering.property%3Da.nest&margin=12&limit=100&force2D=true`
-                );
-                expect(options.method).to.be.equal("GET");
-                return Promise.resolve("success");
-            }
-        } as any;
+        expect(
+            await InteractiveApi.getFeaturesByTile(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/tile/here/mocked-tile-id?clip=true&p.property_name_1=property_value_1&f.special_property_name_1=special_property_value_1&selection=p.name,p.capacity,p.color&skipCache=true&clustering=hexbin&clustering.resolution=3&clustering.testProperty=a.nest&clustering.testProperty2=testProperty2Value&margin=12&limit=100&force2D=true`
+                        );
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    tileType: "here",
+                    tileId: "mocked-tile-id",
+                    clip: true,
+                    limit: 100,
+                    params: {
+                        "p.property_name_1": "property_value_1",
+                        "f.special_property_name_1": "special_property_value_1"
+                    },
+                    selection: ["p.name", "p.capacity", "p.color"],
+                    skipCache: true,
+                    clustering: "hexbin",
+                    clusteringParams: {
+                        resolution: 3,
+                        testProperty: "a.nest",
+                        testProperty2: "testProperty2Value"
+                    },
+                    force2D: true,
+                    margin: 12
+                }
+            )
+        ).eqls("success");
 
         expect(
-            await InteractiveApi.getFeaturesByTile(builder, {
-                layerId: "mocked-layerId",
-                tileType: "here",
-                tileId: "mocked-tile-id",
-                clip: true,
-                limit: 100,
-                params:
-                    "p.property_name_1=property_value_1&f.special_property_name_1=special_property_value_1",
-                selection: "p.name,p.capacity,p.color",
-                skipCache: true,
-                clustering: "hexbin",
-                clusteringParams:
-                    "clustering.resolution=3&clustering.property=a.nest",
-                force2D: true,
-                margin: 12
-            })
+            await InteractiveApi.getFeaturesByTile(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/tile/here/mocked-tile-id`
+                        );
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    tileType: "here",
+                    tileId: "mocked-tile-id"
+                }
+            )
         ).eqls("success");
     });
 
     it("getStatistics", async function() {
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: any, options: any) => {
-                expect(urlBuilder.url).to.be.equals(
-                    `http://mocked.url/layers/mocked-layerId/statistics?skipCache=true`
-                );
-                expect(options.method).to.be.equal("GET");
-                return Promise.resolve("success");
-            }
-        } as any;
+        expect(
+            await InteractiveApi.getStatistics(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/statistics?skipCache=false`
+                        );
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    skipCache: false
+                }
+            )
+        ).eqls("success");
 
         expect(
-            await InteractiveApi.getStatistics(builder, {
-                layerId: "mocked-layerId",
-                skipCache: true
-            })
+            await InteractiveApi.getStatistics(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/statistics`
+                        );
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId"
+                }
+            )
         ).eqls("success");
     });
 
     it("iterateFeatures", async function() {
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: any, options: any) => {
-                expect(urlBuilder.url).to.be.equals(
-                    `http://mocked.url/layers/mocked-layerId/iterate?limit=123&pageToken=mocked-pageToken&selection=p.name%2Cp.capacity%2Cp.color&skipCache=true&force2D=true`
-                );
-                expect(options.method).to.be.equal("GET");
-                return Promise.resolve("success");
-            }
-        } as any;
+        expect(
+            await InteractiveApi.iterateFeatures(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/iterate?limit=123&pageToken=mocked-pageToken&selection=p.name,p.capacity,p.color&skipCache=true&force2D=false`
+                        );
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    limit: 123,
+                    pageToken: "mocked-pageToken",
+                    selection: ["p.name", "p.capacity", "p.color"],
+                    skipCache: true,
+                    force2D: false
+                }
+            )
+        ).eqls("success");
 
         expect(
-            await InteractiveApi.iterateFeatures(builder, {
-                layerId: "mocked-layerId",
-                limit: 123,
-                pageToken: "mocked-pageToken",
-                selection: "p.name,p.capacity,p.color",
-                skipCache: true,
-                force2D: true
-            })
+            await InteractiveApi.iterateFeatures(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/iterate`
+                        );
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId"
+                }
+            )
         ).eqls("success");
     });
 
     it("searchFeatures", async function() {
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: any, options: any) => {
-                expect(urlBuilder.url).to.be.equals(
-                    `http://mocked.url/layers/mocked-layerId/search?limit=123&selection=p.name%2Cp.capacity%2Cp.color&skipCache=true&force2D=true`
-                );
-                expect(options.method).to.be.equal("GET");
-                return Promise.resolve("success");
-            }
-        } as any;
+        expect(
+            await InteractiveApi.searchFeatures(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/search?limit=123&selection=p.name,p.capacity,p.color&skipCache=true&force2D=true`
+                        );
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    limit: 123,
+                    selection: ["p.name", "p.capacity", "p.color"],
+                    skipCache: true,
+                    force2D: true
+                }
+            )
+        ).eqls("success");
 
         expect(
-            await InteractiveApi.searchFeatures(builder, {
-                layerId: "mocked-layerId",
-                limit: 123,
-                selection: "p.name,p.capacity,p.color",
-                skipCache: true,
-                force2D: true
-            })
+            await InteractiveApi.searchFeatures(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/search`
+                        );
+                        expect(options?.method).to.be.equal("GET");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId"
+                }
+            )
         ).eqls("success");
     });
 
     it("deleteFeature", async function() {
-        const builder = {
-            baseUrl: "http://mocked.url",
-            requestBlob: async (urlBuilder: any, options: any) => {
-                expect(urlBuilder.url).to.be.equals(
-                    `http://mocked.url/layers/mocked-layerId/features/mocked-featureId`
-                );
-                expect(options.method).to.be.equal("DELETE");
-                return Promise.resolve("success");
-            }
-        } as any;
-
         expect(
-            await InteractiveApi.deleteFeature(builder, {
-                layerId: "mocked-layerId",
-                featureId: "mocked-featureId"
-            })
+            await InteractiveApi.deleteFeature(
+                new MockedRequestBuilder({
+                    requestBlob: (
+                        url: string,
+                        options?: RequestOptions
+                    ): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/features/mocked-featureId`
+                        );
+                        expect(options?.method).to.be.equal("DELETE");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    featureId: "mocked-featureId"
+                }
+            )
         ).eqls("success");
     });
 
     it("deleteFeatures", async function() {
-        const builder = {
-            baseUrl: "http://mocked.url",
-            requestBlob: async (urlBuilder: any, options: any) => {
-                expect(urlBuilder.url).to.be.equals(
-                    `http://mocked.url/layers/mocked-layerId/features?id=mocked-featureId,mocked-featureId-2`
-                );
-                expect(options.method).to.be.equal("DELETE");
-                return Promise.resolve("success");
-            }
-        } as any;
-
         expect(
-            await InteractiveApi.deleteFeatures(builder, {
-                layerId: "mocked-layerId",
-                id: ["mocked-featureId", "mocked-featureId-2"]
-            })
+            await InteractiveApi.deleteFeatures(
+                new MockedRequestBuilder({
+                    requestBlob: (
+                        url: string,
+                        options?: RequestOptions
+                    ): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/features?id=mocked-featureId,mocked-featureId-2`
+                        );
+                        expect(options?.method).to.be.equal("DELETE");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    id: ["mocked-featureId", "mocked-featureId-2"]
+                }
+            )
         ).eqls("success");
     });
 
     it("patchFeature", async function() {
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: any, options: any) => {
-                expect(urlBuilder.url).to.be.equals(
-                    `http://mocked.url/layers/mocked-layerId/features/mocked-featureId`
-                );
-
-                expect(options.body).to.be.equal(
-                    `{"type":"mocked-feature","bbox":[1,2,3,4]}`
-                );
-
-                expect(options.method).to.be.equal("PATCH");
-                return Promise.resolve("success");
-            }
-        } as any;
-
         expect(
-            await InteractiveApi.patchFeature(builder, {
-                layerId: "mocked-layerId",
-                featureId: "mocked-featureId",
-                body: {
-                    type: "mocked-feature",
-                    bbox: [1, 2, 3, 4]
+            await InteractiveApi.patchFeature(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/features/mocked-featureId`
+                        );
+
+                        expect(options?.body).to.be.equal(
+                            `{"type":"mocked-feature","bbox":[1,2,3,4]}`
+                        );
+
+                        expect(options?.method).to.be.equal("PATCH");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    featureId: "mocked-featureId",
+                    body: {
+                        type: "mocked-feature",
+                        bbox: [1, 2, 3, 4]
+                    }
                 }
-            })
+            )
         ).eqls("success");
     });
 
     it("postFeatures", async function() {
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: any, options: any) => {
-                expect(urlBuilder.url).to.be.equals(
-                    `http://mocked.url/layers/mocked-layerId/features`
-                );
-
-                expect(options.body).to.be.equal(
-                    `{"type":"mocked-features","features":[{"type":"mocked-feature-1","bbox":[1,2,3,4]},{"type":"mocked-feature-2","bbox":[4,3,2,1]}]}`
-                );
-
-                expect(options.method).to.be.equal("POST");
-                return Promise.resolve("success");
-            }
-        } as any;
-
         expect(
-            await InteractiveApi.postFeatures(builder, {
-                layerId: "mocked-layerId",
-                body: {
-                    type: "mocked-features",
-                    features: [
-                        { type: "mocked-feature-1", bbox: [1, 2, 3, 4] },
-                        { type: "mocked-feature-2", bbox: [4, 3, 2, 1] }
-                    ]
+            await InteractiveApi.postFeatures(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/features`
+                        );
+
+                        expect(options?.body).to.be.equal(
+                            `{"type":"mocked-features","features":[{"type":"mocked-feature-1","bbox":[1,2,3,4]},{"type":"mocked-feature-2","bbox":[4,3,2,1]}]}`
+                        );
+
+                        expect(options?.method).to.be.equal("POST");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    body: {
+                        type: "mocked-features",
+                        features: [
+                            { type: "mocked-feature-1", bbox: [1, 2, 3, 4] },
+                            { type: "mocked-feature-2", bbox: [4, 3, 2, 1] }
+                        ]
+                    }
                 }
-            })
+            )
         ).eqls("success");
     });
 
     it("putFeature", async function() {
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: any, options: any) => {
-                expect(urlBuilder.url).to.be.equals(
-                    `http://mocked.url/layers/mocked-layerId/features/mocked-featureId`
-                );
-
-                expect(options.body).to.be.equal(
-                    `{"type":"mocked-feature-1","bbox":[1,2,3,4]}`
-                );
-
-                expect(options.method).to.be.equal("PUT");
-                return Promise.resolve("success");
-            }
-        } as any;
-
         expect(
-            await InteractiveApi.putFeature(builder, {
-                layerId: "mocked-layerId",
-                featureId: "mocked-featureId",
-                body: { type: "mocked-feature-1", bbox: [1, 2, 3, 4] }
-            })
+            await InteractiveApi.putFeature(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/features/mocked-featureId`
+                        );
+
+                        expect(options?.body).to.be.equal(
+                            `{"type":"mocked-feature-1","bbox":[1,2,3,4]}`
+                        );
+
+                        expect(options?.method).to.be.equal("PUT");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    featureId: "mocked-featureId",
+                    body: { type: "mocked-feature-1", bbox: [1, 2, 3, 4] }
+                }
+            )
         ).eqls("success");
     });
 
     it("putFeatures", async function() {
-        const builder = {
-            baseUrl: "http://mocked.url",
-            request: async (urlBuilder: any, options: any) => {
-                expect(urlBuilder.url).to.be.equals(
-                    `http://mocked.url/layers/mocked-layerId/features`
-                );
-
-                expect(options.body).to.be.equal(
-                    `{"type":"mocked-features","features":[{"type":"mocked-feature-1","bbox":[1,2,3,4]},{"type":"mocked-feature-2","bbox":[4,3,2,1]}]}`
-                );
-
-                expect(options.method).to.be.equal("PUT");
-                return Promise.resolve("success");
-            }
-        } as any;
-
         expect(
-            await InteractiveApi.putFeatures(builder, {
-                layerId: "mocked-layerId",
-                body: {
-                    type: "mocked-features",
-                    features: [
-                        { type: "mocked-feature-1", bbox: [1, 2, 3, 4] },
-                        { type: "mocked-feature-2", bbox: [4, 3, 2, 1] }
-                    ]
+            await InteractiveApi.putFeatures(
+                new MockedRequestBuilder({
+                    request: (url: string, options?: RequestOptions): any => {
+                        expect(url).to.be.equals(
+                            `http://mocked.url/layers/mocked-layerId/features`
+                        );
+
+                        expect(options?.body).to.be.equal(
+                            `{"type":"mocked-features","features":[{"type":"mocked-feature-1","bbox":[1,2,3,4]},{"type":"mocked-feature-2","bbox":[4,3,2,1]}]}`
+                        );
+
+                        expect(options?.method).to.be.equal("PUT");
+                        return Promise.resolve("success");
+                    }
+                }),
+                {
+                    layerId: "mocked-layerId",
+                    body: {
+                        type: "mocked-features",
+                        features: [
+                            { type: "mocked-feature-1", bbox: [1, 2, 3, 4] },
+                            { type: "mocked-feature-2", bbox: [4, 3, 2, 1] }
+                        ]
+                    }
                 }
-            })
+            )
         ).eqls("success");
     });
 });

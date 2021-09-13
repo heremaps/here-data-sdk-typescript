@@ -58,7 +58,7 @@ export class UrlBuilder {
         url: string,
         separator: string,
         key: string,
-        value: string | number | boolean | string[]
+        value: string | number | boolean | string[] | number[]
     ): string {
         url += separator;
         url += encodeURIComponent(key) + "=";
@@ -68,8 +68,13 @@ export class UrlBuilder {
             url += `${value}`;
         } else if (typeof value === "string") {
             url += encodeURIComponent(value);
-        } else {
-            url += value.map(val => encodeURIComponent(val)).join(",");
+        } else if (Array.isArray(value)) {
+            const encodedValues: string[] = [];
+            value.forEach((val: string | number) => {
+                encodedValues.push(encodeURIComponent(val));
+            });
+
+            url += encodedValues.join(",");
         }
         return url;
     }
@@ -93,16 +98,41 @@ export class UrlBuilder {
      * @param key The key of the query parameter.
      * @param value The value of the query parameter.
      */
-    appendQuery(key: string, value?: string | number | boolean | string[]) {
+    appendQuery(
+        key: string,
+        value?:
+            | string
+            | number
+            | boolean
+            | string[]
+            | number[]
+            | { [key: string]: string | number }
+    ) {
         if (value === undefined) {
             return;
         }
-        this.url = UrlBuilder.appendQueryString(
-            this.url,
-            this.hasQuery ? "&" : "?",
-            key,
-            value
-        );
+
+        if (value instanceof Object && !(value instanceof Array)) {
+            let queryString = "";
+            for (const propKey in value) {
+                queryString += UrlBuilder.appendQueryString(
+                    "",
+                    this.hasQuery ? "&" : "?",
+                    propKey,
+                    value[propKey]
+                );
+            }
+
+            this.url += queryString;
+        } else {
+            this.url = UrlBuilder.appendQueryString(
+                this.url,
+                this.hasQuery ? "&" : "?",
+                key,
+                value
+            );
+        }
+
         this.hasQuery = true;
     }
 }
