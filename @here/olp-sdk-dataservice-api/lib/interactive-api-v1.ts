@@ -40,14 +40,29 @@ export interface ApiVersion {
     apiVersion?: string;
 }
 
+/**
+ * True if the value is only an estimation; false otherwise.
+ */
+export type Estimated = boolean;
+
+export type GetFeaturesBySpatialBody =
+    | Feature
+    | FeatureCollection
+    | Geometry
+    | LineString
+    | MultiLineString
+    | MultiPoint
+    | MultiPolygon
+    | Point
+    | Polygon;
+
 export interface Feature extends GeoJSON {
     /**
      * The unique identifier of the feature.
      */
     id?: string;
-    geometry?: GeoJSON;
+    geometry?: Geometry;
     properties?: { [key: string]: any };
-    features?: Array<Feature>;
 }
 
 export interface FeatureCollection extends GeoJSON {
@@ -92,21 +107,45 @@ export interface GeoJSON {
      * Describes the coordinate range of the GeoJSON object.
      */
     bbox?: Array<number>;
-    coordinates?:
-        | LineString
-        | MultiLineString
-        | MultiPoint
-        | MultiPolygon
-        | Point
-        | Polygon;
 }
 
-export type LineString = Array<Array<number>>;
-export type MultiLineString = Array<Array<Array<number>>>;
-export type MultiPoint = Array<Array<number>>;
-export type MultiPolygon = Array<Array<Array<Array<number>>>>;
-export type Point = Array<number>;
-export type Polygon = Array<Array<Array<number>>>;
+/**
+ * A Geometry object represents points, curves, and surfaces in coordinate layer.
+ */
+export interface Geometry extends GeoJSON {}
+
+export interface LineString extends Geometry {
+    coordinates?: Array<Array<number>>;
+}
+
+export interface ModelError {
+    title?: string;
+    status?: number;
+    code?: string;
+    cause?: string;
+    action?: string;
+    correlationId?: string;
+}
+
+export interface MultiLineString extends Geometry {
+    coordinates?: Array<Array<Array<number>>>;
+}
+
+export interface MultiPoint extends Geometry {
+    coordinates?: Array<Array<number>>;
+}
+
+export interface MultiPolygon extends Geometry {
+    coordinates?: Array<Array<Array<Array<number>>>>;
+}
+
+export interface Point extends Geometry {
+    coordinates?: Array<number>;
+}
+
+export interface Polygon extends Geometry {
+    coordinates?: Array<Array<Array<number>>>;
+}
 
 export interface Statistics {
     count?: StatisticsCount;
@@ -120,22 +159,22 @@ export interface Statistics {
 
 export interface StatisticsBbox {
     value?: Array<number>;
-    estimated?: boolean;
+    estimated?: Estimated;
 }
 
 export interface StatisticsCount {
     value?: number;
-    estimated?: boolean;
+    estimated?: Estimated;
 }
 
 export interface StatisticsGeometryTypes {
     value?: Array<string>;
-    estimated?: boolean;
+    estimated?: Estimated;
 }
 
 export interface StatisticsProperties {
     value?: Array<StatisticsPropertiesValue>;
-    estimated?: boolean;
+    estimated?: Estimated;
 }
 
 export interface StatisticsPropertiesValue {
@@ -146,7 +185,7 @@ export interface StatisticsPropertiesValue {
 
 export interface StatisticsTags {
     value?: Array<StatisticsTagsValue>;
-    estimated?: boolean;
+    estimated?: Estimated;
 }
 
 export interface StatisticsTagsValue {
@@ -212,7 +251,7 @@ export async function getFeature(
     params: {
         layerId: string;
         featureId: string;
-        selection?: string;
+        selection?: string | Array<string>;
         force2D?: boolean;
     }
 ): Promise<Feature> {
@@ -257,8 +296,8 @@ export async function getFeatures(
     builder: RequestBuilder,
     params: {
         layerId: string;
-        id: string;
-        selection?: string;
+        id: string | string[];
+        selection?: string | Array<string>;
         force2D?: boolean;
     }
 ): Promise<FeatureCollection> {
@@ -389,14 +428,14 @@ export async function getFeaturesByBBox(
     builder: RequestBuilder,
     params: {
         layerId: string;
-        bbox?: string;
+        bbox?: Array<number>;
         clip?: boolean;
         limit?: number;
-        params?: string;
-        selection?: string;
+        params?: { [key: string]: string | number };
+        selection?: string | Array<string>;
         skipCache?: boolean;
         clustering?: string;
-        clusteringParams?: string;
+        clusteringParams?: { [key: string]: string | number };
         force2D?: boolean;
     }
 ): Promise<FeatureCollection> {
@@ -407,14 +446,23 @@ export async function getFeaturesByBBox(
 
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
     urlBuilder.appendQuery("bbox", params["bbox"]);
-    urlBuilder.appendQuery("clip", "true");
+    urlBuilder.appendQuery("clip", params["clip"]);
     urlBuilder.appendQuery("limit", params["limit"]);
     urlBuilder.appendQuery("params", params["params"]);
     urlBuilder.appendQuery("selection", params["selection"]);
-    urlBuilder.appendQuery("skipCache", "true");
+    urlBuilder.appendQuery("skipCache", params["skipCache"]);
     urlBuilder.appendQuery("clustering", params["clustering"]);
-    urlBuilder.appendQuery("clusteringParams", params["clusteringParams"]);
-    urlBuilder.appendQuery("force2D", "true");
+
+    if (params["clusteringParams"]) {
+        for (const clusteringParam in params["clusteringParams"]) {
+            urlBuilder.appendQuery(
+                `clustering.${clusteringParam}`,
+                params["clusteringParams"][clusteringParam]
+            );
+        }
+    }
+
+    urlBuilder.appendQuery("force2D", params["force2D"]);
 
     const headers: { [header: string]: string } = {};
     const options: RequestOptions = {
@@ -509,8 +557,8 @@ export async function getFeaturesBySpatial(
         refFeatureId?: string;
         radius?: number;
         limit?: number;
-        params?: string;
-        selection?: string;
+        params?: { [key: string]: string | number };
+        selection?: string | Array<string>;
         skipCache?: boolean;
         force2D?: boolean;
     }
@@ -606,11 +654,11 @@ export async function getFeaturesBySpatialPost(
     builder: RequestBuilder,
     params: {
         layerId: string;
-        body?: GeoJSON;
+        body?: GetFeaturesBySpatialBody;
         radius?: number;
         limit?: number;
-        params?: string;
-        selection?: string;
+        params?: { [key: string]: string | number };
+        selection?: string | Array<string>;
         skipCache?: boolean;
         force2D?: boolean;
     }
@@ -760,11 +808,11 @@ export async function getFeaturesByTile(
         tileType: string;
         tileId: string;
         clip?: boolean;
-        params?: string;
-        selection?: string;
+        params?: { [key: string]: string | number };
+        selection?: string | Array<string>;
         skipCache?: boolean;
         clustering?: string;
-        clusteringParams?: string;
+        clusteringParams?: { [key: string]: string | number };
         margin?: number;
         limit?: number;
         force2D?: boolean;
@@ -782,7 +830,16 @@ export async function getFeaturesByTile(
     urlBuilder.appendQuery("selection", params["selection"]);
     urlBuilder.appendQuery("skipCache", params["skipCache"]);
     urlBuilder.appendQuery("clustering", params["clustering"]);
-    urlBuilder.appendQuery("clusteringParams", params["clusteringParams"]);
+
+    if (params["clusteringParams"]) {
+        for (const clusteringParam in params["clusteringParams"]) {
+            urlBuilder.appendQuery(
+                `clustering.${clusteringParam}`,
+                params["clusteringParams"][clusteringParam]
+            );
+        }
+    }
+
     urlBuilder.appendQuery("margin", params["margin"]);
     urlBuilder.appendQuery("limit", params["limit"]);
     urlBuilder.appendQuery("force2D", params["force2D"]);
@@ -857,7 +914,7 @@ export async function iterateFeatures(
         layerId: string;
         limit?: number;
         pageToken?: string;
-        selection?: string;
+        selection?: string | Array<string>;
         skipCache?: boolean;
         force2D?: boolean;
     }
@@ -943,8 +1000,8 @@ export async function searchFeatures(
     params: {
         layerId: string;
         limit?: number;
-        params?: string;
-        selection?: string;
+        params?: { [key: string]: string | number };
+        selection?: string | Array<string>;
         skipCache?: boolean;
         force2D?: boolean;
     }
@@ -959,8 +1016,8 @@ export async function searchFeatures(
     urlBuilder.appendQuery("limit", params["limit"]);
     urlBuilder.appendQuery("params", params["params"]);
     urlBuilder.appendQuery("selection", params["selection"]);
-    urlBuilder.appendQuery("skipCache", "true");
-    urlBuilder.appendQuery("force2D", "true");
+    urlBuilder.appendQuery("skipCache", params["skipCache"]);
+    urlBuilder.appendQuery("force2D", params["force2D"]);
 
     const headers: { [header: string]: string } = {};
     const options: RequestOptions = {
