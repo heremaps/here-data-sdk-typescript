@@ -117,12 +117,12 @@ The interactive API supports the following tile types:
 
      ```typescript
      const result = await InteractiveApi.getFeature(requestBuilder, {
-       id: "your-feature-id",
+       featureId: "your-feature-id",
        layerId: "your-layer-id",
      });
      ```
 
-   - To get more than one feature using their IDs, call the `getFeatures` function with the request builder, feature IDs, and layer ID.
+   - To get more than one feature using their IDs, call the `getFeatures` function with the request builder, IDs of these features, and layer ID.
 
      ```typescript
      const result = await InteractiveApi.getFeatures(requestBuilder, {
@@ -131,7 +131,7 @@ The interactive API supports the following tile types:
      });
      ```
 
-   - To get features using a bounding box, call the `getFeaturesByBBox` function with the request builder, feature IDs, and layer ID.
+   - To get features using a bounding box, call the `getFeaturesByBBox` function with the request builder, bounding box, and layer ID.
 
      ```typescript
      const result = await InteractiveApi.getFeaturesByBBox(requestBuilder, {
@@ -140,18 +140,35 @@ The interactive API supports the following tile types:
      });
      ```
 
-   - To get features using a tile, call the `getFeaturesByTile` function with the request builder, feature IDs, and layer ID.
+   - To get features using a tile, call the `getFeaturesByTile` function with the request builder, tile type, tile ID, layer ID, and parameters, which are additional feature properties.
 
      ```typescript
      const result = await InteractiveApi.getFeaturesByTile(requestBuilder, {
        tileType: "your tile type",
-       layerId: "your-layer-id",
        tileId: "your-tileId",
+       layerId: "your-layer-id",
        params: "your-params-string",
      });
      ```
 
-   - To get features using the spatial search, call the `getFeaturesBySpatial` or `getFeaturesBySpatialPost` functions.
+   - To get features using the spatial search, call one of the following functions:
+     - The `getFeaturesBySpatial` function with the request builder, latitude and longitude in the WGS84 decimal degrees, and layer ID.
+
+      ```typescript
+      const result = await InteractiveApi.getFeaturesBySpatial(requestBuilder, {
+        lat: "latitude-in-WGS84-decimal-degrees",
+        lng: "longitude-in-WGS84-decimal-degrees",
+        layerId: "your-layer-id",
+      });
+      ```
+
+     - The `getFeaturesBySpatialPost` function with the request builder, layer ID, and search radius in meters.
+
+      ```typescript
+      const result = await InteractiveApi.getFeaturesBySpatial(requestBuilder, {
+        layerId: "your-layer-id",
+        radius: "radius-in-meters",
+      });
 
      With the spatial search, you can find all features around a given position or in a given region. For more information, see [Spatial search for features](https://developer.here.com/documentation/data-api/data_dev_guide/rest/getting-interactive-spatial.html) in the Data API Guide.
 
