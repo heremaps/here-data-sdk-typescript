@@ -154,21 +154,22 @@ The interactive API supports the following tile types:
    - To get features using the spatial search, call one of the following functions:
      - The `getFeaturesBySpatial` function with the request builder, latitude and longitude in the WGS84 decimal degrees, and layer ID.
 
-      ```typescript
-      const result = await InteractiveApi.getFeaturesBySpatial(requestBuilder, {
-        lat: "latitude-in-WGS84-decimal-degrees",
-        lng: "longitude-in-WGS84-decimal-degrees",
-        layerId: "your-layer-id",
-      });
-      ```
+       ```typescript
+       const result = await InteractiveApi.getFeaturesBySpatial(requestBuilder, {
+         lat: "latitude-in-WGS84-decimal-degrees",
+         lng: "longitude-in-WGS84-decimal-degrees",
+         layerId: "your-layer-id",
+       });
+       ```
 
      - The `getFeaturesBySpatialPost` function with the request builder, layer ID, and search radius in meters.
 
-      ```typescript
-      const result = await InteractiveApi.getFeaturesBySpatial(requestBuilder, {
-        layerId: "your-layer-id",
-        radius: "radius-in-meters",
-      });
+       ```typescript
+       const result = await InteractiveApi.getFeaturesBySpatial(requestBuilder, {
+         layerId: "your-layer-id",
+         radius: "radius-in-meters",
+       });
+       ```
 
      With the spatial search, you can find all features around a given position or in a given region. For more information, see [Spatial search for features](https://developer.here.com/documentation/data-api/data_dev_guide/rest/getting-interactive-spatial.html) in the Data API Guide.
 
