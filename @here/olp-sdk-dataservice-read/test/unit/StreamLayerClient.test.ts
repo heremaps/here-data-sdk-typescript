@@ -619,4 +619,109 @@ describe("StreamLayerClient", function() {
                 );
             });
     });
+
+    it("Should not post offsets if no data", async function() {
+        const headers = new Headers();
+        headers.append("X-Correlation-Id", "9141392.f96875c-9422-4df4-bdfj");
+        const mockResponse = ({
+            headers,
+            json: function() {
+                return {
+                    messages: []
+                };
+            }
+        } as unknown) as Response;
+        pollStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockResponse);
+            }
+        );
+
+        let settings = sandbox.createStubInstance(core.OlpClientSettings);
+        const subscribtionId = await streamLayerClient.subscribe(
+            new dataServiceRead.SubscribeRequest().withMode("serial")
+        );
+        const request = new dataServiceRead.PollRequest().withSubscriptionId(
+            subscribtionId
+        );
+        const messages = await streamLayerClient.poll(request);
+
+        assert.isDefined(messages);
+        expect(messages.length).to.be.equal(0);
+        expect(commitOffsetsStub.notCalled);
+    });
+
+    it("Should not throw if commiting offsets failed", async function() {
+        const headers = new Headers();
+        headers.append("X-Correlation-Id", "9141392.f96875c-9422-4df4-bdfj");
+        const mockResponse = ({
+            headers,
+            json: function() {
+                return {
+                    messages: [
+                        {
+                            metaData: {
+                                partition: "314010583",
+                                checksum: "ff7494d6f17da702862e550c907c0a91",
+                                compressedDataSize: 152417,
+                                dataSize: 100500,
+                                data: "",
+                                dataHandle:
+                                    "iVBORw0-Lf9HdIZBfNEiKAA-AAAE-lFTkSuQmCC",
+                                timestamp: 1517916706
+                            },
+                            offset: {
+                                partition: 7,
+                                offset: 38562
+                            }
+                        },
+                        {
+                            metaData: {
+                                partition: "314010584",
+                                checksum: "ff7494d6f17da702862e550c907c0a91",
+                                dataSize: 100500,
+                                data:
+                                    "7n348c7y49nry394y39yv39y384tvn3984tvn34ty034ynt3yvt983ny",
+                                dataHandle: "",
+                                timestamp: 1517916707
+                            },
+                            offset: {
+                                partition: 8,
+                                offset: 38563
+                            }
+                        }
+                    ]
+                };
+            }
+        } as unknown) as Response;
+        pollStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockResponse);
+            }
+        );
+
+        commitOffsetsStub.callsFake(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.reject(new Error("fake error"));
+            }
+        );
+
+        let settings = sandbox.createStubInstance(core.OlpClientSettings);
+        const params = {
+            catalogHrn: mockedHRN,
+            layerId: mockedLayerId,
+            settings: (settings as unknown) as core.OlpClientSettings
+        };
+        const subscribtionId = await streamLayerClient.subscribe(
+            new dataServiceRead.SubscribeRequest().withMode("serial")
+        );
+        const request = new dataServiceRead.PollRequest().withSubscriptionId(
+            subscribtionId
+        );
+        const messages = await streamLayerClient.poll(request);
+
+        assert.isDefined(messages);
+        expect(messages.length).to.be.equal(2);
+        expect(messages[0].metaData.dataSize).to.be.equal(100500);
+    });
 });
