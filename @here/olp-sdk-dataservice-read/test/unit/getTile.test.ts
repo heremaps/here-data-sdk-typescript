@@ -17,26 +17,75 @@
  * License-Filename: LICENSE
  */
 
-import { assert } from "chai";
+import { assert, expect } from "chai";
 import { TileRequest, getTile } from "@here/olp-sdk-dataservice-read/lib";
-import { OlpClientSettings, HRN } from "@here/olp-sdk-core";
+import * as core from "@here/olp-sdk-core";
+import { QueryApi } from "@here/olp-sdk-dataservice-api";
+import sinon = require("sinon");
+import { FetchOptions } from "@here/olp-sdk-core";
 
 describe("getTile", function() {
-    const settings = new OlpClientSettings({
-        environment: "mock-env",
-        getToken: () => Promise.resolve("mocked-token"),
-        dm: {
-            download: (url: string) =>
-                Promise.resolve(new Response("test-response"))
-        }
+    const request = new TileRequest();
+
+    let sandbox: sinon.SinonSandbox;
+    let quadTreeIndexStub: sinon.SinonStub;
+    let olpClientSettingsStub: sinon.SinonStubbedInstance<core.OlpClientSettings>;
+
+    let getBaseUrlRequestStub: sinon.SinonStub;
+    const fakeURL = "http://fake-base.url";
+
+    before(function() {
+        sandbox = sinon.createSandbox();
     });
 
-    const request = new TileRequest();
+    beforeEach(function() {
+        olpClientSettingsStub = sandbox.createStubInstance(
+            core.OlpClientSettings
+        );
+
+        quadTreeIndexStub = sandbox.stub(QueryApi, "quadTreeIndex");
+
+        getBaseUrlRequestStub = sandbox.stub(core.RequestFactory, "getBaseUrl");
+        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
+    });
+
+    afterEach(function() {
+        sandbox.restore();
+    });
+
+    it("Should return 204 response if no quadTreeIndex data", async function() {
+        const mockedQuadKeyTreeData = {
+            subQuads: [],
+            parentQuads: []
+        };
+
+        quadTreeIndexStub.callsFake(
+            (builder: any, params: any): Promise<QueryApi.Index> => {
+                return Promise.resolve(mockedQuadKeyTreeData);
+            }
+        );
+
+        const response = await getTile(
+            new TileRequest()
+                .withTileKey({ row: 0, column: 0, level: 0 })
+                .withFetchOption(FetchOptions.OnlineOnly),
+            {
+                settings: olpClientSettingsStub as any,
+                catalogHrn: core.HRN.fromString("hrn:here:data:::mocked-hrn"),
+                layerId: "mocked-layer-id",
+                layerType: "versioned",
+                catalogVersion: 123
+            }
+        );
+
+        expect(response.status).eqls(204);
+        expect(response.statusText).eqls("No Content");
+    });
 
     it("Should throw an error if not tile key", async function() {
         const tile = await getTile(request, {
-            settings,
-            catalogHrn: HRN.fromString("hrn:here:data:::mocked-hrn"),
+            settings: olpClientSettingsStub as any,
+            catalogHrn: core.HRN.fromString("hrn:here:data:::mocked-hrn"),
             layerId: "mocked-layer-id",
             layerType: "versioned"
         }).catch(err => err.message);

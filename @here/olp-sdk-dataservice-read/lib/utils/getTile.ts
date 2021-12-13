@@ -149,7 +149,12 @@ export async function getTile(
     }
 
     if (!quadTreeIndex.subQuads || !quadTreeIndex.subQuads.length) {
-        return Promise.reject(new Error("Error fetching QuadTreeIndex"));
+        return Promise.resolve(
+            new Response("No Content", {
+                status: 204,
+                statusText: "No Content"
+            })
+        );
     }
 
     // Return the data for the requested QuadKey or for the closest parent
