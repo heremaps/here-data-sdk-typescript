@@ -200,37 +200,43 @@ export class StreamLayerClient {
         // Update xCorrelationId
         this.xCorrelationId = consumeResponse.xCorrelationId;
 
-        // Commit offsets
-        const latestOffsets: { [key: string]: number } = consumeResponse.data
-            .map(msg => msg.offset)
-            .reduce(
-                (
-                    acc: { [key: string]: number },
-                    curr: StreamApi.StreamOffset
-                ) => {
-                    acc[curr.partition] =
-                        acc[curr.partition] > curr.offset
-                            ? acc[curr.partition]
-                            : curr.offset;
-                    return acc;
-                },
-                {}
-            );
+        if (consumeResponse.data.length > 0) {
+            // Commit offsets
+            const latestOffsets: {
+                [key: string]: number;
+            } = consumeResponse.data
+                .map(msg => msg.offset)
+                .reduce(
+                    (
+                        acc: { [key: string]: number },
+                        curr: StreamApi.StreamOffset
+                    ) => {
+                        acc[curr.partition] =
+                            acc[curr.partition] > curr.offset
+                                ? acc[curr.partition]
+                                : curr.offset;
+                        return acc;
+                    },
+                    {}
+                );
 
-        await StreamApi.doCommitOffsets(requestBuilder, {
-            commitOffsets: {
-                offsets: Object.keys(latestOffsets).map(key => ({
-                    partition: +key,
-                    offset: latestOffsets[key]
-                }))
-            },
-            subscriptionId: request.getSubscriptionId(),
-            mode: request.getMode(),
-            layerId: this.layerId,
-            xCorrelationId: this.xCorrelationId
-        }).catch(async error => {
-            console.log(`Commit offsets unsuccessful, error=${error.message}`);
-        });
+            await StreamApi.doCommitOffsets(requestBuilder, {
+                commitOffsets: {
+                    offsets: Object.keys(latestOffsets).map(key => ({
+                        partition: +key,
+                        offset: latestOffsets[key]
+                    }))
+                },
+                subscriptionId: request.getSubscriptionId(),
+                mode: request.getMode(),
+                layerId: this.layerId,
+                xCorrelationId: this.xCorrelationId
+            }).catch(async error => {
+                console.log(
+                    `Commit offsets unsuccessful, error=${error.message}`
+                );
+            });
+        }
 
         return Promise.resolve(consumeResponse.data);
     }
