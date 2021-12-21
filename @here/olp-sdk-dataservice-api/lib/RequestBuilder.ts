@@ -58,10 +58,11 @@ export class UrlBuilder {
         url: string,
         separator: string,
         key: string,
-        value: string | number | boolean | string[] | number[]
+        value: string | number | boolean | string[] | number[],
+        operator = "="
     ): string {
         url += separator;
-        url += encodeURIComponent(key) + "=";
+        url += encodeURIComponent(key) + operator;
         if (typeof value === "number") {
             url += value.toString();
         } else if (typeof value === "boolean") {
@@ -106,7 +107,8 @@ export class UrlBuilder {
             | boolean
             | string[]
             | number[]
-            | { [key: string]: string | number }
+            | { [key: string]: string | number },
+        operator = "="
     ) {
         if (value === undefined) {
             return;
@@ -129,7 +131,8 @@ export class UrlBuilder {
                 this.url,
                 this.hasQuery ? "&" : "?",
                 key,
-                value
+                value,
+                operator
             );
         }
 
