@@ -96,4 +96,17 @@ describe("UrlBuilderTest", function() {
         expect(testUrlBuilder4.url).to.be.equal(mockedUrl);
         expect(testUrlBuilder4.hasQuery).to.be.equal(true);
     });
+
+    it("Method appendQuery should appends parameters key, value and operator to the URL", async function() {
+        const builder = new UrlBuilder("test-url");
+        const mockedValue = 33;
+        const expecteddUrl = "test-url?testKey3!=33";
+
+        builder.appendQuery("testKey3", mockedValue, "!=");
+
+        assert.isDefined(builder);
+
+        expect(builder.url).to.be.equal(expecteddUrl);
+        expect(builder.hasQuery).to.be.equal(true);
+    });
 });

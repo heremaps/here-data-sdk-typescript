@@ -23,6 +23,7 @@
  */
 
 // tslint:disable:array-type
+// tslint:disable: unified-signatures
 
 import { UrlBuilder, RequestBuilder, RequestOptions } from "./RequestBuilder";
 
@@ -44,6 +45,12 @@ export interface ApiVersion {
  * True if the value is only an estimation; false otherwise.
  */
 export type Estimated = boolean;
+
+export type SearchParams = Array<{
+    key: string;
+    operator: "=" | "!=" | ">=" | "<=" | "<" | ">" | "@>";
+    value: string | number | ".null";
+}>;
 
 export type GetFeaturesBySpatialBody =
     | Feature
@@ -431,7 +438,41 @@ export async function getFeaturesByBBox(
         bbox?: Array<number>;
         clip?: boolean;
         limit?: number;
+        params?: SearchParams;
+        selection?: string | Array<string>;
+        skipCache?: boolean;
+        clustering?: string;
+        clusteringParams?: { [key: string]: string | number };
+        force2D?: boolean;
+    }
+): Promise<FeatureCollection>;
+/**
+ * @deprecated This signature will be removed by 06.2022.
+ * Please use signature with `SearchParams`.
+ */
+export async function getFeaturesByBBox(
+    builder: RequestBuilder,
+    params: {
+        layerId: string;
+        bbox?: Array<number>;
+        clip?: boolean;
+        limit?: number;
         params?: { [key: string]: string | number };
+        selection?: string | Array<string>;
+        skipCache?: boolean;
+        clustering?: string;
+        clusteringParams?: { [key: string]: string | number };
+        force2D?: boolean;
+    }
+): Promise<FeatureCollection>;
+export async function getFeaturesByBBox(
+    builder: RequestBuilder,
+    params: {
+        layerId: string;
+        bbox?: Array<number>;
+        clip?: boolean;
+        limit?: number;
+        params?: { [key: string]: string | number } | SearchParams;
         selection?: string | Array<string>;
         skipCache?: boolean;
         clustering?: string;
@@ -448,7 +489,20 @@ export async function getFeaturesByBBox(
     urlBuilder.appendQuery("bbox", params["bbox"]);
     urlBuilder.appendQuery("clip", params["clip"]);
     urlBuilder.appendQuery("limit", params["limit"]);
-    urlBuilder.appendQuery("params", params["params"]);
+
+    const searchParams = params.params;
+    if (searchParams instanceof Array) {
+        searchParams.forEach(param => {
+            urlBuilder.appendQuery(param.key, param.value, param.operator);
+        });
+    } else {
+        // will be removed 06.2022
+        urlBuilder.appendQuery(
+            "params",
+            params["params"] as { [key: string]: string | number }
+        );
+    }
+
     urlBuilder.appendQuery("selection", params["selection"]);
     urlBuilder.appendQuery("skipCache", params["skipCache"]);
     urlBuilder.appendQuery("clustering", params["clustering"]);
@@ -557,7 +611,45 @@ export async function getFeaturesBySpatial(
         refFeatureId?: string;
         radius?: number;
         limit?: number;
+        params?: SearchParams;
+        selection?: string | Array<string>;
+        skipCache?: boolean;
+        force2D?: boolean;
+    }
+): Promise<FeatureCollection>;
+/**
+ * @deprecated This signature will be removed by 06.2022.
+ * Please use signature with `SearchParams`.
+ */
+export async function getFeaturesBySpatial(
+    builder: RequestBuilder,
+    params: {
+        layerId: string;
+        lat?: number;
+        lng?: number;
+        refCatalogHrn?: string;
+        refLayerId?: string;
+        refFeatureId?: string;
+        radius?: number;
+        limit?: number;
         params?: { [key: string]: string | number };
+        selection?: string | Array<string>;
+        skipCache?: boolean;
+        force2D?: boolean;
+    }
+): Promise<FeatureCollection>;
+export async function getFeaturesBySpatial(
+    builder: RequestBuilder,
+    params: {
+        layerId: string;
+        lat?: number;
+        lng?: number;
+        refCatalogHrn?: string;
+        refLayerId?: string;
+        refFeatureId?: string;
+        radius?: number;
+        limit?: number;
+        params?: { [key: string]: string | number } | SearchParams;
         selection?: string | Array<string>;
         skipCache?: boolean;
         force2D?: boolean;
@@ -576,7 +668,20 @@ export async function getFeaturesBySpatial(
     urlBuilder.appendQuery("refFeatureId", params["refFeatureId"]);
     urlBuilder.appendQuery("radius", params["radius"]);
     urlBuilder.appendQuery("limit", params["limit"]);
-    urlBuilder.appendQuery("params", params["params"]);
+
+    const searchParams = params.params;
+    if (searchParams instanceof Array) {
+        searchParams.forEach(param => {
+            urlBuilder.appendQuery(param.key, param.value, param.operator);
+        });
+    } else {
+        // will be removed 06.2022
+        urlBuilder.appendQuery(
+            "params",
+            params["params"] as { [key: string]: string | number }
+        );
+    }
+
     urlBuilder.appendQuery("selection", params["selection"]);
     urlBuilder.appendQuery("skipCache", params["skipCache"]);
     urlBuilder.appendQuery("force2D", params["force2D"]);
@@ -657,7 +762,37 @@ export async function getFeaturesBySpatialPost(
         body?: GetFeaturesBySpatialBody;
         radius?: number;
         limit?: number;
+        params?: SearchParams;
+        selection?: string | Array<string>;
+        skipCache?: boolean;
+        force2D?: boolean;
+    }
+): Promise<FeatureCollection>;
+/**
+ * @deprecated This signature will be removed by 06.2022.
+ * Please use signature with `SearchParams`.
+ */
+export async function getFeaturesBySpatialPost(
+    builder: RequestBuilder,
+    params: {
+        layerId: string;
+        body?: GetFeaturesBySpatialBody;
+        radius?: number;
+        limit?: number;
         params?: { [key: string]: string | number };
+        selection?: string | Array<string>;
+        skipCache?: boolean;
+        force2D?: boolean;
+    }
+): Promise<FeatureCollection>;
+export async function getFeaturesBySpatialPost(
+    builder: RequestBuilder,
+    params: {
+        layerId: string;
+        body?: GetFeaturesBySpatialBody;
+        radius?: number;
+        limit?: number;
+        params?: { [key: string]: string | number } | SearchParams;
         selection?: string | Array<string>;
         skipCache?: boolean;
         force2D?: boolean;
@@ -672,7 +807,20 @@ export async function getFeaturesBySpatialPost(
 
     urlBuilder.appendQuery("radius", params["radius"]);
     urlBuilder.appendQuery("limit", params["limit"]);
-    urlBuilder.appendQuery("params", params["params"]);
+
+    const searchParams = params.params;
+    if (searchParams instanceof Array) {
+        searchParams.forEach(param => {
+            urlBuilder.appendQuery(param.key, param.value, param.operator);
+        });
+    } else {
+        // will be removed 06.2022
+        urlBuilder.appendQuery(
+            "params",
+            params["params"] as { [key: string]: string | number }
+        );
+    }
+
     urlBuilder.appendQuery("selection", params["selection"]);
     urlBuilder.appendQuery("skipCache", params["skipCache"]);
     urlBuilder.appendQuery("force2D", params["force2D"]);
@@ -808,7 +956,45 @@ export async function getFeaturesByTile(
         tileType: string;
         tileId: string;
         clip?: boolean;
+        params?: SearchParams;
+        selection?: string | Array<string>;
+        skipCache?: boolean;
+        clustering?: string;
+        clusteringParams?: { [key: string]: string | number };
+        margin?: number;
+        limit?: number;
+        force2D?: boolean;
+    }
+): Promise<FeatureCollection>;
+/**
+ * @deprecated This signature will be removed by 06.2022.
+ * Please use signature with `SearchParams`.
+ */
+export async function getFeaturesByTile(
+    builder: RequestBuilder,
+    params: {
+        layerId: string;
+        tileType: string;
+        tileId: string;
+        clip?: boolean;
         params?: { [key: string]: string | number };
+        selection?: string | Array<string>;
+        skipCache?: boolean;
+        clustering?: string;
+        clusteringParams?: { [key: string]: string | number };
+        margin?: number;
+        limit?: number;
+        force2D?: boolean;
+    }
+): Promise<FeatureCollection>;
+export async function getFeaturesByTile(
+    builder: RequestBuilder,
+    params: {
+        layerId: string;
+        tileType: string;
+        tileId: string;
+        clip?: boolean;
+        params?: { [key: string]: string | number } | SearchParams;
         selection?: string | Array<string>;
         skipCache?: boolean;
         clustering?: string;
@@ -826,7 +1012,20 @@ export async function getFeaturesByTile(
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
 
     urlBuilder.appendQuery("clip", params["clip"]);
-    urlBuilder.appendQuery("params", params["params"]);
+
+    const searchParams = params.params;
+    if (searchParams instanceof Array) {
+        searchParams.forEach(param => {
+            urlBuilder.appendQuery(param.key, param.value, param.operator);
+        });
+    } else {
+        // will be removed 06.2022
+        urlBuilder.appendQuery(
+            "params",
+            params["params"] as { [key: string]: string | number }
+        );
+    }
+
     urlBuilder.appendQuery("selection", params["selection"]);
     urlBuilder.appendQuery("skipCache", params["skipCache"]);
     urlBuilder.appendQuery("clustering", params["clustering"]);
@@ -900,9 +1099,17 @@ export async function getStatistics(
  *
  * @param pageToken The page token where the iteration will continue.
  *
+ * @param part Requests disjunct parts of iteration results (used with sort).
+ * List of two integers "part,total". part=1,4 read as first part out of 4, ... until part=4,4 .
+ * Example: ?part=7,9
+ *
  * @param selection A list of properties to be returned in the features result list.
  * Multiple attributes can be specified by using comma(,).
  * Example: `?selection=p.name,p.capacity,p.color`.
+ *
+ * @param sort Specifies the sort order by a list of properties.
+ * Ascending assumed if no sort direction (:asc, :desc) is specified.
+ * Example: sort = ["p.name:asc", "p.color:desc"] => ?sort=p.name:asc,p.color:desc.
  *
  * @param skipCache If set to true the response is not returned from cache. Default is false.
  *
@@ -914,7 +1121,9 @@ export async function iterateFeatures(
         layerId: string;
         limit?: number;
         pageToken?: string;
+        part?: Array<number>;
         selection?: string | Array<string>;
+        sort?: string | Array<string>;
         skipCache?: boolean;
         force2D?: boolean;
     }
@@ -927,7 +1136,9 @@ export async function iterateFeatures(
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
     urlBuilder.appendQuery("limit", params["limit"]);
     urlBuilder.appendQuery("pageToken", params["pageToken"]);
+    urlBuilder.appendQuery("part", params["part"]);
     urlBuilder.appendQuery("selection", params["selection"]);
+    urlBuilder.appendQuery("sort", params["sort"]);
     urlBuilder.appendQuery("skipCache", params["skipCache"]);
     urlBuilder.appendQuery("force2D", params["force2D"]);
 
@@ -1000,7 +1211,33 @@ export async function searchFeatures(
     params: {
         layerId: string;
         limit?: number;
+        params?: SearchParams;
+        selection?: string | Array<string>;
+        skipCache?: boolean;
+        force2D?: boolean;
+    }
+): Promise<FeatureCollection>;
+/**
+ * @deprecated This signature will be removed by 06.2022.
+ * Please use signature with `SearchParams`.
+ */
+export async function searchFeatures(
+    builder: RequestBuilder,
+    params: {
+        layerId: string;
+        limit?: number;
         params?: { [key: string]: string | number };
+        selection?: string | Array<string>;
+        skipCache?: boolean;
+        force2D?: boolean;
+    }
+): Promise<FeatureCollection>;
+export async function searchFeatures(
+    builder: RequestBuilder,
+    params: {
+        layerId: string;
+        limit?: number;
+        params?: { [key: string]: string | number } | SearchParams;
         selection?: string | Array<string>;
         skipCache?: boolean;
         force2D?: boolean;
@@ -1014,7 +1251,20 @@ export async function searchFeatures(
     const urlBuilder = new UrlBuilder(builder.baseUrl + baseUrl);
 
     urlBuilder.appendQuery("limit", params["limit"]);
-    urlBuilder.appendQuery("params", params["params"]);
+
+    const searchParams = params.params;
+    if (searchParams instanceof Array) {
+        searchParams.forEach(param => {
+            urlBuilder.appendQuery(param.key, param.value, param.operator);
+        });
+    } else {
+        // will be removed 06.2022
+        urlBuilder.appendQuery(
+            "params",
+            params["params"] as { [key: string]: string | number }
+        );
+    }
+
     urlBuilder.appendQuery("selection", params["selection"]);
     urlBuilder.appendQuery("skipCache", params["skipCache"]);
     urlBuilder.appendQuery("force2D", params["force2D"]);
