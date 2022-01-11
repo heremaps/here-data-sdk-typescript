@@ -1,3 +1,11 @@
+## v1.12.2 (11/01/2022)
+
+**olp-sdk-dataservice-read**
+
+- `StreamLayerClient::poll()` now blocks sending a backend request if there are no messages to submit (https://github.com/heremaps/here-data-sdk-typescript/pull/495).
+- `getTile` now does not throw an error on sparse versioned or volatile layers (https://github.com/heremaps/here-data-sdk-typescript/pull/496).
+- Improved the interactive map layer API (https://github.com/heremaps/here-data-sdk-typescript/pull/497).
+
 ## v1.12.1 (16/09/2021)
 
 **olp-sdk-dataservice-api**

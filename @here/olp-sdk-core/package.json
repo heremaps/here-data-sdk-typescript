@@ -1,6 +1,6 @@
 {
   "name": "@here/olp-sdk-core",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Core features of the HERE Data Platform",
   "main": "index.js",
   "browser": "index.web.js",
@@ -50,7 +50,7 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@here/olp-sdk-fetch": "^1.9.0",
-    "@here/olp-sdk-dataservice-api": "^1.12.0"
+    "@here/olp-sdk-dataservice-api": "^1.12.2"
   },
   "devDependencies": {
     "@types/chai": "^4.2.7",
