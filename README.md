@@ -8,7 +8,7 @@ HERE Data SDK for TypeScript is a TypeScript client for the <a href="https://pla
 
 | Master                      | Node version       | Status                                                                                                                                                                                         |
 | :-------------------------- | :----------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Build/Test/Bundling/Typedoc | Node 12.13.0 (LTS) | <a href="https://app.travis-ci.com/heremaps/here-data-sdk-typescript" target="_blank"><img src="https://app.travis-ci.com/heremaps/here-data-sdk-typescript.svg?branch=master" alt="Build Status"></a> |
+| Build/Test/Bundling/Typedoc | Node 16.13.2 (LTS) | <a href="https://app.travis-ci.com/heremaps/here-data-sdk-typescript" target="_blank"><img src="https://app.travis-ci.com/heremaps/here-data-sdk-typescript.svg?branch=master" alt="Build Status"></a> |
 
 ### Test coverage
 
@@ -173,6 +173,6 @@ npm run bundle
 
 ## LICENSE
 
-Copyright (C) 2019–2021 HERE Europe B.V.
+Copyright (C) 2019–2022 HERE Europe B.V.
 
 For license details, see the <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/LICENSE" target="_blank">LICENSE</a> file in the root of this project.

@@ -50,4 +50,4 @@ npm run functional-test
 npm run http-server-testing-bundles & npm run test-generated-bundles
 
 # Generate and upload codecov
-( npm run codecov && ./node_modules/.bin/codecov ) || ( echo "CodeCov exited with non-zero, please investigate!" && exit 1 )
+npm run codecov

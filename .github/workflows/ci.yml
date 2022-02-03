@@ -1,0 +1,26 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.x'
+      - run: scripts/misc/commit_checker.sh
+      - run: scripts/linux/psv/build_test_psv.sh && env
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+         fail_ci_if_error: true
+         verbose: true
