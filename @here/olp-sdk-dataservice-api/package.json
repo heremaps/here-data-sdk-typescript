@@ -70,5 +70,8 @@
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
     "typedoc": "^0.20.25"
+  },
+  "engines": {
+    "node": ">= 10.18.0"
   }
 }

@@ -48,7 +48,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "node-fetch": "^2.6.0"
+    "node-fetch": "2.6.7"
   },
   "devDependencies": {
     "@types/chai": "^4.2.7",
@@ -75,5 +75,8 @@
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
     "zlib": "^1.0.5"
+  },
+  "engines": {
+    "node": ">= 10.18.0"
   }
 }
