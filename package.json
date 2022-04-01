@@ -56,7 +56,7 @@
     "bundle": "lerna run bundle",
     "bundle:dev": "lerna run bundle:dev",
     "bundle:prod": "lerna run bundle:prod",
-    "typedoc": "npx typedoc --disableOutputCheck --options typedoc.json"
+    "typedoc": "npx typedoc --options typedoc.json"
   },
   "devDependencies": {
     "@types/node": "^14.11.8",
