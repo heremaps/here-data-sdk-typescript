@@ -16,22 +16,6 @@ HERE Data SDK for TypeScript is a TypeScript client for the <a href="https://pla
 | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Linux    | <a href="https://codecov.io/gh/heremaps/here-data-sdk-typescript/" target="_blank"><img src="https://codecov.io/gh/heremaps/here-data-sdk-typescript/branch/master/graph/badge.svg" alt="Linux code coverage"/></a> |
 
-## Why use
-
-HERE Data SDK for TypeScript provides support for the core HERE platform use cases. The Data SDK is intended to save your time and effort on using HERE REST APIs. It provides a set of stable APIs that simplify complex platform operations and keeps up to date with the latest HERE REST API changes.
-
-Data SDK for TypeScrypt is a modern, lightweight, and modular SDK with minimal dependencies targeted towards a wide range of hardware platforms from embedded devices to desktops.
-
-This SDK lets you:
-
-- Authenticate to the HERE platform using client credentials.
-- Read catalog and partition metadata.
-- Retrieve data from layers.
-- Publish data to layers
-- Delete data from an object store layer
-
-Additionally, the Data SDK includes classes for work with geospatial tiling schemes that are used by most platform catalog layers.
-
 ## Backward compatibility
 
 We try to develop and maintain our API in a way that preserves its compatibility with the existing applications. Changes in Data SDK for TypeScript are greatly influenced by the Data API development. Data API introduces breaking changes 6 months in advance. Therefore, you may need to migrate to a new version of Data SDK for TypeScript every half a year.
