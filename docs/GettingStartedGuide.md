@@ -25,10 +25,10 @@ Working with the Data SDK requires knowledge of the following subjects:
 
 To use Data SDK for TypeScript, you need to understand the following concepts related to the HERE platform:
 
-* [Catalogs](https://developer.here.com/documentation/data-user-guide/portal/layers/catalogs.html)
-* [Layers](https://developer.here.com/documentation/data-user-guide/portal/layers/layers.html)
-* [Partitions](https://developer.here.com/documentation/data-user-guide/portal/layers/partitions.html)
-* [HERE Resource Names (HRNs)](https://developer.here.com/documentation/data-user-guide/user_guide/portal/layers/hrn.html)
+* [Catalogs](https://developer.here.com/documentation/data-api/data_dev_guide/rest/catalogs.html)
+* [Layers](https://developer.here.com/documentation/data-api/data_dev_guide/rest/layers.html)
+* [Partitions](https://developer.here.com/documentation/data-api/data_dev_guide/rest/partitions.html)
+* [HERE Resource Names (HRNs)](https://developer.here.com/documentation/data-api/data_dev_guide/rest/hrn.html)
 
 For more details, see the [Data User Guide](https://developer.here.com/documentation/data-user-guide/index.html).
 
