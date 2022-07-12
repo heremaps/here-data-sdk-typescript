@@ -94,14 +94,14 @@ describe("DataStoreDownloadManager", function() {
             .download(fakeDataUrl)
             .catch(error => {
                 // Assert
-                assert(fetchStub.called);
+                assert(fetchStub.called) as any;
 
                 // callCount should be 4. (1 first call + 3 retries)
-                assert(fetchStub.callCount === 4);
+                assert(fetchStub.callCount === 4) as any;
                 assert(
                     fetchStub.getCall(0).args[0] ===
                         fakeDataUrl + "?" + SENT_WITH_PARAM
-                );
+                ) as any;
                 assert.equal(error.status, 503);
                 assert.equal(error.message, "Service unavailable!");
             });
@@ -122,14 +122,14 @@ describe("DataStoreDownloadManager", function() {
             .download(fakeDataUrl)
             .catch(error => {
                 // Assert
-                assert(fetchStub.called);
+                assert(fetchStub.called) as any;
 
                 // callCount should be 4. (1 first call + 3 retries)
-                assert(fetchStub.callCount === 4);
+                assert(fetchStub.callCount === 4) as any;
                 assert(
                     fetchStub.getCall(0).args[0] ===
                         fakeDataUrl + "?" + SENT_WITH_PARAM
-                );
+                ) as any;
                 assert.equal(error.status, 500);
                 assert.equal(error.message, "Internal Server Error");
             });
@@ -150,14 +150,14 @@ describe("DataStoreDownloadManager", function() {
             .download(fakeDataUrl)
             .catch(error => {
                 // Assert
-                assert(fetchStub.called);
+                assert(fetchStub.called) as any;
 
                 // callCount should be 4. (1 first call + 3 retries)
-                assert(fetchStub.callCount === 4);
+                assert(fetchStub.callCount === 4) as any;
                 assert(
                     fetchStub.getCall(0).args[0] ===
                         fakeDataUrl + "?" + SENT_WITH_PARAM
-                );
+                ) as any;
                 assert.equal(error.status, 429);
                 assert.equal(error.message, "To many requests");
             });
@@ -192,11 +192,11 @@ describe("DataStoreDownloadManager", function() {
         );
 
         // Assert
-        assert(fetchStub.callCount === CALLS_NUMBER);
+        assert(fetchStub.callCount === CALLS_NUMBER) as any;
         assert(
             fetchStub.getCall(MAX_PARALLEL_DOWNLOADS - 1).args[0] ===
                 fakeDataUrl + "?" + SENT_WITH_PARAM
-        );
+        ) as any;
     });
 
     it("Aborting request", async function() {
