@@ -4,13 +4,21 @@ HERE Data SDK for TypeScript includes the core components to access the HERE API
 
 In this guide, learn how to authenticate to and start working with the HERE platform using the Data SDK:
 
-- [Getting Started Guide](#getting-started-guide)
-  - [Prerequisites](#prerequisites)
-  - [Concepts](#concepts)
-  - [Get credentials](#get-credentials)
-  - [Available components](#available-components)
-  - [Reference documentation](#reference-documentation)
-  - [Examples](#examples)
+- [Prerequisites](#prerequisites)
+- [Concepts](#concepts)
+- [Get credentials](#get-credentials)
+- [Installation](#installation)
+- [Development](#development)
+  - [Dependencies](#dependencies)
+    - [Download dependencies](#download-dependencies)
+  - [Build the SDK](#build-the-sdk)
+  - [Test the SDK](#test-the-sdk)
+  - [Test coverage](#test-coverage)
+  - [Generate documentation with TypeDoc](#generate-documentation-with-typedoc)
+  - [Use the bundle functionality](#use-the-bundle-functionality)
+- [Available components](#available-components)
+- [Reference documentation](#reference-documentation)
+- [Examples](#examples)
 
 ## Prerequisites
 
@@ -65,7 +73,7 @@ To use the Data SDK with pure JavaScript, inject the compiled bundles from the C
 <script src="https://unpkg.com/@here/olp-sdk-dataservice-write/bundle.umd.min.js"></script> 
 ```
 
-To learn how to use the Data SDK, see the <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/GettingStartedGuide.md" target="_blank">Getting Started Guide</a>, <a href="https://developer.here.com/documentation/sdk-typescript/dev_guide/index.html" target="blank">Developer Guide</a>, and <a href="https://developer.here.com/documentation/sdk-typescript/api_reference/index.html"  target="_blank">API Reference</a>.
+To learn how to use the Data SDK, see the <a href="https://developer.here.com/documentation/sdk-typescript/dev_guide/index.html" target="blank">Developer Guide</a> and <a href="https://developer.here.com/documentation/sdk-typescript/api_reference/index.html"  target="_blank">API Reference</a>.
 
 ## Development
 
