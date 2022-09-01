@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2022 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,7 +94,7 @@ export async function insertIndexes(
         indexes: Index[];
         layerID: string;
     }
-): Promise<any> {
+): Promise<Response> {
     const baseUrl = "/layers/{layerID}".replace(
         "{layerID}",
         UrlBuilder.toString(params["layerID"])
@@ -112,7 +112,7 @@ export async function insertIndexes(
         options.body = JSON.stringify(params["indexes"]);
     }
 
-    return builder.request<any>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }
 
 /**
@@ -167,7 +167,7 @@ export async function performUpdate(
         layerID: string;
         request: UpdateIndexRequest;
     }
-): Promise<any> {
+): Promise<Response> {
     const baseUrl = "/layers/{layerID}".replace(
         "{layerID}",
         UrlBuilder.toString(params["layerID"])
@@ -185,5 +185,5 @@ export async function performUpdate(
         options.body = JSON.stringify(params["request"]);
     }
 
-    return builder.request<any>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }

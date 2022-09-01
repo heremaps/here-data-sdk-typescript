@@ -65,4 +65,49 @@ describe("IndexApi", function() {
         assert.equal(response.data && response.data.length, 2);
         expect(response).to.be.equal(mockedResponse);
     });
+
+    it("Should performUpdate provide data", async function() {
+        const params = {
+            layerID: "mocked-id",
+            request: {}
+        };
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/layers/mocked-id"
+                );
+                expect(options.method).to.be.equal("PUT");
+                return Promise.resolve("success");
+            }
+        };
+        const result = await IndexApi.performUpdate(
+            (builder as unknown) as RequestBuilder,
+            params
+        );
+        expect(result).to.be.equal("success");
+    });
+
+    it("Should insertIndexes provide data", async function() {
+        const params = {
+            layerID: "mocked-id",
+            indexes: [{ id: "test-index" }]
+        };
+        const builder = {
+            baseUrl: "http://mocked.url",
+            requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
+                expect(urlBuilder.url).to.be.equal(
+                    "http://mocked.url/layers/mocked-id"
+                );
+                expect(options.method).to.be.equal("POST");
+                expect(options.body).equals(JSON.stringify(params.indexes));
+                return Promise.resolve("success");
+            }
+        };
+        const result = await IndexApi.insertIndexes(
+            (builder as unknown) as RequestBuilder,
+            params
+        );
+        expect(result).to.be.equal("success");
+    });
 });

@@ -1,3 +1,24 @@
+## v1.13.0 (02/09/2022)
+
+**olp-sdk-dataservice-api**
+
+- Updated the return type `any` => `Response` for functions:
+
+`ArtifactsApi::putArtifactFileUsingPUT`,
+
+`BlobApi::cancelMultipartUpload`,
+
+`BlobApi::deleteBlob`,
+
+`IndexApi::insertIndexes`,
+
+`IndexApi::performUpdate`,
+
+`VolatileBlobApi::deleteVolatileBlob`,
+
+`VolatileBlobApi::putVolatileBlob`.
+
+
 ## v1.12.2 (11/01/2022)
 
 **olp-sdk-dataservice-read**
