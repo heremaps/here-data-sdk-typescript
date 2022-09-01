@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2022 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -341,7 +341,7 @@ export async function getArtifactUsingGET(
 export async function putArtifactFileUsingPUT(
     builder: RequestBuilder,
     params: { artifactHrn: string; fileName: string; file: string }
-): Promise<any> {
+): Promise<Response> {
     const baseUrl = "/artifact/{artifactHrn}/{fileName}"
         .replace("{artifactHrn}", UrlBuilder.toString(params["artifactHrn"]))
         .replace("{fileName}", UrlBuilder.toString(params["fileName"]));
@@ -358,7 +358,7 @@ export async function putArtifactFileUsingPUT(
         options.body = JSON.stringify(params["file"]);
     }
 
-    return builder.request<any>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }
 
 /**

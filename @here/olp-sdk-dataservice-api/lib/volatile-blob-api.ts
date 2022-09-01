@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2022 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -121,7 +121,7 @@ export async function deleteVolatileBlob(
         dataHandle: string;
         billingTag?: string;
     }
-): Promise<any> {
+): Promise<Response> {
     const baseUrl = "/layers/{layerId}/data/{dataHandle}"
         .replace("{layerId}", UrlBuilder.toString(params["layerId"]))
         .replace("{dataHandle}", UrlBuilder.toString(params["dataHandle"]));
@@ -135,7 +135,7 @@ export async function deleteVolatileBlob(
         headers
     };
 
-    return builder.request<any>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }
 
 /**
@@ -191,7 +191,7 @@ export async function putVolatileBlob(
         body: string;
         billingTag?: string;
     }
-): Promise<any> {
+): Promise<Response> {
     const baseUrl = "/layers/{layerId}/data/{dataHandle}"
         .replace("{layerId}", UrlBuilder.toString(params["layerId"]))
         .replace("{dataHandle}", UrlBuilder.toString(params["dataHandle"]));
@@ -209,5 +209,5 @@ export async function putVolatileBlob(
         options.body = JSON.stringify(params["body"]);
     }
 
-    return builder.request<any>(urlBuilder, options);
+    return builder.requestBlob(urlBuilder, options);
 }

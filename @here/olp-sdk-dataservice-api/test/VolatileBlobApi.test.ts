@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2022 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ describe("VolatileBlobApi", function() {
         };
         const builder = {
             baseUrl: "http://mocked.url",
-            request: async (urlBuilder: UrlBuilder, options: any) => {
+            requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
                 expect(urlBuilder.url).to.be.equal(
                     "http://mocked.url/layers/mocked-id/data/mocked-datahandle?billingTag=mocked-billingTag"
                 );
@@ -110,7 +110,7 @@ describe("VolatileBlobApi", function() {
         };
         const builder = {
             baseUrl: "http://mocked.url",
-            request: async (urlBuilder: UrlBuilder, options: any) => {
+            requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
                 expect(urlBuilder.url).to.be.equal(
                     "http://mocked.url/layers/mocked-id/data/mocked-datahandle?billingTag=mocked-billingTag"
                 );
