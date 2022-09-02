@@ -1,0 +1,38 @@
+name: Typescript SDK Deploy Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      chooseDeploy:
+        description: 'Package to deploy'
+        required: true
+        default: ''
+        type: choice
+        options:
+        - fetch
+        - api
+        - core
+        - auth
+        - read
+        - write
+        - verify
+
+jobs:
+  deploy-sdk-package-to-npm:
+    name: Typescript SDK Build and Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Package to deploy: $PACKAGE_NAME"
+        env:
+          PACKAGE_NAME: ${{ inputs.chooseDeploy }}
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16'
+          cache: npm
+      - name: Build / Tests
+        run: scripts/linux/psv/build_test_psv.sh && env
+      - name: Deploy to NPM
+        run: scripts/publish-packages.sh -${PACKAGE_NAME}
