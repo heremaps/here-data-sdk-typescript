@@ -1,6 +1,6 @@
 #!/bin/bash -e
 #
-# Copyright (C) 2019-2020 HERE Europe B.V.
+# Copyright (C) 2019-2022 HERE Europe B.V.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 # License-Filename: LICENSE
 
 # Simple script that bundles the publishing of packages,
-# to be run from Travis
+# to be run from GitHub Actions
 
 echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ~/.npmrc
 

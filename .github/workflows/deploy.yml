@@ -36,3 +36,6 @@ jobs:
         run: scripts/linux/psv/build_test_psv.sh && env
       - name: Deploy to NPM
         run: scripts/publish-packages.sh -${PACKAGE_NAME}
+        env:
+          PACKAGE_NAME: ${{ inputs.chooseDeploy }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
