@@ -445,40 +445,6 @@ export async function getFeaturesByBBox(
         clusteringParams?: { [key: string]: string | number };
         force2D?: boolean;
     }
-): Promise<FeatureCollection>;
-/**
- * @deprecated This signature will be removed by 06.2022.
- * Please use signature with `SearchParams`.
- */
-export async function getFeaturesByBBox(
-    builder: RequestBuilder,
-    params: {
-        layerId: string;
-        bbox?: Array<number>;
-        clip?: boolean;
-        limit?: number;
-        params?: { [key: string]: string | number };
-        selection?: string | Array<string>;
-        skipCache?: boolean;
-        clustering?: string;
-        clusteringParams?: { [key: string]: string | number };
-        force2D?: boolean;
-    }
-): Promise<FeatureCollection>;
-export async function getFeaturesByBBox(
-    builder: RequestBuilder,
-    params: {
-        layerId: string;
-        bbox?: Array<number>;
-        clip?: boolean;
-        limit?: number;
-        params?: { [key: string]: string | number } | SearchParams;
-        selection?: string | Array<string>;
-        skipCache?: boolean;
-        clustering?: string;
-        clusteringParams?: { [key: string]: string | number };
-        force2D?: boolean;
-    }
 ): Promise<FeatureCollection> {
     const baseUrl = "/layers/{layerId}/bbox".replace(
         "{layerId}",
@@ -495,12 +461,6 @@ export async function getFeaturesByBBox(
         searchParams.forEach(param => {
             urlBuilder.appendQuery(param.key, param.value, param.operator);
         });
-    } else {
-        // will be removed 06.2022
-        urlBuilder.appendQuery(
-            "params",
-            params["params"] as { [key: string]: string | number }
-        );
     }
 
     urlBuilder.appendQuery("selection", params["selection"]);
@@ -616,44 +576,6 @@ export async function getFeaturesBySpatial(
         skipCache?: boolean;
         force2D?: boolean;
     }
-): Promise<FeatureCollection>;
-/**
- * @deprecated This signature will be removed by 06.2022.
- * Please use signature with `SearchParams`.
- */
-export async function getFeaturesBySpatial(
-    builder: RequestBuilder,
-    params: {
-        layerId: string;
-        lat?: number;
-        lng?: number;
-        refCatalogHrn?: string;
-        refLayerId?: string;
-        refFeatureId?: string;
-        radius?: number;
-        limit?: number;
-        params?: { [key: string]: string | number };
-        selection?: string | Array<string>;
-        skipCache?: boolean;
-        force2D?: boolean;
-    }
-): Promise<FeatureCollection>;
-export async function getFeaturesBySpatial(
-    builder: RequestBuilder,
-    params: {
-        layerId: string;
-        lat?: number;
-        lng?: number;
-        refCatalogHrn?: string;
-        refLayerId?: string;
-        refFeatureId?: string;
-        radius?: number;
-        limit?: number;
-        params?: { [key: string]: string | number } | SearchParams;
-        selection?: string | Array<string>;
-        skipCache?: boolean;
-        force2D?: boolean;
-    }
 ): Promise<FeatureCollection> {
     const baseUrl = "/layers/{layerId}/spatial".replace(
         "{layerId}",
@@ -674,12 +596,6 @@ export async function getFeaturesBySpatial(
         searchParams.forEach(param => {
             urlBuilder.appendQuery(param.key, param.value, param.operator);
         });
-    } else {
-        // will be removed 06.2022
-        urlBuilder.appendQuery(
-            "params",
-            params["params"] as { [key: string]: string | number }
-        );
     }
 
     urlBuilder.appendQuery("selection", params["selection"]);
@@ -767,36 +683,6 @@ export async function getFeaturesBySpatialPost(
         skipCache?: boolean;
         force2D?: boolean;
     }
-): Promise<FeatureCollection>;
-/**
- * @deprecated This signature will be removed by 06.2022.
- * Please use signature with `SearchParams`.
- */
-export async function getFeaturesBySpatialPost(
-    builder: RequestBuilder,
-    params: {
-        layerId: string;
-        body?: GetFeaturesBySpatialBody;
-        radius?: number;
-        limit?: number;
-        params?: { [key: string]: string | number };
-        selection?: string | Array<string>;
-        skipCache?: boolean;
-        force2D?: boolean;
-    }
-): Promise<FeatureCollection>;
-export async function getFeaturesBySpatialPost(
-    builder: RequestBuilder,
-    params: {
-        layerId: string;
-        body?: GetFeaturesBySpatialBody;
-        radius?: number;
-        limit?: number;
-        params?: { [key: string]: string | number } | SearchParams;
-        selection?: string | Array<string>;
-        skipCache?: boolean;
-        force2D?: boolean;
-    }
 ): Promise<FeatureCollection> {
     const baseUrl = "/layers/{layerId}/spatial".replace(
         "{layerId}",
@@ -813,12 +699,6 @@ export async function getFeaturesBySpatialPost(
         searchParams.forEach(param => {
             urlBuilder.appendQuery(param.key, param.value, param.operator);
         });
-    } else {
-        // will be removed 06.2022
-        urlBuilder.appendQuery(
-            "params",
-            params["params"] as { [key: string]: string | number }
-        );
     }
 
     urlBuilder.appendQuery("selection", params["selection"]);
@@ -965,44 +845,6 @@ export async function getFeaturesByTile(
         limit?: number;
         force2D?: boolean;
     }
-): Promise<FeatureCollection>;
-/**
- * @deprecated This signature will be removed by 06.2022.
- * Please use signature with `SearchParams`.
- */
-export async function getFeaturesByTile(
-    builder: RequestBuilder,
-    params: {
-        layerId: string;
-        tileType: string;
-        tileId: string;
-        clip?: boolean;
-        params?: { [key: string]: string | number };
-        selection?: string | Array<string>;
-        skipCache?: boolean;
-        clustering?: string;
-        clusteringParams?: { [key: string]: string | number };
-        margin?: number;
-        limit?: number;
-        force2D?: boolean;
-    }
-): Promise<FeatureCollection>;
-export async function getFeaturesByTile(
-    builder: RequestBuilder,
-    params: {
-        layerId: string;
-        tileType: string;
-        tileId: string;
-        clip?: boolean;
-        params?: { [key: string]: string | number } | SearchParams;
-        selection?: string | Array<string>;
-        skipCache?: boolean;
-        clustering?: string;
-        clusteringParams?: { [key: string]: string | number };
-        margin?: number;
-        limit?: number;
-        force2D?: boolean;
-    }
 ): Promise<FeatureCollection> {
     const baseUrl = "/layers/{layerId}/tile/{tileType}/{tileId}"
         .replace("{layerId}", UrlBuilder.toString(params["layerId"]))
@@ -1018,12 +860,6 @@ export async function getFeaturesByTile(
         searchParams.forEach(param => {
             urlBuilder.appendQuery(param.key, param.value, param.operator);
         });
-    } else {
-        // will be removed 06.2022
-        urlBuilder.appendQuery(
-            "params",
-            params["params"] as { [key: string]: string | number }
-        );
     }
 
     urlBuilder.appendQuery("selection", params["selection"]);
@@ -1216,32 +1052,6 @@ export async function searchFeatures(
         skipCache?: boolean;
         force2D?: boolean;
     }
-): Promise<FeatureCollection>;
-/**
- * @deprecated This signature will be removed by 06.2022.
- * Please use signature with `SearchParams`.
- */
-export async function searchFeatures(
-    builder: RequestBuilder,
-    params: {
-        layerId: string;
-        limit?: number;
-        params?: { [key: string]: string | number };
-        selection?: string | Array<string>;
-        skipCache?: boolean;
-        force2D?: boolean;
-    }
-): Promise<FeatureCollection>;
-export async function searchFeatures(
-    builder: RequestBuilder,
-    params: {
-        layerId: string;
-        limit?: number;
-        params?: { [key: string]: string | number } | SearchParams;
-        selection?: string | Array<string>;
-        skipCache?: boolean;
-        force2D?: boolean;
-    }
 ): Promise<FeatureCollection> {
     const baseUrl = "/layers/{layerId}/search".replace(
         "{layerId}",
@@ -1257,12 +1067,6 @@ export async function searchFeatures(
         searchParams.forEach(param => {
             urlBuilder.appendQuery(param.key, param.value, param.operator);
         });
-    } else {
-        // will be removed 06.2022
-        urlBuilder.appendQuery(
-            "params",
-            params["params"] as { [key: string]: string | number }
-        );
     }
 
     urlBuilder.appendQuery("selection", params["selection"]);

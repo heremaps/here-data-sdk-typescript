@@ -22,10 +22,6 @@ import sinonChai = require("sinon-chai");
 
 import { ConfigApi } from "@here/olp-sdk-dataservice-api";
 import {
-  ParentQuad,
-  SubQuad,
-  Index,
-  Layer,
   StatusLink,
   Catalog,
   CatalogFailureStatus,
@@ -42,128 +38,6 @@ const assert = chai.assert;
 const expect = chai.expect;
 
 describe("ConfigApi", function() {
-  it("ParentQuad with all required params", function() {
-    const params: ParentQuad = {
-      dataHandle: "test",
-      partition: "test",
-      version: 1
-    };
-
-    assert.isDefined(params);
-  });
-
-  it("ParentQuad with all required and optional params", function() {
-    const params: ParentQuad = {
-      additionalMetadata: "test",
-      checksum: "test",
-      compressedDataSize: 1,
-      dataHandle: "test",
-      dataSize: 1,
-      partition: "test",
-      version: 1
-    };
-
-    assert.isDefined(params);
-  });
-
-  it("SubQuad with all required params", function() {
-    const params: SubQuad = {
-      dataHandle: "test",
-      subQuadKey: "test",
-      version: 1
-    };
-
-    assert.isDefined(params);
-  });
-
-  it("SubQuad with all required and optional params", function() {
-    const params: SubQuad = {
-      additionalMetadata: "test",
-      checksum: "test",
-      compressedDataSize: 1,
-      dataHandle: "test",
-      dataSize: 1,
-      subQuadKey: "test",
-      version: 1
-    };
-
-    assert.isDefined(params);
-  });
-
-  it("Index with all required params", function() {
-    const params: Index = {
-      parentQuads: [
-        {
-          dataHandle: "test",
-          partition: "test",
-          version: 1
-        }
-      ],
-
-      subQuads: [
-        {
-          dataHandle: "test",
-          subQuadKey: "test",
-          version: 1
-        }
-      ]
-    };
-
-    assert.isDefined(params);
-  });
-
-  it("Layer with all required params", function() {
-    const params: Layer = {
-      hrn: "test",
-      id: "test",
-      layerType: "index",
-      partitioning: {
-        scheme: "generic",
-        tileLevels: [1]
-      }
-    };
-
-    assert.isDefined(params);
-  });
-
-  it("Layer with all required and optional params", function() {
-    const params: Layer = {
-      billingTags: ["test"],
-      contentEncoding: "gzip",
-      contentType: "test",
-      coverage: {
-        adminAreas: ["test"]
-      },
-      creator: {
-        id: "test"
-      },
-      description: "test",
-      hrn: "test",
-      id: "test",
-      layerType: "index",
-      name: "test",
-      partitioning: {
-        scheme: "generic",
-        tileLevels: [1]
-      },
-      schema: {
-        hrn: "test"
-      },
-      streamProperties: {
-        dataInThroughputMbps: 1,
-        dataOutThroughputMbps: 1
-      },
-      summary: "test",
-      tags: ["test"],
-      volume: {
-        volumeType: "durable"
-      },
-      digest: "MD5"
-    };
-
-    assert.isDefined(params);
-  });
-
   it("Catalog with all required params", function() {
     const params: Catalog = {
       created: "test",
@@ -203,7 +77,7 @@ describe("ConfigApi", function() {
             volumeType: "durable"
           },
           digest: "MD5"
-        }
+        } as any
       ],
       name: "test",
       replication: {
@@ -265,7 +139,7 @@ describe("ConfigApi", function() {
             volumeType: "durable"
           },
           digest: "MD5"
-        }
+        } as any
       ],
       name: "test",
       notifications: {

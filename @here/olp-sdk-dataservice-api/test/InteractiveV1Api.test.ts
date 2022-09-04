@@ -175,39 +175,6 @@ describe("InteractiveApi", function() {
                     bbox: [13.082, 52.416, 13.628, 52.626],
                     clip: true,
                     limit: 100,
-                    params: {
-                        "p.property_name_1": "property_value_1",
-                        "f.special_property_name_1": "special_property_value_1"
-                    },
-                    selection: ["p.name", "p.capacity", "p.color"],
-                    skipCache: true,
-                    clustering: "hexbin",
-                    clusteringParams: {
-                        resolution: 3,
-                        testProperty: "a.nest",
-                        testProperty2: "testProperty2Value"
-                    },
-                    force2D: true
-                }
-            )
-        ).eqls("success");
-
-        expect(
-            await InteractiveApi.getFeaturesByBBox(
-                new MockedRequestBuilder({
-                    request: (url: string, options?: RequestOptions): any => {
-                        expect(url).to.be.equals(
-                            `http://mocked.url/layers/mocked-layerId/bbox?bbox=13.082,52.416,13.628,52.626&clip=true&limit=100&p.property_name_1=property_value_1&f.special_property_name_1=special_property_value_1&selection=p.name,p.capacity,p.color&skipCache=true&clustering=hexbin&clustering.resolution=3&clustering.testProperty=a.nest&clustering.testProperty2=testProperty2Value&force2D=true`
-                        );
-                        expect(options?.method).to.be.equal("GET");
-                        return Promise.resolve("success");
-                    }
-                }),
-                {
-                    layerId: "mocked-layerId",
-                    bbox: [13.082, 52.416, 13.628, 52.626],
-                    clip: true,
-                    limit: 100,
                     params: [
                         {
                             key: "p.property_name_1",
@@ -272,37 +239,6 @@ describe("InteractiveApi", function() {
     });
 
     it("getFeaturesBySpatial", async function() {
-        expect(
-            await InteractiveApi.getFeaturesBySpatial(
-                new MockedRequestBuilder({
-                    request: (url: string, options?: RequestOptions): any => {
-                        expect(url).to.be.equals(
-                            `http://mocked.url/layers/mocked-layerId/spatial?lat=-90&lng=45&refCatalogHrn=mocked-refCatalogHrn&refLayerId=mocked-refLayerId&refFeatureId=mocked-refFeatureId&radius=40&limit=100&p.property_name_1=property_value_1&f.special_property_name_1=special_property_value_1&selection=p.name,p.capacity,p.color&skipCache=true&force2D=true`
-                        );
-                        expect(options?.method).to.be.equal("GET");
-                        return Promise.resolve("success");
-                    }
-                }),
-                {
-                    layerId: "mocked-layerId",
-                    lat: -90,
-                    lng: 45,
-                    refCatalogHrn: "mocked-refCatalogHrn",
-                    refLayerId: "mocked-refLayerId",
-                    refFeatureId: "mocked-refFeatureId",
-                    radius: 40,
-                    limit: 100,
-                    params: {
-                        "p.property_name_1": "property_value_1",
-                        "f.special_property_name_1": "special_property_value_1"
-                    },
-                    selection: ["p.name", "p.capacity", "p.color"],
-                    skipCache: true,
-                    force2D: true
-                }
-            )
-        ).eqls("success");
-
         expect(
             await InteractiveApi.getFeaturesBySpatial(
                 new MockedRequestBuilder({
@@ -402,39 +338,6 @@ describe("InteractiveApi", function() {
                     },
                     radius: 40,
                     limit: 100,
-                    params: {
-                        "p.property_name_1": "property_value_1",
-                        "f.special_property_name_1": "special_property_value_1"
-                    },
-                    selection: ["p.name", "p.capacity", "p.color"],
-                    skipCache: true,
-                    force2D: true
-                }
-            )
-        ).eqls("success");
-
-        expect(
-            await InteractiveApi.getFeaturesBySpatialPost(
-                new MockedRequestBuilder({
-                    request: (url: string, options?: RequestOptions): any => {
-                        expect(url).to.be.equals(
-                            `http://mocked.url/layers/mocked-layerId/spatial?radius=40&limit=100&p.property_name_1=property_value_1&f.special_property_name_1=special_property_value_1&selection=p.name,p.capacity,p.color&skipCache=true&force2D=true`
-                        );
-                        expect(options?.body).to.be.equals(
-                            `{"type":"mocked-geojson","bbox":[1,2,3,4]}`
-                        );
-                        expect(options?.method).to.be.equal("POST");
-                        return Promise.resolve("success");
-                    }
-                }),
-                {
-                    layerId: "mocked-layerId",
-                    body: {
-                        type: "mocked-geojson",
-                        bbox: [1, 2, 3, 4]
-                    },
-                    radius: 40,
-                    limit: 100,
                     params: [
                         {
                             key: "p.property_name_1",
@@ -512,41 +415,6 @@ describe("InteractiveApi", function() {
     });
 
     it("getFeaturesByTile", async function() {
-        expect(
-            await InteractiveApi.getFeaturesByTile(
-                new MockedRequestBuilder({
-                    request: (url: string, options?: RequestOptions): any => {
-                        expect(url).to.be.equals(
-                            `http://mocked.url/layers/mocked-layerId/tile/here/mocked-tile-id?clip=true&p.property_name_1=property_value_1&f.special_property_name_1=special_property_value_1&selection=p.name,p.capacity,p.color&skipCache=true&clustering=hexbin&clustering.resolution=3&clustering.testProperty=a.nest&clustering.testProperty2=testProperty2Value&margin=12&limit=100&force2D=true`
-                        );
-                        expect(options?.method).to.be.equal("GET");
-                        return Promise.resolve("success");
-                    }
-                }),
-                {
-                    layerId: "mocked-layerId",
-                    tileType: "here",
-                    tileId: "mocked-tile-id",
-                    clip: true,
-                    limit: 100,
-                    params: {
-                        "p.property_name_1": "property_value_1",
-                        "f.special_property_name_1": "special_property_value_1"
-                    },
-                    selection: ["p.name", "p.capacity", "p.color"],
-                    skipCache: true,
-                    clustering: "hexbin",
-                    clusteringParams: {
-                        resolution: 3,
-                        testProperty: "a.nest",
-                        testProperty2: "testProperty2Value"
-                    },
-                    force2D: true,
-                    margin: 12
-                }
-            )
-        ).eqls("success");
-
         expect(
             await InteractiveApi.getFeaturesByTile(
                 new MockedRequestBuilder({

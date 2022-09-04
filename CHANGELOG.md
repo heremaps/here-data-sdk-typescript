@@ -1,4 +1,4 @@
-## v1.13.0 (02/09/2022)
+## v1.13.0 (06/09/2022)
 
 **olp-sdk-dataservice-api**
 
@@ -17,6 +17,8 @@
 `VolatileBlobApi::deleteVolatileBlob`,
 
 `VolatileBlobApi::putVolatileBlob`.
+
+- Removed deprecated interfaces (Removed the deprecated code (https://github.com/heremaps/here-data-sdk-typescript/pull/511).
 
 
 ## v1.12.2 (11/01/2022)

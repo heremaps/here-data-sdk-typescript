@@ -302,7 +302,7 @@ describe("CatalogClient", function() {
                     },
                     contentType: "application/x-protobuf",
                     layerType: "versioned"
-                }
+                } as any
             ],
             version: 3
         };
@@ -348,7 +348,7 @@ describe("CatalogClient", function() {
                     },
                     contentType: "application/x-protobuf",
                     layerType: "versioned"
-                }
+                } as any
             ],
             version: 3
         };

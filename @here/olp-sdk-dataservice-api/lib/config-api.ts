@@ -55,216 +55,6 @@ export type BillingTags = string[];
 export type CRC = "CRC-32C";
 
 /**
- * @deprecated `ParentQuad` will be removed by 03.2022.
- */
-export interface ParentQuad {
-    /**
-     * Optional value for the additional metadata specified by the publisher
-     */
-    additionalMetadata?: string;
-    /**
-     * The checksum field is optional. The response only includes this information if you specify
-     * the checksum in the request (using the `additionalFields` query parameter) and if the request
-     * for the commit of the partition specifies a checksum. You need to use the 'sha1' checksum of
-     * the data content if you want the data comparison to work for this catalog. The maximum length
-     * of the `checksum` field is 128 characters.
-     */
-    checksum?: string;
-    /**
-     * Optional value for the size of the compressed partition data in bytes. Compressed size of the
-     * data when using Blobstore in the datastore-client with compression enabled to commit to Data
-     * Service. The response only includes this information if you specify the `compressedDataSize`
-     * field in the request, and if the request for the commit of the partition specifies a
-     * `compressedDataSize`.
-     */
-    compressedDataSize?: number;
-    /**
-     * The `dataHandle` uniquely identifies a tile within the scope of the layer’s dataUrl. The
-     * combination of dataURL + `dataHandle` should be a fully qualified URL. To store data in the
-     * `dataHandle` directly the 'data' URL scheme (RFC 2397) should be used. The `dataHandle` must
-     * not contain any characters that are not part of the reserved and unreserved set as defined in
-     * RFC3986. Empty value of this field is allowed. If the `dataHandle` is empty or omitted, it
-     * means that the partition is deleted. To delete a partition in the new version, the
-     * `dataHandle` should be omitted or empty string provided. The maximum length of `dataHandle`
-     * is 1024 characters.
-     */
-    dataHandle: string;
-    /**
-     * Optional value for the size of the partition data in bytes. Uncompressed size of the data
-     * when using Blobstore in the datastore-client with compression enabled or disabled to commit
-     * to Data Service. The response only includes this information if you specify the `dataSize`
-     * field in the request, and if the request for the commit of the partition specifies
-     * `dataSize`.
-     */
-    dataSize?: number;
-    /**
-     * The id of the tile
-     */
-    partition: string;
-    /**
-     * Version of the catalog when this partition was first published
-     */
-    version: number;
-}
-
-/**
- * @deprecated `SubQuad` will be removed by 03.2022.
- */
-export interface SubQuad {
-    /**
-     * Optional value for the additional meta-data specified by the publisher.
-     */
-    additionalMetadata?: string;
-    /**
-     * The checksum field is optional. The response only includes this information if you specify
-     * checksum in the request (using `additionalFields` query parameter), and if the request for
-     * the commit of the partition a checksum was provided during commit of the partition. It should
-     * be set to the sha1 checksum of the data content if the data comparison needs to work for this
-     * catalog. The maximum length of `checksum` field is 128 characters.
-     */
-    checksum?: string;
-    /**
-     * Optional value for the size of the compressed partition data in bytes. Compressed size of the
-     * data when using Blobstore in the datastore-client with compression enabled to commit to Data
-     * Service.  The response only includes this information if you specify the `compressedDataSize`
-     * field in the request, and if the request for the commit of the partition specifies
-     * `compressedDataSize`.
-     */
-    compressedDataSize?: number;
-    /**
-     * The `dataHandle` uniquely identifies a tile within the scope of the layer’s dataUrl. The
-     * combination of dataURL + `dataHandle` should be a fully qualified URL. To store data in the
-     * `dataHandle` directly the 'data' URL scheme (RFC 2397) should be used. The `dataHandle` must
-     * not contain any characters that are not part of the reserved and unreserved set as defined in
-     * RFC3986. Empty value of this field is allowed. If the `dataHandle` is empty or omitted, it
-     * means that the partition is deleted. To delete a partition in the new version, the
-     * `dataHandle` should be omitted or empty string provided. The maximum length of `dataHandle`
-     * is 1024 characters.
-     */
-    dataHandle: string;
-    /**
-     * Optional value for the size of the partition data in bytes. Uncompressed size of the data
-     * when using Blobstore in the datastore-client with compression enabled or disabled to commit
-     * to Data Service. The response only includes this information if you specify the `dataSize`
-     * field in the requested, and if the request for the commit of the partition specifies
-     * `dataSize`.
-     */
-    dataSize?: number;
-    /**
-     * Variable length string defining the child of the passed in the quadkey tile. Depending on the
-     * partitioning scheme of the layer, either a 'quadtree' (deprecated) or a 'heretile' formatted
-     * id from the sub quad will be returned. When the quadkey is referenced in the response (for
-     * example, when depth is 0), subQuadKey is an empty string for 'quadtree' partitioning, and '1'
-     * for 'heretile' partitioning.
-     */
-    subQuadKey: string;
-    /**
-     * Version of the catalog when this partition was first published.
-     */
-    version: number;
-}
-
-/**
- * @deprecated `Index` will be removed by 03.2022.
- */
-export interface Index {
-    /**
-     * Result of the index resource call. For each parent tile, one element with the respective
-     * parent-quad data is contained in the array.
-     */
-    parentQuads: ParentQuad[];
-    /**
-     * Result of the index resource call. For each tile that contains data in the requested quadkey,
-     * one element with the respective sub-quad data is contained in the array.
-     */
-    subQuads: SubQuad[];
-}
-
-/**
- *
- * @deprecated `Layer` will be removed by 03.2022.
- *
- * Describes the catalog layer properties.
- */
-export interface Layer {
-    /**
-     * Billing tag is an optional free-form tag, which is used for grouping billing records
-     * together. If supplied, it must be between 4 - 16 characters, contain only alpha/numeric ASCII
-     * characters `[A-Za-z0-9]`.
-     */
-    billingTags?: BillingTags;
-    /**
-     * Identifies whether the data is compressed.
-     */
-    contentEncoding?: ContentEncoding;
-    /**
-     * The mime type of the data is stored in this layer.
-     */
-    contentType?: ContentType;
-    /**
-     * The geographic areas that this layer covers, grouped by admin areas.
-     */
-    coverage?: Coverage;
-    /**
-     * The person who created this layer.
-     */
-    creator?: Creator;
-    /**
-     * A detailed description of the layer and what it contains. This information appears on the
-     * 'Overview' tab when you open a layer in the platform portal.
-     */
-    description?: string;
-    /**
-     * The HERE Resource Name (HRN) of the layer.
-     */
-    hrn: string;
-    /**
-     * This ID should be unique to one environment. You can use the same ID again in another context
-     * such as a production environment. This ID forms part of the HERE Resource Name (HRN) for the
-     * layer.
-     */
-    id: string;
-    /**
-     * The type of data availability that this layer provides.
-     */
-    layerType:
-        | IndexLayerType
-        | StreamLayerType
-        | VersionedLayerType
-        | VolatileLayerType;
-    /**
-     * A descriptive name for the layer.
-     */
-    name?: string;
-    /**
-     * The name of the partitioning scheme for this layer.
-     */
-    partitioning: Partitioning;
-    /**
-     * The HRN of the data schema for this layer.
-     */
-    schema?: Schema;
-    /**
-     * Properties that define the scale of the streaming service required for this layer.
-     */
-    streamProperties?: StreamProperties;
-    /**
-     * A one-sentence summary of the layer. You can see this summary when you browse a list of
-     * layers on the platform portal.
-     */
-    summary?: string;
-    /**
-     * Some keywords that help to find the catalog when searching in the platform portal.
-     */
-    tags?: Tags;
-    /**
-     * Properties that describe the volume where the data is physically stored.
-     */
-    volume?: DurableVolume | VolatileVolume;
-    digest?: Digest;
-}
-
-/**
  * Describes the catalog properties.
  */
 export interface Catalog {
@@ -314,16 +104,14 @@ export interface Catalog {
     /**
      * The layers in the catalog.
      */
-    layers:
-        | Layer[]
-        | Array<
-              | VersionedLayer
-              | VolatileLayer
-              | StreamLayer
-              | IndexLayer
-              | InteractiveMapsLayer
-              | ObjectstoreLayer
-          >;
+    layers: Array<
+        | VersionedLayer
+        | VolatileLayer
+        | StreamLayer
+        | IndexLayer
+        | InteractiveMapsLayer
+        | ObjectstoreLayer
+    >;
     /**
      * The version of the catalog configuration. Every change in this number indicates a change in the catalog
      * configuration. It is incremented every time you make changes, such as change catalog parameters or add layers.
@@ -692,29 +480,6 @@ export interface DurableVolume {
  */
 export interface GetBaseLayer {
     layerType: string;
-}
-
-/**
- * @deprecated `ErrorMessage` will be removed by 03.2022.
- * An HTTP Error message that the service provides when there is a problem with request.
- */
-export interface ErrorMessage {
-    /**
-     * An error code that pertains to a specific error.
-     */
-    code?: string;
-    /**
-     * A set of validation error messages.
-     */
-    errors?: ValidationErrorMessage[];
-    /**
-     * A message that describes the cause of the error.
-     */
-    message?: string;
-    /**
-     * The HTTP status code of the error response.
-     */
-    status?: number;
 }
 
 export interface IndexDefinition {
@@ -1124,19 +889,6 @@ export type StreamLayerType = "stream";
  */
 export interface StreamProperties {
     /**
-     * @deprecated `dataInThroughputMbps` will be removed by 03.2022.
-     * Maximum throughput for incoming data expressed in megabytes per second.
-     * Throttling occurs when the inbound rate exceeds the maximum inbound throughput. The default is 4 MBps. The maximum is 32 MBps.
-     */
-    dataInThroughputMbps?: number;
-    /**
-     * @deprecated `dataOutThroughputMbps` will be removed by 03.2022.
-     * Maximum throughput for outgoing data expressed in megabytes per second.
-     * Throttling occurs when the total outbound rate to all consumers exceeds the maximum outbound throughput.
-     * The default is 8 MBps. The maximum is 64 MBps.
-     */
-    dataOutThroughputMbps?: number;
-    /**
      * Maximum throughput for incoming data expressed in kilobytes per second. Throttling occurs when the inbound rate
      * exceeds the maximum inbound throughput. The default is 1000 KBps. The minimum is 100 KBps, the maximum is 32800 KBps.
      * Can only be multiple of 100 KBps. Can be updated by the user.
@@ -1173,33 +925,6 @@ export type Ttl = number;
  * The expiry time in hours for data in this layer. Data is automatically removed after the specified time limit has elapsed.
  */
 export type TtlHours = number;
-
-/**
- * @deprecated `ValidationErrorMessage` will be removed by 03.2022.
- * HTTP Error message thrown by the service.
- */
-export interface ValidationErrorMessage {
-    /**
-     * Error code that pertains to a specific error.
-     */
-    code?: string;
-    /**
-     * The field of the object that is invalid. The field follows RFC 6901 JSON Pointer (see: https://tools.ietf.org/html/rfc6901).
-     */
-    field?: string;
-    /**
-     * The value that is invalid that was sent.
-     */
-    invalidValue?: any;
-    /**
-     * This is the message for the error.
-     */
-    message?: string;
-    /**
-     * Duplicate of the HTTP status that is returned.
-     */
-    status?: number;
-}
 
 /**
  * Describes the catalog versioned layer properties.
@@ -1286,20 +1011,10 @@ export interface VolatileVolume {
      * Define keys eviction policy when the memory limit for volatile layer is reached
      */
     maxMemoryPolicy?: MaxMemoryPolicyEnum;
-    /**
-     * @deprecated `packageType` will be removed by 03.2022.
-     * Define initial package type (capacity) of the volatile layer
-     */
-    packageType?: PackageTypeEnum;
     volumeType: "volatile";
 }
 
 export type MaxMemoryPolicyEnum = "failOnWrite" | "replaceLessRecentlyUsedKey";
-
-/**
- * @deprecated `PackageTypeEnum` will be removed by 03.2022.
- */
-export type PackageTypeEnum = "experimental" | "small" | "medium" | "large";
 
 /*
  * ===================================================================
