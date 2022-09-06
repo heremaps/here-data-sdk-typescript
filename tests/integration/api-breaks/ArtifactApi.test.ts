@@ -21,15 +21,15 @@ import * as chai from "chai";
 import sinonChai = require("sinon-chai");
 
 import {
-  Artifact,
+  ArtifactObj,
   ArtifactFile,
-  DeleteArtifactResponse,
-  DeleteFileResponse,
-  DeleteSchemaResponse,
-  Schema,
-  GetArtifactResponse,
-  GetSchemaResponse,
-  ListSchemasResponse,
+  DeleteArtifactResponseObj,
+  DeleteFileResponseObj,
+  DeleteSchemaResponseObj,
+  SchemaObj,
+  GetArtifactResponseObj,
+  GetSchemaResponseObj,
+  ListSchemasResponseObj,
   PagedQuery,
   Principal,
   RegisterArtifactRequest,
@@ -50,12 +50,12 @@ const expect = chai.expect;
 
 describe("ArtifactApi", function() {
   it("Artifact with all required params", function() {
-    const params: Artifact = {
+    const params: ArtifactObj = {
       artifactId: "test",
-      created: {} as Date,
+      created: "",
       groupId: "test",
       hrn: "test",
-      updated: {} as Date,
+      updated: "",
       version: "test"
     };
 
@@ -77,19 +77,19 @@ describe("ArtifactApi", function() {
   });
 
   it("DeleteArtifactResponse with all required params", function() {
-    const params: DeleteArtifactResponse = {};
+    const params: DeleteArtifactResponseObj = {};
 
     assert.isDefined(params);
   });
 
   it("DeleteArtifactResponse with all required and optional params", function() {
-    const params: DeleteArtifactResponse = {
+    const params: DeleteArtifactResponseObj = {
       artifact: {
         artifactId: "test",
-        created: {} as Date,
+        created: "",
         groupId: "test",
         hrn: "test",
-        updated: {} as Date,
+        updated: "",
         version: "test"
       },
       files: ["test"]
@@ -99,19 +99,19 @@ describe("ArtifactApi", function() {
   });
 
   it("DeleteFileResponse with all required params", function() {
-    const params: DeleteFileResponse = {};
+    const params: DeleteFileResponseObj = {};
 
     assert.isDefined(params);
   });
 
   it("DeleteFileResponse with all required and optional params", function() {
-    const params: DeleteFileResponse = {
+    const params: DeleteFileResponseObj = {
       artifact: {
         artifactId: "test",
-        created: {} as Date,
+        created: "",
         groupId: "test",
         hrn: "test",
-        updated: {} as Date,
+        updated: "",
         version: "test"
       },
       file: "test"
@@ -121,31 +121,31 @@ describe("ArtifactApi", function() {
   });
 
   it("DeleteSchemaResponse with all required params", function() {
-    const params: DeleteSchemaResponse = {};
+    const params: DeleteSchemaResponseObj = {};
 
     assert.isDefined(params);
   });
 
   it("DeleteSchemaResponse with all required and optional params", function() {
-    const params: DeleteSchemaResponse = {
+    const params: DeleteSchemaResponseObj = {
       artifacts: [
         {
           artifactId: "test",
-          created: {} as Date,
+          created: "",
           groupId: "test",
           hrn: "test",
-          updated: {} as Date,
+          updated: "",
           version: "test"
         }
       ],
       schema: {
         artifactId: "test",
-        created: {} as Date,
+        created: "",
         groupId: "test",
         hrn: "test",
         name: "test",
         summary: "test",
-        updated: {} as Date,
+        updated: "",
         version: "test"
       }
     };
@@ -154,31 +154,31 @@ describe("ArtifactApi", function() {
   });
 
   it("DeleteSchemaResponse with all required params", function() {
-    const params: DeleteSchemaResponse = {};
+    const params: DeleteSchemaResponseObj = {};
 
     assert.isDefined(params);
   });
 
   it("DeleteSchemaResponse with all required and optional params", function() {
-    const params: DeleteSchemaResponse = {
+    const params: DeleteSchemaResponseObj = {
       artifacts: [
         {
           artifactId: "test",
-          created: {} as Date,
+          created: "",
           groupId: "test",
           hrn: "test",
-          updated: {} as Date,
+          updated: "",
           version: "test"
         }
       ],
       schema: {
         artifactId: "test",
-        created: {} as Date,
+        created: "",
         groupId: "test",
         hrn: "test",
         name: "test",
         summary: "test",
-        updated: {} as Date,
+        updated: "",
         version: "test"
       }
     };
@@ -187,13 +187,13 @@ describe("ArtifactApi", function() {
   });
 
   it("Schema with all required params", function() {
-    const params: Schema = {
+    const params: SchemaObj = {
       artifactId: "test",
-      created: {} as Date,
+      created: "",
       groupId: "test",
       hrn: "test",
       name: "test",
-      updated: {} as Date,
+      updated: "",
       version: "test"
     };
 
@@ -201,14 +201,14 @@ describe("ArtifactApi", function() {
   });
 
   it("Schema with all required and optional params", function() {
-    const params: Schema = {
+    const params: SchemaObj = {
       artifactId: "test",
-      created: {} as Date,
+      created: "",
       groupId: "test",
       hrn: "test",
       name: "test",
       summary: "test",
-      updated: {} as Date,
+      updated: "",
       version: "test"
     };
 
@@ -216,19 +216,19 @@ describe("ArtifactApi", function() {
   });
 
   it("GetArtifactResponse with all required params", function() {
-    const params: GetArtifactResponse = {};
+    const params: GetArtifactResponseObj = {};
 
     assert.isDefined(params);
   });
 
   it("GetArtifactResponse with all required and optional params", function() {
-    const params: GetArtifactResponse = {
+    const params: GetArtifactResponseObj = {
       artifact: {
         artifactId: "test",
-        created: {} as Date,
+        created: "",
         groupId: "test",
         hrn: "test",
-        updated: {} as Date,
+        updated: "",
         version: "test"
       },
       files: [
@@ -242,30 +242,30 @@ describe("ArtifactApi", function() {
   });
 
   it("GetSchemaResponse with all required params", function() {
-    const params: GetSchemaResponse = {};
+    const params: GetSchemaResponseObj = {};
 
     assert.isDefined(params);
   });
 
   it("GetSchemaResponse with all required and optional params", function() {
-    const params: GetSchemaResponse = {
+    const params: GetSchemaResponseObj = {
       artifacts: [
         {
           artifactId: "test",
-          created: {} as Date,
+          created: "",
           groupId: "test",
           hrn: "test",
-          updated: {} as Date,
+          updated: "",
           version: "test"
         }
       ],
       schema: {
         artifactId: "test",
-        created: {} as Date,
+        created: "",
         groupId: "test",
         hrn: "test",
         name: "test",
-        updated: {} as Date,
+        updated: "",
         version: "test"
       },
       schemaValidationResults: [],
@@ -281,21 +281,21 @@ describe("ArtifactApi", function() {
   });
 
   it("ListSchemasResponse with all required params", function() {
-    const params: ListSchemasResponse = {};
+    const params: ListSchemasResponseObj = {};
 
     assert.isDefined(params);
   });
 
   it("ListSchemasResponse with all required and optional params", function() {
-    const params: ListSchemasResponse = {
+    const params: ListSchemasResponseObj = {
       items: [
         {
           artifactId: "test",
-          created: {} as Date,
+          created: "",
           groupId: "test",
           hrn: "test",
           name: "test",
-          updated: {} as Date,
+          updated: "",
           version: "test"
         }
       ],

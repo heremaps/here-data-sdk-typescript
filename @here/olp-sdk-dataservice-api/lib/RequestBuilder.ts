@@ -101,40 +101,20 @@ export class UrlBuilder {
      */
     appendQuery(
         key: string,
-        value?:
-            | string
-            | number
-            | boolean
-            | string[]
-            | number[]
-            | { [key: string]: string | number },
+        value?: string | number | boolean | string[] | number[],
         operator = "="
     ) {
         if (value === undefined) {
             return;
         }
 
-        if (value instanceof Object && !(value instanceof Array)) {
-            let queryString = "";
-            for (const propKey in value) {
-                queryString += UrlBuilder.appendQueryString(
-                    "",
-                    this.hasQuery ? "&" : "?",
-                    propKey,
-                    value[propKey]
-                );
-            }
-
-            this.url += queryString;
-        } else {
-            this.url = UrlBuilder.appendQueryString(
-                this.url,
-                this.hasQuery ? "&" : "?",
-                key,
-                value,
-                operator
-            );
-        }
+        this.url = UrlBuilder.appendQueryString(
+            this.url,
+            this.hasQuery ? "&" : "?",
+            key,
+            value,
+            operator
+        );
 
         this.hasQuery = true;
     }

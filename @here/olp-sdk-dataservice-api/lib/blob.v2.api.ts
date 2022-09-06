@@ -54,30 +54,6 @@ export interface DataHandleResponse {
 
 /**
  * Object or common prefix stored in Object Store layer.
- * @deprecated This will be removed by 2.2022. Please use `KeysListObjectItemResponseObj` instead.
- */
-export interface KeysListObjectItemResponse {
-    /**
-     * Name of the object/common prefix.
-     */
-    name: string;
-    /**
-     * Object size in bytes or omitted if the `type` field is `commonPrefix`.
-     */
-    size?: number;
-    /**
-     * Last modified date and time in RFC 3339 format or omitted if the `type` field is `commonPrefix`.
-     */
-    lastModified?: Date;
-    /**
-     * Indicates whether the item is object or common prefix.
-     * Can be "object" or "commonPrefix";
-     */
-    type: string;
-}
-
-/**
- * Object or common prefix stored in Object Store layer.
  */
 export interface KeysListObjectItemResponseObj {
     /**
@@ -97,18 +73,6 @@ export interface KeysListObjectItemResponseObj {
      * Can be "object" or "commonPrefix";
      */
     type: string;
-}
-
-/**
- * Paginated response of keys and common prefixes.
- * @deprecated This will be removed by 2.2022. Please use `KeysListResponseObj` instead.
- */
-export interface KeysListResponse {
-    /**
-     * Page token to fetch the next page.
-     */
-    pageToken: string;
-    items: KeysListObjectItemResponse[];
 }
 
 /**
@@ -474,7 +438,7 @@ export async function listKeys(
         limit?: number;
         deep?: "true" | "false";
     }
-): Promise<KeysListResponse | KeysListResponseObj> {
+): Promise<KeysListResponseObj> {
     const baseUrl = "/layers/{layerId}/keys".replace(
         "{layerId}",
         UrlBuilder.toString(params["layerId"])
@@ -492,10 +456,7 @@ export async function listKeys(
         headers
     };
 
-    return builder.request<KeysListResponse | KeysListResponseObj>(
-        urlBuilder,
-        options
-    );
+    return builder.request<KeysListResponseObj>(urlBuilder, options);
 }
 
 /**

@@ -38,7 +38,7 @@ describe("ArtifactClient", function() {
 
     public async getSchemaDetails(
       schemaDetailsRequest: dataServiceRead.SchemaDetailsRequest
-    ): Promise<dataServiceApi.ArtifactApi.GetSchemaResponse> {
+    ): Promise<dataServiceApi.ArtifactApi.GetSchemaResponseObj> {
       return {
         variants: [
           {

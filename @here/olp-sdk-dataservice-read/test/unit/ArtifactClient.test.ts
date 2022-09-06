@@ -157,7 +157,7 @@ describe("ArtifactClient", function() {
     });
 
     it("Should method getSchemaDetails provide data", async function() {
-        const mockedSchema: ArtifactApi.GetSchemaResponse = {
+        const mockedSchema: ArtifactApi.GetSchemaResponseObj = {
             variants: [
                 {
                     id: "42",
@@ -173,7 +173,7 @@ describe("ArtifactClient", function() {
             (
                 builder: any,
                 params: any
-            ): Promise<ArtifactApi.GetSchemaResponse> => {
+            ): Promise<ArtifactApi.GetSchemaResponseObj> => {
                 return Promise.resolve(mockedSchema);
             }
         );
@@ -196,7 +196,7 @@ describe("ArtifactClient", function() {
             "Not found"
         );
 
-        const mockedSchema: ArtifactApi.GetSchemaResponse = {
+        const mockedSchema: ArtifactApi.GetSchemaResponseObj = {
             variants: [
                 {
                     id: "42",
@@ -213,7 +213,7 @@ describe("ArtifactClient", function() {
             (
                 builder: any,
                 params: any
-            ): Promise<ArtifactApi.GetSchemaResponse> => {
+            ): Promise<ArtifactApi.GetSchemaResponseObj> => {
                 return Promise.reject(mockedError);
             }
         );
