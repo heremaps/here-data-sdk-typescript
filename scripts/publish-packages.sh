@@ -29,27 +29,27 @@ while [[ $# -gt 0 ]]; do
     case "$key" in
         -fetch)
         # olp-sdk-fetch publish
-        cd @here/olp-sdk-fetch && npm install && npm publish && cd -
+        cd @here/olp-sdk-fetch && npm install && npm pack && tar -xvzf *.tgz && rm -rf package *.tgz  && cd -
         ;;
         -core)
         # olp-sdk-core publish
-        cd @here/olp-sdk-core && npm install && npm publish && cd -
+        cd @here/olp-sdk-core && npm install && npm pack && tar -xvzf *.tgz && rm -rf package *.tgz  && cd -
         ;;
         -api)
         # olp-sdk-dataservice-api publish
-        cd @here/olp-sdk-dataservice-api && npm install && npm publish && cd -
+        cd @here/olp-sdk-dataservice-api && npm install && npm pack && tar -xvzf *.tgz && rm -rf package *.tgz  && cd -
         ;;
         -auth)
         # olp-sdk-authentication publish
-        cd @here/olp-sdk-authentication && node -v && npm -v && npm install && npm pack && ls -lah && cd -
+        cd @here/olp-sdk-authentication && npm install && npm pack && tar -xvzf *.tgz && rm -rf package *.tgz && cd -
         ;;
         -read)
         # olp-sdk-dataservice-read publish
-        cd @here/olp-sdk-dataservice-read && npm install && npm publish && cd -
+        cd @here/olp-sdk-dataservice-read && npm install && npm pack && tar -xvzf *.tgz && rm -rf package *.tgz  && cd -
         ;;
         -write)
         # olp-sdk-dataservice-write publish
-        cd @here/olp-sdk-dataservice-write && npm install && npm publish && cd -
+        cd @here/olp-sdk-dataservice-write && npm install && npm pack && tar -xvzf *.tgz && rm -rf package *.tgz  && cd -
         ;;
         -verify)
         # verify all published
