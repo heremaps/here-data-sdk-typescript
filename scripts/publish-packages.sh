@@ -41,7 +41,7 @@ while [[ $# -gt 0 ]]; do
         ;;
         -auth)
         # olp-sdk-authentication publish
-        cd @here/olp-sdk-authentication && npm install && npm pack && ls -lah && cd -
+        cd @here/olp-sdk-authentication && node -v && npm -v && cat ~/.npmignore && npm install && npm pack && ls -lah && cd -
         ;;
         -read)
         # olp-sdk-dataservice-read publish
