@@ -1,4 +1,4 @@
-# Getting Started Guide
+# Get started
 
 HERE Data SDK for TypeScript includes the core components to access the HERE APIs from any web-based application.
 
