@@ -65,6 +65,6 @@ npm run prepublish-bundle
 
 ## LICENSE
 
-Copyright (C) 2020-2021 HERE Europe B.V.
+Copyright (C) 2020-2023 HERE Europe B.V.
 
 For license details, see the [LICENSE](LICENSE).
