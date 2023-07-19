@@ -10,9 +10,9 @@ To learn how to install and use the Data SDK, see the <a href="https://github.co
 
 ### Build and test
 
-| Master                      | Node version       | Status                                                                                                                                                                                         |
-| :-------------------------- | :----------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Build/Test/Bundling/Typedoc | Node 16.13.2 (LTS) | <a href="https://app.travis-ci.com/heremaps/here-data-sdk-typescript" target="_blank"><img src="https://app.travis-ci.com/heremaps/here-data-sdk-typescript.svg?branch=master" alt="Build Status"></a> |
+| Master                      | Node version       | Status                                                                                                                                                                                                                             |
+| :-------------------------- | :----------------- |:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Build/Test/Bundling/Typedoc | Node 16.13.2 (LTS) | <a href="https://github.com/heremaps/here-data-sdk-typescript/actions/workflows/ci.yml" target="_blank"><img src="https://github.com/heremaps/here-data-sdk-typescript/actions/workflows/ci.yml/badge.svg" alt="Build Status"></a> |
 
 ### Test coverage
 
