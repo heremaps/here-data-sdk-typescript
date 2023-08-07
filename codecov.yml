@@ -4,8 +4,6 @@ coverage:
   precision: 4
   notify:
     wait_for_ci: false
-  ci:
-    - "travis.org"
   status:
     project:
       authentication:
