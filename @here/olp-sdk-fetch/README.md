@@ -2,11 +2,9 @@
 
 ## Overview
 
-This module adds a subset of the [fetch](https://fetch.spec.whatwg.org/) API for [Node.js](https://nodejs.org/). This allows code written for the browser to also execute in `Node.js`.
+This module adds a supporting file:// to the [fetch](https://fetch.spec.whatwg.org/) API for [Node.js](https://nodejs.org/). This allows fetching the files from the local folders.
 
-The main goal of this module is to provide enough compatibility to allow running unit tests in `Node.js`. It is not 100% feature and behavior compatible with `fetch`.
-
-The feature set is that of [node-fetch](https://www.npmjs.com/package/node-fetch) with the addition of a dummy `AbortController`.
+The main goal of this module is to provide the possibility to read files from the local folders with `fetch` API in the Node.js environment.
 
 ## Usage
 
@@ -60,6 +58,6 @@ Add minified JavaScript file to your `html` and create an object of userAuth:
 
 ## LICENSE
 
-Copyright (C) 2019-2023 HERE Europe B.V.
+Copyright (C) 2019-2024 HERE Europe B.V.
 
 For license details, see the [LICENSE](LICENSE).

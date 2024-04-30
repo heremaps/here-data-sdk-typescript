@@ -1,3 +1,8 @@
+## v2.0.0 (10/05/2024)
+
+- Discontinued support of Node.js versions less than 18.x.
+- Removed `node_fetch` from the dependencies.
+
 ## v1.13.0 (06/09/2022)
 
 **olp-sdk-dataservice-api**

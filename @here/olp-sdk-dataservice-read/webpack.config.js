@@ -1,4 +1,5 @@
 const path = require("path");
+const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = env => {
   const isProd = env.NODE_ENV === "production";
@@ -16,6 +17,10 @@ module.exports = env => {
       path: path.resolve(__dirname),
       libraryTarget: "umd",
       globalObject: 'this'
+    },
+    optimization: {
+      minimize: true,
+      minimizer: [new TerserPlugin()],
     }
   };
 };
