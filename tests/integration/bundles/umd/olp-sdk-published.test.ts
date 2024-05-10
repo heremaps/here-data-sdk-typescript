@@ -55,7 +55,7 @@ describe("Test published olp-edge-datastore-read", function() {
     await page.addScriptTag({
       url: "https://unpkg.com/@here/olp-sdk-dataservice-read/bundle.umd.min.js"
     });
-    await page.goto("http://127.0.0.1:8080", { waitUntil: "networkidle2" });
+    await page.goto("http://localhost:8080", { waitUntil: "networkidle2" });
   });
 
   after(async function() {
@@ -76,7 +76,7 @@ describe("Test published olp-sdk-authentication", function() {
     await page.addScriptTag({
       url: "https://unpkg.com/@here/olp-sdk-authentication/bundle.umd.min.js"
     });
-    await page.goto("http://127.0.0.1:8080", { waitUntil: "networkidle2" });
+    await page.goto("http://localhost:8080", { waitUntil: "networkidle2" });
   });
 
   after(async function() {

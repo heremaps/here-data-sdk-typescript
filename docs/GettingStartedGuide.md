@@ -81,10 +81,8 @@ To learn how to use the Data SDK, see the <a href="https://developer.here.com/do
 
 Data SDK for TypeScript has the following dependencies:
 
-- npm 6.0.0+ (for installation instructions, see <a href="https://www.npmjs.com/" target="_blank">npm</a>)
-- Node.js 10+ (for installation instructions, see <a href="http://nodejs.org" target="_blank">Node.js</a>)
-- Lerna.js 3+ (for installation instructions, see <a href="http://lerna.js.org" target="_blank">Lerna.js</a>)
-- TypeDoc 0.15+ (for installation instructions, see <a href="http://typedoc.org" target="_blank">TypeDoc</a>)
+- npm 10+ (for installation instructions, see <a href="https://www.npmjs.com/" target="_blank">npm</a>)
+- Node.js 18+ (for installation instructions, see <a href="http://nodejs.org" target="_blank">Node.js</a>)
 
 > **Note:** As an alternative to npm, you can also use Yarn 1+ (for installation instructions, see <a href="http://yarnpkg.com" target="_blank">Yarn</a>).
 

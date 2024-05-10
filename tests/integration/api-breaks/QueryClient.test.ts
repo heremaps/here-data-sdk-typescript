@@ -86,10 +86,11 @@ describe("QueryClient", function() {
 
   it("Test fetchQuadTreeIndex method with required and optional params", async function() {
     const client = new QueryClientTest(settings);
+    const controller = new AbortController();
 
     const response = await client.fetchQuadTreeIndex(
       new dataServiceRead.QuadTreeIndexRequest(testCatalogHrn, "test-layer-id"),
-      new AbortSignal()
+      controller.signal
     );
     assert.isDefined(response);
   });
@@ -107,12 +108,13 @@ describe("QueryClient", function() {
 
   it("Test getPartitionsById method with required and optional params", async function() {
     const client = new QueryClientTest(settings);
+    const controller = new AbortController();
 
     const response = await client.getPartitionsById(
       new dataServiceRead.PartitionsRequest(),
       "test-layer-id",
       testCatalogHrn,
-      new AbortSignal()
+      controller.signal
     );
     assert.isDefined(response);
   });

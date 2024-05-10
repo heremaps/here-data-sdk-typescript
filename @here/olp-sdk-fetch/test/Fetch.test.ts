@@ -24,7 +24,7 @@ import "../index";
 const isNode = typeof window === "undefined";
 const describeOnlyNode = isNode ? describe : xdescribe;
 
-describe("@here/harp-fetch", function() {
+describe("@here/olp-sdk-fetch", function() {
     it("fetch", function() {
         assert.isFunction(fetch);
     });

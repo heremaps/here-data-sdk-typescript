@@ -32,7 +32,7 @@ describe("Test generated olp-edge-datastore-api", function() {
       args: ["no-sandbox", "disable-setuid-sandbox"]
     });
     page = await browser.newPage();
-    await page.goto("http://127.0.0.1:8080", { waitUntil: "networkidle2" });
+    await page.goto("http://localhost:8080", { waitUntil: "networkidle2" });
     await page.addScriptTag({
       path: "@here/olp-sdk-dataservice-api/bundle.umd.min.js"
     });
@@ -56,7 +56,7 @@ describe("Test generated olp-edge-datastore-read", function() {
     await page.addScriptTag({
       path: "@here/olp-sdk-dataservice-read/bundle.umd.min.js"
     });
-    await page.goto("http://127.0.0.1:8080", { waitUntil: "networkidle2" });
+    await page.goto("http://localhost:8080", { waitUntil: "networkidle2" });
   });
 
   after(async function() {
@@ -77,7 +77,7 @@ describe("Test generated olp-sdk-authentication", function() {
     await page.addScriptTag({
       path: "@here/olp-sdk-authentication/bundle.umd.min.js"
     });
-    await page.goto("http://127.0.0.1:8080", { waitUntil: "networkidle2" });
+    await page.goto("http://localhost:8080", { waitUntil: "networkidle2" });
   });
 
   after(async function() {

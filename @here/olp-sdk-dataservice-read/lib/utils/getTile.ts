@@ -150,7 +150,7 @@ export async function getTile(
 
     if (!quadTreeIndex.subQuads || !quadTreeIndex.subQuads.length) {
         return Promise.resolve(
-            new Response("No Content", {
+            new Response(null, {
                 status: 204,
                 statusText: "No Content"
             })

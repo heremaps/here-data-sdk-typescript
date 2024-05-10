@@ -24,3 +24,4 @@ heaptrack_report.html
 CertificateAuthorityCertificate.pem
 demo-app
 build
+.DS_Store
