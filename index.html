@@ -1,184 +1,70 @@
-<!doctype html>
-<html class="default no-js">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>@here/olp-sdk-ts</title>
-	<meta name="description" content="Documentation for @here/olp-sdk-ts">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="assets/css/main.css">
-	<script async src="assets/js/search.js" id="search-script"></script>
-</head>
-<body>
-<header>
-	<div class="tsd-page-toolbar">
-		<div class="container">
-			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
-					<div class="field">
-						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
-						<input id="tsd-search-field" type="text" />
-					</div>
-					<ul class="results">
-						<li class="state loading">Preparing search index...</li>
-						<li class="state failure">The search index is not available</li>
-					</ul>
-					<a href="index.html" class="title">@here/olp-sdk-ts</a>
-				</div>
-				<div class="table-cell" id="tsd-widgets">
-					<div id="tsd-filter">
-						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
-						<div class="tsd-filter-group">
-							<div class="tsd-select" id="tsd-filter-visibility">
-								<span class="tsd-select-label">All</span>
-								<ul class="tsd-select-list">
-									<li data-value="public">Public</li>
-									<li data-value="protected">Public/Protected</li>
-									<li data-value="private" class="selected">All</li>
-								</ul>
-							</div>
-							<input type="checkbox" id="tsd-filter-inherited" checked />
-							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-						</div>
-					</div>
-					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="tsd-page-title">
-		<div class="container">
-			<h1>@here/olp-sdk-ts</h1>
-		</div>
-	</div>
-</header>
-<div class="container container-main">
-	<div class="row">
-		<div class="col-8 col-content">
-			<div class="tsd-panel tsd-typography">
-				<a href="#here-data-sdk-for-typescript" id="here-data-sdk-for-typescript" style="color: inherit; text-decoration: none;">
-					<h1>HERE Data SDK for TypeScript</h1>
-				</a>
-				<p>HERE Data SDK for TypeScript is a TypeScript client for the <a href="https://platform.here.com" target="_blank">HERE platform</a>.</p>
-				<a href="#use-the-sdk" id="use-the-sdk" style="color: inherit; text-decoration: none;">
-					<h2>Use the SDK</h2>
-				</a>
-				<p>To learn how to install and use the Data SDK, see the <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/GettingStartedGuide.md" target="_blank">Getting Started Guide</a> and <a href="https://developer.here.com/documentation/sdk-typescript/dev_guide/index.html" target="blank">Developer Guide</a>.</p>
-				<a href="#health-check" id="health-check" style="color: inherit; text-decoration: none;">
-					<h2>Health check</h2>
-				</a>
-				<a href="#build-and-test" id="build-and-test" style="color: inherit; text-decoration: none;">
-					<h3>Build and test</h3>
-				</a>
-				<table>
-					<thead>
-						<tr>
-							<th align="left">Master</th>
-							<th align="left">Node version</th>
-							<th align="left">Status</th>
-						</tr>
-					</thead>
-					<tbody><tr>
-							<td align="left">Build/Test/Bundling/Typedoc</td>
-							<td align="left">Node 16.13.2 (LTS)</td>
-							<td align="left"><a href="https://github.com/heremaps/here-data-sdk-typescript/actions/workflows/ci.yml" target="_blank"><img src="https://github.com/heremaps/here-data-sdk-typescript/actions/workflows/ci.yml/badge.svg" alt="Build Status"></a></td>
-						</tr>
-				</tbody></table>
-				<a href="#test-coverage" id="test-coverage" style="color: inherit; text-decoration: none;">
-					<h3>Test coverage</h3>
-				</a>
-				<table>
-					<thead>
-						<tr>
-							<th align="left">Platform</th>
-							<th align="left">Status</th>
-						</tr>
-					</thead>
-					<tbody><tr>
-							<td align="left">Linux</td>
-							<td align="left"><a href="https://codecov.io/gh/heremaps/here-data-sdk-typescript/" target="_blank"><img src="https://codecov.io/gh/heremaps/here-data-sdk-typescript/branch/master/graph/badge.svg" alt="Linux code coverage"/></a></td>
-						</tr>
-				</tbody></table>
-				<a href="#backward-compatibility" id="backward-compatibility" style="color: inherit; text-decoration: none;">
-					<h2>Backward compatibility</h2>
-				</a>
-				<p>We try to develop and maintain our API in a way that preserves its compatibility with the existing applications. Changes in Data SDK for TypeScript are greatly influenced by the Data API development. Data API introduces breaking changes 6 months in advance. Therefore, you may need to migrate to a new version of Data SDK for TypeScript every half a year.</p>
-				<p>For more information on Data API, see its <a href="https://developer.here.com/documentation/data-api/data_dev_guide/index.html" target="_blank">Developer Guide</a> and <a href="https://developer.here.com/documentation/data-api/api-reference.html" target="_blank">API Reference</a>.</p>
-				<p>When new API is introduced in Data SDK for TypeScript, the old one is not deleted straight away. The standard API deprecation time is 6 months. It gives you time to switch to new code. However, we do not provide API backward compatibility.</p>
-				<p>Learn more about deprecated methods, functions, and parameters in the Data SDK for TypeScript <a href="https://developer.here.com/documentation/sdk-typescript/api_reference/index.html"  target="_blank">API Reference</a> and <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/CHANGELOG.md" target="_blank">changelog</a>.</p>
-				<p>For more information on Data SDK for TypeScript, see our <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/GettingStartedGuide.md" target="_blank">Getting Started Guide</a> and <a href="https://developer.here.com/documentation/sdk-typescript/dev_guide/index.html" target="blank">Developer Guide</a>.</p>
-				<a href="#about-this-repository" id="about-this-repository" style="color: inherit; text-decoration: none;">
-					<h2>About this repository</h2>
-				</a>
-				<p>The Data SDK repository is a monorepo that contains the core components of the platform SDK organized in the NPM workspace.</p>
-				<p>All components can be used stand-alone and are in the <a href="https://github.com/heremaps/here-data-sdk-typescript/tree/master/%40here" target="_blank">@here</a> subdirectory.</p>
-				<a href="#license" id="license" style="color: inherit; text-decoration: none;">
-					<h2>LICENSE</h2>
-				</a>
-				<p>Copyright (C) 2019–2022 HERE Europe B.V.</p>
-				<p>For license details, see the <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/LICENSE" target="_blank">LICENSE</a> file in the root of this project.</p>
-			</div>
-		</div>
-		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
-			<nav class="tsd-navigation primary">
-				<ul>
-					<li class=" ">
-						<a href="modules.html">Modules</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/olp_sdk_authentication.html">olp-<wbr>sdk-<wbr>authentication</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/olp_sdk_core.html">olp-<wbr>sdk-<wbr>core</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/olp_sdk_dataservice_api.html">olp-<wbr>sdk-<wbr>dataservice-<wbr>api</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/olp_sdk_dataservice_read.html">olp-<wbr>sdk-<wbr>dataservice-<wbr>read</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/olp_sdk_dataservice_write.html">olp-<wbr>sdk-<wbr>dataservice-<wbr>write</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules/olp_sdk_fetch.html">olp-<wbr>sdk-<wbr>fetch</a>
-					</li>
-				</ul>
-			</nav>
-			<nav class="tsd-navigation secondary menu-sticky">
-				<ul class="before-current">
-				</ul>
-			</nav>
-		</div>
-	</div>
-</div>
-<footer class="with-border-bottom">
-	<div class="container">
-		<h2>Legend</h2>
-		<div class="tsd-legend-group">
-			<ul class="tsd-legend">
-				<li class="tsd-kind-namespace"><span class="tsd-kind-icon">Namespace</span></li>
-				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
-				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
-				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
-			</ul>
-			<ul class="tsd-legend">
-				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
-			</ul>
-		</div>
-	</div>
-</footer>
-<div class="container tsd-generator">
-	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
-</div>
-<div class="overlay"></div>
-<script src="assets/js/main.js"></script>
-</body>
-</html>
+<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>@here/olp-sdk-ts</title><meta name="description" content="Documentation for @here/olp-sdk-ts"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">@here/olp-sdk-ts</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1> @here/olp-sdk-ts </h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography">
+<a href="#here-data-sdk-for-typescript" id="here-data-sdk-for-typescript" style="color: inherit; text-decoration: none;">
+  <h1>HERE Data SDK for TypeScript</h1>
+</a>
+<p>HERE Data SDK for TypeScript is a TypeScript client for the <a href="https://platform.here.com" target="_blank">HERE platform</a>.</p>
+
+<a href="#use-the-sdk" id="use-the-sdk" style="color: inherit; text-decoration: none;">
+  <h2>Use the SDK</h2>
+</a>
+<p>To learn how to install and use the Data SDK, see the <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/GettingStartedGuide.md" target="_blank">Getting Started Guide</a> and <a href="https://developer.here.com/documentation/sdk-typescript/dev_guide/index.html" target="blank">Developer Guide</a>.</p>
+
+<a href="#health-check" id="health-check" style="color: inherit; text-decoration: none;">
+  <h2>Health check</h2>
+</a>
+
+<a href="#build-and-test" id="build-and-test" style="color: inherit; text-decoration: none;">
+  <h3>Build and test</h3>
+</a>
+<table>
+<thead>
+<tr>
+<th align="left">Master</th>
+<th align="left">Node version</th>
+<th align="left">Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Build/Test/Bundling/Typedoc</td>
+<td align="left">Node 18.17.1 (LTS)</td>
+<td align="left"><a href="https://github.com/heremaps/here-data-sdk-typescript/actions/workflows/ci.yml" target="_blank"><img src="https://github.com/heremaps/here-data-sdk-typescript/actions/workflows/ci.yml/badge.svg" alt="Build Status"></a></td>
+</tr>
+</tbody></table>
+
+<a href="#test-coverage" id="test-coverage" style="color: inherit; text-decoration: none;">
+  <h3>Test coverage</h3>
+</a>
+<table>
+<thead>
+<tr>
+<th align="left">Platform</th>
+<th align="left">Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Linux</td>
+<td align="left"><a href="https://codecov.io/gh/heremaps/here-data-sdk-typescript/" target="_blank"><img src="https://codecov.io/gh/heremaps/here-data-sdk-typescript/branch/master/graph/badge.svg" alt="Linux code coverage"/></a></td>
+</tr>
+</tbody></table>
+
+<a href="#backward-compatibility" id="backward-compatibility" style="color: inherit; text-decoration: none;">
+  <h2>Backward compatibility</h2>
+</a>
+<p>We try to develop and maintain our API in a way that preserves its compatibility with the existing applications. Changes in Data SDK for TypeScript are greatly influenced by the Data API development. Data API introduces breaking changes 6 months in advance. Therefore, you may need to migrate to a new version of Data SDK for TypeScript every half a year.</p>
+<p>For more information on Data API, see its <a href="https://developer.here.com/documentation/data-api/data_dev_guide/index.html" target="_blank">Developer Guide</a> and <a href="https://developer.here.com/documentation/data-api/api-reference.html" target="_blank">API Reference</a>.</p>
+<p>When new API is introduced in Data SDK for TypeScript, the old one is not deleted straight away. The standard API deprecation time is 6 months. It gives you time to switch to new code. However, we do not provide API backward compatibility.</p>
+<p>Learn more about deprecated methods, functions, and parameters in the Data SDK for TypeScript <a href="https://developer.here.com/documentation/sdk-typescript/api_reference/index.html"  target="_blank">API Reference</a> and <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/CHANGELOG.md" target="_blank">changelog</a>.</p>
+<p>For more information on Data SDK for TypeScript, see our <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/docs/GettingStartedGuide.md" target="_blank">Getting Started Guide</a> and <a href="https://developer.here.com/documentation/sdk-typescript/dev_guide/index.html" target="blank">Developer Guide</a>.</p>
+
+<a href="#about-this-repository" id="about-this-repository" style="color: inherit; text-decoration: none;">
+  <h2>About this repository</h2>
+</a>
+<p>The Data SDK repository is a monorepo that contains the core components of the platform SDK organized in the NPM workspace.</p>
+<p>All components can be used stand-alone and are in the <a href="https://github.com/heremaps/here-data-sdk-typescript/tree/master/%40here" target="_blank">@here</a> subdirectory.</p>
+
+<a href="#license" id="license" style="color: inherit; text-decoration: none;">
+  <h2>LICENSE</h2>
+</a>
+<p>Copyright (C) 2019-2024 HERE Europe B.V.</p>
+<p>For license details, see the <a href="https://github.com/heremaps/here-data-sdk-typescript/blob/master/LICENSE" target="_blank">LICENSE</a> file in the root of this project.</p>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Modules</a></li><li class=" tsd-kind-module"><a href="modules/olp_sdk_authentication.html">olp-<wbr/>sdk-<wbr/>authentication</a></li><li class=" tsd-kind-module"><a href="modules/olp_sdk_core.html">olp-<wbr/>sdk-<wbr/>core</a></li><li class=" tsd-kind-module"><a href="modules/olp_sdk_dataservice_api.html">olp-<wbr/>sdk-<wbr/>dataservice-<wbr/>api</a></li><li class=" tsd-kind-module"><a href="modules/olp_sdk_dataservice_read.html">olp-<wbr/>sdk-<wbr/>dataservice-<wbr/>read</a></li><li class=" tsd-kind-module"><a href="modules/olp_sdk_dataservice_write.html">olp-<wbr/>sdk-<wbr/>dataservice-<wbr/>write</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li><li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li><li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li><li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li></ul><ul class="tsd-legend"><li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>
