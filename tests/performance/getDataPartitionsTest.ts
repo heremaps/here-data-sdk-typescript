@@ -51,12 +51,10 @@ export async function getPartitionsMemoryTest(params: TestParams) {
 
   while (endTimestamp > new Date()) {
     countSentRequests++;
-    console.info(`>>> Sending request: ${countSentRequests} <<<`);
 
     layerClient
       .getPartitions(partitionsRequest)
       .then(metadata => {
-        console.log("Metadata:\n" + JSON.stringify(metadata));
         countSuccessRequests++;
       })
       .catch(_ => {
