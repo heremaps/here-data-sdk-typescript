@@ -51,14 +51,10 @@ export async function getDataMemoryTest(params: TestParams) {
 
   while (endTimestamp > new Date()) {
     countSentRequests++;
-    console.info(`>>> Sending request: ${countSentRequests} <<<`);
 
     layerClient
       .getData(dataRequest.withPartitionId(`${countSentRequests}`))
-      .then(res => {
-        res.blob().then(data => {
-          console.log(data);
-        });
+      .then(() => {
         countSuccessRequests++;
       })
       .catch(_ => {

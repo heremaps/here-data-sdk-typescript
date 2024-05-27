@@ -28,6 +28,8 @@ yarn bootstrap
 npm run build 
 echo ">>> Building SDK done... >>>"
 
+(cd tests/performance/ && npx tsc)
+
 # Start local server
 echo ">>> Local Server starting for further performance test ... >>>"
 node tests/utils/mocked-olp-server/server.js > /dev/null 2>/dev/null & SERVER_PID=$!
