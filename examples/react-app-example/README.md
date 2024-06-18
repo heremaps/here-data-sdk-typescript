@@ -6,7 +6,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 1. Copy `./public/credentials.json.sample` to `./public/credentials.json`, and then add your credentials to that file.
 
-    For more information, see the [related section](https://developer.here.com/documentation/sdk-typescript/dev_guide/topics/authenticate.html) in our Developer Guide.
+    For more information, see the [related section](https://www.here.com/docs/bundle/data-sdk-for-typescript-developer-guide/page/docs/GettingStartedGuide.html) in our Developer Guide.
 
 2. To fetch dependencies, run `yarn && yarn add react-scripts`.
 
@@ -34,6 +34,6 @@ In the project directory, you can run the following scripts:
 
 For more information, see the following documentation:
 
-- Data API <a href="https://developer.here.com/documentation/data-api/data_dev_guide/index.html" target="_blank">Developer Guide</a> and <a href="https://developer.here.com/documentation/data-api/api-reference.html" target="_blank">API Reference</a>
+- Data API <a href="https://www.here.com/docs/bundle/data-api-developer-guide/page/README.html" target="_blank">Developer Guide</a> and <a href="https://www.here.com/docs/category/data-api" target="_blank">API Reference</a>
 - [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started)
 - [React documentation](https://reactjs.org/)
