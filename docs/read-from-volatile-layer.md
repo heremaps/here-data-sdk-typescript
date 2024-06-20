@@ -65,7 +65,7 @@ App works!
 
 ## Create `VolatileLayerClient`
 
-You can use the `VolatileLayerClient` object to get the latest published data and partition metadata from a [volatile layer](https://developer.here.com/documentation/data-user-guide/portal/layers/layers.html#volatile-layers).
+You can use the `VolatileLayerClient` object to get the latest published data and partition metadata from a [volatile layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/getting-data-volatile.html).
 
 **To create the `VolatileLayerClient` object:**
 
@@ -85,7 +85,7 @@ You can use the `VolatileLayerClient` object to get the latest published data an
 
 ## Get partition metadata from a volatile layer
 
-Partition metadata from a [volatile layer](https://developer.here.com/documentation/data-user-guide/portal/layers/layers.html#volatile-layers) consists of the following information about the partition:
+Partition metadata from a [volatile layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/getting-data-volatile.html) consists of the following information about the partition:
 
 - Data handle
 - ID
@@ -98,7 +98,7 @@ You can get partition metadata in one of the following ways:
 - Using the Metadata Service API
 - Using the Query Service API
 
-You can get partition metadata using the Query Service API only if the partition has the HERE tile scheme. For more information on the HERE tile scheme, see [Partitions](https://developer.here.com/documentation/data-user-guide/portal/layers/partitions.html).
+You can get partition metadata using the Query Service API only if the partition has the HERE tile scheme. For more information on the HERE tile scheme, see [Partitions](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/partitions.html).
 
 For performance reasons, it is best to use the Query Service API only to get metadata for a specific partition. For batch processes, and to get metadata for many partitions or all partitions in a layer, use the Metadata Service API.
 
@@ -167,7 +167,7 @@ const partitions = await volatileLayerClient.getPartitions(
 
 ## Get data from a volatile layer
 
-A [volatile layer](https://developer.here.com/documentation/data-user-guide/portal/layers/layers.html#volatile-layers) consists of key-value pairs. Each new value for a key overrides the old one. Therefore, you can only get the latest data from the volatile layer.
+A [volatile layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/getting-data-volatile.html) consists of key-value pairs. Each new value for a key overrides the old one. Therefore, you can only get the latest data from the volatile layer.
 
 **To get data from the volatile layer:**
 
