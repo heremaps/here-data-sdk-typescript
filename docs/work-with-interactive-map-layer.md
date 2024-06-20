@@ -66,7 +66,7 @@ App works!
 ## Create `RequestBuilder`
 
 You need `RequestBuilder` to use the `InteractiveApi` functions from `@here/olp-sdk-dataservice-api`.
-You can use the `InteractiveApi` functions to request any data from an [interactive map layer](https://developer.here.com/documentation/data-user-guide/user_guide/portal/layers/layers.html#interactive-map-layers).
+You can use the `InteractiveApi` functions to request any data from an [interactive map layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/getting-data-interactive.html).
 
 **To create the `RequestBuilder` instance:**
 
@@ -87,7 +87,7 @@ You can use the `InteractiveApi` functions to request any data from an [interact
 
 ## Get data from an interactive map layer
 
-Each [interactive map layer](https://developer.here.com/documentation/data-user-guide/user_guide/portal/layers/layers.html#object-store-layers) has a different set of features that you can request and use to work with map data.
+Each [interactive map layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/getting-data-interactive.html) has a different set of features that you can request and use to work with map data.
 
 You can request one or several features of the interactive map layer using their IDs, tiles that contain them, a bounding box, spatial search, search, iteration, and statistics.
 
@@ -171,15 +171,15 @@ The interactive API supports the following tile types:
        });
        ```
 
-     With the spatial search, you can find all features around a given position or in a given region. For more information, see [Spatial search for features](https://developer.here.com/documentation/data-api/data_dev_guide/rest/getting-interactive-spatial.html) in the Data API Guide.
+     With the spatial search, you can find all features around a given position or in a given region. For more information, see [Spatial search for features](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/getting-interactive-spatial.html) in the Data API Guide.
 
    - To get features using the search, call the `searchFeatures` function.
 
-     For more information, see [Searching for features](https://developer.here.com/documentation/data-api/data_dev_guide/rest/getting-interactive-search.html) in the Data API Guide.
+     For more information, see [Searching for features](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/getting-interactive-search.html) in the Data API Guide.
 
    - To get features using iteration, call the `iterateFeatures` function.
 
-     You get an ordered set of features, and none of them is returned twice. For more information, see [Iterating features](https://developer.here.com/documentation/data-api/data_dev_guide/rest/getting-interactive-iterate.html) in the Data API Guide.
+     You get an ordered set of features, and none of them is returned twice. For more information, see [Iterating features](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/getting-interactive-iterate.html) in the Data API Guide.
 
    - To get features using statistics, call the `getStatistics` function with the ID of the layer.
 
@@ -201,7 +201,7 @@ You can update existing features in an interactive map layer or publish new ones
 
 2. Call the `patchFeature`, `postFeatures`, `putFeature`, or `putFeatures` functions.
 
-   For more information, see [Update data in an interactive map layer](https://developer.here.com/documentation/data-api/data_dev_guide/rest/updating-data-interactive.html) and [Publish to an interactive map layer](https://developer.here.com/documentation/data-api/data_dev_guide/rest/publishing-data-interactive.html) in the Data API Guide.
+   For more information, see [Update data in an interactive map layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/updating-data-interactive.html) and [Publish to an interactive map layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/publishing-data-interactive.html) in the Data API Guide.
 
 ## Delete data from an interactive map layer
 
@@ -213,4 +213,4 @@ You can delete features from an interactive map layer when you no longer need th
 
 2. Call the `deleteFeature` or `deleteFeatures` functions.
 
-   For more information, see [Delete data from an interactive map layer](https://developer.here.com/documentation/data-api/data_dev_guide/rest/deleting-data-interactive.html) in the Data API Guide.
+   For more information, see [Delete data from an interactive map layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/deleting-data-interactive.html) in the Data API Guide.
