@@ -33,18 +33,18 @@ Working with the Data SDK requires knowledge of the following subjects:
 
 To use Data SDK for TypeScript, you need to understand the following concepts related to the HERE platform:
 
-* [Catalogs](https://developer.here.com/documentation/data-api/data_dev_guide/rest/catalogs.html)
-* [Layers](https://developer.here.com/documentation/data-api/data_dev_guide/rest/layers.html)
-* [Partitions](https://developer.here.com/documentation/data-api/data_dev_guide/rest/partitions.html)
-* [HERE Resource Names (HRNs)](https://developer.here.com/documentation/data-api/data_dev_guide/rest/hrn.html)
+* [Catalogs](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/catalogs.html)
+* [Layers](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/layers.html)
+* [Partitions](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/partitions.html)
+* [HERE Resource Names (HRNs)](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/hrn.html)
 
-For more details, see the [Data User Guide](https://developer.here.com/documentation/data-user-guide/index.html).
+For more details, see the [Data User Guide](https://www.here.com/docs/bundle/data-api-developer-guide/page/README.html).
 
 ## Get credentials
 
 To work with catalog or service requests to the HERE platform, you need to get authentication and authorization credentials.
 
-You can authenticate to the HERE platform within your application with the platform credentials available on the HERE portal by means of the Data SDK authentication library. For the available authentication options, see the [Identity & Access Management Developer Guide](https://developer.here.com/documentation/identity-access-management/dev_guide/index.html).
+You can authenticate to the HERE platform within your application with the platform credentials available on the HERE portal by means of the Data SDK authentication library. For the available authentication options, see the [Identity and Access Management Developer Guide](https://www.here.com/docs/bundle/identity-and-access-management-developer-guide/page/README.html).
 
 After you set up the credentials, you can use them to access the Data SDK libraries.
 
@@ -73,7 +73,7 @@ To use the Data SDK with pure JavaScript, inject the compiled bundles from the C
 <script src="https://unpkg.com/@here/olp-sdk-dataservice-write/bundle.umd.min.js"></script> 
 ```
 
-To learn how to use the Data SDK, see the <a href="https://developer.here.com/documentation/sdk-typescript/dev_guide/index.html" target="blank">Developer Guide</a> and <a href="https://developer.here.com/documentation/sdk-typescript/api_reference/index.html"  target="_blank">API Reference</a>.
+To learn how to use the Data SDK, see the <a href="https://www.here.com/docs/bundle/data-sdk-for-typescript-developer-guide/page/README.html" target="blank">Developer Guide</a> and <a href="https://www.here.com/docs/bundle/data-sdk-for-typescript-api-reference/page/index.html"  target="_blank">API Reference</a>.
 
 ## Development
 
