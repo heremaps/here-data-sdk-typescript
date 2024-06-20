@@ -66,7 +66,7 @@ App works!
 ## Create `RequestBuilder`
 
 You need `RequestBuilder` to use the `ObjectStoreApi` functions from `@here/olp-sdk-dataservice-api`.
-You can use the `ObjectStoreApi` functions to request any data from an [object store layer](https://developer.here.com/documentation/data-user-guide/user_guide/portal/layers/layers.html#object-store-layers).
+You can use the `ObjectStoreApi` functions to request any data from an [object store layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/getting-data-objectstore.html).
 
 **To create the `RequestBuilder` instance:**
 
@@ -87,7 +87,7 @@ You can use the `ObjectStoreApi` functions to request any data from an [object s
 
 ## Get data from an object store layer
 
-You can request any data from an [object store layer](https://developer.here.com/documentation/data-user-guide/user_guide/portal/layers/layers.html#object-store-layers) using its key or data handle.
+You can request any data from an [object store layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/getting-data-objectstore.html) using its key or data handle.
 
 **To get data from the object store layer:**
 
@@ -108,7 +108,7 @@ You receive data from the requested key of the selected layer.
 
 ## Get all keys from an object store layer
 
-You can get a list of all keys from an [object store layer](https://developer.here.com/documentation/data-user-guide/user_guide/portal/layers/layers.html#object-store-layers).
+You can get a list of all keys from an [object store layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/getting-data-objectstore-listing.html).
 
 **To get the list of keys:**
 
@@ -133,7 +133,7 @@ call this function recursively with a parent in the query string.
 
 ## Publish data to an object store layer
 
-You can publish data to an [object store layer](https://developer.here.com/documentation/data-user-guide/user_guide/portal/layers/layers.html#object-store-layers) by referencing its key. For data of up to 192 MB, use the single part upload method. If you want to upload larger amounts of data, use the multipart upload method.
+You can publish data to an [object store layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/publishing-data-objectstore.html) by referencing its key. For data of up to 192 MB, use the single part upload method. If you want to upload larger amounts of data, use the multipart upload method.
 
 When you publish new data, old data is overwritten.
 
@@ -191,7 +191,7 @@ To practice uploading large amounts of data and learn how to upload it to the Bl
 
 ## Delete data from an object store layer
 
-You can delete data from any [object store layer](https://developer.here.com/documentation/data-user-guide/user_guide/portal/layers/layers.html#object-store-layers) using its key.
+You can delete data from any [object store layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/deleting-data-objectstore.html) using its key.
 
 **To delete data from the object store layer:**
 
@@ -210,4 +210,4 @@ You can delete data from any [object store layer](https://developer.here.com/doc
 
 You receive a response from the datastore with the status of the operation.
 
-For more information, see the [Data User Guide](https://developer.here.com/documentation/data-user-guide/user_guide/portal/layers/layers.html) and [Data API](https://developer.here.com/documentation/data-api/api-reference-blob-v2.html).
+For more information, see the [Data API Developer Guide](https://www.here.com/docs/bundle/data-api-developer-guide/page/README.html) and [Data API Blob v2 API Reference](https://www.here.com/docs/bundle/data-api-blob-v2-api-reference/page/index.html).
