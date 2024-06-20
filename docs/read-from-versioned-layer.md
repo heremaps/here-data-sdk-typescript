@@ -65,7 +65,7 @@ App works!
 
 ## Create `VersionedLayerClient`
 
-You can use the `VersionedLayerClient` object to request any data and partition metadata version from a [versioned layer](https://developer.here.com/documentation/data-user-guide/portal/layers/layers.html#versioned-layers). When you request a particular version of data from the versioned layer, the partition you receive in the response may have a lower version number than you requested. The version of a layer or partition represents the catalog version in which the layer or partition was last updated.
+You can use the `VersionedLayerClient` object to request any data and partition metadata version from a [versioned layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/partitions.html). When you request a particular version of data from the versioned layer, the partition you receive in the response may have a lower version number than you requested. The version of a layer or partition represents the catalog version in which the layer or partition was last updated.
 
 **To create the `VersionedLayerClient` object:**
 
@@ -91,7 +91,7 @@ You can use the `VersionedLayerClient` object to request any data and partition 
 
 ## Get partition metadata from a versioned layer
 
-Partition metadata from a [versioned layer](https://developer.here.com/documentation/data-user-guide/portal/layers/layers.html#versioned-layers) consists of the following information about the partition:
+Partition metadata from a [versioned layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/getting-data-versioned.html) consists of the following information about the partition:
 
 - Data handle
 - ID
@@ -105,7 +105,7 @@ You can get partition metadata in one of the following ways:
 - Using the Metadata Service API
 - Using the Query Service API
  
-You can get partition metadata using the Query Service API only if the partition has the HERE tile scheme. For more information on the HERE tile scheme, see [Partitions](https://developer.here.com/documentation/data-user-guide/portal/layers/partitions.html).
+You can get partition metadata using the Query Service API only if the partition has the HERE tile scheme. For more information on the HERE tile scheme, see [Partitions](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/partitions.html).
 
 For performance reasons, it is best to use the Query Service API only to get metadata for a specific partition. For batch processes, and to get metadata for many partitions or all partitions in a layer, use the Metadata Service API.
 
@@ -180,7 +180,7 @@ const partitions = await versionedLayerClient.getPartitions(
 
 ## Get data from a versioned layer
 
-You can request any version of data from a [versioned layer](https://developer.here.com/documentation/data-user-guide/portal/layers/layers.html#versioned-layers). When you request a particular version of data from the versioned layer, the partition you receive in the response may have a lower version number than you requested. The version of a layer or partition represents the catalog version in which the layer or partition was last updated.
+You can request any version of data from a [versioned layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/getting-data-versioned.html). When you request a particular version of data from the versioned layer, the partition you receive in the response may have a lower version number than you requested. The version of a layer or partition represents the catalog version in which the layer or partition was last updated.
 
 **To get data from the versioned layer:**
 
