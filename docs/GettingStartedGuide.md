@@ -1,35 +1,15 @@
 # Get started
 
-HERE Data SDK for TypeScript includes the core components to access the HERE APIs from any web-based application.
-
-In this guide, learn how to authenticate to and start working with the HERE platform using the Data SDK:
-
-- [Prerequisites](#prerequisites)
-- [Concepts](#concepts)
-- [Get credentials](#get-credentials)
-- [Installation](#installation)
-- [Development](#development)
-  - [Dependencies](#dependencies)
-    - [Download dependencies](#download-dependencies)
-  - [Build the SDK](#build-the-sdk)
-  - [Test the SDK](#test-the-sdk)
-  - [Test coverage](#test-coverage)
-  - [Generate documentation with TypeDoc](#generate-documentation-with-typedoc)
-  - [Use the bundle functionality](#use-the-bundle-functionality)
-- [Available components](#available-components)
-- [Reference documentation](#reference-documentation)
-- [Examples](#examples)
+HERE Data SDK for TypeScript includes the core components to access HERE APIs from any web-based application.
+Read this topic to learn how to authenticate to and start working with the HERE platform using the HERE Data SDK for TypeScript.
 
 ## Prerequisites
 
-To start using Data SDK for TypeScript, you need a platform user account.
+- HERE platform account. Follow [this link](https://platform.here.com/portal/sign-up) to create an account. 
+- Basic understanding of the core HERE platform concepts.
+- Basic TypeScript proficiency.
 
-Working with the Data SDK requires knowledge of the following subjects:
-
-- Basic understanding of the core [HERE platform concepts](#concepts).
-- Basic proficiency with TypeScript.
-
-## Concepts
+### Concepts
 
 To use Data SDK for TypeScript, you need to understand the following concepts related to the HERE platform:
 
@@ -37,8 +17,6 @@ To use Data SDK for TypeScript, you need to understand the following concepts re
 * [Layers](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/layers.html)
 * [Partitions](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/partitions.html)
 * [HERE Resource Names (HRNs)](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/hrn.html)
-
-For more details, see the [Data User Guide](https://www.here.com/docs/bundle/data-api-developer-guide/page/README.html).
 
 ## Get credentials
 
@@ -84,7 +62,8 @@ Data SDK for TypeScript has the following dependencies:
 - npm 10+ (for installation instructions, see <a href="https://www.npmjs.com/" target="_blank">npm</a>)
 - Node.js 18+ (for installation instructions, see <a href="http://nodejs.org" target="_blank">Node.js</a>)
 
-> **Note:** As an alternative to npm, you can also use Yarn 1+ (for installation instructions, see <a href="http://yarnpkg.com" target="_blank">Yarn</a>).
+> #### Note 
+> As an alternative to npm, you can use Yarn. For installation instructions, see [Yarn documentation](https://yarnpkg.com/getting-started/install).
 
 #### Download dependencies
 
