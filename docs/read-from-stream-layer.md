@@ -4,7 +4,7 @@ This example shows how to read partition metadata and partition data from a stre
 
 ## Build and run an app on Node.js
 
-Before you build an app, make sure that you installed all of the <a href="https://github.com/heremaps/here-data-sdk-typescript#dependencies" target="_blank">dependencies</a>.
+Before you build an app, make sure that you installed all of the [dependencies](GettingStartedGuide.md#dependencies).
 
 **To build and run an app on Node.js:**
 
@@ -65,7 +65,7 @@ App works!
 
 ## Create `StreamLayerClient`
 
-You can use the `StreamLayerClient` class to request data from the queue that streams data from a [stream layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/README.html#stream-layers). Once a consumer reads the data, the data is no longer available to that consumer, but the data remains available to other consumers.
+You can use the `StreamLayerClient` class to request data from the queue that streams data from a [stream layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/layers.html#stream-layers). Once a consumer reads the data, the data is no longer available to that consumer, but the data remains available to other consumers.
 
 Stream layers can be configured with retention time, or time-to-live (TTL) which results in unconsumed data being removed after a specified period.
 
@@ -119,9 +119,9 @@ Stream layers can be configured with retention time, or time-to-live (TTL) which
 
 Now, to get data, you can call the `Poll` method.
 
-## <a name="get-data-streamlayerclient"></a>Get data and partition metadata from a stream layer
+## Get data and partition metadata from a stream layer
 
-You can read messages from a [stream layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/README.html#stream-layers) if you subscribe to the layer. The messages contain data and the following partition metadata:
+You can read messages from a [stream layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/layers.html#stream-layers) if you subscribe to the layer. The messages contain data and the following partition metadata:
 
 - Data handle
 - ID
@@ -134,9 +134,9 @@ You can read messages from a [stream layer](https://www.here.com/docs/bundle/dat
 
 1. Create the `streamLayerClient` object.
 
-   For instructions, see [Create StreamLayerClient]([#create-streamlayerclient](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/layer-creating_2.html)).
+   For instructions, see [Create StreamLayerClient](#create-streamlayerclient).
 
-2. Subscribe to the stream layer. See [Subscribe to the stream layer](https://www.here.com/docs/bundle/data-api-developer-guide/page/rest/getting-data-stream.html)
+2. Subscribe to the stream layer.
 
 3. Call the `poll` method with the subscription ID.
 
@@ -197,7 +197,7 @@ You can read messages from a [stream layer](https://www.here.com/docs/bundle/dat
 
 You get data from the requested partition.
  
-## <a name="seek-streamlayerclient"></a>Seek to a predefined offset
+## Seek to a predefined offset
 
 You can start reading data from a specified offset. To start message consumption from a layer (topic) offset, move the message pointer to it. Once you seek to an offset, you cannot return to the initial offset, unless the initial offset is saved.
 
@@ -210,7 +210,7 @@ await streamLayerClient.seek(
 );
 ```
 
-## <a name="unsubscribe-streamlayerclient"></a>Delete a subscription to a layer
+## Delete a subscription to a layer
 
 You can delete a subscription to a layer (topic). This operation removes the subscription from the service.
 
