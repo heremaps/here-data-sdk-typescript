@@ -3,9 +3,16 @@
 HERE Data SDK for TypeScript includes the core components to access HERE APIs from any web-based application.
 Read this topic to learn how to authenticate to and start working with the HERE platform using the HERE Data SDK for TypeScript.
 
+## Get a HERE account
+
+Obtain access to the HERE platform through your organization administrator's invitation or [contact us](https://www.here.com/contact?intref=dev_docum) to get started.
+
+* If your company has already established a HERE platform organization, contact your organization admin who can invite you to join the organization.
+* If your company hasn’t established a HERE platform organization yet, [contact us](https://www.here.com/contact?intref=dev_docum).
+
+
 ## Prerequisites
 
-- HERE platform account. Follow [this link](https://platform.here.com/portal/sign-up) to create an account. 
 - Basic understanding of the core HERE platform concepts.
 - Basic TypeScript proficiency.
 
