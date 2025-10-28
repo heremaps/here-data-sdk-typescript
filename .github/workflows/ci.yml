@@ -11,7 +11,7 @@ on:
 jobs:
   psv-linux-build-test-codecov:
     name: PSV / Linux Build / Tests / Code coverage
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4
     - name: Use Node.js

@@ -47,8 +47,7 @@ npm run integration-test
 npm run functional-test
 
 # Test the generated bundles
-# FIXME: Tests are failing now with `Failed to launch the browser process!`
-# npm run http-server-testing-bundles & npm run test-generated-bundles
+npm run http-server-testing-bundles & npm run test-generated-bundles
 
 # Generate and upload codecov
 npm run codecov
