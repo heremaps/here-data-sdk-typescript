@@ -1,6 +1,6 @@
 #!/bin/bash -e
 #
-# Copyright (C) 2019-2022 HERE Europe B.V.
+# Copyright (C) 2019-2026 HERE Europe B.V.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,40 +22,39 @@
 
 echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ~/.npmrc
 
-yarn
+npm ci
 
 while [[ $# -gt 0 ]]; do
     key="$1"
     case "$key" in
         -fetch)
         # olp-sdk-fetch publish
-        cd @here/olp-sdk-fetch && npm install && npm publish && cd -
+        npm publish -w @here/olp-sdk-fetch
         ;;
         -core)
         # olp-sdk-core publish
-        cd @here/olp-sdk-core && npm install && npm publish && cd -
+        npm publish -w @here/olp-sdk-core
         ;;
         -api)
         # olp-sdk-dataservice-api publish
-        cd @here/olp-sdk-dataservice-api && npm install && npm publish && cd -
+        npm publish -w @here/olp-sdk-dataservice-api
         ;;
         -auth)
         # olp-sdk-authentication publish
-        cd @here/olp-sdk-authentication && npm install && npm publish && cd -
+        npm publish -w @here/olp-sdk-authentication
         ;;
         -read)
         # olp-sdk-dataservice-read publish
-        cd @here/olp-sdk-dataservice-read && npm install && npm publish && cd -
+        npm publish -w @here/olp-sdk-dataservice-read
         ;;
         -write)
         # olp-sdk-dataservice-write publish
-        cd @here/olp-sdk-dataservice-write && npm install && npm publish && cd -
+        npm publish -w @here/olp-sdk-dataservice-write
         ;;
         -verify)
         # verify all published
         echo 'Publish verification...'
-        yarn
-        yarn bootstrap
+        npm ci
         npm run --silent build
         npm run --silent http-server-testing-bundles & npm run --silent test-published-bundles
         echo 'Publish verification done! '

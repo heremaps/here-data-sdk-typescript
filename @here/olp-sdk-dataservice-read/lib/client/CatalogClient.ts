@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,11 +25,9 @@ import {
     RequestFactory
 } from "@here/olp-sdk-core";
 import { ConfigApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
-import {
-    CatalogRequest,
-    CatalogVersionRequest,
-    LayerVersionsRequest
-} from "@here/olp-sdk-dataservice-read";
+import { CatalogRequest } from "./CatalogRequest";
+import { CatalogVersionRequest } from "./CatalogVersionRequest";
+import { LayerVersionsRequest } from "./LayerVersionsRequest";
 
 /**
  * Interacts with the `DataStore` catalog.
@@ -45,7 +43,10 @@ export class CatalogClient {
      * @param settings The [[OlpClientSettings]] instance.
      * @return The [[CatalogClient]] instance.
      */
-    constructor(catalogHrn: HRN, readonly settings: OlpClientSettings) {
+    constructor(
+        catalogHrn: HRN,
+        readonly settings: OlpClientSettings
+    ) {
         this.hrn = catalogHrn.toString();
     }
 
@@ -77,7 +78,7 @@ export class CatalogClient {
         return ConfigApi.getCatalog(builder, {
             catalogHrn: this.hrn,
             billingTag: request.getBillingTag()
-        }).catch(err => Promise.reject(err));
+        });
     }
 
     /**
@@ -96,11 +97,11 @@ export class CatalogClient {
             "metadata",
             HRN.fromString(this.hrn),
             abortSignal
-        ).catch(error => Promise.reject(error));
+        );
 
         const earliestVersion = await MetadataApi.minimumVersion(builder, {
             billingTag: request.getBillingTag()
-        }).catch(err => Promise.reject(err));
+        });
 
         return Promise.resolve(earliestVersion.version);
     }
@@ -125,7 +126,7 @@ export class CatalogClient {
             "metadata",
             HRN.fromString(this.hrn),
             abortSignal
-        ).catch(error => Promise.reject(error));
+        );
         let requestedCatalogVersion = request.getVersion();
 
         if (requestedCatalogVersion === undefined) {
@@ -136,7 +137,7 @@ export class CatalogClient {
             }
             requestedCatalogVersion = await this.getLatestVersion(
                 catalogVersionRequest
-            ).catch(error => Promise.reject(error));
+            );
         }
 
         if (requestedCatalogVersion === undefined) {
@@ -150,7 +151,7 @@ export class CatalogClient {
         const layerVersions = await MetadataApi.getLayerVersions(builder, {
             version: requestedCatalogVersion,
             billingTag: request.getBillingTag()
-        }).catch(async error => Promise.reject(new Error(error)));
+        }).catch(async (error) => Promise.reject(new Error(error)));
 
         return Promise.resolve(layerVersions.layerVersions);
     }
@@ -184,12 +185,12 @@ export class CatalogClient {
             "metadata",
             HRN.fromString(this.hrn),
             abortSignal
-        ).catch(error => Promise.reject(error));
+        );
 
         const latestVersion = await MetadataApi.latestVersion(builder, {
             startVersion,
             billingTag: request.getBillingTag()
-        }).catch(err => Promise.reject(err));
+        });
         return Promise.resolve(latestVersion.version);
     }
 
@@ -229,7 +230,7 @@ export class CatalogClient {
             "metadata",
             HRN.fromString(this.hrn),
             abortSignal
-        ).catch(error => Promise.reject(error));
+        );
         return MetadataApi.listVersions(builder, {
             startVersion,
             endVersion,

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,21 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import * as dataServiceRead from "../../lib";
 import { FetchOptions } from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("TileRequest", function() {
+describe("TileRequest", function () {
     const mockedQuadKey = {
         row: 1,
         column: 2,
@@ -40,12 +42,12 @@ describe("TileRequest", function() {
 
     const request = new dataServiceRead.TileRequest();
 
-    it("Should initialize", function() {
+    it("Should initialize", function () {
         assert.isDefined(request);
         expect(request).be.instanceOf(dataServiceRead.TileRequest);
     });
 
-    it("Should get parameters with chain", async function() {
+    it("Should get parameters with chain", async function () {
         request
             .withTileKey(mockedQuadKey)
             .withBillingTag(mockedBillingTag)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,272 +17,287 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { QueryApi } from "@here/olp-sdk-dataservice-api";
 import {
-  Index,
-  ParentQuad,
-  Partition,
-  Partitions,
-  SubQuad
+    Index,
+    ParentQuad,
+    Partition,
+    Partitions,
+    SubQuad
 } from "@here/olp-sdk-dataservice-api/lib/query-api";
 import { mockedRequestBuilder } from "./MockedRequestBuilder";
 
-chai.use(sinonChai);
+describe("QueryApi", function () {
+    it("Index with all required params", function () {
+        const params: Index = {};
 
-const assert = chai.assert;
-const expect = chai.expect;
+        assert.isDefined(params);
+    });
 
-describe("QueryApi", function() {
-  it("Index with all required params", function() {
-    const params: Index = {};
+    it("Index with all required and optional params", function () {
+        const params: Index = {
+            parentQuads: [
+                {
+                    additionalMetadata: "test",
+                    checksum: "test",
+                    compressedDataSize: 1,
+                    dataHandle: "test",
+                    dataSize: 1,
+                    partition: "test",
+                    version: 1
+                }
+            ],
+            subQuads: [
+                {
+                    additionalMetadata: "test",
+                    checksum: "test",
+                    compressedDataSize: 1,
+                    dataHandle: "test",
+                    dataSize: 1,
+                    subQuadKey: "test",
+                    version: 1
+                }
+            ],
+            status: 1,
+            title: "test"
+        };
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("Index with all required and optional params", function() {
-    const params: Index = {
-      parentQuads: [
-        {
-          additionalMetadata: "test",
-          checksum: "test",
-          compressedDataSize: 1,
-          dataHandle: "test",
-          dataSize: 1,
-          partition: "test",
-          version: 1
-        }
-      ],
-      subQuads: [
-        {
-          additionalMetadata: "test",
-          checksum: "test",
-          compressedDataSize: 1,
-          dataHandle: "test",
-          dataSize: 1,
-          subQuadKey: "test",
-          version: 1
-        }
-      ],
-      status: 1,
-      title: "test"
-    };
+    it("ParentQuad with all required params", function () {
+        const params: ParentQuad = {
+            dataHandle: "test",
+            partition: "test",
+            version: 1
+        };
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("ParentQuad with all required params", function() {
-    const params: ParentQuad = {
-      dataHandle: "test",
-      partition: "test",
-      version: 1
-    };
+    it("ParentQuad with all required and optional params", function () {
+        const params: ParentQuad = {
+            additionalMetadata: "test",
+            checksum: "test",
+            compressedDataSize: 1,
+            dataHandle: "test",
+            dataSize: 1,
+            partition: "test",
+            version: 1
+        };
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("ParentQuad with all required and optional params", function() {
-    const params: ParentQuad = {
-      additionalMetadata: "test",
-      checksum: "test",
-      compressedDataSize: 1,
-      dataHandle: "test",
-      dataSize: 1,
-      partition: "test",
-      version: 1
-    };
+    it("Partition with all required params", function () {
+        const params: Partition = {
+            partition: "test",
+            version: 1
+        };
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("Partition with all required params", function() {
-    const params: Partition = {
-      partition: "test",
-      version: 1
-    };
+    it("Partition with all required and optional params", function () {
+        const params: Partition = {
+            checksum: "test",
+            compressedDataSize: 1,
+            dataHandle: "test",
+            dataSize: 1,
+            partition: "test",
+            version: 1
+        };
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("Partition with all required and optional params", function() {
-    const params: Partition = {
-      checksum: "test",
-      compressedDataSize: 1,
-      dataHandle: "test",
-      dataSize: 1,
-      partition: "test",
-      version: 1
-    };
+    it("Partitions with all required params", function () {
+        const params: Partitions = {};
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("Partitions with all required params", function() {
-    const params: Partitions = {};
+    it("Partitions with all required and optional params", function () {
+        const params: Partitions = {
+            partitions: [
+                {
+                    checksum: "test",
+                    compressedDataSize: 1,
+                    dataHandle: "test",
+                    dataSize: 1,
+                    partition: "test",
+                    version: 1
+                }
+            ],
+            status: 1,
+            title: "test"
+        };
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("Partitions with all required and optional params", function() {
-    const params: Partitions = {
-      partitions: [
-        {
-          checksum: "test",
-          compressedDataSize: 1,
-          dataHandle: "test",
-          dataSize: 1,
-          partition: "test",
-          version: 1
-        }
-      ],
-      status: 1,
-      title: "test"
-    };
+    it("SubQuad with all required params", function () {
+        const params: SubQuad = {
+            dataHandle: "test",
+            subQuadKey: "test",
+            version: 1
+        };
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("SubQuad with all required params", function() {
-    const params: SubQuad = {
-      dataHandle: "test",
-      subQuadKey: "test",
-      version: 1
-    };
+    it("SubQuad with all required and optional params", function () {
+        const params: SubQuad = {
+            additionalMetadata: "test",
+            checksum: "test",
+            compressedDataSize: 1,
+            dataHandle: "test",
+            dataSize: 1,
+            subQuadKey: "test",
+            version: 1
+        };
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("SubQuad with all required and optional params", function() {
-    const params: SubQuad = {
-      additionalMetadata: "test",
-      checksum: "test",
-      compressedDataSize: 1,
-      dataHandle: "test",
-      dataSize: 1,
-      subQuadKey: "test",
-      version: 1
-    };
+    it("Test getChangesById method with all required params", async function () {
+        const params = {
+            layerId: "test",
+            partition: ["test"]
+        };
 
-    assert.isDefined(params);
-  });
+        const result = await QueryApi.getChangesById(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test getChangesById method with all required params", async function() {
-    const params = {
-      layerId: "test",
-      partition: ["test"]
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await QueryApi.getChangesById(mockedRequestBuilder, params);
+    it("Test getChangesById method with all required and optional params", async function () {
+        const params = {
+            layerId: "test",
+            partition: ["test"],
+            startVersion: "test",
+            endVersion: "test",
+            sinceTime: 1,
+            additionalFields: ["test"],
+            billingTag: "test"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await QueryApi.getChangesById(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test getChangesById method with all required and optional params", async function() {
-    const params = {
-      layerId: "test",
-      partition: ["test"],
-      startVersion: "test",
-      endVersion: "test",
-      sinceTime: 1,
-      additionalFields: ["test"],
-      billingTag: "test"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await QueryApi.getChangesById(mockedRequestBuilder, params);
+    it("Test getPartitionsById method with all required params", async function () {
+        const params = {
+            layerId: "test",
+            partition: ["test"]
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await QueryApi.getPartitionsById(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test getPartitionsById method with all required params", async function() {
-    const params = {
-      layerId: "test",
-      partition: ["test"]
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await QueryApi.getPartitionsById(
-      mockedRequestBuilder,
-      params
-    );
+    it("Test getPartitionsById method with all required and optional params", async function () {
+        const params = {
+            layerId: "test",
+            partition: ["test"],
+            version: "test",
+            additionalFields: ["test"],
+            billingTag: "test"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await QueryApi.getPartitionsById(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test getPartitionsById method with all required and optional params", async function() {
-    const params = {
-      layerId: "test",
-      partition: ["test"],
-      version: "test",
-      additionalFields: ["test"],
-      billingTag: "test"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await QueryApi.getPartitionsById(
-      mockedRequestBuilder,
-      params
-    );
+    it("Test quadTreeIndex method with all required params", async function () {
+        const params = {
+            layerId: "test",
+            version: 1,
+            quadKey: "test",
+            depth: 1
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await QueryApi.quadTreeIndex(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test quadTreeIndex method with all required params", async function() {
-    const params = {
-      layerId: "test",
-      version: 1,
-      quadKey: "test",
-      depth: 1
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await QueryApi.quadTreeIndex(mockedRequestBuilder, params);
+    it("Test quadTreeIndex method with all required and optional params", async function () {
+        const params = {
+            layerId: "test",
+            version: 1,
+            quadKey: "test",
+            depth: 1,
+            additionalFields: ["test"],
+            billingTag: "test"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await QueryApi.quadTreeIndex(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test quadTreeIndex method with all required and optional params", async function() {
-    const params = {
-      layerId: "test",
-      version: 1,
-      quadKey: "test",
-      depth: 1,
-      additionalFields: ["test"],
-      billingTag: "test"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await QueryApi.quadTreeIndex(mockedRequestBuilder, params);
+    it("Test quadTreeIndexVolatile method with all required params", async function () {
+        const params = {
+            layerId: "test",
+            quadKey: "test",
+            depth: 1
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await QueryApi.quadTreeIndexVolatile(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test quadTreeIndexVolatile method with all required params", async function() {
-    const params = {
-      layerId: "test",
-      quadKey: "test",
-      depth: 1
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await QueryApi.quadTreeIndexVolatile(
-      mockedRequestBuilder,
-      params
-    );
+    it("Test quadTreeIndexVolatile method with all required and optional params", async function () {
+        const params = {
+            layerId: "test",
+            quadKey: "test",
+            depth: 1,
+            additionalFields: ["test"],
+            billingTag: "test"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await QueryApi.quadTreeIndexVolatile(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test quadTreeIndexVolatile method with all required and optional params", async function() {
-    const params = {
-      layerId: "test",
-      quadKey: "test",
-      depth: 1,
-      additionalFields: ["test"],
-      billingTag: "test"
-    };
-
-    const result = await QueryApi.quadTreeIndexVolatile(
-      mockedRequestBuilder,
-      params
-    );
-
-    expect(result).to.be.equal("success");
-  });
+        expect(result).to.be.equal("success");
+    });
 });

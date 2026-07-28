@@ -67,17 +67,14 @@ To learn how to use the Data SDK, see the <a href="https://www.here.com/docs/bun
 Data SDK for TypeScript has the following dependencies:
 
 - npm 10+ (for installation instructions, see <a href="https://www.npmjs.com/" target="_blank">npm</a>)
-- Node.js 18+ (for installation instructions, see <a href="http://nodejs.org" target="_blank">Node.js</a>)
-
-> #### Note 
-> As an alternative to npm, you can use Yarn. For installation instructions, see [Yarn documentation](https://yarnpkg.com/getting-started/install).
+- Node.js 24+ (for installation instructions, see <a href="http://nodejs.org" target="_blank">Node.js</a>)
 
 #### Download dependencies
 
-To bootstrap the packages in the current Lerna repository, install all interdependent packages, and link any cross-dependencies, run the following command:
+The repository uses npm workspaces. To install all interdependent packages and link any cross-dependencies, run the following command in the repository root:
 
 ```sh
-yarn install && yarn bootstrap
+npm install
 ```
 
 ### Build the SDK

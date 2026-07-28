@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import {
     HttpError,
     SENT_WITH_PARAM
 } from "@here/olp-sdk-core";
+import { buildErrorMessage } from "./buildErrorMessage";
 
 /**
  * Platform-specific parts of signing a request using HMAC algorithms.
@@ -97,7 +98,7 @@ async function signLatin1(
 function generateUid(randomValues: Uint8Array): string {
     const pad2 = (str: string) => (str.length === 1 ? "0" + str : str);
     return randomValues.reduce(
-        (result, byte) => (result += pad2(byte.toString(UID_SIZE))),
+        (result, byte) => result + pad2(byte.toString(UID_SIZE)),
         ""
     );
 }
@@ -175,7 +176,7 @@ export async function requestToken_common(
 
     if (!request.ok) {
         return Promise.reject(
-            new HttpError(request.status, request.statusText)
+            new HttpError(request.status, await buildErrorMessage(request))
         );
     }
 

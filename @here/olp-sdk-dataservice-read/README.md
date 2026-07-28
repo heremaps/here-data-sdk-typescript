@@ -21,8 +21,8 @@ Here is an overview of the top-level files of the repository:
 
 The following NPM packages are required to build/test the library:
 
-    - node: >= 10.0.0
-    - npm: >= 6.0.0
+    - node: >= 24.0.0
+    - npm: >= 10.0.0
 
 ### Build
 
@@ -123,6 +123,6 @@ Add minified JavaScript files to your `html` and create an object of userAuth an
 
 ## LICENSE
 
-Copyright (C) 2019-2023 HERE Europe B.V.
+Copyright (C) 2019-2026 HERE Europe B.V.
 
 For license details, see the [LICENSE](LICENSE).

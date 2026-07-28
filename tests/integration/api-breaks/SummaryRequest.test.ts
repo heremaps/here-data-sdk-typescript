@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,76 +16,79 @@
  * SPDX-License-Identifier: Apache-2.0
  * License-Filename: LICENSE
  */
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
 
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { SummaryRequest } from "@here/olp-sdk-dataservice-read";
 import { HRN } from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
+describe("SummaryRequest", function () {
+    const testCatalogHrn = HRN.fromString("hrn:here:data:::mocked-hrn");
 
-const assert = chai.assert;
-const expect = chai.expect;
+    it("Shoud be initialized with arguments", async function () {
+        const client = new SummaryRequest();
+        assert.isDefined(client);
 
-describe("SummaryRequest", function() {
-  const testCatalogHrn = HRN.fromString("hrn:here:data:::mocked-hrn");
+        expect(client).to.be.instanceOf(SummaryRequest);
+        assert.isDefined(client.getLayerId);
+        assert.isDefined(client.getBillingTag);
+        assert.isDefined(client.getCatalogHrn);
+        assert.isDefined(client.withBillingTag);
+        assert.isDefined(client.withCatalogHrn);
+        assert.isDefined(client.withLayerId);
+    });
 
-  it("Shoud be initialized with arguments", async function() {
-    const client = new SummaryRequest();
-    assert.isDefined(client);
+    it("Test withLayerId method with layerId", async function () {
+        const client = new SummaryRequest();
 
-    expect(client).to.be.instanceOf(SummaryRequest);
-    assert.isDefined(client.getLayerId);
-    assert.isDefined(client.getBillingTag);
-    assert.isDefined(client.getCatalogHrn);
-    assert.isDefined(client.withBillingTag);
-    assert.isDefined(client.withCatalogHrn);
-    assert.isDefined(client.withLayerId);
-  });
+        const response = await client.withLayerId("test");
+        assert.isDefined(response);
+    });
 
-  it("Test withLayerId method with layerId", async function() {
-    const client = new SummaryRequest();
+    it("Test getLayerId method without params", async function () {
+        const client = new SummaryRequest();
+        await client.withLayerId("test");
 
-    const response = await client.withLayerId("test");
-    assert.isDefined(response);
-  });
+        const response = await client.getLayerId();
+        assert.isDefined(response);
+    });
 
-  it("Test getLayerId method without params", async function() {
-    const client = new SummaryRequest();
-    await client.withLayerId("test");
+    it("Test withBillingTag method with tag", async function () {
+        const client = new SummaryRequest();
 
-    const response = await client.getLayerId();
-    assert.isDefined(response);
-  });
+        const response = await client.withBillingTag("test");
+        assert.isDefined(response);
+    });
 
-  it("Test withBillingTag method with tag", async function() {
-    const client = new SummaryRequest();
+    it("Test getBillingTag method without params", async function () {
+        const client = new SummaryRequest();
+        await client.withBillingTag("test");
 
-    const response = await client.withBillingTag("test");
-    assert.isDefined(response);
-  });
+        const response = await client.getBillingTag();
+        assert.isDefined(response);
+    });
 
-  it("Test getBillingTag method without params", async function() {
-    const client = new SummaryRequest();
-    await client.withBillingTag("test");
+    it("Test withCatalogHrn method with hrn", async function () {
+        const client = new SummaryRequest();
 
-    const response = await client.getBillingTag();
-    assert.isDefined(response);
-  });
+        const response = await client.withCatalogHrn(testCatalogHrn);
+        assert.isDefined(response);
+    });
 
-  it("Test withCatalogHrn method with hrn", async function() {
-    const client = new SummaryRequest();
+    it("Test getCatalogHrn method without params", async function () {
+        const client = new SummaryRequest();
+        await client.withCatalogHrn(testCatalogHrn);
 
-    const response = await client.withCatalogHrn(testCatalogHrn);
-    assert.isDefined(response);
-  });
-
-  it("Test getCatalogHrn method without params", async function() {
-    const client = new SummaryRequest();
-    await client.withCatalogHrn(testCatalogHrn);
-
-    const response = await client.getCatalogHrn();
-    assert.isDefined(response);
-  });
+        const response = await client.getCatalogHrn();
+        assert.isDefined(response);
+    });
 });

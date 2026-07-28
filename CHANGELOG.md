@@ -1,3 +1,12 @@
+## v3.0.0 (2026)
+
+- Discontinued support of Node.js versions less than 24.x.
+- Migrated the monorepo from Lerna and Yarn workspaces to npm workspaces.
+- Replaced the deprecated TSLint with ESLint (`typescript-eslint`).
+- Migrated the test suites from Mocha, Chai and Sinon to Vitest.
+- Upgraded the build tooling to TypeScript 5, webpack 5, Prettier 3 and Husky 9.
+- Removed unused and deprecated development dependencies to reduce the security surface.
+
 ## v2.0.0 (10/05/2024)
 
 - Discontinued support of Node.js versions less than 18.x.

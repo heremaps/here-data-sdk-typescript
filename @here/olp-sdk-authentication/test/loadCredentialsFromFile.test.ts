@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,21 @@
  * License-Filename: LICENSE
  */
 
-import { assert } from "chai";
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { loadCredentialsFromFile } from "../lib/loadCredentialsFromFile";
 
-describe("loadCredentialsFromFile", function() {
-    it("should return correct AuthCredentials", function() {
+describe("loadCredentialsFromFile", function () {
+    it("should return correct AuthCredentials", function () {
         const credentials = loadCredentialsFromFile(
             "./test/test-credentials.properties"
         );
@@ -33,14 +43,22 @@ describe("loadCredentialsFromFile", function() {
         );
     });
 
-    it("should throw an error", function() {
-        try {
-            loadCredentialsFromFile("./test/test-error-credentials.properties");
-        } catch (error) {
-            assert.strictEqual(
-                error.message,
-                "Error parsing value here.access.key.id from configuration"
-            );
-        }
+    it("should skip what is not a pair and keep separators inside a value", function () {
+        // The fixture also holds a line without any separator, which is not a
+        // property and must not stop the rest of the file from being read.
+        const credentials = loadCredentialsFromFile(
+            "./test/test-credentials-comments.properties"
+        );
+
+        assert.strictEqual(credentials.accessKeyId, "Tt7wZRTAar");
+        // Only the first `=` separates the key from the value, so the base64
+        // padding of the secret has to survive parsing.
+        assert.strictEqual(credentials.accessKeySecret, "abc123/xyz+==");
+    });
+
+    it("should throw an error", function () {
+        expect(() =>
+            loadCredentialsFromFile("./test/test-error-credentials.properties")
+        ).toThrow("Error parsing value here.access.key.id from configuration");
     });
 });

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,73 +17,77 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { LayerVersionsRequest } from "@here/olp-sdk-dataservice-read";
 
-chai.use(sinonChai);
+describe("LayerVersionsRequest", function () {
+    class LayerVersionsRequestTest extends LayerVersionsRequest {
+        getVersion(): number {
+            return 5;
+        }
 
-const assert = chai.assert;
-const expect = chai.expect;
+        withVersion(version: number): LayerVersionsRequest {
+            return this;
+        }
 
-describe("LayerVersionsRequest", function() {
-  class LayerVersionsRequestTest extends LayerVersionsRequest {
-    getVersion(): number {
-      return 5;
+        getBillingTag(): string {
+            return "billing-tag";
+        }
+
+        withBillingTag(tag: string): LayerVersionsRequest {
+            return this;
+        }
     }
 
-    withVersion(version: number): LayerVersionsRequest {
-      return this;
-    }
+    it("Shoud be initialized", async function () {
+        const request = new LayerVersionsRequestTest();
+        assert.isDefined(request);
+        expect(request).to.be.instanceOf(LayerVersionsRequest);
 
-    getBillingTag(): string {
-      return "billing-tag";
-    }
+        assert.isFunction(request.withVersion);
+        assert.isFunction(request.getVersion);
 
-    withBillingTag(tag: string): LayerVersionsRequest {
-      return this;
-    }
-  }
+        assert.isFunction(request.withBillingTag);
+        assert.isFunction(request.getBillingTag);
+    });
 
-  it("Shoud be initialized", async function() {
-    const request = new LayerVersionsRequestTest();
-    assert.isDefined(request);
-    expect(request).to.be.instanceOf(LayerVersionsRequest);
+    it("Test withVersion method with version", async function () {
+        const request = new LayerVersionsRequestTest();
 
-    assert.isFunction(request.withVersion);
-    assert.isFunction(request.getVersion);
+        const response = request.withVersion(11);
+        assert.isDefined(response);
+    });
 
-    assert.isFunction(request.withBillingTag);
-    assert.isFunction(request.getBillingTag);
-  });
+    it("Test getVersion method without params", async function () {
+        const request = new LayerVersionsRequestTest();
+        request.withVersion(11);
 
-  it("Test withVersion method with version", async function() {
-    const request = new LayerVersionsRequestTest();
+        const response = request.getVersion();
+        assert.isDefined(response);
+    });
 
-    const response = request.withVersion(11);
-    assert.isDefined(response);
-  });
+    it("Test withBillingTag method with tag", async function () {
+        const request = new LayerVersionsRequestTest();
 
-  it("Test getVersion method without params", async function() {
-    const request = new LayerVersionsRequestTest();
-    request.withVersion(11);
+        const response = request.withBillingTag("test-tag");
+        assert.isDefined(response);
+    });
 
-    const response = request.getVersion();
-    assert.isDefined(response);
-  });
+    it("Test getBillingTag method without params", async function () {
+        const request = new LayerVersionsRequestTest();
+        request.withBillingTag("test-tag");
 
-  it("Test withBillingTag method with tag", async function() {
-    const request = new LayerVersionsRequestTest();
-
-    const response = request.withBillingTag("test-tag");
-    assert.isDefined(response);
-  });
-
-  it("Test getBillingTag method without params", async function() {
-    const request = new LayerVersionsRequestTest();
-    request.withBillingTag("test-tag");
-
-    const response = request.getBillingTag();
-    assert.isDefined(response);
-  });
+        const response = request.getBillingTag();
+        assert.isDefined(response);
+    });
 });

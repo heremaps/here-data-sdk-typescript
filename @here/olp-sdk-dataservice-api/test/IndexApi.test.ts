@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,22 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { IndexApi } from "@here/olp-sdk-dataservice-api";
 import { RequestBuilder, UrlBuilder } from "../lib/RequestBuilder";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("IndexApi", function() {
-    it("Should performQuery provide data", async function() {
+describe("IndexApi", function () {
+    it("Should performQuery provide data", async function () {
         const mockedResponse = {
             data: [
                 {
@@ -58,7 +61,7 @@ describe("IndexApi", function() {
             }
         };
         const response = await IndexApi.performQuery(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
         assert.isDefined(response.data);
@@ -66,7 +69,7 @@ describe("IndexApi", function() {
         expect(response).to.be.equal(mockedResponse);
     });
 
-    it("Should performUpdate provide data", async function() {
+    it("Should performUpdate provide data", async function () {
         const params = {
             layerID: "mocked-id",
             request: {}
@@ -82,13 +85,13 @@ describe("IndexApi", function() {
             }
         };
         const result = await IndexApi.performUpdate(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
         expect(result).to.be.equal("success");
     });
 
-    it("Should insertIndexes provide data", async function() {
+    it("Should insertIndexes provide data", async function () {
         const params = {
             layerID: "mocked-id",
             indexes: [{ id: "test-index" }]
@@ -105,7 +108,7 @@ describe("IndexApi", function() {
             }
         };
         const result = await IndexApi.insertIndexes(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
         expect(result).to.be.equal("success");

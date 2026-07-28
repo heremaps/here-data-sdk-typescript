@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,77 +17,81 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { SchemaRequest } from "@here/olp-sdk-dataservice-read";
 import { ArtifactApi } from "@here/olp-sdk-dataservice-api";
 
-chai.use(sinonChai);
+describe("SchemaRequest", function () {
+    class SchemaRequestTest extends SchemaRequest {
+        getVariant(): ArtifactApi.Variant {
+            return {
+                id: "test",
+                url: "test"
+            };
+        }
 
-const assert = chai.assert;
-const expect = chai.expect;
+        withVariant(variant: ArtifactApi.Variant): SchemaRequest {
+            return this;
+        }
 
-describe("SchemaRequest", function() {
-  class SchemaRequestTest extends SchemaRequest {
-    getVariant(): ArtifactApi.Variant {
-      return {
-        id: "test",
-        url: "test"
-      };
+        withBillingTag(tag: string): SchemaRequest {
+            return this;
+        }
+
+        getBillingTag(): string {
+            return "billing-tag";
+        }
     }
 
-    withVariant(variant: ArtifactApi.Variant): SchemaRequest {
-      return this;
-    }
+    it("Shoud be initialized", async function () {
+        const request = new SchemaRequest();
+        assert.isDefined(request);
+        expect(request).to.be.instanceOf(SchemaRequest);
 
-    withBillingTag(tag: string): SchemaRequest {
-      return this;
-    }
-
-    getBillingTag(): string {
-      return "billing-tag";
-    }
-  }
-
-  it("Shoud be initialized", async function() {
-    const request = new SchemaRequest();
-    assert.isDefined(request);
-    expect(request).to.be.instanceOf(SchemaRequest);
-
-    assert.isFunction(request.withVariant);
-    assert.isFunction(request.getVariant);
-    assert.isFunction(request.withBillingTag);
-    assert.isFunction(request.getBillingTag);
-  });
-
-  it("Test withVariant method with variant", async function() {
-    const request = new SchemaRequestTest();
-
-    const response = request.withVariant({
-      id: "test",
-      url: "test"
+        assert.isFunction(request.withVariant);
+        assert.isFunction(request.getVariant);
+        assert.isFunction(request.withBillingTag);
+        assert.isFunction(request.getBillingTag);
     });
-    assert.isDefined(response);
-  });
 
-  it("Test getVariant method without params", async function() {
-    const request = new SchemaRequestTest();
+    it("Test withVariant method with variant", async function () {
+        const request = new SchemaRequestTest();
 
-    const response = request.getVariant();
-    assert.isDefined(response);
-  });
+        const response = request.withVariant({
+            id: "test",
+            url: "test"
+        });
+        assert.isDefined(response);
+    });
 
-  it("Test withBillingTag method with tag", async function() {
-    const request = new SchemaRequestTest();
+    it("Test getVariant method without params", async function () {
+        const request = new SchemaRequestTest();
 
-    const response = request.withBillingTag("test-tag");
-    assert.isDefined(response);
-  });
+        const response = request.getVariant();
+        assert.isDefined(response);
+    });
 
-  it("Test getBillingTag method without params", async function() {
-    const request = new SchemaRequestTest();
+    it("Test withBillingTag method with tag", async function () {
+        const request = new SchemaRequestTest();
 
-    const response = request.getBillingTag();
-    assert.isDefined(response);
-  });
+        const response = request.withBillingTag("test-tag");
+        assert.isDefined(response);
+    });
+
+    it("Test getBillingTag method without params", async function () {
+        const request = new SchemaRequestTest();
+
+        const response = request.getBillingTag();
+        assert.isDefined(response);
+    });
 });

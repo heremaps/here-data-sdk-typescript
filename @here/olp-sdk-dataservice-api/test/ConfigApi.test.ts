@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,22 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { ConfigApi } from "@here/olp-sdk-dataservice-api";
 import { RequestBuilder, UrlBuilder } from "../lib/RequestBuilder";
 
-chai.use(sinonChai);
-
-const expect = chai.expect;
-
-describe("ConfigApi", function() {
-    it("catalogExists", async function() {
+describe("ConfigApi", function () {
+    it("catalogExists", async function () {
         const params = {
             catalogHrn: "mocked-catalogHrn",
             billingTag: "mocked-billingTag"
@@ -44,14 +48,14 @@ describe("ConfigApi", function() {
             }
         };
         const result = await ConfigApi.catalogExists(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("createCatalog", async function() {
+    it("createCatalog", async function () {
         const params = {
             body: "mocked-body" as any,
             billingTag: "mocked-billingTag"
@@ -68,14 +72,14 @@ describe("ConfigApi", function() {
             }
         };
         const result = await ConfigApi.createCatalog(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("deleteCatalog", async function() {
+    it("deleteCatalog", async function () {
         const params = {
             catalogHrn: "mocked-catalogHrn",
             billingTag: "mocked-billingTag"
@@ -91,14 +95,14 @@ describe("ConfigApi", function() {
             }
         };
         const result = await ConfigApi.deleteCatalog(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("deleteLayer", async function() {
+    it("deleteLayer", async function () {
         const params = {
             catalogHrn: "mocked-catalogHrn",
             layerId: "mocked-layerId"
@@ -114,14 +118,14 @@ describe("ConfigApi", function() {
             }
         };
         const result = await ConfigApi.deleteLayer(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("disableAutomaticVersionDeletion", async function() {
+    it("disableAutomaticVersionDeletion", async function () {
         const params = {
             catalogHrn: "mocked-catalogHrn"
         };
@@ -136,14 +140,14 @@ describe("ConfigApi", function() {
             }
         };
         const result = await ConfigApi.disableAutomaticVersionDeletion(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("getCatalog", async function() {
+    it("getCatalog", async function () {
         const params = {
             catalogHrn: "mocked-catalogHrn",
             billingTag: "mocked-billingTag"
@@ -159,14 +163,14 @@ describe("ConfigApi", function() {
             }
         };
         const result = await ConfigApi.getCatalog(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("getCatalogStatus", async function() {
+    it("getCatalogStatus", async function () {
         const params = {
             token: "mocked-token",
             billingTag: "mocked-billingTag"
@@ -182,14 +186,14 @@ describe("ConfigApi", function() {
             }
         };
         const result = await ConfigApi.getCatalogStatus(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("getCatalogs", async function() {
+    it("getCatalogs", async function () {
         const params = {
             billingTag: "mocked-billingTag" as any,
             verbose: "mocked-verbose" as any,
@@ -218,14 +222,14 @@ describe("ConfigApi", function() {
             }
         };
         const result = await ConfigApi.getCatalogs(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("patchCatalog", async function() {
+    it("patchCatalog", async function () {
         const params = {
             catalogHrn: "mocked-catalogHrn",
             body: "mocked-body" as any
@@ -245,14 +249,14 @@ describe("ConfigApi", function() {
             }
         };
         const result = await ConfigApi.patchCatalog(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("patchLayer", async function() {
+    it("patchLayer", async function () {
         const params = {
             catalogHrn: "mocked-catalogHrn",
             layerId: "mocked-layerId",
@@ -273,14 +277,14 @@ describe("ConfigApi", function() {
             }
         };
         const result = await ConfigApi.patchLayer(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("updateCatalog", async function() {
+    it("updateCatalog", async function () {
         const params = {
             catalogHrn: "mocked-catalogHrn",
             body: "mocked-body" as any,
@@ -301,7 +305,7 @@ describe("ConfigApi", function() {
             }
         };
         const result = await ConfigApi.updateCatalog(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 

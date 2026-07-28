@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,223 +17,226 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { CoverageApi } from "@here/olp-sdk-dataservice-api";
 import {
-  BoundingBox,
-  CatalogAdminAreas,
-  LayerBoundingBox,
-  LayerLevelSummary,
-  LayerSummary
+    BoundingBox,
+    CatalogAdminAreas,
+    LayerBoundingBox,
+    LayerLevelSummary,
+    LayerSummary
 } from "@here/olp-sdk-dataservice-api/lib/coverage-api";
 import { mockedRequestBuilder } from "./MockedRequestBuilder";
 
-chai.use(sinonChai);
+describe("CoverageApi", function () {
+    it("BoundingBox with all required params", function () {
+        const params: BoundingBox = {};
 
-const assert = chai.assert;
-const expect = chai.expect;
+        assert.isDefined(params);
+    });
 
-describe("CoverageApi", function() {
-  it("BoundingBox with all required params", function() {
-    const params: BoundingBox = {};
+    it("BoundingBox with all optional params", function () {
+        const params: BoundingBox = {
+            east: "test",
+            north: "test",
+            south: "test",
+            west: "test"
+        };
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("BoundingBox with all optional params", function() {
-    const params: BoundingBox = {
-      east: "test",
-      north: "test",
-      south: "test",
-      west: "test"
-    };
+    it("CatalogAdminAreas with all required params", function () {
+        const params: CatalogAdminAreas = {};
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("CatalogAdminAreas with all required params", function() {
-    const params: CatalogAdminAreas = {};
+    it("CatalogAdminAreas with all optional params", function () {
+        const params: CatalogAdminAreas = {
+            cities: ["test"],
+            counties: ["test"],
+            countries: ["test"],
+            states: ["test"]
+        };
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("CatalogAdminAreas with all optional params", function() {
-    const params: CatalogAdminAreas = {
-      cities: ["test"],
-      counties: ["test"],
-      countries: ["test"],
-      states: ["test"]
-    };
-
-    assert.isDefined(params);
-  });
-
-  it("LayerBoundingBox  with all required params", function() {
-    const params: LayerBoundingBox = {
-      east: 1,
-      south: 1,
-      north: 1,
-      west: 1
-    };
-
-    assert.isDefined(params);
-  });
-
-  it("LayerLevelSummary with all required params", function() {
-    const params: LayerLevelSummary = {
-      boundingBox: {
-        east: 1,
-        south: 1,
-        north: 1,
-        west: 1
-      },
-      size: 1,
-      processedTimestamp: 1,
-      centroid: 1,
-      minPartitionSize: 1,
-      maxPartitionSize: 1,
-      version: 1,
-      totalPartitions: 1
-    };
-
-    assert.isDefined(params);
-  });
-
-  it("LayerSummary with all required params", function() {
-    const params: LayerSummary = {
-      catalogHRN: "test-hrn",
-      layer: "test",
-      levelSummary: {
-        1: {
-          boundingBox: {
+    it("LayerBoundingBox  with all required params", function () {
+        const params: LayerBoundingBox = {
             east: 1,
             south: 1,
             north: 1,
             west: 1
-          },
-          size: 1,
-          processedTimestamp: 1,
-          centroid: 1,
-          minPartitionSize: 1,
-          maxPartitionSize: 1,
-          version: 1,
-          totalPartitions: 1
-        }
-      }
-    };
+        };
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("Test getDataCoverageAdminAreas method with all required params", async function() {
-    const params = {
-      layerId: "mocked-layerId",
-      datalevel: "mocked-datalevel"
-    };
+    it("LayerLevelSummary with all required params", function () {
+        const params: LayerLevelSummary = {
+            boundingBox: {
+                east: 1,
+                south: 1,
+                north: 1,
+                west: 1
+            },
+            size: 1,
+            processedTimestamp: 1,
+            centroid: 1,
+            minPartitionSize: 1,
+            maxPartitionSize: 1,
+            version: 1,
+            totalPartitions: 1
+        };
 
-    const result = await CoverageApi.getDataCoverageAdminAreas(
-      mockedRequestBuilder,
-      params
-    );
+        assert.isDefined(params);
+    });
 
-    expect(result).to.be.equal("success");
-  });
+    it("LayerSummary with all required params", function () {
+        const params: LayerSummary = {
+            catalogHRN: "test-hrn",
+            layer: "test",
+            levelSummary: {
+                1: {
+                    boundingBox: {
+                        east: 1,
+                        south: 1,
+                        north: 1,
+                        west: 1
+                    },
+                    size: 1,
+                    processedTimestamp: 1,
+                    centroid: 1,
+                    minPartitionSize: 1,
+                    maxPartitionSize: 1,
+                    version: 1,
+                    totalPartitions: 1
+                }
+            }
+        };
 
-  it("Test getDataCoverageSizeMap method with all required params", async function() {
-    const params = {
-      layerId: "mocked-layerId"
-    };
+        assert.isDefined(params);
+    });
 
-    const result = await CoverageApi.getDataCoverageSizeMap(
-      mockedRequestBuilder,
-      params
-    );
+    it("Test getDataCoverageAdminAreas method with all required params", async function () {
+        const params = {
+            layerId: "mocked-layerId",
+            datalevel: "mocked-datalevel"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await CoverageApi.getDataCoverageAdminAreas(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test getDataCoverageSizeMap method with all required and optional params", async function() {
-    const params = {
-      layerId: "mocked-layerId",
-      datalevel: 12
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await CoverageApi.getDataCoverageSizeMap(
-      mockedRequestBuilder,
-      params
-    );
+    it("Test getDataCoverageSizeMap method with all required params", async function () {
+        const params = {
+            layerId: "mocked-layerId"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await CoverageApi.getDataCoverageSizeMap(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test getDataCoverageSummary method with all required params", async function() {
-    const params = {
-      layerId: "mocked-layerId"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await CoverageApi.getDataCoverageSummary(
-      mockedRequestBuilder,
-      params
-    );
+    it("Test getDataCoverageSizeMap method with all required and optional params", async function () {
+        const params = {
+            layerId: "mocked-layerId",
+            datalevel: 12
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await CoverageApi.getDataCoverageSizeMap(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test getDataCoverageTile method with all required params", async function() {
-    const params = {
-      layerId: "mocked-layerId"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await CoverageApi.getDataCoverageTile(
-      mockedRequestBuilder,
-      params
-    );
+    it("Test getDataCoverageSummary method with all required params", async function () {
+        const params = {
+            layerId: "mocked-layerId"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await CoverageApi.getDataCoverageSummary(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test getDataCoverageTile method with all required and optional params", async function() {
-    const params = {
-      layerId: "mocked-layerId",
-      datalevel: 12
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await CoverageApi.getDataCoverageTile(
-      mockedRequestBuilder,
-      params
-    );
+    it("Test getDataCoverageTile method with all required params", async function () {
+        const params = {
+            layerId: "mocked-layerId"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await CoverageApi.getDataCoverageTile(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test getDataCoverageTimeMap method with all required params", async function() {
-    const params = {
-      layerId: "mocked-layerId",
-      catalogHRN: "mocked-catalogHRN"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await CoverageApi.getDataCoverageTimeMap(
-      mockedRequestBuilder,
-      params
-    );
+    it("Test getDataCoverageTile method with all required and optional params", async function () {
+        const params = {
+            layerId: "mocked-layerId",
+            datalevel: 12
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await CoverageApi.getDataCoverageTile(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test getDataCoverageTimeMap method with all required and optional params", async function() {
-    const params = {
-      layerId: "mocked-layerId",
-      datalevel: 12,
-      catalogHRN: "mocked-catalogHRN"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await CoverageApi.getDataCoverageTimeMap(
-      mockedRequestBuilder,
-      params
-    );
+    it("Test getDataCoverageTimeMap method with all required params", async function () {
+        const params = {
+            layerId: "mocked-layerId",
+            catalogHRN: "mocked-catalogHRN"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await CoverageApi.getDataCoverageTimeMap(
+            mockedRequestBuilder,
+            params
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("Test getDataCoverageTimeMap method with all required and optional params", async function () {
+        const params = {
+            layerId: "mocked-layerId",
+            datalevel: 12,
+            catalogHRN: "mocked-catalogHRN"
+        };
+
+        const result = await CoverageApi.getDataCoverageTimeMap(
+            mockedRequestBuilder,
+            params
+        );
+
+        expect(result).to.be.equal("success");
+    });
 });

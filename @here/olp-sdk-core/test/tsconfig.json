@@ -1,6 +1,8 @@
 {
     "extends": "../tsconfig.json",
     "compilerOptions": {
-        "importHelpers": true
-    }
+        "importHelpers": true,
+        "noImplicitAny": false
+    },
+    "include": ["../lib/**/*.ts", "../index*.ts", "./**/*.ts"]
 }

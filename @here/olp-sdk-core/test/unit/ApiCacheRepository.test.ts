@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,20 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import * as lib from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("ApiCacheRepository", function() {
+describe("ApiCacheRepository", function () {
     let testCache = new lib.KeyValueCache();
     testCache.put("test-key", "test-value");
     let apiCacheRepository = new lib.ApiCacheRepository(testCache);
@@ -44,12 +47,12 @@ describe("ApiCacheRepository", function() {
     const testServiceVersion3 = "service-version3";
     const testServiceUrl3 = "service-url3";
 
-    it("Shoud be initialised", async function() {
+    it("Shoud be initialised", async function () {
         assert.isDefined(apiCacheRepository);
         expect(apiCacheRepository).be.instanceOf(lib.ApiCacheRepository);
     });
 
-    it("Method put should store a new key-value pair in the cache", async function() {
+    it("Method put should store a new key-value pair in the cache", async function () {
         const operationIsSuccessful = apiCacheRepository.put(
             testServiceApiName,
             testServiceVersion,
@@ -67,7 +70,7 @@ describe("ApiCacheRepository", function() {
         ).equal(testServiceUrl);
     });
 
-    it("Method get should return the base URL from the cache.", async function() {
+    it("Method get should return the base URL from the cache.", async function () {
         apiCacheRepository.put(
             testServiceApiName2,
             testServiceVersion2,

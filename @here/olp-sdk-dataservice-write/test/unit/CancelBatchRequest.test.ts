@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,24 +17,28 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { CancelBatchRequest } from "@here/olp-sdk-dataservice-write";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("CancelBatchRequest", function() {
-    it("Should initialize", function() {
+describe("CancelBatchRequest", function () {
+    it("Should initialize", function () {
         const request = new CancelBatchRequest();
 
         assert.isDefined(request);
         expect(request).be.instanceOf(CancelBatchRequest);
     });
 
-    it("Should set and get parameters", function() {
+    it("Should set and get parameters", function () {
         const mockedPublicationId = "publication-id";
         const mockedBillingTag = "mocked-billing-tag";
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2021 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,20 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { DataRequest } from "../../lib";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("DataRequest", function() {
+describe("DataRequest", function () {
     const billingTag = "billingTag";
     const mockedDataHandle = "43d76b9f-e934-40e5-9ce4-91d88a30f1c6";
     const mockedPartitionId = "123123123";
@@ -37,21 +40,19 @@ describe("DataRequest", function() {
         level: 42
     };
 
-    it("Should initialize", function() {
+    it("Should initialize", function () {
         const dataRequest = new DataRequest();
 
         assert.isDefined(dataRequest);
         expect(dataRequest).be.instanceOf(DataRequest);
     });
 
-    it("Should set parameters", function() {
+    it("Should set parameters", function () {
         const dataRequest = new DataRequest();
-        const dataRequestWithCatalogHrn = dataRequest.withDataHandle(
-            mockedDataHandle
-        );
-        const dataRequestWithLayerId = dataRequest.withPartitionId(
-            mockedPartitionId
-        );
+        const dataRequestWithCatalogHrn =
+            dataRequest.withDataHandle(mockedDataHandle);
+        const dataRequestWithLayerId =
+            dataRequest.withPartitionId(mockedPartitionId);
         const dataRequestWithBillTag = dataRequest.withBillingTag(billingTag);
 
         expect(dataRequestWithCatalogHrn.getDataHandle()).to.be.equal(
@@ -63,7 +64,7 @@ describe("DataRequest", function() {
         expect(dataRequestWithBillTag.getBillingTag()).to.be.equal(billingTag);
     });
 
-    it("Should get parameters with chain", function() {
+    it("Should get parameters with chain", function () {
         const dataRequest = new DataRequest()
             .withDataHandle(mockedDataHandle)
             .withPartitionId(mockedPartitionId)

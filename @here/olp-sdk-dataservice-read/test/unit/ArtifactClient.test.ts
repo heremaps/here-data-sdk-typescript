@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2021 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,64 +17,66 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
+import { createStubInstance } from "./stub-instance";
 import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
 import { ArtifactApi } from "@here/olp-sdk-dataservice-api";
 import * as dataserviceCore from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("ArtifactClient", function() {
-    let sandbox: sinon.SinonSandbox;
-    let olpClientSettingsStub: sinon.SinonStubbedInstance<dataserviceCore.OlpClientSettings>;
-    let getArtifactUsingGETStub: sinon.SinonStub;
-    let getSchemaUsingGETStub: sinon.SinonStub;
-    let getBaseUrlRequestStub: sinon.SinonStub;
+describe("ArtifactClient", function () {
+    let olpClientSettingsStub: any;
+    let getArtifactUsingGETStub: any;
+    let getSchemaUsingGETStub: any;
+    let getBaseUrlRequestStub: any;
     const mockedHRN = dataserviceCore.HRN.fromString(
         "hrn:here:data:::mocked-hrn"
     );
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
 
-    before(function() {
-        sandbox = sinon.createSandbox();
-    });
+    beforeAll(function () {});
 
-    beforeEach(function() {
-        olpClientSettingsStub = sandbox.createStubInstance(
+    beforeEach(function () {
+        olpClientSettingsStub = createStubInstance(
             dataserviceCore.OlpClientSettings
         );
-        getBaseUrlRequestStub = sandbox.stub(
-            dataserviceCore.RequestFactory,
-            "getBaseUrl"
-        );
-        getArtifactUsingGETStub = sandbox.stub(
-            ArtifactApi,
-            "getArtifactUsingGET"
-        );
-        getSchemaUsingGETStub = sandbox.stub(ArtifactApi, "getSchemaUsingGET");
+        getBaseUrlRequestStub = vi
+            .spyOn(dataserviceCore.RequestFactory, "getBaseUrl")
+            .mockReturnValue(undefined as any);
+        getArtifactUsingGETStub = vi
+            .spyOn(ArtifactApi, "getArtifactUsingGET")
+            .mockReturnValue(undefined as any);
+        getSchemaUsingGETStub = vi
+            .spyOn(ArtifactApi, "getSchemaUsingGET")
+            .mockReturnValue(undefined as any);
 
-        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
+        getBaseUrlRequestStub.mockImplementation(() =>
+            Promise.resolve(fakeURL)
+        );
     });
 
-    afterEach(function() {
-        sandbox.restore();
+    afterEach(function () {
+        vi.restoreAllMocks();
     });
 
-    it("Shoud be initialised with settings", async function() {
+    it("Shoud be initialised with settings", async function () {
         const artifactClient = new dataServiceRead.ArtifactClient(
             olpClientSettingsStub as any
         );
         assert.isDefined(artifactClient);
     });
 
-    it("Should method getSchema provide data", async function() {
+    it("Should method getSchema provide data", async function () {
         const mockedSchema: Response = new Response(null, {
             statusText: "mocked response"
         });
@@ -86,7 +88,7 @@ describe("ArtifactClient", function() {
             olpClientSettingsStub as any
         );
         assert.isDefined(artifactClient);
-        getArtifactUsingGETStub.callsFake(
+        getArtifactUsingGETStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.resolve(mockedSchema);
             }
@@ -100,7 +102,7 @@ describe("ArtifactClient", function() {
         assert.isDefined(response);
     });
 
-    it("Should method getSchema return HttpError when ArtifactClient API crashes", async function() {
+    it("Should method getSchema return HttpError when ArtifactClient API crashes", async function () {
         const NOT_FOUND_ERROR_CODE = 404;
         const mockedError = new dataserviceCore.HttpError(
             NOT_FOUND_ERROR_CODE,
@@ -118,7 +120,7 @@ describe("ArtifactClient", function() {
             olpClientSettingsStub as any
         );
         assert.isDefined(artifactClient);
-        getArtifactUsingGETStub.callsFake(
+        getArtifactUsingGETStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.reject(mockedError);
             }
@@ -137,7 +139,7 @@ describe("ArtifactClient", function() {
             });
     });
 
-    it("Should method getSchema return error without variant data provided", async function() {
+    it("Should method getSchema return error without variant data provided", async function () {
         const mockedError: string =
             "Please provide the schema variant by schemaRequest.withVariant()";
 
@@ -150,13 +152,13 @@ describe("ArtifactClient", function() {
 
         const schema = await artifactClient
             .getSchema(schemaRequest)
-            .catch(error => {
+            .catch((error) => {
                 assert.isDefined(error);
                 assert.equal(mockedError, error.message);
             });
     });
 
-    it("Should method getSchemaDetails provide data", async function() {
+    it("Should method getSchemaDetails provide data", async function () {
         const mockedSchema: ArtifactApi.GetSchemaResponseObj = {
             variants: [
                 {
@@ -169,7 +171,7 @@ describe("ArtifactClient", function() {
             olpClientSettingsStub as any
         );
         assert.isDefined(artifactClient);
-        getSchemaUsingGETStub.callsFake(
+        getSchemaUsingGETStub.mockImplementation(
             (
                 builder: any,
                 params: any
@@ -178,18 +180,16 @@ describe("ArtifactClient", function() {
             }
         );
 
-        const schemaDetailsRequest = new dataServiceRead.SchemaDetailsRequest().withSchema(
-            mockedHRN
-        );
+        const schemaDetailsRequest =
+            new dataServiceRead.SchemaDetailsRequest().withSchema(mockedHRN);
 
-        const response = await artifactClient.getSchemaDetails(
-            schemaDetailsRequest
-        );
+        const response =
+            await artifactClient.getSchemaDetails(schemaDetailsRequest);
         assert.isDefined(!response);
         expect(mockedSchema).be.equal(response);
     });
 
-    it("Should method getSchemaDetails return HttpError when ArtifactClient crashes", async function() {
+    it("Should method getSchemaDetails return HttpError when ArtifactClient crashes", async function () {
         const NOT_FOUND_ERROR_CODE = 404;
         const mockedError = new dataserviceCore.HttpError(
             NOT_FOUND_ERROR_CODE,
@@ -209,7 +209,7 @@ describe("ArtifactClient", function() {
         );
         assert.isDefined(artifactClient);
 
-        getSchemaUsingGETStub.callsFake(
+        getSchemaUsingGETStub.mockImplementation(
             (
                 builder: any,
                 params: any
@@ -218,9 +218,8 @@ describe("ArtifactClient", function() {
             }
         );
 
-        const schemaDetailsRequest = new dataServiceRead.SchemaDetailsRequest().withSchema(
-            mockedHRN
-        );
+        const schemaDetailsRequest =
+            new dataServiceRead.SchemaDetailsRequest().withSchema(mockedHRN);
 
         const responseSchema = await artifactClient
             .getSchemaDetails(schemaDetailsRequest)
@@ -232,7 +231,7 @@ describe("ArtifactClient", function() {
             });
     });
 
-    it("Should method getSchemaDetails return error without hrn provided", async function() {
+    it("Should method getSchemaDetails return error without hrn provided", async function () {
         const mockedError: string =
             "Please provide the schema HRN by schemaDetailsRequest.withSchema()";
 

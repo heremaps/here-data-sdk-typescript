@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,20 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import * as lib from "@here/olp-sdk-core";
-
-chai.use(sinonChai);
-const expect = chai.expect;
+import * as KeyValueCacheModule from "../../lib/cache/KeyValueCache";
+import * as DataStoreDownloadManagerModule from "../../lib/utils/DataStoreDownloadManager";
 
 class MockedKeyValueCache {
     private readonly cache: Map<string, string>;
@@ -51,34 +58,33 @@ class MockedCustomDataStoreDownloadManager {
     }
 }
 
-describe("OlpClientSettings", function() {
-    let KeyValueCacheStub: sinon.SinonStub;
-    let DataStoreDownloadManagerStub: sinon.SinonStub;
+describe("OlpClientSettings", function () {
+    let KeyValueCacheStub: any;
+    let DataStoreDownloadManagerStub: any;
 
-    let sandbox: sinon.SinonSandbox;
+    beforeAll(function () {});
 
-    before(function() {
-        sandbox = sinon.createSandbox();
+    afterEach(function () {
+        vi.restoreAllMocks();
     });
 
-    afterEach(function() {
-        sandbox.restore();
+    beforeEach(function () {
+        KeyValueCacheStub = vi
+            .spyOn(KeyValueCacheModule, "KeyValueCache")
+            .mockReturnValue(undefined as any);
+        KeyValueCacheStub.mockImplementation(function () {
+            return new MockedKeyValueCache();
+        });
+
+        DataStoreDownloadManagerStub = vi
+            .spyOn(DataStoreDownloadManagerModule, "DataStoreDownloadManager")
+            .mockReturnValue(undefined as any);
+        DataStoreDownloadManagerStub.mockImplementation(function () {
+            return new MockedDataStoreDownloadManager();
+        });
     });
 
-    beforeEach(function() {
-        KeyValueCacheStub = sandbox.stub(lib, "KeyValueCache");
-        KeyValueCacheStub.callsFake((cache, hrn) => new MockedKeyValueCache());
-
-        DataStoreDownloadManagerStub = sandbox.stub(
-            lib,
-            "DataStoreDownloadManager"
-        );
-        DataStoreDownloadManagerStub.callsFake(
-            (cache, hrn) => new MockedDataStoreDownloadManager()
-        );
-    });
-
-    it("Should be configured with correct params and default download manager", async function() {
+    it("Should be configured with correct params and default download manager", async function () {
         const settings = new lib.OlpClientSettings({
             environment: "test-env",
             getToken: () => Promise.resolve("test-token")
@@ -89,9 +95,8 @@ describe("OlpClientSettings", function() {
         );
         expect(settings.environment).equal("test-env");
 
-        const downloadedResult = await settings.downloadManager.download(
-            "fake-url"
-        );
+        const downloadedResult =
+            await settings.downloadManager.download("fake-url");
         expect(downloadedResult).equal(
             "test-download-manager-downloaded-result"
         );
@@ -100,16 +105,15 @@ describe("OlpClientSettings", function() {
         expect(tokenStr).equal("test-token");
     });
 
-    it("Should be configured with correct params and custom download manager", async function() {
+    it("Should be configured with correct params and custom download manager", async function () {
         const settings = new lib.OlpClientSettings({
             environment: "test-env",
             getToken: () => Promise.resolve("test-token"),
             dm: new MockedCustomDataStoreDownloadManager()
         });
 
-        const downloadedResult = await settings.downloadManager.download(
-            "fake-url"
-        );
+        const downloadedResult =
+            await settings.downloadManager.download("fake-url");
         expect(await downloadedResult.text()).equal(
             "test-custom-download-manager-downloaded-result"
         );

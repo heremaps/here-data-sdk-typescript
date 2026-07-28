@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,22 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { QueryApi } from "@here/olp-sdk-dataservice-api";
 import { RequestBuilder, UrlBuilder } from "../lib/RequestBuilder";
 
-chai.use(sinonChai);
-
-const expect = chai.expect;
-
-describe("QueryApi", function() {
-    it("getChangesById", async function() {
+describe("QueryApi", function () {
+    it("getChangesById", async function () {
         const params = {
             layerId: "mocked-layerId",
             startVersion: "mocked-startVersion",
@@ -49,14 +53,14 @@ describe("QueryApi", function() {
             }
         };
         const result = await QueryApi.getChangesById(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("getPartitionsById", async function() {
+    it("getPartitionsById", async function () {
         const params = {
             layerId: "mocked-layerId",
             partition: ["mocked-partition-1", "mocked-partition-2"],
@@ -75,14 +79,14 @@ describe("QueryApi", function() {
             }
         };
         const result = await QueryApi.getPartitionsById(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("quadTreeIndex", async function() {
+    it("quadTreeIndex", async function () {
         const params = {
             layerId: "mocked-layerId",
             version: 124,
@@ -105,14 +109,14 @@ describe("QueryApi", function() {
             }
         };
         const result = await QueryApi.quadTreeIndex(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("quadTreeIndexVolatile", async function() {
+    it("quadTreeIndexVolatile", async function () {
         const params = {
             layerId: "mocked-layerId",
             quadKey: "mocked-quadKey",
@@ -134,7 +138,7 @@ describe("QueryApi", function() {
             }
         };
         const result = await QueryApi.quadTreeIndexVolatile(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 

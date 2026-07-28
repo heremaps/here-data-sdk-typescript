@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,32 +17,33 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { CatalogRequest } from "../../lib";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("CatalogRequest", function() {
+describe("CatalogRequest", function () {
     const billingTag = "billingTag";
 
-    it("Should initialize", function() {
+    it("Should initialize", function () {
         const catalogRequest = new CatalogRequest();
 
         assert.isDefined(CatalogRequest);
         expect(catalogRequest).be.instanceOf(CatalogRequest);
     });
 
-    it("Should set parameters", function() {
+    it("Should set parameters", function () {
         const catalogRequest = new CatalogRequest();
-        const catalogRequestWithBillTag = catalogRequest.withBillingTag(
-            billingTag
-        );
+        const catalogRequestWithBillTag =
+            catalogRequest.withBillingTag(billingTag);
 
         expect(catalogRequestWithBillTag.getBillingTag()).to.be.equal(
             billingTag

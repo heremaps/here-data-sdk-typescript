@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2021 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,21 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import * as dataServiceRead from "../../lib";
 import { HRN } from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("QuadTreeIndexRequest", function() {
+describe("QuadTreeIndexRequest", function () {
     const billingTag = "billingTag";
     const mockedHRN = HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
@@ -41,7 +43,7 @@ describe("QuadTreeIndexRequest", function() {
         level: 1
     };
 
-    it("Should initialize", function() {
+    it("Should initialize", function () {
         const quadTreeRequest = new dataServiceRead.QuadTreeIndexRequest(
             mockedHRN,
             mockedLayerId,
@@ -57,21 +59,18 @@ describe("QuadTreeIndexRequest", function() {
         expect(quadTreeRequest.getLayerType()).to.be.equal(mockedLayerType);
     });
 
-    it("Should set parameters", function() {
+    it("Should set parameters", function () {
         const quadTreeRequest = new dataServiceRead.QuadTreeIndexRequest(
             mockedHRN,
             mockedLayerId,
             mockedLayerType
         );
-        const quadTreeRequestWithVersion = quadTreeRequest.withVersion(
-            mockedVersion
-        );
-        const quadTreeRequestWithQuadKey = quadTreeRequest.withQuadKey(
-            mockedQuadKey
-        );
-        const quadTreeRequestWithBillTag = quadTreeRequest.withBillingTag(
-            billingTag
-        );
+        const quadTreeRequestWithVersion =
+            quadTreeRequest.withVersion(mockedVersion);
+        const quadTreeRequestWithQuadKey =
+            quadTreeRequest.withQuadKey(mockedQuadKey);
+        const quadTreeRequestWithBillTag =
+            quadTreeRequest.withBillingTag(billingTag);
 
         quadTreeRequest.withAdditionalFields([
             "dataSize",
@@ -92,7 +91,7 @@ describe("QuadTreeIndexRequest", function() {
         assert.isDefined(quadTreeRequest.getAdditionalFields());
     });
 
-    it("Should get parameters with chain", function() {
+    it("Should get parameters with chain", function () {
         const quadTreeRequest = new dataServiceRead.QuadTreeIndexRequest(
             mockedHRN,
             mockedLayerId,

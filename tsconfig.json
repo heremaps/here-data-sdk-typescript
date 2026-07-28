@@ -1,15 +1,24 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "target": "es6",
-        "lib": ["es2017", "dom"],
+        "target": "ES2022",
+        "lib": ["ES2022", "DOM"],
         "sourceMap": true,
         "declaration": true,
         "baseUrl": ".",
         "rootDir": ".",
         "strict": true,
+        "useUnknownInCatchVariables": false,
+        "skipLibCheck": true,
+        // The `exclude` below resolves to the root `node_modules` in every
+        // extending package config. From TypeScript 6 on, `@types/*` inside an
+        // excluded directory is no longer auto-included, which makes the Node
+        // globals (`Buffer`, `fs`, `process`, ...) fail to resolve - already
+        // visible in editors that ship a newer compiler than the repo pins.
+        // Request them explicitly. Types reached through an `import`/`require`
+        // resolve as modules and are unaffected by this list.
+        "types": ["node"],
         "resolveJsonModule": true,
-        "downlevelIteration": true,
         "newLine": "LF",
         "noImplicitReturns": true
     },

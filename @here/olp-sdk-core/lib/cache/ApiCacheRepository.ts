@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,8 @@
  * License-Filename: LICENSE
  */
 
-import { HRN, KeyValueCache } from "@here/olp-sdk-core";
+import { HRN } from "../utils/HRN";
+import { KeyValueCache } from "./KeyValueCache";
 
 /**
  * The list of the API endpoints names that the HERE Data SDK for TypeScript uses.
@@ -57,7 +58,10 @@ export class ApiCacheRepository {
      * @param hrn The HERE Resource Name (HRN) for which you want to use the [[ApiCacheRepository]] instance.
      * @return The [[ApiCacheRepository]] instance.
      */
-    constructor(private readonly cache: KeyValueCache, hrn?: HRN) {
+    constructor(
+        private readonly cache: KeyValueCache,
+        hrn?: HRN
+    ) {
         this.hrn = hrn ? hrn.toString() : "platform-api";
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 HERE Europe B.V.
+ * Copyright (C) 2021-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,28 +17,32 @@
  * License-Filename: LICENSE
  */
 
-import * as sinon from "sinon";
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { BlobV2UploadRequest } from "../../lib/utils/multipartupload-internal/BlobV2UploadRequest";
 import { ObjectStoreApi } from "@here/olp-sdk-dataservice-api";
 
-chai.use(sinonChai);
-const expect = chai.expect;
-
-describe("BlobV2UploadRequest", function() {
+describe("BlobV2UploadRequest", function () {
     const mockedRequestBuilder: any = {
         id: "mocked-request-builder"
     };
 
-    let blobApiStub: sinon.SinonStub;
+    let blobApiStub: any;
 
     afterEach(() => {
-        blobApiStub.restore();
+        blobApiStub.mockRestore();
     });
 
-    it("startMultipartUpload", async function() {
+    it("startMultipartUpload", async function () {
         const contentType = "mocked-content-type";
         const handle = "mocked-key";
         const layerId = "mocked-layer-id";
@@ -48,9 +52,9 @@ describe("BlobV2UploadRequest", function() {
             multipartToken: "mocked-multipartToken"
         };
 
-        blobApiStub = sinon
-            .stub(ObjectStoreApi, "startMultipartUploadByKey")
-            .resolves(mockedApiResponse);
+        blobApiStub = vi
+            .spyOn(ObjectStoreApi, "startMultipartUploadByKey")
+            .mockResolvedValue(mockedApiResponse);
 
         const request = new BlobV2UploadRequest(mockedRequestBuilder);
         const result = await request.startMultipartUpload({
@@ -62,7 +66,7 @@ describe("BlobV2UploadRequest", function() {
 
         expect(result.multipartToken).equals(mockedApiResponse.multipartToken);
 
-        expect(blobApiStub).calledWith(mockedRequestBuilder, {
+        expect(blobApiStub).toHaveBeenCalledWith(mockedRequestBuilder, {
             key: handle,
             layerId,
             body: {
@@ -74,10 +78,10 @@ describe("BlobV2UploadRequest", function() {
         const mockedApiBadResponse = {
             multipartToken: undefined as any
         };
-        blobApiStub.restore();
-        blobApiStub = sinon
-            .stub(ObjectStoreApi, "startMultipartUploadByKey")
-            .resolves(mockedApiBadResponse);
+        blobApiStub.mockRestore();
+        blobApiStub = vi
+            .spyOn(ObjectStoreApi, "startMultipartUploadByKey")
+            .mockResolvedValue(mockedApiBadResponse);
 
         await request
             .startMultipartUpload({
@@ -86,14 +90,14 @@ describe("BlobV2UploadRequest", function() {
                 layerId,
                 contentEncoding
             })
-            .catch(e => {
+            .catch((e) => {
                 expect(e.message).eqls(
                     "Failed to start the multipart upload to Blob V2. Bad response."
                 );
             });
     });
 
-    it("uploadPart", async function() {
+    it("uploadPart", async function () {
         const contentType = "mocked-content-type";
         const multipartToken = "mocked-multipartToken";
         const data = Buffer.from("mocked-data", "utf8");
@@ -105,9 +109,9 @@ describe("BlobV2UploadRequest", function() {
             id: "mocked-part-id"
         };
 
-        blobApiStub = sinon
-            .stub(ObjectStoreApi, "uploadPartByKey")
-            .resolves(mockedApiResponse);
+        blobApiStub = vi
+            .spyOn(ObjectStoreApi, "uploadPartByKey")
+            .mockResolvedValue(mockedApiResponse);
 
         const request = new BlobV2UploadRequest(mockedRequestBuilder);
         const result = await request.uploadPart({
@@ -122,7 +126,7 @@ describe("BlobV2UploadRequest", function() {
         expect(result.partId).equals("mocked-part-id");
         expect(result.partNumber).equals(23);
 
-        expect(blobApiStub).calledWith(mockedRequestBuilder, {
+        expect(blobApiStub).toHaveBeenCalledWith(mockedRequestBuilder, {
             layerId,
             body: data,
             multipartToken,
@@ -135,10 +139,10 @@ describe("BlobV2UploadRequest", function() {
             id: undefined as any
         };
 
-        blobApiStub.restore();
-        blobApiStub = sinon
-            .stub(ObjectStoreApi, "uploadPartByKey")
-            .resolves(mockedApiBadResponse);
+        blobApiStub.mockRestore();
+        blobApiStub = vi
+            .spyOn(ObjectStoreApi, "uploadPartByKey")
+            .mockResolvedValue(mockedApiBadResponse);
 
         await request
             .uploadPart({
@@ -149,14 +153,14 @@ describe("BlobV2UploadRequest", function() {
                 contentLength,
                 partNumber
             })
-            .catch(e => {
+            .catch((e) => {
                 expect(e.message).eqls(
                     "Error uploading chunk 23, can not get the part ID from the response"
                 );
             });
     });
 
-    it("completeMultipartUpload", async function() {
+    it("completeMultipartUpload", async function () {
         const multipartToken = "mocked-multipartToken";
         const layerId = "mocked-layerId";
         const parts = [
@@ -170,10 +174,9 @@ describe("BlobV2UploadRequest", function() {
             }
         ];
 
-        blobApiStub = sinon.stub(
-            ObjectStoreApi,
-            "completeMultipartUploadByKey"
-        );
+        blobApiStub = vi
+            .spyOn(ObjectStoreApi, "completeMultipartUploadByKey")
+            .mockReturnValue(undefined as any);
 
         const request = new BlobV2UploadRequest(mockedRequestBuilder);
         await request.completeMultipartUpload({
@@ -182,7 +185,7 @@ describe("BlobV2UploadRequest", function() {
             layerId
         });
 
-        expect(blobApiStub).calledWith(mockedRequestBuilder, {
+        expect(blobApiStub).toHaveBeenCalledWith(mockedRequestBuilder, {
             layerId,
             body: {
                 parts

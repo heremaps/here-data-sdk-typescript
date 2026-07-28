@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 import { OlpClientSettings, RequestFactory } from "@here/olp-sdk-core";
 import { ConfigApi } from "@here/olp-sdk-dataservice-api";
-import { CatalogsRequest } from "@here/olp-sdk-dataservice-read";
+import { CatalogsRequest } from "./CatalogsRequest";
 
 /**
  * A client for the platform Config Service.
@@ -51,7 +51,7 @@ export class ConfigClient {
             "config",
             this.apiVersion,
             this.settings
-        ).catch(error => Promise.reject(error));
+        );
 
         const params: {
             verbose?: string;

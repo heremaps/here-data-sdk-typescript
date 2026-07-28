@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,26 @@
  * License-Filename: LICENSE
  */
 
-import { assert } from "chai";
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { HRN } from "@here/olp-sdk-core";
 
-describe("HRN", function() {
-    it("fromString", function() {
+describe("HRN", function () {
+    it("fromString", function () {
         const hrnString = "hrn:here:datastore:::testcatalog";
         assert.strictEqual(HRN.fromString(hrnString).toString(), hrnString);
     });
 
-    it("localURL", function() {
+    it("localURL", function () {
         const hrn = HRN.fromString("http://localhost:5000");
 
         assert.strictEqual(hrn.data.partition, "catalog-url");
@@ -35,7 +45,7 @@ describe("HRN", function() {
         assert.strictEqual(hrn.data.account, "");
     });
 
-    it("additionalFields", function() {
+    it("additionalFields", function () {
         const hrn = HRN.fromString(
             "hrn:here:datastore:::testcatalog:some:additional:fields"
         );
@@ -47,7 +57,7 @@ describe("HRN", function() {
         ]);
     });
 
-    it("HRN throw Error on malformed input data", function() {
+    it("HRN throw Error on malformed input data", function () {
         let caught = false;
         try {
             // tslint:disable-next-line:no-unused-variable

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,67 +17,71 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { CatalogsRequest } from "@here/olp-sdk-dataservice-read";
 
-chai.use(sinonChai);
+describe("CatalogsRequest", function () {
+    class CatalogsRequestTest extends CatalogsRequest {
+        withSchema(schemaHrn: string): CatalogsRequest {
+            return this;
+        }
+        getSchema(): string {
+            return "schema-hrn";
+        }
 
-const assert = chai.assert;
-const expect = chai.expect;
+        withBillingTag(tag: string): CatalogsRequest {
+            return this;
+        }
 
-describe("CatalogsRequest", function() {
-  class CatalogsRequestTest extends CatalogsRequest {
-    withSchema(schemaHrn: string): CatalogsRequest {
-      return this;
+        getBillingTag(): string {
+            return "billing-tag";
+        }
     }
-    getSchema(): string {
-      return "schema-hrn";
-    }
 
-    withBillingTag(tag: string): CatalogsRequest {
-      return this;
-    }
+    it("Shoud be initialized", async function () {
+        const catalogsRequest = new CatalogsRequestTest();
+        assert.isDefined(catalogsRequest);
+        expect(catalogsRequest).to.be.instanceOf(CatalogsRequest);
 
-    getBillingTag(): string {
-      return "billing-tag";
-    }
-  }
+        assert.isFunction(catalogsRequest.withBillingTag);
+        assert.isFunction(catalogsRequest.getBillingTag);
+    });
 
-  it("Shoud be initialized", async function() {
-    const catalogsRequest = new CatalogsRequestTest();
-    assert.isDefined(catalogsRequest);
-    expect(catalogsRequest).to.be.instanceOf(CatalogsRequest);
+    it("Test withSchema method with schemaHrn", async function () {
+        const catalogsRequest = new CatalogsRequestTest();
 
-    assert.isFunction(catalogsRequest.withBillingTag);
-    assert.isFunction(catalogsRequest.getBillingTag);
-  });
+        const response = catalogsRequest.withSchema("test");
+        assert.isDefined(response);
+    });
 
-  it("Test withSchema method with schemaHrn", async function() {
-    const catalogsRequest = new CatalogsRequestTest();
+    it("Test getSchema method without params", async function () {
+        const catalogsRequest = new CatalogsRequestTest();
 
-    const response = catalogsRequest.withSchema("test");
-    assert.isDefined(response);
-  });
+        const response = catalogsRequest.getSchema();
+        assert.isDefined(response);
+    });
 
-  it("Test getSchema method without params", async function() {
-    const catalogsRequest = new CatalogsRequestTest();
+    it("Test withBillingTag method with tag", async function () {
+        const catalogsRequest = new CatalogsRequestTest();
 
-    const response = catalogsRequest.getSchema();
-    assert.isDefined(response);
-  });
+        const response = catalogsRequest.withBillingTag("test-tag");
+        assert.isDefined(response);
+    });
 
-  it("Test withBillingTag method with tag", async function() {
-    const catalogsRequest = new CatalogsRequestTest();
+    it("Test getBillingTag method without params", async function () {
+        const catalogsRequest = new CatalogsRequestTest();
 
-    const response = catalogsRequest.withBillingTag("test-tag");
-    assert.isDefined(response);
-  });
-
-  it("Test getBillingTag method without params", async function() {
-    const catalogsRequest = new CatalogsRequestTest();
-
-    const response = catalogsRequest.getBillingTag();
-    assert.isDefined(response);
-  });
+        const response = catalogsRequest.getBillingTag();
+        assert.isDefined(response);
+    });
 });

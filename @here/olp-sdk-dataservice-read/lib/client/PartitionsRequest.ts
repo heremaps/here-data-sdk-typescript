@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,8 @@
 
 import { FetchOptions } from "@here/olp-sdk-core";
 import { AdditionalFields } from "@here/olp-sdk-dataservice-api";
-import {
-    validateBillingTag,
-    validatePartitionsIdsList
-} from "@here/olp-sdk-dataservice-read";
+import { validateBillingTag } from "../utils/validateBillingTag";
+import { validatePartitionsIdsList } from "../utils/validatePartitionsIdsList";
 
 /**
  * Prepares information for calls to get partitions metadata from the Metadata Service API.

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,23 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { PublishApi } from "@here/olp-sdk-dataservice-api";
 
 import { RequestBuilder, UrlBuilder } from "../lib/RequestBuilder";
 
-chai.use(sinonChai);
-
-const expect = chai.expect;
-
-describe("PublishApi", function() {
-    it("getPublication", async function() {
+describe("PublishApi", function () {
+    it("getPublication", async function () {
         const params = {
             publicationId: "mocked-publicationId",
             billingTag: "mocked-billingTag"
@@ -45,14 +49,14 @@ describe("PublishApi", function() {
             }
         };
         const result = await PublishApi.getPublication(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("initPublication", async function() {
+    it("initPublication", async function () {
         const params = {
             publicationId: "mocked-publicationId",
             body: {
@@ -80,14 +84,14 @@ describe("PublishApi", function() {
             }
         };
         const result = await PublishApi.initPublication(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("submitPublication", async function() {
+    it("submitPublication", async function () {
         const params = {
             publicationId: "mocked-publicationId",
             billingTag: "mocked-billingTag"
@@ -106,14 +110,14 @@ describe("PublishApi", function() {
             }
         };
         const result = await PublishApi.submitPublication(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("uploadPartitions", async function() {
+    it("uploadPartitions", async function () {
         const params = {
             layerId: "mocked-layer-id",
             publicationId: "mocked-publicationId",
@@ -145,14 +149,14 @@ describe("PublishApi", function() {
             }
         };
         const result = await PublishApi.uploadPartitions(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("cancelPublication", async function() {
+    it("cancelPublication", async function () {
         const params = {
             publicationId: "mocked-publicationId",
             billingTag: "mocked-billingTag"
@@ -168,7 +172,7 @@ describe("PublishApi", function() {
             }
         };
         const result = await PublishApi.cancelPublication(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 

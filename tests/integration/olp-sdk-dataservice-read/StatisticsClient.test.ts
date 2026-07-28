@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2021 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,297 +17,295 @@
  * License-Filename: LICENSE
  */
 
-import * as sinon from "sinon";
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
 import {
-  StatisticsClient,
-  SummaryRequest,
-  StatisticsRequest,
-  CoverageDataType
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
+import {
+    StatisticsClient,
+    SummaryRequest,
+    StatisticsRequest,
+    CoverageDataType
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "../FetchMock";
 import * as core from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
+describe("StatisticsClient", function () {
+    let fetchMock: FetchMock;
+    let fetchStub: any;
 
-const assert = chai.assert;
-const expect = chai.expect;
+    let statisticsClient: StatisticsClient;
+    let settings: core.OlpClientSettings;
 
-describe("StatisticsClient", function() {
-  let fetchMock: FetchMock;
-  let sandbox: sinon.SinonSandbox;
-  let fetchStub: sinon.SinonStub;
+    const mockedHRN = core.HRN.fromString("hrn:here:data:::mocked-hrn");
+    const mockedLayerId = "mocked-layed-id";
 
-  let statisticsClient: StatisticsClient;
-  let settings: core.OlpClientSettings;
+    beforeAll(function () {});
 
-  const mockedHRN = core.HRN.fromString("hrn:here:data:::mocked-hrn");
-  const mockedLayerId = "mocked-layed-id";
-
-  before(function() {
-    sandbox = sinon.createSandbox();
-  });
-
-  afterEach(function() {
-    sandbox.restore();
-  });
-
-  beforeEach(function() {
-    fetchMock = new FetchMock();
-    fetchStub = sandbox.stub(global as any, "fetch");
-    fetchStub.callsFake(fetchMock.fetch());
-
-    // Setup Statistics Client with new OlpClientSettings.
-    settings = new core.OlpClientSettings({
-      environment: "here",
-      getToken: () => Promise.resolve("test-token-string")
+    afterEach(function () {
+        vi.restoreAllMocks();
     });
-    statisticsClient = new StatisticsClient(settings);
-  });
 
-  it("Shoud be initialized with settings", async function() {
-    assert.isDefined(statisticsClient);
-    expect(statisticsClient).to.be.instanceOf(StatisticsClient);
-  });
+    beforeEach(function () {
+        fetchMock = new FetchMock();
+        fetchStub = vi.spyOn(global as any, "fetch");
+        fetchStub.mockImplementation(fetchMock.fetch());
 
-  it("Should fetch the summary info from statistics service", async function() {
-    const mockedResponses = new Map();
+        // Setup Statistics Client with new OlpClientSettings.
+        settings = new core.OlpClientSettings({
+            environment: "here",
+            getToken: () => Promise.resolve("test-token-string")
+        });
+        statisticsClient = new StatisticsClient(settings);
+    });
 
-    // Set the response from lookup api
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "statistics",
-            version: "v1",
-            baseURL:
-              "https://statistics.data.api.platform.here.com/statistics/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ])
-      )
-    );
+    it("Shoud be initialized with settings", async function () {
+        assert.isDefined(statisticsClient);
+        expect(statisticsClient).to.be.instanceOf(StatisticsClient);
+    });
 
-    // Set the response from Statistics service with the summary info.
-    const mockedStatisticsSummary = {
-      catalogHRN: "hrn:here-dev:data:::samplecatalog",
-      layer: "sampleLayer",
-      levelSummary: [
-        {
-          summaryPerZoomLevel: {
-            size: 1024,
-            proccessedTimestamp: 1567116347,
-            centroid: 1256044,
-            totalPartitions: 2500,
-            bbox: {
-              east: "41.8785",
-              north: "41.8781",
-              south: "87.6278",
-              west: "87.6298"
-            },
-            minPartitionSize: 512,
-            maxPartitionSize: 1024,
-            version: 3
-          },
-          version: 11
-        }
-      ]
-    };
+    it("Should fetch the summary info from statistics service", async function () {
+        const mockedResponses = new Map();
 
-    mockedResponses.set(
-      `https://statistics.data.api.platform.here.com/statistics/v1/layers/mocked-layed-id/summary`,
-      new Response(JSON.stringify(mockedStatisticsSummary))
-    );
+        // Set the response from lookup api
+        mockedResponses.set(
+            `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis`,
+            new Response(
+                JSON.stringify([
+                    {
+                        api: "statistics",
+                        version: "v1",
+                        baseURL:
+                            "https://statistics.data.api.platform.here.com/statistics/v1",
+                        parameters: {
+                            additionalProp1: "string",
+                            additionalProp2: "string",
+                            additionalProp3: "string"
+                        }
+                    }
+                ])
+            )
+        );
 
-    // Setup the fetch to use mocked responses.
-    fetchMock.withMockedResponses(mockedResponses);
+        // Set the response from Statistics service with the summary info.
+        const mockedStatisticsSummary = {
+            catalogHRN: "hrn:here-dev:data:::samplecatalog",
+            layer: "sampleLayer",
+            levelSummary: [
+                {
+                    summaryPerZoomLevel: {
+                        size: 1024,
+                        proccessedTimestamp: 1567116347,
+                        centroid: 1256044,
+                        totalPartitions: 2500,
+                        bbox: {
+                            east: "41.8785",
+                            north: "41.8781",
+                            south: "87.6278",
+                            west: "87.6298"
+                        },
+                        minPartitionSize: 512,
+                        maxPartitionSize: 1024,
+                        version: 3
+                    },
+                    version: 11
+                }
+            ]
+        };
 
-    const summaryRequest = new SummaryRequest()
-      .withCatalogHrn(mockedHRN)
-      .withLayerId(mockedLayerId);
+        mockedResponses.set(
+            `https://statistics.data.api.platform.here.com/statistics/v1/layers/mocked-layed-id/summary`,
+            new Response(JSON.stringify(mockedStatisticsSummary))
+        );
 
-    const summaryResponse = await statisticsClient.getSummary(summaryRequest);
-    assert.isDefined(summaryResponse);
+        // Setup the fetch to use mocked responses.
+        fetchMock.withMockedResponses(mockedResponses);
 
-    expect(summaryResponse.catalogHRN).to.be.equal(
-      "hrn:here-dev:data:::samplecatalog"
-    );
-    expect(summaryResponse.layer).to.be.equal("sampleLayer");
-    assert.isDefined(summaryResponse.levelSummary);
+        const summaryRequest = new SummaryRequest()
+            .withCatalogHrn(mockedHRN)
+            .withLayerId(mockedLayerId);
 
-    expect(fetchStub.callCount).to.be.equal(2);
-  });
+        const summaryResponse =
+            await statisticsClient.getSummary(summaryRequest);
+        assert.isDefined(summaryResponse);
 
-  it("Should method getSummary return error if catalogHRN is not provided", async function() {
-    const mockedErrorResponse = "No catalogHrn provided";
+        expect(summaryResponse.catalogHRN).to.be.equal(
+            "hrn:here-dev:data:::samplecatalog"
+        );
+        expect(summaryResponse.layer).to.be.equal("sampleLayer");
+        assert.isDefined(summaryResponse.levelSummary);
 
-    const summaryRequest = new SummaryRequest().withLayerId(mockedLayerId);
+        expect(fetchStub.mock.calls.length).to.be.equal(2);
+    });
 
-    const summaryResponse = await statisticsClient
-      .getSummary(summaryRequest)
-      .catch(error => {
-        assert.isDefined(error);
-        assert.equal(mockedErrorResponse, error.message);
-      });
-  });
+    it("Should method getSummary return error if catalogHRN is not provided", async function () {
+        const mockedErrorResponse = "No catalogHrn provided";
 
-  it("Should method getSummary return error if layerId is not provided", async function() {
-    const mockedErrorResponse = "No layerId provided";
+        const summaryRequest = new SummaryRequest().withLayerId(mockedLayerId);
 
-    const summaryRequest = new SummaryRequest().withCatalogHrn(mockedHRN);
+        const summaryResponse = await statisticsClient
+            .getSummary(summaryRequest)
+            .catch((error) => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.message);
+            });
+    });
 
-    const summaryResponse = await statisticsClient
-      .getSummary(summaryRequest)
-      .catch(error => {
-        assert.isDefined(error);
-        assert.equal(mockedErrorResponse, error.message);
-      });
-  });
+    it("Should method getSummary return error if layerId is not provided", async function () {
+        const mockedErrorResponse = "No layerId provided";
 
-  it("Should method getStatistics return timemap statistics data", async function() {
-    const mockedResponses = new Map();
+        const summaryRequest = new SummaryRequest().withCatalogHrn(mockedHRN);
 
-    // Set the response from lookup api
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "statistics",
-            version: "v1",
-            baseURL:
-              "https://statistics.data.api.platform.here.com/statistics/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ])
-      )
-    );
+        const summaryResponse = await statisticsClient
+            .getSummary(summaryRequest)
+            .catch((error) => {
+                assert.isDefined(error);
+                assert.equal(mockedErrorResponse, error.message);
+            });
+    });
 
-    // Set the response from Statistics service with the statistics info.
-    const mockedData = Buffer.alloc(42);
+    it("Should method getStatistics return timemap statistics data", async function () {
+        const mockedResponses = new Map();
 
-    mockedResponses.set(
-      `https://statistics.data.api.platform.here.com/statistics/v1/layers/mocked-layed-id/heatmap/age?datalevel=3&catalogHRN=hrn%3Ahere%3Adata%3A%3A%3Amocked-hrn`,
-      new Response(JSON.stringify(mockedData))
-    );
+        // Set the response from lookup api
+        mockedResponses.set(
+            `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis`,
+            new Response(
+                JSON.stringify([
+                    {
+                        api: "statistics",
+                        version: "v1",
+                        baseURL:
+                            "https://statistics.data.api.platform.here.com/statistics/v1",
+                        parameters: {
+                            additionalProp1: "string",
+                            additionalProp2: "string",
+                            additionalProp3: "string"
+                        }
+                    }
+                ])
+            )
+        );
 
-    // Setup the fetch to use mocked responses.
-    fetchMock.withMockedResponses(mockedResponses);
+        // Set the response from Statistics service with the statistics info.
+        const mockedData = Buffer.alloc(42);
 
-    const statisticsRequest = new StatisticsRequest()
-      .withCatalogHrn(mockedHRN)
-      .withLayerId(mockedLayerId)
-      .withDataLevel(3)
-      .withTypemap(CoverageDataType.TIMEMAP);
+        mockedResponses.set(
+            `https://statistics.data.api.platform.here.com/statistics/v1/layers/mocked-layed-id/heatmap/age?datalevel=3&catalogHRN=hrn%3Ahere%3Adata%3A%3A%3Amocked-hrn`,
+            new Response(JSON.stringify(mockedData))
+        );
 
-    const summaryResponse = await statisticsClient.getStatistics(
-      statisticsRequest
-    );
-    assert.isDefined(summaryResponse);
-    expect(fetchStub.callCount).to.be.equal(2);
-  });
+        // Setup the fetch to use mocked responses.
+        fetchMock.withMockedResponses(mockedResponses);
 
-  it("Should method getStatistics return sizemap statistics data", async function() {
-    const mockedResponses = new Map();
+        const statisticsRequest = new StatisticsRequest()
+            .withCatalogHrn(mockedHRN)
+            .withLayerId(mockedLayerId)
+            .withDataLevel(3)
+            .withTypemap(CoverageDataType.TIMEMAP);
 
-    // Set the response from lookup api
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "statistics",
-            version: "v1",
-            baseURL:
-              "https://statistics.data.api.platform.here.com/statistics/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ])
-      )
-    );
+        const summaryResponse =
+            await statisticsClient.getStatistics(statisticsRequest);
+        assert.isDefined(summaryResponse);
+        expect(fetchStub.mock.calls.length).to.be.equal(2);
+    });
 
-    // Set the response from Statistics service with the statistics info.
-    const mockedData = Buffer.alloc(42);
+    it("Should method getStatistics return sizemap statistics data", async function () {
+        const mockedResponses = new Map();
 
-    mockedResponses.set(
-      `https://statistics.data.api.platform.here.com/statistics/v1/layers/mocked-layed-id/heatmap/size?datalevel=3`,
-      new Response(JSON.stringify(mockedData))
-    );
+        // Set the response from lookup api
+        mockedResponses.set(
+            `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis`,
+            new Response(
+                JSON.stringify([
+                    {
+                        api: "statistics",
+                        version: "v1",
+                        baseURL:
+                            "https://statistics.data.api.platform.here.com/statistics/v1",
+                        parameters: {
+                            additionalProp1: "string",
+                            additionalProp2: "string",
+                            additionalProp3: "string"
+                        }
+                    }
+                ])
+            )
+        );
 
-    // Setup the fetch to use mocked responses.
-    fetchMock.withMockedResponses(mockedResponses);
+        // Set the response from Statistics service with the statistics info.
+        const mockedData = Buffer.alloc(42);
 
-    const statisticsRequest = new StatisticsRequest()
-      .withCatalogHrn(mockedHRN)
-      .withLayerId(mockedLayerId)
-      .withDataLevel(3)
-      .withTypemap(CoverageDataType.SIZEMAP);
+        mockedResponses.set(
+            `https://statistics.data.api.platform.here.com/statistics/v1/layers/mocked-layed-id/heatmap/size?datalevel=3`,
+            new Response(JSON.stringify(mockedData))
+        );
 
-    const summaryResponse = await statisticsClient.getStatistics(
-      statisticsRequest
-    );
-    assert.isDefined(summaryResponse);
-    expect(fetchStub.callCount).to.be.equal(2);
-  });
+        // Setup the fetch to use mocked responses.
+        fetchMock.withMockedResponses(mockedResponses);
 
-  it("Should method getStatistics return bitmap statistics data", async function() {
-    const mockedResponses = new Map();
+        const statisticsRequest = new StatisticsRequest()
+            .withCatalogHrn(mockedHRN)
+            .withLayerId(mockedLayerId)
+            .withDataLevel(3)
+            .withTypemap(CoverageDataType.SIZEMAP);
 
-    // Set the response from lookup api
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "statistics",
-            version: "v1",
-            baseURL:
-              "https://statistics.data.api.platform.here.com/statistics/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ])
-      )
-    );
+        const summaryResponse =
+            await statisticsClient.getStatistics(statisticsRequest);
+        assert.isDefined(summaryResponse);
+        expect(fetchStub.mock.calls.length).to.be.equal(2);
+    });
 
-    // Set the response from Statistics service with the statistics info.
-    const mockedData = Buffer.alloc(42);
+    it("Should method getStatistics return bitmap statistics data", async function () {
+        const mockedResponses = new Map();
 
-    mockedResponses.set(
-      `https://statistics.data.api.platform.here.com/statistics/v1/layers/mocked-layed-id/tilemap?datalevel=3`,
-      new Response(JSON.stringify(mockedData))
-    );
+        // Set the response from lookup api
+        mockedResponses.set(
+            `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis`,
+            new Response(
+                JSON.stringify([
+                    {
+                        api: "statistics",
+                        version: "v1",
+                        baseURL:
+                            "https://statistics.data.api.platform.here.com/statistics/v1",
+                        parameters: {
+                            additionalProp1: "string",
+                            additionalProp2: "string",
+                            additionalProp3: "string"
+                        }
+                    }
+                ])
+            )
+        );
 
-    // Setup the fetch to use mocked responses.
-    fetchMock.withMockedResponses(mockedResponses);
+        // Set the response from Statistics service with the statistics info.
+        const mockedData = Buffer.alloc(42);
 
-    const statisticsRequest = new StatisticsRequest()
-      .withCatalogHrn(mockedHRN)
-      .withLayerId(mockedLayerId)
-      .withDataLevel(3)
-      .withTypemap(CoverageDataType.BITMAP);
+        mockedResponses.set(
+            `https://statistics.data.api.platform.here.com/statistics/v1/layers/mocked-layed-id/tilemap?datalevel=3`,
+            new Response(JSON.stringify(mockedData))
+        );
 
-    const summaryResponse = await statisticsClient.getStatistics(
-      statisticsRequest
-    );
-    assert.isDefined(summaryResponse);
-    expect(fetchStub.callCount).to.be.equal(2);
-  });
+        // Setup the fetch to use mocked responses.
+        fetchMock.withMockedResponses(mockedResponses);
+
+        const statisticsRequest = new StatisticsRequest()
+            .withCatalogHrn(mockedHRN)
+            .withLayerId(mockedLayerId)
+            .withDataLevel(3)
+            .withTypemap(CoverageDataType.BITMAP);
+
+        const summaryResponse =
+            await statisticsClient.getStatistics(statisticsRequest);
+        assert.isDefined(summaryResponse);
+        expect(fetchStub.mock.calls.length).to.be.equal(2);
+    });
 });

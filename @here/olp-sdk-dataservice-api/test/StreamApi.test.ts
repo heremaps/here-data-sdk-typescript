@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,22 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { StreamApi } from "@here/olp-sdk-dataservice-api";
 import { RequestBuilder, UrlBuilder } from "../lib/RequestBuilder";
 
-chai.use(sinonChai);
-
-const expect = chai.expect;
-
-describe("StreamApi", function() {
-    it("Should doCommitOffsets works as expected", async function() {
+describe("StreamApi", function () {
+    it("Should doCommitOffsets works as expected", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
@@ -56,8 +60,8 @@ describe("StreamApi", function() {
         });
     });
 
-    it("Should subscribe works as expected", async function() {
-        const builder = ({
+    it("Should subscribe works as expected", async function () {
+        const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
                 expect(urlBuilder.url).to.be.equal(
@@ -66,7 +70,7 @@ describe("StreamApi", function() {
                 expect(options.method).to.be.equal("POST");
                 return Promise.resolve();
             }
-        } as unknown) as RequestBuilder;
+        } as unknown as RequestBuilder;
 
         await StreamApi.subscribe(builder, {
             layerId: "mocked-id",
@@ -80,8 +84,8 @@ describe("StreamApi", function() {
         });
     });
 
-    it("Should consumeData works as expected", async function() {
-        const builder = ({
+    it("Should consumeData works as expected", async function () {
+        const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
                 expect(urlBuilder.url).to.be.equal(
@@ -90,7 +94,7 @@ describe("StreamApi", function() {
                 expect(options.method).to.be.equal("GET");
                 return Promise.resolve();
             }
-        } as unknown) as RequestBuilder;
+        } as unknown as RequestBuilder;
 
         await StreamApi.consumeData(builder, {
             layerId: "mocked-id",
@@ -100,8 +104,8 @@ describe("StreamApi", function() {
         });
     });
 
-    it("Should seekToOffset works as expected", async function() {
-        const builder = ({
+    it("Should seekToOffset works as expected", async function () {
+        const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
                 expect(urlBuilder.url).to.be.equal(
@@ -110,7 +114,7 @@ describe("StreamApi", function() {
                 expect(options.method).to.be.equal("PUT");
                 return Promise.resolve();
             }
-        } as unknown) as RequestBuilder;
+        } as unknown as RequestBuilder;
 
         await StreamApi.seekToOffset(builder, {
             layerId: "mocked-id",
@@ -128,7 +132,7 @@ describe("StreamApi", function() {
         });
     });
 
-    it("Should deleteSubscription works as expected", async function() {
+    it("Should deleteSubscription works as expected", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (urlBuilder: UrlBuilder, options: any) => {
@@ -148,7 +152,7 @@ describe("StreamApi", function() {
         });
     });
 
-    it("Should endpoint works as expected", async function() {
+    it("Should endpoint works as expected", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: any) => {
@@ -165,7 +169,7 @@ describe("StreamApi", function() {
         });
     });
 
-    it("Should endpointByConsumer works as expected", async function() {
+    it("Should endpointByConsumer works as expected", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: any) => {

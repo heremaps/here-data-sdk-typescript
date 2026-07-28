@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,20 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { PartitionsRequest } from "../../";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("PartitionsRequest", function() {
+describe("PartitionsRequest", function () {
     const billingTag = "billingTag";
     const mockedVersion = 42;
     const mockedIds = ["1", "2", "13", "42"];
@@ -39,24 +41,26 @@ describe("PartitionsRequest", function() {
         "crc"
     ];
 
-    it("Should initialize", function() {
+    it("Should initialize", function () {
         const partitionsRequest = new PartitionsRequest();
 
         assert.isDefined(partitionsRequest);
         expect(partitionsRequest).be.instanceOf(PartitionsRequest);
     });
 
-    it("Should set parameters", function() {
+    it("Should set parameters", function () {
         const partitionsRequest = new PartitionsRequest();
-        const partitionsRequestWithBillTag = partitionsRequest.withBillingTag(
-            billingTag
-        );
-        const partitionsRequestWithIds = partitionsRequest.withPartitionIds(
-            mockedIds
-        );
-        const partitionsAdditionalFields = partitionsRequest.withAdditionalFields(
-            ["dataSize", "checksum", "compressedDataSize", "crc"]
-        );
+        const partitionsRequestWithBillTag =
+            partitionsRequest.withBillingTag(billingTag);
+        const partitionsRequestWithIds =
+            partitionsRequest.withPartitionIds(mockedIds);
+        const partitionsAdditionalFields =
+            partitionsRequest.withAdditionalFields([
+                "dataSize",
+                "checksum",
+                "compressedDataSize",
+                "crc"
+            ]);
 
         expect(partitionsRequestWithBillTag.getBillingTag()).to.be.equal(
             billingTag
@@ -67,7 +71,7 @@ describe("PartitionsRequest", function() {
         assert.isDefined(partitionsAdditionalFields.getAdditionalFields());
     });
 
-    it("Should get parameters with chain", function() {
+    it("Should get parameters with chain", function () {
         const partitionsRequest = new PartitionsRequest()
             .withBillingTag(billingTag)
             .withPartitionIds(mockedIds)
@@ -83,11 +87,10 @@ describe("PartitionsRequest", function() {
         assert.isDefined(partitionsRequest.getAdditionalFields());
     });
 
-    it("Should be thrown error if additional fields are empty", function() {
+    it("Should be thrown error if additional fields are empty", function () {
         try {
-            const partitionsRequest = new PartitionsRequest().withAdditionalFields(
-                []
-            );
+            const partitionsRequest =
+                new PartitionsRequest().withAdditionalFields([]);
         } catch (error) {
             assert.equal(
                 error.message,

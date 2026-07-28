@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,167 +17,170 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { VolatileBlobApi } from "@here/olp-sdk-dataservice-api";
 import {
-  AuthenticationMessage,
-  AuthorizationMessage
+    AuthenticationMessage,
+    AuthorizationMessage
 } from "@here/olp-sdk-dataservice-api/lib/volatile-blob-api";
 import { mockedRequestBuilder } from "./MockedRequestBuilder";
 
-chai.use(sinonChai);
+describe("VolatileBlobApi", function () {
+    it("AuthenticationMessage  with all required params", function () {
+        const params: AuthenticationMessage = {};
 
-const assert = chai.assert;
-const expect = chai.expect;
+        assert.isDefined(params);
+    });
 
-describe("VolatileBlobApi", function() {
-  it("AuthenticationMessage  with all required params", function() {
-    const params: AuthenticationMessage = {};
+    it("AuthenticationMessage with all required and optional params", function () {
+        const params: AuthenticationMessage = {
+            error: "test",
+            errorDescription: "test"
+        };
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("AuthenticationMessage with all required and optional params", function() {
-    const params: AuthenticationMessage = {
-      error: "test",
-      errorDescription: "test"
-    };
+    it("AuthorizationMessage  with all required params", function () {
+        const params: AuthorizationMessage = {};
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("AuthorizationMessage  with all required params", function() {
-    const params: AuthorizationMessage = {};
+    it("AuthorizationMessage with all required and optional params", function () {
+        const params: AuthorizationMessage = {
+            error: "test",
+            errorDescription: "test"
+        };
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("AuthorizationMessage with all required and optional params", function() {
-    const params: AuthorizationMessage = {
-      error: "test",
-      errorDescription: "test"
-    };
+    it("Test checkHandleExists method with all required params", async function () {
+        const params = {
+            layerId: "test",
+            dataHandle: "test"
+        };
 
-    assert.isDefined(params);
-  });
+        const result = await VolatileBlobApi.checkHandleExists(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test checkHandleExists method with all required params", async function() {
-    const params = {
-      layerId: "test",
-      dataHandle: "test"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await VolatileBlobApi.checkHandleExists(
-      mockedRequestBuilder,
-      params
-    );
+    it("Test checkHandleExists method with all required and optional params", async function () {
+        const params = {
+            layerId: "test",
+            dataHandle: "test",
+            billingTag: "test"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await VolatileBlobApi.checkHandleExists(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test checkHandleExists method with all required and optional params", async function() {
-    const params = {
-      layerId: "test",
-      dataHandle: "test",
-      billingTag: "test"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await VolatileBlobApi.checkHandleExists(
-      mockedRequestBuilder,
-      params
-    );
+    it("Test deleteVolatileBlob method with all required params", async function () {
+        const params = {
+            layerId: "test",
+            dataHandle: "test"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await VolatileBlobApi.deleteVolatileBlob(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test deleteVolatileBlob method with all required params", async function() {
-    const params = {
-      layerId: "test",
-      dataHandle: "test"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await VolatileBlobApi.deleteVolatileBlob(
-      mockedRequestBuilder,
-      params
-    );
+    it("Test deleteVolatileBlob method with all required and optional params", async function () {
+        const params = {
+            layerId: "test",
+            dataHandle: "test",
+            billingTag: "test"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await VolatileBlobApi.deleteVolatileBlob(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test deleteVolatileBlob method with all required and optional params", async function() {
-    const params = {
-      layerId: "test",
-      dataHandle: "test",
-      billingTag: "test"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await VolatileBlobApi.deleteVolatileBlob(
-      mockedRequestBuilder,
-      params
-    );
+    it("Test getVolatileBlob method with all required params", async function () {
+        const params = {
+            layerId: "test",
+            dataHandle: "test"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await VolatileBlobApi.getVolatileBlob(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test getVolatileBlob method with all required params", async function() {
-    const params = {
-      layerId: "test",
-      dataHandle: "test"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await VolatileBlobApi.getVolatileBlob(
-      mockedRequestBuilder,
-      params
-    );
+    it("Test getVolatileBlob method with all required and optional params", async function () {
+        const params = {
+            layerId: "test",
+            dataHandle: "test",
+            billingTag: "test"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await VolatileBlobApi.getVolatileBlob(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test getVolatileBlob method with all required and optional params", async function() {
-    const params = {
-      layerId: "test",
-      dataHandle: "test",
-      billingTag: "test"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await VolatileBlobApi.getVolatileBlob(
-      mockedRequestBuilder,
-      params
-    );
+    it("Test putVolatileBlob method with all required params", async function () {
+        const params = {
+            layerId: "test",
+            dataHandle: "test",
+            body: "test"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await VolatileBlobApi.putVolatileBlob(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test putVolatileBlob method with all required params", async function() {
-    const params = {
-      layerId: "test",
-      dataHandle: "test",
-      body: "test"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await VolatileBlobApi.putVolatileBlob(
-      mockedRequestBuilder,
-      params
-    );
+    it("Test putVolatileBlob method with all required and optional params", async function () {
+        const params = {
+            layerId: "test",
+            dataHandle: "test",
+            body: "test",
+            billingTag: "test"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await VolatileBlobApi.putVolatileBlob(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test putVolatileBlob method with all required and optional params", async function() {
-    const params = {
-      layerId: "test",
-      dataHandle: "test",
-      body: "test",
-      billingTag: "test"
-    };
-
-    const result = await VolatileBlobApi.putVolatileBlob(
-      mockedRequestBuilder,
-      params
-    );
-
-    expect(result).to.be.equal("success");
-  });
+        expect(result).to.be.equal("success");
+    });
 });

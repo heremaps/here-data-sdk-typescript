@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,12 @@
  * License-Filename: LICENSE
  */
 
-import {
-    ApiCacheRepository,
-    ApiName,
-    DataStoreRequestBuilder,
-    getEnvLookUpUrl,
-    HRN,
-    HttpError,
-    OlpClientSettings
-} from "@here/olp-sdk-core";
+import { ApiCacheRepository, ApiName } from "../cache/ApiCacheRepository";
+import { OlpClientSettings } from "../client/OlpClientSettings";
+import { DataStoreRequestBuilder } from "./DataStoreRequestBuilder";
+import { HRN } from "./HRN";
+import { HttpError } from "./HttpError";
+import { getEnvLookUpUrl } from "./getEnvLookupUrl";
 import { LookupApi } from "@here/olp-sdk-dataservice-api";
 
 const MILLISECONDS_IN_SECOND = 1000;
@@ -122,65 +119,62 @@ export class RequestFactory {
               })
             : LookupApi.getPlatformAPIList(lookUpApiRequest);
 
-        return lookupPromise
-            .then(async (resp: any) => {
-                let maxAge: number;
-                if (resp.headers) {
-                    const cacheControl = resp.headers.get("cache-control");
-                    if (cacheControl) {
-                        const maxSize = cacheControl.match(/max-age=(\d+)/);
-                        maxAge = maxSize ? parseInt(maxSize[1], 10) : 0;
-                    }
+        return lookupPromise.then(async (resp: any) => {
+            let maxAge: number;
+            if (resp.headers) {
+                const cacheControl = resp.headers.get("cache-control");
+                if (cacheControl) {
+                    const maxSize = cacheControl.match(/max-age=(\d+)/);
+                    maxAge = maxSize ? parseInt(maxSize[1], 10) : 0;
                 }
+            }
 
-                const res = await resp.json();
+            const res = await resp.json();
 
-                if (!Array.isArray(res)) {
-                    throw new HttpError(
-                        res.status || NO_CONTENT_CODE,
-                        res.title || "No content"
+            if (!Array.isArray(res)) {
+                throw new HttpError(
+                    res.status || NO_CONTENT_CODE,
+                    res.title || "No content"
+                );
+            }
+
+            res.forEach((item) => {
+                if (item.version === cacheOnlyVersion) {
+                    apiCache.put(
+                        item.api as ApiName,
+                        item.version,
+                        item.baseURL,
+                        "api"
                     );
-                }
-
-                res.forEach(item => {
-                    if (item.version === cacheOnlyVersion) {
+                    if (maxAge) {
+                        const time =
+                            new Date().getTime() +
+                            maxAge * MILLISECONDS_IN_SECOND;
                         apiCache.put(
                             item.api as ApiName,
                             item.version,
-                            item.baseURL,
-                            "api"
+                            time.toString(),
+                            "age"
                         );
-                        if (maxAge) {
-                            const time =
-                                new Date().getTime() +
-                                maxAge * MILLISECONDS_IN_SECOND;
-                            apiCache.put(
-                                item.api as ApiName,
-                                item.version,
-                                time.toString(),
-                                "age"
-                            );
-                        }
                     }
-                });
-
-                const baseUrlIndex = res.findIndex(
-                    item =>
-                        item.api === serviceName &&
-                        item.version === serviceVersion
-                );
-
-                if (baseUrlIndex === -1) {
-                    throw new HttpError(
-                        NOT_FOUND_CODE,
-                        `No BaseUrl found for ${serviceName}, ${serviceVersion} ${
-                            hrn ? hrn.toString() : ""
-                        }`
-                    );
                 }
+            });
 
-                return res[baseUrlIndex].baseURL;
-            })
-            .catch(err => Promise.reject(err));
+            const baseUrlIndex = res.findIndex(
+                (item) =>
+                    item.api === serviceName && item.version === serviceVersion
+            );
+
+            if (baseUrlIndex === -1) {
+                throw new HttpError(
+                    NOT_FOUND_CODE,
+                    `No BaseUrl found for ${serviceName}, ${serviceVersion} ${
+                        hrn ? hrn.toString() : ""
+                    }`
+                );
+            }
+
+            return res[baseUrlIndex].baseURL;
+        });
     }
 }

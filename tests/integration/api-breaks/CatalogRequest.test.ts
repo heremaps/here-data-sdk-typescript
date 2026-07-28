@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,47 +17,51 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { CatalogRequest } from "@here/olp-sdk-dataservice-read";
 
-chai.use(sinonChai);
+describe("CatalogRequest", function () {
+    class CatalogRequestTest extends CatalogRequest {
+        withBillingTag(tag: string): CatalogRequest {
+            return this;
+        }
 
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("CatalogRequest", function() {
-  class CatalogRequestTest extends CatalogRequest {
-    withBillingTag(tag: string): CatalogRequest {
-      return this;
+        getBillingTag(): string {
+            return "billing-tag";
+        }
     }
 
-    getBillingTag(): string {
-      return "billing-tag";
-    }
-  }
+    it("Shoud be initialized", async function () {
+        const catalogRequest = new CatalogRequestTest();
+        assert.isDefined(catalogRequest);
+        expect(catalogRequest).to.be.instanceOf(CatalogRequest);
 
-  it("Shoud be initialized", async function() {
-    const catalogRequest = new CatalogRequestTest();
-    assert.isDefined(catalogRequest);
-    expect(catalogRequest).to.be.instanceOf(CatalogRequest);
+        assert.isFunction(catalogRequest.withBillingTag);
+        assert.isFunction(catalogRequest.getBillingTag);
+    });
 
-    assert.isFunction(catalogRequest.withBillingTag);
-    assert.isFunction(catalogRequest.getBillingTag);
-  });
+    it("Test withBillingTag method with tag", async function () {
+        const catalogRequest = new CatalogRequestTest();
 
-  it("Test withBillingTag method with tag", async function() {
-    const catalogRequest = new CatalogRequestTest();
+        const response = catalogRequest.withBillingTag("test-tag");
+        assert.isDefined(response);
+    });
 
-    const response = catalogRequest.withBillingTag("test-tag");
-    assert.isDefined(response);
-  });
+    it("Test getBillingTag method without params", async function () {
+        const catalogRequest = new CatalogRequestTest();
+        catalogRequest.withBillingTag("test-tag");
 
-  it("Test getBillingTag method without params", async function() {
-    const catalogRequest = new CatalogRequestTest();
-    catalogRequest.withBillingTag("test-tag");
-
-    const response = catalogRequest.getBillingTag();
-    assert.isDefined(response);
-  });
+        const response = catalogRequest.getBillingTag();
+        assert.isDefined(response);
+    });
 });

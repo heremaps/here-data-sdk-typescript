@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,8 @@
  * License-Filename: LICENSE
  */
 
-import { DownloadManager, LIB_VERSION } from "@here/olp-sdk-core";
+import { LIB_VERSION } from "../../lib.version";
+import { DownloadManager } from "./DownloadManager";
 import { RequestBuilder } from "@here/olp-sdk-dataservice-api";
 
 /**
@@ -119,8 +120,7 @@ export class DataStoreRequestBuilder extends RequestBuilder {
         }
         return this.downloadManager
             .download(url, options)
-            .then(result => result.json())
-            .catch(err => Promise.reject(err));
+            .then((result) => result.json());
     }
 
     /**
@@ -139,9 +139,7 @@ export class DataStoreRequestBuilder extends RequestBuilder {
                 ...this.addAbortSignal(init)
             };
         }
-        return this.downloadManager
-            .download(url, options)
-            .catch(err => Promise.reject(err));
+        return this.downloadManager.download(url, options);
     }
 
     private async addBearerToken(init?: RequestInit): Promise<RequestInit> {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,24 +17,28 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { KeyValueCache } from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
-const expect = chai.expect;
-
-describe("KeyValueCache", function() {
-    let sandbox: sinon.SinonSandbox;
+describe("KeyValueCache", function () {
     let keyValueCache1 = new KeyValueCache();
 
-    beforeEach(function() {
+    beforeEach(function () {
         keyValueCache1.put("key1", "value1");
         keyValueCache1.put("key2", "value2");
     });
 
-    it("Should put new key value", function() {
+    it("Should put new key value", function () {
         keyValueCache1.put("key3", "value3");
 
         expect(keyValueCache1.get("key1")).equal("value1");
@@ -42,7 +46,7 @@ describe("KeyValueCache", function() {
         expect(keyValueCache1.get("key3")).equal("value3");
     });
 
-    it("Should put handle error", function() {
+    it("Should put handle error", function () {
         const cache = new KeyValueCache();
         const resp1 = cache.put("key", "somedata");
         expect(resp1).equal(true);
@@ -51,12 +55,12 @@ describe("KeyValueCache", function() {
         expect(resp2).equal(false);
     });
 
-    it("Should getCapacity return cache capacity", function() {
+    it("Should getCapacity return cache capacity", function () {
         const cache = new KeyValueCache();
         expect(cache.getCapacity()).equal(2097152);
     });
 
-    it("Should clear() clear the cache and remove all ietms", function() {
+    it("Should clear() clear the cache and remove all ietms", function () {
         const cache = new KeyValueCache();
         cache.put("key", "value");
         expect(cache.get("key")).equal("value");
@@ -64,7 +68,7 @@ describe("KeyValueCache", function() {
         expect(cache.get("key")).equal(undefined);
     });
 
-    it("Should get key value", function() {
+    it("Should get key value", function () {
         expect(keyValueCache1.get("key1")).equal("value1");
         expect(keyValueCache1.get("key2")).equal("value2");
     });

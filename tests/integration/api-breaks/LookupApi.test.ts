@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,127 +17,139 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { LookupApi } from "@here/olp-sdk-dataservice-api";
 import {
-  API,
-  ApiNotFoundError
+    API,
+    ApiNotFoundError
 } from "@here/olp-sdk-dataservice-api/lib/lookup-api";
 import { mockedRequestBuilder } from "./MockedRequestBuilder";
 
-chai.use(sinonChai);
+describe("LookupApi", function () {
+    it("API with all required params", function () {
+        const params: API = {
+            api: "test",
+            version: "test",
+            baseURL: "test"
+        };
 
-const assert = chai.assert;
-const expect = chai.expect;
+        assert.isDefined(params);
+    });
 
-describe("LookupApi", function() {
-  it("API with all required params", function() {
-    const params: API = {
-      api: "test",
-      version: "test",
-      baseURL: "test"
-    };
+    it("API with all required and optional params", function () {
+        const params: API = {
+            api: "test",
+            version: "test",
+            baseURL: "test",
+            parameters: { ["test"]: "test" }
+        };
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("API with all required and optional params", function() {
-    const params: API = {
-      api: "test",
-      version: "test",
-      baseURL: "test",
-      parameters: { ["test"]: "test" }
-    };
+    it("ApiNotFoundError with all required params", function () {
+        const params: ApiNotFoundError = {};
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("ApiNotFoundError with all required params", function() {
-    const params: ApiNotFoundError = {};
+    it("ApiNotFoundError with all required and optional params", function () {
+        const params: ApiNotFoundError = {
+            status: 1,
+            title: "test",
+            detail: [{ name: "test", error: "test" }],
+            error: "test",
+            error_description: "test"
+        };
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("ApiNotFoundError with all required and optional params", function() {
-    const params: ApiNotFoundError = {
-      status: 1,
-      title: "test",
-      detail: [{ name: "test", error: "test" }],
-      error: "test",
-      error_description: "test"
-    };
+    it("Test platformAPI method with all required params", async function () {
+        const params = {
+            api: "mocked-api",
+            version: "mocked-version"
+        };
 
-    assert.isDefined(params);
-  });
+        const result = await LookupApi.platformAPI(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test platformAPI method with all required params", async function() {
-    const params = {
-      api: "mocked-api",
-      version: "mocked-version"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await LookupApi.platformAPI(mockedRequestBuilder, params);
+    it("Test getPlatformAPIList method without params", async function () {
+        const result = await LookupApi.getPlatformAPIList(mockedRequestBuilder);
 
-    expect(result).to.be.equal("success");
-  });
+        expect(result).to.be.equal("success");
+    });
 
-  it("Test getPlatformAPIList method without params", async function() {
-    const result = await LookupApi.getPlatformAPIList(mockedRequestBuilder);
+    it("Test resourceAPI method with all required params", async function () {
+        const params = {
+            hrn: "mocked-hrn",
+            api: "test",
+            version: "test"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await LookupApi.resourceAPI(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test resourceAPI method with all required params", async function() {
-    const params = {
-      hrn: "mocked-hrn",
-      api: "test",
-      version: "test"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await LookupApi.resourceAPI(mockedRequestBuilder, params);
+    it("Test resourceAPI method with all required and optional params", async function () {
+        const params = {
+            hrn: "mocked-hrn",
+            api: "test",
+            version: "test",
+            region: "mocked-region"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await LookupApi.resourceAPI(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test resourceAPI method with all required and optional params", async function() {
-    const params = {
-      hrn: "mocked-hrn",
-      api: "test",
-      version: "test",
-      region: "mocked-region"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await LookupApi.resourceAPI(mockedRequestBuilder, params);
+    it("Test getResourceAPIList method with all required params", async function () {
+        const params = {
+            hrn: "mocked-hrn"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await LookupApi.getResourceAPIList(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test getResourceAPIList method with all required params", async function() {
-    const params = {
-      hrn: "mocked-hrn"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await LookupApi.getResourceAPIList(
-      mockedRequestBuilder,
-      params
-    );
+    it("Test getResourceAPIList method with all required and optional params", async function () {
+        const params = {
+            hrn: "mocked-hrn",
+            region: "mocked-region"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await LookupApi.getResourceAPIList(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test getResourceAPIList method with all required and optional params", async function() {
-    const params = {
-      hrn: "mocked-hrn",
-      region: "mocked-region"
-    };
-
-    const result = await LookupApi.getResourceAPIList(
-      mockedRequestBuilder,
-      params
-    );
-
-    expect(result).to.be.equal("success");
-  });
+        expect(result).to.be.equal("success");
+    });
 });

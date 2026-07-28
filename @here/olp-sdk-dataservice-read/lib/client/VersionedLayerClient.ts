@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2021 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,17 +28,14 @@ import {
     STATUS_CODES
 } from "@here/olp-sdk-core";
 import { BlobApi, MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
-import {
-    DataRequest,
-    getTile,
-    MetadataCacheRepository,
-    PartitionsRequest,
-    QuadKeyPartitionsRequest,
-    QuadTreeIndexRequest,
-    QueryClient,
-    TileRequest,
-    TileRequestParams
-} from "@here/olp-sdk-dataservice-read";
+import { MetadataCacheRepository } from "../cache/MetadataCacheRepository";
+import { getTile } from "../utils/getTile";
+import { DataRequest } from "./DataRequest";
+import { PartitionsRequest } from "./PartitionsRequest";
+import { QuadKeyPartitionsRequest } from "./QuadKeyPartitionsRequest";
+import { QuadTreeIndexRequest } from "./QuadTreeIndexRequest";
+import { QueryClient } from "./QueryClient";
+import { TileRequest, TileRequestParams } from "./TileRequest";
 /**
  * Parameters for use to initialize VersionLayerClient.
  */
@@ -156,7 +153,7 @@ export class VersionedLayerClient {
             // fetch the latest version and lock it to the instance.
             this.version = await this.getLatestVersion(
                 dataRequest.getBillingTag()
-            ).catch(error => Promise.reject(error));
+            );
         }
 
         if (this.version === undefined) {
@@ -172,7 +169,7 @@ export class VersionedLayerClient {
                 partitionId,
                 dataRequest.getFetchOption(),
                 dataRequest.getBillingTag()
-            ).catch(error => Promise.reject(error));
+            );
             return this.downloadPartition(
                 partitionIdDataHandle,
                 abortSignal,
@@ -229,9 +226,7 @@ export class VersionedLayerClient {
     ): Promise<QueryApi.Index | MetadataApi.Partitions | QueryApi.Partitions> {
         if (this.version === undefined) {
             // fetch the latest version and lock it to the instance.
-            this.version = await this.getLatestVersion(
-                request.getBillingTag()
-            ).catch(error => Promise.reject(error));
+            this.version = await this.getLatestVersion(request.getBillingTag());
         }
 
         if (this.version === undefined) {
@@ -300,7 +295,7 @@ export class VersionedLayerClient {
                                 | "crc"
                         ) => {
                             return partitions.every(
-                                partition => partition[field] !== undefined
+                                (partition) => partition[field] !== undefined
                             );
                         }
                     );
@@ -319,14 +314,14 @@ export class VersionedLayerClient {
             "metadata",
             HRN.fromString(this.hrn),
             abortSignal
-        ).catch(error => Promise.reject(error));
+        );
 
         const metadata = await MetadataApi.getPartitions(metaRequestBilder, {
             version: this.version,
             layerId: this.layerId,
             additionalFields: request.getAdditionalFields(),
             billingTag: request.getBillingTag()
-        }).catch(error => Promise.reject(error));
+        });
 
         if (
             request.getFetchOption() !== FetchOptions.OnlineOnly &&
@@ -391,11 +386,11 @@ export class VersionedLayerClient {
         const builder = await this.getRequestBuilder(
             "metadata",
             HRN.fromString(this.hrn)
-        ).catch(error => Promise.reject(error));
+        );
         const latestVersion = await MetadataApi.latestVersion(builder, {
             startVersion: -1,
             billingTag
-        }).catch(error => Promise.reject(error));
+        });
         return Promise.resolve(latestVersion.version);
     }
 
@@ -408,7 +403,7 @@ export class VersionedLayerClient {
             "blob",
             HRN.fromString(this.hrn),
             abortSignal
-        ).catch(error => Promise.reject(error));
+        );
         return BlobApi.getBlob(builder, {
             dataHandle,
             layerId: this.layerId,

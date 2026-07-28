@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,95 +17,99 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { CatalogVersionRequest } from "@here/olp-sdk-dataservice-read";
 
-chai.use(sinonChai);
+describe("CatalogVersionRequest", function () {
+    class CatalogVersionRequestTest extends CatalogVersionRequest {
+        getStartVersion(): number {
+            return 5;
+        }
 
-const assert = chai.assert;
-const expect = chai.expect;
+        withStartVersion(version: number): CatalogVersionRequest {
+            return this;
+        }
 
-describe("CatalogVersionRequest", function() {
-  class CatalogVersionRequestTest extends CatalogVersionRequest {
-    getStartVersion(): number {
-      return 5;
+        getEndVersion(): number {
+            return 25;
+        }
+
+        withEndVersion(version: number): CatalogVersionRequest {
+            return this;
+        }
+
+        withBillingTag(tag: string): CatalogVersionRequest {
+            return this;
+        }
+
+        getBillingTag(): string {
+            return "billing-tag";
+        }
     }
 
-    withStartVersion(version: number): CatalogVersionRequest {
-      return this;
-    }
+    it("Shoud be initialized", async function () {
+        const catalogRequest = new CatalogVersionRequestTest();
+        assert.isDefined(catalogRequest);
+        expect(catalogRequest).to.be.instanceOf(CatalogVersionRequest);
 
-    getEndVersion(): number {
-      return 25;
-    }
+        assert.isFunction(catalogRequest.withStartVersion);
+        assert.isFunction(catalogRequest.getStartVersion);
+        assert.isFunction(catalogRequest.withEndVersion);
+        assert.isFunction(catalogRequest.getEndVersion);
+        assert.isFunction(catalogRequest.withBillingTag);
+        assert.isFunction(catalogRequest.getBillingTag);
+    });
 
-    withEndVersion(version: number): CatalogVersionRequest {
-      return this;
-    }
+    it("Test withStartVersion method with version", async function () {
+        const request = new CatalogVersionRequestTest();
 
-    withBillingTag(tag: string): CatalogVersionRequest {
-      return this;
-    }
+        const response = request.withStartVersion(1);
+        assert.isDefined(response);
+    });
 
-    getBillingTag(): string {
-      return "billing-tag";
-    }
-  }
+    it("Test getStartVersion method without params", async function () {
+        const request = new CatalogVersionRequestTest();
 
-  it("Shoud be initialized", async function() {
-    const catalogRequest = new CatalogVersionRequestTest();
-    assert.isDefined(catalogRequest);
-    expect(catalogRequest).to.be.instanceOf(CatalogVersionRequest);
+        const response = request.getStartVersion();
+        assert.isDefined(response);
+    });
 
-    assert.isFunction(catalogRequest.withStartVersion);
-    assert.isFunction(catalogRequest.getStartVersion);
-    assert.isFunction(catalogRequest.withEndVersion);
-    assert.isFunction(catalogRequest.getEndVersion);
-    assert.isFunction(catalogRequest.withBillingTag);
-    assert.isFunction(catalogRequest.getBillingTag);
-  });
+    it("Test withEndVersion method with version", async function () {
+        const request = new CatalogVersionRequestTest();
 
-  it("Test withStartVersion method with version", async function() {
-    const request = new CatalogVersionRequestTest();
+        const response = request.withEndVersion(25);
+        assert.isDefined(response);
+    });
 
-    const response = request.withStartVersion(1);
-    assert.isDefined(response);
-  });
+    it("Test getEndVersion method without params", async function () {
+        const request = new CatalogVersionRequestTest();
 
-  it("Test getStartVersion method without params", async function() {
-    const request = new CatalogVersionRequestTest();
+        const response = request.getEndVersion();
+        assert.isDefined(response);
+    });
 
-    const response = request.getStartVersion();
-    assert.isDefined(response);
-  });
+    it("Test withBillingTag method with tag", async function () {
+        const catalogRequest = new CatalogVersionRequestTest();
 
-  it("Test withEndVersion method with version", async function() {
-    const request = new CatalogVersionRequestTest();
+        const response = catalogRequest.withBillingTag("test-tag");
+        assert.isDefined(response);
+    });
 
-    const response = request.withEndVersion(25);
-    assert.isDefined(response);
-  });
+    it("Test getBillingTag method without params", async function () {
+        const catalogRequest = new CatalogVersionRequestTest();
+        catalogRequest.withBillingTag("test-tag");
 
-  it("Test getEndVersion method without params", async function() {
-    const request = new CatalogVersionRequestTest();
-
-    const response = request.getEndVersion();
-    assert.isDefined(response);
-  });
-
-  it("Test withBillingTag method with tag", async function() {
-    const catalogRequest = new CatalogVersionRequestTest();
-
-    const response = catalogRequest.withBillingTag("test-tag");
-    assert.isDefined(response);
-  });
-
-  it("Test getBillingTag method without params", async function() {
-    const catalogRequest = new CatalogVersionRequestTest();
-    catalogRequest.withBillingTag("test-tag");
-
-    const response = catalogRequest.getBillingTag();
-    assert.isDefined(response);
-  });
+        const response = catalogRequest.getBillingTag();
+        assert.isDefined(response);
+    });
 });

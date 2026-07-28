@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,21 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { getEnvLookUpUrl } from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
-
-const expect = chai.expect;
-
-describe("getEnvLookUpUrl", function() {
-    it("Should return default url", function() {
+describe("getEnvLookUpUrl", function () {
+    it("Should return default url", function () {
         expect(getEnvLookUpUrl("invalid environment name string")).to.be.equal(
             "https://api-lookup.data.api.platform.here.com/lookup/v1"
         );
@@ -35,37 +40,37 @@ describe("getEnvLookUpUrl", function() {
         );
     });
 
-    it("Should return url to the development instance", function() {
+    it("Should return url to the development instance", function () {
         expect(getEnvLookUpUrl("here-dev")).to.be.equal(
             "https://api-lookup.data.api.platform.sit.here.com/lookup/v1"
         );
     });
 
-    it("Should return url to the production instance", function() {
+    it("Should return url to the production instance", function () {
         expect(getEnvLookUpUrl("here")).to.be.equal(
             "https://api-lookup.data.api.platform.here.com/lookup/v1"
         );
     });
 
-    it("Should return url to the china production instance", function() {
+    it("Should return url to the china production instance", function () {
         expect(getEnvLookUpUrl("here-cn")).to.be.equal(
             "https://api-lookup.data.api.platform.hereolp.cn/lookup/v1"
         );
     });
 
-    it("Should return url to the china development instance", function() {
+    it("Should return url to the china development instance", function () {
         expect(getEnvLookUpUrl("here-cn-dev")).to.be.equal(
             "https://api-lookup.data.api.platform.in.hereolp.cn/lookup/v1"
         );
     });
 
-    it("Should return url to the localhost instance", function() {
+    it("Should return url to the localhost instance", function () {
         expect(getEnvLookUpUrl("local")).to.be.equal(
             "http://localhost:31005/lookup/v1"
         );
     });
 
-    it("Should return url to the custom instance", function() {
+    it("Should return url to the custom instance", function () {
         expect(getEnvLookUpUrl("http://localhost:3000/lookup/v1")).to.be.equal(
             "http://localhost:3000/lookup/v1"
         );

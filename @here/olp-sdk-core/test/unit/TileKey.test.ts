@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,21 @@
  * License-Filename: LICENSE
  */
 
-import { assert } from "chai";
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { TileKey } from "@here/olp-sdk-core";
 
-describe("TileKey", function() {
-    it("largeNumberDivision", function() {
+describe("TileKey", function () {
+    it("largeNumberDivision", function () {
         // make sure that dividing by a large number by 2 actually produces correct results
         let x = Math.pow(2, 52);
         for (let i = 51; i > 0; --i) {
@@ -30,7 +40,7 @@ describe("TileKey", function() {
         }
     });
 
-    it("getSubHereTile", function() {
+    it("getSubHereTile", function () {
         assert.strictEqual(
             "4",
             TileKey.fromRowColumnLevel(2, 2, 2).getSubHereTile(1)
@@ -49,7 +59,7 @@ describe("TileKey", function() {
         );
     });
 
-    it("toQuadKey", function() {
+    it("toQuadKey", function () {
         assert.strictEqual(
             "30",
             TileKey.fromRowColumnLevel(2, 2, 2).toQuadKey()
@@ -76,7 +86,7 @@ describe("TileKey", function() {
         );
     });
 
-    it("fromQuadKey", function() {
+    it("fromQuadKey", function () {
         assert.isTrue(
             TileKey.fromQuadKey("30").equals(
                 TileKey.fromRowColumnLevel(2, 2, 2)
@@ -107,17 +117,17 @@ describe("TileKey", function() {
         );
     });
 
-    it("columnsAtLevel", function() {
+    it("columnsAtLevel", function () {
         assert.strictEqual(8, TileKey.columnsAtLevel(3));
         assert.strictEqual(8192, TileKey.columnsAtLevel(13));
     });
 
-    it("rowsAtLevel", function() {
+    it("rowsAtLevel", function () {
         assert.strictEqual(8, TileKey.rowsAtLevel(3));
         assert.strictEqual(8192, TileKey.rowsAtLevel(13));
     });
 
-    it("parent", function() {
+    it("parent", function () {
         assert.isTrue(
             TileKey.fromRowColumnLevel(1637, 4042, 12).equals(
                 TileKey.fromMortonCode(100000155).parent()
@@ -125,7 +135,7 @@ describe("TileKey", function() {
         );
     });
 
-    it("addedSubKey", function() {
+    it("addedSubKey", function () {
         assert.isTrue(
             TileKey.fromRowColumnLevel(10, 15, 4).equals(
                 TileKey.fromRowColumnLevel(2, 3, 2).addedSubKey("31")
@@ -133,7 +143,7 @@ describe("TileKey", function() {
         );
     });
 
-    it("changedLevelBy", function() {
+    it("changedLevelBy", function () {
         assert.isTrue(
             TileKey.fromRowColumnLevel(2, 3, 2).equals(
                 TileKey.fromRowColumnLevel(2, 3, 2).changedLevelBy(0)
@@ -151,7 +161,7 @@ describe("TileKey", function() {
         );
     });
 
-    it("fromMortonCode", function() {
+    it("fromMortonCode", function () {
         assert.isTrue(
             TileKey.fromRowColumnLevel(1637, 4042, 12).equals(
                 TileKey.fromMortonCode(25000038)
@@ -164,28 +174,28 @@ describe("TileKey", function() {
         );
     });
 
-    it("rowCount", function() {
+    it("rowCount", function () {
         assert.strictEqual(
             4096,
             TileKey.fromRowColumnLevel(1637, 4042, 12).rowCount()
         );
     });
 
-    it("columnCount", function() {
+    it("columnCount", function () {
         assert.strictEqual(
             8192,
             TileKey.fromRowColumnLevel(3275, 8085, 13).columnCount()
         );
     });
 
-    it("toHereTile", function() {
+    it("toHereTile", function () {
         assert.strictEqual(
             "100000155",
             TileKey.fromRowColumnLevel(3275, 8085, 13).toHereTile()
         );
     });
 
-    it("changedLevelTo", function() {
+    it("changedLevelTo", function () {
         assert.isTrue(
             TileKey.fromRowColumnLevel(6, 15, 4).equals(
                 TileKey.fromRowColumnLevel(3275, 8085, 13).changedLevelTo(4)
@@ -193,7 +203,7 @@ describe("TileKey", function() {
         );
     });
 
-    it("fromHereTile", function() {
+    it("fromHereTile", function () {
         assert.isTrue(
             TileKey.fromHereTile("100000155").equals(
                 TileKey.fromRowColumnLevel(3275, 8085, 13)
@@ -201,11 +211,11 @@ describe("TileKey", function() {
         );
     });
 
-    it("parentMortonCode", function() {
+    it("parentMortonCode", function () {
         assert.strictEqual(25000038, TileKey.parentMortonCode(100000155));
     });
 
-    it("addedSubHereTile", function() {
+    it("addedSubHereTile", function () {
         assert.isTrue(
             TileKey.fromRowColumnLevel(49, 124, 7).equals(
                 TileKey.fromRowColumnLevel(6, 15, 4).addedSubHereTile("82")
@@ -213,7 +223,7 @@ describe("TileKey", function() {
         );
     });
 
-    it("atCoords", function() {
+    it("atCoords", function () {
         assert.isTrue(
             TileKey.fromRowColumnLevel(3, 6, 5).equals(
                 TileKey.atCoords(5, 8.8, 6.486, 45, 55)
@@ -221,7 +231,7 @@ describe("TileKey", function() {
         );
     });
 
-    it("throws an error", function() {
+    it("throws an error", function () {
         try {
             TileKey.fromRowColumnLevel(0, 0, 0).parent();
         } catch (error) {
@@ -232,7 +242,7 @@ describe("TileKey", function() {
         }
     });
 
-    it("Tile is not valid if the row/column is out of bounds", function() {
+    it("Tile is not valid if the row/column is out of bounds", function () {
         const invalid_tile_1 = { row: 5, column: 1, level: 1 };
         assert.isFalse(TileKey.isValid(invalid_tile_1));
 
@@ -246,7 +256,7 @@ describe("TileKey", function() {
         assert.isFalse(TileKey.isValid(invalid_tile_4));
     });
 
-    it("Tile is not valid if the level is out of bounds", function() {
+    it("Tile is not valid if the level is out of bounds", function () {
         const invalid_tile_1 = { row: 0, column: 0, level: -1 };
         assert.isFalse(TileKey.isValid(invalid_tile_1));
 

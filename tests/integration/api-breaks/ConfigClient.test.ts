@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,61 +16,62 @@
  * SPDX-License-Identifier: Apache-2.0
  * License-Filename: LICENSE
  */
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
 
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { ConfigClient } from "@here/olp-sdk-dataservice-read";
 import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
 import * as dataServiceApi from "@here/olp-sdk-dataservice-api";
 import { OlpClientSettings } from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
+describe("ConfigClient", function () {
+    class ConfigClientTest extends ConfigClient {
+        constructor(settings: OlpClientSettings) {
+            super(settings);
+        }
 
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("ConfigClient", function() {
-  class ConfigClientTest extends ConfigClient {
-    constructor(settings: OlpClientSettings) {
-      super(settings);
+        public async getCatalogs(
+            request?: dataServiceRead.CatalogsRequest
+        ): Promise<dataServiceApi.ConfigApi.CatalogsListResult> {
+            return {};
+        }
     }
 
-    public async getCatalogs(
-      request?: dataServiceRead.CatalogsRequest
-    ): Promise<dataServiceApi.ConfigApi.CatalogsListResult> {
-      return {};
-    }
-  }
+    let settings = new OlpClientSettings({
+        environment: "here",
+        getToken: () => Promise.resolve("mocked-token")
+    });
 
-  let sandbox: sinon.SinonSandbox;
-  sandbox = sinon.createSandbox();
-  let settings = new OlpClientSettings({
-    environment: "here",
-    getToken: () => Promise.resolve("mocked-token")
-  });
+    it("Shoud be initialized with arguments", async function () {
+        const configClient = new ConfigClient(settings);
+        assert.isDefined(configClient);
 
-  it("Shoud be initialized with arguments", async function() {
-    const configClient = new ConfigClient(settings);
-    assert.isDefined(configClient);
+        expect(configClient).to.be.instanceOf(ConfigClient);
+        assert.isDefined(configClient.getCatalogs);
+    });
 
-    expect(configClient).to.be.instanceOf(ConfigClient);
-    assert.isDefined(configClient.getCatalogs);
-  });
+    it("Test getCatalogs method without params", async function () {
+        const configClient = new ConfigClientTest(settings);
 
-  it("Test getCatalogs method without params", async function() {
-    const configClient = new ConfigClientTest(settings);
+        const response = await configClient.getCatalogs();
+        assert.isDefined(response);
+    });
 
-    const response = await configClient.getCatalogs();
-    assert.isDefined(response);
-  });
+    it("Test getCatalog method with catalogsRequest", async function () {
+        const configClient = new ConfigClientTest(settings);
 
-  it("Test getCatalog method with catalogsRequest", async function() {
-    const configClient = new ConfigClientTest(settings);
-
-    const response = await configClient.getCatalogs(
-      new dataServiceRead.CatalogsRequest()
-    );
-    assert.isDefined(response);
-  });
+        const response = await configClient.getCatalogs(
+            new dataServiceRead.CatalogsRequest()
+        );
+        assert.isDefined(response);
+    });
 });

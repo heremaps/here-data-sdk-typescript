@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2021 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,11 +29,9 @@ import {
     MetadataApi,
     QueryApi
 } from "@here/olp-sdk-dataservice-api";
-import {
-    MetadataCacheRepository,
-    PartitionsRequest,
-    QuadTreeIndexRequest
-} from "@here/olp-sdk-dataservice-read";
+import { MetadataCacheRepository } from "../cache/MetadataCacheRepository";
+import { PartitionsRequest } from "./PartitionsRequest";
+import { QuadTreeIndexRequest } from "./QuadTreeIndexRequest";
 
 /**
  * A client for the Query Service API that provides a way to get information (metadata)
@@ -87,7 +85,7 @@ export class QueryClient {
                 request.getCatalogHrn(),
                 abortSignal,
                 request.getBillingTag()
-            ).catch(error =>
+            ).catch((error) =>
                 Promise.reject(
                     `Error getting the last catalog version: ${error}`
                 )
@@ -107,7 +105,7 @@ export class QueryClient {
             this.settings,
             request.getCatalogHrn(),
             abortSignal
-        ).catch(error =>
+        ).catch((error) =>
             Promise.reject(
                 `Erorr creating request object for query service: ${error}`
             )
@@ -205,7 +203,7 @@ export class QueryClient {
             this.settings,
             hrn,
             abortSignal
-        ).catch(error =>
+        ).catch((error) =>
             Promise.reject(
                 `Erorr creating request object for query service: ${error}`
             )
@@ -218,7 +216,7 @@ export class QueryClient {
             additionalFields: request.getAdditionalFields(),
             version:
                 catalogVersion !== undefined ? `${catalogVersion}` : undefined
-        }).catch(err => Promise.reject(err));
+        });
 
         if (
             request.getFetchOption() !== FetchOptions.OnlineOnly &&
@@ -227,7 +225,7 @@ export class QueryClient {
             medatada.partitions.length
         ) {
             const partitions: MetadataApi.Partition[] = medatada.partitions.map(
-                partition => ({
+                (partition) => ({
                     checksum: partition.checksum,
                     compressedDataSize: partition.compressedDataSize,
                     dataHandle: partition.dataHandle || "",
@@ -262,7 +260,7 @@ export class QueryClient {
             this.settings,
             catalogHrn,
             abortSignal
-        ).catch(error =>
+        ).catch((error) =>
             Promise.reject(
                 `Erorr creating request object for metadata service: ${error}`
             )
@@ -271,7 +269,7 @@ export class QueryClient {
         const latestVersion = await MetadataApi.latestVersion(request, {
             startVersion: -1,
             billingTag
-        }).catch(error => Promise.reject(error));
+        });
 
         return Promise.resolve(latestVersion.version);
     }

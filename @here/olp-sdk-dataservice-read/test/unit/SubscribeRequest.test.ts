@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,25 +17,28 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { SubscribeRequest } from "../../lib";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("SubscribeRequest", function() {
-    it("Should initialize", function() {
+describe("SubscribeRequest", function () {
+    it("Should initialize", function () {
         const subscriptionRequest = new SubscribeRequest();
 
         assert.isDefined(subscriptionRequest);
         expect(subscriptionRequest).be.instanceOf(SubscribeRequest);
     });
 
-    it("Should set parameters", function() {
+    it("Should set parameters", function () {
         const mockMode = "parallel";
         const mockSubId = "1111111111";
         const mockConsumerId = "123e4567-e89b-12d3-a456-556642440000";
@@ -46,18 +49,16 @@ describe("SubscribeRequest", function() {
         };
 
         const subscriptionRequest = new SubscribeRequest();
-        const subscriptionRequestWithMode = subscriptionRequest.withMode(
-            mockMode
-        );
-        const subscriptionRequestWithSub = subscriptionRequest.withSubscriptionId(
-            mockSubId
-        );
-        const subscriptionRequestWithConsumerId = subscriptionRequest.withConsumerId(
-            mockConsumerId
-        );
-        const subscriptionRequestWithSubscriptionProperties = subscriptionRequest.withSubscriptionProperties(
-            mockSubscriptionProperties
-        );
+        const subscriptionRequestWithMode =
+            subscriptionRequest.withMode(mockMode);
+        const subscriptionRequestWithSub =
+            subscriptionRequest.withSubscriptionId(mockSubId);
+        const subscriptionRequestWithConsumerId =
+            subscriptionRequest.withConsumerId(mockConsumerId);
+        const subscriptionRequestWithSubscriptionProperties =
+            subscriptionRequest.withSubscriptionProperties(
+                mockSubscriptionProperties
+            );
 
         expect(subscriptionRequestWithMode.getMode()).to.be.equal(mockMode);
         expect(subscriptionRequestWithSub.getSubscriptionId()).to.be.equal(
@@ -71,7 +72,7 @@ describe("SubscribeRequest", function() {
         ).to.be.equal(mockSubscriptionProperties);
     });
 
-    it("Should get parameters with chain", function() {
+    it("Should get parameters with chain", function () {
         const mockMode = "parallel";
         const mockSubId = "1111111111";
         const mockConsumerId = "123e4567-e89b-12d3-a456-556642440000";

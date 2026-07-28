@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,18 +29,16 @@ import {
     MetadataApi,
     PublishApi
 } from "@here/olp-sdk-dataservice-api";
-import {
-    CancelBatchRequest,
-    CheckDataExistsRequest,
-    CompleteBatchRequest,
-    GetBatchRequest,
-    MultiPartUploadWrapper,
-    PublishSinglePartitionRequest,
-    StartBatchRequest,
-    UploadBlobRequest,
-    UploadBlobResult,
-    UploadPartitionsRequest
-} from "@here/olp-sdk-dataservice-write";
+import { MultiPartUploadWrapper } from "../utils/MultiPartUploadWrapper";
+import { CancelBatchRequest } from "./CancelBatchRequest";
+import { CheckDataExistsRequest } from "./CheckDataExistsRequest";
+import { CompleteBatchRequest } from "./CompleteBatchRequest";
+import { GetBatchRequest } from "./GetBatchRequest";
+import { PublishSinglePartitionRequest } from "./PublishSinglePartitionRequest";
+import { StartBatchRequest } from "./StartBatchRequest";
+import { UploadBlobRequest } from "./UploadBlobRequest";
+import { UploadBlobResult } from "./UploadBlobResult";
+import { UploadPartitionsRequest } from "./UploadPartitionsRequest";
 
 /**
  * Parameters used to initialize `VersionedLayerClient`.
@@ -109,7 +107,7 @@ export class VersionedLayerClient {
             this.params.settings,
             this.params.catalogHrn,
             abortSignal
-        ).catch(error =>
+        ).catch((error) =>
             Promise.reject(
                 new Error(
                     `Error retrieving from cache requestBuilder for resource "${this.params.catalogHrn}" and api: blob. ${error}`
@@ -160,7 +158,7 @@ export class VersionedLayerClient {
         const latestVersion = await MetadataApi.latestVersion(builder, {
             startVersion,
             billingTag
-        }).catch(err => Promise.reject(err));
+        });
 
         return Promise.resolve(latestVersion.version);
     }
@@ -667,7 +665,7 @@ export class VersionedLayerClient {
             const generatedDatahandle = Uuid.create();
             const dataExist = await this.checkDataExists(
                 checkDataExistsRequest.withDataHandle(generatedDatahandle)
-            ).catch(response => response.status !== STATUS_CODES.NOT_FOUND);
+            ).catch((response) => response.status !== STATUS_CODES.NOT_FOUND);
 
             if (!dataExist) {
                 return generatedDatahandle;

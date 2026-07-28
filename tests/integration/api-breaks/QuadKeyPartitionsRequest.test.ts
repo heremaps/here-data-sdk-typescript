@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,161 +17,165 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { AdditionalFields } from "@here/olp-sdk-dataservice-api";
 import {
-  QuadKeyPartitionsRequest,
-  QuadTreeIndexDepth
+    QuadKeyPartitionsRequest,
+    QuadTreeIndexDepth
 } from "@here/olp-sdk-dataservice-read";
 import { QuadKey } from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
+describe("QuadKeyPartitionsRequest", function () {
+    class QuadKeyPartitionsRequestTest extends QuadKeyPartitionsRequest {
+        withVersion(version?: number): QuadKeyPartitionsRequest {
+            return this;
+        }
 
-const assert = chai.assert;
-const expect = chai.expect;
+        withQuadKey(quadKey: QuadKey): QuadKeyPartitionsRequest {
+            return this;
+        }
 
-describe("QuadKeyPartitionsRequest", function() {
-  class QuadKeyPartitionsRequestTest extends QuadKeyPartitionsRequest {
-    withVersion(version?: number): QuadKeyPartitionsRequest {
-      return this;
+        withDepth(depth: QuadTreeIndexDepth): QuadKeyPartitionsRequest {
+            return this;
+        }
+
+        withBillingTag(tag: string): QuadKeyPartitionsRequest {
+            return this;
+        }
+
+        withAdditionalFields(
+            additionalFields: AdditionalFields
+        ): QuadKeyPartitionsRequest {
+            return this;
+        }
+
+        getVersion(): number {
+            return 10;
+        }
+
+        getQuadKey(): QuadKey {
+            return {
+                row: 5,
+                column: 5,
+                level: 5
+            };
+        }
+
+        getDepth(): QuadTreeIndexDepth {
+            return 0;
+        }
+
+        getBillingTag(): string {
+            return "test-billing-tag";
+        }
+
+        getAdditionalFields(): AdditionalFields {
+            return ["dataSize"];
+        }
     }
 
-    withQuadKey(quadKey: QuadKey): QuadKeyPartitionsRequest {
-      return this;
-    }
-
-    withDepth(depth: QuadTreeIndexDepth): QuadKeyPartitionsRequest {
-      return this;
-    }
-
-    withBillingTag(tag: string): QuadKeyPartitionsRequest {
-      return this;
-    }
-
-    withAdditionalFields(
-      additionalFields: AdditionalFields
-    ): QuadKeyPartitionsRequest {
-      return this;
-    }
-
-    getVersion(): number {
-      return 10;
-    }
-
-    getQuadKey(): QuadKey {
-      return {
-        row: 5,
-        column: 5,
-        level: 5
-      };
-    }
-
-    getDepth(): QuadTreeIndexDepth {
-      return 0;
-    }
-
-    getBillingTag(): string {
-      return "test-billing-tag";
-    }
-
-    getAdditionalFields(): AdditionalFields {
-      return ["dataSize"];
-    }
-  }
-
-  it("Shoud be initialized", async function() {
-    const request = new QuadKeyPartitionsRequest();
-    assert.isDefined(request);
-    expect(request).to.be.instanceOf(QuadKeyPartitionsRequest);
-    assert.isFunction(request.withDepth);
-    assert.isFunction(request.getDepth);
-    assert.isFunction(request.withQuadKey);
-    assert.isFunction(request.getQuadKey);
-    assert.isFunction(request.withBillingTag);
-    assert.isFunction(request.getBillingTag);
-    assert.isFunction(request.withAdditionalFields);
-    assert.isFunction(request.getAdditionalFields);
-  });
-
-  it("Test withVersion method with version", async function() {
-    const request = new QuadKeyPartitionsRequestTest();
-
-    const response = request.withVersion(3);
-    assert.isDefined(response);
-  });
-
-  it("Test withVersion method without params", async function() {
-    const request = new QuadKeyPartitionsRequestTest();
-
-    const response = request.withVersion();
-    assert.isDefined(response);
-  });
-
-  it("Test getVersion method without params", async function() {
-    const request = new QuadKeyPartitionsRequestTest();
-
-    const response = request.getVersion();
-    assert.isDefined(response);
-  });
-
-  it("Test withDepth method with depth", async function() {
-    const request = new QuadKeyPartitionsRequestTest();
-
-    const response = request.withDepth(3);
-    assert.isDefined(response);
-  });
-
-  it("Test getDepth method without params", async function() {
-    const request = new QuadKeyPartitionsRequestTest();
-
-    const response = request.getDepth();
-    assert.isDefined(response);
-  });
-
-  it("Test withQuadKey method with quadKey", async function() {
-    const request = new QuadKeyPartitionsRequestTest();
-
-    const response = request.withQuadKey({
-      row: 5,
-      column: 5,
-      level: 5
+    it("Shoud be initialized", async function () {
+        const request = new QuadKeyPartitionsRequest();
+        assert.isDefined(request);
+        expect(request).to.be.instanceOf(QuadKeyPartitionsRequest);
+        assert.isFunction(request.withDepth);
+        assert.isFunction(request.getDepth);
+        assert.isFunction(request.withQuadKey);
+        assert.isFunction(request.getQuadKey);
+        assert.isFunction(request.withBillingTag);
+        assert.isFunction(request.getBillingTag);
+        assert.isFunction(request.withAdditionalFields);
+        assert.isFunction(request.getAdditionalFields);
     });
-    assert.isDefined(response);
-  });
 
-  it("Test getQuadKey method without params", async function() {
-    const request = new QuadKeyPartitionsRequestTest();
+    it("Test withVersion method with version", async function () {
+        const request = new QuadKeyPartitionsRequestTest();
 
-    const response = request.getQuadKey();
-    assert.isDefined(response);
-  });
+        const response = request.withVersion(3);
+        assert.isDefined(response);
+    });
 
-  it("Test withBillingTag method with tag", async function() {
-    const catalogRequest = new QuadKeyPartitionsRequestTest();
+    it("Test withVersion method without params", async function () {
+        const request = new QuadKeyPartitionsRequestTest();
 
-    const response = catalogRequest.withBillingTag("test-tag");
-    assert.isDefined(response);
-  });
+        const response = request.withVersion();
+        assert.isDefined(response);
+    });
 
-  it("Test getBillingTag method without params", async function() {
-    const catalogRequest = new QuadKeyPartitionsRequestTest();
+    it("Test getVersion method without params", async function () {
+        const request = new QuadKeyPartitionsRequestTest();
 
-    const response = catalogRequest.getBillingTag();
-    assert.isDefined(response);
-  });
+        const response = request.getVersion();
+        assert.isDefined(response);
+    });
 
-  it("Test withAdditionalFields method with additionalFields", async function() {
-    const catalogRequest = new QuadKeyPartitionsRequestTest();
+    it("Test withDepth method with depth", async function () {
+        const request = new QuadKeyPartitionsRequestTest();
 
-    const response = catalogRequest.withAdditionalFields(["dataSize"]);
-    assert.isDefined(response);
-  });
+        const response = request.withDepth(3);
+        assert.isDefined(response);
+    });
 
-  it("Test getAdditionalFields method without params", async function() {
-    const catalogRequest = new QuadKeyPartitionsRequestTest();
+    it("Test getDepth method without params", async function () {
+        const request = new QuadKeyPartitionsRequestTest();
 
-    const response = catalogRequest.getAdditionalFields();
-    assert.isDefined(response);
-  });
+        const response = request.getDepth();
+        assert.isDefined(response);
+    });
+
+    it("Test withQuadKey method with quadKey", async function () {
+        const request = new QuadKeyPartitionsRequestTest();
+
+        const response = request.withQuadKey({
+            row: 5,
+            column: 5,
+            level: 5
+        });
+        assert.isDefined(response);
+    });
+
+    it("Test getQuadKey method without params", async function () {
+        const request = new QuadKeyPartitionsRequestTest();
+
+        const response = request.getQuadKey();
+        assert.isDefined(response);
+    });
+
+    it("Test withBillingTag method with tag", async function () {
+        const catalogRequest = new QuadKeyPartitionsRequestTest();
+
+        const response = catalogRequest.withBillingTag("test-tag");
+        assert.isDefined(response);
+    });
+
+    it("Test getBillingTag method without params", async function () {
+        const catalogRequest = new QuadKeyPartitionsRequestTest();
+
+        const response = catalogRequest.getBillingTag();
+        assert.isDefined(response);
+    });
+
+    it("Test withAdditionalFields method with additionalFields", async function () {
+        const catalogRequest = new QuadKeyPartitionsRequestTest();
+
+        const response = catalogRequest.withAdditionalFields(["dataSize"]);
+        assert.isDefined(response);
+    });
+
+    it("Test getAdditionalFields method without params", async function () {
+        const catalogRequest = new QuadKeyPartitionsRequestTest();
+
+        const response = catalogRequest.getAdditionalFields();
+        assert.isDefined(response);
+    });
 });

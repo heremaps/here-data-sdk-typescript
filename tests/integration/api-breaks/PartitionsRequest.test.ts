@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,124 +17,128 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { PartitionsRequest } from "@here/olp-sdk-dataservice-read";
 import { AdditionalFields } from "@here/olp-sdk-dataservice-api";
 
-chai.use(sinonChai);
+describe("PartitionsRequest", function () {
+    class PartitionsRequestTest extends PartitionsRequest {
+        withVersion(version?: number): PartitionsRequest {
+            return this;
+        }
+        getVersion(): number {
+            return 10;
+        }
 
-const assert = chai.assert;
-const expect = chai.expect;
+        withBillingTag(tag: string): PartitionsRequest {
+            return this;
+        }
 
-describe("PartitionsRequest", function() {
-  class PartitionsRequestTest extends PartitionsRequest {
-    withVersion(version?: number): PartitionsRequest {
-      return this;
+        getBillingTag(): string {
+            return "billing-tag";
+        }
+
+        withPartitionIds(ids: string[]): PartitionsRequest {
+            return this;
+        }
+
+        getPartitionIds(): string[] {
+            return ["partitionIds"];
+        }
+
+        withAdditionalFields(
+            additionalFields: AdditionalFields
+        ): PartitionsRequest {
+            return this;
+        }
+
+        getAdditionalFields(): AdditionalFields {
+            return ["dataSize"];
+        }
     }
-    getVersion(): number {
-      return 10;
-    }
 
-    withBillingTag(tag: string): PartitionsRequest {
-      return this;
-    }
+    it("Shoud be initialized", async function () {
+        const request = new PartitionsRequest();
+        assert.isDefined(request);
+        expect(request).to.be.instanceOf(PartitionsRequest);
+        assert.isFunction(request.withBillingTag);
+        assert.isFunction(request.getBillingTag);
+        assert.isFunction(request.withPartitionIds);
+        assert.isFunction(request.getPartitionIds);
+        assert.isFunction(request.withAdditionalFields);
+        assert.isFunction(request.getAdditionalFields);
+    });
 
-    getBillingTag(): string {
-      return "billing-tag";
-    }
+    it("Test withVersion method with version", async function () {
+        const request = new PartitionsRequestTest();
 
-    withPartitionIds(ids: string[]): PartitionsRequest {
-      return this;
-    }
+        const response = request.withVersion(5);
+        assert.isDefined(response);
+    });
 
-    getPartitionIds(): string[] {
-      return ["partitionIds"];
-    }
+    it("Test withVersion method without params", async function () {
+        const request = new PartitionsRequestTest();
 
-    withAdditionalFields(
-      additionalFields: AdditionalFields
-    ): PartitionsRequest {
-      return this;
-    }
+        const response = request.withVersion();
+        assert.isDefined(response);
+    });
 
-    getAdditionalFields(): AdditionalFields {
-      return ["dataSize"];
-    }
-  }
+    it("Test getVersion method without params", async function () {
+        const request = new PartitionsRequestTest();
 
-  it("Shoud be initialized", async function() {
-    const request = new PartitionsRequest();
-    assert.isDefined(request);
-    expect(request).to.be.instanceOf(PartitionsRequest);
-    assert.isFunction(request.withBillingTag);
-    assert.isFunction(request.getBillingTag);
-    assert.isFunction(request.withPartitionIds);
-    assert.isFunction(request.getPartitionIds);
-    assert.isFunction(request.withAdditionalFields);
-    assert.isFunction(request.getAdditionalFields);
-  });
+        const response = request.getVersion();
+        assert.isDefined(response);
+    });
 
-  it("Test withVersion method with version", async function() {
-    const request = new PartitionsRequestTest();
+    it("Test withBillingTag method with tag", async function () {
+        const request = new PartitionsRequestTest();
 
-    const response = request.withVersion(5);
-    assert.isDefined(response);
-  });
+        const response = request.withBillingTag("test-tag");
+        assert.isDefined(response);
+    });
 
-  it("Test withVersion method without params", async function() {
-    const request = new PartitionsRequestTest();
+    it("Test getBillingTag method without params", async function () {
+        const request = new PartitionsRequestTest();
 
-    const response = request.withVersion();
-    assert.isDefined(response);
-  });
+        const response = request.getBillingTag();
+        assert.isDefined(response);
+    });
 
-  it("Test getVersion method without params", async function() {
-    const request = new PartitionsRequestTest();
+    it("Test withPartitionIds method with ids", async function () {
+        const request = new PartitionsRequestTest();
 
-    const response = request.getVersion();
-    assert.isDefined(response);
-  });
+        const response = request.withPartitionIds(["test"]);
+        assert.isDefined(response);
+    });
 
-  it("Test withBillingTag method with tag", async function() {
-    const request = new PartitionsRequestTest();
+    it("Test getPartitionIds method without params", async function () {
+        const request = new PartitionsRequestTest();
 
-    const response = request.withBillingTag("test-tag");
-    assert.isDefined(response);
-  });
+        const response = request.getPartitionIds();
+        assert.isDefined(response);
+    });
 
-  it("Test getBillingTag method without params", async function() {
-    const request = new PartitionsRequestTest();
+    it("Test withAdditionalFields method with AdditionalFields", async function () {
+        const request = new PartitionsRequestTest();
 
-    const response = request.getBillingTag();
-    assert.isDefined(response);
-  });
+        const response = request.withAdditionalFields(["dataSize"]);
+        assert.isDefined(response);
+    });
 
-  it("Test withPartitionIds method with ids", async function() {
-    const request = new PartitionsRequestTest();
+    it("Test getAdditionalFields method without params", async function () {
+        const request = new PartitionsRequestTest();
 
-    const response = request.withPartitionIds(["test"]);
-    assert.isDefined(response);
-  });
-
-  it("Test getPartitionIds method without params", async function() {
-    const request = new PartitionsRequestTest();
-
-    const response = request.getPartitionIds();
-    assert.isDefined(response);
-  });
-
-  it("Test withAdditionalFields method with AdditionalFields", async function() {
-    const request = new PartitionsRequestTest();
-
-    const response = request.withAdditionalFields(["dataSize"]);
-    assert.isDefined(response);
-  });
-
-  it("Test getAdditionalFields method without params", async function() {
-    const request = new PartitionsRequestTest();
-
-    const response = request.getAdditionalFields();
-    assert.isDefined(response);
-  });
+        const response = request.getAdditionalFields();
+        assert.isDefined(response);
+    });
 });

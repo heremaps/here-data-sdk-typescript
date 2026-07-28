@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,109 +17,113 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { SeekRequest } from "@here/olp-sdk-dataservice-read";
 import { StreamApi } from "@here/olp-sdk-dataservice-api";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("SeekRequest", function() {
-  class SeekRequestTest extends SeekRequest {
-    getMode(): "serial" {
-      return "serial";
-    }
-
-    withMode(mode: "serial"): SeekRequest {
-      return this;
-    }
-
-    getSubscriptionId(): string {
-      return "subscription-id";
-    }
-
-    withSubscriptionId(id: string): SeekRequest {
-      return this;
-    }
-
-    getSeekOffsets(): StreamApi.SeekOffsetsRequest | undefined {
-      return {
-        offsets: [
-          {
-            partition: 1,
-            offset: 1
-          }
-        ]
-      };
-    }
-
-    withSeekOffsets(offsets: StreamApi.SeekOffsetsRequest): SeekRequest {
-      return this;
-    }
-  }
-
-  it("Shoud be initialized", async function() {
-    const request = new SeekRequest();
-    assert.isDefined(request);
-    expect(request).to.be.instanceOf(SeekRequest);
-
-    assert.isFunction(request.withMode);
-    assert.isFunction(request.getMode);
-    assert.isFunction(request.withSubscriptionId);
-    assert.isFunction(request.getSubscriptionId);
-    assert.isFunction(request.withSeekOffsets);
-    assert.isFunction(request.getSeekOffsets);
-  });
-
-  it("Test withMode method with mode", async function() {
-    const request = new SeekRequestTest();
-
-    const response = request.withMode("serial");
-    assert.isDefined(response);
-  });
-
-  it("Test getMode method without params", async function() {
-    const request = new SeekRequestTest();
-
-    const response = request.getMode();
-    assert.isDefined(response);
-  });
-
-  it("Test withSubscriptionId method with id", async function() {
-    const request = new SeekRequestTest();
-
-    const response = request.withSubscriptionId("test");
-    assert.isDefined(response);
-  });
-
-  it("Test getSubscriptionId method without params", async function() {
-    const request = new SeekRequestTest();
-
-    const response = request.getSubscriptionId();
-    assert.isDefined(response);
-  });
-
-  it("Test withSeekOffsets method with offsets", async function() {
-    const request = new SeekRequestTest();
-
-    const response = request.withSeekOffsets({
-      offsets: [
-        {
-          partition: 1,
-          offset: 1
+describe("SeekRequest", function () {
+    class SeekRequestTest extends SeekRequest {
+        getMode(): "serial" {
+            return "serial";
         }
-      ]
+
+        withMode(mode: "serial"): SeekRequest {
+            return this;
+        }
+
+        getSubscriptionId(): string {
+            return "subscription-id";
+        }
+
+        withSubscriptionId(id: string): SeekRequest {
+            return this;
+        }
+
+        getSeekOffsets(): StreamApi.SeekOffsetsRequest | undefined {
+            return {
+                offsets: [
+                    {
+                        partition: 1,
+                        offset: 1
+                    }
+                ]
+            };
+        }
+
+        withSeekOffsets(offsets: StreamApi.SeekOffsetsRequest): SeekRequest {
+            return this;
+        }
+    }
+
+    it("Shoud be initialized", async function () {
+        const request = new SeekRequest();
+        assert.isDefined(request);
+        expect(request).to.be.instanceOf(SeekRequest);
+
+        assert.isFunction(request.withMode);
+        assert.isFunction(request.getMode);
+        assert.isFunction(request.withSubscriptionId);
+        assert.isFunction(request.getSubscriptionId);
+        assert.isFunction(request.withSeekOffsets);
+        assert.isFunction(request.getSeekOffsets);
     });
-    assert.isDefined(response);
-  });
 
-  it("Test getSeekOffsets method without params", async function() {
-    const request = new SeekRequestTest();
+    it("Test withMode method with mode", async function () {
+        const request = new SeekRequestTest();
 
-    const response = request.getSeekOffsets();
-    assert.isDefined(response);
-  });
+        const response = request.withMode("serial");
+        assert.isDefined(response);
+    });
+
+    it("Test getMode method without params", async function () {
+        const request = new SeekRequestTest();
+
+        const response = request.getMode();
+        assert.isDefined(response);
+    });
+
+    it("Test withSubscriptionId method with id", async function () {
+        const request = new SeekRequestTest();
+
+        const response = request.withSubscriptionId("test");
+        assert.isDefined(response);
+    });
+
+    it("Test getSubscriptionId method without params", async function () {
+        const request = new SeekRequestTest();
+
+        const response = request.getSubscriptionId();
+        assert.isDefined(response);
+    });
+
+    it("Test withSeekOffsets method with offsets", async function () {
+        const request = new SeekRequestTest();
+
+        const response = request.withSeekOffsets({
+            offsets: [
+                {
+                    partition: 1,
+                    offset: 1
+                }
+            ]
+        });
+        assert.isDefined(response);
+    });
+
+    it("Test getSeekOffsets method without params", async function () {
+        const request = new SeekRequestTest();
+
+        const response = request.getSeekOffsets();
+        assert.isDefined(response);
+    });
 });

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,106 +16,115 @@
  * SPDX-License-Identifier: Apache-2.0
  * License-Filename: LICENSE
  */
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
 
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { QueryClient } from "@here/olp-sdk-dataservice-read";
 import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
 import * as dataServiceApi from "@here/olp-sdk-dataservice-api";
 import { HRN, OlpClientSettings } from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
+describe("QueryClient", function () {
+    class QueryClientTest extends QueryClient {
+        constructor(settings: OlpClientSettings) {
+            super(settings);
+        }
 
-const assert = chai.assert;
-const expect = chai.expect;
+        public async fetchQuadTreeIndex(
+            request: dataServiceRead.QuadTreeIndexRequest,
+            abortSignal?: AbortSignal
+        ): Promise<dataServiceApi.QueryApi.Index> {
+            return {
+                status: 1,
+                title: "test"
+            };
+        }
 
-describe("QueryClient", function() {
-  class QueryClientTest extends QueryClient {
-    constructor(settings: OlpClientSettings) {
-      super(settings);
+        public async getPartitionsById(
+            request: dataServiceRead.PartitionsRequest,
+            layerId: string,
+            hrn: HRN,
+            abortSignal?: AbortSignal
+        ): Promise<dataServiceApi.QueryApi.Partitions> {
+            return {
+                status: 11,
+                title: "test"
+            };
+        }
     }
 
-    public async fetchQuadTreeIndex(
-      request: dataServiceRead.QuadTreeIndexRequest,
-      abortSignal?: AbortSignal
-    ): Promise<dataServiceApi.QueryApi.Index> {
-      return {
-        status: 1,
-        title: "test"
-      };
-    }
+    let settings = new OlpClientSettings({
+        environment: "here",
+        getToken: () => Promise.resolve("mocked-token")
+    });
 
-    public async getPartitionsById(
-      request: dataServiceRead.PartitionsRequest,
-      layerId: string,
-      hrn: HRN,
-      abortSignal?: AbortSignal
-    ): Promise<dataServiceApi.QueryApi.Partitions> {
-      return {
-        status: 11,
-        title: "test"
-      };
-    }
-  }
+    const testCatalogHrn = HRN.fromString("hrn:here:data:::mocked-hrn");
 
-  let settings = new OlpClientSettings({
-    environment: "here",
-    getToken: () => Promise.resolve("mocked-token")
-  });
+    it("Shoud be initialized with arguments", async function () {
+        const queryClient = new QueryClient(settings);
+        assert.isDefined(queryClient);
 
-  const testCatalogHrn = HRN.fromString("hrn:here:data:::mocked-hrn");
+        expect(queryClient).to.be.instanceOf(QueryClient);
+        assert.isDefined(queryClient.fetchQuadTreeIndex);
+        assert.isDefined(queryClient.getPartitionsById);
+    });
 
-  it("Shoud be initialized with arguments", async function() {
-    const queryClient = new QueryClient(settings);
-    assert.isDefined(queryClient);
+    it("Test fetchQuadTreeIndex method with required params", async function () {
+        const client = new QueryClientTest(settings);
 
-    expect(queryClient).to.be.instanceOf(QueryClient);
-    assert.isDefined(queryClient.fetchQuadTreeIndex);
-    assert.isDefined(queryClient.getPartitionsById);
-  });
+        const response = await client.fetchQuadTreeIndex(
+            new dataServiceRead.QuadTreeIndexRequest(
+                testCatalogHrn,
+                "test-layer-id"
+            )
+        );
+        assert.isDefined(response);
+    });
 
-  it("Test fetchQuadTreeIndex method with required params", async function() {
-    const client = new QueryClientTest(settings);
+    it("Test fetchQuadTreeIndex method with required and optional params", async function () {
+        const client = new QueryClientTest(settings);
+        const controller = new AbortController();
 
-    const response = await client.fetchQuadTreeIndex(
-      new dataServiceRead.QuadTreeIndexRequest(testCatalogHrn, "test-layer-id")
-    );
-    assert.isDefined(response);
-  });
+        const response = await client.fetchQuadTreeIndex(
+            new dataServiceRead.QuadTreeIndexRequest(
+                testCatalogHrn,
+                "test-layer-id"
+            ),
+            controller.signal
+        );
+        assert.isDefined(response);
+    });
 
-  it("Test fetchQuadTreeIndex method with required and optional params", async function() {
-    const client = new QueryClientTest(settings);
-    const controller = new AbortController();
+    it("Test getPartitionsById method with required params", async function () {
+        const client = new QueryClientTest(settings);
 
-    const response = await client.fetchQuadTreeIndex(
-      new dataServiceRead.QuadTreeIndexRequest(testCatalogHrn, "test-layer-id"),
-      controller.signal
-    );
-    assert.isDefined(response);
-  });
+        const response = await client.getPartitionsById(
+            new dataServiceRead.PartitionsRequest(),
+            "test-layer-id",
+            testCatalogHrn
+        );
+        assert.isDefined(response);
+    });
 
-  it("Test getPartitionsById method with required params", async function() {
-    const client = new QueryClientTest(settings);
+    it("Test getPartitionsById method with required and optional params", async function () {
+        const client = new QueryClientTest(settings);
+        const controller = new AbortController();
 
-    const response = await client.getPartitionsById(
-      new dataServiceRead.PartitionsRequest(),
-      "test-layer-id",
-      testCatalogHrn
-    );
-    assert.isDefined(response);
-  });
-
-  it("Test getPartitionsById method with required and optional params", async function() {
-    const client = new QueryClientTest(settings);
-    const controller = new AbortController();
-
-    const response = await client.getPartitionsById(
-      new dataServiceRead.PartitionsRequest(),
-      "test-layer-id",
-      testCatalogHrn,
-      controller.signal
-    );
-    assert.isDefined(response);
-  });
+        const response = await client.getPartitionsById(
+            new dataServiceRead.PartitionsRequest(),
+            "test-layer-id",
+            testCatalogHrn,
+            controller.signal
+        );
+        assert.isDefined(response);
+    });
 });

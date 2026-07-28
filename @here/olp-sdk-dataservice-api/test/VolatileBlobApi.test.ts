@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2022 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,22 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { VolatileBlobApi } from "@here/olp-sdk-dataservice-api";
 import { RequestBuilder, UrlBuilder } from "../lib/RequestBuilder";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("VolatileBlobApi", function() {
-    it("checkHandleExists", async function() {
+describe("VolatileBlobApi", function () {
+    it("checkHandleExists", async function () {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -46,14 +49,14 @@ describe("VolatileBlobApi", function() {
             }
         };
         const result = await VolatileBlobApi.checkHandleExists(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("deleteVolatileBlob", async function() {
+    it("deleteVolatileBlob", async function () {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -70,14 +73,14 @@ describe("VolatileBlobApi", function() {
             }
         };
         const result = await VolatileBlobApi.deleteVolatileBlob(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("getVolatileBlob", async function() {
+    it("getVolatileBlob", async function () {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -94,14 +97,14 @@ describe("VolatileBlobApi", function() {
             }
         };
         const result = await VolatileBlobApi.getVolatileBlob(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("putVolatileBlob", async function() {
+    it("putVolatileBlob", async function () {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -120,7 +123,7 @@ describe("VolatileBlobApi", function() {
             }
         };
         const result = await VolatileBlobApi.putVolatileBlob(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 

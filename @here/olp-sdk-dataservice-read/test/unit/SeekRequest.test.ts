@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,25 +17,28 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { SeekRequest } from "../../lib";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("SubscribeRequest", function() {
-    it("Should initialize", function() {
+describe("SubscribeRequest", function () {
+    it("Should initialize", function () {
         const seekRequest = new SeekRequest();
 
         assert.isDefined(seekRequest);
         expect(seekRequest).be.instanceOf(SeekRequest);
     });
 
-    it("Should set parameters", function() {
+    it("Should set parameters", function () {
         const mockMode = "parallel";
         const mockSubId = "1111111111";
         const mockOffsets = {
@@ -63,7 +66,7 @@ describe("SubscribeRequest", function() {
         );
     });
 
-    it("Should get parameters with chain", function() {
+    it("Should get parameters with chain", function () {
         const mockMode = "parallel";
         const mockSubId = "1111111111";
         const mockOffsets = {

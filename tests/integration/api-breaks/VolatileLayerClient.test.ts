@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,217 +17,228 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
 import {
-  VolatileLayerClient,
-  VolatileLayerClientParams,
-  QuadKeyPartitionsRequest,
-  DataRequest,
-  PartitionsRequest
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
+import {
+    VolatileLayerClient,
+    VolatileLayerClientParams,
+    QuadKeyPartitionsRequest,
+    DataRequest,
+    PartitionsRequest
 } from "@here/olp-sdk-dataservice-read";
 import { QueryApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
 import { HRN, OlpClientSettings } from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
+describe("VolatileLayerClientParams", function () {
+    it("VolatileLayerClientParams with all required params", function () {
+        const params: VolatileLayerClientParams = {
+            catalogHrn: HRN.fromString("hrn:here:data:::example-catalog"),
+            layerId: "mocked-layer-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("mocked-token")
+            })
+        };
 
-const assert = chai.assert;
-const expect = chai.expect;
+        assert.isDefined(params);
+    });
 
-describe("VolatileLayerClientParams", function() {
-  it("VolatileLayerClientParams with all required params", function() {
-    const params: VolatileLayerClientParams = {
-      catalogHrn: HRN.fromString("hrn:here:data:::example-catalog"),
-      layerId: "mocked-layer-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("mocked-token")
-      })
-    };
+    it("VolatileLayerClientParams with all required and optional params", function () {
+        const params: VolatileLayerClientParams = {
+            catalogHrn: HRN.fromString("hrn:here:data:::example-catalog"),
+            layerId: "mocked-layer-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("mocked-token")
+            })
+        };
 
-    assert.isDefined(params);
-  });
-
-  it("VolatileLayerClientParams with all required and optional params", function() {
-    const params: VolatileLayerClientParams = {
-      catalogHrn: HRN.fromString("hrn:here:data:::example-catalog"),
-      layerId: "mocked-layer-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("mocked-token")
-      })
-    };
-
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 });
 
-describe("VolatileLayerClient", function() {
-  class VolatileLayerClientTest extends VolatileLayerClient {
-    constructor(params: VolatileLayerClientParams) {
-      super(params);
+describe("VolatileLayerClient", function () {
+    class VolatileLayerClientTest extends VolatileLayerClient {
+        constructor(params: VolatileLayerClientParams) {
+            super(params);
+        }
+
+        async getData(
+            dataRequest: DataRequest,
+            abortSignal?: AbortSignal
+        ): Promise<Response> {
+            return Promise.resolve(new Response());
+        }
+
+        async getPartitions(
+            quadKeyPartitionsRequest: QuadKeyPartitionsRequest,
+            abortSignal?: AbortSignal
+        ): Promise<QueryApi.Index>;
+        async getPartitions(
+            partitionsRequest: PartitionsRequest,
+            abortSignal?: AbortSignal
+        ): Promise<MetadataApi.Partitions>;
+
+        async getPartitions(
+            request: QuadKeyPartitionsRequest | PartitionsRequest,
+            abortSignal?: AbortSignal
+        ): Promise<
+            QueryApi.Index | MetadataApi.Partitions | QueryApi.Partitions
+        > {
+            return Promise.resolve({});
+        }
     }
 
-    async getData(
-      dataRequest: DataRequest,
-      abortSignal?: AbortSignal
-    ): Promise<Response> {
-      return Promise.resolve(new Response());
-    }
-
-    async getPartitions(
-      quadKeyPartitionsRequest: QuadKeyPartitionsRequest,
-      abortSignal?: AbortSignal
-    ): Promise<QueryApi.Index>;
-    async getPartitions(
-      partitionsRequest: PartitionsRequest,
-      abortSignal?: AbortSignal
-    ): Promise<MetadataApi.Partitions>;
-
-    async getPartitions(
-      request: QuadKeyPartitionsRequest | PartitionsRequest,
-      abortSignal?: AbortSignal
-    ): Promise<QueryApi.Index | MetadataApi.Partitions | QueryApi.Partitions> {
-      return Promise.resolve({});
-    }
-  }
-
-  beforeEach(function() {
-    VolatileLayerClientTest;
-  });
-
-  it("Shoud be initialized with arguments", async function() {
-    const settings = new OlpClientSettings({
-      environment: "here",
-      getToken: () => Promise.resolve("test-token-string")
-    });
-    const layerClient = new VolatileLayerClient({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings
-    });
-    assert.isDefined(layerClient);
-    expect(layerClient).to.be.instanceOf(VolatileLayerClient);
-
-    assert.isFunction(layerClient.getData);
-    assert.isFunction(layerClient.getPartitions);
-  });
-
-  it("Shoud be initialized with VolatileLayerClientParams", async function() {
-    const layerClient = new VolatileLayerClient({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
-    });
-    assert.isDefined(layerClient);
-    expect(layerClient).to.be.instanceOf(VolatileLayerClient);
-
-    assert.isFunction(layerClient.getData);
-    assert.isFunction(layerClient.getPartitions);
-  });
-
-  it("getPartitions method with QuadKeyPartitionsRequest", async function() {
-    const layerClient = new VolatileLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+    beforeEach(function () {
+        VolatileLayerClientTest;
     });
 
-    const response = layerClient.getPartitions(new QuadKeyPartitionsRequest());
-    assert.isDefined(response);
-  });
+    it("Shoud be initialized with arguments", async function () {
+        const settings = new OlpClientSettings({
+            environment: "here",
+            getToken: () => Promise.resolve("test-token-string")
+        });
+        const layerClient = new VolatileLayerClient({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings
+        });
+        assert.isDefined(layerClient);
+        expect(layerClient).to.be.instanceOf(VolatileLayerClient);
 
-  it("getPartitions method with QuadKeyPartitionsRequest and abort signal", async function() {
-    const layerClient = new VolatileLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+        assert.isFunction(layerClient.getData);
+        assert.isFunction(layerClient.getPartitions);
     });
 
-    const abortController = new AbortController();
+    it("Shoud be initialized with VolatileLayerClientParams", async function () {
+        const layerClient = new VolatileLayerClient({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
+        assert.isDefined(layerClient);
+        expect(layerClient).to.be.instanceOf(VolatileLayerClient);
 
-    const response = layerClient.getPartitions(
-      new QuadKeyPartitionsRequest(),
-      abortController.signal
-    );
-    assert.isDefined(response);
-  });
-
-  it("getPartitions method with PartitionsRequest", async function() {
-    const layerClient = new VolatileLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+        assert.isFunction(layerClient.getData);
+        assert.isFunction(layerClient.getPartitions);
     });
 
-    const response = layerClient.getPartitions(new PartitionsRequest());
-    assert.isDefined(response);
-  });
+    it("getPartitions method with QuadKeyPartitionsRequest", async function () {
+        const layerClient = new VolatileLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
 
-  it("getPartitions method with PartitionsRequest and abort signal", async function() {
-    const layerClient = new VolatileLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+        const response = layerClient.getPartitions(
+            new QuadKeyPartitionsRequest()
+        );
+        assert.isDefined(response);
     });
 
-    const abortController = new AbortController();
+    it("getPartitions method with QuadKeyPartitionsRequest and abort signal", async function () {
+        const layerClient = new VolatileLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
 
-    const response = layerClient.getPartitions(
-      new PartitionsRequest(),
-      abortController.signal
-    );
-    assert.isDefined(response);
-  });
+        const abortController = new AbortController();
 
-  it("getData method method with dataHandle", async function() {
-    const layerClient = new VolatileLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+        const response = layerClient.getPartitions(
+            new QuadKeyPartitionsRequest(),
+            abortController.signal
+        );
+        assert.isDefined(response);
     });
 
-    const mockedDataHandle = "1b2ca68f-d4a0-4379-8120-cd025640510c";
-    const request = new DataRequest().withDataHandle(mockedDataHandle);
-    const response = await layerClient.getData(request);
+    it("getPartitions method with PartitionsRequest", async function () {
+        const layerClient = new VolatileLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
 
-    assert.isDefined(response);
-  });
-
-  it("getData method method with dataHandle and abort signal", async function() {
-    const layerClient = new VolatileLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+        const response = layerClient.getPartitions(new PartitionsRequest());
+        assert.isDefined(response);
     });
 
-    const abortController = new AbortController();
+    it("getPartitions method with PartitionsRequest and abort signal", async function () {
+        const layerClient = new VolatileLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
 
-    const mockedDataHandle = "1b2ca68f-d4a0-4379-8120-cd025640510c";
-    const request = new DataRequest().withDataHandle(mockedDataHandle);
-    const response = await layerClient.getData(request, abortController.signal);
+        const abortController = new AbortController();
 
-    assert.isDefined(response);
-  });
+        const response = layerClient.getPartitions(
+            new PartitionsRequest(),
+            abortController.signal
+        );
+        assert.isDefined(response);
+    });
+
+    it("getData method method with dataHandle", async function () {
+        const layerClient = new VolatileLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
+
+        const mockedDataHandle = "1b2ca68f-d4a0-4379-8120-cd025640510c";
+        const request = new DataRequest().withDataHandle(mockedDataHandle);
+        const response = await layerClient.getData(request);
+
+        assert.isDefined(response);
+    });
+
+    it("getData method method with dataHandle and abort signal", async function () {
+        const layerClient = new VolatileLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
+
+        const abortController = new AbortController();
+
+        const mockedDataHandle = "1b2ca68f-d4a0-4379-8120-cd025640510c";
+        const request = new DataRequest().withDataHandle(mockedDataHandle);
+        const response = await layerClient.getData(
+            request,
+            abortController.signal
+        );
+
+        assert.isDefined(response);
+    });
 });

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,70 +17,74 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { PollRequest } from "@here/olp-sdk-dataservice-read";
 
-chai.use(sinonChai);
+describe("PollRequest", function () {
+    class PollRequestTest extends PollRequest {
+        getMode(): "serial" {
+            return "serial";
+        }
 
-const assert = chai.assert;
-const expect = chai.expect;
+        withMode(mode: "serial"): PollRequest {
+            return this;
+        }
 
-describe("PollRequest", function() {
-  class PollRequestTest extends PollRequest {
-    getMode(): "serial" {
-      return "serial";
+        getSubscriptionId(): string {
+            return "subscription-id";
+        }
+
+        withSubscriptionId(id: string): PollRequest {
+            return this;
+        }
     }
 
-    withMode(mode: "serial"): PollRequest {
-      return this;
-    }
+    it("Shoud be initialized", async function () {
+        const request = new PollRequest();
+        assert.isDefined(request);
+        expect(request).to.be.instanceOf(PollRequest);
 
-    getSubscriptionId(): string {
-      return "subscription-id";
-    }
+        assert.isFunction(request.withMode);
+        assert.isFunction(request.getMode);
+        assert.isFunction(request.withSubscriptionId);
+        assert.isFunction(request.getSubscriptionId);
+    });
 
-    withSubscriptionId(id: string): PollRequest {
-      return this;
-    }
-  }
+    it("Test withMode method with mode", async function () {
+        const request = new PollRequestTest();
 
-  it("Shoud be initialized", async function() {
-    const request = new PollRequest();
-    assert.isDefined(request);
-    expect(request).to.be.instanceOf(PollRequest);
+        const response = request.withMode("serial");
+        assert.isDefined(response);
+    });
 
-    assert.isFunction(request.withMode);
-    assert.isFunction(request.getMode);
-    assert.isFunction(request.withSubscriptionId);
-    assert.isFunction(request.getSubscriptionId);
-  });
+    it("Test getMode method without params", async function () {
+        const request = new PollRequestTest();
 
-  it("Test withMode method with mode", async function() {
-    const request = new PollRequestTest();
+        const response = request.getMode();
+        assert.isDefined(response);
+    });
 
-    const response = request.withMode("serial");
-    assert.isDefined(response);
-  });
+    it("Test withSubscriptionId method with id", async function () {
+        const request = new PollRequestTest();
 
-  it("Test getMode method without params", async function() {
-    const request = new PollRequestTest();
+        const response = request.withSubscriptionId("test");
+        assert.isDefined(response);
+    });
 
-    const response = request.getMode();
-    assert.isDefined(response);
-  });
+    it("Test getSubscriptionId method without params", async function () {
+        const request = new PollRequestTest();
 
-  it("Test withSubscriptionId method with id", async function() {
-    const request = new PollRequestTest();
-
-    const response = request.withSubscriptionId("test");
-    assert.isDefined(response);
-  });
-
-  it("Test getSubscriptionId method without params", async function() {
-    const request = new PollRequestTest();
-
-    const response = request.getSubscriptionId();
-    assert.isDefined(response);
-  });
+        const response = request.getSubscriptionId();
+        assert.isDefined(response);
+    });
 });
