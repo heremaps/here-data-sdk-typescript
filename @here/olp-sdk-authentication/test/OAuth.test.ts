@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,30 +17,36 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { requestToken, Token, UserAuth } from "../index";
-import * as crypto from "crypto";
 import { HttpError, SENT_WITH_PARAM } from "@here/olp-sdk-core";
-import fetchMock = require("fetch-mock");
+import fetchMock from "fetch-mock";
+import { buildErrorMessage } from "../lib/buildErrorMessage";
 import { loadCredentialsFromFile } from "../lib/loadCredentialsFromFile";
 import { OAuthArgs } from "../lib/requestToken_common";
-import { TokenRequesterFn } from "../lib/UserAuth";
+import { TokenRequesterFn, UserAuthConfig } from "../lib/UserAuth";
 
 const REPLY_TIMEOUT_MS = 600;
 const MOCK_CREATED_TIME = 1550777140;
 const MOCK_UPDATED_TIME = 1550777141;
 
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("oauth-request", function() {
+describe("oauth-request", function () {
     // requires CONSUMER_KEY and SECRET_KEY env variables, disabled by default
-    xit("requestTokenOnline", async function() {
+    it.skip("requestTokenOnline", async function () {
         let consumerKey = "";
         let secretKey = "";
 
-        assert.doesNotThrow(function() {
+        assert.doesNotThrow(function () {
             consumerKey = process.env.CONSUMER_KEY as string;
             secretKey = process.env.SECRET_KEY as string;
         });
@@ -61,19 +67,15 @@ describe("oauth-request", function() {
     });
 });
 
-describe("oauth-request-offline", function() {
-    let sandbox: sinon.SinonSandbox;
-
-    before(function() {
-        sandbox = sinon.createSandbox();
-    });
+describe("oauth-request-offline", function () {
+    beforeAll(function () {});
 
     const mock_token = "eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsIm";
     const mock_id = "mock-id";
     const mock_scrt = "mock-str";
 
-    beforeEach(function() {
-        fetchMock.config.overwriteRoutes = true;
+    beforeEach(function () {
+        fetchMock.mockGlobal();
         fetchMock.post(
             "https://account.api.here.com/oauth2/token?" + SENT_WITH_PARAM,
             {
@@ -84,18 +86,17 @@ describe("oauth-request-offline", function() {
         );
     });
 
-    afterEach(function() {
-        fetchMock.reset();
-        sandbox.restore();
+    afterEach(function () {
+        fetchMock.hardReset();
+        vi.restoreAllMocks();
     });
 
     // tslint:disable-next-line: only-arrow-functions
-    it("SHA-256 to sign token requests", async function() {
-        const mockedOauthSignature = "mocked_oauth_signature";
-        sandbox.stub(crypto, "createHmac").returns(({
-            update: sandbox.stub(),
-            digest: sandbox.stub().returns(mockedOauthSignature)
-        } as unknown) as crypto.Hmac);
+    it("SHA-256 to sign token requests", async function () {
+        // The HMAC-SHA256 signature is deterministic for the fixed inputs below,
+        // so the real crypto implementation is exercised and asserted directly.
+        const expectedOauthSignature =
+            "Lwmma%2FFvEsjg5FnCB6KosgD46mD%2FnZiy4fIBEwLHy0s%3D";
 
         const result = await requestToken({
             consumerKey: "mocked-key",
@@ -106,13 +107,14 @@ describe("oauth-request-offline", function() {
             timestamp: MOCK_CREATED_TIME
         });
 
-        const options: RequestInit & any = fetchMock.calls()[0][1];
+        const options: RequestInit & any =
+            fetchMock.callHistory.calls()[0].args[1];
         expect(options.headers.get("Authorization")).to.be.equal(
-            `OAuth oauth_consumer_key="mocked-key",oauth_nonce="mocked-nonce",oauth_signature_method="HMAC-SHA256",oauth_timestamp="1550777140",oauth_version="1.0",oauth_signature="${mockedOauthSignature}"`
+            `OAuth oauth_consumer_key="mocked-key",oauth_nonce="mocked-nonce",oauth_signature_method="HMAC-SHA256",oauth_timestamp="1550777140",oauth_version="1.0",oauth_signature="${expectedOauthSignature}"`
         );
     });
 
-    it("requestToken", async function() {
+    it("requestToken", async function () {
         const consumerKey = "key";
         const secretKey = "secret";
 
@@ -127,7 +129,7 @@ describe("oauth-request-offline", function() {
         assert.isNotEmpty(reply.accessToken);
     });
 
-    it("getTokenAuthModeFile", async function() {
+    it("getTokenAuthModeFile", async function () {
         let token: string | null = null;
         const credentialsFilePath = "./test/test-credentials.properties";
         const credentials = loadCredentialsFromFile(credentialsFilePath);
@@ -147,7 +149,7 @@ describe("oauth-request-offline", function() {
         }
     });
 
-    it("getTokenAuthModeForm", async function() {
+    it("getTokenAuthModeForm", async function () {
         let token: string | null = null;
 
         const userAuth = new UserAuth({
@@ -168,7 +170,7 @@ describe("oauth-request-offline", function() {
         }
     });
 
-    it("validateAccessToken", async function() {
+    it("validateAccessToken", async function () {
         const userAuth = new UserAuth({
             credentials: {
                 accessKeyId: mock_id,
@@ -195,7 +197,7 @@ describe("oauth-request-offline", function() {
         }
     });
 
-    it("validateAccessTokenFalse", async function() {
+    it("validateAccessTokenFalse", async function () {
         const userAuth = new UserAuth({
             credentials: {
                 accessKeyId: mock_id,
@@ -213,14 +215,50 @@ describe("oauth-request-offline", function() {
             responseStatus
         );
 
-        await userAuth.validateAccessToken(mock_token).catch(err => {
+        await userAuth.validateAccessToken(mock_token).catch((err) => {
             assert.isTrue(err instanceof HttpError);
             assert.equal(err.status, responseStatus);
             assert.equal(err.message, responseText);
         });
     });
 
-    it("getAccessTokenFalse", async function() {
+    it("validateAccessTokenForwardsErrorBody", async function () {
+        const userAuth = new UserAuth({
+            credentials: {
+                accessKeyId: mock_id,
+                accessKeySecret: mock_scrt
+            },
+            tokenRequester: requestToken
+        });
+
+        const responseStatus = 401;
+        const errorBody = {
+            errorId: "ERROR-2c9a1f7e-4d8b-4a6c-8f2e-7b1c3d5e9a04",
+            httpStatus: responseStatus,
+            errorCode: 401204,
+            message: "Token is expired.",
+            correlationId: "1d2e3f40-5a6b-4c7d-8e9f-0a1b2c3d4e5f"
+        };
+
+        fetchMock.post(
+            "https://account.api.here.com/verify/accessToken?" +
+                SENT_WITH_PARAM,
+            {
+                status: responseStatus,
+                body: errorBody
+            }
+        );
+
+        await expect(
+            userAuth.validateAccessToken(mock_token)
+        ).rejects.toMatchObject({
+            name: "HttpError",
+            status: responseStatus,
+            message: `Unauthorized | Info: ${JSON.stringify(errorBody)}`
+        });
+    });
+
+    it("getAccessTokenFalse", async function () {
         const userAuth = new UserAuth({
             credentials: {
                 accessKeyId: mock_id,
@@ -232,26 +270,93 @@ describe("oauth-request-offline", function() {
         const responseStatus = 401;
         const responseText = "Unauthorized";
 
+        // The token route registered in `beforeEach` has to be dropped first:
+        // fetch-mock matches the first registered route, so the failing
+        // response below would otherwise never be used.
+        fetchMock.removeRoutes();
         fetchMock.post(
             "https://account.api.here.com/oauth2/token?" + SENT_WITH_PARAM,
             responseStatus
         );
 
-        await userAuth.getToken().catch(err => {
+        await userAuth.getToken().catch((err) => {
             assert.isTrue(err instanceof HttpError);
             assert.equal(err.status, responseStatus);
             assert.equal(err.message, responseText);
         });
     });
+
+    it("getAccessTokenForwardsErrorBody", async function () {
+        const responseStatus = 401;
+        const errorBody = {
+            errorId: "ERROR-b6f4ff4f-27f7-4a1b-9a25-2b0d0e9a6f18",
+            httpStatus: responseStatus,
+            errorCode: 401300,
+            message: "Signature mismatch.",
+            correlationId: "8f14e45f-ceea-467a-9575-6f6c1e0d3b21"
+        };
+
+        // The token route registered in `beforeEach` has to be dropped first:
+        // fetch-mock matches the first registered route, so the failing
+        // response below would otherwise never be used.
+        fetchMock.removeRoutes();
+        fetchMock.post(
+            "https://account.api.here.com/oauth2/token?" + SENT_WITH_PARAM,
+            {
+                status: responseStatus,
+                body: errorBody
+            }
+        );
+
+        await expect(
+            requestToken({
+                url: "https://account.api.here.com/oauth2/token",
+                consumerKey: mock_id,
+                secretKey: mock_scrt
+            })
+        ).rejects.toMatchObject({
+            name: "HttpError",
+            status: responseStatus,
+            // The platform reports the reason of the failure only in the body,
+            // so both the correlation ID and the description have to survive.
+            message: `Unauthorized | Info: ${JSON.stringify(errorBody)}`
+        });
+    });
+
+    it("getAccessTokenKeepsStatusTextWhenBodyIsUnreadable", async function () {
+        const responseStatus = 401;
+
+        fetchMock.removeRoutes();
+        fetchMock.post(
+            "https://account.api.here.com/oauth2/token?" + SENT_WITH_PARAM,
+            responseStatus
+        );
+
+        vi.spyOn(Response.prototype, "text").mockRejectedValue(
+            new Error("Stream is already read")
+        );
+
+        await expect(
+            requestToken({
+                url: "https://account.api.here.com/oauth2/token",
+                consumerKey: mock_id,
+                secretKey: mock_scrt
+            })
+        ).rejects.toMatchObject({
+            name: "HttpError",
+            status: responseStatus,
+            message: "Unauthorized"
+        });
+    });
 });
 
-describe("oauth-request-lookupapi", function() {
+describe("oauth-request-lookupapi", function () {
     const mock_token = "eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsIm";
     const mock_id = "mock-id";
     const mock_scrt = "mock-str";
 
-    beforeEach(function() {
-        fetchMock.config.overwriteRoutes = true;
+    beforeEach(function () {
+        fetchMock.mockGlobal();
         fetchMock.post(
             "https://account.api.here.com/oauth2/token?" + SENT_WITH_PARAM,
             {
@@ -262,11 +367,11 @@ describe("oauth-request-lookupapi", function() {
         );
     });
 
-    afterEach(function() {
-        fetchMock.reset();
+    afterEach(function () {
+        fetchMock.hardReset();
     });
 
-    it("getUserInfo-ProdEnv", async function() {
+    it("getUserInfo-ProdEnv", async function () {
         const userAuth = new UserAuth({
             env: "here",
             credentials: {
@@ -316,7 +421,7 @@ describe("oauth-request-lookupapi", function() {
         }
     });
 
-    it("getUserInfo-DevEnv", async function() {
+    it("getUserInfo-DevEnv", async function () {
         const userAuth = new UserAuth({
             env: "here-dev",
             credentials: {
@@ -366,7 +471,7 @@ describe("oauth-request-lookupapi", function() {
         }
     });
 
-    it("getUserInfo-CnEnv", async function() {
+    it("getUserInfo-CnEnv", async function () {
         const userAuth = new UserAuth({
             env: "here-cn",
             credentials: {
@@ -417,7 +522,7 @@ describe("oauth-request-lookupapi", function() {
         }
     });
 
-    it("getUserInfo-CnDevEnv", async function() {
+    it("getUserInfo-CnDevEnv", async function () {
         const userAuth = new UserAuth({
             env: "here-cn-dev",
             credentials: {
@@ -468,7 +573,7 @@ describe("oauth-request-lookupapi", function() {
         }
     });
 
-    it("getUserInfo-CustomUrl", async function() {
+    it("getUserInfo-CustomUrl", async function () {
         const userAuth = new UserAuth({
             customUrl: "http://localhost/",
             credentials: {
@@ -515,7 +620,7 @@ describe("oauth-request-lookupapi", function() {
         }
     });
 
-    it("getUserInfo-default", async function() {
+    it("getUserInfo-default", async function () {
         const userAuth = new UserAuth({
             credentials: {
                 accessKeyId: mock_id,
@@ -563,9 +668,45 @@ describe("oauth-request-lookupapi", function() {
             assert.fail();
         }
     });
+
+    it("getUserInfoForwardsErrorBody", async function () {
+        const userAuth = new UserAuth({
+            credentials: {
+                accessKeyId: mock_id,
+                accessKeySecret: mock_scrt
+            },
+            tokenRequester: requestToken
+        });
+
+        const responseStatus = 403;
+        const errorBody = {
+            errorId: "ERROR-7e5b0c1a-93d4-4f8a-b2c6-0e1f4a7d8b93",
+            httpStatus: responseStatus,
+            errorCode: 403000,
+            message: "Insufficient rights to read the user profile.",
+            correlationId: "aa11bb22-cc33-4d44-8e55-66ff77008899"
+        };
+
+        fetchMock.get(
+            "https://account.api.here.com/user/me?" + SENT_WITH_PARAM,
+            {
+                status: responseStatus,
+                body: errorBody
+            }
+        );
+
+        await expect(userAuth.getUserInfo(mock_token)).rejects.toMatchObject({
+            name: "HttpError",
+            status: responseStatus,
+            // The existing prefix has to stay in front of the forwarded body.
+            message: `Error fetching user info: Forbidden | Info: ${JSON.stringify(
+                errorBody
+            )}`
+        });
+    });
 });
 
-describe("auth-request-project-scope", function() {
+describe("auth-request-project-scope", function () {
     let token: string | null = null;
     const mockedScope = "mocked-scope";
     const mock_id = "mock-id";
@@ -580,7 +721,7 @@ describe("auth-request-project-scope", function() {
         return Promise.resolve(mockedToken);
     };
 
-    it("Should scope be present on userAuth", async function() {
+    it("Should scope be present on userAuth", async function () {
         const userAuth = new UserAuth({
             env: "here-dev",
             credentials: {
@@ -601,7 +742,7 @@ describe("auth-request-project-scope", function() {
         }
     });
 
-    it("Should customUrl be present in getToken request", async function() {
+    it("Should customUrl be present in getToken request", async function () {
         const mockedUrl = "https://example.com/my/custom/url";
         const mockedTokenRequest = async (params: any): Promise<Token> => {
             assert.strictEqual(params.url, mockedUrl);
@@ -629,9 +770,9 @@ describe("auth-request-project-scope", function() {
     });
 });
 
-describe("expired token refreshing", async function() {
+describe("expired token refreshing", async function () {
     let mockedTokenRequester: TokenRequesterFn;
-    beforeEach(function() {
+    beforeEach(function () {
         const defaultTokenExpirationTime = 3600;
         mockedTokenRequester = async (params: OAuthArgs): Promise<Token> => {
             const expirationDate = new Date();
@@ -649,7 +790,7 @@ describe("expired token refreshing", async function() {
         };
     });
 
-    it("Should getToken return the same token for two requests in row", async function() {
+    it("Should getToken return the same token for two requests in row", async function () {
         const userAuth = new UserAuth({
             env: "here",
             tokenRequester: mockedTokenRequester,
@@ -667,11 +808,22 @@ describe("expired token refreshing", async function() {
         expect(token1).to.be.equal(token2);
     });
 
-    it("Should getToken return the different tokens for two requests with delay", async function() {
+    it("Should getToken return the different tokens for two requests with delay", async function () {
         const userProvidedTokenExpirationTime = 10;
+        const millisecondsInSecond = 1000;
+        let issued = 0;
+        const countingTokenRequester = async (): Promise<Token> => {
+            issued += 1;
+            return Promise.resolve({
+                accessToken: `token-${issued}`,
+                expiresIn: userProvidedTokenExpirationTime,
+                tokenType: "fake"
+            });
+        };
+
         const userAuth = new UserAuth({
             env: "here",
-            tokenRequester: mockedTokenRequester,
+            tokenRequester: countingTokenRequester,
             credentials: {
                 accessKeyId: "appId",
                 accessKeySecret: "keyScrt"
@@ -679,15 +831,97 @@ describe("expired token refreshing", async function() {
             expiresIn: userProvidedTokenExpirationTime
         });
 
-        const token1 = await userAuth.getToken();
-
-        setTimeout(async function() {
+        // The cached token is kept until its expiration date passes, so the
+        // clock has to move for the second call to reach the requester.
+        vi.useFakeTimers();
+        try {
+            const token1 = await userAuth.getToken();
+            vi.advanceTimersByTime(
+                (userProvidedTokenExpirationTime + 1) * millisecondsInSecond
+            );
             const token2 = await userAuth.getToken();
 
-            assert.isDefined(token1);
-            assert.isDefined(token2);
-            expect(token1).to.be.not.equal(token2);
-            // tslint:disable-next-line: no-magic-numbers
-        }, 15000);
+            expect(token1).to.be.equal("token-1");
+            expect(token2).to.be.equal("token-2");
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+});
+
+describe("auth-credentials-errors", function () {
+    const mockedTokenRequester = async (): Promise<Token> =>
+        Promise.resolve({
+            accessToken: "fake-access-token",
+            expiresIn: 42,
+            tokenType: "fake"
+        });
+
+    it("Should throw when constructed without credentials", function () {
+        expect(
+            () =>
+                new UserAuth({
+                    env: "here",
+                    tokenRequester: mockedTokenRequester
+                } as UserAuthConfig)
+        ).toThrow(
+            "The credentials has not been added, please add credentials!"
+        );
+    });
+
+    it("Should reject getToken when the access key secret is missing", async function () {
+        const userAuth = new UserAuth({
+            env: "here",
+            tokenRequester: mockedTokenRequester,
+            credentials: {
+                accessKeyId: "appId"
+            }
+        });
+
+        await expect(userAuth.getToken()).rejects.toBe(
+            "Error getting token. The credentials has not been added!"
+        );
+    });
+
+    it("Should reject getToken with the response that carries no token", async function () {
+        const emptyResponse: Token = {
+            accessToken: "",
+            expiresIn: 42,
+            tokenType: "fake"
+        };
+
+        const userAuth = new UserAuth({
+            env: "here",
+            tokenRequester: async () => Promise.resolve(emptyResponse),
+            credentials: {
+                accessKeyId: "appId",
+                accessKeySecret: "keyScrt"
+            }
+        });
+
+        // The whole response is handed over, since it is the only place that
+        // can explain why the platform issued no token.
+        await expect(userAuth.getToken()).rejects.toBe(emptyResponse);
+    });
+});
+
+describe("buildErrorMessage", function () {
+    it("Should return the body alone when there is no status text", async function () {
+        const message = await buildErrorMessage({
+            statusText: "",
+            text: async () => `{"errorCode":401300}`
+        } as unknown as Response);
+
+        expect(message).to.be.equal(`{"errorCode":401300}`);
+    });
+
+    it("Should return the status text when the response cannot be read", async function () {
+        // Not every Response like object carries a body reader, for example
+        // the ones the SDK builds itself to report a cache miss.
+        const message = await buildErrorMessage({
+            statusText: "Unauthorized"
+        } as unknown as Response);
+
+        expect(message).to.be.equal("Unauthorized");
     });
 });

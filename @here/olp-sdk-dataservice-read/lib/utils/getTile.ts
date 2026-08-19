@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,14 +27,13 @@ import {
 } from "@here/olp-sdk-core";
 import { BlobApi } from "@here/olp-sdk-dataservice-api";
 import { Index as QuadTreeIndex } from "@here/olp-sdk-dataservice-api/lib/query-api";
+import { QuadTreeIndexCacheRepository } from "../cache/QuadTreeIndexCacheRepository";
 import {
-    QuadTreeIndexCacheRepository,
     QuadTreeIndexDepth,
-    QuadTreeIndexRequest,
-    QueryClient,
-    TileRequest,
-    TileRequestParams
-} from "@here/olp-sdk-dataservice-read";
+    QuadTreeIndexRequest
+} from "../client/QuadTreeIndexRequest";
+import { QueryClient } from "../client/QueryClient";
+import { TileRequest, TileRequestParams } from "../client/TileRequest";
 /**
  * Parameters used to get a tile.
  */
@@ -104,7 +103,7 @@ export async function getTile(
         params.settings,
         params.catalogHrn,
         abortSignal
-    ).catch(error => Promise.reject(error));
+    );
 
     const delta = 4;
     const requestedTileKey = TileKey.fromRowColumnLevel(
@@ -145,7 +144,7 @@ export async function getTile(
             tileKey: parentTileKey,
             abortSignal,
             billingTag: request.getBillingTag()
-        }).catch(e => Promise.reject(e));
+        });
     }
 
     if (!quadTreeIndex.subQuads || !quadTreeIndex.subQuads.length) {
@@ -168,7 +167,7 @@ export async function getTile(
         --level
     ) {
         const metadata = subQuads.find(
-            item =>
+            (item) =>
                 item.subQuadKey === currentTileKey.getSubHereTile(currentDelta)
         );
 
@@ -223,9 +222,10 @@ export async function fetchQuadTreeIndex(
         quadTreeIndexRequest.withVersion(params.catalogVersion);
     }
 
-    const quadTreeIndex = await queryClient
-        .fetchQuadTreeIndex(quadTreeIndexRequest, params.abortSignal)
-        .catch(err => Promise.reject(err));
+    const quadTreeIndex = await queryClient.fetchQuadTreeIndex(
+        quadTreeIndexRequest,
+        params.abortSignal
+    );
 
     if (
         params.fetchOptions !== FetchOptions.OnlineOnly &&

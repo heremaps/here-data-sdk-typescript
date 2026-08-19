@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2021 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,49 +17,46 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { CoverageDataType, StatisticsRequest } from "../../lib";
 import { HRN } from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("SummaryRequest", function() {
+describe("SummaryRequest", function () {
     const billingTag = "billingTag";
     const mockedHRN = HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
     const mockedDataLevel = 9;
     const mockedTimemap = CoverageDataType.TIMEMAP;
 
-    it("Should initialize", function() {
+    it("Should initialize", function () {
         const statisticsRequest = new StatisticsRequest();
 
         assert.isDefined(statisticsRequest);
         expect(statisticsRequest).be.instanceOf(StatisticsRequest);
     });
 
-    it("Should set parameters", function() {
+    it("Should set parameters", function () {
         const statisticsRequest = new StatisticsRequest();
-        const statisticsRequestWithCatalogHrn = statisticsRequest.withCatalogHrn(
-            mockedHRN
-        );
-        const statisticsRequestWithLayerId = statisticsRequest.withLayerId(
-            mockedLayerId
-        );
-        const statisticsRequestWithDataLevel = statisticsRequest.withDataLevel(
-            mockedDataLevel
-        );
-        const statisticsRequestWithTimemap = statisticsRequest.withTypemap(
-            mockedTimemap
-        );
-        const statisticsRequestWithBillTag = statisticsRequest.withBillingTag(
-            billingTag
-        );
+        const statisticsRequestWithCatalogHrn =
+            statisticsRequest.withCatalogHrn(mockedHRN);
+        const statisticsRequestWithLayerId =
+            statisticsRequest.withLayerId(mockedLayerId);
+        const statisticsRequestWithDataLevel =
+            statisticsRequest.withDataLevel(mockedDataLevel);
+        const statisticsRequestWithTimemap =
+            statisticsRequest.withTypemap(mockedTimemap);
+        const statisticsRequestWithBillTag =
+            statisticsRequest.withBillingTag(billingTag);
 
         expect(statisticsRequestWithCatalogHrn.getCatalogHrn()).to.be.equal(
             mockedHRN.toString()
@@ -78,7 +75,7 @@ describe("SummaryRequest", function() {
         );
     });
 
-    it("Should get parameters with chain", function() {
+    it("Should get parameters with chain", function () {
         const statisticsRequest = new StatisticsRequest()
             .withCatalogHrn(mockedHRN)
             .withLayerId(mockedLayerId)

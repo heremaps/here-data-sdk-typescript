@@ -1,6 +1,6 @@
 #!/bin/bash -ex
 #
-# Copyright (C) 2019 HERE Europe B.V.
+# Copyright (C) 2019-2026 HERE Europe B.V.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,11 +21,8 @@
 # Following script is for SDK building verification
 ###################################################
 
-# Install main dependencies
-yarn
-
-# Initialize lerna monorepo with yarn workspaces
-yarn bootstrap
+# Install and link all workspace packages
+npm ci
 
 # Build the project
 npm run build
@@ -49,5 +46,5 @@ npm run functional-test
 # Test the generated bundles
 npm run http-server-testing-bundles & npm run test-generated-bundles
 
-# Generate and upload codecov
-npm run codecov
+# Generate coverage reports (uploaded to Codecov by the GitHub Action)
+npm run coverage

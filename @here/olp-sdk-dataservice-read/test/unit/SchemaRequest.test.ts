@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,40 +17,40 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { SchemaRequest } from "../../lib";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("SchemaRequest", function() {
+describe("SchemaRequest", function () {
     const billingTag = "billingTag";
     const mockedVersion = {
         id: "42",
         url: "http://fake.url"
     };
 
-    it("Should initialize", function() {
+    it("Should initialize", function () {
         const schemaRequest = new SchemaRequest();
 
         assert.isDefined(schemaRequest);
         expect(schemaRequest).be.instanceOf(SchemaRequest);
     });
 
-    it("Should set parameters", function() {
+    it("Should set parameters", function () {
         const schemaRequest = new SchemaRequest();
 
-        const schemaRequestWithVariant = schemaRequest.withVariant(
-            mockedVersion
-        );
-        const schemaRequestWithBilTag = schemaRequest.withBillingTag(
-            billingTag
-        );
+        const schemaRequestWithVariant =
+            schemaRequest.withVariant(mockedVersion);
+        const schemaRequestWithBilTag =
+            schemaRequest.withBillingTag(billingTag);
 
         assert.isDefined(schemaRequestWithVariant);
         assert.isDefined(schemaRequestWithBilTag);
@@ -60,7 +60,7 @@ describe("SchemaRequest", function() {
         expect(schemaRequestWithBilTag.getBillingTag()).to.be.equal(billingTag);
     });
 
-    it("Should set parameters with chain", function() {
+    it("Should set parameters with chain", function () {
         const schemaRequest = new SchemaRequest()
             .withVariant(mockedVersion)
             .withBillingTag(billingTag);

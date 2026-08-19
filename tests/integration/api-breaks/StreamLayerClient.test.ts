@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,285 +17,298 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
 import {
-  StreamLayerClient,
-  StreamLayerClientParams,
-  PollRequest,
-  SeekRequest,
-  SubscribeRequest,
-  UnsubscribeRequest
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
+import {
+    StreamLayerClient,
+    StreamLayerClientParams,
+    PollRequest,
+    SeekRequest,
+    SubscribeRequest,
+    UnsubscribeRequest
 } from "@here/olp-sdk-dataservice-read";
 import { StreamApi } from "@here/olp-sdk-dataservice-api";
 import { HRN, OlpClientSettings } from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
+describe("StreamLayerClientParams", function () {
+    it("StreamLayerClientParams with all required params", function () {
+        const params: StreamLayerClientParams = {
+            catalogHrn: HRN.fromString("hrn:here:data:::example-catalog"),
+            layerId: "mocked-layer-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("mocked-token")
+            })
+        };
 
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("StreamLayerClientParams", function() {
-  it("StreamLayerClientParams with all required params", function() {
-    const params: StreamLayerClientParams = {
-      catalogHrn: HRN.fromString("hrn:here:data:::example-catalog"),
-      layerId: "mocked-layer-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("mocked-token")
-      })
-    };
-
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 });
 
-describe("StreamLayerClient", function() {
-  class StreamLayerClientTest extends StreamLayerClient {
-    constructor(params: StreamLayerClientParams) {
-      super(params);
+describe("StreamLayerClient", function () {
+    class StreamLayerClientTest extends StreamLayerClient {
+        constructor(params: StreamLayerClientParams) {
+            super(params);
+        }
+
+        async subscribe(
+            request: SubscribeRequest,
+            abortSignal?: AbortSignal
+        ): Promise<string> {
+            return Promise.resolve("response");
+        }
+
+        async poll(
+            request: PollRequest,
+            abortSignal?: AbortSignal
+        ): Promise<StreamApi.Message[]> {
+            return Promise.resolve([]);
+        }
+
+        async unsubscribe(
+            request: UnsubscribeRequest,
+            abortSignal?: AbortSignal
+        ): Promise<Response> {
+            return Promise.resolve(new Response());
+        }
+
+        async getData(
+            message: StreamApi.Message,
+            abortSignal?: AbortSignal
+        ): Promise<Response> {
+            return Promise.resolve(new Response());
+        }
+
+        async seek(
+            request: SeekRequest,
+            abortSignal?: AbortSignal
+        ): Promise<Response> {
+            return Promise.resolve(new Response());
+        }
     }
 
-    async subscribe(
-      request: SubscribeRequest,
-      abortSignal?: AbortSignal
-    ): Promise<string> {
-      return Promise.resolve("response");
-    }
+    it("Shoud be initialized with StreamLayerClientParams", async function () {
+        const layerClient = new StreamLayerClient({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
+        assert.isDefined(layerClient);
+        expect(layerClient).to.be.instanceOf(StreamLayerClient);
 
-    async poll(
-      request: PollRequest,
-      abortSignal?: AbortSignal
-    ): Promise<StreamApi.Message[]> {
-      return Promise.resolve([]);
-    }
-
-    async unsubscribe(
-      request: UnsubscribeRequest,
-      abortSignal?: AbortSignal
-    ): Promise<Response> {
-      return Promise.resolve(new Response());
-    }
-
-    async getData(
-      message: StreamApi.Message,
-      abortSignal?: AbortSignal
-    ): Promise<Response> {
-      return Promise.resolve(new Response());
-    }
-
-    async seek(
-      request: SeekRequest,
-      abortSignal?: AbortSignal
-    ): Promise<Response> {
-      return Promise.resolve(new Response());
-    }
-  }
-
-  it("Shoud be initialized with StreamLayerClientParams", async function() {
-    const layerClient = new StreamLayerClient({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
-    });
-    assert.isDefined(layerClient);
-    expect(layerClient).to.be.instanceOf(StreamLayerClient);
-
-    assert.isFunction(layerClient.subscribe);
-    assert.isFunction(layerClient.poll);
-    assert.isFunction(layerClient.unsubscribe);
-    assert.isFunction(layerClient.getData);
-    assert.isFunction(layerClient.seek);
-  });
-
-  it("Test subscribe method method with SubscribeRequest", async function() {
-    const layerClient = new StreamLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+        assert.isFunction(layerClient.subscribe);
+        assert.isFunction(layerClient.poll);
+        assert.isFunction(layerClient.unsubscribe);
+        assert.isFunction(layerClient.getData);
+        assert.isFunction(layerClient.seek);
     });
 
-    const request = new SubscribeRequest();
-    const response = await layerClient.subscribe(request);
+    it("Test subscribe method method with SubscribeRequest", async function () {
+        const layerClient = new StreamLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
 
-    assert.isDefined(response);
-  });
+        const request = new SubscribeRequest();
+        const response = await layerClient.subscribe(request);
 
-  it("Test subscribe method method with SubscribeRequest and abort signal", async function() {
-    const layerClient = new StreamLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+        assert.isDefined(response);
     });
 
-    const abortController = new AbortController();
+    it("Test subscribe method method with SubscribeRequest and abort signal", async function () {
+        const layerClient = new StreamLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
 
-    const request = new SubscribeRequest();
-    const response = await layerClient.subscribe(
-      request,
-      abortController.signal
-    );
+        const abortController = new AbortController();
 
-    assert.isDefined(response);
-  });
+        const request = new SubscribeRequest();
+        const response = await layerClient.subscribe(
+            request,
+            abortController.signal
+        );
 
-  it("Test poll method method with PollRequest", async function() {
-    const layerClient = new StreamLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+        assert.isDefined(response);
     });
 
-    const request = new PollRequest();
-    const response = await layerClient.poll(request);
+    it("Test poll method method with PollRequest", async function () {
+        const layerClient = new StreamLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
 
-    assert.isDefined(response);
-  });
+        const request = new PollRequest();
+        const response = await layerClient.poll(request);
 
-  it("Test poll method method with PollRequest and abort signal", async function() {
-    const layerClient = new StreamLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+        assert.isDefined(response);
     });
 
-    const abortController = new AbortController();
+    it("Test poll method method with PollRequest and abort signal", async function () {
+        const layerClient = new StreamLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
 
-    const request = new PollRequest();
-    const response = await layerClient.poll(request, abortController.signal);
+        const abortController = new AbortController();
 
-    assert.isDefined(response);
-  });
+        const request = new PollRequest();
+        const response = await layerClient.poll(
+            request,
+            abortController.signal
+        );
 
-  it("Test unsubscribe method method with UnsubscribeRequest", async function() {
-    const layerClient = new StreamLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+        assert.isDefined(response);
     });
 
-    const request = new UnsubscribeRequest();
-    const response = await layerClient.unsubscribe(request);
+    it("Test unsubscribe method method with UnsubscribeRequest", async function () {
+        const layerClient = new StreamLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
 
-    assert.isDefined(response);
-  });
+        const request = new UnsubscribeRequest();
+        const response = await layerClient.unsubscribe(request);
 
-  it("Test unsubscribe method method with UnsubscribeRequest and abort signal", async function() {
-    const layerClient = new StreamLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+        assert.isDefined(response);
     });
 
-    const abortController = new AbortController();
+    it("Test unsubscribe method method with UnsubscribeRequest and abort signal", async function () {
+        const layerClient = new StreamLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
 
-    const request = new UnsubscribeRequest();
-    const response = await layerClient.unsubscribe(
-      request,
-      abortController.signal
-    );
+        const abortController = new AbortController();
 
-    assert.isDefined(response);
-  });
+        const request = new UnsubscribeRequest();
+        const response = await layerClient.unsubscribe(
+            request,
+            abortController.signal
+        );
 
-  it("Test getData method method with message", async function() {
-    const layerClient = new StreamLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+        assert.isDefined(response);
     });
 
-    const message = {
-      metaData: { partition: "test" },
-      offset: {
-        partition: 1,
-        offset: 10
-      }
-    };
-    const response = await layerClient.getData(message);
+    it("Test getData method method with message", async function () {
+        const layerClient = new StreamLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
 
-    assert.isDefined(response);
-  });
+        const message = {
+            metaData: { partition: "test" },
+            offset: {
+                partition: 1,
+                offset: 10
+            }
+        };
+        const response = await layerClient.getData(message);
 
-  it("Test getData method method with message and abort signal", async function() {
-    const layerClient = new StreamLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+        assert.isDefined(response);
     });
 
-    const abortController = new AbortController();
+    it("Test getData method method with message and abort signal", async function () {
+        const layerClient = new StreamLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
 
-    const message = {
-      metaData: { partition: "test" },
-      offset: {
-        partition: 1,
-        offset: 10
-      }
-    };
-    const response = await layerClient.getData(message, abortController.signal);
+        const abortController = new AbortController();
 
-    assert.isDefined(response);
-  });
+        const message = {
+            metaData: { partition: "test" },
+            offset: {
+                partition: 1,
+                offset: 10
+            }
+        };
+        const response = await layerClient.getData(
+            message,
+            abortController.signal
+        );
 
-  it("Test seek method method with SeekRequest", async function() {
-    const layerClient = new StreamLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+        assert.isDefined(response);
     });
 
-    const request = new SeekRequest();
-    const response = await layerClient.seek(request);
+    it("Test seek method method with SeekRequest", async function () {
+        const layerClient = new StreamLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
 
-    assert.isDefined(response);
-  });
+        const request = new SeekRequest();
+        const response = await layerClient.seek(request);
 
-  it("Test seek method method with SeekRequest and abort signal", async function() {
-    const layerClient = new StreamLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+        assert.isDefined(response);
     });
 
-    const abortController = new AbortController();
+    it("Test seek method method with SeekRequest and abort signal", async function () {
+        const layerClient = new StreamLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
 
-    const request = new SeekRequest();
-    const response = await layerClient.seek(request, abortController.signal);
+        const abortController = new AbortController();
 
-    assert.isDefined(response);
-  });
+        const request = new SeekRequest();
+        const response = await layerClient.seek(
+            request,
+            abortController.signal
+        );
+
+        assert.isDefined(response);
+    });
 });

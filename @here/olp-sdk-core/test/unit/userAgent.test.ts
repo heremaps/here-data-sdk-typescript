@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,21 @@
  * License-Filename: LICENSE
  */
 
-import { assert } from "chai";
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { addSentWithParam, SENT_WITH_PARAM } from "@here/olp-sdk-core";
 
-describe("addSentWithParam", function() {
-    it("Should be preparing string as an adding additional param", function() {
+describe("addSentWithParam", function () {
+    it("Should be preparing string as an adding additional param", function () {
         const url = "https://example.com/test/url?someParam=test";
 
         const result = addSentWithParam(url);
@@ -29,7 +39,7 @@ describe("addSentWithParam", function() {
         assert.isTrue(result === url + "&" + SENT_WITH_PARAM);
     });
 
-    it("Should be preparing string as an adding the first param", function() {
+    it("Should be preparing string as an adding the first param", function () {
         const url = "https://example.com/test/url";
 
         const result = addSentWithParam(url);

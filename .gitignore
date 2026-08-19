@@ -7,6 +7,7 @@ coverage
 xunit.xml
 *.js
 !webpack.config.js
+!scripts/static-server.js
 *.d.ts
 *.js.map
 app.ts
@@ -22,6 +23,7 @@ heaptrack/
 heaptrack_report.html
 !tests/utils/mocked-olp-server/*.js
 CertificateAuthorityCertificate.pem
+mockserver-ca.pem
 demo-app
 build
 .DS_Store

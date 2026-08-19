@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 HERE Europe B.V.
+ * Copyright (C) 2021-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,14 +17,20 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { WebData } from "../../lib/utils/multipartupload-internal/WebData";
 
-chai.use(sinonChai);
-const expect = chai.expect;
-
-describe("WebData", function() {
+describe("WebData", function () {
     let mockedBlob: Blob;
     const mockedDataSize = 9;
     beforeEach(() => {
@@ -41,14 +47,14 @@ describe("WebData", function() {
         } as any;
     });
 
-    it("readBytes", async function() {
+    it("readBytes", async function () {
         const data = new WebData(mockedBlob);
         const bytes = await data.readBytes(2, 3);
         expect(bytes.byteLength).eqls(3);
         expect(bytes.toString()).eqls("st-");
     });
 
-    it("size", function() {
+    it("size", function () {
         const data = new WebData(mockedBlob);
         expect(data.size()).eqls(9);
     });

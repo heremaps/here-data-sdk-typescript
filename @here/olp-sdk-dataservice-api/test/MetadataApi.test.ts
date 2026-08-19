@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,22 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { MetadataApi } from "@here/olp-sdk-dataservice-api";
 import { RequestBuilder, UrlBuilder } from "../lib/RequestBuilder";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("MetadataApi", function() {
-    it("Should getChanges provide data", async function() {
+describe("MetadataApi", function () {
+    it("Should getChanges provide data", async function () {
         const mockedResponse = {
             partitions: [
                 {
@@ -62,14 +65,14 @@ describe("MetadataApi", function() {
             }
         };
         const changes = await MetadataApi.getChanges(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
         assert.equal(changes.partitions.length, 2);
         expect(changes).to.be.equal(mockedResponse);
     });
 
-    it("Should getLayerVersions provide data", async function() {
+    it("Should getLayerVersions provide data", async function () {
         const mockedResponse = {
             layerVersions: [
                 {
@@ -94,7 +97,7 @@ describe("MetadataApi", function() {
             }
         };
         const versions = await MetadataApi.getLayerVersions(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 version: 42
             }
@@ -103,7 +106,7 @@ describe("MetadataApi", function() {
         expect(versions.version).to.be.equal(mockedResponse.version);
     });
 
-    it("Should getPartitions provide data", async function() {
+    it("Should getPartitions provide data", async function () {
         const mockedResponse = {
             partitions: [
                 {
@@ -135,14 +138,14 @@ describe("MetadataApi", function() {
             }
         };
         const changes = await MetadataApi.getPartitions(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
         assert.equal(changes.partitions.length, 2);
         expect(changes).to.be.equal(mockedResponse);
     });
 
-    it("Should latestVersion provide data", async function() {
+    it("Should latestVersion provide data", async function () {
         const mockedStartedVersion = 1;
         const mockedResponse = {
             version: 42
@@ -158,7 +161,7 @@ describe("MetadataApi", function() {
             }
         };
         const version = await MetadataApi.latestVersion(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 startVersion: mockedStartedVersion
             }
@@ -166,7 +169,7 @@ describe("MetadataApi", function() {
         expect(version.version).to.be.equal(mockedResponse.version);
     });
 
-    it("Should listVersions provide data", async function() {
+    it("Should listVersions provide data", async function () {
         const mockedStartedVersion = 1;
         const mockedEndVersion = 42;
         const mockedResponse = {
@@ -192,7 +195,7 @@ describe("MetadataApi", function() {
             }
         };
         const versions = await MetadataApi.listVersions(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 startVersion: mockedStartedVersion,
                 endVersion: mockedEndVersion
@@ -202,7 +205,7 @@ describe("MetadataApi", function() {
         expect(versions).to.be.equal(mockedResponse);
     });
 
-    it("Should minimumVersion provide data", async function() {
+    it("Should minimumVersion provide data", async function () {
         const mockedResponse = {
             version: 42
         };
@@ -217,7 +220,7 @@ describe("MetadataApi", function() {
             }
         };
         const version = await MetadataApi.minimumVersion(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {}
         );
         expect(version.version).to.be.equal(mockedResponse.version);

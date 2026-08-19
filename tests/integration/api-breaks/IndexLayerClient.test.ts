@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,207 +17,211 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
 import {
-  IndexLayerClient,
-  IndexLayerClientParams,
-  IndexQueryRequest
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
+import {
+    IndexLayerClient,
+    IndexLayerClientParams,
+    IndexQueryRequest
 } from "@here/olp-sdk-dataservice-read";
 import { IndexApi } from "@here/olp-sdk-dataservice-api";
 import { HRN, OlpClientSettings } from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
+describe("IndexLayerClientParams", function () {
+    it("IndexLayerClientParams with all required params", function () {
+        const params: IndexLayerClientParams = {
+            catalogHrn: HRN.fromString("hrn:here:data:::example-catalog"),
+            layerId: "mocked-layer-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("mocked-token")
+            })
+        };
 
-const assert = chai.assert;
-const expect = chai.expect;
+        assert.isDefined(params);
+    });
 
-describe("IndexLayerClientParams", function() {
-  it("IndexLayerClientParams with all required params", function() {
-    const params: IndexLayerClientParams = {
-      catalogHrn: HRN.fromString("hrn:here:data:::example-catalog"),
-      layerId: "mocked-layer-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("mocked-token")
-      })
-    };
+    it("IndexLayerClientParams with all required and optional params", function () {
+        const params: IndexLayerClientParams = {
+            catalogHrn: HRN.fromString("hrn:here:data:::example-catalog"),
+            layerId: "mocked-layer-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("mocked-token")
+            })
+        };
 
-    assert.isDefined(params);
-  });
-
-  it("IndexLayerClientParams with all required and optional params", function() {
-    const params: IndexLayerClientParams = {
-      catalogHrn: HRN.fromString("hrn:here:data:::example-catalog"),
-      layerId: "mocked-layer-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("mocked-token")
-      })
-    };
-
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 });
 
-describe("IndexLayerClient", function() {
-  class IndexLayerClientTest extends IndexLayerClient {
-    constructor(params: IndexLayerClientParams) {
-      super(params);
+describe("IndexLayerClient", function () {
+    class IndexLayerClientTest extends IndexLayerClient {
+        constructor(params: IndexLayerClientParams) {
+            super(params);
+        }
+
+        async getData(
+            model: IndexApi.Index,
+            abortSignal?: AbortSignal
+        ): Promise<Response> {
+            return Promise.resolve(new Response());
+        }
+
+        async getPartitions(
+            request: IndexQueryRequest,
+            abortSignal?: AbortSignal
+        ): Promise<IndexApi.Index[]> {
+            return Promise.resolve([]);
+        }
     }
 
-    async getData(
-      model: IndexApi.Index,
-      abortSignal?: AbortSignal
-    ): Promise<Response> {
-      return Promise.resolve(new Response());
-    }
-
-    async getPartitions(
-      request: IndexQueryRequest,
-      abortSignal?: AbortSignal
-    ): Promise<IndexApi.Index[]> {
-      return Promise.resolve([]);
-    }
-  }
-
-  beforeEach(function() {
-    IndexLayerClientTest;
-  });
-
-  it("Shoud be initialized with arguments", async function() {
-    const settings = new OlpClientSettings({
-      environment: "here",
-      getToken: () => Promise.resolve("test-token-string")
-    });
-    const layerClient = new IndexLayerClient({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings
-    });
-    assert.isDefined(layerClient);
-    expect(layerClient).to.be.instanceOf(IndexLayerClient);
-
-    assert.isFunction(layerClient.getData);
-    assert.isFunction(layerClient.getPartitions);
-  });
-
-  it("Shoud be initialized with IndexLayerClientParams", async function() {
-    const layerClient = new IndexLayerClient({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
-    });
-    assert.isDefined(layerClient);
-    expect(layerClient).to.be.instanceOf(IndexLayerClient);
-
-    assert.isFunction(layerClient.getData);
-    assert.isFunction(layerClient.getPartitions);
-  });
-
-  it("getPartitions method with IndexQueryRequest", async function() {
-    const layerClient = new IndexLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+    beforeEach(function () {
+        IndexLayerClientTest;
     });
 
-    const response = layerClient.getPartitions(new IndexQueryRequest());
-    assert.isDefined(response);
-  });
+    it("Shoud be initialized with arguments", async function () {
+        const settings = new OlpClientSettings({
+            environment: "here",
+            getToken: () => Promise.resolve("test-token-string")
+        });
+        const layerClient = new IndexLayerClient({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings
+        });
+        assert.isDefined(layerClient);
+        expect(layerClient).to.be.instanceOf(IndexLayerClient);
 
-  it("getPartitions method with IndexQueryRequest and abort signal", async function() {
-    const layerClient = new IndexLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+        assert.isFunction(layerClient.getData);
+        assert.isFunction(layerClient.getPartitions);
     });
 
-    const abortController = new AbortController();
+    it("Shoud be initialized with IndexLayerClientParams", async function () {
+        const layerClient = new IndexLayerClient({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
+        assert.isDefined(layerClient);
+        expect(layerClient).to.be.instanceOf(IndexLayerClient);
 
-    const response = layerClient.getPartitions(
-      new IndexQueryRequest(),
-      abortController.signal
-    );
-    assert.isDefined(response);
-  });
-
-  it("getData method with model", async function() {
-    const layerClient = new IndexLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+        assert.isFunction(layerClient.getData);
+        assert.isFunction(layerClient.getPartitions);
     });
 
-    const mockedModel = {
-      id: "8c0e5ac9-b036-4365-8820-dfcba64588fc",
-      size: 111928,
-      checksum: "448a33cd65c47bed1eeb4d72e7fa022c95a41158",
-      timestamp: 1551981674191,
-      hour_from: 1506402000000,
-      tile_id: 377894442,
-      crc: null
-    };
-    const response = await layerClient.getData(mockedModel);
+    it("getPartitions method with IndexQueryRequest", async function () {
+        const layerClient = new IndexLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
 
-    assert.isDefined(response);
-  });
-
-  it("getData method with empty model", async function() {
-    const layerClient = new IndexLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+        const response = layerClient.getPartitions(new IndexQueryRequest());
+        assert.isDefined(response);
     });
 
-    const mockedModel = {};
-    const response = await layerClient.getData(mockedModel);
+    it("getPartitions method with IndexQueryRequest and abort signal", async function () {
+        const layerClient = new IndexLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
 
-    assert.isDefined(response);
-  });
+        const abortController = new AbortController();
 
-  it("getData method with model and abort signal", async function() {
-    const layerClient = new IndexLayerClientTest({
-      catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
-      layerId: "test-layed-id",
-      settings: new OlpClientSettings({
-        environment: "here",
-        getToken: () => Promise.resolve("test-token-string")
-      })
+        const response = layerClient.getPartitions(
+            new IndexQueryRequest(),
+            abortController.signal
+        );
+        assert.isDefined(response);
     });
 
-    const abortController = new AbortController();
+    it("getData method with model", async function () {
+        const layerClient = new IndexLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
 
-    const mockedModel = {
-      id: "8c0e5ac9-b036-4365-8820-dfcba64588fc",
-      size: 111928,
-      checksum: "448a33cd65c47bed1eeb4d72e7fa022c95a41158",
-      timestamp: 1551981674191,
-      hour_from: 1506402000000,
-      tile_id: 377894442,
-      crc: null
-    };
+        const mockedModel = {
+            id: "8c0e5ac9-b036-4365-8820-dfcba64588fc",
+            size: 111928,
+            checksum: "448a33cd65c47bed1eeb4d72e7fa022c95a41158",
+            timestamp: 1551981674191,
+            hour_from: 1506402000000,
+            tile_id: 377894442,
+            crc: null
+        };
+        const response = await layerClient.getData(mockedModel);
 
-    const response = await layerClient.getData(
-      mockedModel,
-      abortController.signal
-    );
+        assert.isDefined(response);
+    });
 
-    assert.isDefined(response);
-  });
+    it("getData method with empty model", async function () {
+        const layerClient = new IndexLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
+
+        const mockedModel = {};
+        const response = await layerClient.getData(mockedModel);
+
+        assert.isDefined(response);
+    });
+
+    it("getData method with model and abort signal", async function () {
+        const layerClient = new IndexLayerClientTest({
+            catalogHrn: HRN.fromString("hrn:here:data:::test-hrn"),
+            layerId: "test-layed-id",
+            settings: new OlpClientSettings({
+                environment: "here",
+                getToken: () => Promise.resolve("test-token-string")
+            })
+        });
+
+        const abortController = new AbortController();
+
+        const mockedModel = {
+            id: "8c0e5ac9-b036-4365-8820-dfcba64588fc",
+            size: 111928,
+            checksum: "448a33cd65c47bed1eeb4d72e7fa022c95a41158",
+            timestamp: 1551981674191,
+            hour_from: 1506402000000,
+            tile_id: 377894442,
+            crc: null
+        };
+
+        const response = await layerClient.getData(
+            mockedModel,
+            abortController.signal
+        );
+
+        assert.isDefined(response);
+    });
 });

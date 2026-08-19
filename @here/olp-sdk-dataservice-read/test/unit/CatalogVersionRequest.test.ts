@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,38 +17,38 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { CatalogVersionRequest } from "../../lib";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("CatalogVersionRequest", function() {
+describe("CatalogVersionRequest", function () {
     const billingTag = "billingTag";
     const mockedStartVersion = 13;
     const mockedEndVersion = 42;
 
-    it("Should initialize", function() {
+    it("Should initialize", function () {
         const catalogVersionRequest = new CatalogVersionRequest();
 
         assert.isDefined(catalogVersionRequest);
         expect(catalogVersionRequest).be.instanceOf(CatalogVersionRequest);
     });
 
-    it("Should set parameters", function() {
+    it("Should set parameters", function () {
         const catalogVersionRequest = new CatalogVersionRequest();
 
-        const catalogStartVersion = catalogVersionRequest.withStartVersion(
-            mockedStartVersion
-        );
-        const catalogEndVersion = catalogVersionRequest.withEndVersion(
-            mockedEndVersion
-        );
+        const catalogStartVersion =
+            catalogVersionRequest.withStartVersion(mockedStartVersion);
+        const catalogEndVersion =
+            catalogVersionRequest.withEndVersion(mockedEndVersion);
         const catalogBillTag = catalogVersionRequest.withBillingTag(billingTag);
 
         expect(catalogStartVersion.getStartVersion()).to.be.equal(
@@ -58,7 +58,7 @@ describe("CatalogVersionRequest", function() {
         expect(catalogBillTag.getBillingTag()).to.be.equal(billingTag);
     });
 
-    it("Should get parameters with chain", function() {
+    it("Should get parameters with chain", function () {
         const catalogVersionRequest = new CatalogVersionRequest()
             .withStartVersion(mockedStartVersion)
             .withEndVersion(mockedEndVersion)

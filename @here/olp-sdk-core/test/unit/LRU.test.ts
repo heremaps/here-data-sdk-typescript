@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,21 @@
  * License-Filename: LICENSE
  */
 
-import { assert } from "chai";
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { LRUCache } from "@here/olp-sdk-core";
 
-describe("LRU", function() {
-    it("set", function() {
+describe("LRU", function () {
+    it("set", function () {
         const cache = new LRUCache(3);
         cache.set(1, 1);
         cache.set(2, 2);
@@ -32,7 +42,7 @@ describe("LRU", function() {
         assert.strictEqual(cache.get(3), 3);
     });
 
-    it("get", function() {
+    it("get", function () {
         const cache = new LRUCache<number, number>(3);
         assert.strictEqual(cache.get(1), undefined);
         assert.strictEqual(cache.get(2), undefined);
@@ -44,7 +54,7 @@ describe("LRU", function() {
         assert.strictEqual(cache.get(3), undefined);
     });
 
-    it("overflow", function() {
+    it("overflow", function () {
         const cache = new LRUCache(3);
         cache.set(1, 1);
         cache.set(2, 2);
@@ -57,7 +67,7 @@ describe("LRU", function() {
         assert.strictEqual(cache.get(4), 4);
     });
 
-    it("clear", function() {
+    it("clear", function () {
         const cache = new LRUCache(3);
         cache.set(1, 1);
         cache.set(2, 2);
@@ -67,7 +77,7 @@ describe("LRU", function() {
         assert.strictEqual(cache.get(2), undefined);
     });
 
-    it("resize", function() {
+    it("resize", function () {
         const cache = new LRUCache<number, number>(2);
 
         cache.set(1, 1);

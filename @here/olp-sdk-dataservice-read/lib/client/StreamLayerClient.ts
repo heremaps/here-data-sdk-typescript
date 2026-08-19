@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +24,10 @@ import {
     RequestFactory
 } from "@here/olp-sdk-core";
 import { BlobApi, StreamApi } from "@here/olp-sdk-dataservice-api";
-import {
-    PollRequest,
-    SeekRequest,
-    SubscribeRequest,
-    UnsubscribeRequest
-} from "@here/olp-sdk-dataservice-read";
+import { PollRequest } from "./PollRequest";
+import { SeekRequest } from "./SeekRequest";
+import { SubscribeRequest } from "./SubscribeRequest";
+import { UnsubscribeRequest } from "./UnsubscribeRequest";
 
 export interface StreamLayerClientParams {
     // The HERE Resource Name (HRN) of the catalog from which you want to get partitions metadata and data.
@@ -91,7 +89,7 @@ export class StreamLayerClient {
             this.settings,
             this.catalogHrn,
             abortSignal
-        ).catch(error => Promise.reject(error));
+        );
 
         const subscribtionRequestParams = {
             layerId: this.layerId,
@@ -104,22 +102,20 @@ export class StreamLayerClient {
         const subscriptionResult = await StreamApi.subscribe(
             requestBuilder,
             subscribtionRequestParams
-        )
-            .then(
-                async (
-                    res: Response
-                ): Promise<{
-                    nodeBaseURL: string;
-                    subscriptionId: string;
-                    xCorrelationId?: string;
-                }> => {
-                    const xCorrelationId =
-                        res.headers.get("X-Correlation-Id") || undefined;
-                    const responseData = await res.json();
-                    return Promise.resolve({ xCorrelationId, ...responseData });
-                }
-            )
-            .catch(err => Promise.reject(err));
+        ).then(
+            async (
+                res: Response
+            ): Promise<{
+                nodeBaseURL: string;
+                subscriptionId: string;
+                xCorrelationId?: string;
+            }> => {
+                const xCorrelationId =
+                    res.headers.get("X-Correlation-Id") || undefined;
+                const responseData = await res.json();
+                return Promise.resolve({ xCorrelationId, ...responseData });
+            }
+        );
 
         // Update xCorrelationId
         this.xCorrelationId = subscriptionResult.xCorrelationId;
@@ -178,24 +174,21 @@ export class StreamLayerClient {
         const consumeResponse = await StreamApi.consumeData(
             requestBuilder,
             consumeDataParams
-        )
-            .then(
-                async (
-                    response: Response
-                ): Promise<{
-                    data: StreamApi.Message[];
-                    xCorrelationId?: string;
-                }> => {
-                    const data = await response.json();
-                    return Promise.resolve({
-                        xCorrelationId:
-                            response.headers.get("X-Correlation-Id") ||
-                            undefined,
-                        data: data && data.messages ? data.messages : []
-                    });
-                }
-            )
-            .catch(error => Promise.reject(error));
+        ).then(
+            async (
+                response: Response
+            ): Promise<{
+                data: StreamApi.Message[];
+                xCorrelationId?: string;
+            }> => {
+                const data = await response.json();
+                return Promise.resolve({
+                    xCorrelationId:
+                        response.headers.get("X-Correlation-Id") || undefined,
+                    data: data && data.messages ? data.messages : []
+                });
+            }
+        );
 
         // Update xCorrelationId
         this.xCorrelationId = consumeResponse.xCorrelationId;
@@ -205,7 +198,7 @@ export class StreamLayerClient {
             const latestOffsets: {
                 [key: string]: number;
             } = consumeResponse.data
-                .map(msg => msg.offset)
+                .map((msg) => msg.offset)
                 .reduce(
                     (
                         acc: { [key: string]: number },
@@ -222,7 +215,7 @@ export class StreamLayerClient {
 
             await StreamApi.doCommitOffsets(requestBuilder, {
                 commitOffsets: {
-                    offsets: Object.keys(latestOffsets).map(key => ({
+                    offsets: Object.keys(latestOffsets).map((key) => ({
                         partition: +key,
                         offset: latestOffsets[key]
                     }))
@@ -231,7 +224,7 @@ export class StreamLayerClient {
                 mode: request.getMode(),
                 layerId: this.layerId,
                 xCorrelationId: this.xCorrelationId
-            }).catch(async error => {
+            }).catch(async (error) => {
                 console.log(
                     `Commit offsets unsuccessful, error=${error.message}`
                 );
@@ -312,7 +305,7 @@ export class StreamLayerClient {
             this.settings,
             this.catalogHrn,
             abortSignal
-        ).catch(error => Promise.reject(error));
+        );
 
         return BlobApi.getBlob(requestBuilder, {
             dataHandle: message.metaData.dataHandle,
@@ -376,13 +369,10 @@ export class StreamLayerClient {
             mode: request.getMode(),
             subscriptionId: request.getSubscriptionId(),
             xCorrelationId: this.xCorrelationId
-        })
-            .then(async response => {
-                this.xCorrelationId =
-                    response.headers.get("X-Correlation-Id") ||
-                    this.xCorrelationId;
-                return response;
-            })
-            .catch(err => Promise.reject(err));
+        }).then(async (response) => {
+            this.xCorrelationId =
+                response.headers.get("X-Correlation-Id") || this.xCorrelationId;
+            return response;
+        });
     }
 }

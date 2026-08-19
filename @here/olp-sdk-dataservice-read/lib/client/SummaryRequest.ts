@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 import { HRN } from "@here/olp-sdk-core";
-import { validateBillingTag } from "@here/olp-sdk-dataservice-read";
+import { validateBillingTag } from "../utils/validateBillingTag";
 
 /**
  * Prepares information for calls to get a summary from the platform Statistics Service.

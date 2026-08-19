@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,168 +17,172 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { StatisticsRequest } from "@here/olp-sdk-dataservice-read";
 import { HRN } from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
+describe("StatisticsRequest", function () {
+    enum CoverageDataType {
+        BITMAP = "tilemap",
+        SIZEMAP = "heatmap/size",
+        TIMEMAP = "heatmap/age"
+    }
 
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("StatisticsRequest", function() {
-  enum CoverageDataType {
-    BITMAP = "tilemap",
-    SIZEMAP = "heatmap/size",
-    TIMEMAP = "heatmap/age"
-  }
-
-  class StatisticsRequestTest extends StatisticsRequest {
-    /*catalogHrn?: string;
+    class StatisticsRequestTest extends StatisticsRequest {
+        /*catalogHrn?: string;
         private layerId?: string;
         private typemap?: CoverageDataType;
         private dataLevel?: number;
         private billingTag?: string;
 */
 
-    getCatalogHrn(): string {
-      return "hrn:here:data:::test-hrn";
+        getCatalogHrn(): string {
+            return "hrn:here:data:::test-hrn";
+        }
+
+        getLayerId(): string {
+            return "test";
+        }
+
+        getTypemap(): CoverageDataType {
+            return CoverageDataType.BITMAP;
+        }
+
+        getDataLevel(): number | undefined;
+
+        getDataLevel(): string | undefined;
+
+        getDataLevel(): number | string | undefined {
+            return 3;
+        }
+
+        withCatalogHrn(hrn: HRN): StatisticsRequest {
+            return new StatisticsRequest();
+        }
+
+        withLayerId(layerId: string): StatisticsRequest {
+            return new StatisticsRequest();
+        }
+
+        withTypemap(coverageDataType: CoverageDataType): StatisticsRequest {
+            return new StatisticsRequest();
+        }
+
+        withDataLevel(dataLevel: number): StatisticsRequest;
+
+        withDataLevel(dataLevel: string): StatisticsRequest;
+
+        withDataLevel(dataLevel: string | number) {
+            return new StatisticsRequest();
+        }
+
+        withBillingTag(tag: string): StatisticsRequest {
+            return new StatisticsRequest();
+        }
+
+        getBillingTag(): string {
+            return "billing-tag";
+        }
     }
 
-    getLayerId(): string {
-      return "test";
-    }
+    it("Shoud be initialized", async function () {
+        const request = new StatisticsRequest();
+        assert.isDefined(request);
+        expect(request).to.be.instanceOf(StatisticsRequest);
 
-    getTypemap(): CoverageDataType {
-      return CoverageDataType.BITMAP;
-    }
+        assert.isFunction(request.withTypemap);
+        assert.isFunction(request.getTypemap);
+        assert.isFunction(request.withCatalogHrn);
+        assert.isFunction(request.getCatalogHrn);
+        assert.isFunction(request.withDataLevel);
+        assert.isFunction(request.getDataLevel);
+        assert.isFunction(request.withLayerId);
+        assert.isFunction(request.getLayerId);
+        assert.isFunction(request.withLayerId);
+        assert.isFunction(request.getLayerId);
+        assert.isFunction(request.withBillingTag);
+        assert.isFunction(request.getBillingTag);
+    });
 
-    getDataLevel(): number | undefined;
+    it("Test withTypemap method with type map", async function () {
+        const request = new StatisticsRequestTest();
 
-    getDataLevel(): string | undefined;
+        const response = request.withTypemap(CoverageDataType.BITMAP);
+        assert.isDefined(response);
+    });
 
-    getDataLevel(): number | string | undefined {
-      return 3;
-    }
+    it("Test getTypemap method without params", async function () {
+        const request = new StatisticsRequestTest();
 
-    withCatalogHrn(hrn: HRN): StatisticsRequest {
-      return new StatisticsRequest();
-    }
+        const response = request.getTypemap();
+        assert.isDefined(response);
+    });
 
-    withLayerId(layerId: string): StatisticsRequest {
-      return new StatisticsRequest();
-    }
+    it("Test withCatalogHrn method with hrn", async function () {
+        const request = new StatisticsRequestTest();
 
-    withTypemap(coverageDataType: CoverageDataType): StatisticsRequest {
-      return new StatisticsRequest();
-    }
+        const response = request.withCatalogHrn(
+            HRN.fromString("hrn:here:data:::test-hrn")
+        );
+        assert.isDefined(response);
+    });
 
-    withDataLevel(dataLevel: number): StatisticsRequest;
+    it("Test getCatalogHrn method without params", async function () {
+        const request = new StatisticsRequestTest();
 
-    withDataLevel(dataLevel: string): StatisticsRequest;
+        const response = request.getCatalogHrn();
+        assert.isDefined(response);
+    });
 
-    withDataLevel(dataLevel: string | number) {
-      return new StatisticsRequest();
-    }
+    it("Test withDataLevel method with dataLevel", async function () {
+        const request = new StatisticsRequestTest();
 
-    withBillingTag(tag: string): StatisticsRequest {
-      return new StatisticsRequest();
-    }
+        const response = request.withDataLevel(1);
+        assert.isDefined(response);
+    });
 
-    getBillingTag(): string {
-      return "billing-tag";
-    }
-  }
+    it("Test getDataLevel method without params", async function () {
+        const request = new StatisticsRequestTest();
 
-  it("Shoud be initialized", async function() {
-    const request = new StatisticsRequest();
-    assert.isDefined(request);
-    expect(request).to.be.instanceOf(StatisticsRequest);
+        const response = request.getDataLevel();
+        assert.isDefined(response);
+    });
 
-    assert.isFunction(request.withTypemap);
-    assert.isFunction(request.getTypemap);
-    assert.isFunction(request.withCatalogHrn);
-    assert.isFunction(request.getCatalogHrn);
-    assert.isFunction(request.withDataLevel);
-    assert.isFunction(request.getDataLevel);
-    assert.isFunction(request.withLayerId);
-    assert.isFunction(request.getLayerId);
-    assert.isFunction(request.withLayerId);
-    assert.isFunction(request.getLayerId);
-    assert.isFunction(request.withBillingTag);
-    assert.isFunction(request.getBillingTag);
-  });
+    it("Test withLayerId method with layerId", async function () {
+        const request = new StatisticsRequestTest();
 
-  it("Test withTypemap method with type map", async function() {
-    const request = new StatisticsRequestTest();
+        const response = request.withLayerId("test");
+        assert.isDefined(response);
+    });
 
-    const response = request.withTypemap(CoverageDataType.BITMAP);
-    assert.isDefined(response);
-  });
+    it("Test getLayerId method without params", async function () {
+        const request = new StatisticsRequestTest();
 
-  it("Test getTypemap method without params", async function() {
-    const request = new StatisticsRequestTest();
+        const response = request.getLayerId();
+        assert.isDefined(response);
+    });
 
-    const response = request.getTypemap();
-    assert.isDefined(response);
-  });
+    it("Test withBillingTag method with tag", async function () {
+        const request = new StatisticsRequestTest();
 
-  it("Test withCatalogHrn method with hrn", async function() {
-    const request = new StatisticsRequestTest();
+        const response = request.withBillingTag("test-tag");
+        assert.isDefined(response);
+    });
 
-    const response = request.withCatalogHrn(
-      HRN.fromString("hrn:here:data:::test-hrn")
-    );
-    assert.isDefined(response);
-  });
+    it("Test getBillingTag method without params", async function () {
+        const request = new StatisticsRequestTest();
 
-  it("Test getCatalogHrn method without params", async function() {
-    const request = new StatisticsRequestTest();
-
-    const response = request.getCatalogHrn();
-    assert.isDefined(response);
-  });
-
-  it("Test withDataLevel method with dataLevel", async function() {
-    const request = new StatisticsRequestTest();
-
-    const response = request.withDataLevel(1);
-    assert.isDefined(response);
-  });
-
-  it("Test getDataLevel method without params", async function() {
-    const request = new StatisticsRequestTest();
-
-    const response = request.getDataLevel();
-    assert.isDefined(response);
-  });
-
-  it("Test withLayerId method with layerId", async function() {
-    const request = new StatisticsRequestTest();
-
-    const response = request.withLayerId("test");
-    assert.isDefined(response);
-  });
-
-  it("Test getLayerId method without params", async function() {
-    const request = new StatisticsRequestTest();
-
-    const response = request.getLayerId();
-    assert.isDefined(response);
-  });
-
-  it("Test withBillingTag method with tag", async function() {
-    const request = new StatisticsRequestTest();
-
-    const response = request.withBillingTag("test-tag");
-    assert.isDefined(response);
-  });
-
-  it("Test getBillingTag method without params", async function() {
-    const request = new StatisticsRequestTest();
-
-    const response = request.getBillingTag();
-    assert.isDefined(response);
-  });
+        const response = request.getBillingTag();
+        assert.isDefined(response);
+    });
 });

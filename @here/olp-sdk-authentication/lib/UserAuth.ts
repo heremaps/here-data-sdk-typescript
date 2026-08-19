@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
  */
 
 import { HttpError, SENT_WITH_PARAM } from "@here/olp-sdk-core";
+import { buildErrorMessage } from "./buildErrorMessage";
 import { OAuthArgs, Token } from "./requestToken_common";
 
 /**
@@ -213,15 +214,13 @@ export class UserAuth {
             );
         }
 
-        const response = await this.config
-            .tokenRequester({
-                url: this.config.customUrl || this.m_apiUrl + "oauth2/token",
-                consumerKey: this.m_credentials.accessKeyId,
-                secretKey: this.m_credentials.accessKeySecret,
-                scope: this.m_scope,
-                expiresIn: this.m_expiresIn
-            })
-            .catch(err => Promise.reject(err));
+        const response = await this.config.tokenRequester({
+            url: this.config.customUrl || this.m_apiUrl + "oauth2/token",
+            consumerKey: this.m_credentials.accessKeyId,
+            secretKey: this.m_credentials.accessKeySecret,
+            scope: this.m_scope,
+            expiresIn: this.m_expiresIn
+        });
 
         if (response.accessToken) {
             this.m_accessToken = response.accessToken;
@@ -265,7 +264,7 @@ export class UserAuth {
 
         if (!request.ok) {
             return Promise.reject(
-                new HttpError(request.status, request.statusText)
+                new HttpError(request.status, await buildErrorMessage(request))
             );
         }
 
@@ -296,7 +295,9 @@ export class UserAuth {
             return Promise.reject(
                 new HttpError(
                     request.status,
-                    `Error fetching user info: ${request.statusText}`
+                    `Error fetching user info: ${await buildErrorMessage(
+                        request
+                    )}`
                 )
             );
         }

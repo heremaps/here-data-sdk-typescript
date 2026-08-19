@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,21 +17,28 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { UrlBuilder } from "../index";
 
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("UrlBuilderTest", function() {
+describe("UrlBuilderTest", function () {
     const testUrlBuilder = new UrlBuilder("test-url");
 
-    it("UrlBuilder shoud be initialized", async function() {
+    it("UrlBuilder shoud be initialized", async function () {
         assert.isDefined(testUrlBuilder);
         expect(testUrlBuilder).to.be.instanceOf(UrlBuilder);
     });
 
-    it("Method stringifyQuery should return URL query string from a key, value paris provided as params.", async function() {
+    it("Method stringifyQuery should return URL query string from a key, value paris provided as params.", async function () {
         const mockedUrlQueryResult = "testKey=testValuetestKey2=testValue2";
 
         const urlQueryResult = UrlBuilder.stringifyQuery({
@@ -41,7 +48,7 @@ describe("UrlBuilderTest", function() {
         expect(urlQueryResult).to.be.equal(mockedUrlQueryResult);
     });
 
-    it("Method appendQuery should appends parameters key, value to the URL.", async function() {
+    it("Method appendQuery should appends parameters key, value to the URL.", async function () {
         const mockedUrl = "test-url?testKey=testValue";
 
         testUrlBuilder.appendQuery("testKey", "testValue");
@@ -51,7 +58,7 @@ describe("UrlBuilderTest", function() {
         expect(testUrlBuilder.hasQuery).to.be.equal(true);
     });
 
-    it("Method appendQuery should not appends parameters to the URL if value is undefined.", async function() {
+    it("Method appendQuery should not appends parameters to the URL if value is undefined.", async function () {
         const testUrlBuilder2 = new UrlBuilder("test-url");
         const mockedUrl = "test-url";
 
@@ -63,7 +70,7 @@ describe("UrlBuilderTest", function() {
         expect(testUrlBuilder2.hasQuery).to.be.equal(false);
     });
 
-    it("Method appendQuery should appends parameters key, value to the URL, when parameter value type is number", async function() {
+    it("Method appendQuery should appends parameters key, value to the URL, when parameter value type is number", async function () {
         const testUrlBuilder3 = new UrlBuilder("test-url");
         const mockedValue = 33;
         const mockedUrl = "test-url?testKey3=33";
@@ -76,7 +83,7 @@ describe("UrlBuilderTest", function() {
         expect(testUrlBuilder3.hasQuery).to.be.equal(true);
     });
 
-    it("Method appendQuery should appends parameters key, value to the URL, when parameter value type is boolean", async function() {
+    it("Method appendQuery should appends parameters key, value to the URL, when parameter value type is boolean", async function () {
         const testBuilder = new UrlBuilder("test-url");
         testBuilder.appendQuery("testKey", false);
         testBuilder.appendQuery("testKey2", true);
@@ -86,7 +93,7 @@ describe("UrlBuilderTest", function() {
         );
     });
 
-    it("Method appendQuery should appends parameters key, value to the URL, when parameter value is an array of strings", async function() {
+    it("Method appendQuery should appends parameters key, value to the URL, when parameter value is an array of strings", async function () {
         const testUrlBuilder4 = new UrlBuilder("test-url");
         const mockedUrl = "test-url?testkey=value1,value2,value3";
 
@@ -97,7 +104,7 @@ describe("UrlBuilderTest", function() {
         expect(testUrlBuilder4.hasQuery).to.be.equal(true);
     });
 
-    it("Method appendQuery should appends parameters key, value and operator to the URL", async function() {
+    it("Method appendQuery should appends parameters key, value and operator to the URL", async function () {
         const builder = new UrlBuilder("test-url");
         const mockedValue = 33;
         const expecteddUrl = "test-url?testKey3!=33";

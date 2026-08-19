@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,157 +17,172 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { IndexApi } from "@here/olp-sdk-dataservice-api";
 import {
-  DataResponse,
-  Index,
-  MapStringObject,
-  UpdateIndexRequest
+    DataResponse,
+    Index,
+    MapStringObject,
+    UpdateIndexRequest
 } from "@here/olp-sdk-dataservice-api/lib/index-api";
 import { mockedRequestBuilder } from "./MockedRequestBuilder";
 
-chai.use(sinonChai);
+describe("IndexApi", function () {
+    it("DataResponse with all required params", function () {
+        const params: DataResponse = {};
 
-const assert = chai.assert;
-const expect = chai.expect;
+        assert.isDefined(params);
+    });
 
-describe("IndexApi", function() {
-  it("DataResponse with all required params", function() {
-    const params: DataResponse = {};
+    it("DataResponse with all required and optional params", function () {
+        const params: DataResponse = {
+            data: [
+                {
+                    checksum: "test",
+                    fields: "test",
+                    id: "test",
+                    metadata: { ["test"]: "test" },
+                    size: 1
+                }
+            ],
+            error: "test"
+        };
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("DataResponse with all required and optional params", function() {
-    const params: DataResponse = {
-      data: [
-        {
-          checksum: "test",
-          fields: "test",
-          id: "test",
-          metadata: { ["test"]: "test" },
-          size: 1
-        }
-      ],
-      error: "test"
-    };
+    it("Index with all required params", function () {
+        const params: Index = {};
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("Index with all required params", function() {
-    const params: Index = {};
-
-    assert.isDefined(params);
-  });
-
-  it("Index with all required and optional params", function() {
-    const params: Index = {
-      checksum: "test",
-      fields: "test",
-      id: "test",
-      metadata: { ["test"]: "test" },
-      size: 1
-    };
-
-    assert.isDefined(params);
-  });
-
-  it("MapStringObject with all required params", function() {
-    const params: MapStringObject = {
-      mykey: "test"
-    };
-
-    assert.isDefined(params);
-  });
-
-  it("UpdateIndexRequest with all required params", function() {
-    const params: UpdateIndexRequest = {};
-
-    assert.isDefined(params);
-  });
-
-  it("UpdateIndexRequest with all required and optional params", function() {
-    const params: UpdateIndexRequest = {
-      additions: [
-        {
-          checksum: "test",
-          fields: "test",
-          id: "test",
-          metadata: { ["test"]: "test" },
-          size: 1
-        }
-      ],
-      removals: ["test"]
-    };
-
-    assert.isDefined(params);
-  });
-
-  it("Test insertIndexes method with all required params", async function() {
-    const params = {
-      indexes: [
-        {
-          checksum: "test",
-          fields: "test",
-          id: "test",
-          metadata: { ["test"]: "test" },
-          size: 1
-        }
-      ],
-      layerID: "test"
-    };
-
-    const result = await IndexApi.insertIndexes(mockedRequestBuilder, params);
-
-    expect(result).to.be.equal("success");
-  });
-
-  it("Test performQuery method with all required params", async function() {
-    const params = {
-      layerID: "test",
-      query: "test"
-    };
-
-    const result = await IndexApi.performQuery(mockedRequestBuilder, params);
-
-    expect(result).to.be.equal("success");
-  });
-
-  it("Test performQuery method with all required and optional params", async function() {
-    const params = {
-      layerID: "test",
-      query: "test",
-      huge: true
-    };
-
-    const result = await IndexApi.performQuery(mockedRequestBuilder, params);
-
-    expect(result).to.be.equal("success");
-  });
-
-  it("Test performUpdate method with all required params", async function() {
-    const params = {
-      layerID: "test",
-      request: {
-        additions: [
-          {
+    it("Index with all required and optional params", function () {
+        const params: Index = {
             checksum: "test",
             fields: "test",
             id: "test",
             metadata: { ["test"]: "test" },
             size: 1
-          }
-        ],
-        removals: ["test"]
-      }
-    };
+        };
 
-    const result = await IndexApi.performUpdate(mockedRequestBuilder, params);
+        assert.isDefined(params);
+    });
 
-    expect(result).to.be.equal("success");
-  });
+    it("MapStringObject with all required params", function () {
+        const params: MapStringObject = {
+            mykey: "test"
+        };
+
+        assert.isDefined(params);
+    });
+
+    it("UpdateIndexRequest with all required params", function () {
+        const params: UpdateIndexRequest = {};
+
+        assert.isDefined(params);
+    });
+
+    it("UpdateIndexRequest with all required and optional params", function () {
+        const params: UpdateIndexRequest = {
+            additions: [
+                {
+                    checksum: "test",
+                    fields: "test",
+                    id: "test",
+                    metadata: { ["test"]: "test" },
+                    size: 1
+                }
+            ],
+            removals: ["test"]
+        };
+
+        assert.isDefined(params);
+    });
+
+    it("Test insertIndexes method with all required params", async function () {
+        const params = {
+            indexes: [
+                {
+                    checksum: "test",
+                    fields: "test",
+                    id: "test",
+                    metadata: { ["test"]: "test" },
+                    size: 1
+                }
+            ],
+            layerID: "test"
+        };
+
+        const result = await IndexApi.insertIndexes(
+            mockedRequestBuilder,
+            params
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("Test performQuery method with all required params", async function () {
+        const params = {
+            layerID: "test",
+            query: "test"
+        };
+
+        const result = await IndexApi.performQuery(
+            mockedRequestBuilder,
+            params
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("Test performQuery method with all required and optional params", async function () {
+        const params = {
+            layerID: "test",
+            query: "test",
+            huge: true
+        };
+
+        const result = await IndexApi.performQuery(
+            mockedRequestBuilder,
+            params
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("Test performUpdate method with all required params", async function () {
+        const params = {
+            layerID: "test",
+            request: {
+                additions: [
+                    {
+                        checksum: "test",
+                        fields: "test",
+                        id: "test",
+                        metadata: { ["test"]: "test" },
+                        size: 1
+                    }
+                ],
+                removals: ["test"]
+            }
+        };
+
+        const result = await IndexApi.performUpdate(
+            mockedRequestBuilder,
+            params
+        );
+
+        expect(result).to.be.equal("success");
+    });
 });

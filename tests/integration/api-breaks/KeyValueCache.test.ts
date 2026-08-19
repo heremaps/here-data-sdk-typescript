@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,48 +17,51 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { KeyValueCache } from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
+describe("KeyValueCache", function () {
+    it("Shoud be initialized withouth arguments", async function () {
+        const testKeyValueCache = new KeyValueCache();
+        assert.isDefined(testKeyValueCache);
 
-const assert = chai.assert;
-const expect = chai.expect;
+        expect(testKeyValueCache).to.be.instanceOf(KeyValueCache);
+        assert.isDefined(testKeyValueCache.put);
+        assert.isDefined(testKeyValueCache.get);
+        assert.isDefined(testKeyValueCache.remove);
+    });
 
-describe("KeyValueCache", function() {
-  it("Shoud be initialized withouth arguments", async function() {
-    const testKeyValueCache = new KeyValueCache();
-    assert.isDefined(testKeyValueCache);
+    it("Test put method with params", async function () {
+        const testKeyValueCache = new KeyValueCache();
 
-    expect(testKeyValueCache).to.be.instanceOf(KeyValueCache);
-    assert.isDefined(testKeyValueCache.put);
-    assert.isDefined(testKeyValueCache.get);
-    assert.isDefined(testKeyValueCache.remove);
-  });
+        const response = testKeyValueCache.put("test-key", "test");
+        assert.isTrue(response);
+    });
 
-  it("Test put method with params", async function() {
-    const testKeyValueCache = new KeyValueCache();
+    it("Test get method with params", async function () {
+        const testKeyValueCache = new KeyValueCache();
+        testKeyValueCache.put("test-key", "test");
 
-    const response = testKeyValueCache.put("test-key", "test");
-    assert.isTrue(response);
-  });
+        const response = testKeyValueCache.get("test-key");
+        assert.isDefined(response);
+    });
 
-  it("Test get method with params", async function() {
-    const testKeyValueCache = new KeyValueCache();
-    testKeyValueCache.put("test-key", "test");
+    it("Test remove method with params", async function () {
+        const testKeyValueCache = new KeyValueCache();
+        testKeyValueCache.put("test-key", "test");
+        testKeyValueCache.put("test-key2", "test");
 
-    const response = testKeyValueCache.get("test-key");
-    assert.isDefined(response);
-  });
-
-  it("Test remove method with params", async function() {
-    const testKeyValueCache = new KeyValueCache();
-    testKeyValueCache.put("test-key", "test");
-    testKeyValueCache.put("test-key2", "test");
-
-    const response = testKeyValueCache.remove("test-key");
-    assert.isTrue(response);
-  });
+        const response = testKeyValueCache.remove("test-key");
+        assert.isTrue(response);
+    });
 });

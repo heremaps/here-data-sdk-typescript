@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,8 @@
 
 import { OlpClientSettings, RequestFactory } from "@here/olp-sdk-core";
 import { ArtifactApi } from "@here/olp-sdk-dataservice-api";
-import {
-    SchemaDetailsRequest,
-    SchemaRequest
-} from "@here/olp-sdk-dataservice-read";
+import { SchemaDetailsRequest } from "./SchemaDetailsRequest";
+import { SchemaRequest } from "./SchemaRequest";
 
 /**
  * Gets schema metadata and data from the platform Artifact Service.
@@ -62,11 +60,11 @@ export class ArtifactClient {
             "artifact",
             this.apiVersion,
             this.settings
-        ).catch(error => Promise.reject(error));
+        );
 
         return ArtifactApi.getSchemaUsingGET(request, {
             schemaHrn: hrnStr
-        }).catch(err => Promise.reject(err));
+        });
     }
 
     /**
@@ -88,10 +86,10 @@ export class ArtifactClient {
             "artifact",
             this.apiVersion,
             this.settings
-        ).catch(error => Promise.reject(error));
+        );
         const response = await ArtifactApi.getArtifactUsingGET(request, {
             artifactHrn: variant.url
-        }).catch(async error => {
+        }).catch(async (error) => {
             const messages: { [key: number]: string } = {
                 400: "Bad request",
                 401: "You are not authorized to view the schema",

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,20 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { DataStoreDownloadManager, SENT_WITH_PARAM } from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("DataStoreDownloadManager", function() {
+describe("DataStoreDownloadManager", function () {
     const fakeDataUrl = `https://download.example.url`;
 
     function createMockDownloadResponse() {
@@ -36,26 +40,26 @@ describe("DataStoreDownloadManager", function() {
             statusText: "success",
             ok: true,
             headers: [],
-            arrayBuffer: sinon.stub(),
-            json: sinon.stub(),
-            text: sinon.stub()
+            arrayBuffer: vi.fn(),
+            json: vi.fn(),
+            text: vi.fn()
         };
         return mock;
     }
 
-    it("#download handles successful download response", async function() {
+    it("#download handles successful download response", async function () {
         const mock = createMockDownloadResponse();
         mock.status = 302;
-        const fetchStub = sinon.stub().resolves(mock);
+        const fetchStub = vi.fn().mockResolvedValue(mock);
         const downloadMgr = new DataStoreDownloadManager(fetchStub, 5);
 
         // Act
         const response = await downloadMgr.download(fakeDataUrl);
 
         // Assert
-        assert.isTrue(fetchStub.calledOnce);
+        assert.isTrue(fetchStub.mock.calls.length === 1);
         assert.isTrue(
-            fetchStub.getCall(0).args[0] === fakeDataUrl + "?" + SENT_WITH_PARAM
+            fetchStub.mock.calls[0][0] === fakeDataUrl + "?" + SENT_WITH_PARAM
         );
         assert.deepEqual(response.statusText, "success");
 
@@ -63,43 +67,43 @@ describe("DataStoreDownloadManager", function() {
             // Arrange
             const mock = createMockDownloadResponse();
             mock.status = responseStatus;
-            const fetchStub = sinon.stub().resolves(mock);
+            const fetchStub = vi.fn().mockResolvedValue(mock);
             const downloadMgr = new DataStoreDownloadManager(fetchStub, 5);
 
             // Act
             const response = await downloadMgr.download(fakeDataUrl);
 
             // Assert
-            assert.isTrue(fetchStub.calledOnce);
+            assert.isTrue(fetchStub.mock.calls.length === 1);
             assert.isTrue(
-                fetchStub.getCall(0).args[0] ===
+                fetchStub.mock.calls[0][0] ===
                     fakeDataUrl + "?" + SENT_WITH_PARAM
             );
             assert.deepEqual(response.statusText, "success");
         }
     });
 
-    it("#download handles HTTP 503 status response max retries", async function() {
+    it("#download handles HTTP 503 status response max retries", async function () {
         // Arrange
         const mock = createMockDownloadResponse();
         mock.status = 503;
         mock.ok = false;
         mock.statusText = "Service unavailable!";
-        mock.json.resolves({ statusText: "Service unavailable!" });
-        const fetchStub = sinon.stub().resolves(mock);
+        mock.json.mockResolvedValue({ statusText: "Service unavailable!" });
+        const fetchStub = vi.fn().mockResolvedValue(mock);
         const downloadMgr = new DataStoreDownloadManager(fetchStub, 3);
 
         // Act
         const downloadResponse = await downloadMgr
             .download(fakeDataUrl)
-            .catch(error => {
+            .catch((error) => {
                 // Assert
-                assert(fetchStub.called) as any;
+                assert(fetchStub.mock.calls.length > 0) as any;
 
                 // callCount should be 4. (1 first call + 3 retries)
-                assert(fetchStub.callCount === 4) as any;
+                assert(fetchStub.mock.calls.length === 4) as any;
                 assert(
-                    fetchStub.getCall(0).args[0] ===
+                    fetchStub.mock.calls[0][0] ===
                         fakeDataUrl + "?" + SENT_WITH_PARAM
                 ) as any;
                 assert.equal(error.status, 503);
@@ -107,27 +111,27 @@ describe("DataStoreDownloadManager", function() {
             });
     });
 
-    it("#download handles HTTP 500 status response max retries", async function() {
+    it("#download handles HTTP 500 status response max retries", async function () {
         // Arrange
         const mock = createMockDownloadResponse();
         mock.status = 500;
         mock.ok = false;
         mock.statusText = "Internal Server Error";
-        mock.json.resolves({ statusText: "Internal Server Error" });
-        const fetchStub = sinon.stub().resolves(mock);
+        mock.json.mockResolvedValue({ statusText: "Internal Server Error" });
+        const fetchStub = vi.fn().mockResolvedValue(mock);
         const downloadMgr = new DataStoreDownloadManager(fetchStub, 3);
 
         // Act
         const downloadResponse = await downloadMgr
             .download(fakeDataUrl)
-            .catch(error => {
+            .catch((error) => {
                 // Assert
-                assert(fetchStub.called) as any;
+                assert(fetchStub.mock.calls.length > 0) as any;
 
                 // callCount should be 4. (1 first call + 3 retries)
-                assert(fetchStub.callCount === 4) as any;
+                assert(fetchStub.mock.calls.length === 4) as any;
                 assert(
-                    fetchStub.getCall(0).args[0] ===
+                    fetchStub.mock.calls[0][0] ===
                         fakeDataUrl + "?" + SENT_WITH_PARAM
                 ) as any;
                 assert.equal(error.status, 500);
@@ -135,27 +139,27 @@ describe("DataStoreDownloadManager", function() {
             });
     });
 
-    it("#download handles HTTP 429 status response max retries", async function() {
+    it("#download handles HTTP 429 status response max retries", async function () {
         // Arrange
         const mock = createMockDownloadResponse();
         mock.status = 429;
         mock.ok = false;
         mock.statusText = "To many requests";
-        mock.json.resolves({ statusText: "To many requests" });
-        const fetchStub = sinon.stub().resolves(mock);
+        mock.json.mockResolvedValue({ statusText: "To many requests" });
+        const fetchStub = vi.fn().mockResolvedValue(mock);
         const downloadMgr = new DataStoreDownloadManager(fetchStub, 3);
 
         // Act
         const downloadResponse = await downloadMgr
             .download(fakeDataUrl)
-            .catch(error => {
+            .catch((error) => {
                 // Assert
-                assert(fetchStub.called) as any;
+                assert(fetchStub.mock.calls.length > 0) as any;
 
                 // callCount should be 4. (1 first call + 3 retries)
-                assert(fetchStub.callCount === 4) as any;
+                assert(fetchStub.mock.calls.length === 4) as any;
                 assert(
-                    fetchStub.getCall(0).args[0] ===
+                    fetchStub.mock.calls[0][0] ===
                         fakeDataUrl + "?" + SENT_WITH_PARAM
                 ) as any;
                 assert.equal(error.status, 429);
@@ -167,14 +171,14 @@ describe("DataStoreDownloadManager", function() {
      * Note, DataStoreDownloadManager limits the number of html headers sent to MAX_PARALLEL_DOWNLOADS, but
      * will allow more then MAX_PARALLEL_DOWNLOADS of parallel download under the hood.
      */
-    it("#download performs download with maxParallelDownloads exceeded", async function() {
+    it("#download performs download with maxParallelDownloads exceeded", async function () {
         // Arrange
         const MAX_PARALLEL_DOWNLOADS = 16;
         const CALLS_NUMBER = 32;
 
         const mock = createMockDownloadResponse();
-        mock.json.resolves({ version: "4" });
-        const fetchStub = sinon.stub().resolves(mock);
+        mock.json.mockResolvedValue({ version: "4" });
+        const fetchStub = vi.fn().mockResolvedValue(mock);
         const downloadMgr = new DataStoreDownloadManager(fetchStub, 5);
 
         // Act
@@ -184,24 +188,24 @@ describe("DataStoreDownloadManager", function() {
         }
 
         await Promise.all(
-            downloadResponses.map(downloadRespPromise => {
-                return downloadRespPromise.then(downloadResp => {
+            downloadResponses.map((downloadRespPromise) => {
+                return downloadRespPromise.then((downloadResp) => {
                     return downloadResp.arrayBuffer();
                 });
             })
         );
 
         // Assert
-        assert(fetchStub.callCount === CALLS_NUMBER) as any;
+        assert(fetchStub.mock.calls.length === CALLS_NUMBER) as any;
         assert(
-            fetchStub.getCall(MAX_PARALLEL_DOWNLOADS - 1).args[0] ===
+            fetchStub.mock.calls[MAX_PARALLEL_DOWNLOADS - 1][0] ===
                 fakeDataUrl + "?" + SENT_WITH_PARAM
         ) as any;
     });
 
-    it("Aborting request", async function() {
+    it("Aborting request", async function () {
         const mockedFetch = async (
-            input: RequestInfo,
+            input: RequestInfo | URL,
             init?: any
         ): Promise<Response> => {
             return !init.signal.aborted
@@ -214,7 +218,7 @@ describe("DataStoreDownloadManager", function() {
         abortController.abort();
         await dm
             .download(fakeDataUrl, { signal: abortController.signal })
-            .catch(error => {
+            .catch((error) => {
                 return assert.equal(error, "aborted");
             });
     });

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 HERE Europe B.V.
+ * Copyright (C) 2021-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,28 +17,32 @@
  * License-Filename: LICENSE
  */
 
-import * as sinon from "sinon";
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { BlobV1UploadRequest } from "../../lib/utils/multipartupload-internal/BlobV1UploadRequest";
 import { BlobApi } from "@here/olp-sdk-dataservice-api";
 
-chai.use(sinonChai);
-const expect = chai.expect;
-
-describe("BlobV1UploadRequest", function() {
+describe("BlobV1UploadRequest", function () {
     const mockedRequestBuilder: any = {
         id: "mocked-request-builder"
     };
 
-    let blobApiStub: sinon.SinonStub;
+    let blobApiStub: any;
 
     afterEach(() => {
-        blobApiStub.restore();
+        blobApiStub.mockRestore();
     });
 
-    it("startMultipartUpload", async function() {
+    it("startMultipartUpload", async function () {
         const contentType = "mocked-content-type";
         const handle = "mocked-datahandle";
         const layerId = "mocked-layer-id";
@@ -57,9 +61,9 @@ describe("BlobV1UploadRequest", function() {
             }
         };
 
-        blobApiStub = sinon
-            .stub(BlobApi, "startMultipartUpload")
-            .resolves(mockedApiResponse);
+        blobApiStub = vi
+            .spyOn(BlobApi, "startMultipartUpload")
+            .mockResolvedValue(mockedApiResponse);
 
         const request = new BlobV1UploadRequest(mockedRequestBuilder);
         const result = await request.startMultipartUpload({
@@ -74,7 +78,7 @@ describe("BlobV1UploadRequest", function() {
             mockedApiResponse.links.uploadPart.href
         );
 
-        expect(blobApiStub).calledWith(mockedRequestBuilder, {
+        expect(blobApiStub).toHaveBeenCalledWith(mockedRequestBuilder, {
             dataHandle: handle,
             layerId,
             billingTag,
@@ -88,10 +92,10 @@ describe("BlobV1UploadRequest", function() {
             links: undefined
         };
 
-        blobApiStub.restore();
-        blobApiStub = sinon
-            .stub(BlobApi, "startMultipartUpload")
-            .resolves(mockedApiBadResponse);
+        blobApiStub.mockRestore();
+        blobApiStub = vi
+            .spyOn(BlobApi, "startMultipartUpload")
+            .mockResolvedValue(mockedApiBadResponse);
 
         await request
             .startMultipartUpload({
@@ -101,14 +105,14 @@ describe("BlobV1UploadRequest", function() {
                 billingTag,
                 contentEncoding
             })
-            .catch(e => {
+            .catch((e) => {
                 expect(e.message).eqls(
                     "Failed to start the multipart upload to Blob V1. Bad response."
                 );
             });
     });
 
-    it("uploadPart", async function() {
+    it("uploadPart", async function () {
         const contentType = "mocked-content-type";
         const url = "mocked-url";
         const data = Buffer.from("mocked-data", "utf8");
@@ -120,9 +124,9 @@ describe("BlobV1UploadRequest", function() {
             headers: new Map().set("ETag", "mocked-id")
         };
 
-        blobApiStub = sinon
-            .stub(BlobApi, "doUploadPart")
-            .resolves((mockedApiResponse as unknown) as Response);
+        blobApiStub = vi
+            .spyOn(BlobApi, "doUploadPart")
+            .mockResolvedValue(mockedApiResponse as unknown as Response);
 
         const request = new BlobV1UploadRequest(mockedRequestBuilder);
         const result = await request.uploadPart({
@@ -137,7 +141,7 @@ describe("BlobV1UploadRequest", function() {
         expect(result.partId).equals("mocked-id");
         expect(result.partNumber).equals(23);
 
-        expect(blobApiStub).calledWith(mockedRequestBuilder, {
+        expect(blobApiStub).toHaveBeenCalledWith(mockedRequestBuilder, {
             url,
             body: data,
             contentType,
@@ -149,10 +153,10 @@ describe("BlobV1UploadRequest", function() {
         const mockedApiBadResponse = {
             headers: new Map()
         };
-        blobApiStub.restore();
-        blobApiStub = sinon
-            .stub(BlobApi, "doUploadPart")
-            .resolves((mockedApiBadResponse as unknown) as Response);
+        blobApiStub.mockRestore();
+        blobApiStub = vi
+            .spyOn(BlobApi, "doUploadPart")
+            .mockResolvedValue(mockedApiBadResponse as unknown as Response);
 
         await request
             .uploadPart({
@@ -163,14 +167,14 @@ describe("BlobV1UploadRequest", function() {
                 partNumber,
                 billingTag
             })
-            .catch(e => {
+            .catch((e) => {
                 expect(e.message).eqls(
                     "Error uploading chunk 23, can not read ETag from the response headers."
                 );
             });
     });
 
-    it("completeMultipartUpload", async function() {
+    it("completeMultipartUpload", async function () {
         const url = "mocked-url";
         const billingTag = "mocked-billingTag";
         const parts = [
@@ -184,7 +188,9 @@ describe("BlobV1UploadRequest", function() {
             }
         ];
 
-        blobApiStub = sinon.stub(BlobApi, "doCompleteMultipartUpload");
+        blobApiStub = vi
+            .spyOn(BlobApi, "doCompleteMultipartUpload")
+            .mockReturnValue(undefined as any);
 
         const request = new BlobV1UploadRequest(mockedRequestBuilder);
         await request.completeMultipartUpload({
@@ -193,7 +199,7 @@ describe("BlobV1UploadRequest", function() {
             billingTag
         });
 
-        expect(blobApiStub).calledWith(mockedRequestBuilder, {
+        expect(blobApiStub).toHaveBeenCalledWith(mockedRequestBuilder, {
             url,
             parts: {
                 parts: [

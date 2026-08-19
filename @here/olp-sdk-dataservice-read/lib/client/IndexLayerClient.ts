@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import {
     RequestFactory
 } from "@here/olp-sdk-core";
 import { BlobApi, IndexApi } from "@here/olp-sdk-dataservice-api";
-import { IndexQueryRequest } from "@here/olp-sdk-dataservice-read";
+import { IndexQueryRequest } from "./IndexQueryRequest";
 
 /**
  * Parameters for use to initialize IndexLayerClient.
@@ -95,13 +95,13 @@ export class IndexLayerClient {
             "index",
             HRN.fromString(this.hrn),
             abortSignal
-        ).catch(err => Promise.reject(err));
+        );
 
         const indexMetadata = await IndexApi.performQuery(requestBuilder, {
             layerID: this.layerId,
             query,
             huge: request.getHugeResponse()
-        }).catch(err => Promise.reject(err));
+        });
 
         return indexMetadata.data
             ? Promise.resolve(indexMetadata.data)
@@ -133,7 +133,7 @@ export class IndexLayerClient {
             "blob",
             HRN.fromString(this.hrn),
             abortSignal
-        ).catch(err => Promise.reject(err));
+        );
 
         return BlobApi.getBlob(builder, {
             dataHandle: model.id,
@@ -158,6 +158,6 @@ export class IndexLayerClient {
             this.settings,
             hrn,
             abortSignal
-        ).catch(err => Promise.reject(err));
+        );
     }
 }

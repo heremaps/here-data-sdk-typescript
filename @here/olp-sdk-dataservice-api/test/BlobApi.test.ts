@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2022 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,22 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { BlobApi } from "@here/olp-sdk-dataservice-api";
 import { RequestBuilder, UrlBuilder } from "../lib/RequestBuilder";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("BlobApi", function() {
-    it("cancelMultipartUpload", async function() {
+describe("BlobApi", function () {
+    it("cancelMultipartUpload", async function () {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -47,14 +50,14 @@ describe("BlobApi", function() {
             }
         };
         const result = await BlobApi.cancelMultipartUpload(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("checkBlobExistsStatus", async function() {
+    it("checkBlobExistsStatus", async function () {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -71,17 +74,16 @@ describe("BlobApi", function() {
             }
         };
         const result = await BlobApi.checkBlobExistsStatus(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("doCompleteMultipartUpload", async function() {
+    it("doCompleteMultipartUpload", async function () {
         const params = {
-            url:
-                "http://mocked.url/layers/mocked-id/data/mocked-datahandle/multiparts/mocked-multiPartToken",
+            url: "http://mocked.url/layers/mocked-id/data/mocked-datahandle/multiparts/mocked-multiPartToken",
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
             multiPartToken: "mocked-multiPartToken",
@@ -107,14 +109,14 @@ describe("BlobApi", function() {
             }
         };
         const result = await BlobApi.doCompleteMultipartUpload(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("deleteBlob", async function() {
+    it("deleteBlob", async function () {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -131,14 +133,14 @@ describe("BlobApi", function() {
             }
         };
         const result = await BlobApi.deleteBlob(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("getBlob", async function() {
+    it("getBlob", async function () {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -157,14 +159,14 @@ describe("BlobApi", function() {
             }
         };
         const result = await BlobApi.getBlob(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("getMultipartUploadStatus", async function() {
+    it("getMultipartUploadStatus", async function () {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -182,14 +184,14 @@ describe("BlobApi", function() {
             }
         };
         const result = await BlobApi.getMultipartUploadStatus(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("putData", async function() {
+    it("putData", async function () {
         const content = Buffer.from("mocked-data", "utf8");
         const params = {
             layerId: "mocked-id",
@@ -218,14 +220,14 @@ describe("BlobApi", function() {
             }
         };
         const result = await BlobApi.putData(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("startMultipartUpload", async function() {
+    it("startMultipartUpload", async function () {
         const params = {
             layerId: "mocked-id",
             dataHandle: "mocked-datahandle",
@@ -244,7 +246,7 @@ describe("BlobApi", function() {
             }
         };
         const result = await BlobApi.startMultipartUpload(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
@@ -252,10 +254,9 @@ describe("BlobApi", function() {
     });
 });
 
-it("doUploadPart", async function() {
+it("doUploadPart", async function () {
     const params = {
-        url:
-            "http://mocked.url/layers/mocked-id/data/mocked-datahandle/multiparts/mocked-multiPartToken/parts",
+        url: "http://mocked.url/layers/mocked-id/data/mocked-datahandle/multiparts/mocked-multiPartToken/parts",
         layerId: "mocked-id",
         dataHandle: "mocked-datahandle",
         billingTag: "mocked-billingTag",
@@ -279,7 +280,7 @@ it("doUploadPart", async function() {
         }
     };
     const result = await BlobApi.doUploadPart(
-        (builder as unknown) as RequestBuilder,
+        builder as unknown as RequestBuilder,
         params
     );
 

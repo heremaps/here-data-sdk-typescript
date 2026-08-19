@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,18 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
+import { createStubInstance } from "./stub-instance";
 import {
     VersionedLayerClient,
     StartBatchRequest,
@@ -31,7 +40,6 @@ import {
     UploadPartitionsRequest,
     PublishSinglePartitionRequest
 } from "@here/olp-sdk-dataservice-write";
-import sinon = require("sinon");
 import {
     MetadataApi,
     PublishApi,
@@ -39,10 +47,6 @@ import {
 } from "@here/olp-sdk-dataservice-api";
 import { OlpClientSettings, RequestFactory, Uuid } from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
 class MockedHrn {
     constructor(private readonly hrn: string) {}
     toString(): string {
@@ -50,63 +54,82 @@ class MockedHrn {
     }
 }
 
-describe("VersionedLayerClient write", function() {
-    let sandbox: sinon.SinonSandbox;
-    let getVersionStub: sinon.SinonStub;
-    let initPublicationStub: sinon.SinonStub;
-    let cancelPublicationStub: sinon.SinonStub;
-    let getPublicationStub: sinon.SinonStub;
-    let submitPublicationStub: sinon.SinonStub;
-    let getBaseUrlRequestStub: sinon.SinonStub;
-    let checkBlobExistsStub: sinon.SinonStub;
-    let startMultipartUploadStub: sinon.SinonStub;
-    let doUploadPartStub: sinon.SinonStub;
-    let doCompleteMultipartUploadStub: sinon.SinonStub;
-    let uploadPartitionsStub: sinon.SinonStub;
+describe("VersionedLayerClient write", function () {
+    let getVersionStub: any;
+    let initPublicationStub: any;
+    let cancelPublicationStub: any;
+    let getPublicationStub: any;
+    let submitPublicationStub: any;
+    let getBaseUrlRequestStub: any;
+    let checkBlobExistsStub: any;
+    let startMultipartUploadStub: any;
+    let doUploadPartStub: any;
+    let doCompleteMultipartUploadStub: any;
+    let uploadPartitionsStub: any;
     let settings: OlpClientSettings;
-    let uuidCreateStub: sinon.SinonStub;
-    let putDataStub: sinon.SinonStub;
+    let uuidCreateStub: any;
+    let putDataStub: any;
 
     const fakeURL = "http://fake-base.url";
     const catalogHrn = new MockedHrn("hrn:here:data:::mocked-hrn") as any;
 
-    before(function() {
-        sandbox = sinon.createSandbox();
-    });
+    beforeAll(function () {});
 
-    beforeEach(function() {
-        settings = sandbox.createStubInstance(OlpClientSettings) as any;
+    beforeEach(function () {
+        settings = createStubInstance(OlpClientSettings) as any;
 
-        getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
-        initPublicationStub = sandbox.stub(PublishApi, "initPublication");
-        cancelPublicationStub = sandbox.stub(PublishApi, "cancelPublication");
-        getPublicationStub = sandbox.stub(PublishApi, "getPublication");
-        submitPublicationStub = sandbox.stub(PublishApi, "submitPublication");
-        checkBlobExistsStub = sandbox.stub(BlobApi, "checkBlobExistsStatus");
-        uploadPartitionsStub = sandbox.stub(PublishApi, "uploadPartitions");
-        uuidCreateStub = sandbox.stub(Uuid, "create");
+        getVersionStub = vi
+            .spyOn(MetadataApi, "latestVersion")
+            .mockReturnValue(undefined as any);
+        initPublicationStub = vi
+            .spyOn(PublishApi, "initPublication")
+            .mockReturnValue(undefined as any);
+        cancelPublicationStub = vi
+            .spyOn(PublishApi, "cancelPublication")
+            .mockReturnValue(undefined as any);
+        getPublicationStub = vi
+            .spyOn(PublishApi, "getPublication")
+            .mockReturnValue(undefined as any);
+        submitPublicationStub = vi
+            .spyOn(PublishApi, "submitPublication")
+            .mockReturnValue(undefined as any);
+        checkBlobExistsStub = vi
+            .spyOn(BlobApi, "checkBlobExistsStatus")
+            .mockReturnValue(undefined as any);
+        uploadPartitionsStub = vi
+            .spyOn(PublishApi, "uploadPartitions")
+            .mockReturnValue(undefined as any);
+        uuidCreateStub = vi
+            .spyOn(Uuid, "create")
+            .mockReturnValue(undefined as any);
 
-        startMultipartUploadStub = sandbox.stub(
-            BlobApi,
-            "startMultipartUpload"
+        startMultipartUploadStub = vi
+            .spyOn(BlobApi, "startMultipartUpload")
+            .mockReturnValue(undefined as any);
+        doUploadPartStub = vi
+            .spyOn(BlobApi, "doUploadPart")
+            .mockReturnValue(undefined as any);
+        doCompleteMultipartUploadStub = vi
+            .spyOn(BlobApi, "doCompleteMultipartUpload")
+            .mockReturnValue(undefined as any);
+
+        getBaseUrlRequestStub = vi
+            .spyOn(RequestFactory, "getBaseUrl")
+            .mockReturnValue(undefined as any);
+        getBaseUrlRequestStub.mockImplementation(() =>
+            Promise.resolve(fakeURL)
         );
-        doUploadPartStub = sandbox.stub(BlobApi, "doUploadPart");
-        doCompleteMultipartUploadStub = sandbox.stub(
-            BlobApi,
-            "doCompleteMultipartUpload"
-        );
 
-        getBaseUrlRequestStub = sandbox.stub(RequestFactory, "getBaseUrl");
-        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
-
-        putDataStub = sandbox.stub(BlobApi, "putData");
+        putDataStub = vi
+            .spyOn(BlobApi, "putData")
+            .mockReturnValue(undefined as any);
     });
 
-    afterEach(function() {
-        sandbox.restore();
+    afterEach(function () {
+        vi.restoreAllMocks();
     });
 
-    it("Should initialize", function() {
+    it("Should initialize", function () {
         const client = new VersionedLayerClient({
             catalogHrn,
             settings
@@ -116,13 +139,15 @@ describe("VersionedLayerClient write", function() {
         expect(client).be.instanceOf(VersionedLayerClient);
     });
 
-    it("checkDataExists returns 200", async function() {
+    it("checkDataExists returns 200", async function () {
         const client = new VersionedLayerClient({
             catalogHrn,
             settings
         });
 
-        checkBlobExistsStub.callsFake(() => Promise.resolve({ status: 200 }));
+        checkBlobExistsStub.mockImplementation(() =>
+            Promise.resolve({ status: 200 })
+        );
         const isDadaExists = await client.checkDataExists(
             new CheckDataExistsRequest()
                 .withDataHandle("test-data-handle")
@@ -131,13 +156,13 @@ describe("VersionedLayerClient write", function() {
         expect(isDadaExists.status).to.be.equal(200);
     });
 
-    it("checkDataExists rejects with HttpError", async function() {
+    it("checkDataExists rejects with HttpError", async function () {
         const client = new VersionedLayerClient({
             catalogHrn,
             settings
         });
 
-        checkBlobExistsStub.callsFake(() =>
+        checkBlobExistsStub.mockImplementation(() =>
             Promise.reject({ status: 404, message: "Not found" })
         );
         const isDadaExists = await client
@@ -146,12 +171,12 @@ describe("VersionedLayerClient write", function() {
                     .withDataHandle("test-data-handle")
                     .withLayerId("test-layer")
             )
-            .catch(e => e);
+            .catch((e) => e);
         expect(isDadaExists.status).to.be.equal(404);
         expect(isDadaExists.message).to.be.equal("Not found");
     });
 
-    it("checkDataExists rejects with errors if empty params", async function() {
+    it("checkDataExists rejects with errors if empty params", async function () {
         const client = new VersionedLayerClient({
             catalogHrn,
             settings
@@ -161,7 +186,7 @@ describe("VersionedLayerClient write", function() {
             .checkDataExists(
                 new CheckDataExistsRequest().withDataHandle("test-data-handle")
             )
-            .catch(e => e);
+            .catch((e) => e);
 
         expect(isDadaExists.message).to.be.equal(
             "Please provide layer id for the CheckDataExistsRequest"
@@ -171,19 +196,19 @@ describe("VersionedLayerClient write", function() {
             .checkDataExists(
                 new CheckDataExistsRequest().withLayerId("test-layer")
             )
-            .catch(e => e);
+            .catch((e) => e);
 
         expect(isDadaExists2.message).to.be.equal(
             "Please provide data handle for the CheckDataExistsRequest"
         );
     });
 
-    it("Should method getBaseVersion provide latest version", async function() {
+    it("Should method getBaseVersion provide latest version", async function () {
         const mockedVersion = {
             version: 123
         };
 
-        getVersionStub.callsFake(
+        getVersionStub.mockImplementation(
             (): Promise<MetadataApi.VersionResponse> => {
                 return Promise.resolve(mockedVersion);
             }
@@ -200,8 +225,8 @@ describe("VersionedLayerClient write", function() {
         expect(version).to.be.equal(mockedVersion.version);
     });
 
-    it("Should init the publication", async function() {
-        initPublicationStub.callsFake(
+    it("Should init the publication", async function () {
+        initPublicationStub.mockImplementation(
             (): Promise<PublishApi.Publication> => {
                 return Promise.resolve({
                     catalogId: "hrn:here:data:::mocked-hrn",
@@ -233,7 +258,7 @@ describe("VersionedLayerClient write", function() {
         );
     });
 
-    it("Should init the publication throw an error", async function() {
+    it("Should init the publication throw an error", async function () {
         const client = new VersionedLayerClient({
             catalogHrn,
             settings
@@ -241,22 +266,24 @@ describe("VersionedLayerClient write", function() {
 
         const response = await client
             .startBatch(new StartBatchRequest())
-            .catch(error => error.message);
+            .catch((error) => error.message);
         expect(response).to.be.equal(
             "Please provide layer id or ids for the StartBatchRequest"
         );
 
-        getBaseUrlRequestStub.callsFake(() => Promise.reject("Server Error"));
+        getBaseUrlRequestStub.mockImplementation(() =>
+            Promise.reject("Server Error")
+        );
         const response2 = await client
             .startBatch(new StartBatchRequest())
-            .catch(error => error.message);
+            .catch((error) => error.message);
         expect(response2).to.be.equal(
             'Error retrieving from cache builder for resource "hrn:here:data:::mocked-hrn" and api: publish. Server Error'
         );
     });
 
-    it("Should cancel the publication", async function() {
-        cancelPublicationStub.callsFake(function() {
+    it("Should cancel the publication", async function () {
+        cancelPublicationStub.mockImplementation(function () {
             return Promise.resolve({
                 status: 204
             });
@@ -273,8 +300,8 @@ describe("VersionedLayerClient write", function() {
         expect(response.status === 204).equals(true);
     });
 
-    it("Should rejects with error a cancel the publication operation", async function() {
-        cancelPublicationStub.callsFake(function() {
+    it("Should rejects with error a cancel the publication operation", async function () {
+        cancelPublicationStub.mockImplementation(function () {
             return Promise.reject({
                 message: "Internal Server Error",
                 status: 500
@@ -290,29 +317,31 @@ describe("VersionedLayerClient write", function() {
             .cancelBatch(
                 new CancelBatchRequest().withPublicationId("mocked-pub-id")
             )
-            .catch(error => error.message);
+            .catch((error) => error.message);
         expect(response).to.be.equals("Internal Server Error");
 
         const response1 = await client
             .cancelBatch(new CancelBatchRequest())
-            .catch(error => error.message);
+            .catch((error) => error.message);
         expect(response1).to.be.equals(
             "Please provide publication id for the CancelBatchRequest"
         );
 
-        getBaseUrlRequestStub.callsFake(() => Promise.reject("Server Error"));
+        getBaseUrlRequestStub.mockImplementation(() =>
+            Promise.reject("Server Error")
+        );
         const response2 = await client
             .cancelBatch(
                 new CancelBatchRequest().withPublicationId("mocked-pub-id")
             )
-            .catch(error => error.message);
+            .catch((error) => error.message);
         expect(response2).to.be.equal(
             'Error retrieving from cache builder for resource "hrn:here:data:::mocked-hrn" and api: publish. Server Error'
         );
     });
 
-    it("Should submit the publication", async function() {
-        submitPublicationStub.callsFake(function() {
+    it("Should submit the publication", async function () {
+        submitPublicationStub.mockImplementation(function () {
             return Promise.resolve({
                 status: 204
             });
@@ -329,8 +358,8 @@ describe("VersionedLayerClient write", function() {
         expect(response.status).equals(204);
     });
 
-    it("Should rejects with error a submit the publication operation", async function() {
-        submitPublicationStub.callsFake(function() {
+    it("Should rejects with error a submit the publication operation", async function () {
+        submitPublicationStub.mockImplementation(function () {
             return Promise.reject({
                 message: "Internal Server Error",
                 status: 500
@@ -346,29 +375,31 @@ describe("VersionedLayerClient write", function() {
             .completeBatch(
                 new CompleteBatchRequest().withPublicationId("mocked-pub-id")
             )
-            .catch(error => error.message);
+            .catch((error) => error.message);
         expect(response).to.be.equals("Internal Server Error");
 
         const response1 = await client
             .completeBatch(new CompleteBatchRequest())
-            .catch(error => error.message);
+            .catch((error) => error.message);
         expect(response1).to.be.equals(
             "Please provide publication id for the CompleteBatchRequest"
         );
 
-        getBaseUrlRequestStub.callsFake(() => Promise.reject("Server Error"));
+        getBaseUrlRequestStub.mockImplementation(() =>
+            Promise.reject("Server Error")
+        );
         const response2 = await client
             .cancelBatch(
                 new CancelBatchRequest().withPublicationId("mocked-pub-id")
             )
-            .catch(error => error.message);
+            .catch((error) => error.message);
         expect(response2).to.be.equal(
             'Error retrieving from cache builder for resource "hrn:here:data:::mocked-hrn" and api: publish. Server Error'
         );
     });
 
-    it("Should return the publication details", async function() {
-        getPublicationStub.callsFake(function() {
+    it("Should return the publication details", async function () {
+        getPublicationStub.mockImplementation(function () {
             return Promise.resolve({
                 catalogId: "sdk-writing-test",
                 catalogVersion: 37,
@@ -402,8 +433,8 @@ describe("VersionedLayerClient write", function() {
         );
     });
 
-    it("Should rejects with error when getting the publication details", async function() {
-        getPublicationStub.callsFake(function() {
+    it("Should rejects with error when getting the publication details", async function () {
+        getPublicationStub.mockImplementation(function () {
             return Promise.reject({
                 message: "Internal Server Error",
                 status: 500
@@ -417,26 +448,28 @@ describe("VersionedLayerClient write", function() {
 
         const response = await client
             .getBatch(new GetBatchRequest().withPublicationId("mocked-pub-id"))
-            .catch(error => error.message);
+            .catch((error) => error.message);
         expect(response).to.be.equals("Internal Server Error");
 
         const response1 = await client
             .getBatch(new GetBatchRequest())
-            .catch(error => error.message);
+            .catch((error) => error.message);
         expect(response1).to.be.equals(
             "Please provide publication id for the GetBatchRequest"
         );
 
-        getBaseUrlRequestStub.callsFake(() => Promise.reject("Server Error"));
+        getBaseUrlRequestStub.mockImplementation(() =>
+            Promise.reject("Server Error")
+        );
         const response2 = await client
             .getBatch(new GetBatchRequest().withPublicationId("mocked-pub-id"))
-            .catch(error => error.message);
+            .catch((error) => error.message);
         expect(response2).to.be.equal(
             'Error retrieving builder for resource "hrn:here:data:::mocked-hrn" and api: publish. Server Error'
         );
     });
 
-    it("UploadBlob", async function() {
+    it("UploadBlob", async function () {
         const data = Buffer.alloc(25000);
         const mockedDatahandle = "mocked-datahandle";
         const mockedContentType = "text/plain";
@@ -449,7 +482,7 @@ describe("VersionedLayerClient write", function() {
 
         const layerId = "mocked-layer";
 
-        startMultipartUploadStub.callsFake(() =>
+        startMultipartUploadStub.mockImplementation(() =>
             Promise.resolve({
                 links: {
                     complete: { href: "http://mocked.url", method: "PUT" },
@@ -462,17 +495,17 @@ describe("VersionedLayerClient write", function() {
 
         const mockedHeaders = new Headers();
         mockedHeaders.set("ETag", "mocked-etag");
-        doUploadPartStub.callsFake(() =>
+        doUploadPartStub.mockImplementation(() =>
             Promise.resolve({
                 headers: mockedHeaders,
                 status: 204
             })
         );
-        doCompleteMultipartUploadStub.callsFake(() =>
+        doCompleteMultipartUploadStub.mockImplementation(() =>
             Promise.resolve({ status: 204 })
         );
 
-        putDataStub.callsFake(() =>
+        putDataStub.mockImplementation(() =>
             Promise.resolve({
                 status: 204
             })
@@ -494,7 +527,7 @@ describe("VersionedLayerClient write", function() {
         expect(response2.getDataHandle()).equals(mockedDatahandle);
     });
 
-    it("UploadBlob with content encoding gzip", async function() {
+    it("UploadBlob with content encoding gzip", async function () {
         const data = Buffer.alloc(25);
         const mockedDatahandle = "mocked-datahandle";
         const mockedContentType = "text/plain";
@@ -508,7 +541,7 @@ describe("VersionedLayerClient write", function() {
 
         const layerId = "mocked-layer";
 
-        putDataStub.callsFake(() =>
+        putDataStub.mockImplementation(() =>
             Promise.resolve({
                 status: 204
             })
@@ -524,12 +557,12 @@ describe("VersionedLayerClient write", function() {
 
         const response = await client.uploadBlob(request);
         expect(response.getDataHandle()).equals(mockedDatahandle);
-        expect(putDataStub.args[0][1].contentEncoding).equals(
+        expect(putDataStub.mock.calls[0][1].contentEncoding).equals(
             mockedContentEncoding
         );
     });
 
-    it("UploadBlob should generate and return the datahandle", async function() {
+    it("UploadBlob should generate and return the datahandle", async function () {
         const data = Buffer.alloc(25000);
         const mockedDatahandle = "mocked-datahandle";
         const mockedContentType = "text/plain";
@@ -542,7 +575,7 @@ describe("VersionedLayerClient write", function() {
 
         const layerId = "mocked-layer";
 
-        startMultipartUploadStub.callsFake(() =>
+        startMultipartUploadStub.mockImplementation(() =>
             Promise.resolve({
                 links: {
                     complete: { href: "http://mocked.url", method: "PUT" },
@@ -553,22 +586,24 @@ describe("VersionedLayerClient write", function() {
             })
         );
 
-        uuidCreateStub.callsFake(() => mockedDatahandle);
-        checkBlobExistsStub.callsFake(() => Promise.reject({ status: 404 }));
+        uuidCreateStub.mockImplementation(() => mockedDatahandle);
+        checkBlobExistsStub.mockImplementation(() =>
+            Promise.reject({ status: 404 })
+        );
 
         const mockedHeaders = new Headers();
         mockedHeaders.set("ETag", "mocked-etag");
-        doUploadPartStub.callsFake(() =>
+        doUploadPartStub.mockImplementation(() =>
             Promise.resolve({
                 headers: mockedHeaders,
                 status: 204
             })
         );
-        doCompleteMultipartUploadStub.callsFake(() =>
+        doCompleteMultipartUploadStub.mockImplementation(() =>
             Promise.resolve({ status: 204 })
         );
 
-        putDataStub.callsFake(() =>
+        putDataStub.mockImplementation(() =>
             Promise.resolve({
                 status: 204
             })
@@ -584,7 +619,7 @@ describe("VersionedLayerClient write", function() {
         expect(response.getDataHandle()).equals(mockedDatahandle);
     });
 
-    it("UploadBlob should try to generate datahandle and return the error", async function() {
+    it("UploadBlob should try to generate datahandle and return the error", async function () {
         const data = Buffer.alloc(25000);
         const mockedDatahandle = "mocked-datahandle";
         const mockedContentType = "text/plain";
@@ -597,7 +632,7 @@ describe("VersionedLayerClient write", function() {
 
         const layerId = "mocked-layer";
 
-        startMultipartUploadStub.callsFake(() =>
+        startMultipartUploadStub.mockImplementation(() =>
             Promise.resolve({
                 links: {
                     complete: { href: "http://mocked.url", method: "PUT" },
@@ -608,18 +643,20 @@ describe("VersionedLayerClient write", function() {
             })
         );
 
-        uuidCreateStub.callsFake(() => mockedDatahandle);
-        checkBlobExistsStub.callsFake(() => Promise.resolve({ status: 200 }));
+        uuidCreateStub.mockImplementation(() => mockedDatahandle);
+        checkBlobExistsStub.mockImplementation(() =>
+            Promise.resolve({ status: 200 })
+        );
 
         const mockedHeaders = new Headers();
         mockedHeaders.set("ETag", "mocked-etag");
-        doUploadPartStub.callsFake(() =>
+        doUploadPartStub.mockImplementation(() =>
             Promise.resolve({
                 headers: mockedHeaders,
                 status: 204
             })
         );
-        doCompleteMultipartUploadStub.callsFake(() =>
+        doCompleteMultipartUploadStub.mockImplementation(() =>
             Promise.resolve({ status: 204 })
         );
 
@@ -629,11 +666,11 @@ describe("VersionedLayerClient write", function() {
             .withContentType(mockedContentType)
             .withBillingTag(mockedBillingTag);
 
-        const response = await client.uploadBlob(request).catch(e => e);
+        const response = await client.uploadBlob(request).catch((e) => e);
         expect(response.message).equals("Please set DataHandle to the request");
     });
 
-    it("UploadBlob wrong parameters test", async function() {
+    it("UploadBlob wrong parameters test", async function () {
         const data = Buffer.alloc(52428800);
         const mockedDatahandle = "mocked-datahandle";
         const mockedContentType = "text/plain";
@@ -652,7 +689,7 @@ describe("VersionedLayerClient write", function() {
             .withContentType(mockedContentType)
             .withBillingTag(mockedBillingTag);
 
-        const response = await client.uploadBlob(request).catch(e => e);
+        const response = await client.uploadBlob(request).catch((e) => e);
         expect(response.message).equals(
             "Please set layerId to the UploadBlobRequest"
         );
@@ -663,7 +700,7 @@ describe("VersionedLayerClient write", function() {
             .withDataHandle(mockedDatahandle)
             .withBillingTag(mockedBillingTag);
 
-        const response2 = await client.uploadBlob(request2).catch(e => e);
+        const response2 = await client.uploadBlob(request2).catch((e) => e);
         expect(response2.message).equals(
             "Please set contentType to the UploadBlobRequest"
         );
@@ -674,12 +711,12 @@ describe("VersionedLayerClient write", function() {
             .withDataHandle(mockedDatahandle)
             .withBillingTag(mockedBillingTag);
 
-        const response3 = await client.uploadBlob(request3).catch(e => e);
+        const response3 = await client.uploadBlob(request3).catch((e) => e);
         expect(response3.message).equals(
             "Please set data to the UploadBlobRequest"
         );
 
-        startMultipartUploadStub.callsFake(() =>
+        startMultipartUploadStub.mockImplementation(() =>
             Promise.resolve({
                 links: {
                     complete: { href: "http://mocked.url", method: "PUT" },
@@ -689,7 +726,9 @@ describe("VersionedLayerClient write", function() {
                 }
             })
         );
-        doUploadPartStub.callsFake(() => Promise.reject("A some server error"));
+        doUploadPartStub.mockImplementation(() =>
+            Promise.reject("A some server error")
+        );
         const request4 = new UploadBlobRequest()
             .withLayerId(layerId)
             .withData(data)
@@ -697,11 +736,11 @@ describe("VersionedLayerClient write", function() {
             .withContentType(mockedContentType)
             .withBillingTag(mockedBillingTag);
 
-        const response4 = await client.uploadBlob(request4).catch(e => e);
+        const response4 = await client.uploadBlob(request4).catch((e) => e);
         expect(response4).equals("A some server error");
     });
 
-    it("UploadBlob rejects if no ETag in header", async function() {
+    it("UploadBlob rejects if no ETag in header", async function () {
         const data = Buffer.alloc(52428800);
         const mockedDatahandle = "mocked-datahandle";
         const mockedContentType = "text/plain";
@@ -714,7 +753,7 @@ describe("VersionedLayerClient write", function() {
 
         const layerId = "mocked-layer";
 
-        startMultipartUploadStub.callsFake(() =>
+        startMultipartUploadStub.mockImplementation(() =>
             Promise.resolve({
                 links: {
                     complete: { href: "http://mocked.url", method: "PUT" },
@@ -726,13 +765,13 @@ describe("VersionedLayerClient write", function() {
         );
 
         const mockedHeaders = new Headers();
-        doUploadPartStub.callsFake(() =>
+        doUploadPartStub.mockImplementation(() =>
             Promise.resolve({
                 headers: mockedHeaders,
                 status: 204
             })
         );
-        doCompleteMultipartUploadStub.callsFake(() =>
+        doCompleteMultipartUploadStub.mockImplementation(() =>
             Promise.resolve({ status: 204 })
         );
 
@@ -743,13 +782,13 @@ describe("VersionedLayerClient write", function() {
             .withContentType(mockedContentType)
             .withBillingTag(mockedBillingTag);
 
-        const response = await client.uploadBlob(request).catch(e => e);
+        const response = await client.uploadBlob(request).catch((e) => e);
         expect(response.message).equals(
             "Error uploading chunk 1, can not read ETag from the response headers."
         );
     });
 
-    it("UploadBlob rejects if multipart upload not started", async function() {
+    it("UploadBlob rejects if multipart upload not started", async function () {
         const data = Buffer.alloc(52428800);
         const mockedDatahandle = "mocked-datahandle";
         const mockedContentType = "text/plain";
@@ -762,7 +801,7 @@ describe("VersionedLayerClient write", function() {
 
         const layerId = "mocked-layer";
 
-        startMultipartUploadStub.callsFake(() =>
+        startMultipartUploadStub.mockImplementation(() =>
             Promise.reject("Error starting multipart upload")
         );
 
@@ -773,11 +812,11 @@ describe("VersionedLayerClient write", function() {
             .withContentType(mockedContentType)
             .withBillingTag(mockedBillingTag);
 
-        const response = await client.uploadBlob(request).catch(e => e);
+        const response = await client.uploadBlob(request).catch((e) => e);
         expect(response).equals("Error starting multipart upload");
     });
 
-    it("UploadBlob rejects if complete multipart upload was not OK", async function() {
+    it("UploadBlob rejects if complete multipart upload was not OK", async function () {
         const data = Buffer.alloc(52428800);
         const mockedDatahandle = "mocked-datahandle";
         const mockedContentType = "text/plain";
@@ -790,7 +829,7 @@ describe("VersionedLayerClient write", function() {
 
         const layerId = "mocked-layer";
 
-        startMultipartUploadStub.callsFake(() =>
+        startMultipartUploadStub.mockImplementation(() =>
             Promise.resolve({
                 links: {
                     complete: { href: "http://mocked.url", method: "PUT" },
@@ -803,13 +842,13 @@ describe("VersionedLayerClient write", function() {
 
         const mockedHeaders = new Headers();
         mockedHeaders.set("ETag", "mocked-etag");
-        doUploadPartStub.callsFake(() =>
+        doUploadPartStub.mockImplementation(() =>
             Promise.resolve({
                 headers: mockedHeaders,
                 status: 204
             })
         );
-        doCompleteMultipartUploadStub.callsFake(() =>
+        doCompleteMultipartUploadStub.mockImplementation(() =>
             Promise.reject("Error completing upload")
         );
 
@@ -820,11 +859,11 @@ describe("VersionedLayerClient write", function() {
             .withContentType(mockedContentType)
             .withBillingTag(mockedBillingTag);
 
-        const response = await client.uploadBlob(request).catch(e => e);
+        const response = await client.uploadBlob(request).catch((e) => e);
         expect(response).equals("Error completing upload");
     });
 
-    it("UploadPartitions", async function() {
+    it("UploadPartitions", async function () {
         const mockedPublicationId = "mocked-publication-id";
         const layerId = "mocked-layer";
         const mockedPartitions = {
@@ -845,7 +884,9 @@ describe("VersionedLayerClient write", function() {
             settings
         });
 
-        uploadPartitionsStub.callsFake(() => Promise.resolve({ status: 204 }));
+        uploadPartitionsStub.mockImplementation(() =>
+            Promise.resolve({ status: 204 })
+        );
 
         const request = new UploadPartitionsRequest()
             .withLayerId(layerId)
@@ -857,7 +898,7 @@ describe("VersionedLayerClient write", function() {
         expect(response.status).equals(204);
     });
 
-    it("UploadPartitions negative", async function() {
+    it("UploadPartitions negative", async function () {
         const mockedPublicationId = "mocked-publication-id";
         const layerId = "mocked-layer";
         const mockedPartitions = {
@@ -878,13 +919,15 @@ describe("VersionedLayerClient write", function() {
             settings
         });
 
-        uploadPartitionsStub.callsFake(() => Promise.resolve({ status: 204 }));
+        uploadPartitionsStub.mockImplementation(() =>
+            Promise.resolve({ status: 204 })
+        );
 
         const request = new UploadPartitionsRequest()
             .withPublicationId(mockedPublicationId)
             .withPartitions(mockedPartitions);
 
-        const response = await client.uploadPartitions(request).catch(e => e);
+        const response = await client.uploadPartitions(request).catch((e) => e);
         expect(response.message).equals(
             "Please set layerId to the UploadPartitionsRequest"
         );
@@ -893,7 +936,9 @@ describe("VersionedLayerClient write", function() {
             .withLayerId(layerId)
             .withPartitions(mockedPartitions);
 
-        const response2 = await client.uploadPartitions(request2).catch(e => e);
+        const response2 = await client
+            .uploadPartitions(request2)
+            .catch((e) => e);
         expect(response2.message).equals(
             "Please set publicationId to the UploadPartitionsRequest"
         );
@@ -902,13 +947,15 @@ describe("VersionedLayerClient write", function() {
             .withLayerId(layerId)
             .withPublicationId(mockedPublicationId);
 
-        const response3 = await client.uploadPartitions(request3).catch(e => e);
+        const response3 = await client
+            .uploadPartitions(request3)
+            .catch((e) => e);
         expect(response3.message).equals(
             "Please set partitions to the UploadPartitionsRequest"
         );
     });
 
-    it("publishToBatch", async function() {
+    it("publishToBatch", async function () {
         const data = Buffer.alloc(25000);
         const mockedDatahandle = "mocked-datahandle";
         const mockedContentType = "text/plain";
@@ -921,7 +968,7 @@ describe("VersionedLayerClient write", function() {
 
         const layerId = "mocked-layer";
 
-        startMultipartUploadStub.callsFake(() =>
+        startMultipartUploadStub.mockImplementation(() =>
             Promise.resolve({
                 links: {
                     complete: { href: "http://mocked.url", method: "PUT" },
@@ -934,23 +981,25 @@ describe("VersionedLayerClient write", function() {
 
         const mockedHeaders = new Headers();
         mockedHeaders.set("ETag", "mocked-etag");
-        doUploadPartStub.callsFake(() =>
+        doUploadPartStub.mockImplementation(() =>
             Promise.resolve({
                 headers: mockedHeaders,
                 status: 204
             })
         );
-        doCompleteMultipartUploadStub.callsFake(() =>
+        doCompleteMultipartUploadStub.mockImplementation(() =>
             Promise.resolve({ status: 204 })
         );
 
-        putDataStub.callsFake(() =>
+        putDataStub.mockImplementation(() =>
             Promise.resolve({
                 status: 204
             })
         );
 
-        uploadPartitionsStub.callsFake(() => Promise.resolve({ status: 204 }));
+        uploadPartitionsStub.mockImplementation(() =>
+            Promise.resolve({ status: 204 })
+        );
 
         const request = new PublishSinglePartitionRequest()
             .withLayerId(layerId)
@@ -975,7 +1024,7 @@ describe("VersionedLayerClient write", function() {
         expect(response2.status).equals(204);
     });
 
-    it("publishToBatch wrong parameters test", async function() {
+    it("publishToBatch wrong parameters test", async function () {
         const data = Buffer.alloc(52428800);
         const mockedContentType = "text/plain";
         const mockedBillingTag = "mocked-billing-tag";
@@ -994,7 +1043,7 @@ describe("VersionedLayerClient write", function() {
             .withContentType(mockedContentType)
             .withBillingTag(mockedBillingTag);
 
-        const response = await client.publishToBatch(request).catch(e => e);
+        const response = await client.publishToBatch(request).catch((e) => e);
         expect(response.message).equals(
             "Please set metadata to the PublishSinglePartitionRequest"
         );
@@ -1010,7 +1059,7 @@ describe("VersionedLayerClient write", function() {
             .withContentType(mockedContentType)
             .withBillingTag(mockedBillingTag);
 
-        const response2 = await client.publishToBatch(request2).catch(e => e);
+        const response2 = await client.publishToBatch(request2).catch((e) => e);
         expect(response2.message).equals(
             "Please set data to the PublishSinglePartitionRequest"
         );
@@ -1026,9 +1075,149 @@ describe("VersionedLayerClient write", function() {
             .withContentType(mockedContentType)
             .withBillingTag(mockedBillingTag);
 
-        const response3 = await client.publishToBatch(request3).catch(e => e);
+        const response3 = await client.publishToBatch(request3).catch((e) => e);
         expect(response3.message).equals(
             "Please set layerId to the PublishSinglePartitionRequest"
         );
+    });
+
+    it("publishToBatch rejects an incomplete partition description", async function () {
+        const data = Buffer.alloc(25000);
+        const layerId = "mocked-layer";
+        const mockedContentType = "text/plain";
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        const withoutPartition = new PublishSinglePartitionRequest()
+            .withLayerId(layerId)
+            .withData(data)
+            .withMetaData({
+                dataSize: data.byteLength,
+                dataHandle: "mocked-datahandle"
+            } as any)
+            .withPublicationId("mocked-publication-id")
+            .withContentType(mockedContentType);
+
+        const response = await client
+            .publishToBatch(withoutPartition)
+            .catch((e) => e);
+        expect(response.message).equals("Partition ID is missing");
+
+        const withoutPublicationId = new PublishSinglePartitionRequest()
+            .withLayerId(layerId)
+            .withData(data)
+            .withMetaData({
+                partition: "mocked-partition",
+                dataSize: data.byteLength,
+                dataHandle: "mocked-datahandle"
+            })
+            .withContentType(mockedContentType);
+
+        const response2 = await client
+            .publishToBatch(withoutPublicationId)
+            .catch((e) => e);
+        expect(response2.message).equals(
+            "Please set publicationId to the PublishSinglePartitionRequest"
+        );
+
+        const withoutContentType = new PublishSinglePartitionRequest()
+            .withLayerId(layerId)
+            .withData(data)
+            .withMetaData({
+                partition: "mocked-partition",
+                dataSize: data.byteLength,
+                dataHandle: "mocked-datahandle"
+            })
+            .withPublicationId("mocked-publication-id");
+
+        const response3 = await client
+            .publishToBatch(withoutContentType)
+            .catch((e) => e);
+        expect(response3.message).equals(
+            "Please set contentType to the UploadBlobRequest"
+        );
+    });
+
+    it("Should report which api the request builder could not be built for", async function () {
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        // Every entry point names the api it failed to look up, so that a
+        // lookup failure can be told apart from a failure of the call itself.
+        getBaseUrlRequestStub.mockImplementation(() =>
+            Promise.reject(new Error("mocked-lookup-error"))
+        );
+
+        const blobError = await client
+            .checkDataExists(
+                new CheckDataExistsRequest()
+                    .withLayerId("mocked-layer")
+                    .withDataHandle("mocked-datahandle")
+            )
+            .catch((e) => e);
+        expect(blobError.message).contains("api: blob");
+
+        const metadataError = await client.getBaseVersion().catch((e) => e);
+        expect(metadataError).contains("api: metadata");
+
+        const completeError = await client
+            .completeBatch(
+                new CompleteBatchRequest().withPublicationId(
+                    "mocked-publication-id"
+                )
+            )
+            .catch((e) => e);
+        expect(completeError.message).contains("api: publish");
+
+        const uploadError = await client
+            .uploadPartitions(
+                new UploadPartitionsRequest()
+                    .withLayerId("mocked-layer")
+                    .withPublicationId("mocked-publication-id")
+                    .withPartitions({ partitions: [] })
+            )
+            .catch((e) => e);
+        expect(uploadError.message).contains("api: publish");
+    });
+
+    it("publishToBatch fills the data size in and keeps the content encoding", async function () {
+        const data = Buffer.alloc(25000);
+        const layerId = "mocked-layer";
+
+        const client = new VersionedLayerClient({
+            catalogHrn,
+            settings
+        });
+
+        putDataStub.mockImplementation(() => Promise.resolve({ status: 204 }));
+        uploadPartitionsStub.mockImplementation(() =>
+            Promise.resolve({ status: 204 })
+        );
+
+        // The metadata carries no data size, so the client has to take it from
+        // the data itself before the partition is published.
+        const request = new PublishSinglePartitionRequest()
+            .withLayerId(layerId)
+            .withData(data)
+            .withMetaData({
+                partition: "mocked-partition",
+                dataHandle: "mocked-datahandle"
+            } as any)
+            .withPublicationId("mocked-publication-id")
+            .withContentType("text/plain")
+            .withContentEncoding("gzip");
+
+        const response = await client.publishToBatch(request);
+
+        expect(response.status).equals(204);
+        expect(putDataStub.mock.calls[0][1].contentEncoding).equals("gzip");
+        expect(
+            uploadPartitionsStub.mock.calls[0][1].body.partitions[0].dataSize
+        ).equals(data.byteLength);
     });
 });

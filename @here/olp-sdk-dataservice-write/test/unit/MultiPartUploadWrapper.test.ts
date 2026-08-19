@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 HERE Europe B.V.
+ * Copyright (C) 2021-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,17 @@
  * License-Filename: LICENSE
  */
 
-import * as sinon from "sinon";
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import * as core from "@here/olp-sdk-core";
 import * as BlobV1UploadRequest from "@here/olp-sdk-dataservice-write/lib/utils/multipartupload-internal/BlobV1UploadRequest";
 import * as BlobV2UploadRequest from "@here/olp-sdk-dataservice-write/lib/utils/multipartupload-internal/BlobV2UploadRequest";
@@ -27,25 +35,25 @@ import { NodeFileData } from "@here/olp-sdk-dataservice-write/lib/utils/multipar
 import { BufferData } from "@here/olp-sdk-dataservice-write/lib/utils/multipartupload-internal/BufferData";
 import { MultiPartUploadWrapper } from "@here/olp-sdk-dataservice-write";
 
-chai.use(sinonChai);
-
-const expect = chai.expect;
-
 const OlpClientSettingsStub = {} as core.OlpClientSettings;
 let wrapper: MultiPartUploadWrapper;
 
-describe("MultiPartUploadWrapper", async function() {
-    let HrnFromStringStub: sinon.SinonStub;
-    let requestFactoryCreateStub: sinon.SinonStub;
+describe("MultiPartUploadWrapper", async function () {
+    let HrnFromStringStub: any;
+    let requestFactoryCreateStub: any;
 
     beforeEach(() => {
-        HrnFromStringStub = sinon.stub(core.HRN, "fromString");
-        requestFactoryCreateStub = sinon.stub(core.RequestFactory, "create");
+        HrnFromStringStub = vi
+            .spyOn(core.HRN, "fromString")
+            .mockReturnValue(undefined as any);
+        requestFactoryCreateStub = vi
+            .spyOn(core.RequestFactory, "create")
+            .mockReturnValue(undefined as any);
     });
 
     afterEach(() => {
-        HrnFromStringStub.restore();
-        requestFactoryCreateStub.restore();
+        HrnFromStringStub.mockRestore();
+        requestFactoryCreateStub.mockRestore();
     });
 
     describe("Success cases", () => {
@@ -53,20 +61,22 @@ describe("MultiPartUploadWrapper", async function() {
             // ======= Prepare ====== //
 
             const MockedBlobV1UploadRequest = {
-                startMultipartUpload: sinon.stub().resolves({
+                startMultipartUpload: vi.fn().mockResolvedValue({
                     uploadPartUrl: "mocked-upload-part-url",
                     completeUrl: "mocked-complete-url"
                 }),
-                uploadPart: sinon.stub().resolves({
+                uploadPart: vi.fn().mockResolvedValue({
                     partId: "mocked-uploaded-part-id",
                     partNumber: 1
                 }),
-                completeMultipartUpload: sinon.stub()
+                completeMultipartUpload: vi.fn()
             };
 
-            const BlobV1UploadRequestStub = sinon
-                .stub(BlobV1UploadRequest, "BlobV1UploadRequest")
-                .returns(MockedBlobV1UploadRequest);
+            const BlobV1UploadRequestStub = vi
+                .spyOn(BlobV1UploadRequest, "BlobV1UploadRequest")
+                .mockImplementation(function () {
+                    return MockedBlobV1UploadRequest;
+                });
 
             // ======= Initialize ====== //
             wrapper = new MultiPartUploadWrapper(
@@ -92,11 +102,12 @@ describe("MultiPartUploadWrapper", async function() {
 
             // =========== Should be called once startMultipartUpload method with correct params. ======= //
 
-            const startMultipartUploadCalls = MockedBlobV1UploadRequest.startMultipartUpload.getCalls();
+            const startMultipartUploadCalls =
+                MockedBlobV1UploadRequest.startMultipartUpload.mock.calls;
             expect(startMultipartUploadCalls.length).eqls(1);
 
             const startMultipartUploadCallParams =
-                startMultipartUploadCalls[0].args[0];
+                startMultipartUploadCalls[0][0];
             expect(startMultipartUploadCallParams.contentType).eqls(
                 "text/plain"
             );
@@ -113,10 +124,11 @@ describe("MultiPartUploadWrapper", async function() {
 
             // =========== Should be called once uploadPart method with correct params. ======= //
 
-            const uploadPartCalls = MockedBlobV1UploadRequest.uploadPart.getCalls();
+            const uploadPartCalls =
+                MockedBlobV1UploadRequest.uploadPart.mock.calls;
             expect(uploadPartCalls.length).eqls(1);
 
-            const uploadPartCallParams = uploadPartCalls[0].args[0];
+            const uploadPartCallParams = uploadPartCalls[0][0];
             expect(uploadPartCallParams.layerId).eqls("mocked-layer-id");
             expect(uploadPartCallParams.data.byteLength).eqls(9);
             expect(uploadPartCallParams.multipartToken).eqls(undefined);
@@ -128,11 +140,12 @@ describe("MultiPartUploadWrapper", async function() {
 
             // =========== Should be called once completeMultipartUpload method with correct params. ======= //
 
-            const completeMultipartUploadCalls = MockedBlobV1UploadRequest.completeMultipartUpload.getCalls();
+            const completeMultipartUploadCalls =
+                MockedBlobV1UploadRequest.completeMultipartUpload.mock.calls;
             expect(completeMultipartUploadCalls.length).eqls(1);
 
             const completeMultipartUploadCallParams =
-                completeMultipartUploadCalls[0].args[0];
+                completeMultipartUploadCalls[0][0];
 
             expect(completeMultipartUploadCallParams.parts).eqls([
                 { id: "mocked-uploaded-part-id", number: 1 }
@@ -150,26 +163,28 @@ describe("MultiPartUploadWrapper", async function() {
                 "mocked-complete-url"
             );
 
-            BlobV1UploadRequestStub.restore();
+            BlobV1UploadRequestStub.mockRestore();
         });
 
         it("Upload to Blob V2", async () => {
             // ======= Prepare ====== //
 
             const MockedBlobV2UploadRequest = {
-                startMultipartUpload: sinon.stub().resolves({
+                startMultipartUpload: vi.fn().mockResolvedValue({
                     multipartToken: "mocked-multipartToken"
                 }),
-                uploadPart: sinon.stub().resolves({
+                uploadPart: vi.fn().mockResolvedValue({
                     partNumber: 1,
                     partId: "mocked-uploaded-part-id"
                 }),
-                completeMultipartUpload: sinon.stub()
+                completeMultipartUpload: vi.fn()
             };
 
-            const BlobV2UploadRequestStub = sinon
-                .stub(BlobV2UploadRequest, "BlobV2UploadRequest")
-                .returns(MockedBlobV2UploadRequest);
+            const BlobV2UploadRequestStub = vi
+                .spyOn(BlobV2UploadRequest, "BlobV2UploadRequest")
+                .mockImplementation(function () {
+                    return MockedBlobV2UploadRequest;
+                });
 
             // ======= Initialize ====== //
             wrapper = new MultiPartUploadWrapper(
@@ -194,11 +209,12 @@ describe("MultiPartUploadWrapper", async function() {
 
             // =========== Should be called once startMultipartUpload method with correct params. ======= //
 
-            const startMultipartUploadCalls = MockedBlobV2UploadRequest.startMultipartUpload.getCalls();
+            const startMultipartUploadCalls =
+                MockedBlobV2UploadRequest.startMultipartUpload.mock.calls;
             expect(startMultipartUploadCalls.length).eqls(1);
 
             const startMultipartUploadCallParams =
-                startMultipartUploadCalls[0].args[0];
+                startMultipartUploadCalls[0][0];
             expect(startMultipartUploadCallParams.contentType).eqls(
                 "text/plain"
             );
@@ -211,10 +227,11 @@ describe("MultiPartUploadWrapper", async function() {
 
             // =========== Should be called once uploadPart method with correct params. ======= //
 
-            const uploadPartCalls = MockedBlobV2UploadRequest.uploadPart.getCalls();
+            const uploadPartCalls =
+                MockedBlobV2UploadRequest.uploadPart.mock.calls;
             expect(uploadPartCalls.length).eqls(1);
 
-            const uploadPartCallParams = uploadPartCalls[0].args[0];
+            const uploadPartCallParams = uploadPartCalls[0][0];
             expect(uploadPartCallParams.layerId).eqls("mocked-layer-id");
             expect(uploadPartCallParams.data.byteLength).eqls(9);
             expect(uploadPartCallParams.multipartToken).eqls(
@@ -228,11 +245,12 @@ describe("MultiPartUploadWrapper", async function() {
 
             // =========== Should be called once completeMultipartUpload method with correct params. ======= //
 
-            const completeMultipartUploadCalls = MockedBlobV2UploadRequest.completeMultipartUpload.getCalls();
+            const completeMultipartUploadCalls =
+                MockedBlobV2UploadRequest.completeMultipartUpload.mock.calls;
             expect(completeMultipartUploadCalls.length).eqls(1);
 
             const completeMultipartUploadCallParams =
-                completeMultipartUploadCalls[0].args[0];
+                completeMultipartUploadCalls[0][0];
 
             expect(completeMultipartUploadCallParams.parts).eqls([
                 { id: "mocked-uploaded-part-id", number: 1 }
@@ -248,30 +266,32 @@ describe("MultiPartUploadWrapper", async function() {
             );
             expect(completeMultipartUploadCallParams.url).eqls(undefined);
 
-            BlobV2UploadRequestStub.restore();
+            BlobV2UploadRequestStub.mockRestore();
         });
 
         it("Should call callbacks if exists", async () => {
             // ======= Prepare ====== //
 
             const MockedBlobV2UploadRequest = {
-                startMultipartUpload: sinon.stub().resolves({
+                startMultipartUpload: vi.fn().mockResolvedValue({
                     multipartToken: "mocked-multipartToken"
                 }),
-                uploadPart: sinon.stub().resolves({
+                uploadPart: vi.fn().mockResolvedValue({
                     partNumber: 1,
                     partId: "mocked-uploaded-part-id"
                 }),
-                completeMultipartUpload: sinon.stub()
+                completeMultipartUpload: vi.fn()
             };
 
-            const BlobV2UploadRequestStub = sinon
-                .stub(BlobV2UploadRequest, "BlobV2UploadRequest")
-                .returns(MockedBlobV2UploadRequest);
+            const BlobV2UploadRequestStub = vi
+                .spyOn(BlobV2UploadRequest, "BlobV2UploadRequest")
+                .mockImplementation(function () {
+                    return MockedBlobV2UploadRequest;
+                });
 
-            const onStart = sinon.stub();
-            const onStatus = sinon.stub();
-            const blobFinally = sinon.stub();
+            const onStart = vi.fn();
+            const onStatus = vi.fn();
+            const blobFinally = vi.fn();
 
             class TestBlobData extends BufferData {
                 constructor(data: ArrayBufferLike) {
@@ -308,10 +328,10 @@ describe("MultiPartUploadWrapper", async function() {
 
             // =========== Should be called once onStart callback with correct params. ======= //
 
-            const onStartCalls = onStart.getCalls();
+            const onStartCalls = onStart.mock.calls;
             expect(onStartCalls.length).eqls(1);
 
-            const onStartCallParams = onStartCalls[0].args[0];
+            const onStartCallParams = onStartCalls[0][0];
             expect(onStartCallParams.dataSize).equals(9);
             expect(onStartCallParams.multipartToken).equals(
                 "mocked-multipartToken"
@@ -321,10 +341,10 @@ describe("MultiPartUploadWrapper", async function() {
 
             // =========== Should be called once onStatus callback with correct params. ======= //
 
-            const onStatusCalls = onStatus.getCalls();
+            const onStatusCalls = onStatus.mock.calls;
             expect(onStatusCalls.length).eqls(1);
 
-            const onStatusCallsParams = onStatusCalls[0].args[0];
+            const onStatusCallsParams = onStatusCalls[0][0];
             expect(onStatusCallsParams.chunkId).equals(
                 "mocked-uploaded-part-id"
             );
@@ -333,7 +353,7 @@ describe("MultiPartUploadWrapper", async function() {
             expect(onStatusCallsParams.totalChunks).equals(1);
             expect(onStatusCallsParams.uploadedChunks).equals(1);
 
-            BlobV2UploadRequestStub.restore();
+            BlobV2UploadRequestStub.mockRestore();
         });
     });
 
@@ -342,19 +362,21 @@ describe("MultiPartUploadWrapper", async function() {
             // ======= Prepare ====== //
 
             const MockedBlobV2UploadRequest = {
-                startMultipartUpload: sinon.stub().resolves({
+                startMultipartUpload: vi.fn().mockResolvedValue({
                     multipartToken: "mocked-multipartToken"
                 }),
-                uploadPart: sinon.stub().resolves({
+                uploadPart: vi.fn().mockResolvedValue({
                     partNumber: 1,
                     partId: "mocked-uploaded-part-id"
                 }),
-                completeMultipartUpload: sinon.stub()
+                completeMultipartUpload: vi.fn()
             };
 
-            const BlobV2UploadRequestStub = sinon
-                .stub(BlobV2UploadRequest, "BlobV2UploadRequest")
-                .returns(MockedBlobV2UploadRequest);
+            const BlobV2UploadRequestStub = vi
+                .spyOn(BlobV2UploadRequest, "BlobV2UploadRequest")
+                .mockImplementation(function () {
+                    return MockedBlobV2UploadRequest;
+                });
 
             // ======= Initialize ====== //
             wrapper = new MultiPartUploadWrapper(
@@ -378,21 +400,24 @@ describe("MultiPartUploadWrapper", async function() {
 
             // =========== Should be called once startMultipartUpload method. ======= //
 
-            const startMultipartUploadCalls = MockedBlobV2UploadRequest.startMultipartUpload.getCalls();
+            const startMultipartUploadCalls =
+                MockedBlobV2UploadRequest.startMultipartUpload.mock.calls;
             expect(startMultipartUploadCalls.length).eqls(1);
 
             // =========== Should be called 7 times the uploadPart method. ======= //
 
-            const uploadPartCalls = MockedBlobV2UploadRequest.uploadPart.getCalls();
+            const uploadPartCalls =
+                MockedBlobV2UploadRequest.uploadPart.mock.calls;
             expect(uploadPartCalls.length).eqls(7);
 
             // =========== Should be called once completeMultipartUpload method with correct params. ======= //
 
-            const completeMultipartUploadCalls = MockedBlobV2UploadRequest.completeMultipartUpload.getCalls();
+            const completeMultipartUploadCalls =
+                MockedBlobV2UploadRequest.completeMultipartUpload.mock.calls;
             expect(completeMultipartUploadCalls.length).eqls(1);
 
             const completeMultipartUploadCallParams =
-                completeMultipartUploadCalls[0].args[0];
+                completeMultipartUploadCalls[0][0];
 
             expect(completeMultipartUploadCallParams.parts).eqls([
                 { id: "mocked-uploaded-part-id", number: 1 },
@@ -414,26 +439,28 @@ describe("MultiPartUploadWrapper", async function() {
             );
             expect(completeMultipartUploadCallParams.url).eqls(undefined);
 
-            BlobV2UploadRequestStub.restore();
+            BlobV2UploadRequestStub.mockRestore();
         });
 
         it("The uploaded data should be splitted by not default 17MB chunks", async () => {
             // ======= Prepare ====== //
 
             const MockedBlobV2UploadRequest = {
-                startMultipartUpload: sinon.stub().resolves({
+                startMultipartUpload: vi.fn().mockResolvedValue({
                     multipartToken: "mocked-multipartToken"
                 }),
-                uploadPart: sinon.stub().resolves({
+                uploadPart: vi.fn().mockResolvedValue({
                     partNumber: 1,
                     partId: "mocked-uploaded-part-id"
                 }),
-                completeMultipartUpload: sinon.stub()
+                completeMultipartUpload: vi.fn()
             };
 
-            const BlobV2UploadRequestStub = sinon
-                .stub(BlobV2UploadRequest, "BlobV2UploadRequest")
-                .returns(MockedBlobV2UploadRequest);
+            const BlobV2UploadRequestStub = vi
+                .spyOn(BlobV2UploadRequest, "BlobV2UploadRequest")
+                .mockImplementation(function () {
+                    return MockedBlobV2UploadRequest;
+                });
 
             // ======= Initialize ====== //
             wrapper = new MultiPartUploadWrapper(
@@ -458,21 +485,24 @@ describe("MultiPartUploadWrapper", async function() {
 
             // =========== Should be called once startMultipartUpload method. ======= //
 
-            const startMultipartUploadCalls = MockedBlobV2UploadRequest.startMultipartUpload.getCalls();
+            const startMultipartUploadCalls =
+                MockedBlobV2UploadRequest.startMultipartUpload.mock.calls;
             expect(startMultipartUploadCalls.length).eqls(1);
 
             // =========== Should be called 2 times the uploadPart method. ======= //
 
-            const uploadPartCalls = MockedBlobV2UploadRequest.uploadPart.getCalls();
+            const uploadPartCalls =
+                MockedBlobV2UploadRequest.uploadPart.mock.calls;
             expect(uploadPartCalls.length).eqls(2);
 
             // =========== Should be called once completeMultipartUpload method with correct params. ======= //
 
-            const completeMultipartUploadCalls = MockedBlobV2UploadRequest.completeMultipartUpload.getCalls();
+            const completeMultipartUploadCalls =
+                MockedBlobV2UploadRequest.completeMultipartUpload.mock.calls;
             expect(completeMultipartUploadCalls.length).eqls(1);
 
             const completeMultipartUploadCallParams =
-                completeMultipartUploadCalls[0].args[0];
+                completeMultipartUploadCalls[0][0];
 
             expect(completeMultipartUploadCallParams.parts).eqls([
                 { id: "mocked-uploaded-part-id", number: 1 },
@@ -489,7 +519,7 @@ describe("MultiPartUploadWrapper", async function() {
             );
             expect(completeMultipartUploadCallParams.url).eqls(undefined);
 
-            BlobV2UploadRequestStub.restore();
+            BlobV2UploadRequestStub.mockRestore();
         });
     });
 
@@ -497,23 +527,27 @@ describe("MultiPartUploadWrapper", async function() {
         it("Upload to Blob", async () => {
             // ======= Prepare ====== //
 
-            const NodeFileDataStub = sinon
-                .stub(NodeFileData, "fromPath")
-                .resolves(new BufferData(Buffer.from("test-data", "utf-8")));
+            const NodeFileDataStub = vi
+                .spyOn(NodeFileData, "fromPath")
+                .mockResolvedValue(
+                    new BufferData(Buffer.from("test-data", "utf-8"))
+                );
 
             const MockedBlobV2UploadRequest = {
-                startMultipartUpload: sinon.stub().resolves({
+                startMultipartUpload: vi.fn().mockResolvedValue({
                     multipartToken: "mocked-multipartToken"
                 }),
-                uploadPart: sinon
-                    .stub()
-                    .resolves({ id: "mocked-uploaded-part-id" }),
-                completeMultipartUpload: sinon.stub()
+                uploadPart: vi
+                    .fn()
+                    .mockResolvedValue({ id: "mocked-uploaded-part-id" }),
+                completeMultipartUpload: vi.fn()
             };
 
-            const BlobV2UploadRequestStub = sinon
-                .stub(BlobV2UploadRequest, "BlobV2UploadRequest")
-                .returns(MockedBlobV2UploadRequest);
+            const BlobV2UploadRequestStub = vi
+                .spyOn(BlobV2UploadRequest, "BlobV2UploadRequest")
+                .mockImplementation(function () {
+                    return MockedBlobV2UploadRequest;
+                });
 
             // ======= Initialize ====== //
             wrapper = new MultiPartUploadWrapper(
@@ -534,8 +568,8 @@ describe("MultiPartUploadWrapper", async function() {
 
             expect(status).eqls(204);
 
-            NodeFileDataStub.restore();
-            BlobV2UploadRequestStub.restore();
+            NodeFileDataStub.mockRestore();
+            BlobV2UploadRequestStub.mockRestore();
         });
     });
 
@@ -544,14 +578,16 @@ describe("MultiPartUploadWrapper", async function() {
             // ======= Prepare ====== //
 
             let MockedBlobV1UploadRequest = {
-                startMultipartUpload: sinon.stub().resolves({
+                startMultipartUpload: vi.fn().mockResolvedValue({
                     uploadPartUrl: "mocked-upload-part-url"
                 })
             };
 
-            let BlobV1UploadRequestStub = sinon
-                .stub(BlobV1UploadRequest, "BlobV1UploadRequest")
-                .returns(MockedBlobV1UploadRequest);
+            let BlobV1UploadRequestStub = vi
+                .spyOn(BlobV1UploadRequest, "BlobV1UploadRequest")
+                .mockImplementation(function () {
+                    return MockedBlobV1UploadRequest;
+                });
 
             // ======= Initialize ====== //
             wrapper = new MultiPartUploadWrapper(
@@ -577,17 +613,19 @@ describe("MultiPartUploadWrapper", async function() {
                 );
             }
 
-            BlobV1UploadRequestStub.restore();
+            BlobV1UploadRequestStub.mockRestore();
 
             MockedBlobV1UploadRequest = {
-                startMultipartUpload: sinon.stub().resolves({
+                startMultipartUpload: vi.fn().mockResolvedValue({
                     completeUrl: "mocked-complete-url"
                 })
             };
 
-            BlobV1UploadRequestStub = sinon
-                .stub(BlobV1UploadRequest, "BlobV1UploadRequest")
-                .returns(MockedBlobV1UploadRequest);
+            BlobV1UploadRequestStub = vi
+                .spyOn(BlobV1UploadRequest, "BlobV1UploadRequest")
+                .mockImplementation(function () {
+                    return MockedBlobV1UploadRequest;
+                });
 
             // ======= Initialize ====== //
             wrapper = new MultiPartUploadWrapper(
@@ -613,15 +651,17 @@ describe("MultiPartUploadWrapper", async function() {
                 );
             }
 
-            BlobV1UploadRequestStub.restore();
+            BlobV1UploadRequestStub.mockRestore();
 
             MockedBlobV1UploadRequest = {
-                startMultipartUpload: sinon.stub().resolves({})
+                startMultipartUpload: vi.fn().mockResolvedValue({})
             };
 
-            BlobV1UploadRequestStub = sinon
-                .stub(BlobV1UploadRequest, "BlobV1UploadRequest")
-                .returns(MockedBlobV1UploadRequest);
+            BlobV1UploadRequestStub = vi
+                .spyOn(BlobV1UploadRequest, "BlobV1UploadRequest")
+                .mockImplementation(function () {
+                    return MockedBlobV1UploadRequest;
+                });
 
             // ======= Initialize ====== //
             wrapper = new MultiPartUploadWrapper(
@@ -647,17 +687,19 @@ describe("MultiPartUploadWrapper", async function() {
                 );
             }
 
-            BlobV1UploadRequestStub.restore();
+            BlobV1UploadRequestStub.mockRestore();
 
             const MockedBlobV2UploadRequest = {
-                startMultipartUpload: sinon.stub().resolves({
+                startMultipartUpload: vi.fn().mockResolvedValue({
                     completeUrl: "mocked-complete-url"
                 })
             };
 
-            const BlobV2UploadRequestStub = sinon
-                .stub(BlobV2UploadRequest, "BlobV2UploadRequest")
-                .returns(MockedBlobV2UploadRequest);
+            const BlobV2UploadRequestStub = vi
+                .spyOn(BlobV2UploadRequest, "BlobV2UploadRequest")
+                .mockImplementation(function () {
+                    return MockedBlobV2UploadRequest;
+                });
 
             // ======= Initialize ====== //
             wrapper = new MultiPartUploadWrapper(
@@ -683,7 +725,7 @@ describe("MultiPartUploadWrapper", async function() {
                 );
             }
 
-            BlobV2UploadRequestStub.restore();
+            BlobV2UploadRequestStub.mockRestore();
 
             // ======= Initialize ====== //
             wrapper = new MultiPartUploadWrapper(

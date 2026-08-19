@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,21 @@
  * License-Filename: LICENSE
  */
 
-import { assert } from "chai";
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { requestToken } from "../index.web";
 
 import { SENT_WITH_PARAM } from "@here/olp-sdk-core/lib";
-import fetchMock = require("fetch-mock");
+import fetchMock from "fetch-mock";
 
 const REPLY_TIMEOUT_MS = 600;
 
@@ -30,22 +40,25 @@ const REPLY_TIMEOUT_MS = 600;
  * @see ../lib/requestToken.web.ts
  */
 declare var global: any;
-global.crypto = {
-    subtle: {
-        importKey: () => "mocked-key",
-        // tslint:disable-next-line: no-magic-numbers
-        sign: () => Promise.resolve(new ArrayBuffer(162))
-    },
-    getRandomValues: () => new Uint8Array()
-};
+Object.defineProperty(global, "crypto", {
+    configurable: true,
+    writable: true,
+    value: {
+        subtle: {
+            importKey: () => "mocked-key",
+            sign: () => Promise.resolve(new ArrayBuffer(162))
+        },
+        getRandomValues: () => new Uint8Array()
+    }
+});
 
 global.btoa = () => "mocked-btoa-string";
 
-describe("oauth-request-offline", function() {
+describe("oauth-request-offline", function () {
     const mock_token = "eyJhbGciOiJSUzUxMiIsImN0eSI6IkpXVCIsIm";
 
-    beforeEach(function() {
-        fetchMock.config.overwriteRoutes = true;
+    beforeEach(function () {
+        fetchMock.mockGlobal();
         fetchMock.post(
             "https://account.api.here.com/oauth2/token?" + SENT_WITH_PARAM,
             {
@@ -56,11 +69,11 @@ describe("oauth-request-offline", function() {
         );
     });
 
-    afterEach(function() {
-        fetchMock.reset();
+    afterEach(function () {
+        fetchMock.hardReset();
     });
 
-    it("requestTokenWeb", async function() {
+    it("requestTokenWeb", async function () {
         const consumerKey = "key";
         const secretKey = "secret";
 
@@ -73,5 +86,36 @@ describe("oauth-request-offline", function() {
         assert.strictEqual(reply.tokenType, "bearer");
         assert.isAbove(reply.expiresIn, REPLY_TIMEOUT_MS);
         assert.isNotEmpty(reply.accessToken);
+    });
+
+    it("requestTokenWebInsecureContext", async function () {
+        const secureCrypto = global.crypto;
+        // Browsers expose `crypto.subtle` only over https, and the request
+        // cannot be signed without it.
+        Object.defineProperty(global, "crypto", {
+            configurable: true,
+            writable: true,
+            value: {
+                getRandomValues: () => new Uint8Array()
+            }
+        });
+
+        try {
+            await expect(
+                requestToken({
+                    url: "https://account.api.here.com/oauth2/token",
+                    consumerKey: "key",
+                    secretKey: "secret"
+                })
+            ).rejects.toThrow(
+                "Failed to sign request: 'crypto.subtle' is undefined in insecure contexts."
+            );
+        } finally {
+            Object.defineProperty(global, "crypto", {
+                configurable: true,
+                writable: true,
+                value: secureCrypto
+            });
+        }
     });
 });

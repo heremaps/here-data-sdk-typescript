@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,116 +17,120 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { DataRequest } from "@here/olp-sdk-dataservice-read";
 
-chai.use(sinonChai);
+describe("DataRequest", function () {
+    class DataRequestTest extends DataRequest {
+        getDataHandle(): string | undefined {
+            return "test";
+        }
 
-const assert = chai.assert;
-const expect = chai.expect;
+        withDataHandle(dataHandle: string): DataRequest {
+            return this;
+        }
 
-describe("DataRequest", function() {
-  class DataRequestTest extends DataRequest {
-    getDataHandle(): string | undefined {
-      return "test";
+        getPartitionId(): string | undefined {
+            return "test";
+        }
+
+        withPartitionId(partitionId: string): DataRequest {
+            return this;
+        }
+
+        getVersion(): number | undefined {
+            return 5;
+        }
+
+        withVersion(version: number): DataRequest {
+            return this;
+        }
+
+        withBillingTag(tag: string): DataRequest {
+            return this;
+        }
+
+        getBillingTag(): string {
+            return "test-billing-tag";
+        }
     }
 
-    withDataHandle(dataHandle: string): DataRequest {
-      return this;
-    }
+    it("Shoud be initialized", async function () {
+        const request = new DataRequest();
+        assert.isDefined(request);
+        expect(request).to.be.instanceOf(DataRequest);
 
-    getPartitionId(): string | undefined {
-      return "test";
-    }
+        assert.isFunction(request.withPartitionId);
+        assert.isFunction(request.getPartitionId);
+        assert.isFunction(request.withDataHandle);
+        assert.isFunction(request.getDataHandle);
+        assert.isFunction(request.withBillingTag);
+        assert.isFunction(request.getBillingTag);
+    });
 
-    withPartitionId(partitionId: string): DataRequest {
-      return this;
-    }
+    it("Test withVersion method with version", async function () {
+        const request = new DataRequestTest();
 
-    getVersion(): number | undefined {
-      return 5;
-    }
+        const response = request.withVersion(3);
+        assert.isDefined(response);
+    });
 
-    withVersion(version: number): DataRequest {
-      return this;
-    }
+    it("Test getVersion method without params", async function () {
+        const request = new DataRequestTest();
 
-    withBillingTag(tag: string): DataRequest {
-      return this;
-    }
+        const response = request.getVersion();
+        assert.isDefined(response);
+    });
 
-    getBillingTag(): string {
-      return "test-billing-tag";
-    }
-  }
+    it("Test withPartitionId method with id", async function () {
+        const request = new DataRequestTest();
 
-  it("Shoud be initialized", async function() {
-    const request = new DataRequest();
-    assert.isDefined(request);
-    expect(request).to.be.instanceOf(DataRequest);
+        const response = request.withPartitionId("test");
+        assert.isDefined(response);
+    });
 
-    assert.isFunction(request.withPartitionId);
-    assert.isFunction(request.getPartitionId);
-    assert.isFunction(request.withDataHandle);
-    assert.isFunction(request.getDataHandle);
-    assert.isFunction(request.withBillingTag);
-    assert.isFunction(request.getBillingTag);
-  });
+    it("Test getPartitionId method without params", async function () {
+        const request = new DataRequestTest();
 
-  it("Test withVersion method with version", async function() {
-    const request = new DataRequestTest();
+        const response = request.getPartitionId();
+        assert.isDefined(response);
+    });
 
-    const response = request.withVersion(3);
-    assert.isDefined(response);
-  });
+    it("Test withDataHandle method with dataHandle", async function () {
+        const request = new DataRequestTest();
 
-  it("Test getVersion method without params", async function() {
-    const request = new DataRequestTest();
+        const response = request.withDataHandle("test");
+        assert.isDefined(response);
+    });
 
-    const response = request.getVersion();
-    assert.isDefined(response);
-  });
+    it("Test getDataHandle method without params", async function () {
+        const request = new DataRequestTest();
 
-  it("Test withPartitionId method with id", async function() {
-    const request = new DataRequestTest();
+        const response = request.getDataHandle();
+        assert.isDefined(response);
+    });
 
-    const response = request.withPartitionId("test");
-    assert.isDefined(response);
-  });
+    it("Test withBillingTag method with tag", async function () {
+        const request = new DataRequestTest();
 
-  it("Test getPartitionId method without params", async function() {
-    const request = new DataRequestTest();
+        const response = request.withBillingTag("test-tag");
+        assert.isDefined(response);
+    });
 
-    const response = request.getPartitionId();
-    assert.isDefined(response);
-  });
+    it("Test getBillingTag method without params", async function () {
+        const request = new DataRequestTest();
 
-  it("Test withDataHandle method with dataHandle", async function() {
-    const request = new DataRequestTest();
-
-    const response = request.withDataHandle("test");
-    assert.isDefined(response);
-  });
-
-  it("Test getDataHandle method without params", async function() {
-    const request = new DataRequestTest();
-
-    const response = request.getDataHandle();
-    assert.isDefined(response);
-  });
-
-  it("Test withBillingTag method with tag", async function() {
-    const request = new DataRequestTest();
-
-    const response = request.withBillingTag("test-tag");
-    assert.isDefined(response);
-  });
-
-  it("Test getBillingTag method without params", async function() {
-    const request = new DataRequestTest();
-
-    const response = request.getBillingTag();
-    assert.isDefined(response);
-  });
+        const response = request.getBillingTag();
+        assert.isDefined(response);
+    });
 });

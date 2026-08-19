@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2021 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,22 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
+import { createStubInstance } from "./stub-instance";
 import * as dataServiceRead from "../../lib";
 import { ConfigApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
 
 import * as core from "@here/olp-sdk-core";
-
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
 
 class MockCatalogVersionRequest {
     public getBillingTag(): string | undefined {
@@ -37,51 +40,63 @@ class MockCatalogVersionRequest {
     }
 }
 
-describe("CatalogClient", function() {
-    let sandbox: sinon.SinonSandbox;
-    let getVersionStub: sinon.SinonStub;
-    let getLayerVersionsStub: sinon.SinonStub;
-    let getCatalogStub: sinon.SinonStub;
-    let getListVersionsStub: sinon.SinonStub;
-    let getEarliestVersionsStub: sinon.SinonStub;
+describe("CatalogClient", function () {
+    let getVersionStub: any;
+    let getLayerVersionsStub: any;
+    let getCatalogStub: any;
+    let getListVersionsStub: any;
+    let getEarliestVersionsStub: any;
     let catalogClient: dataServiceRead.CatalogClient;
-    let getBaseUrlRequestStub: sinon.SinonStub;
+    let getBaseUrlRequestStub: any;
     const fakeURL = "http://fake-base.url";
     const mockedHRN = core.HRN.fromString("hrn:here:data:::live-weather-na");
 
-    before(function() {
-        sandbox = sinon.createSandbox();
-        let settings = sandbox.createStubInstance(core.OlpClientSettings);
+    beforeAll(function () {
+        let settings = createStubInstance(core.OlpClientSettings);
         catalogClient = new dataServiceRead.CatalogClient(
             mockedHRN,
-            (settings as unknown) as core.OlpClientSettings
+            settings as unknown as core.OlpClientSettings
         );
     });
 
-    beforeEach(function() {
-        getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
-        getLayerVersionsStub = sandbox.stub(MetadataApi, "getLayerVersions");
-        getCatalogStub = sandbox.stub(ConfigApi, "getCatalog");
-        getListVersionsStub = sandbox.stub(MetadataApi, "listVersions");
-        getEarliestVersionsStub = sandbox.stub(MetadataApi, "minimumVersion");
-        getBaseUrlRequestStub = sandbox.stub(core.RequestFactory, "getBaseUrl");
-        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
+    beforeEach(function () {
+        getVersionStub = vi
+            .spyOn(MetadataApi, "latestVersion")
+            .mockReturnValue(undefined as any);
+        getLayerVersionsStub = vi
+            .spyOn(MetadataApi, "getLayerVersions")
+            .mockReturnValue(undefined as any);
+        getCatalogStub = vi
+            .spyOn(ConfigApi, "getCatalog")
+            .mockReturnValue(undefined as any);
+        getListVersionsStub = vi
+            .spyOn(MetadataApi, "listVersions")
+            .mockReturnValue(undefined as any);
+        getEarliestVersionsStub = vi
+            .spyOn(MetadataApi, "minimumVersion")
+            .mockReturnValue(undefined as any);
+        getBaseUrlRequestStub = vi
+            .spyOn(core.RequestFactory, "getBaseUrl")
+            .mockReturnValue(undefined as any);
+        getBaseUrlRequestStub.mockImplementation(() =>
+            Promise.resolve(fakeURL)
+        );
     });
 
-    afterEach(function() {
-        sandbox.restore();
+    afterEach(function () {
+        vi.restoreAllMocks();
     });
 
-    it("Shoud be initialised", async function() {
+    it("Shoud be initialised", async function () {
         assert.isDefined(catalogClient);
     });
 
-    it("Should method getLatestVersion provide data with startVersion parameter", async function() {
+    it("Should method getLatestVersion provide data with startVersion parameter", async function () {
         const mockedVersion = {
             version: 42
         };
 
-        getVersionStub.callsFake(
+        getVersionStub.mockImplementation(
             (
                 builder: any,
                 params: any
@@ -90,19 +105,18 @@ describe("CatalogClient", function() {
             }
         );
 
-        const catalogRequest = new dataServiceRead.CatalogVersionRequest().withStartVersion(
-            42
-        );
+        const catalogRequest =
+            new dataServiceRead.CatalogVersionRequest().withStartVersion(42);
 
         const response = await catalogClient.getLatestVersion(
-            (catalogRequest as unknown) as dataServiceRead.CatalogVersionRequest
+            catalogRequest as unknown as dataServiceRead.CatalogVersionRequest
         );
 
         assert.isDefined(response);
         expect(response).to.be.equal(mockedVersion.version);
     });
 
-    it("Should method getLatestVersion return HttpError when API crashes", async function() {
+    it("Should method getLatestVersion return HttpError when API crashes", async function () {
         const TEST_ERROR_CODE = 404;
         const mockedError = new core.HttpError(
             TEST_ERROR_CODE,
@@ -113,7 +127,7 @@ describe("CatalogClient", function() {
             version: 42
         };
 
-        getVersionStub.callsFake(
+        getVersionStub.mockImplementation(
             (
                 builder: any,
                 params: any
@@ -122,13 +136,12 @@ describe("CatalogClient", function() {
             }
         );
 
-        const catalogRequest = new dataServiceRead.CatalogVersionRequest().withStartVersion(
-            42
-        );
+        const catalogRequest =
+            new dataServiceRead.CatalogVersionRequest().withStartVersion(42);
 
         const response = await catalogClient
             .getLatestVersion(
-                (catalogRequest as unknown) as dataServiceRead.CatalogVersionRequest
+                catalogRequest as unknown as dataServiceRead.CatalogVersionRequest
             )
             .catch((err: any) => {
                 assert.isDefined(err);
@@ -140,21 +153,20 @@ describe("CatalogClient", function() {
             });
     });
 
-    it("Should method getLayerVersions return HttpError when MetadataApi.getLayerVersions crashes", async function() {
+    it("Should method getLayerVersions return HttpError when MetadataApi.getLayerVersions crashes", async function () {
         const testError = "Can not get catalog layer version";
 
-        getLayerVersionsStub.callsFake(
+        getLayerVersionsStub.mockImplementation(
             (builder: any, params: any): Promise<MetadataApi.LayerVersions> => {
                 return Promise.reject("Can not get catalog layer version");
             }
         );
 
-        const catalogRequest = new dataServiceRead.LayerVersionsRequest().withVersion(
-            3
-        );
+        const catalogRequest =
+            new dataServiceRead.LayerVersionsRequest().withVersion(3);
         const response = await catalogClient
             .getLayerVersions(
-                (catalogRequest as unknown) as dataServiceRead.LayerVersionsRequest
+                catalogRequest as unknown as dataServiceRead.LayerVersionsRequest
             )
             .catch((err: any) => {
                 assert.isDefined(err);
@@ -162,7 +174,7 @@ describe("CatalogClient", function() {
             });
     });
 
-    it("Should method getLayerVersions provide data with version parameter", async function() {
+    it("Should method getLayerVersions provide data with version parameter", async function () {
         const mockedVersion = {
             layerVersions: [
                 { layer: "testLayer1", version: 1, timestamp: 11 },
@@ -172,24 +184,23 @@ describe("CatalogClient", function() {
             version: 3
         };
 
-        getLayerVersionsStub.callsFake(
+        getLayerVersionsStub.mockImplementation(
             (builder: any, params: any): Promise<MetadataApi.LayerVersions> => {
                 return Promise.resolve(mockedVersion);
             }
         );
 
-        const catalogRequest = new dataServiceRead.LayerVersionsRequest().withVersion(
-            3
-        );
+        const catalogRequest =
+            new dataServiceRead.LayerVersionsRequest().withVersion(3);
         const response = await catalogClient.getLayerVersions(
-            (catalogRequest as unknown) as dataServiceRead.LayerVersionsRequest
+            catalogRequest as unknown as dataServiceRead.LayerVersionsRequest
         );
 
         assert.isDefined(response);
         expect(response).to.be.equal(mockedVersion.layerVersions);
     });
 
-    it("Should method getLayerVersions provide data for latests version when version parameter is not setted", async function() {
+    it("Should method getLayerVersions provide data for latests version when version parameter is not setted", async function () {
         const mockedLayerVersions = {
             layerVersions: [
                 { layer: "testLayer1", version: 1, timestamp: 11 },
@@ -199,7 +210,7 @@ describe("CatalogClient", function() {
             ],
             version: 4
         };
-        getLayerVersionsStub.callsFake(
+        getLayerVersionsStub.mockImplementation(
             (builder: any, params: any): Promise<MetadataApi.LayerVersions> => {
                 return Promise.resolve(mockedLayerVersions);
             }
@@ -208,7 +219,7 @@ describe("CatalogClient", function() {
         const mockedLatestVersion = {
             version: 4
         };
-        getVersionStub.callsFake(
+        getVersionStub.mockImplementation(
             (
                 builder: any,
                 params: any
@@ -219,19 +230,19 @@ describe("CatalogClient", function() {
         const catalogRequest = new dataServiceRead.LayerVersionsRequest();
 
         const response = await catalogClient.getLayerVersions(
-            (catalogRequest as unknown) as dataServiceRead.LayerVersionsRequest
+            catalogRequest as unknown as dataServiceRead.LayerVersionsRequest
         );
 
         assert.isDefined(response);
         expect(response).to.be.equal(mockedLayerVersions.layerVersions);
     });
 
-    it("Should method getEarliestVersion provide the minimun version availiable for the given catalogRequest", async function() {
+    it("Should method getEarliestVersion provide the minimun version availiable for the given catalogRequest", async function () {
         const mockedEarliestVersion: MetadataApi.VersionResponse = {
             version: 5
         };
 
-        getEarliestVersionsStub.callsFake(
+        getEarliestVersionsStub.mockImplementation(
             (
                 builder: any,
                 params: any
@@ -242,21 +253,21 @@ describe("CatalogClient", function() {
 
         const catalogRequest = new MockCatalogVersionRequest();
         const response = await catalogClient.getEarliestVersion(
-            (catalogRequest as unknown) as dataServiceRead.CatalogVersionRequest
+            catalogRequest as unknown as dataServiceRead.CatalogVersionRequest
         );
 
         assert.isDefined(response);
         expect(response).to.be.equal(mockedEarliestVersion.version);
     });
 
-    it("Should method getEarliestVersion return HttpError getting earliest catalog version", async function() {
+    it("Should method getEarliestVersion return HttpError getting earliest catalog version", async function () {
         const TEST_ERROR_CODE = 404;
         const mockedError = new core.HttpError(
             TEST_ERROR_CODE,
             "Error getting earliest catalog version"
         );
 
-        getEarliestVersionsStub.callsFake(
+        getEarliestVersionsStub.mockImplementation(
             (
                 builder: any,
                 params: any
@@ -269,9 +280,9 @@ describe("CatalogClient", function() {
 
         const response = await catalogClient
             .getEarliestVersion(
-                (catalogRequest as unknown) as dataServiceRead.CatalogVersionRequest
+                catalogRequest as unknown as dataServiceRead.CatalogVersionRequest
             )
-            .catch(err => {
+            .catch((err) => {
                 assert.isDefined(err);
                 expect(err.status).to.be.equal(TEST_ERROR_CODE);
                 expect(err.message).to.be.equal(
@@ -281,7 +292,7 @@ describe("CatalogClient", function() {
             });
     });
 
-    it("Should method getCatalog provide data", async function() {
+    it("Should method getCatalog provide data", async function () {
         const mockedCatalogResponse: ConfigApi.Catalog = {
             id: "here-internal-test",
             hrn: "hrn:here-dev:data:::here-internal-test",
@@ -294,8 +305,7 @@ describe("CatalogClient", function() {
             layers: [
                 {
                     id: "hype-test-prefetch",
-                    hrn:
-                        "hrn:here-dev:data:::here-internal-test:hype-test-prefetch",
+                    hrn: "hrn:here-dev:data:::here-internal-test:hype-test-prefetch",
                     partitioning: {
                         tileLevels: [],
                         scheme: "heretile"
@@ -307,7 +317,7 @@ describe("CatalogClient", function() {
             version: 3
         };
 
-        getCatalogStub.callsFake(
+        getCatalogStub.mockImplementation(
             (builder: any, params: any): Promise<ConfigApi.Catalog> => {
                 return Promise.resolve(mockedCatalogResponse);
             }
@@ -321,7 +331,7 @@ describe("CatalogClient", function() {
         expect(response).to.be.equal(mockedCatalogResponse);
     });
 
-    it("Should method getCatalog return HttpError when Can not load catalog configuration", async function() {
+    it("Should method getCatalog return HttpError when Can not load catalog configuration", async function () {
         const TEST_ERROR_CODE = 404;
         const mockedError = new core.HttpError(
             TEST_ERROR_CODE,
@@ -340,8 +350,7 @@ describe("CatalogClient", function() {
             layers: [
                 {
                     id: "hype-test-prefetch",
-                    hrn:
-                        "hrn:here-dev:data:::here-internal-test:hype-test-prefetch",
+                    hrn: "hrn:here-dev:data:::here-internal-test:hype-test-prefetch",
                     partitioning: {
                         tileLevels: [],
                         scheme: "heretile"
@@ -353,7 +362,7 @@ describe("CatalogClient", function() {
             version: 3
         };
 
-        getCatalogStub.callsFake(
+        getCatalogStub.mockImplementation(
             (builder: any, params: any): Promise<ConfigApi.Catalog> => {
                 return Promise.reject(mockedError);
             }
@@ -371,7 +380,7 @@ describe("CatalogClient", function() {
             });
     });
 
-    it("Should method getVersions provide data with startVersion and EndVersion parameters", async function() {
+    it("Should method getVersions provide data with startVersion and EndVersion parameters", async function () {
         const mockedVersions: MetadataApi.VersionInfos = {
             versions: [
                 {
@@ -388,7 +397,7 @@ describe("CatalogClient", function() {
             ]
         };
 
-        getListVersionsStub.callsFake(
+        getListVersionsStub.mockImplementation(
             (builder: any, params: any): Promise<MetadataApi.VersionInfos> => {
                 return Promise.resolve(mockedVersions);
             }
@@ -399,14 +408,14 @@ describe("CatalogClient", function() {
             .withEndVersion(42);
 
         const response = await catalogClient.getVersions(
-            (catalogRequest as unknown) as dataServiceRead.CatalogVersionRequest
+            catalogRequest as unknown as dataServiceRead.CatalogVersionRequest
         );
 
         assert.isDefined(response);
         assert.isTrue(response.versions.length > 0);
     });
 
-    it("Should method getVersions provide data with startVersion parameters", async function() {
+    it("Should method getVersions provide data with startVersion parameters", async function () {
         const mockedVersions = {
             versions: [
                 {
@@ -422,44 +431,42 @@ describe("CatalogClient", function() {
                 }
             ]
         };
-        getListVersionsStub.callsFake((builder, params) => {
+        getListVersionsStub.mockImplementation((builder, params) => {
             return Promise.resolve(mockedVersions);
         });
-        getVersionStub.callsFake((builder, params) => {
+        getVersionStub.mockImplementation((builder, params) => {
             return Promise.resolve({ version: 42 });
         });
 
-        const catalogRequest = new dataServiceRead.CatalogVersionRequest().withStartVersion(
-            13
-        );
+        const catalogRequest =
+            new dataServiceRead.CatalogVersionRequest().withStartVersion(13);
         const response = await catalogClient.getVersions(catalogRequest);
 
         assert.isDefined(response);
         assert.isTrue(response.versions.length > 0);
     });
 
-    it("Should method getVersions return HttpError when API crashes", async function() {
+    it("Should method getVersions return HttpError when API crashes", async function () {
         const TEST_ERROR_CODE = 404;
         const mockedError = new core.HttpError(
             TEST_ERROR_CODE,
             "Can't get versions"
         );
 
-        getVersionStub.callsFake((builder, params) => {
+        getVersionStub.mockImplementation((builder, params) => {
             return Promise.resolve({ version: 42 });
         });
 
-        getListVersionsStub.callsFake((builder, params) => {
+        getListVersionsStub.mockImplementation((builder, params) => {
             return Promise.reject(mockedError);
         });
 
-        const catalogRequest = new dataServiceRead.CatalogVersionRequest().withStartVersion(
-            13
-        );
+        const catalogRequest =
+            new dataServiceRead.CatalogVersionRequest().withStartVersion(13);
 
         const response = await catalogClient
             .getVersions(catalogRequest)
-            .catch(err => {
+            .catch((err) => {
                 assert.isDefined(err);
                 expect(err.status).to.be.equal(TEST_ERROR_CODE);
                 expect(err.message).to.be.equal("Can't get versions");

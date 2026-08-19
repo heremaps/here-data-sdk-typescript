@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 HERE Europe B.V.
+ * Copyright (C) 2021-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import {
     RequestFactory,
     STATUS_CODES
 } from "@here/olp-sdk-core";
-import { BlobData } from "@here/olp-sdk-dataservice-write";
+import { BlobData } from "./BlobData";
 import { BlobV1UploadRequest } from "./multipartupload-internal/BlobV1UploadRequest";
 import { BlobV2UploadRequest } from "./multipartupload-internal/BlobV2UploadRequest";
 import { BufferData } from "./multipartupload-internal/BufferData";
@@ -269,7 +269,7 @@ export class MultiPartUploadWrapper {
         ) {
             throw new Error(
                 `Missing ${["uploadPartUrl", "completeUrl"].filter(
-                    p => !(p in startMultipartResponse)
+                    (p) => !(p in startMultipartResponse)
                 )}. Aborting upload.`
             );
         }
@@ -317,7 +317,7 @@ export class MultiPartUploadWrapper {
                             partNumber: chunkNumber,
                             url: startMultipartResponse.uploadPartUrl
                         })
-                        .then(uploadPartResponse => {
+                        .then((uploadPartResponse) => {
                             parts.push({
                                 id: uploadPartResponse.partId,
                                 number: uploadPartResponse.partNumber

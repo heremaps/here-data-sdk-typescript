@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,427 +17,466 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { ConfigApi } from "@here/olp-sdk-dataservice-api";
 import {
-  StatusLink,
-  Catalog,
-  CatalogFailureStatus,
-  CatalogPendingStatus,
-  CatalogSummary,
-  CatalogsList,
-  CatalogsListResult
+    StatusLink,
+    Catalog,
+    CatalogFailureStatus,
+    CatalogPendingStatus,
+    CatalogSummary,
+    CatalogsList,
+    CatalogsListResult
 } from "@here/olp-sdk-dataservice-api/lib/config-api";
 import { mockedRequestBuilder } from "./MockedRequestBuilder";
 
-chai.use(sinonChai);
+describe("ConfigApi", function () {
+    it("Catalog with all required params", function () {
+        const params: Catalog = {
+            created: "test",
+            description: "test",
+            hrn: "test",
+            id: "test",
+            layers: [
+                {
+                    billingTags: ["test"],
+                    contentEncoding: "gzip",
+                    contentType: "test",
+                    coverage: {
+                        adminAreas: ["test"]
+                    },
+                    creator: {
+                        id: "test"
+                    },
+                    description: "test",
+                    hrn: "test",
+                    id: "test",
+                    layerType: "index",
+                    name: "test",
+                    partitioning: {
+                        scheme: "generic",
+                        tileLevels: [1]
+                    },
+                    schema: {
+                        hrn: "test"
+                    },
+                    streamProperties: {
+                        dataInThroughputMbps: 1,
+                        dataOutThroughputMbps: 1
+                    },
+                    summary: "test",
+                    tags: ["test"],
+                    volume: {
+                        volumeType: "durable"
+                    },
+                    digest: "MD5"
+                } as any
+            ],
+            name: "test",
+            replication: {
+                regions: [
+                    {
+                        id: "eu-ireland",
+                        role: "primary"
+                    }
+                ]
+            },
+            summary: "test",
+            tags: ["text"],
+            version: 1
+        };
 
-const assert = chai.assert;
-const expect = chai.expect;
+        assert.isDefined(params);
+    });
 
-describe("ConfigApi", function() {
-  it("Catalog with all required params", function() {
-    const params: Catalog = {
-      created: "test",
-      description: "test",
-      hrn: "test",
-      id: "test",
-      layers: [
-        {
-          billingTags: ["test"],
-          contentEncoding: "gzip",
-          contentType: "test",
-          coverage: {
-            adminAreas: ["test"]
-          },
-          creator: {
-            id: "test"
-          },
-          description: "test",
-          hrn: "test",
-          id: "test",
-          layerType: "index",
-          name: "test",
-          partitioning: {
-            scheme: "generic",
-            tileLevels: [1]
-          },
-          schema: {
-            hrn: "test"
-          },
-          streamProperties: {
-            dataInThroughputMbps: 1,
-            dataOutThroughputMbps: 1
-          },
-          summary: "test",
-          tags: ["test"],
-          volume: {
-            volumeType: "durable"
-          },
-          digest: "MD5"
-        } as any
-      ],
-      name: "test",
-      replication: {
-        regions: [
-          {
-            id: "eu-ireland",
-            role: "primary"
-          }
-        ]
-      },
-      summary: "test",
-      tags: ["text"],
-      version: 1
-    };
+    it("Catalog with all required and optional params", function () {
+        const params: Catalog = {
+            billingTags: ["text"],
+            coverage: {
+                adminAreas: ["text"]
+            },
+            created: "test",
+            description: "test",
+            hrn: "test",
+            id: "test",
+            layers: [
+                {
+                    billingTags: ["test"],
+                    contentEncoding: "gzip",
+                    contentType: "test",
+                    coverage: {
+                        adminAreas: ["test"]
+                    },
+                    creator: {
+                        id: "test"
+                    },
+                    description: "test",
+                    hrn: "test",
+                    id: "test",
+                    layerType: "index",
+                    name: "test",
+                    partitioning: {
+                        scheme: "generic",
+                        tileLevels: [1]
+                    },
+                    schema: {
+                        hrn: "test"
+                    },
+                    streamProperties: {
+                        dataInThroughputMbps: 1,
+                        dataOutThroughputMbps: 1
+                    },
+                    summary: "test",
+                    tags: ["test"],
+                    volume: {
+                        volumeType: "durable"
+                    },
+                    digest: "MD5"
+                } as any
+            ],
+            name: "test",
+            notifications: {
+                enabled: true
+            },
+            owner: {
+                creator: {
+                    id: "text"
+                },
+                organisation: {
+                    id: "text"
+                }
+            },
+            replication: {
+                regions: [
+                    {
+                        id: "eu-ireland",
+                        role: "primary"
+                    }
+                ]
+            },
+            summary: "test",
+            tags: ["text"],
+            version: 1
+        };
 
-    assert.isDefined(params);
-  });
+        assert.isDefined(params);
+    });
 
-  it("Catalog with all required and optional params", function() {
-    const params: Catalog = {
-      billingTags: ["text"],
-      coverage: {
-        adminAreas: ["text"]
-      },
-      created: "test",
-      description: "test",
-      hrn: "test",
-      id: "test",
-      layers: [
-        {
-          billingTags: ["test"],
-          contentEncoding: "gzip",
-          contentType: "test",
-          coverage: {
-            adminAreas: ["test"]
-          },
-          creator: {
-            id: "test"
-          },
-          description: "test",
-          hrn: "test",
-          id: "test",
-          layerType: "index",
-          name: "test",
-          partitioning: {
-            scheme: "generic",
-            tileLevels: [1]
-          },
-          schema: {
-            hrn: "test"
-          },
-          streamProperties: {
-            dataInThroughputMbps: 1,
-            dataOutThroughputMbps: 1
-          },
-          summary: "test",
-          tags: ["test"],
-          volume: {
-            volumeType: "durable"
-          },
-          digest: "MD5"
-        } as any
-      ],
-      name: "test",
-      notifications: {
-        enabled: true
-      },
-      owner: {
-        creator: {
-          id: "text"
-        },
-        organisation: {
-          id: "text"
-        }
-      },
-      replication: {
-        regions: [
-          {
-            id: "eu-ireland",
-            role: "primary"
-          }
-        ]
-      },
-      summary: "test",
-      tags: ["text"],
-      version: 1
-    };
+    it("CatalogFailureStatus with all required params", function () {
+        const params: CatalogFailureStatus = {};
+        assert.isDefined(params);
+    });
 
-    assert.isDefined(params);
-  });
+    it("CatalogFailureStatus with all required and optional params", function () {
+        const params: CatalogFailureStatus = {
+            reason: "test",
+            status: "test"
+        };
+        assert.isDefined(params);
+    });
 
-  it("CatalogFailureStatus with all required params", function() {
-    const params: CatalogFailureStatus = {};
-    assert.isDefined(params);
-  });
+    it("CatalogPendingStatus with all required params", function () {
+        const params: CatalogPendingStatus = {};
+        assert.isDefined(params);
+    });
+    it("CatalogPendingStatus with all required and optional params", function () {
+        const params: CatalogPendingStatus = {
+            status: "test"
+        };
+        assert.isDefined(params);
+    });
 
-  it("CatalogFailureStatus with all required and optional params", function() {
-    const params: CatalogFailureStatus = {
-      reason: "test",
-      status: "test"
-    };
-    assert.isDefined(params);
-  });
-
-  it("CatalogPendingStatus with all required params", function() {
-    const params: CatalogPendingStatus = {};
-    assert.isDefined(params);
-  });
-  it("CatalogPendingStatus with all required and optional params", function() {
-    const params: CatalogPendingStatus = {
-      status: "test"
-    };
-    assert.isDefined(params);
-  });
-
-  it("CatalogSummary with all required params", function() {
-    const params: CatalogSummary = {};
-    assert.isDefined(params);
-  });
-  it("CatalogSummary with all required and optional params", function() {
-    const params: CatalogSummary = {
-      href: "test",
-      hrn: "test",
-      title: "test",
-      type: "test"
-    };
-    assert.isDefined(params);
-  });
-
-  it("CatalogsList with all required params", function() {
-    const params: CatalogsList = {};
-    assert.isDefined(params);
-  });
-
-  it("CatalogsList with all required and optional params", function() {
-    const params: CatalogsList = {
-      items: [
-        {
-          href: "test",
-          hrn: "test",
-          title: "test",
-          type: "test"
-        }
-      ]
-    };
-    assert.isDefined(params);
-  });
-
-  it("CatalogsListResult with all required params", function() {
-    const params: CatalogsListResult = {};
-    assert.isDefined(params);
-  });
-
-  it("CatalogsListResult with all required and optional params", function() {
-    const params: CatalogsListResult = {
-      results: {
-        items: [
-          {
+    it("CatalogSummary with all required params", function () {
+        const params: CatalogSummary = {};
+        assert.isDefined(params);
+    });
+    it("CatalogSummary with all required and optional params", function () {
+        const params: CatalogSummary = {
             href: "test",
             hrn: "test",
             title: "test",
             type: "test"
-          }
-        ]
-      }
-    };
-    assert.isDefined(params);
-  });
+        };
+        assert.isDefined(params);
+    });
 
-  it("StatusLink with all required params", function() {
-    const params: StatusLink = {};
+    it("CatalogsList with all required params", function () {
+        const params: CatalogsList = {};
+        assert.isDefined(params);
+    });
 
-    assert.isDefined(params);
-  });
+    it("CatalogsList with all required and optional params", function () {
+        const params: CatalogsList = {
+            items: [
+                {
+                    href: "test",
+                    hrn: "test",
+                    title: "test",
+                    type: "test"
+                }
+            ]
+        };
+        assert.isDefined(params);
+    });
 
-  it("StatusLink with all required and optional params", function() {
-    const params: StatusLink = {
-      href: "test",
-      title: "test",
-      type: "test"
-    };
+    it("CatalogsListResult with all required params", function () {
+        const params: CatalogsListResult = {};
+        assert.isDefined(params);
+    });
 
-    assert.isDefined(params);
-  });
+    it("CatalogsListResult with all required and optional params", function () {
+        const params: CatalogsListResult = {
+            results: {
+                items: [
+                    {
+                        href: "test",
+                        hrn: "test",
+                        title: "test",
+                        type: "test"
+                    }
+                ]
+            }
+        };
+        assert.isDefined(params);
+    });
 
-  ////////////////
+    it("StatusLink with all required params", function () {
+        const params: StatusLink = {};
 
-  it("Test catalogExists method with all required params", async function() {
-    const params = {
-      catalogHrn: "mocked-catalogHrn"
-    };
+        assert.isDefined(params);
+    });
 
-    const result = await ConfigApi.catalogExists(mockedRequestBuilder, params);
+    it("StatusLink with all required and optional params", function () {
+        const params: StatusLink = {
+            href: "test",
+            title: "test",
+            type: "test"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        assert.isDefined(params);
+    });
 
-  it("Test catalogExists method with all required and optional params", async function() {
-    const params = {
-      catalogHrn: "mocked-catalogHrn",
-      billingTag: "mocked-billingTag"
-    };
+    ////////////////
 
-    const result = await ConfigApi.catalogExists(mockedRequestBuilder, params);
+    it("Test catalogExists method with all required params", async function () {
+        const params = {
+            catalogHrn: "mocked-catalogHrn"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await ConfigApi.catalogExists(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test createCatalog method with all required params", async function() {
-    const params = {
-      body: "mocked-body" as any
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await ConfigApi.createCatalog(mockedRequestBuilder, params);
+    it("Test catalogExists method with all required and optional params", async function () {
+        const params = {
+            catalogHrn: "mocked-catalogHrn",
+            billingTag: "mocked-billingTag"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await ConfigApi.catalogExists(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test createCatalog method with all required and optional params", async function() {
-    const params = {
-      body: "mocked-body" as any,
-      billingTag: "mocked-billingTag"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await ConfigApi.createCatalog(mockedRequestBuilder, params);
+    it("Test createCatalog method with all required params", async function () {
+        const params = {
+            body: "mocked-body" as any
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await ConfigApi.createCatalog(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test deleteCatalog method with all required params", async function() {
-    const params = {
-      catalogHrn: "mocked-catalogHrn"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await ConfigApi.deleteCatalog(mockedRequestBuilder, params);
+    it("Test createCatalog method with all required and optional params", async function () {
+        const params = {
+            body: "mocked-body" as any,
+            billingTag: "mocked-billingTag"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await ConfigApi.createCatalog(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test deleteCatalog method with all required and optional params", async function() {
-    const params = {
-      catalogHrn: "mocked-catalogHrn",
-      billingTag: "mocked-billingTag"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await ConfigApi.deleteCatalog(mockedRequestBuilder, params);
+    it("Test deleteCatalog method with all required params", async function () {
+        const params = {
+            catalogHrn: "mocked-catalogHrn"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await ConfigApi.deleteCatalog(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test deleteLayer method with all required params", async function() {
-    const params = {
-      catalogHrn: "mocked-catalogHrn",
-      layerId: "mocked-layerId"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await ConfigApi.deleteLayer(mockedRequestBuilder, params);
+    it("Test deleteCatalog method with all required and optional params", async function () {
+        const params = {
+            catalogHrn: "mocked-catalogHrn",
+            billingTag: "mocked-billingTag"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await ConfigApi.deleteCatalog(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test getCatalog method with all required params", async function() {
-    const params = {
-      catalogHrn: "mocked-catalogHrn",
-      billingTag: "mocked-billingTag"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await ConfigApi.getCatalog(mockedRequestBuilder, params);
+    it("Test deleteLayer method with all required params", async function () {
+        const params = {
+            catalogHrn: "mocked-catalogHrn",
+            layerId: "mocked-layerId"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await ConfigApi.deleteLayer(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test getCatalogStatus method with all required params", async function() {
-    const params = {
-      token: "mocked-token",
-      billingTag: "mocked-billingTag"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await ConfigApi.getCatalogStatus(
-      mockedRequestBuilder,
-      params
-    );
+    it("Test getCatalog method with all required params", async function () {
+        const params = {
+            catalogHrn: "mocked-catalogHrn",
+            billingTag: "mocked-billingTag"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await ConfigApi.getCatalog(mockedRequestBuilder, params);
 
-  it("Test getCatalogs method with all required params", async function() {
-    const params = {};
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await ConfigApi.getCatalogs(mockedRequestBuilder, params);
+    it("Test getCatalogStatus method with all required params", async function () {
+        const params = {
+            token: "mocked-token",
+            billingTag: "mocked-billingTag"
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await ConfigApi.getCatalogStatus(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test getCatalogs method with all required and optional params", async function() {
-    const params = {
-      billingTag: "mocked-billingTag" as any,
-      verbose: "mocked-verbose" as any,
-      q: "mocked-verbose" as any,
-      organisation: "mocked-organisation" as any,
-      organisationType: "mocked-organisationType" as any,
-      layerType: "mocked-layerType" as any,
-      region: "mocked-region" as any,
-      schemaHrn: "mocked-schemaHrn" as any,
-      resourceType: "mocked-resourceType" as any,
-      coverage: "mocked-coverage" as any,
-      access: "mocked-access" as any,
-      limit: "mocked-limit" as any,
-      sortBy: "mocked-sortBy" as any,
-      sortOrder: "mocked-sortOrder" as any
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await ConfigApi.getCatalogs(mockedRequestBuilder, params);
+    it("Test getCatalogs method with all required params", async function () {
+        const params = {};
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await ConfigApi.getCatalogs(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test patchCatalog method with all required params", async function() {
-    const params = {
-      catalogHrn: "mocked-catalogHrn",
-      body: "mocked-body" as any
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await ConfigApi.patchCatalog(mockedRequestBuilder, params);
+    it("Test getCatalogs method with all required and optional params", async function () {
+        const params = {
+            billingTag: "mocked-billingTag" as any,
+            verbose: "mocked-verbose" as any,
+            q: "mocked-verbose" as any,
+            organisation: "mocked-organisation" as any,
+            organisationType: "mocked-organisationType" as any,
+            layerType: "mocked-layerType" as any,
+            region: "mocked-region" as any,
+            schemaHrn: "mocked-schemaHrn" as any,
+            resourceType: "mocked-resourceType" as any,
+            coverage: "mocked-coverage" as any,
+            access: "mocked-access" as any,
+            limit: "mocked-limit" as any,
+            sortBy: "mocked-sortBy" as any,
+            sortOrder: "mocked-sortOrder" as any
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await ConfigApi.getCatalogs(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test patchLayer method with all required params", async function() {
-    const params = {
-      catalogHrn: "mocked-catalogHrn",
-      layerId: "mocked-layerId",
-      body: "mocked-body" as any
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await ConfigApi.patchLayer(mockedRequestBuilder, params);
+    it("Test patchCatalog method with all required params", async function () {
+        const params = {
+            catalogHrn: "mocked-catalogHrn",
+            body: "mocked-body" as any
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await ConfigApi.patchCatalog(
+            mockedRequestBuilder,
+            params
+        );
 
-  it("Test updateCatalog method with all required params", async function() {
-    const params = {
-      catalogHrn: "mocked-catalogHrn",
-      body: "mocked-body" as any
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await ConfigApi.updateCatalog(mockedRequestBuilder, params);
+    it("Test patchLayer method with all required params", async function () {
+        const params = {
+            catalogHrn: "mocked-catalogHrn",
+            layerId: "mocked-layerId",
+            body: "mocked-body" as any
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await ConfigApi.patchLayer(mockedRequestBuilder, params);
 
-  it("Test updateCatalog method with all required and optional params", async function() {
-    const params = {
-      catalogHrn: "mocked-catalogHrn",
-      body: "mocked-body" as any,
-      billingTag: "mocked-billingTag"
-    };
+        expect(result).to.be.equal("success");
+    });
 
-    const result = await ConfigApi.updateCatalog(mockedRequestBuilder, params);
+    it("Test updateCatalog method with all required params", async function () {
+        const params = {
+            catalogHrn: "mocked-catalogHrn",
+            body: "mocked-body" as any
+        };
 
-    expect(result).to.be.equal("success");
-  });
+        const result = await ConfigApi.updateCatalog(
+            mockedRequestBuilder,
+            params
+        );
+
+        expect(result).to.be.equal("success");
+    });
+
+    it("Test updateCatalog method with all required and optional params", async function () {
+        const params = {
+            catalogHrn: "mocked-catalogHrn",
+            body: "mocked-body" as any,
+            billingTag: "mocked-billingTag"
+        };
+
+        const result = await ConfigApi.updateCatalog(
+            mockedRequestBuilder,
+            params
+        );
+
+        expect(result).to.be.equal("success");
+    });
 });

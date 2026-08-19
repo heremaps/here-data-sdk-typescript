@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,23 +17,25 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import * as lib from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("addBearerToken", function() {
+describe("addBearerToken", function () {
     const USER_AGENT = `OLP-TS-SDK/${lib.LIB_VERSION}`;
-    const dm = ({
+    const dm = {
         download: async (url: string, init?: RequestInit) =>
             Promise.resolve({ json: () => Promise.resolve(init) })
-    } as unknown) as lib.DownloadManager;
+    } as unknown as lib.DownloadManager;
 
     const requestBuilder = new lib.DataStoreRequestBuilder(
         dm,
@@ -41,14 +43,14 @@ describe("addBearerToken", function() {
         () => Promise.resolve("mocked-token")
     );
 
-    it("Shoud be added token to the request headers with empty params from the user", async function() {
+    it("Shoud be added token to the request headers with empty params from the user", async function () {
         const result: any = await requestBuilder.download("mocked-url");
         expect(result.headers.get("Authorization")).equals(
             "Bearer mocked-token"
         );
     });
 
-    it("Shoud be added token to the request headers with not empty params from the user", async function() {
+    it("Shoud be added token to the request headers with not empty params from the user", async function () {
         const result: any = await requestBuilder.download("mocked-url", {
             body: "test-string"
         });
@@ -58,7 +60,7 @@ describe("addBearerToken", function() {
         );
     });
 
-    it("Shoud be added token to the request headers with some headers in params from the user", async function() {
+    it("Shoud be added token to the request headers with some headers in params from the user", async function () {
         const result: any = await requestBuilder.download("mocked-url", {
             body: "test-string",
             headers: [
@@ -74,7 +76,7 @@ describe("addBearerToken", function() {
         );
     });
 
-    it("Shoud be added token to the request headers with some instance of  Headers in params from the user", async function() {
+    it("Shoud be added token to the request headers with some instance of  Headers in params from the user", async function () {
         const result: any = await requestBuilder.download("mocked-url", {
             body: "test-string",
             headers: new Headers({ "test-header": "test-header-value" })
@@ -86,7 +88,7 @@ describe("addBearerToken", function() {
         expect(result.headers.get("test-header")).equals("test-header-value");
     });
 
-    it("Shoud be added token to the request headers with some empty headers object in params from the user", async function() {
+    it("Shoud be added token to the request headers with some empty headers object in params from the user", async function () {
         const result: any = await requestBuilder.download("mocked-url", {
             body: "test-string",
             headers: {}
@@ -97,7 +99,7 @@ describe("addBearerToken", function() {
         );
     });
 
-    it("Shoud be added token to the request headers with some not empty headers object in params from the user", async function() {
+    it("Shoud be added token to the request headers with some not empty headers object in params from the user", async function () {
         const result: any = await requestBuilder.download("mocked-url", {
             body: "test-string",
             headers: { "test-header": "test-header-value" }
@@ -110,9 +112,8 @@ describe("addBearerToken", function() {
     });
 });
 
-describe("DataStoreRequestBuilder", function() {
-    let sandbox: sinon.SinonSandbox;
-    let getBaseUrlRequestStub: sinon.SinonStub;
+describe("DataStoreRequestBuilder", function () {
+    let getBaseUrlRequestStub: any;
 
     let dataStore: any;
     let dataStoreError: any;
@@ -122,32 +123,34 @@ describe("DataStoreRequestBuilder", function() {
     let token = () => Promise.resolve("token");
     let abortSignalTest: any;
 
-    let dm = ({
+    let dm = {
         download: (url: any, options: any) =>
-            Promise.resolve(({
+            Promise.resolve({
                 status: 200,
                 statusText: "Test Success",
-                json: function() {
+                json: function () {
                     return this;
                 }
-            } as unknown) as Response)
-    } as unknown) as lib.DownloadManager;
+            } as unknown as Response)
+    } as unknown as lib.DownloadManager;
 
-    let dmError = ({
+    let dmError = {
         download: (url: any, options: any) =>
-            Promise.reject(({
+            Promise.reject({
                 status: 404,
                 statusText: "Test Error"
-            } as unknown) as Response)
-    } as unknown) as lib.DownloadManager;
+            } as unknown as Response)
+    } as unknown as lib.DownloadManager;
 
-    before(function() {
-        sandbox = sinon.createSandbox();
-    });
+    beforeAll(function () {});
 
-    beforeEach(function() {
-        getBaseUrlRequestStub = sandbox.stub(lib.RequestFactory, "getBaseUrl");
-        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
+    beforeEach(function () {
+        getBaseUrlRequestStub = vi
+            .spyOn(lib.RequestFactory, "getBaseUrl")
+            .mockReturnValue(undefined as any);
+        getBaseUrlRequestStub.mockImplementation(() =>
+            Promise.resolve(fakeURL)
+        );
 
         dataStore = new lib.DataStoreRequestBuilder(
             dm,
@@ -164,16 +167,16 @@ describe("DataStoreRequestBuilder", function() {
         );
     });
 
-    afterEach(function() {
-        sandbox.restore();
+    afterEach(function () {
+        vi.restoreAllMocks();
     });
 
-    it("Shoud be initialized", async function() {
+    it("Shoud be initialized", async function () {
         assert.isDefined(dataStore);
         expect(dataStore).be.instanceOf(lib.DataStoreRequestBuilder);
     });
 
-    it("Shoud downloads data from the provided URL", async function() {
+    it("Shoud downloads data from the provided URL", async function () {
         const response = await dataStore.download(mockedUrl);
 
         assert.isDefined(response);
@@ -181,7 +184,7 @@ describe("DataStoreRequestBuilder", function() {
         expect(response.statusText).to.be.equal("Test Success");
     });
 
-    it("Shoud download method return error when downloadManager crashed", async function() {
+    it("Shoud download method return error when downloadManager crashed", async function () {
         try {
             await dataStoreError.download(mockedUrl);
         } catch (error) {
@@ -191,7 +194,7 @@ describe("DataStoreRequestBuilder", function() {
         }
     });
 
-    it("Shoud downloads the blob data from the provided URL", async function() {
+    it("Shoud downloads the blob data from the provided URL", async function () {
         const response = await dataStore.downloadBlob(mockedUrl);
 
         assert.isDefined(response);
@@ -199,7 +202,7 @@ describe("DataStoreRequestBuilder", function() {
         expect(response.statusText).to.be.equal("Test Success");
     });
 
-    it("Shoud downloadBlob method return error when downloadManager crashed", async function() {
+    it("Shoud downloadBlob method return error when downloadManager crashed", async function () {
         try {
             await dataStoreError.downloadBlob(mockedUrl);
         } catch (error) {
@@ -209,20 +212,20 @@ describe("DataStoreRequestBuilder", function() {
         }
     });
 
-    it("Shoud abort signal be added to the headers of the requests", async function() {
-        const dm = ({
+    it("Shoud abort signal be added to the headers of the requests", async function () {
+        const dm = {
             download: (url: any, options: any) => {
                 assert.isDefined(options.signal.aborted);
                 expect(options.signal.aborted).equals(false);
-                return Promise.resolve(({
+                return Promise.resolve({
                     status: 200,
                     statusText: "Test Success",
-                    json: function() {
+                    json: function () {
                         return this;
                     }
-                } as unknown) as Response);
+                } as unknown as Response);
             }
-        } as unknown) as lib.DownloadManager;
+        } as unknown as lib.DownloadManager;
         const abortController = new AbortController();
         const requestBuilder = new lib.DataStoreRequestBuilder(
             dm,

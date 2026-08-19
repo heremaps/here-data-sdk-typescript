@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 HERE Europe B.V.
+ * Copyright (C) 2021-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,24 +17,29 @@
  * License-Filename: LICENSE
  */
 
-import * as sinon from "sinon";
-import * as chai from "chai";
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import * as fs from "fs";
-import sinonChai = require("sinon-chai");
 import { NodeFileData } from "../../lib/utils/multipartupload-internal/NodeFileData";
 
-chai.use(sinonChai);
-const expect = chai.expect;
-
-describe("NodeFileData", function() {
-    let fsOpen: sinon.SinonStub;
+describe("NodeFileData", function () {
+    let fsOpen: any;
 
     afterEach(() => {
-        fsOpen.restore();
+        fsOpen.mockRestore();
     });
 
-    it("readBytes", async function() {
-        fsOpen = sinon.stub(fs.promises, "open").returns({
+    it("readBytes", async function () {
+        fsOpen = vi.spyOn(fs.promises, "open").mockReturnValue({
             stat: () => Promise.resolve({ size: 9 }),
             read: (
                 buffer: Buffer,
@@ -56,8 +61,8 @@ describe("NodeFileData", function() {
         const bytes = await data.readBytes(2, 5);
         expect(bytes.toString()).eqls("12345");
 
-        fsOpen.restore();
-        fsOpen = sinon.stub(fs.promises, "open").returns({
+        fsOpen.mockRestore();
+        fsOpen = vi.spyOn(fs.promises, "open").mockReturnValue({
             stat: () => Promise.resolve({ size: 9 }),
             read: (
                 buffer: Buffer,
@@ -78,17 +83,17 @@ describe("NodeFileData", function() {
         await data2.readBytes(5, 6);
     });
 
-    it("size", async function() {
-        fsOpen = sinon.stub(fs.promises, "open").returns({
+    it("size", async function () {
+        fsOpen = vi.spyOn(fs.promises, "open").mockReturnValue({
             stat: () => Promise.resolve({ size: 9 })
         } as any);
         const data = await NodeFileData.fromPath("fake-filepath");
         expect(data.size()).eqls(9);
     });
 
-    it("closing file handle", async function() {
+    it("closing file handle", async function () {
         let closeCalls = 0;
-        fsOpen = sinon.stub(fs.promises, "open").returns({
+        fsOpen = vi.spyOn(fs.promises, "open").mockReturnValue({
             close: () => {
                 closeCalls++;
                 return Promise.resolve();
@@ -103,7 +108,7 @@ describe("NodeFileData", function() {
         expect(closeCalls).eqls(1);
     });
 
-    it("negative test, catch wrong file path", async function() {
+    it("negative test, catch wrong file path", async function () {
         try {
             await NodeFileData.fromPath("fake-filepath");
         } catch (error) {

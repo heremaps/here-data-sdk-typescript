@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2021 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,27 +17,29 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
+import { createStubInstance } from "./stub-instance";
 import * as dataServiceRead from "../../lib";
 import { MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
 import * as core from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
+describe("QueryClient", function () {
+    let getVersionStub: any;
+    let getPartitionsByIdStub: any;
+    let quadTreeIndexVolatileStub: any;
+    let olpClientSettingsStub: any;
 
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("QueryClient", function() {
-    let sandbox: sinon.SinonSandbox;
-    let getVersionStub: sinon.SinonStub;
-    let getPartitionsByIdStub: sinon.SinonStub;
-    let quadTreeIndexVolatileStub: sinon.SinonStub;
-    let olpClientSettingsStub: sinon.SinonStubbedInstance<core.OlpClientSettings>;
-
-    let getBaseUrlRequestStub: sinon.SinonStub;
+    let getBaseUrlRequestStub: any;
     const mockedHRN = core.HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
     const mockedLayerType = "volatile";
@@ -48,37 +50,40 @@ describe("QueryClient", function() {
         level: 3
     };
 
-    before(function() {
-        sandbox = sinon.createSandbox();
-    });
+    beforeAll(function () {});
 
-    beforeEach(function() {
-        olpClientSettingsStub = sandbox.createStubInstance(
-            core.OlpClientSettings
+    beforeEach(function () {
+        olpClientSettingsStub = createStubInstance(core.OlpClientSettings);
+        quadTreeIndexVolatileStub = vi
+            .spyOn(QueryApi, "quadTreeIndexVolatile")
+            .mockReturnValue(undefined as any);
+        getVersionStub = vi
+            .spyOn(MetadataApi, "latestVersion")
+            .mockReturnValue(undefined as any);
+        getPartitionsByIdStub = vi
+            .spyOn(QueryApi, "getPartitionsById")
+            .mockReturnValue(undefined as any);
+        getBaseUrlRequestStub = vi
+            .spyOn(core.RequestFactory, "getBaseUrl")
+            .mockReturnValue(undefined as any);
+
+        getBaseUrlRequestStub.mockImplementation(() =>
+            Promise.resolve(fakeURL)
         );
-        quadTreeIndexVolatileStub = sandbox.stub(
-            QueryApi,
-            "quadTreeIndexVolatile"
-        );
-        getVersionStub = sandbox.stub(MetadataApi, "latestVersion");
-        getPartitionsByIdStub = sandbox.stub(QueryApi, "getPartitionsById");
-        getBaseUrlRequestStub = sandbox.stub(core.RequestFactory, "getBaseUrl");
-
-        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
     });
 
-    afterEach(function() {
-        sandbox.restore();
+    afterEach(function () {
+        vi.restoreAllMocks();
     });
 
-    it("Shoud be initialised with settings", async function() {
+    it("Shoud be initialised with settings", async function () {
         const queryClient = new dataServiceRead.QueryClient(
             olpClientSettingsStub as any
         );
         assert.isDefined(queryClient);
     });
 
-    it("Should method fetchQuadTreeIndex provide data with all parameters", async function() {
+    it("Should method fetchQuadTreeIndex provide data with all parameters", async function () {
         const mockedQuadKeyTreeData = {
             subQuads: [
                 {
@@ -100,7 +105,7 @@ describe("QueryClient", function() {
         );
         assert.isDefined(queryClient);
 
-        quadTreeIndexVolatileStub.callsFake(
+        quadTreeIndexVolatileStub.mockImplementation(
             (builder: any, params: any): Promise<QueryApi.Index> => {
                 return Promise.resolve(mockedQuadKeyTreeData);
             }
@@ -114,15 +119,14 @@ describe("QueryClient", function() {
             .withQuadKey(mockedQuadKey)
             .withVersion(42);
 
-        const response = await queryClient.fetchQuadTreeIndex(
-            quadTreeIndexRequest
-        );
+        const response =
+            await queryClient.fetchQuadTreeIndex(quadTreeIndexRequest);
 
         assert.isDefined(response);
         expect(response).to.be.equal(mockedQuadKeyTreeData);
     });
 
-    it("Should method fetchQuadTreeIndex return error if quadKey is not provided", async function() {
+    it("Should method fetchQuadTreeIndex return error if quadKey is not provided", async function () {
         const mockedErrorResponse = "Please provide correct QuadKey";
         const queryClient = new dataServiceRead.QueryClient(
             olpClientSettingsStub as any
@@ -137,13 +141,13 @@ describe("QueryClient", function() {
 
         const result = await queryClient
             .fetchQuadTreeIndex(quadTreeIndexRequest)
-            .catch(error => {
+            .catch((error) => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error);
             });
     });
 
-    it("Should method fetchQuadTreeIndex return error if layerId is not provided", async function() {
+    it("Should method fetchQuadTreeIndex return error if layerId is not provided", async function () {
         const mockedErrorResponse = "Please provide correct Id of the Layer";
         const queryClient = new dataServiceRead.QueryClient(
             olpClientSettingsStub as any
@@ -158,20 +162,20 @@ describe("QueryClient", function() {
 
         const result = await queryClient
             .fetchQuadTreeIndex(quadTreeIndexRequest)
-            .catch(error => {
+            .catch((error) => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error);
             });
     });
 
-    it("Should method fetchQuadTreeIndex return error if catalog version is not provided", async function() {
+    it("Should method fetchQuadTreeIndex return error if catalog version is not provided", async function () {
         const mockedErrorResponse = `Please provide correct catalog version`;
         const queryClient = new dataServiceRead.QueryClient(
             olpClientSettingsStub as any
         );
         assert.isDefined(queryClient);
 
-        getVersionStub.callsFake(
+        getVersionStub.mockImplementation(
             (
                 builder: any,
                 params: any
@@ -188,13 +192,13 @@ describe("QueryClient", function() {
 
         const result = await queryClient
             .fetchQuadTreeIndex(quadTreeIndexRequest)
-            .catch(error => {
+            .catch((error) => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error);
             });
     });
 
-    it("Should method fetchQuadTreeIndex return error if catalog version is not provided", async function() {
+    it("Should method fetchQuadTreeIndex return error if catalog version is not provided", async function () {
         const mockedError = "Unknown error";
         const mockedErrorResponse = `Error getting the last catalog version: ${mockedError}`;
         const queryClient = new dataServiceRead.QueryClient(
@@ -202,7 +206,7 @@ describe("QueryClient", function() {
         );
         assert.isDefined(queryClient);
 
-        getVersionStub.callsFake(
+        getVersionStub.mockImplementation(
             (
                 builder: any,
                 params: any
@@ -219,13 +223,13 @@ describe("QueryClient", function() {
 
         const result = await queryClient
             .fetchQuadTreeIndex(quadTreeIndexRequest)
-            .catch(error => {
+            .catch((error) => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error);
             });
     });
 
-    it("Should method getPartitionsById provide data with all parameters", async function() {
+    it("Should method getPartitionsById provide data with all parameters", async function () {
         const mockedIds = ["1", "2", "13", "42"];
         const mockedLayerId = "fake-layer-id";
         const mockedHRN = core.HRN.fromString("hrn:here:data:::mocked-hrn");
@@ -251,15 +255,14 @@ describe("QueryClient", function() {
         );
         assert.isDefined(queryClient);
 
-        getPartitionsByIdStub.callsFake(
+        getPartitionsByIdStub.mockImplementation(
             (builder: any, params: any): Promise<QueryApi.Partitions> => {
                 return Promise.resolve(mockedPartitionsResponse);
             }
         );
 
-        const partitionsRequest = new dataServiceRead.PartitionsRequest().withPartitionIds(
-            mockedIds
-        );
+        const partitionsRequest =
+            new dataServiceRead.PartitionsRequest().withPartitionIds(mockedIds);
 
         const response = await queryClient.getPartitionsById(
             partitionsRequest,
@@ -271,7 +274,7 @@ describe("QueryClient", function() {
         expect(response).to.be.equal(mockedPartitionsResponse);
     });
 
-    it("Should method getPartitionsById return error if partitionIds list is not provided", async function() {
+    it("Should method getPartitionsById return error if partitionIds list is not provided", async function () {
         const mockedErrorResponse = "Please provide correct partitionIds list";
         const mockedLayerId = "fake-layer-id";
         const mockedHRN = core.HRN.fromString("hrn:here:data:::mocked-hrn");
@@ -284,7 +287,7 @@ describe("QueryClient", function() {
 
         const response = await queryClient
             .getPartitionsById(partitionsRequest, mockedLayerId, mockedHRN)
-            .catch(error => {
+            .catch((error) => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error);
             });

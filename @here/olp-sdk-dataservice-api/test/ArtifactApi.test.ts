@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2022 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,22 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { ArtifactApi } from "@here/olp-sdk-dataservice-api";
 import { RequestBuilder, UrlBuilder } from "../lib/RequestBuilder";
 
-chai.use(sinonChai);
-
-const expect = chai.expect;
-
-describe("ArtifactApi", function() {
-    it("deleteArtifactUsingDELETE", async function() {
+describe("ArtifactApi", function () {
+    it("deleteArtifactUsingDELETE", async function () {
         const params = {
             artifactHrn: "mocked-artifactHrn"
         };
@@ -43,14 +47,14 @@ describe("ArtifactApi", function() {
             }
         };
         const result = await ArtifactApi.deleteArtifactUsingDELETE(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("deleteFileUsingDELETE", async function() {
+    it("deleteFileUsingDELETE", async function () {
         const params = {
             artifactHrn: "mocked-artifactHrn",
             fileName: "mocked-fileName"
@@ -66,14 +70,14 @@ describe("ArtifactApi", function() {
             }
         };
         const result = await ArtifactApi.deleteFileUsingDELETE(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("getArtifactFileUsingGET", async function() {
+    it("getArtifactFileUsingGET", async function () {
         const params = {
             artifactHrn: "mocked-artifactHrn",
             fileName: "mocked-fileName"
@@ -89,14 +93,14 @@ describe("ArtifactApi", function() {
             }
         };
         const result = await ArtifactApi.getArtifactFileUsingGET(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("getArtifactUsingGET", async function() {
+    it("getArtifactUsingGET", async function () {
         const params = {
             artifactHrn: "mocked-artifactHrn",
             fileName: "mocked-fileName"
@@ -112,14 +116,14 @@ describe("ArtifactApi", function() {
             }
         };
         const result = await ArtifactApi.getArtifactUsingGET(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("putArtifactFileUsingPUT", async function() {
+    it("putArtifactFileUsingPUT", async function () {
         const params = {
             artifactHrn: "mocked-artifactHrn",
             fileName: "mocked-fileName",
@@ -140,14 +144,14 @@ describe("ArtifactApi", function() {
             }
         };
         const result = await ArtifactApi.putArtifactFileUsingPUT(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("registerArtifactUsingPUT", async function() {
+    it("registerArtifactUsingPUT", async function () {
         const params = {
             groupId: "mocked-groupId",
             artifactId: "mocked-artifactId",
@@ -170,14 +174,14 @@ describe("ArtifactApi", function() {
             }
         };
         const result = await ArtifactApi.registerArtifactUsingPUT(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("deleteSchemaUsingDELETE", async function() {
+    it("deleteSchemaUsingDELETE", async function () {
         const params = {
             schemaHrn: "mocked-schemaHrn"
         };
@@ -192,14 +196,14 @@ describe("ArtifactApi", function() {
             }
         };
         const result = await ArtifactApi.deleteSchemaUsingDELETE(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("getDocumentUsingGET", async function() {
+    it("getDocumentUsingGET", async function () {
         const params = {
             schemaHrn: "mocked-schemaHrn",
             file: "mocked-file"
@@ -215,14 +219,14 @@ describe("ArtifactApi", function() {
             }
         };
         const result = await ArtifactApi.getDocumentUsingGET(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("getSchemaUsingGET", async function() {
+    it("getSchemaUsingGET", async function () {
         const params = {
             schemaHrn: "mocked-schemaHrn"
         };
@@ -237,14 +241,14 @@ describe("ArtifactApi", function() {
             }
         };
         const result = await ArtifactApi.getSchemaUsingGET(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("listUsingGET", async function() {
+    it("listUsingGET", async function () {
         const params = {
             sort: "mocked-sort",
             order: "mocked-order" as any,
@@ -262,14 +266,14 @@ describe("ArtifactApi", function() {
             }
         };
         const result = await ArtifactApi.listUsingGET(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("updateSchemaPermissionUsingPOST", async function() {
+    it("updateSchemaPermissionUsingPOST", async function () {
         const params = {
             schemaHrn: "mocked-schemaHrn",
             updatePermissionRequest: "mocked-updatePermissionRequest" as any
@@ -291,7 +295,7 @@ describe("ArtifactApi", function() {
             }
         };
         const result = await ArtifactApi.updateSchemaPermissionUsingPOST(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 

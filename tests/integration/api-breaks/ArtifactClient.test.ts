@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,75 +16,78 @@
  * SPDX-License-Identifier: Apache-2.0
  * License-Filename: LICENSE
  */
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
 
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { ArtifactClient } from "@here/olp-sdk-dataservice-read";
 import * as dataServiceRead from "@here/olp-sdk-dataservice-read";
 import * as dataServiceApi from "@here/olp-sdk-dataservice-api";
 import * as dataserviceCore from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
+describe("ArtifactClient", function () {
+    class ArtifactClientTest extends ArtifactClient {
+        constructor(settings: dataserviceCore.OlpClientSettings) {
+            super(settings);
+        }
 
-const assert = chai.assert;
-const expect = chai.expect;
+        public async getSchemaDetails(
+            schemaDetailsRequest: dataServiceRead.SchemaDetailsRequest
+        ): Promise<dataServiceApi.ArtifactApi.GetSchemaResponseObj> {
+            return {
+                variants: [
+                    {
+                        id: "test",
+                        url: "test"
+                    }
+                ]
+            };
+        }
 
-describe("ArtifactClient", function() {
-  class ArtifactClientTest extends ArtifactClient {
-    constructor(settings: dataserviceCore.OlpClientSettings) {
-      super(settings);
+        public async getSchema(
+            schemaRequest: dataServiceRead.SchemaRequest
+        ): Promise<ArrayBuffer> {
+            return new ArrayBuffer(162);
+        }
     }
 
-    public async getSchemaDetails(
-      schemaDetailsRequest: dataServiceRead.SchemaDetailsRequest
-    ): Promise<dataServiceApi.ArtifactApi.GetSchemaResponseObj> {
-      return {
-        variants: [
-          {
-            id: "test",
-            url: "test"
-          }
-        ]
-      };
-    }
+    let settings = new dataserviceCore.OlpClientSettings({
+        environment: "here",
+        getToken: () => Promise.resolve("mocked-token")
+    });
 
-    public async getSchema(
-      schemaRequest: dataServiceRead.SchemaRequest
-    ): Promise<ArrayBuffer> {
-      return new ArrayBuffer(162);
-    }
-  }
+    it("Shoud be initialized with arguments", async function () {
+        const artifactClient = new ArtifactClient(settings);
+        assert.isDefined(artifactClient);
 
-  let settings = new dataserviceCore.OlpClientSettings({
-    environment: "here",
-    getToken: () => Promise.resolve("mocked-token")
-  });
+        expect(artifactClient).to.be.instanceOf(ArtifactClient);
+        assert.isDefined(artifactClient.getSchemaDetails);
+        assert.isDefined(artifactClient.getSchema);
+    });
 
-  it("Shoud be initialized with arguments", async function() {
-    const artifactClient = new ArtifactClient(settings);
-    assert.isDefined(artifactClient);
+    it("Test getSchemaDetails method with schemaDetailsRequest", async function () {
+        const artifactClient = new ArtifactClientTest(settings);
 
-    expect(artifactClient).to.be.instanceOf(ArtifactClient);
-    assert.isDefined(artifactClient.getSchemaDetails);
-    assert.isDefined(artifactClient.getSchema);
-  });
+        const response = await artifactClient.getSchemaDetails(
+            new dataServiceRead.SchemaDetailsRequest()
+        );
+        assert.isDefined(response);
+    });
 
-  it("Test getSchemaDetails method with schemaDetailsRequest", async function() {
-    const artifactClient = new ArtifactClientTest(settings);
+    it("Test getSchema method with schemaRequest", async function () {
+        const artifactClient = new ArtifactClientTest(settings);
 
-    const response = await artifactClient.getSchemaDetails(
-      new dataServiceRead.SchemaDetailsRequest()
-    );
-    assert.isDefined(response);
-  });
-
-  it("Test getSchema method with schemaRequest", async function() {
-    const artifactClient = new ArtifactClientTest(settings);
-
-    const response = await artifactClient.getSchema(
-      new dataServiceRead.SchemaRequest()
-    );
-    assert.isDefined(response);
-  });
+        const response = await artifactClient.getSchema(
+            new dataServiceRead.SchemaRequest()
+        );
+        assert.isDefined(response);
+    });
 });

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 HERE Europe B.V.
+ * Copyright (C) 2021-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,18 +19,22 @@
 
 // tslint:disable: no-magic-numbers
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { InteractiveApi, RequestOptions } from "@here/olp-sdk-dataservice-api";
 import { MockedRequestBuilder } from "./MockedRequestBuilder";
 
-chai.use(sinonChai);
-
-const expect = chai.expect;
-
-describe("InteractiveApi", function() {
-    it("getApiVersion", async function() {
+describe("InteractiveApi", function () {
+    it("getApiVersion", async function () {
         expect(
             await InteractiveApi.getApiVersion(
                 new MockedRequestBuilder({
@@ -44,7 +48,7 @@ describe("InteractiveApi", function() {
         ).eqls("success");
     });
 
-    it("getHealth", async function() {
+    it("getHealth", async function () {
         expect(
             await InteractiveApi.getHealth(
                 new MockedRequestBuilder({
@@ -58,7 +62,7 @@ describe("InteractiveApi", function() {
         ).eqls("success");
     });
 
-    it("getFeature", async function() {
+    it("getFeature", async function () {
         expect(
             await InteractiveApi.getFeature(
                 new MockedRequestBuilder({
@@ -117,7 +121,7 @@ describe("InteractiveApi", function() {
         ).eqls("success");
     });
 
-    it("getFeatures", async function() {
+    it("getFeatures", async function () {
         expect(
             await InteractiveApi.getFeatures(
                 new MockedRequestBuilder({
@@ -158,7 +162,7 @@ describe("InteractiveApi", function() {
         ).eqls("success");
     });
 
-    it("getFeaturesByBBox", async function() {
+    it("getFeaturesByBBox", async function () {
         expect(
             await InteractiveApi.getFeaturesByBBox(
                 new MockedRequestBuilder({
@@ -238,7 +242,7 @@ describe("InteractiveApi", function() {
         ).eqls("success");
     });
 
-    it("getFeaturesBySpatial", async function() {
+    it("getFeaturesBySpatial", async function () {
         expect(
             await InteractiveApi.getFeaturesBySpatial(
                 new MockedRequestBuilder({
@@ -315,7 +319,7 @@ describe("InteractiveApi", function() {
         ).eqls("success");
     });
 
-    it("getFeaturesBySpatialPost", async function() {
+    it("getFeaturesBySpatialPost", async function () {
         expect(
             await InteractiveApi.getFeaturesBySpatialPost(
                 new MockedRequestBuilder({
@@ -414,7 +418,7 @@ describe("InteractiveApi", function() {
         ).eqls("success");
     });
 
-    it("getFeaturesByTile", async function() {
+    it("getFeaturesByTile", async function () {
         expect(
             await InteractiveApi.getFeaturesByTile(
                 new MockedRequestBuilder({
@@ -478,7 +482,7 @@ describe("InteractiveApi", function() {
         ).eqls("success");
     });
 
-    it("getStatistics", async function() {
+    it("getStatistics", async function () {
         expect(
             await InteractiveApi.getStatistics(
                 new MockedRequestBuilder({
@@ -515,7 +519,7 @@ describe("InteractiveApi", function() {
         ).eqls("success");
     });
 
-    it("iterateFeatures", async function() {
+    it("iterateFeatures", async function () {
         expect(
             await InteractiveApi.iterateFeatures(
                 new MockedRequestBuilder({
@@ -558,7 +562,7 @@ describe("InteractiveApi", function() {
         ).eqls("success");
     });
 
-    it("searchFeatures", async function() {
+    it("searchFeatures", async function () {
         expect(
             await InteractiveApi.searchFeatures(
                 new MockedRequestBuilder({
@@ -620,7 +624,7 @@ describe("InteractiveApi", function() {
         ).eqls("success");
     });
 
-    it("deleteFeature", async function() {
+    it("deleteFeature", async function () {
         expect(
             await InteractiveApi.deleteFeature(
                 new MockedRequestBuilder({
@@ -643,7 +647,7 @@ describe("InteractiveApi", function() {
         ).eqls("success");
     });
 
-    it("deleteFeatures", async function() {
+    it("deleteFeatures", async function () {
         expect(
             await InteractiveApi.deleteFeatures(
                 new MockedRequestBuilder({
@@ -666,7 +670,7 @@ describe("InteractiveApi", function() {
         ).eqls("success");
     });
 
-    it("patchFeature", async function() {
+    it("patchFeature", async function () {
         expect(
             await InteractiveApi.patchFeature(
                 new MockedRequestBuilder({
@@ -695,7 +699,7 @@ describe("InteractiveApi", function() {
         ).eqls("success");
     });
 
-    it("postFeatures", async function() {
+    it("postFeatures", async function () {
         expect(
             await InteractiveApi.postFeatures(
                 new MockedRequestBuilder({
@@ -726,7 +730,7 @@ describe("InteractiveApi", function() {
         ).eqls("success");
     });
 
-    it("putFeature", async function() {
+    it("putFeature", async function () {
         expect(
             await InteractiveApi.putFeature(
                 new MockedRequestBuilder({
@@ -752,7 +756,7 @@ describe("InteractiveApi", function() {
         ).eqls("success");
     });
 
-    it("putFeatures", async function() {
+    it("putFeatures", async function () {
         expect(
             await InteractiveApi.putFeatures(
                 new MockedRequestBuilder({

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 HERE Europe B.V.
+ * Copyright (C) 2021-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,22 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { ObjectStoreApi } from "@here/olp-sdk-dataservice-api";
 import { RequestBuilder, UrlBuilder } from "../lib/RequestBuilder";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("ObjectStoreApi", function() {
-    it("cancelMultipartUploadByKey", async function() {
+describe("ObjectStoreApi", function () {
+    it("cancelMultipartUploadByKey", async function () {
         const params = {
             layerId: "mocked-id",
             multipartToken: "mocked-multiPartToken"
@@ -45,14 +48,14 @@ describe("ObjectStoreApi", function() {
             }
         };
         const result = await ObjectStoreApi.cancelMultipartUploadByKey(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("checkKeyExists", async function() {
+    it("checkKeyExists", async function () {
         const params = {
             layerId: "mocked-id",
             key: "mocked-key"
@@ -68,14 +71,14 @@ describe("ObjectStoreApi", function() {
             }
         };
         const result = await ObjectStoreApi.checkKeyExists(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("completeMultipartUploadByKey", async function() {
+    it("completeMultipartUploadByKey", async function () {
         const params = {
             layerId: "mocked-id",
             multipartToken: "mocked-multiPartToken"
@@ -91,14 +94,14 @@ describe("ObjectStoreApi", function() {
             }
         };
         const result = await ObjectStoreApi.completeMultipartUploadByKey(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("deleteBlobByKey", async function() {
+    it("deleteBlobByKey", async function () {
         const params = {
             layerId: "mocked-id",
             key: "mocked-key"
@@ -114,14 +117,14 @@ describe("ObjectStoreApi", function() {
             }
         };
         const result = await ObjectStoreApi.deleteBlobByKey(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("getBlobByKey", async function() {
+    it("getBlobByKey", async function () {
         const params = {
             layerId: "mocked-id",
             key: "mocked-key"
@@ -137,14 +140,14 @@ describe("ObjectStoreApi", function() {
             }
         };
         const result = await ObjectStoreApi.getBlobByKey(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("getMultipartUploadStatusByKey", async function() {
+    it("getMultipartUploadStatusByKey", async function () {
         const params = {
             layerId: "mocked-id",
             multipartToken: "mocked-multiPartToken"
@@ -160,14 +163,14 @@ describe("ObjectStoreApi", function() {
             }
         };
         const result = await ObjectStoreApi.getMultipartUploadStatusByKey(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("listKeys", async function() {
+    it("listKeys", async function () {
         const params = {
             layerId: "mocked-id"
         };
@@ -182,14 +185,14 @@ describe("ObjectStoreApi", function() {
             }
         };
         const result = await ObjectStoreApi.listKeys(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("putBlobByKey", async function() {
+    it("putBlobByKey", async function () {
         const params = {
             layerId: "mocked-id",
             key: "mocked-key",
@@ -209,14 +212,14 @@ describe("ObjectStoreApi", function() {
             }
         };
         const result = await ObjectStoreApi.putBlobByKey(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("startMultipartUploadByKey", async function() {
+    it("startMultipartUploadByKey", async function () {
         const params = {
             layerId: "mocked-id",
             key: "mocked-key",
@@ -240,14 +243,14 @@ describe("ObjectStoreApi", function() {
             }
         };
         const result = await ObjectStoreApi.startMultipartUploadByKey(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("uploadPartByKey data is string", async function() {
+    it("uploadPartByKey data is string", async function () {
         const params = {
             layerId: "mocked-id",
             body: "mocked-body",
@@ -266,14 +269,14 @@ describe("ObjectStoreApi", function() {
             }
         };
         const result = await ObjectStoreApi.uploadPartByKey(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("uploadPartByKey data us buffer", async function() {
+    it("uploadPartByKey data us buffer", async function () {
         const mockedData = Buffer.from("mocked-body", "utf8");
         const params = {
             layerId: "mocked-id",
@@ -300,14 +303,14 @@ describe("ObjectStoreApi", function() {
             }
         };
         const result = await ObjectStoreApi.uploadPartByKey(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("doUploadPartByKey witout required params", async function() {
+    it("doUploadPartByKey witout required params", async function () {
         const mockedData = Buffer.from("mocked-body", "utf8");
         const params = {
             layerId: "mocked-id",
@@ -332,7 +335,7 @@ describe("ObjectStoreApi", function() {
             }
         };
         const result = await ObjectStoreApi.uploadPartByKey(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 

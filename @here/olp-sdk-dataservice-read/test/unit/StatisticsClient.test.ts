@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2021 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,71 +17,70 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
+import { createStubInstance } from "./stub-instance";
 import * as dataServiceRead from "../../lib";
 import { CoverageApi } from "@here/olp-sdk-dataservice-api";
 import * as core from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-
-describe("StatistiscClient", function() {
-    let sandbox: sinon.SinonSandbox;
-    let olpClientSettingsStub: sinon.SinonStubbedInstance<core.OlpClientSettings>;
-    let getDataCoverageSummaryStub: sinon.SinonStub;
-    let getStatisticsBitMapStub: sinon.SinonStub;
-    let getStatisticsSizeMapStub: sinon.SinonStub;
-    let getStatisticsTimeMapStub: sinon.SinonStub;
-    let getBaseUrlRequestStub: sinon.SinonStub;
+describe("StatistiscClient", function () {
+    let olpClientSettingsStub: any;
+    let getDataCoverageSummaryStub: any;
+    let getStatisticsBitMapStub: any;
+    let getStatisticsSizeMapStub: any;
+    let getStatisticsTimeMapStub: any;
+    let getBaseUrlRequestStub: any;
     const mockedHRN = core.HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
 
-    before(function() {
-        sandbox = sinon.createSandbox();
+    beforeAll(function () {});
+
+    beforeEach(function () {
+        olpClientSettingsStub = createStubInstance(core.OlpClientSettings);
+        getBaseUrlRequestStub = vi
+            .spyOn(core.RequestFactory, "getBaseUrl")
+            .mockReturnValue(undefined as any);
+        getDataCoverageSummaryStub = vi
+            .spyOn(CoverageApi, "getDataCoverageSummary")
+            .mockReturnValue(undefined as any);
+        getStatisticsBitMapStub = vi
+            .spyOn(CoverageApi, "getDataCoverageTile")
+            .mockReturnValue(undefined as any);
+        getStatisticsSizeMapStub = vi
+            .spyOn(CoverageApi, "getDataCoverageSizeMap")
+            .mockReturnValue(undefined as any);
+        getStatisticsTimeMapStub = vi
+            .spyOn(CoverageApi, "getDataCoverageTimeMap")
+            .mockReturnValue(undefined as any);
+
+        getBaseUrlRequestStub.mockImplementation(() =>
+            Promise.resolve(fakeURL)
+        );
     });
 
-    beforeEach(function() {
-        olpClientSettingsStub = sandbox.createStubInstance(
-            core.OlpClientSettings
-        );
-        getBaseUrlRequestStub = sandbox.stub(core.RequestFactory, "getBaseUrl");
-        getDataCoverageSummaryStub = sandbox.stub(
-            CoverageApi,
-            "getDataCoverageSummary"
-        );
-        getStatisticsBitMapStub = sandbox.stub(
-            CoverageApi,
-            "getDataCoverageTile"
-        );
-        getStatisticsSizeMapStub = sandbox.stub(
-            CoverageApi,
-            "getDataCoverageSizeMap"
-        );
-        getStatisticsTimeMapStub = sandbox.stub(
-            CoverageApi,
-            "getDataCoverageTimeMap"
-        );
-
-        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
+    afterEach(function () {
+        vi.restoreAllMocks();
     });
 
-    afterEach(function() {
-        sandbox.restore();
-    });
-
-    it("Shoud be initialised with context", async function() {
+    it("Shoud be initialised with context", async function () {
         const statisticsClient = new dataServiceRead.StatisticsClient(
             olpClientSettingsStub as any
         );
         assert.isDefined(statisticsClient);
     });
 
-    it("Should method getSummary provide data", async function() {
+    it("Should method getSummary provide data", async function () {
         const mockedSummary: CoverageApi.LayerSummary = {
             catalogHRN: "hrn:here:data:::mocked-hrn",
             layer: mockedLayerId,
@@ -107,7 +106,7 @@ describe("StatistiscClient", function() {
             olpClientSettingsStub as any
         );
         assert.isDefined(statisticsClient);
-        getDataCoverageSummaryStub.callsFake(
+        getDataCoverageSummaryStub.mockImplementation(
             (builder: any, params: any): Promise<CoverageApi.LayerSummary> => {
                 return Promise.resolve(mockedSummary);
             }
@@ -121,7 +120,7 @@ describe("StatistiscClient", function() {
         assert.isDefined(summary);
     });
 
-    it("Should method getSummary return error if catalogHRN is not provided", async function() {
+    it("Should method getSummary return error if catalogHRN is not provided", async function () {
         const mockedErrorResponse = "No catalogHrn provided";
         const statisticsClient = new dataServiceRead.StatisticsClient(
             olpClientSettingsStub as any
@@ -134,48 +133,47 @@ describe("StatistiscClient", function() {
 
         const summary = await statisticsClient
             .getSummary(summaryRequest)
-            .catch(error => {
+            .catch((error) => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.message);
             });
     });
 
-    it("Should method getSummary return error if layerId is not provided", async function() {
+    it("Should method getSummary return error if layerId is not provided", async function () {
         const mockedErrorResponse = "No layerId provided";
         const statisticsClient = new dataServiceRead.StatisticsClient(
             olpClientSettingsStub as any
         );
         assert.isDefined(statisticsClient);
 
-        const summaryRequest = new dataServiceRead.SummaryRequest().withCatalogHrn(
-            mockedHRN
-        );
+        const summaryRequest =
+            new dataServiceRead.SummaryRequest().withCatalogHrn(mockedHRN);
 
         const summary = await statisticsClient
             .getSummary(summaryRequest)
-            .catch(error => {
+            .catch((error) => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.message);
             });
     });
 
-    it("Should method getStatistics provide data", async function() {
+    it("Should method getStatistics provide data", async function () {
         const mockedStatistics: Response = new Response("mocked-response");
         const statisticsClient = new dataServiceRead.StatisticsClient(
             olpClientSettingsStub as any
         );
         assert.isDefined(statisticsClient);
-        getStatisticsBitMapStub.callsFake(
+        getStatisticsBitMapStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.resolve(mockedStatistics);
             }
         );
-        getStatisticsSizeMapStub.callsFake(
+        getStatisticsSizeMapStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.resolve(mockedStatistics);
             }
         );
-        getStatisticsTimeMapStub.callsFake(
+        getStatisticsTimeMapStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.resolve(mockedStatistics);
             }
@@ -215,7 +213,7 @@ describe("StatistiscClient", function() {
         assert.isDefined(statisticTimeMap);
     });
 
-    it("Should method getStatistics return error if catalogHRN is not provided", async function() {
+    it("Should method getStatistics return error if catalogHRN is not provided", async function () {
         const mockedErrorResponse = "No catalogHrn provided";
         const statisticsClient = new dataServiceRead.StatisticsClient(
             olpClientSettingsStub as any
@@ -229,13 +227,13 @@ describe("StatistiscClient", function() {
 
         const statistic = await statisticsClient
             .getStatistics(statisticRequest)
-            .catch(error => {
+            .catch((error) => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.message);
             });
     });
 
-    it("Should method getStatistics return error if layerId is not provided", async function() {
+    it("Should method getStatistics return error if layerId is not provided", async function () {
         const mockedErrorResponse = "No layerId provided";
         const statisticsClient = new dataServiceRead.StatisticsClient(
             olpClientSettingsStub as any
@@ -249,13 +247,13 @@ describe("StatistiscClient", function() {
 
         const statistic = await statisticsClient
             .getStatistics(statisticRequest)
-            .catch(error => {
+            .catch((error) => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.message);
             });
     });
 
-    it("Should method getStatistics return error if typemap is not provided", async function() {
+    it("Should method getStatistics return error if typemap is not provided", async function () {
         const mockedErrorResponse = "No typemap provided";
         const statisticsClient = new dataServiceRead.StatisticsClient(
             olpClientSettingsStub as any
@@ -269,29 +267,29 @@ describe("StatistiscClient", function() {
 
         const statistic = await statisticsClient
             .getStatistics(statisticRequest)
-            .catch(error => {
+            .catch((error) => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.message);
             });
     });
 
-    it("Should method getStatistics provide data if dataLevel not set", async function() {
+    it("Should method getStatistics provide data if dataLevel not set", async function () {
         const mockedStatistics: Response = new Response("mocked-response");
         const statisticsClient = new dataServiceRead.StatisticsClient(
             olpClientSettingsStub as any
         );
         assert.isDefined(statisticsClient);
-        getStatisticsBitMapStub.callsFake(
+        getStatisticsBitMapStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.resolve(mockedStatistics);
             }
         );
-        getStatisticsSizeMapStub.callsFake(
+        getStatisticsSizeMapStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.resolve(mockedStatistics);
             }
         );
-        getStatisticsTimeMapStub.callsFake(
+        getStatisticsTimeMapStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.resolve(mockedStatistics);
             }

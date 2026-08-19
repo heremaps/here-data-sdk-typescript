@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,23 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { AuthorizationAPI } from "@here/olp-sdk-dataservice-api";
 
 import { RequestBuilder, UrlBuilder } from "../lib/RequestBuilder";
 
-chai.use(sinonChai);
-
-const expect = chai.expect;
-
-describe("AuthorizationApi", function() {
-    it("getEntityGroupMembership", async function() {
+describe("AuthorizationApi", function () {
+    it("getEntityGroupMembership", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -41,7 +45,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getEntityGroupMembership(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 realm: "mocked-realm",
                 member: "mocked-member",
@@ -53,7 +57,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getEntityManagedGroups", async function() {
+    it("getEntityManagedGroups", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -65,7 +69,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getEntityManagedGroups(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 realm: "mocked-realm",
                 member: "mocked-member",
@@ -77,7 +81,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getRealmMember", async function() {
+    it("getRealmMember", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -89,7 +93,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getRealmMember(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 realm: "mocked-realm",
                 member: "mocked-member"
@@ -99,7 +103,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getRealmMembers", async function() {
+    it("getRealmMembers", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -111,7 +115,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getRealmMembers(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 realm: "mocked-realm",
                 pageToken: "mocked-page-token",
@@ -125,7 +129,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("cancelRealmMemberInvite", async function() {
+    it("cancelRealmMemberInvite", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (
@@ -140,7 +144,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.cancelRealmMemberInvite(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 realm: "mocked-realm",
                 invite: "mocked-invite"
@@ -150,7 +154,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("createRealmMemberInvite", async function() {
+    it("createRealmMemberInvite", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -165,7 +169,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.createRealmMemberInvite(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 realm: "mocked-realm",
                 body: {
@@ -180,7 +184,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("resendRealmMemberInvite", async function() {
+    it("resendRealmMemberInvite", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (
@@ -195,7 +199,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.resendRealmMemberInvite(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 realm: "mocked-realm",
                 invite: "mocked-invite"
@@ -205,7 +209,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("searchRealmMemberInvites", async function() {
+    it("searchRealmMemberInvites", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -217,7 +221,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.searchRealmMemberInvites(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 realm: "mocked-realm",
                 group: "mocked-group",
@@ -230,7 +234,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("addGrant", async function() {
+    it("addGrant", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -242,7 +246,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.addGrant(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 resourceHrn: "mocked-resourceHrn",
                 entityId: "mocked-entityId",
@@ -254,7 +258,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getGrant", async function() {
+    it("getGrant", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -266,7 +270,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getGrant(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 resourceHrn: "mocked-resourceHrn",
                 entityId: "mocked-entityId",
@@ -278,7 +282,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getGrants", async function() {
+    it("getGrants", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -290,7 +294,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getGrants(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 resourceHrn: "mocked-resourceHrn",
                 entityId: "mocked-entityId",
@@ -301,7 +305,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("listGrants", async function() {
+    it("listGrants", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -313,7 +317,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.listGrants(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 resourceHrn: "mocked-resourceHrn",
                 entityType: "mocked-entityType",
@@ -325,7 +329,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("removeGrant", async function() {
+    it("removeGrant", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (
@@ -340,7 +344,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.removeGrant(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 resourceHrn: "mocked-resourceHrn",
                 entityId: "mocked-entityId",
@@ -352,7 +356,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("addRoleEntity", async function() {
+    it("addRoleEntity", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (
@@ -367,7 +371,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.addRoleEntity(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 role: "mocked-role",
                 entity: "mocked-entity"
@@ -377,7 +381,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("deleteRoleEntity", async function() {
+    it("deleteRoleEntity", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (
@@ -392,7 +396,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.deleteRoleEntity(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 role: "mocked-role",
                 entity: "mocked-entity"
@@ -402,7 +406,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getMyRoles", async function() {
+    it("getMyRoles", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -414,7 +418,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getMyRoles(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 pageToken: "mocked-pageToken",
                 count: 5
@@ -424,7 +428,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getRole", async function() {
+    it("getRole", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -436,7 +440,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getRole(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 role: "mocked-role"
             }
@@ -445,7 +449,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getRoleEntities", async function() {
+    it("getRoleEntities", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -457,7 +461,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getRoleEntities(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 role: "mocked-role",
                 pageToken: "mocked-pageToken",
@@ -468,7 +472,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getRoleEntity", async function() {
+    it("getRoleEntity", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -480,7 +484,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getRoleEntity(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 role: "mocked-role",
                 entity: "mocked-entity"
@@ -490,7 +494,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getRolePermissions", async function() {
+    it("getRolePermissions", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -502,7 +506,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getRolePermissions(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 role: "mocked-role",
                 pageToken: "mocked-pageToken",
@@ -513,7 +517,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getRolePermission", async function() {
+    it("getRolePermission", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -525,7 +529,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getRolePermission(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 role: "mocked-role",
                 permission: "mocked-permission"
@@ -535,7 +539,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getRoles", async function() {
+    it("getRoles", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -547,7 +551,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getRoles(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 pageToken: "mocked-pageToken",
                 count: 5,
@@ -559,7 +563,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("addGroupMember", async function() {
+    it("addGroupMember", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (
@@ -574,7 +578,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.addGroupMember(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 groupId: "mocked-groupId",
                 member: "mocked-member"
@@ -584,7 +588,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("createGroup", async function() {
+    it("createGroup", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -598,7 +602,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.createGroup(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 body: {
                     name: "mocked-group",
@@ -613,7 +617,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("deleteGroup", async function() {
+    it("deleteGroup", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (
@@ -628,7 +632,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.deleteGroup(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 groupId: "mocked-groupId"
             }
@@ -637,7 +641,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getGroup", async function() {
+    it("getGroup", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -649,7 +653,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getGroup(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 groupId: "mocked-groupId"
             }
@@ -658,7 +662,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getGroupMember", async function() {
+    it("getGroupMember", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -670,7 +674,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getGroupMember(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 groupId: "mocked-groupId",
                 member: "mocked-member"
@@ -680,7 +684,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getGroupMembers", async function() {
+    it("getGroupMembers", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -692,7 +696,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getGroupMembers(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 groupId: "mocked-groupId",
                 pageToken: "mocked-pageToken",
@@ -704,7 +708,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getGroupRoles", async function() {
+    it("getGroupRoles", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -716,7 +720,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getGroupRoles(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 groupId: "mocked-groupId",
                 pageToken: "mocked-pageToken",
@@ -727,7 +731,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getGroups", async function() {
+    it("getGroups", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -739,7 +743,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getGroups(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 pageToken: "mocked-pageToken",
                 count: 5,
@@ -750,7 +754,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getMyGroups", async function() {
+    it("getMyGroups", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -762,7 +766,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getMyGroups(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 pageToken: "mocked-pageToken",
                 count: 5
@@ -772,7 +776,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("leaveGroup", async function() {
+    it("leaveGroup", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (
@@ -787,7 +791,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.leaveGroup(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 groupId: "mocked-groupId"
             }
@@ -796,7 +800,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("removeGroupMember", async function() {
+    it("removeGroupMember", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (
@@ -811,7 +815,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.removeGroupMember(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 groupId: "mocked-groupId",
                 member: "mocked-member"
@@ -821,7 +825,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("updateGroup", async function() {
+    it("updateGroup", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (urlBuilder: UrlBuilder, options: RequestInit) => {
@@ -837,7 +841,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.updateGroup(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 groupId: "mocked-groupId",
                 body: {
@@ -853,7 +857,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("addProjectMember", async function() {
+    it("addProjectMember", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (
@@ -872,7 +876,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.addProjectMember(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 member: "mocked-member",
@@ -883,7 +887,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("addProjectResourceRelation", async function() {
+    it("addProjectResourceRelation", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -906,7 +910,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.addProjectResourceRelation(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 resource: "mocked-resource",
@@ -922,7 +926,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("checkProjectExistance", async function() {
+    it("checkProjectExistance", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (
@@ -941,7 +945,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.checkProjectExistance(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 xCorrelationID: "mocked-xCorrelationID"
@@ -951,7 +955,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("createProject", async function() {
+    it("createProject", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -977,7 +981,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.createProject(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 body: {
                     id: "mocked-project-id",
@@ -991,7 +995,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("deleteProject", async function() {
+    it("deleteProject", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (
@@ -1010,7 +1014,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.deleteProject(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 xCorrelationID: "mocked-xCorrelationID"
@@ -1020,7 +1024,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("deleteProjectMember", async function() {
+    it("deleteProjectMember", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (
@@ -1039,7 +1043,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.deleteProjectMember(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 member: "mocked-member",
@@ -1050,7 +1054,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("deleteProjectResourceReference", async function() {
+    it("deleteProjectResourceReference", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (
@@ -1074,7 +1078,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.deleteProjectResourceReference(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 relation: "mocked-relation",
@@ -1089,7 +1093,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getAllProjectList", async function() {
+    it("getAllProjectList", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1108,7 +1112,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getAllProjectList(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 limit: 5,
                 pageToken: "mocked-page-token",
@@ -1119,7 +1123,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getProject", async function() {
+    it("getProject", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1138,7 +1142,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getProject(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 xCorrelationID: "mocked-xCorrelationID"
@@ -1148,7 +1152,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getProjectList", async function() {
+    it("getProjectList", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1167,7 +1171,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getProjectList(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 limit: 5,
                 pageToken: "mocked-page-token",
@@ -1180,7 +1184,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getProjectMember", async function() {
+    it("getProjectMember", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1199,7 +1203,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getProjectMember(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 member: "mocked-member",
@@ -1210,7 +1214,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getProjectResource", async function() {
+    it("getProjectResource", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1229,7 +1233,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getProjectResource(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 resource: "mocked-resource",
@@ -1241,7 +1245,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("leaveProject", async function() {
+    it("leaveProject", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (
@@ -1260,7 +1264,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.leaveProject(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 xCorrelationID: "mocked-xCorrelationID"
@@ -1270,7 +1274,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("listProjectMembers", async function() {
+    it("listProjectMembers", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1289,7 +1293,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.listProjectMembers(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 limit: 5,
@@ -1302,7 +1306,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("listProjectResources", async function() {
+    it("listProjectResources", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1321,7 +1325,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.listProjectResources(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 limit: 5,
@@ -1335,7 +1339,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("patchProject", async function() {
+    it("patchProject", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1360,7 +1364,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.patchProject(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 body: {
@@ -1374,7 +1378,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getResource", async function() {
+    it("getResource", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1393,7 +1397,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getResource(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 resource: "mocked-resource",
                 referenceable: true,
@@ -1404,7 +1408,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getListOfWaysResourceIsLinkable", async function() {
+    it("getListOfWaysResourceIsLinkable", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1423,7 +1427,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getListOfWaysResourceIsLinkable(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 resource: "mocked-resource",
                 limit: 5,
@@ -1435,7 +1439,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getResourceLinkability", async function() {
+    it("getResourceLinkability", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1454,7 +1458,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getResourceLinkability(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 resource: "mocked-resource",
                 availableToHrn: "mocked-availableToHrn",
@@ -1465,7 +1469,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getResourceProjects", async function() {
+    it("getResourceProjects", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1484,7 +1488,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getResourceProjects(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 resource: "mocked-resource",
                 limit: 5,
@@ -1497,7 +1501,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getResources", async function() {
+    it("getResources", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1516,7 +1520,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getResources(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 type: "catalog",
                 limit: 5,
@@ -1531,7 +1535,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("listRealmResources", async function() {
+    it("listRealmResources", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1550,7 +1554,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.listRealmResources(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 type: "catalog",
                 limit: 5,
@@ -1562,7 +1566,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("makeResourceLinkable", async function() {
+    it("makeResourceLinkable", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1588,7 +1592,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.makeResourceLinkable(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 resource: "mocked-resource",
                 body: {
@@ -1603,7 +1607,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("removeResourceLinkability", async function() {
+    it("removeResourceLinkability", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (
@@ -1622,7 +1626,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.removeResourceLinkability(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 resource: "mocked-resource",
                 availableToHrn: "mocked-availableToHrn",
@@ -1633,7 +1637,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("updateResourceLinkability", async function() {
+    it("updateResourceLinkability", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1659,7 +1663,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.updateResourceLinkability(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 resource: "mocked-resource",
                 availableToHrn: "mocked-availableToHrn",
@@ -1675,7 +1679,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("attachProjectPolicyToMember", async function() {
+    it("attachProjectPolicyToMember", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (
@@ -1690,7 +1694,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.attachProjectPolicyToMember(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 member: "mocked-member",
@@ -1701,7 +1705,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("createProjectPolicy", async function() {
+    it("createProjectPolicy", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1729,7 +1733,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.createProjectPolicy(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 body: {
@@ -1748,7 +1752,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("deleteProjectPolicy", async function() {
+    it("deleteProjectPolicy", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (
@@ -1763,7 +1767,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.deleteProjectPolicy(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 policy: "mocked-policy"
@@ -1773,7 +1777,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("detachProjectPolicyFromMember", async function() {
+    it("detachProjectPolicyFromMember", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             requestBlob: async (
@@ -1788,7 +1792,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.detachProjectPolicyFromMember(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 policy: "mocked-policy",
@@ -1799,7 +1803,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getAllProjectMembersWithAttachedPolicy", async function() {
+    it("getAllProjectMembersWithAttachedPolicy", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1816,21 +1820,22 @@ describe("AuthorizationApi", function() {
                 return Promise.resolve("success");
             }
         };
-        const result = await AuthorizationAPI.getAllProjectMembersWithAttachedPolicy(
-            (builder as unknown) as RequestBuilder,
-            {
-                project: "mocked-project",
-                policy: "mocked-policy",
-                xCorrelationID: "mocked-xCorelationID",
-                limit: 5,
-                pageToken: "mocked-page-token"
-            }
-        );
+        const result =
+            await AuthorizationAPI.getAllProjectMembersWithAttachedPolicy(
+                builder as unknown as RequestBuilder,
+                {
+                    project: "mocked-project",
+                    policy: "mocked-policy",
+                    xCorrelationID: "mocked-xCorelationID",
+                    limit: 5,
+                    pageToken: "mocked-page-token"
+                }
+            );
 
         expect(result).to.be.equal("success");
     });
 
-    it("getAttachedProjectPoliciesForMember", async function() {
+    it("getAttachedProjectPoliciesForMember", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1847,21 +1852,22 @@ describe("AuthorizationApi", function() {
                 return Promise.resolve("success");
             }
         };
-        const result = await AuthorizationAPI.getAttachedProjectPoliciesForMember(
-            (builder as unknown) as RequestBuilder,
-            {
-                project: "mocked-project",
-                member: "mocked-member",
-                xCorrelationID: "mocked-xCorelationID",
-                limit: 5,
-                pageToken: "mocked-page-token"
-            }
-        );
+        const result =
+            await AuthorizationAPI.getAttachedProjectPoliciesForMember(
+                builder as unknown as RequestBuilder,
+                {
+                    project: "mocked-project",
+                    member: "mocked-member",
+                    xCorrelationID: "mocked-xCorelationID",
+                    limit: 5,
+                    pageToken: "mocked-page-token"
+                }
+            );
 
         expect(result).to.be.equal("success");
     });
 
-    it("getAttachedProjectPolicyForMember", async function() {
+    it("getAttachedProjectPolicyForMember", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1876,7 +1882,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getAttachedProjectPolicyForMember(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 member: "mocked-member",
@@ -1887,7 +1893,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getProjectPolicy", async function() {
+    it("getProjectPolicy", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1902,7 +1908,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getProjectPolicy(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 policy: "mocked-policy"
@@ -1912,7 +1918,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getProjectPolicyList", async function() {
+    it("getProjectPolicyList", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1930,7 +1936,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getProjectPolicyList(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 projectPolicyType: "mocked-projectPolicyType",
@@ -1943,7 +1949,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("setAttachedProjectPoliciesToMember", async function() {
+    it("setAttachedProjectPoliciesToMember", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -1965,23 +1971,24 @@ describe("AuthorizationApi", function() {
                 return Promise.resolve("success");
             }
         };
-        const result = await AuthorizationAPI.setAttachedProjectPoliciesToMember(
-            (builder as unknown) as RequestBuilder,
-            {
-                project: "mocked-project",
-                member: "mocked-member",
-                body: [
-                    {
-                        policy: "mocked-policy"
-                    }
-                ]
-            }
-        );
+        const result =
+            await AuthorizationAPI.setAttachedProjectPoliciesToMember(
+                builder as unknown as RequestBuilder,
+                {
+                    project: "mocked-project",
+                    member: "mocked-member",
+                    body: [
+                        {
+                            policy: "mocked-policy"
+                        }
+                    ]
+                }
+            );
 
         expect(result).to.be.equal("success");
     });
 
-    it("updateProjectPolicy", async function() {
+    it("updateProjectPolicy", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -2009,7 +2016,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.updateProjectPolicy(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 policy: "mocked-policy",
@@ -2029,7 +2036,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getResourceActionsForProject", async function() {
+    it("getResourceActionsForProject", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -2047,7 +2054,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getResourceActionsForProject(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 project: "mocked-project",
                 resource: "mocked-resource",
@@ -2059,7 +2066,7 @@ describe("AuthorizationApi", function() {
         expect(result).to.be.equal("success");
     });
 
-    it("getResourceTypeActionList", async function() {
+    it("getResourceTypeActionList", async function () {
         const builder = {
             baseUrl: "http://mocked.url",
             request: async (
@@ -2077,7 +2084,7 @@ describe("AuthorizationApi", function() {
             }
         };
         const result = await AuthorizationAPI.getResourceTypeActionList(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             {
                 resourceType: "artifact",
                 xCorrelationID: "mocked-xCorelationID",

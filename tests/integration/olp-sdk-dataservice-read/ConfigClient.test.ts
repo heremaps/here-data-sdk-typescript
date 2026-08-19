@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,140 +17,142 @@
  * License-Filename: LICENSE
  */
 
-import * as sinon from "sinon";
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { ConfigClient, CatalogsRequest } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "../FetchMock";
 import { ConfigApi } from "@here/olp-sdk-dataservice-api";
 import { OlpClientSettings } from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
+describe("configClient", function () {
+    let fetchMock: FetchMock;
+    let fetchStub: any;
+    let configClient: ConfigClient;
+    let settings: OlpClientSettings;
 
-const assert = chai.assert;
-const expect = chai.expect;
+    beforeAll(function () {});
 
-describe("configClient", function() {
-  let fetchMock: FetchMock;
-  let sandbox: sinon.SinonSandbox;
-  let fetchStub: sinon.SinonStub;
-  let configClient: ConfigClient;
-  let settings: OlpClientSettings;
-
-  before(function() {
-    sandbox = sinon.createSandbox();
-  });
-
-  afterEach(function() {
-    sandbox.restore();
-  });
-
-  beforeEach(function() {
-    fetchMock = new FetchMock();
-    fetchStub = sandbox.stub(global as any, "fetch");
-    fetchStub.callsFake(fetchMock.fetch());
-
-    // Setup Config Client with new OlpClientSettings.
-    settings = new OlpClientSettings({
-      environment: "here",
-      getToken: () => Promise.resolve("test-token-string")
+    afterEach(function () {
+        vi.restoreAllMocks();
     });
-    configClient = new ConfigClient(settings);
-  });
 
-  it("Shoud be initialized with settings", async function() {
-    assert.isDefined(configClient);
-    expect(configClient).to.be.instanceOf(ConfigClient);
-  });
+    beforeEach(function () {
+        fetchMock = new FetchMock();
+        fetchStub = vi.spyOn(global as any, "fetch");
+        fetchStub.mockImplementation(fetchMock.fetch());
 
-  it("Should fetch the list of catalogs to which you have access", async function() {
-    const mockedResponses = new Map();
+        // Setup Config Client with new OlpClientSettings.
+        settings = new OlpClientSettings({
+            environment: "here",
+            getToken: () => Promise.resolve("test-token-string")
+        });
+        configClient = new ConfigClient(settings);
+    });
 
-    const mockedCatalogsHRN: ConfigApi.CatalogsListResult = {
-      results: {
-        items: [
-          { hrn: "hrn:::test-hrn" },
-          { hrn: "hrn:::test-hrn2" },
-          { hrn: "hrn:::test-hrn3" }
-        ]
-      }
-    };
+    it("Shoud be initialized with settings", async function () {
+        assert.isDefined(configClient);
+        expect(configClient).to.be.instanceOf(ConfigClient);
+    });
 
-    // Set the response from lookup api with the info about Metadata service.
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "config",
-            version: "v1",
-            baseURL: "https://config.data.api.platform.here.com/config/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
+    it("Should fetch the list of catalogs to which you have access", async function () {
+        const mockedResponses = new Map();
+
+        const mockedCatalogsHRN: ConfigApi.CatalogsListResult = {
+            results: {
+                items: [
+                    { hrn: "hrn:::test-hrn" },
+                    { hrn: "hrn:::test-hrn2" },
+                    { hrn: "hrn:::test-hrn3" }
+                ]
             }
-          }
-        ])
-      )
-    );
+        };
 
-    // Set the response from Metadata service with the versions info from the catalog.
-    mockedResponses.set(
-      `https://config.data.api.platform.here.com/config/v1/catalogs?billingTag=billing-tag`,
-      new Response(JSON.stringify(mockedCatalogsHRN))
-    );
+        // Set the response from lookup api with the info about Metadata service.
+        mockedResponses.set(
+            `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis`,
+            new Response(
+                JSON.stringify([
+                    {
+                        api: "config",
+                        version: "v1",
+                        baseURL:
+                            "https://config.data.api.platform.here.com/config/v1",
+                        parameters: {
+                            additionalProp1: "string",
+                            additionalProp2: "string",
+                            additionalProp3: "string"
+                        }
+                    }
+                ])
+            )
+        );
 
-    // Setup the fetch to use mocked responses.
-    fetchMock.withMockedResponses(mockedResponses);
+        // Set the response from Metadata service with the versions info from the catalog.
+        mockedResponses.set(
+            `https://config.data.api.platform.here.com/config/v1/catalogs?billingTag=billing-tag`,
+            new Response(JSON.stringify(mockedCatalogsHRN))
+        );
 
-    const request = new CatalogsRequest().withBillingTag("billing-tag");
+        // Setup the fetch to use mocked responses.
+        fetchMock.withMockedResponses(mockedResponses);
 
-    const response = await configClient.getCatalogs(request);
+        const request = new CatalogsRequest().withBillingTag("billing-tag");
 
-    assert.isDefined(response);
-    expect(fetchStub.callCount).to.be.equal(2);
-  });
+        const response = await configClient.getCatalogs(request);
 
-  it("Should fetch the list of catalogs to which you have access filtered by hrn", async function() {
-    const mockedResponses = new Map();
+        assert.isDefined(response);
+        expect(fetchStub.mock.calls.length).to.be.equal(2);
+    });
 
-    const mockedCatalogsFilteredByHRN: ConfigApi.CatalogsListResult = {
-      results: { items: [{ hrn: "hrn:::test-hrn" }] }
-    };
-    // Set the response from lookup api with the info about Metadata service.
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "config",
-            version: "v1",
-            baseURL: "https://config.data.api.platform.here.com/config/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ])
-      )
-    );
+    it("Should fetch the list of catalogs to which you have access filtered by hrn", async function () {
+        const mockedResponses = new Map();
 
-    // Set the response from Metadata service with the versions info from the catalog.
-    mockedResponses.set(
-      `https://config.data.api.platform.here.com/config/v1/catalogs?verbose=true&schemaHrn=hrn%3A%3A%3Atest-hrn`,
-      new Response(JSON.stringify(mockedCatalogsFilteredByHRN))
-    );
+        const mockedCatalogsFilteredByHRN: ConfigApi.CatalogsListResult = {
+            results: { items: [{ hrn: "hrn:::test-hrn" }] }
+        };
+        // Set the response from lookup api with the info about Metadata service.
+        mockedResponses.set(
+            `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis`,
+            new Response(
+                JSON.stringify([
+                    {
+                        api: "config",
+                        version: "v1",
+                        baseURL:
+                            "https://config.data.api.platform.here.com/config/v1",
+                        parameters: {
+                            additionalProp1: "string",
+                            additionalProp2: "string",
+                            additionalProp3: "string"
+                        }
+                    }
+                ])
+            )
+        );
 
-    // Setup the fetch to use mocked responses.
-    fetchMock.withMockedResponses(mockedResponses);
+        // Set the response from Metadata service with the versions info from the catalog.
+        mockedResponses.set(
+            `https://config.data.api.platform.here.com/config/v1/catalogs?verbose=true&schemaHrn=hrn%3A%3A%3Atest-hrn`,
+            new Response(JSON.stringify(mockedCatalogsFilteredByHRN))
+        );
 
-    const request = new CatalogsRequest().withSchema("hrn:::test-hrn");
+        // Setup the fetch to use mocked responses.
+        fetchMock.withMockedResponses(mockedResponses);
 
-    const response = await configClient.getCatalogs(request);
+        const request = new CatalogsRequest().withSchema("hrn:::test-hrn");
 
-    assert.isDefined(response);
-    expect(fetchStub.callCount).to.be.equal(2);
-  });
+        const response = await configClient.getCatalogs(request);
+
+        assert.isDefined(response);
+        expect(fetchStub.mock.calls.length).to.be.equal(2);
+    });
 });

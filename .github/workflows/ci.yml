@@ -13,16 +13,23 @@ jobs:
     name: PSV / Linux Build / Tests / Code coverage
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
     - name: Use Node.js
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v7
       with:
-        node-version: 18
+        node-version: 24
         cache: npm
+    # MockServer, which backs the functional tests, ships Java 17 bytecode.
+    # The runner defaults to Java 11, so pin the version the jar needs.
+    - name: Use Java
+      uses: actions/setup-java@v5
+      with:
+        distribution: temurin
+        java-version: 17
     - name: Build / Tests / Coverage
       run: scripts/linux/psv/build_test_psv.sh
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v7
       with:
         fail_ci_if_error: true # optional (default = false)
         verbose: true # optional (default = false)
@@ -33,7 +40,7 @@ jobs:
     name: PSV.Commit.Checker
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
       with:
         fetch-depth: 0
     - name: Commit checker script. Verify commit text

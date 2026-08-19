@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,11 +24,8 @@ import {
     RequestFactory
 } from "@here/olp-sdk-core";
 import { CoverageApi } from "@here/olp-sdk-dataservice-api";
-import {
-    CoverageDataType,
-    StatisticsRequest,
-    SummaryRequest
-} from "@here/olp-sdk-dataservice-read";
+import { CoverageDataType, StatisticsRequest } from "./StatisticsRequest";
+import { SummaryRequest } from "./SummaryRequest";
 
 /**
  * A client for the platform Statistics Service.
@@ -65,9 +62,7 @@ export class StatisticsClient {
         if (layerId === undefined) {
             return Promise.reject(new Error(`No layerId provided`));
         }
-        const coverageRequestBuilder = await this.getRequestBuilder(
-            catalogHrn
-        ).catch(error => Promise.reject(error));
+        const coverageRequestBuilder = await this.getRequestBuilder(catalogHrn);
         return CoverageApi.getDataCoverageSummary(coverageRequestBuilder, {
             layerId
         });
@@ -101,9 +96,7 @@ export class StatisticsClient {
         if (typemap === undefined) {
             return Promise.reject(new Error(`No typemap provided`));
         }
-        const coverageRequestBuilder = await this.getRequestBuilder(
-            catalogHRN
-        ).catch(error => Promise.reject(error));
+        const coverageRequestBuilder = await this.getRequestBuilder(catalogHRN);
 
         let request;
         switch (typemap) {

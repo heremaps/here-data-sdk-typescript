@@ -8,9 +8,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
     For more information, see the [related section](https://www.here.com/docs/bundle/data-sdk-for-typescript-developer-guide/page/docs/GettingStartedGuide.html) in our Developer Guide.
 
-2. To fetch dependencies, run `yarn && yarn add react-scripts`.
+2. To fetch dependencies, run `npm install && npm install react-scripts`.
 
-3. To run the app in the development mode, run `yarn start`.
+3. To run the app in the development mode, run `npm start`.
 
 4. In your favorite browser, open `http://localhost:3000`.
 
@@ -18,13 +18,13 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run the following scripts:
 
-- `yarn start` – runs the app in the development mode.\
+- `npm start` – runs the app in the development mode.\
     To view it in the browser, open [http://localhost:3000](http://localhost:3000).
 
     The page reloads if you make edits.\
     You will also see no lint errors in the console.
 
-- `yarn build` – builds the app for production in the `build` folder.\
+- `npm run build` – builds the app for production in the `build` folder.\
     It correctly bundles React in the production mode and optimizes the build for the best performance.
 
     The build is minified, and the filenames include hashes.\

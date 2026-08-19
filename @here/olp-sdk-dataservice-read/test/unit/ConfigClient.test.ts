@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,36 +17,38 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import * as dataServiceRead from "../../lib";
 import { RequestFactory } from "@here/olp-sdk-core";
 import { ConfigApi } from "@here/olp-sdk-dataservice-api";
 
-chai.use(sinonChai);
-const expect = chai.expect;
-
-let sandbox: sinon.SinonSandbox;
 const settings = {} as any;
 const configClient = new dataServiceRead.ConfigClient(settings);
 
-describe("ConfigClient", function() {
-    before(function() {
-        sandbox = sinon.createSandbox();
+describe("ConfigClient", function () {
+    beforeAll(function () {});
+
+    beforeEach(function () {
+        vi.spyOn(RequestFactory, "create").mockImplementation(() =>
+            Promise.resolve({} as any)
+        );
     });
 
-    beforeEach(function() {
-        sandbox
-            .stub(RequestFactory, "create")
-            .callsFake(() => Promise.resolve({} as any));
+    afterEach(function () {
+        vi.restoreAllMocks();
     });
 
-    afterEach(function() {
-        sandbox.restore();
-    });
-
-    it("Should works as expected with empty request.", async function() {
+    it("Should works as expected with empty request.", async function () {
         class MockedCatalogsRequest {
             public getSchema() {
                 return undefined;
@@ -56,16 +58,18 @@ describe("ConfigClient", function() {
             }
         }
 
-        sandbox.stub(ConfigApi, "getCatalogs").callsFake((_, params): any => {
-            expect(params.billingTag === undefined).to.be.true;
-            return Promise.resolve();
-        });
+        vi.spyOn(ConfigApi, "getCatalogs").mockImplementation(
+            (_, params): any => {
+                expect(params.billingTag === undefined).to.be.true;
+                return Promise.resolve();
+            }
+        );
 
         const catalogsConfigRequest = new MockedCatalogsRequest();
         await configClient.getCatalogs(catalogsConfigRequest as any);
     });
 
-    it("Should works as expected with request with schema and empty billing tag", async function() {
+    it("Should works as expected with request with schema and empty billing tag", async function () {
         class MockedCatalogsRequest {
             public getSchema() {
                 return "test-schema-string";
@@ -75,18 +79,20 @@ describe("ConfigClient", function() {
             }
         }
 
-        sandbox.stub(ConfigApi, "getCatalogs").callsFake((_, params): any => {
-            expect(params.billingTag === undefined).to.be.true;
-            expect(params.schemaHrn === "test-schema-string").to.be.true;
-            expect(params.verbose === "true").to.be.true;
-            return Promise.resolve();
-        });
+        vi.spyOn(ConfigApi, "getCatalogs").mockImplementation(
+            (_, params): any => {
+                expect(params.billingTag === undefined).to.be.true;
+                expect(params.schemaHrn === "test-schema-string").to.be.true;
+                expect(params.verbose === "true").to.be.true;
+                return Promise.resolve();
+            }
+        );
 
         const catalogsConfigRequest = new MockedCatalogsRequest();
         await configClient.getCatalogs(catalogsConfigRequest as any);
     });
 
-    it("Should works as expected with request with schema and with billing tag", async function() {
+    it("Should works as expected with request with schema and with billing tag", async function () {
         class MockedCatalogsRequest {
             public getSchema() {
                 return "test-schema-string";
@@ -96,12 +102,14 @@ describe("ConfigClient", function() {
             }
         }
 
-        sandbox.stub(ConfigApi, "getCatalogs").callsFake((_, params): any => {
-            expect(params.verbose === "true").to.be.true;
-            expect(params.schemaHrn === "test-schema-string").to.be.true;
-            expect(params.billingTag === "test-billing-tag").to.be.true;
-            return Promise.resolve();
-        });
+        vi.spyOn(ConfigApi, "getCatalogs").mockImplementation(
+            (_, params): any => {
+                expect(params.verbose === "true").to.be.true;
+                expect(params.schemaHrn === "test-schema-string").to.be.true;
+                expect(params.billingTag === "test-billing-tag").to.be.true;
+                return Promise.resolve();
+            }
+        );
 
         const catalogsConfigRequest = new MockedCatalogsRequest();
         await configClient.getCatalogs(catalogsConfigRequest as any);

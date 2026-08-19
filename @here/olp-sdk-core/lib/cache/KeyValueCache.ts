@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,8 @@
  * License-Filename: LICENSE
  */
 
-import { getDataSize, LRUCache } from "@here/olp-sdk-core";
+import { getDataSize } from "../utils/getDataSizeUtil";
+import { LRUCache } from "./LRUCache";
 
 const BYTES_IN_MB = 1024;
 

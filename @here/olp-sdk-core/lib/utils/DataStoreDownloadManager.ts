@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,10 @@
  * License-Filename: LICENSE
  */
 
-import {
-    addSentWithParam,
-    DownloadManager,
-    HttpError,
-    STATUS_CODES
-} from "@here/olp-sdk-core";
+import { DownloadManager } from "./DownloadManager";
+import { HttpError } from "./HttpError";
+import { STATUS_CODES } from "./index";
+import { addSentWithParam } from "./userAgent";
 
 /** @internal
  * 'DeferredPromise' takes an executor function for executing it later, when [[exec]] is called.
@@ -47,9 +45,7 @@ class DeferredPromise<T> {
      * When `exec` is called the deferred executor function is executed.
      */
     exec() {
-        this.executor()
-            .then(this.resolveFunc)
-            .catch(this.rejectFunc);
+        this.executor().then(this.resolveFunc).catch(this.rejectFunc);
     }
 }
 
@@ -153,7 +149,9 @@ export class DataStoreDownloadManager implements DownloadManager {
     }
 
     private static async waitFor(milliseconds: number): Promise<void> {
-        return new Promise<void>(resolve => setTimeout(resolve, milliseconds));
+        return new Promise<void>((resolve) =>
+            setTimeout(resolve, milliseconds)
+        );
     }
 
     /**
@@ -203,11 +201,11 @@ export class DataStoreDownloadManager implements DownloadManager {
             url,
             init
         )
-            .then(response => {
+            .then((response) => {
                 this.onDownloadDone();
                 return response;
             })
-            .catch(async err => {
+            .catch(async (err) => {
                 this.onDownloadDone();
                 return Promise.reject(err);
             });

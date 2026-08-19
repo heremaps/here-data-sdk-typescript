@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,62 +17,71 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
+import { createStubInstance } from "./stub-instance";
 import * as dataServiceRead from "../../lib";
 import * as core from "@here/olp-sdk-core";
 import { IndexApi, BlobApi } from "@here/olp-sdk-dataservice-api";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("IndexLayerClient", function() {
-    let sandbox: sinon.SinonSandbox;
-    let getBlobStub: sinon.SinonStub;
-    let getIndexStub: sinon.SinonStub;
-    let getBaseUrlRequestStub: sinon.SinonStub;
+describe("IndexLayerClient", function () {
+    let getBlobStub: any;
+    let getIndexStub: any;
+    let getBaseUrlRequestStub: any;
     let indexLayerClient: dataServiceRead.IndexLayerClient;
     const mockedHRN = core.HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
     const fakeURL = "http://fake-base.url";
 
-    before(function() {
-        sandbox = sinon.createSandbox();
-        let settings = sandbox.createStubInstance(core.OlpClientSettings);
+    beforeAll(function () {
+        let settings = createStubInstance(core.OlpClientSettings);
 
         const indexLayerClientParams = {
             catalogHrn: mockedHRN,
             layerId: mockedLayerId,
-            settings: (settings as unknown) as core.OlpClientSettings
+            settings: settings as unknown as core.OlpClientSettings
         };
         indexLayerClient = new dataServiceRead.IndexLayerClient(
             indexLayerClientParams
         );
     });
 
-    beforeEach(function() {
-        getBlobStub = sandbox.stub(BlobApi, "getBlob");
-        getIndexStub = sandbox.stub(IndexApi, "performQuery");
-        getBaseUrlRequestStub = sandbox.stub(core.RequestFactory, "getBaseUrl");
-        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
+    beforeEach(function () {
+        getBlobStub = vi
+            .spyOn(BlobApi, "getBlob")
+            .mockReturnValue(undefined as any);
+        getIndexStub = vi
+            .spyOn(IndexApi, "performQuery")
+            .mockReturnValue(undefined as any);
+        getBaseUrlRequestStub = vi
+            .spyOn(core.RequestFactory, "getBaseUrl")
+            .mockReturnValue(undefined as any);
+        getBaseUrlRequestStub.mockImplementation(() =>
+            Promise.resolve(fakeURL)
+        );
     });
 
-    afterEach(function() {
-        sandbox.restore();
+    afterEach(function () {
+        vi.restoreAllMocks();
     });
 
-    it("Shoud be initialized", async function() {
+    it("Shoud be initialized", async function () {
         assert.isDefined(indexLayerClient);
         expect(indexLayerClient).be.instanceOf(
             dataServiceRead.IndexLayerClient
         );
     });
 
-    it("Should method getPartitions provide data with IndexQueryRequest", async function() {
+    it("Should method getPartitions provide data with IndexQueryRequest", async function () {
         const mockedIndexResponse = {
             data: [
                 {
@@ -105,7 +114,7 @@ describe("IndexLayerClient", function() {
             ]
         };
 
-        getIndexStub.callsFake(
+        getIndexStub.mockImplementation(
             (builder: any, params: any): Promise<IndexApi.DataResponse> => {
                 return Promise.resolve(mockedIndexResponse);
             }
@@ -120,14 +129,14 @@ describe("IndexLayerClient", function() {
         expect(partitions).to.be.equal(mockedIndexResponse.data);
     });
 
-    it("Should method getPartitions with IndexQueryRequest return HttpError when IndexApi crashes", async function() {
+    it("Should method getPartitions with IndexQueryRequest return HttpError when IndexApi crashes", async function () {
         const TEST_ERROR_CODE = 404;
         const mockedHttpError = new core.HttpError(
             TEST_ERROR_CODE,
             "Test Error"
         );
 
-        getIndexStub.callsFake(
+        getIndexStub.mockImplementation(
             (builder: any, params: any): Promise<IndexApi.DataResponse> => {
                 return Promise.reject(mockedHttpError);
             }
@@ -146,7 +155,7 @@ describe("IndexLayerClient", function() {
             });
     });
 
-    it("Should method getPartitions return error without IndexQueryRequest", async function() {
+    it("Should method getPartitions return error without IndexQueryRequest", async function () {
         const mockedErrorResponse = {
             message: "Please provide correct query"
         };
@@ -154,13 +163,13 @@ describe("IndexLayerClient", function() {
         const request = new dataServiceRead.IndexQueryRequest();
         const partitions = await indexLayerClient
             .getPartitions(request)
-            .catch(error => {
+            .catch((error) => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse.message, error.message);
             });
     });
 
-    it("Should method getPartitions be aborted fetching by abort signal", async function() {
+    it("Should method getPartitions be aborted fetching by abort signal", async function () {
         const mockedBlobData = new Response("mocked-blob-response");
         const mockedIndexResponse = {
             data: [
@@ -193,7 +202,7 @@ describe("IndexLayerClient", function() {
                 }
             ]
         };
-        getIndexStub.callsFake(
+        getIndexStub.mockImplementation(
             (builder: any, params: any): Promise<IndexApi.DataResponse> => {
                 return builder.abortSignal.aborted
                     ? Promise.reject("AbortError")
@@ -206,22 +215,21 @@ describe("IndexLayerClient", function() {
         );
 
         const abortController = new AbortController();
-
-        indexLayerClient
-            .getPartitions(
-                (request as unknown) as dataServiceRead.IndexQueryRequest,
-                abortController.signal
-            )
-            .then()
-            .catch((err: any) => {
-                assert.strictEqual(err, "AbortError");
-                assert.isTrue(abortController.signal.aborted);
-            });
-
         abortController.abort();
+
+        try {
+            await indexLayerClient.getPartitions(
+                request as unknown as dataServiceRead.IndexQueryRequest,
+                abortController.signal
+            );
+            assert.fail("getPartitions should have been aborted");
+        } catch (err) {
+            assert.strictEqual(err, "AbortError");
+            assert.isTrue(abortController.signal.aborted);
+        }
     });
 
-    it("Should method getData provide data", async function() {
+    it("Should method getData provide data", async function () {
         const mockedBlobData: Response = new Response("mocked-blob-response");
         const mockedModel = {
             id: "8c0e5ac9-b036-4365-8820-dfcba64588fc",
@@ -232,7 +240,7 @@ describe("IndexLayerClient", function() {
             tile_id: 377894442,
             crc: null
         };
-        getBlobStub.callsFake(
+        getBlobStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.resolve(mockedBlobData);
             }
@@ -240,23 +248,23 @@ describe("IndexLayerClient", function() {
 
         const response = await indexLayerClient.getData(mockedModel);
         assert.isDefined(response);
-        expect(getBlobStub.getCalls()[0].args[1].dataHandle).to.be.equal(
+        expect(getBlobStub.mock.calls[0][1].dataHandle).to.be.equal(
             mockedModel.id
         );
     });
 
-    it("Should method getData return Error without parameters", async function() {
+    it("Should method getData return Error without parameters", async function () {
         const mockedErrorResponse = {
             message: "No data handle for this partition"
         };
 
-        const response = await indexLayerClient.getData({}).catch(error => {
+        const response = await indexLayerClient.getData({}).catch((error) => {
             assert.isDefined(error);
             assert.equal(mockedErrorResponse.message, error.message);
         });
     });
 
-    it("Should error be handled", async function() {
+    it("Should error be handled", async function () {
         const mockedModel = {
             id: "8c0e5ac9-b036-4365-8820-dfcba64588fc",
             size: 111928,
@@ -268,7 +276,7 @@ describe("IndexLayerClient", function() {
         };
         const mockedErrorResponse = "mocked-error";
 
-        getBlobStub.callsFake(
+        getBlobStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.reject("mocked-error");
             }
@@ -276,13 +284,13 @@ describe("IndexLayerClient", function() {
 
         const response = await indexLayerClient
             .getData(mockedModel)
-            .catch(error => {
+            .catch((error) => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error);
             });
     });
 
-    it("Should base url error be handled", async function() {
+    it("Should base url error be handled", async function () {
         const mockedModel = {
             id: "8c0e5ac9-b036-4365-8820-dfcba64588fc",
             size: 111928,
@@ -294,7 +302,7 @@ describe("IndexLayerClient", function() {
         };
         const mockedErrorResponse = "Bad response";
 
-        getBaseUrlRequestStub.callsFake(() =>
+        getBaseUrlRequestStub.mockImplementation(() =>
             Promise.reject({
                 status: 400,
                 statusText: "Bad response"
@@ -303,13 +311,13 @@ describe("IndexLayerClient", function() {
 
         const response = await indexLayerClient
             .getData(mockedModel)
-            .catch(error => {
+            .catch((error) => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error.statusText);
             });
     });
 
-    it("Should HttpError be handled", async function() {
+    it("Should HttpError be handled", async function () {
         const TEST_ERROR_CODE = 404;
         const mockedError = new core.HttpError(TEST_ERROR_CODE, "Test Error");
 
@@ -323,7 +331,7 @@ describe("IndexLayerClient", function() {
             crc: null
         };
 
-        getBlobStub.callsFake(
+        getBlobStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.reject(mockedError);
             }
@@ -331,7 +339,7 @@ describe("IndexLayerClient", function() {
 
         const response = await indexLayerClient
             .getData(mockedModel)
-            .catch(err => {
+            .catch((err) => {
                 assert.isDefined(err);
                 expect(err.status).to.be.equal(TEST_ERROR_CODE);
                 expect(err.message).to.be.equal("Test Error");
@@ -339,7 +347,7 @@ describe("IndexLayerClient", function() {
             });
     });
 
-    it("IndexLayerClient instance should be initialized with IndexLayerClientParams", async function() {
+    it("IndexLayerClient instance should be initialized with IndexLayerClientParams", async function () {
         assert.isDefined(indexLayerClient);
         assert.equal(indexLayerClient["hrn"], "hrn:here:data:::mocked-hrn");
     });

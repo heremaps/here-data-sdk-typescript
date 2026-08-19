@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,20 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { QuadKeyPartitionsRequest } from "../../";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("QuadKeyPartitionsRequest", function() {
+describe("QuadKeyPartitionsRequest", function () {
     const billingTag = "billingTag";
     const mockedVersion = 42;
     const mockedDepth = 3;
@@ -38,7 +40,7 @@ describe("QuadKeyPartitionsRequest", function() {
         level: 3
     };
 
-    it("Should initialize", function() {
+    it("Should initialize", function () {
         const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest();
 
         assert.isDefined(quadKeyPartitionsRequest);
@@ -47,20 +49,21 @@ describe("QuadKeyPartitionsRequest", function() {
         );
     });
 
-    it("Should set parameters", function() {
+    it("Should set parameters", function () {
         const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest();
-        const quadKeyPartitionsRequestWithDepth = quadKeyPartitionsRequest.withDepth(
-            mockedDepth
-        );
-        const quadKeyPartitionsRequestWithQuadKey = quadKeyPartitionsRequest.withQuadKey(
-            mockedQuadKey
-        );
-        const quadKeyPartitionsRequestWithBillTag = quadKeyPartitionsRequest.withBillingTag(
-            billingTag
-        );
-        const quadKeyPartitionsRequestWithAddFields = quadKeyPartitionsRequest.withAdditionalFields(
-            ["dataSize", "checksum", "compressedDataSize", "crc"]
-        );
+        const quadKeyPartitionsRequestWithDepth =
+            quadKeyPartitionsRequest.withDepth(mockedDepth);
+        const quadKeyPartitionsRequestWithQuadKey =
+            quadKeyPartitionsRequest.withQuadKey(mockedQuadKey);
+        const quadKeyPartitionsRequestWithBillTag =
+            quadKeyPartitionsRequest.withBillingTag(billingTag);
+        const quadKeyPartitionsRequestWithAddFields =
+            quadKeyPartitionsRequest.withAdditionalFields([
+                "dataSize",
+                "checksum",
+                "compressedDataSize",
+                "crc"
+            ]);
         expect(quadKeyPartitionsRequestWithDepth.getDepth()).to.be.equal(
             mockedDepth
         );
@@ -75,7 +78,7 @@ describe("QuadKeyPartitionsRequest", function() {
         );
     });
 
-    it("Should get parameters with chain", function() {
+    it("Should get parameters with chain", function () {
         const quadKeyPartitionsRequest = new QuadKeyPartitionsRequest()
             .withDepth(mockedDepth)
             .withQuadKey(mockedQuadKey)

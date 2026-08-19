@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,276 +17,285 @@
  * License-Filename: LICENSE
  */
 
-import * as sinon from "sinon";
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
 import {
-  ArtifactClient,
-  SchemaRequest,
-  SchemaDetailsRequest
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
+import {
+    ArtifactClient,
+    SchemaRequest,
+    SchemaDetailsRequest
 } from "@here/olp-sdk-dataservice-read";
 import { FetchMock } from "../FetchMock";
 import * as core from "@here/olp-sdk-core";
 
-chai.use(sinonChai);
+describe("ArtifactClient", function () {
+    let fetchMock: FetchMock;
+    let fetchStub: any;
+    let artifactClient: ArtifactClient;
+    let settings: core.OlpClientSettings;
 
-const assert = chai.assert;
-const expect = chai.expect;
+    beforeAll(function () {});
 
-describe("ArtifactClient", function() {
-  let fetchMock: FetchMock;
-  let sandbox: sinon.SinonSandbox;
-  let fetchStub: sinon.SinonStub;
-  let artifactClient: ArtifactClient;
-  let settings: core.OlpClientSettings;
-
-  before(function() {
-    sandbox = sinon.createSandbox();
-  });
-
-  afterEach(function() {
-    sandbox.restore();
-  });
-
-  beforeEach(function() {
-    fetchMock = new FetchMock();
-    fetchStub = sandbox.stub(global as any, "fetch");
-    fetchStub.callsFake(fetchMock.fetch());
-
-    // Setup Artifact Client with new OlpClientSettings.
-    settings = new core.OlpClientSettings({
-      environment: "here",
-      getToken: () => Promise.resolve("test-token-string")
+    afterEach(function () {
+        vi.restoreAllMocks();
     });
-    artifactClient = new ArtifactClient(settings);
-  });
 
-  it("Shoud be initialized with settings", async function() {
-    assert.isDefined(artifactClient);
-    expect(artifactClient).to.be.instanceOf(ArtifactClient);
-  });
+    beforeEach(function () {
+        fetchMock = new FetchMock();
+        fetchStub = vi.spyOn(global as any, "fetch");
+        fetchStub.mockImplementation(fetchMock.fetch());
 
-  it("Should fetch the schema details", async function() {
-    const mockedResponses = new Map();
-    const headers = new Headers();
-    headers.append("cache-control", "max-age=3600");
+        // Setup Artifact Client with new OlpClientSettings.
+        settings = new core.OlpClientSettings({
+            environment: "here",
+            getToken: () => Promise.resolve("test-token-string")
+        });
+        artifactClient = new ArtifactClient(settings);
+    });
 
-    // Set the response from lookup api with the info about Metadata service.
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "artifact",
-            version: "v1",
-            baseURL: "https://artifact.data.api.platform.here.com/artifact/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ]),
-        { headers }
-      )
-    );
+    it("Shoud be initialized with settings", async function () {
+        assert.isDefined(artifactClient);
+        expect(artifactClient).to.be.instanceOf(ArtifactClient);
+    });
 
-    const mockedResponse = {
-      artifacts: [
-        {
-          artifactId: "test_v1",
-          created: {},
-          groupId: "com.here.rib.schema",
-          hrn: "hrn:here:artifact::realm:com.here.test.mock:test_v1",
-          updated: {},
-          version: "1.0.0"
-        }
-      ],
-      schema: {
-        artifactId: "topology-geometry_v1",
-        created: "2020-01-02T12:28:06.578Z",
-        groupId: "com.here.rib.schema",
-        hrn: "hrn:here:artifact::realm:com.here.test.mock:test_v1",
-        name: "test_v1",
-        summary: "The schema for road topology.",
-        updated: "2020-01-02T12:28:06.578Z",
-        version: "1.0.0"
-      },
-      schemaValidationResults: [
-        {
-          backwardsCompatibility: true,
-          fileExtension: true,
-          googleStyle: true,
-          majorVersionInPackage: true,
-          module: "string",
-          packageConsistency: true
-        }
-      ],
-      variants: [
-        {
-          id: "doc",
-          url: "artifact/hrn:here:artifact:::com.here.schema.fake:100500-v1"
-        },
-        {
-          id: "doc",
-          url: "artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2"
-        }
-      ]
-    };
+    it("Should fetch the schema details", async function () {
+        const mockedResponses = new Map();
+        const headers = new Headers();
+        headers.append("cache-control", "max-age=3600");
 
-    // Set the response from Metadata service with the versions info from the catalog.
-    mockedResponses.set(
-      `https://artifact.data.api.platform.here.com/artifact/v1/schema/hrn:here:schema:::com.here.schema.mock:test_v2:2.38.0`,
-      new Response(JSON.stringify(mockedResponse), { headers })
-    );
-
-    // Setup the fetch to use mocked responses.
-    fetchMock.withMockedResponses(mockedResponses);
-
-    const request = new SchemaDetailsRequest().withSchema(
-      core.HRN.fromString(
-        "hrn:here:schema:::com.here.schema.mock:test_v2:2.38.0"
-      )
-    );
-
-    const response = await artifactClient.getSchemaDetails(request);
-
-    assert.isDefined(response);
-    expect(fetchStub.callCount).to.be.equal(2);
-  });
-
-  it("Should getSchemaDetails() handle errors", async function() {
-    const request = new SchemaDetailsRequest().withBillingTag("billing-tag");
-
-    const response = await artifactClient
-      .getSchemaDetails(request)
-      .catch(error => {
-        expect(error.message).equal(
-          "Please provide the schema HRN by schemaDetailsRequest.withSchema()"
+        // Set the response from lookup api with the info about Metadata service.
+        mockedResponses.set(
+            `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis`,
+            new Response(
+                JSON.stringify([
+                    {
+                        api: "artifact",
+                        version: "v1",
+                        baseURL:
+                            "https://artifact.data.api.platform.here.com/artifact/v1",
+                        parameters: {
+                            additionalProp1: "string",
+                            additionalProp2: "string",
+                            additionalProp3: "string"
+                        }
+                    }
+                ]),
+                { headers }
+            )
         );
-      });
-  });
 
-  it("Should getSchema() handle errors", async function() {
-    const request = new SchemaRequest();
+        const mockedResponse = {
+            artifacts: [
+                {
+                    artifactId: "test_v1",
+                    created: {},
+                    groupId: "com.here.rib.schema",
+                    hrn: "hrn:here:artifact::realm:com.here.test.mock:test_v1",
+                    updated: {},
+                    version: "1.0.0"
+                }
+            ],
+            schema: {
+                artifactId: "topology-geometry_v1",
+                created: "2020-01-02T12:28:06.578Z",
+                groupId: "com.here.rib.schema",
+                hrn: "hrn:here:artifact::realm:com.here.test.mock:test_v1",
+                name: "test_v1",
+                summary: "The schema for road topology.",
+                updated: "2020-01-02T12:28:06.578Z",
+                version: "1.0.0"
+            },
+            schemaValidationResults: [
+                {
+                    backwardsCompatibility: true,
+                    fileExtension: true,
+                    googleStyle: true,
+                    majorVersionInPackage: true,
+                    module: "string",
+                    packageConsistency: true
+                }
+            ],
+            variants: [
+                {
+                    id: "doc",
+                    url: "artifact/hrn:here:artifact:::com.here.schema.fake:100500-v1"
+                },
+                {
+                    id: "doc",
+                    url: "artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2"
+                }
+            ]
+        };
 
-    const response = await artifactClient.getSchema(request).catch(error => {
-      expect(error.message).equal(
-        "Please provide the schema variant by schemaRequest.withVariant()"
-      );
+        // Set the response from Metadata service with the versions info from the catalog.
+        mockedResponses.set(
+            `https://artifact.data.api.platform.here.com/artifact/v1/schema/hrn:here:schema:::com.here.schema.mock:test_v2:2.38.0`,
+            new Response(JSON.stringify(mockedResponse), { headers })
+        );
+
+        // Setup the fetch to use mocked responses.
+        fetchMock.withMockedResponses(mockedResponses);
+
+        const request = new SchemaDetailsRequest().withSchema(
+            core.HRN.fromString(
+                "hrn:here:schema:::com.here.schema.mock:test_v2:2.38.0"
+            )
+        );
+
+        const response = await artifactClient.getSchemaDetails(request);
+
+        assert.isDefined(response);
+        expect(fetchStub.mock.calls.length).to.be.equal(2);
     });
-  });
 
-  it("Should fetch file of the schema", async function() {
-    const mockedResponses = new Map();
-    const headers = new Headers();
-    headers.append("cache-control", "max-age=3600");
+    it("Should getSchemaDetails() handle errors", async function () {
+        const request = new SchemaDetailsRequest().withBillingTag(
+            "billing-tag"
+        );
 
-    // Set the response from lookup api with the info about Metadata service.
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "artifact",
-            version: "v1",
-            baseURL: "https://artifact.data.api.platform.here.com/artifact/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ]),
-        { headers }
-      )
-    );
-
-    const mockedResponse = Buffer.alloc(42);
-    const mockedResponse2 = Buffer.alloc(50);
-
-    // Set the response from Metadata service with the versions info from the catalog.
-    mockedResponses.set(
-      `https://artifact.data.api.platform.here.com/artifact/v1/artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2`,
-      new Response(mockedResponse, { headers })
-    );
-
-    mockedResponses.set(
-      `https://artifact.data.api.platform.here.com/artifact/v1/artifact/hrn:here:artifact:::com.here.schema.fake:100702-v2`,
-      new Response(mockedResponse2, { headers })
-    );
-
-    // Setup the fetch to use mocked responses.
-    fetchMock.withMockedResponses(mockedResponses);
-
-    const request = new SchemaRequest().withVariant({
-      id: "doc",
-      url: "artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2"
+        const response = await artifactClient
+            .getSchemaDetails(request)
+            .catch((error) => {
+                expect(error.message).equal(
+                    "Please provide the schema HRN by schemaDetailsRequest.withSchema()"
+                );
+            });
     });
 
-    const request2 = new SchemaRequest().withVariant({
-      id: "doc",
-      url: "artifact/hrn:here:artifact:::com.here.schema.fake:100702-v2"
+    it("Should getSchema() handle errors", async function () {
+        const request = new SchemaRequest();
+
+        const response = await artifactClient
+            .getSchema(request)
+            .catch((error) => {
+                expect(error.message).equal(
+                    "Please provide the schema variant by schemaRequest.withVariant()"
+                );
+            });
     });
 
-    const response = await artifactClient.getSchema(request);
+    it("Should fetch file of the schema", async function () {
+        const mockedResponses = new Map();
+        const headers = new Headers();
+        headers.append("cache-control", "max-age=3600");
 
-    const response2 = await artifactClient.getSchema(request2);
+        // Set the response from lookup api with the info about Metadata service.
+        mockedResponses.set(
+            `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis`,
+            new Response(
+                JSON.stringify([
+                    {
+                        api: "artifact",
+                        version: "v1",
+                        baseURL:
+                            "https://artifact.data.api.platform.here.com/artifact/v1",
+                        parameters: {
+                            additionalProp1: "string",
+                            additionalProp2: "string",
+                            additionalProp3: "string"
+                        }
+                    }
+                ]),
+                { headers }
+            )
+        );
 
-    assert.isDefined(response);
-    expect(response.byteLength).to.be.equal(42);
-    assert.isDefined(response2);
-    expect(response2.byteLength).to.be.equal(50);
-    expect(fetchStub.callCount).to.be.equal(3);
-  });
+        const mockedResponse = Buffer.alloc(42);
+        const mockedResponse2 = Buffer.alloc(50);
 
-  it("Should getSchema() handle 400 error", async function() {
-    const mockedResponses = new Map();
-    const headers = new Headers();
-    headers.append("cache-control", "max-age=3600");
+        // Set the response from Metadata service with the versions info from the catalog.
+        mockedResponses.set(
+            `https://artifact.data.api.platform.here.com/artifact/v1/artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2`,
+            new Response(mockedResponse, { headers })
+        );
 
-    // Set the response from lookup api with the info about Metadata service.
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "artifact",
-            version: "v1",
-            baseURL: "https://artifact.data.api.platform.here.com/artifact/v1",
-            parameters: {
-              additionalProp1: "string",
-              additionalProp2: "string",
-              additionalProp3: "string"
-            }
-          }
-        ]),
-        { headers }
-      )
-    );
+        mockedResponses.set(
+            `https://artifact.data.api.platform.here.com/artifact/v1/artifact/hrn:here:artifact:::com.here.schema.fake:100702-v2`,
+            new Response(mockedResponse2, { headers })
+        );
 
-    const mockedResponse = Buffer.alloc(42);
+        // Setup the fetch to use mocked responses.
+        fetchMock.withMockedResponses(mockedResponses);
 
-    // Set the response from Metadata service with the versions info from the catalog.
-    mockedResponses.set(
-      `https://artifact.data.api.platform.here.com/artifact/v1/artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2`,
-      { status: 400, statusText: "Bad request" }
-    );
+        const request = new SchemaRequest().withVariant({
+            id: "doc",
+            url: "artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2"
+        });
 
-    // Setup the fetch to use mocked responses.
-    fetchMock.withMockedResponses(mockedResponses);
+        const request2 = new SchemaRequest().withVariant({
+            id: "doc",
+            url: "artifact/hrn:here:artifact:::com.here.schema.fake:100702-v2"
+        });
 
-    const request = new SchemaRequest()
-      .withVariant({
-        id: "doc",
-        url: "artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2"
-      })
-      .withBillingTag("billing-tag");
+        const response = await artifactClient.getSchema(request);
 
-    const response = await artifactClient.getSchema(request).catch(error => {
-      expect(error.message).equal(
-        "Artifact Service error: HTTP 400: Bad request"
-      );
+        const response2 = await artifactClient.getSchema(request2);
+
+        assert.isDefined(response);
+        expect(response.byteLength).to.be.equal(42);
+        assert.isDefined(response2);
+        expect(response2.byteLength).to.be.equal(50);
+        expect(fetchStub.mock.calls.length).to.be.equal(3);
     });
-  });
+
+    it("Should getSchema() handle 400 error", async function () {
+        const mockedResponses = new Map();
+        const headers = new Headers();
+        headers.append("cache-control", "max-age=3600");
+
+        // Set the response from lookup api with the info about Metadata service.
+        mockedResponses.set(
+            `https://api-lookup.data.api.platform.here.com/lookup/v1/platform/apis`,
+            new Response(
+                JSON.stringify([
+                    {
+                        api: "artifact",
+                        version: "v1",
+                        baseURL:
+                            "https://artifact.data.api.platform.here.com/artifact/v1",
+                        parameters: {
+                            additionalProp1: "string",
+                            additionalProp2: "string",
+                            additionalProp3: "string"
+                        }
+                    }
+                ]),
+                { headers }
+            )
+        );
+
+        const mockedResponse = Buffer.alloc(42);
+
+        // Set the response from Metadata service with the versions info from the catalog.
+        mockedResponses.set(
+            `https://artifact.data.api.platform.here.com/artifact/v1/artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2`,
+            { status: 400, statusText: "Bad request" }
+        );
+
+        // Setup the fetch to use mocked responses.
+        fetchMock.withMockedResponses(mockedResponses);
+
+        const request = new SchemaRequest()
+            .withVariant({
+                id: "doc",
+                url: "artifact/hrn:here:artifact:::com.here.schema.fake:100500-v2"
+            })
+            .withBillingTag("billing-tag");
+
+        const response = await artifactClient
+            .getSchema(request)
+            .catch((error) => {
+                expect(error.message).equal(
+                    "Artifact Service error: HTTP 400: Bad request"
+                );
+            });
+    });
 });

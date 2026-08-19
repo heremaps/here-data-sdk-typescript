@@ -1,6 +1,6 @@
 {
   "name": "@here/olp-sdk-ts",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "HERE OLP SDK for TypeScript",
   "author": {
     "name": "HERE Europe B.V.",
@@ -29,47 +29,54 @@
     "sourceMap": true,
     "instrument": true
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
-    "*.ts": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.ts": "prettier --write"
   },
   "scripts": {
-    "bootstrap": "lerna bootstrap --use-workspaces",
-    "build": "lerna run build",
-    "test": "lerna run test",
-    "http-server-testing-bundles": "serve -l tcp://localhost:8080 tests/integration/bundles/umd/static",
-    "test-published-bundles": "cd tests/integration/bundles/umd && tsc && cd - && mocha --timeout 5000 tests/integration/bundles/umd/olp-sdk-published.test.js",
-    "test-generated-bundles": "cd tests/integration/bundles/umd && tsc && cd - && mocha --timeout 5000 tests/integration/bundles/umd/olp-sdk-generated.test.js",
-    "api-breaks-test": "nyc mocha --opts ./tests/integration/api-breaks/mocha.opts",
-    "integration-test": "nyc mocha --opts ./tests/integration/mocha.opts",
-    "functional-test": "nyc mocha --opts ./tests/functional/mocha.opts",
-    "coverage": "lerna run coverage",
-    "codecov": "lerna run codecov",
-    "lint": "lerna run lint",
-    "bundle": "lerna run bundle",
-    "bundle:dev": "lerna run bundle:dev",
-    "bundle:prod": "lerna run bundle:prod",
-    "typedoc": "npx typedoc --options typedoc.json"
+    "prepare": "husky",
+    "build": "npm run build -w @here/olp-sdk-fetch -w @here/olp-sdk-dataservice-api && npm run build -w @here/olp-sdk-core && npm run build -w @here/olp-sdk-authentication -w @here/olp-sdk-dataservice-read -w @here/olp-sdk-dataservice-write",
+    "test": "npm run test --workspaces --if-present",
+    "http-server-testing-bundles": "node scripts/static-server.js tests/integration/bundles/umd/static 8080",
+    "test-published-bundles": "vitest run --config ./vitest.bundles-published.config.ts",
+    "test-generated-bundles": "vitest run --config ./vitest.bundles-generated.config.ts",
+    "api-breaks-test": "vitest run --config ./vitest.api-breaks.config.ts",
+    "integration-test": "vitest run --config ./vitest.integration.config.ts",
+    "functional-test": "vitest run --config ./vitest.functional.config.ts",
+    "coverage": "npm run coverage --workspaces --if-present",
+    "lint": "eslint .",
+    "bundle": "npm run bundle --workspaces --if-present",
+    "bundle:dev": "npm run bundle:dev --workspaces --if-present",
+    "bundle:prod": "npm run bundle:prod --workspaces --if-present",
+    "typedoc": "typedoc --options typedoc.json"
   },
   "devDependencies": {
-    "@types/node": "18.7.14",
-    "lerna": "^4.0.0",
-    "typescript": "4.0.3",
-    "codecov": "3.7.2",
-    "mockserver-node": "^5.12.0",
-    "mockserver-client": "^5.12.0",
-    "ts-node": "10.9.2",
-    "puppeteer": "^13.1.3",
-    "puppeteer-to-istanbul": "^1.4.0",
-    "nyc": "^15.0.0",
-    "mocha": "^7.1.1",
-    "serve": "^13.0.2"
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.0.0",
+    "@vitest/coverage-v8": "^4.1.10",
+    "eslint": "^10.8.0",
+    "eslint-config-prettier": "^10.1.8",
+    "fetch-mock": "^12.6.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.2.0",
+    "mockserver-client": "^7.4.0",
+    "mockserver-node": "^7.4.0",
+    "prettier": "^3.4.2",
+    "puppeteer": "^25.4.0",
+    "typedoc": "^0.28.20",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.65.0",
+    "vitest": "^4.1.10",
+    "webpack": "^5.109.1",
+    "webpack-cli": "^7.2.1"
+  },
+  "engines": {
+    "node": ">= 24.0.0"
+  },
+  "allowScripts": {
+    "bufferutil": true,
+    "es5-ext": true,
+    "fsevents": true,
+    "puppeteer": true,
+    "utf-8-validate": true
   }
 }

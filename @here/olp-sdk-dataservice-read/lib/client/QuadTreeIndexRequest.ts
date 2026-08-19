@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019-2021 HERE Europe B.V.
+ * Copyright (C) 2019-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 import { HRN, QuadKey } from "@here/olp-sdk-core";
 import { AdditionalFields } from "@here/olp-sdk-dataservice-api";
-import { validateBillingTag } from "@here/olp-sdk-dataservice-read";
+import { validateBillingTag } from "../utils/validateBillingTag";
 
 /**
  * The recursion depth of the quadtree.

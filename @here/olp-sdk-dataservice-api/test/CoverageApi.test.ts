@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,22 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { CoverageApi } from "@here/olp-sdk-dataservice-api";
 import { RequestBuilder, UrlBuilder } from "../lib/RequestBuilder";
 
-chai.use(sinonChai);
-
-const expect = chai.expect;
-
-describe("CoverageApi", function() {
-    it("getDataCoverageAdminAreas", async function() {
+describe("CoverageApi", function () {
+    it("getDataCoverageAdminAreas", async function () {
         const params = {
             layerId: "mocked-layerId",
             datalevel: "mocked-datalevel"
@@ -44,14 +48,14 @@ describe("CoverageApi", function() {
             }
         };
         const result = await CoverageApi.getDataCoverageAdminAreas(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("getDataCoverageSizeMap", async function() {
+    it("getDataCoverageSizeMap", async function () {
         const params = {
             layerId: "mocked-layerId",
             datalevel: 12
@@ -67,14 +71,14 @@ describe("CoverageApi", function() {
             }
         };
         const result = await CoverageApi.getDataCoverageSizeMap(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("getDataCoverageSummary", async function() {
+    it("getDataCoverageSummary", async function () {
         const params = {
             layerId: "mocked-layerId"
         };
@@ -89,14 +93,14 @@ describe("CoverageApi", function() {
             }
         };
         const result = await CoverageApi.getDataCoverageSummary(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("getDataCoverageTile", async function() {
+    it("getDataCoverageTile", async function () {
         const params = {
             layerId: "mocked-layerId",
             datalevel: 12
@@ -112,14 +116,14 @@ describe("CoverageApi", function() {
             }
         };
         const result = await CoverageApi.getDataCoverageTile(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 
         expect(result).to.be.equal("success");
     });
 
-    it("getDataCoverageTimeMap", async function() {
+    it("getDataCoverageTimeMap", async function () {
         const params = {
             layerId: "mocked-layerId",
             datalevel: 12,
@@ -136,7 +140,7 @@ describe("CoverageApi", function() {
             }
         };
         const result = await CoverageApi.getDataCoverageTimeMap(
-            (builder as unknown) as RequestBuilder,
+            builder as unknown as RequestBuilder,
             params
         );
 

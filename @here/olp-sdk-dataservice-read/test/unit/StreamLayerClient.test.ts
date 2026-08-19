@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,22 @@
  * License-Filename: LICENSE
  */
 
-import sinon = require("sinon");
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
+import { createStubInstance } from "./stub-instance";
 import * as dataServiceRead from "../../lib";
 import * as core from "@here/olp-sdk-core";
 
 import { BlobApi, StreamApi } from "@here/olp-sdk-dataservice-api";
-
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
 
 /**
  * Extending StreamLayerClient to test protected properties and mock methods
@@ -60,16 +63,15 @@ class StreamLayerClientTest extends dataServiceRead.StreamLayerClient {
     }
 }
 
-describe("StreamLayerClient", function() {
-    let sandbox: sinon.SinonSandbox;
-    let getBaseUrlRequestStub: sinon.SinonStub;
-    let getFactoryRequestStub: sinon.SinonStub;
-    let subscribeStub: sinon.SinonStub;
-    let pollStub: sinon.SinonStub;
-    let unsubscribeStub: sinon.SinonStub;
-    let commitOffsetsStub: sinon.SinonStub;
-    let getBlobStub: sinon.SinonStub;
-    let seekOffsetsStub: sinon.SinonStub;
+describe("StreamLayerClient", function () {
+    let getBaseUrlRequestStub: any;
+    let getFactoryRequestStub: any;
+    let subscribeStub: any;
+    let pollStub: any;
+    let unsubscribeStub: any;
+    let commitOffsetsStub: any;
+    let getBlobStub: any;
+    let seekOffsetsStub: any;
     let streamLayerClient: StreamLayerClientTest;
     const mockedHRN = core.HRN.fromString("hrn:here:data:::mocked-hrn");
     const mockedLayerId = "mocked-layed-id";
@@ -82,11 +84,10 @@ describe("StreamLayerClient", function() {
         settings: core.OlpClientSettings;
     };
 
-    before(function() {
-        sandbox = sinon.createSandbox();
-        settings = (sandbox.createStubInstance(
+    beforeAll(function () {
+        settings = createStubInstance(
             core.OlpClientSettings
-        ) as unknown) as core.OlpClientSettings;
+        ) as unknown as core.OlpClientSettings;
         params = {
             catalogHrn: mockedHRN,
             layerId: mockedLayerId,
@@ -95,22 +96,38 @@ describe("StreamLayerClient", function() {
         streamLayerClient = new StreamLayerClientTest(params);
     });
 
-    beforeEach(function() {
-        getBlobStub = sandbox.stub(BlobApi, "getBlob");
-        subscribeStub = sandbox.stub(StreamApi, "subscribe");
-        pollStub = sandbox.stub(StreamApi, "consumeData");
-        commitOffsetsStub = sandbox.stub(StreamApi, "doCommitOffsets");
-        unsubscribeStub = sandbox.stub(StreamApi, "deleteSubscription");
-        seekOffsetsStub = sandbox.stub(StreamApi, "seekToOffset");
-        getBaseUrlRequestStub = sandbox.stub(core.RequestFactory, "getBaseUrl");
-        getBaseUrlRequestStub.callsFake(() => Promise.resolve(fakeURL));
+    beforeEach(function () {
+        getBlobStub = vi
+            .spyOn(BlobApi, "getBlob")
+            .mockReturnValue(undefined as any);
+        subscribeStub = vi
+            .spyOn(StreamApi, "subscribe")
+            .mockReturnValue(undefined as any);
+        pollStub = vi
+            .spyOn(StreamApi, "consumeData")
+            .mockReturnValue(undefined as any);
+        commitOffsetsStub = vi
+            .spyOn(StreamApi, "doCommitOffsets")
+            .mockReturnValue(undefined as any);
+        unsubscribeStub = vi
+            .spyOn(StreamApi, "deleteSubscription")
+            .mockReturnValue(undefined as any);
+        seekOffsetsStub = vi
+            .spyOn(StreamApi, "seekToOffset")
+            .mockReturnValue(undefined as any);
+        getBaseUrlRequestStub = vi
+            .spyOn(core.RequestFactory, "getBaseUrl")
+            .mockReturnValue(undefined as any);
+        getBaseUrlRequestStub.mockImplementation(() =>
+            Promise.resolve(fakeURL)
+        );
     });
 
-    afterEach(function() {
-        sandbox.restore();
+    afterEach(function () {
+        vi.restoreAllMocks();
     });
 
-    it("Shoud be initialized", async function() {
+    it("Shoud be initialized", async function () {
         assert.isDefined(streamLayerClient);
         expect(streamLayerClient).be.instanceOf(
             dataServiceRead.StreamLayerClient
@@ -122,17 +139,17 @@ describe("StreamLayerClient", function() {
         );
     });
 
-    it("Should subscribe method post data and return subscription id", async function() {
+    it("Should subscribe method post data and return subscription id", async function () {
         const headers = new Headers();
         headers.append("X-Correlation-Id", "9141392.f96875c-9422-4df4-b5ff");
         const mockResponse = {
             headers,
             subscriptionId: "-9141392.f96875c-9422-4df4-b5ff-41a4f459",
-            json: function() {
+            json: function () {
                 return this;
             }
         };
-        subscribeStub.callsFake(
+        subscribeStub.mockImplementation(
             (
                 builder: any,
                 params: any
@@ -149,13 +166,13 @@ describe("StreamLayerClient", function() {
         expect(subscription).to.be.equal(mockResponse.subscriptionId);
     });
 
-    it("Should subscribe be aborted fetching by abort signal", async function() {
+    it("Should subscribe be aborted fetching by abort signal", async function () {
         const mockResponse = {
             nodeBaseURL: "https://mock-url/hrn/id",
             subscriptionId: "-9141392.f96875c-9422-4df4-b5ff-41a4f459"
         };
 
-        subscribeStub.callsFake(
+        subscribeStub.mockImplementation(
             (
                 builder: any,
                 params: any
@@ -169,28 +186,27 @@ describe("StreamLayerClient", function() {
         const streamLayerClient = new dataServiceRead.StreamLayerClient(params);
         const request = new dataServiceRead.SubscribeRequest();
         const abortController = new AbortController();
-
-        streamLayerClient
-            .subscribe(
-                (request as unknown) as dataServiceRead.SubscribeRequest,
-                abortController.signal
-            )
-            .then()
-            .catch((err: any) => {
-                assert.strictEqual(err, "AbortError");
-                assert.isTrue(abortController.signal.aborted);
-            });
-
         abortController.abort();
+
+        try {
+            await streamLayerClient.subscribe(
+                request as unknown as dataServiceRead.SubscribeRequest,
+                abortController.signal
+            );
+            assert.fail("subscribe should have been aborted");
+        } catch (err) {
+            assert.strictEqual(err, "AbortError");
+            assert.isTrue(abortController.signal.aborted);
+        }
     });
 
-    it("Should poll method get data, post offsets and return messages", async function() {
+    it("Should poll method get data, post offsets and return messages", async function () {
         const headers = new Headers();
         const commitOffsetsResponse = new Response("Ok");
         headers.append("X-Correlation-Id", "9141392.f96875c-9422-4df4-bdfj");
-        const mockResponse = ({
+        const mockResponse = {
             headers,
-            json: function() {
+            json: function () {
                 return {
                     messages: [
                         {
@@ -214,8 +230,7 @@ describe("StreamLayerClient", function() {
                                 partition: "314010584",
                                 checksum: "ff7494d6f17da702862e550c907c0a91",
                                 dataSize: 100500,
-                                data:
-                                    "7n348c7y49nry394y39yv39y384tvn3984tvn34ty034ynt3yvt983ny",
+                                data: "7n348c7y49nry394y39yv39y384tvn3984tvn34ty034ynt3yvt983ny",
                                 dataHandle: "",
                                 timestamp: 1517916707
                             },
@@ -227,24 +242,24 @@ describe("StreamLayerClient", function() {
                     ]
                 };
             }
-        } as unknown) as Response;
-        pollStub.callsFake(
+        } as unknown as Response;
+        pollStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.resolve(mockResponse);
             }
         );
 
-        commitOffsetsStub.callsFake(
+        commitOffsetsStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.resolve(commitOffsetsResponse);
             }
         );
 
-        let settings = sandbox.createStubInstance(core.OlpClientSettings);
+        let settings = createStubInstance(core.OlpClientSettings);
         const params = {
             catalogHrn: mockedHRN,
             layerId: mockedLayerId,
-            settings: (settings as unknown) as core.OlpClientSettings
+            settings: settings as unknown as core.OlpClientSettings
         };
         const subscribtionId = await streamLayerClient.subscribe(
             new dataServiceRead.SubscribeRequest().withMode("serial")
@@ -259,7 +274,7 @@ describe("StreamLayerClient", function() {
         expect(messages[0].metaData.dataSize).to.be.equal(100500);
     });
 
-    it("Should method getData call API with correct arguments", async function() {
+    it("Should method getData call API with correct arguments", async function () {
         const mockedBlobData: Response = new Response("mocked-blob-response");
         const mockedMessage = {
             metaData: {
@@ -277,19 +292,19 @@ describe("StreamLayerClient", function() {
                 offset: 38562
             }
         };
-        getBlobStub.callsFake(
+        getBlobStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.resolve(mockedBlobData);
             }
         );
 
         await streamLayerClient.getData(mockedMessage);
-        expect(getBlobStub.getCalls()[0].args[1].dataHandle).to.be.equal(
+        expect(getBlobStub.mock.calls[0][1].dataHandle).to.be.equal(
             mockedMessage.metaData.dataHandle
         );
     });
 
-    it("Should base url error be handled", async function() {
+    it("Should base url error be handled", async function () {
         const mockedMessage = {
             metaData: {
                 partition: "314010583",
@@ -308,20 +323,20 @@ describe("StreamLayerClient", function() {
         };
         const mockedErrorResponse = "Bad response";
 
-        getBaseUrlRequestStub.callsFake(() =>
+        getBaseUrlRequestStub.mockImplementation(() =>
             Promise.reject({
                 status: 400,
                 statusText: "Bad response"
             })
         );
 
-        await streamLayerClient.getData(mockedMessage).catch(error => {
+        await streamLayerClient.getData(mockedMessage).catch((error) => {
             assert.isDefined(error);
             assert.equal(mockedErrorResponse, error.statusText);
         });
     });
 
-    it("Should method getData return Error without parameters", async function() {
+    it("Should method getData return Error without parameters", async function () {
         const mockedMessage = {
             metaData: {
                 partition: "314010583"
@@ -336,13 +351,13 @@ describe("StreamLayerClient", function() {
             message: "No data handle for this partition"
         };
 
-        await streamLayerClient.getData(mockedMessage).catch(error => {
+        await streamLayerClient.getData(mockedMessage).catch((error) => {
             assert.isDefined(error);
             assert.equal(mockedErrorResponse.message, error.message);
         });
     });
 
-    it("Should error be handled", async function() {
+    it("Should error be handled", async function () {
         const mockedMessage = {
             metaData: {
                 partition: "314010583",
@@ -362,7 +377,7 @@ describe("StreamLayerClient", function() {
 
         const mockedErrorResponse = "mocked-error";
 
-        getBlobStub.callsFake(
+        getBlobStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.reject("mocked-error");
             }
@@ -370,13 +385,13 @@ describe("StreamLayerClient", function() {
 
         const response = await streamLayerClient
             .getData(mockedMessage)
-            .catch(error => {
+            .catch((error) => {
                 assert.isDefined(error);
                 assert.equal(mockedErrorResponse, error);
             });
     });
 
-    it("Should HttpError be handled", async function() {
+    it("Should HttpError be handled", async function () {
         const TEST_ERROR_CODE = 404;
         const mockedError = new core.HttpError(TEST_ERROR_CODE, "Test Error");
 
@@ -397,7 +412,7 @@ describe("StreamLayerClient", function() {
             }
         };
 
-        getBlobStub.callsFake(
+        getBlobStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.reject(mockedError);
             }
@@ -405,7 +420,7 @@ describe("StreamLayerClient", function() {
 
         const response = await streamLayerClient
             .getData(mockedMessage)
-            .catch(err => {
+            .catch((err) => {
                 assert.isDefined(err);
                 expect(err.status).to.be.equal(TEST_ERROR_CODE);
                 expect(err.message).to.be.equal("Test Error");
@@ -413,12 +428,12 @@ describe("StreamLayerClient", function() {
             });
     });
 
-    it("Should unsubscribe be aborted fetching by abort signal", async function() {
-        const mockResponse = ({
+    it("Should unsubscribe be aborted fetching by abort signal", async function () {
+        const mockResponse = {
             status: 200
-        } as unknown) as Response;
+        } as unknown as Response;
 
-        unsubscribeStub.callsFake(
+        unsubscribeStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return builder.abortSignal.aborted
                     ? Promise.reject("AbortError")
@@ -428,26 +443,25 @@ describe("StreamLayerClient", function() {
 
         const request = new dataServiceRead.UnsubscribeRequest();
         const abortController = new AbortController();
-
-        streamLayerClient
-            .unsubscribe(
-                (request as unknown) as dataServiceRead.UnsubscribeRequest,
-                abortController.signal
-            )
-            .then()
-            .catch((err: any) => {
-                assert.strictEqual(err, "AbortError");
-                assert.isTrue(abortController.signal.aborted);
-            });
-
         abortController.abort();
+
+        try {
+            await streamLayerClient.unsubscribe(
+                request as unknown as dataServiceRead.UnsubscribeRequest,
+                abortController.signal
+            );
+            assert.fail("unsubscribe should have been aborted");
+        } catch (err) {
+            assert.strictEqual(err, "AbortError");
+            assert.isTrue(abortController.signal.aborted);
+        }
     });
 
-    it("Should unsubscribe delete subscription and return OK", async function() {
-        const mockResponse = ({
+    it("Should unsubscribe delete subscription and return OK", async function () {
+        const mockResponse = {
             status: 200
-        } as unknown) as Response;
-        unsubscribeStub.callsFake(
+        } as unknown as Response;
+        unsubscribeStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.resolve(mockResponse);
             }
@@ -456,16 +470,17 @@ describe("StreamLayerClient", function() {
         const subscribtionId = await streamLayerClient.subscribe(
             new dataServiceRead.SubscribeRequest().withMode("serial")
         );
-        const request = new dataServiceRead.UnsubscribeRequest().withSubscriptionId(
-            subscribtionId
-        );
+        const request =
+            new dataServiceRead.UnsubscribeRequest().withSubscriptionId(
+                subscribtionId
+            );
         const unsubscription = await streamLayerClient.unsubscribe(request);
 
         assert.isDefined(unsubscription);
         expect(unsubscription.status).to.be.equal(mockResponse.status);
     });
 
-    it("Should unsubscribe return error if mode is parallel and subscriptionId is missed", async function() {
+    it("Should unsubscribe return error if mode is parallel and subscriptionId is missed", async function () {
         const mockError =
             "Error: for 'parallel' mode 'subscriptionId' is required.";
 
@@ -474,13 +489,13 @@ describe("StreamLayerClient", function() {
         );
         const unsubscription = await streamLayerClient
             .unsubscribe(request)
-            .catch(err => {
+            .catch((err) => {
                 assert.isDefined(err);
                 expect(err.message).to.be.equal(mockError);
             });
     });
 
-    it("Should seek return error if mode is parallel and subscriptionId is missed", async function() {
+    it("Should seek return error if mode is parallel and subscriptionId is missed", async function () {
         const mockOffsets = {
             offsets: [
                 {
@@ -499,32 +514,32 @@ describe("StreamLayerClient", function() {
         const request = new dataServiceRead.SeekRequest()
             .withMode("parallel")
             .withSeekOffsets(mockOffsets);
-        const seek = await streamLayerClient.seek(request).catch(err => {
+        const seek = await streamLayerClient.seek(request).catch((err) => {
             assert.isDefined(err);
             expect(err.message).to.be.equal(mockError);
         });
     });
 
-    it("Should seek return error if offsets are missed", async function() {
+    it("Should seek return error if offsets are missed", async function () {
         const mockError = "Error: offsets are required.";
 
         const request = new dataServiceRead.SeekRequest();
-        const seek = await streamLayerClient.seek(request).catch(err => {
+        const seek = await streamLayerClient.seek(request).catch((err) => {
             assert.isDefined(err);
             expect(err.message).to.be.equal(mockError);
         });
     });
 
-    it("Should seek set offsets and return OK", async function() {
+    it("Should seek set offsets and return OK", async function () {
         const headers = new Headers();
         headers.append("X-Correlation-Id", "9141392.f96875c-9422-4df4-bdfj");
-        const mockResponse = ({
+        const mockResponse = {
             headers,
-            json: function() {
+            json: function () {
                 return this;
             },
             status: 200
-        } as unknown) as Response;
+        } as unknown as Response;
         const mockOffsets = {
             offsets: [
                 {
@@ -537,7 +552,7 @@ describe("StreamLayerClient", function() {
                 }
             ]
         };
-        seekOffsetsStub.callsFake(
+        seekOffsetsStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.resolve(mockResponse);
             }
@@ -555,17 +570,17 @@ describe("StreamLayerClient", function() {
         expect(seek.status).to.be.equal(mockResponse.status);
     });
 
-    it("Should seek update xCorrelationId", async function() {
+    it("Should seek update xCorrelationId", async function () {
         const xCorrelationId = "9141392.f96875c-9422-4df4-bdfj";
         const headers = new Headers();
         headers.append("X-Correlation-Id", xCorrelationId);
-        const mockResponse = ({
+        const mockResponse = {
             headers,
-            json: function() {
+            json: function () {
                 return this;
             },
             status: 200
-        } as unknown) as Response;
+        } as unknown as Response;
         const mockOffsets = {
             offsets: [
                 {
@@ -578,7 +593,7 @@ describe("StreamLayerClient", function() {
                 }
             ]
         };
-        seekOffsetsStub.callsFake(
+        seekOffsetsStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.resolve(mockResponse);
             }
@@ -595,17 +610,17 @@ describe("StreamLayerClient", function() {
         expect(streamLayerClient["xCorrelationId"]).equals(xCorrelationId);
     });
 
-    it("Should pull return error if mode is parallel and subscriptionId is missed", async function() {
+    it("Should pull return error if mode is parallel and subscriptionId is missed", async function () {
         await streamLayerClient
             .poll(new dataServiceRead.PollRequest().withMode("parallel"))
-            .catch(error => {
+            .catch((error) => {
                 expect(error.message).equals(
                     "Error: for 'parallel' mode 'subscriptionId' is required."
                 );
             });
     });
 
-    it("Should pull return error if subscribtionNodeBaseUrl is missed", async function() {
+    it("Should pull return error if subscribtionNodeBaseUrl is missed", async function () {
         streamLayerClient["subscribtionNodeBaseUrl"] = undefined;
         await streamLayerClient
             .poll(
@@ -613,31 +628,31 @@ describe("StreamLayerClient", function() {
                     .withMode("parallel")
                     .withSubscriptionId("mocked-id")
             )
-            .catch(error => {
+            .catch((error) => {
                 expect(error.message).equals(
                     `No valid nodeBaseurl provided for the subscribtion id=mocked-id, please check your subscribtion`
                 );
             });
     });
 
-    it("Should not post offsets if no data", async function() {
+    it("Should not post offsets if no data", async function () {
         const headers = new Headers();
         headers.append("X-Correlation-Id", "9141392.f96875c-9422-4df4-bdfj");
-        const mockResponse = ({
+        const mockResponse = {
             headers,
-            json: function() {
+            json: function () {
                 return {
                     messages: []
                 };
             }
-        } as unknown) as Response;
-        pollStub.callsFake(
+        } as unknown as Response;
+        pollStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.resolve(mockResponse);
             }
         );
 
-        let settings = sandbox.createStubInstance(core.OlpClientSettings);
+        let settings = createStubInstance(core.OlpClientSettings);
         const subscribtionId = await streamLayerClient.subscribe(
             new dataServiceRead.SubscribeRequest().withMode("serial")
         );
@@ -648,15 +663,15 @@ describe("StreamLayerClient", function() {
 
         assert.isDefined(messages);
         expect(messages.length).to.be.equal(0);
-        expect(commitOffsetsStub.notCalled);
+        expect(commitOffsetsStub.mock.calls.length === 0);
     });
 
-    it("Should not throw if commiting offsets failed", async function() {
+    it("Should not throw if commiting offsets failed", async function () {
         const headers = new Headers();
         headers.append("X-Correlation-Id", "9141392.f96875c-9422-4df4-bdfj");
-        const mockResponse = ({
+        const mockResponse = {
             headers,
-            json: function() {
+            json: function () {
                 return {
                     messages: [
                         {
@@ -680,8 +695,7 @@ describe("StreamLayerClient", function() {
                                 partition: "314010584",
                                 checksum: "ff7494d6f17da702862e550c907c0a91",
                                 dataSize: 100500,
-                                data:
-                                    "7n348c7y49nry394y39yv39y384tvn3984tvn34ty034ynt3yvt983ny",
+                                data: "7n348c7y49nry394y39yv39y384tvn3984tvn34ty034ynt3yvt983ny",
                                 dataHandle: "",
                                 timestamp: 1517916707
                             },
@@ -693,24 +707,24 @@ describe("StreamLayerClient", function() {
                     ]
                 };
             }
-        } as unknown) as Response;
-        pollStub.callsFake(
+        } as unknown as Response;
+        pollStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.resolve(mockResponse);
             }
         );
 
-        commitOffsetsStub.callsFake(
+        commitOffsetsStub.mockImplementation(
             (builder: any, params: any): Promise<Response> => {
                 return Promise.reject(new Error("fake error"));
             }
         );
 
-        let settings = sandbox.createStubInstance(core.OlpClientSettings);
+        let settings = createStubInstance(core.OlpClientSettings);
         const params = {
             catalogHrn: mockedHRN,
             layerId: mockedLayerId,
-            settings: (settings as unknown) as core.OlpClientSettings
+            settings: settings as unknown as core.OlpClientSettings
         };
         const subscribtionId = await streamLayerClient.subscribe(
             new dataServiceRead.SubscribeRequest().withMode("serial")
@@ -723,5 +737,161 @@ describe("StreamLayerClient", function() {
         assert.isDefined(messages);
         expect(messages.length).to.be.equal(2);
         expect(messages[0].metaData.dataSize).to.be.equal(100500);
+    });
+
+    it("Should subscribe leave the correlation id unset if the response carries none", async function () {
+        const mockResponse = {
+            headers: new Headers(),
+            nodeBaseURL: "https://mock-url/hrn/id",
+            subscriptionId: "-9141392.f96875c-9422-4df4-b5ff-41a4f459",
+            json: function () {
+                return this;
+            }
+        };
+        subscribeStub.mockImplementation(
+            (): Promise<StreamApi.ConsumerSubscribeResponse> =>
+                Promise.resolve(mockResponse)
+        );
+
+        const client = new dataServiceRead.StreamLayerClient(params);
+        const subscription = await client.subscribe(
+            new dataServiceRead.SubscribeRequest()
+        );
+
+        expect(subscription).to.be.equal(mockResponse.subscriptionId);
+        assert.isUndefined(client["xCorrelationId"]);
+    });
+
+    it("Should poll return no messages if the response carries no data", async function () {
+        const mockResponse = {
+            headers: new Headers(),
+            json: function () {
+                return null;
+            }
+        } as unknown as Response;
+        pollStub.mockImplementation((): Promise<Response> =>
+            Promise.resolve(mockResponse)
+        );
+
+        const subscribtionId = await streamLayerClient.subscribe(
+            new dataServiceRead.SubscribeRequest().withMode("serial")
+        );
+        const messages = await streamLayerClient.poll(
+            new dataServiceRead.PollRequest().withSubscriptionId(subscribtionId)
+        );
+
+        expect(messages.length).to.be.equal(0);
+        expect(commitOffsetsStub.mock.calls.length).to.be.equal(0);
+        assert.isUndefined(streamLayerClient["xCorrelationId"]);
+    });
+
+    it("Should poll commit the highest offset of a partition", async function () {
+        const headers = new Headers();
+        headers.append("X-Correlation-Id", "9141392.f96875c-9422-4df4-bdfj");
+        const mockResponse = {
+            headers,
+            json: function () {
+                return {
+                    messages: [
+                        {
+                            metaData: {
+                                partition: "314010583",
+                                dataHandle: "iVBORw0-Lf9HdIZBfNEiKAA"
+                            },
+                            offset: {
+                                partition: 7,
+                                offset: 38562
+                            }
+                        },
+                        {
+                            metaData: {
+                                partition: "314010584",
+                                dataHandle: "iVBORw0-Lf9HdIZBfNEiKAB"
+                            },
+                            offset: {
+                                partition: 7,
+                                offset: 100
+                            }
+                        }
+                    ]
+                };
+            }
+        } as unknown as Response;
+        pollStub.mockImplementation((): Promise<Response> =>
+            Promise.resolve(mockResponse)
+        );
+        commitOffsetsStub.mockImplementation((): Promise<Response> =>
+            Promise.resolve(new Response("Ok"))
+        );
+
+        const subscribtionId = await streamLayerClient.subscribe(
+            new dataServiceRead.SubscribeRequest().withMode("serial")
+        );
+        await streamLayerClient.poll(
+            new dataServiceRead.PollRequest().withSubscriptionId(subscribtionId)
+        );
+
+        expect(
+            commitOffsetsStub.mock.calls[0][1].commitOffsets.offsets
+        ).to.be.deep.equal([{ partition: 7, offset: 38562 }]);
+    });
+
+    it("Should unsubscribe return error if subscribtionNodeBaseUrl is missed", async function () {
+        const client = new dataServiceRead.StreamLayerClient(params);
+        const request =
+            new dataServiceRead.UnsubscribeRequest().withSubscriptionId(
+                "mocked-id"
+            );
+
+        await expect(client.unsubscribe(request)).rejects.toThrow(
+            "Subscribtion error. No valid nodeBaseurl provided for the subscribtion id=mocked-id, please check your subscribtion"
+        );
+    });
+
+    it("Should seek return error if subscribtionNodeBaseUrl is missed", async function () {
+        const client = new dataServiceRead.StreamLayerClient(params);
+        const request = new dataServiceRead.SeekRequest()
+            .withSubscriptionId("mocked-id")
+            .withSeekOffsets({ offsets: [{ partition: 1, offset: 1 }] });
+
+        await expect(client.seek(request)).rejects.toThrow(
+            "Subscribtion error. No valid nodeBaseurl provided for the subscribtion id=mocked-id, please check your subscribtion"
+        );
+    });
+
+    it("Should seek keep the correlation id if the response carries none", async function () {
+        const xCorrelationId = "9141392.f96875c-9422-4df4-bdfj";
+        const subscribeHeaders = new Headers();
+        subscribeHeaders.append("X-Correlation-Id", xCorrelationId);
+        subscribeStub.mockImplementation(
+            (): Promise<StreamApi.ConsumerSubscribeResponse> =>
+                Promise.resolve({
+                    headers: subscribeHeaders,
+                    nodeBaseURL: "https://mock-url/hrn/id",
+                    subscriptionId: "mocked-subscribtionId",
+                    json: function () {
+                        return this;
+                    }
+                })
+        );
+        seekOffsetsStub.mockImplementation((): Promise<Response> =>
+            Promise.resolve({
+                headers: new Headers(),
+                status: 200
+            } as unknown as Response)
+        );
+
+        const client = new dataServiceRead.StreamLayerClient(params);
+        const subscribtionId = await client.subscribe(
+            new dataServiceRead.SubscribeRequest().withMode("serial")
+        );
+        const seek = await client.seek(
+            new dataServiceRead.SeekRequest()
+                .withSubscriptionId(subscribtionId)
+                .withSeekOffsets({ offsets: [{ partition: 1, offset: 1 }] })
+        );
+
+        expect(seek.status).to.be.equal(200);
+        expect(client["xCorrelationId"]).to.be.equal(xCorrelationId);
     });
 });

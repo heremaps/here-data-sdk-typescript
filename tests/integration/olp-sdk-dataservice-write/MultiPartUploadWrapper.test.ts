@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 HERE Europe B.V.
+ * Copyright (C) 2021-2026 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,228 +17,227 @@
  * License-Filename: LICENSE
  */
 
-import * as chai from "chai";
-import sinonChai = require("sinon-chai");
-import sinon = require("sinon");
-
+import {
+    afterAll,
+    afterEach,
+    beforeAll,
+    beforeEach,
+    describe,
+    expect,
+    it,
+    vi,
+    assert
+} from "vitest";
 import { MultiPartUploadWrapper } from "@here/olp-sdk-dataservice-write";
 import { OlpClientSettings } from "@here/olp-sdk-core";
 import { FetchMock } from "../FetchMock";
 
-chai.use(sinonChai);
-
-const assert = chai.assert;
-const expect = chai.expect;
-
-describe("Multipart Upload Integration Test", function() {
-  let fetchMock: FetchMock;
-  let sandbox: sinon.SinonSandbox;
-  let fetchStub: sinon.SinonStub;
-  let settings: OlpClientSettings;
-
-  settings = new OlpClientSettings({
-    environment: "here",
-    getToken: () => Promise.resolve("mocked-token")
-  });
-  const catalogHrn = "hrn:here:data:::mocked-hrn";
-  const layerId = "mocked-layer-id";
-  const dataSize = 74 * 1024 * 1024;
-  const contentType = "text/plain";
-  const data = Buffer.alloc(dataSize, 1);
-
-  const headers = new Headers();
-  headers.append("cache-control", "max-age=3600");
-
-  before(function() {
-    sandbox = sinon.createSandbox();
-  });
-
-  afterEach(function() {
-    sandbox.restore();
-  });
-
-  beforeEach(function() {
-    fetchMock = new FetchMock();
-    fetchStub = sandbox.stub(global as any, "fetch");
-    fetchStub.callsFake(fetchMock.fetch());
+describe("Multipart Upload Integration Test", function () {
+    let fetchMock: FetchMock;
+    let fetchStub: any;
+    let settings: OlpClientSettings;
 
     settings = new OlpClientSettings({
-      environment: "here",
-      getToken: () => Promise.resolve("mocked-token")
+        environment: "here",
+        getToken: () => Promise.resolve("mocked-token")
     });
-  });
+    const catalogHrn = "hrn:here:data:::mocked-hrn";
+    const layerId = "mocked-layer-id";
+    const dataSize = 74 * 1024 * 1024;
+    const contentType = "text/plain";
+    const data = Buffer.alloc(dataSize, 1);
 
-  it("Should initialize", function() {
-    const wrapper = new MultiPartUploadWrapper(
-      {
-        catalogHrn,
-        layerId,
-        handle: "mocked-dataHandle",
-        blobVersion: "v1",
-        contentType
-      },
-      settings
-    );
+    const headers = new Headers();
+    headers.append("cache-control", "max-age=3600");
 
-    assert.isDefined(wrapper);
-    expect(wrapper).be.instanceOf(MultiPartUploadWrapper);
-  });
+    beforeAll(function () {});
 
-  it("Should upload to Blob V1", async function() {
-    const mockedResponses = new Map();
+    afterEach(function () {
+        vi.restoreAllMocks();
+    });
 
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "blob",
-            version: "v1",
-            baseURL: `https://mocked.api/blobstore/v1`,
-            parameters: {}
-          }
-        ]),
-        { headers }
-      )
-    );
+    beforeEach(function () {
+        fetchMock = new FetchMock();
+        fetchStub = vi.spyOn(global as any, "fetch");
+        fetchStub.mockImplementation(fetchMock.fetch());
 
-    mockedResponses.set(
-      `https://mocked.api/blobstore/v1/layers/mocked-layer-id/data/mocked-dataHandle/multiparts`,
-      new Response(
-        JSON.stringify({
-          links: {
-            status: {
-              href: `https://mocked.api/multiparts/mocked-blob-token`,
-              method: "GET"
+        settings = new OlpClientSettings({
+            environment: "here",
+            getToken: () => Promise.resolve("mocked-token")
+        });
+    });
+
+    it("Should initialize", function () {
+        const wrapper = new MultiPartUploadWrapper(
+            {
+                catalogHrn,
+                layerId,
+                handle: "mocked-dataHandle",
+                blobVersion: "v1",
+                contentType
             },
-            delete: {
-              href: `https://mocked.api/multiparts/mocked-blob-token`,
-              method: "DELETE"
+            settings
+        );
+
+        assert.isDefined(wrapper);
+        expect(wrapper).be.instanceOf(MultiPartUploadWrapper);
+    });
+
+    it("Should upload to Blob V1", async function () {
+        const mockedResponses = new Map();
+
+        mockedResponses.set(
+            `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis`,
+            new Response(
+                JSON.stringify([
+                    {
+                        api: "blob",
+                        version: "v1",
+                        baseURL: `https://mocked.api/blobstore/v1`,
+                        parameters: {}
+                    }
+                ]),
+                { headers }
+            )
+        );
+
+        mockedResponses.set(
+            `https://mocked.api/blobstore/v1/layers/mocked-layer-id/data/mocked-dataHandle/multiparts`,
+            new Response(
+                JSON.stringify({
+                    links: {
+                        status: {
+                            href: `https://mocked.api/multiparts/mocked-blob-token`,
+                            method: "GET"
+                        },
+                        delete: {
+                            href: `https://mocked.api/multiparts/mocked-blob-token`,
+                            method: "DELETE"
+                        },
+                        uploadPart: {
+                            href: `https://mocked.api/multiparts/mocked-blob-token/parts`,
+                            method: "POST"
+                        },
+                        complete: {
+                            href: `https://mocked.api/multiparts/mocked-blob-token`,
+                            method: "PUT"
+                        }
+                    }
+                }),
+                { headers }
+            )
+        );
+
+        const partsHeaders = new Headers();
+        partsHeaders.append("cache-control", "max-age=3600");
+        partsHeaders.append("ETag", `${Math.random() * 10000}`);
+
+        for (let partNumber = 0; partNumber < 16; partNumber++) {
+            mockedResponses.set(
+                `https://mocked.api/multiparts/mocked-blob-token/parts?partNumber=${partNumber}`,
+                new Response(undefined, { headers: partsHeaders })
+            );
+        }
+
+        mockedResponses.set(
+            `https://mocked.api/multiparts/mocked-blob-token`,
+            new Response(undefined, { headers })
+        );
+
+        // Setup the fetch to use mocked responses.
+        fetchMock.withMockedResponses(mockedResponses);
+
+        const wrapper = new MultiPartUploadWrapper(
+            {
+                catalogHrn,
+                layerId,
+                handle: "mocked-dataHandle",
+                blobVersion: "v1",
+                contentType
             },
-            uploadPart: {
-              href: `https://mocked.api/multiparts/mocked-blob-token/parts`,
-              method: "POST"
+            settings
+        );
+
+        await wrapper.upload(data);
+
+        /**
+         * Should be 18 calls:
+         *  1 - lookup
+         *  1 - start multipart
+         *  15 - upload part
+         *  1 - complete multipart
+         */
+        expect(fetchStub.mock.calls.length).to.be.equal(18);
+    });
+
+    it("Should upload to Blob V2", async function () {
+        const mockedResponses = new Map();
+
+        mockedResponses.set(
+            `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis`,
+            new Response(
+                JSON.stringify([
+                    {
+                        api: "blob",
+                        version: "v2",
+                        baseURL: `https://mocked.api/blobstore/v2`,
+                        parameters: {}
+                    }
+                ]),
+                { headers }
+            )
+        );
+
+        mockedResponses.set(
+            `https://mocked.api/blobstore/v2/layers/mocked-layer-id/keys/mocked-key`,
+            new Response(
+                JSON.stringify({
+                    multipartToken: "mocked-multipartToken"
+                }),
+                { headers }
+            )
+        );
+
+        for (let partNumber = 0; partNumber < 16; partNumber++) {
+            mockedResponses.set(
+                `https://mocked.api/blobstore/v2/layers/mocked-layer-id/keysMultipart/mocked-multipartToken/parts?partNumber=${partNumber}`,
+                new Response(
+                    JSON.stringify({
+                        id: `${Math.random() * 10000}`
+                    }),
+                    { headers }
+                )
+            );
+        }
+
+        mockedResponses.set(
+            `https://mocked.api/blobstore/v2/layers/mocked-layer-id/keysMultipart/mocked-multipartToken`,
+            new Response(undefined, { headers })
+        );
+
+        // Setup the fetch to use mocked responses.
+        fetchMock.withMockedResponses(mockedResponses);
+
+        const wrapper = new MultiPartUploadWrapper(
+            {
+                catalogHrn,
+                layerId,
+                handle: "mocked-key",
+                blobVersion: "v2",
+                contentType
             },
-            complete: {
-              href: `https://mocked.api/multiparts/mocked-blob-token`,
-              method: "PUT"
-            }
-          }
-        }),
-        { headers }
-      )
-    );
+            settings
+        );
 
-    const partsHeaders = new Headers();
-    partsHeaders.append("cache-control", "max-age=3600");
-    partsHeaders.append("ETag", `${Math.random() * 10000}`);
+        await wrapper.upload(data);
 
-    for (let partNumber = 0; partNumber < 16; partNumber++) {
-      mockedResponses.set(
-        `https://mocked.api/multiparts/mocked-blob-token/parts?partNumber=${partNumber}`,
-        new Response(undefined, { headers: partsHeaders })
-      );
-    }
-
-    mockedResponses.set(
-      `https://mocked.api/multiparts/mocked-blob-token`,
-      new Response(undefined, { headers })
-    );
-
-    // Setup the fetch to use mocked responses.
-    fetchMock.withMockedResponses(mockedResponses);
-
-    const wrapper = new MultiPartUploadWrapper(
-      {
-        catalogHrn,
-        layerId,
-        handle: "mocked-dataHandle",
-        blobVersion: "v1",
-        contentType
-      },
-      settings
-    );
-
-    await wrapper.upload(data);
-
-    /**
-     * Should be 18 calls:
-     *  1 - lookup
-     *  1 - start multipart
-     *  15 - upload part
-     *  1 - complete multipart
-     */
-    expect(fetchStub.callCount).to.be.equal(18);
-  });
-
-  it("Should upload to Blob V2", async function() {
-    const mockedResponses = new Map();
-
-    mockedResponses.set(
-      `https://api-lookup.data.api.platform.here.com/lookup/v1/resources/hrn:here:data:::mocked-hrn/apis`,
-      new Response(
-        JSON.stringify([
-          {
-            api: "blob",
-            version: "v2",
-            baseURL: `https://mocked.api/blobstore/v2`,
-            parameters: {}
-          }
-        ]),
-        { headers }
-      )
-    );
-
-    mockedResponses.set(
-      `https://mocked.api/blobstore/v2/layers/mocked-layer-id/keys/mocked-key`,
-      new Response(
-        JSON.stringify({
-          multipartToken: "mocked-multipartToken"
-        }),
-        { headers }
-      )
-    );
-
-    for (let partNumber = 0; partNumber < 16; partNumber++) {
-      mockedResponses.set(
-        `https://mocked.api/blobstore/v2/layers/mocked-layer-id/keysMultipart/mocked-multipartToken/parts?partNumber=${partNumber}`,
-        new Response(
-          JSON.stringify({
-            id: `${Math.random() * 10000}`
-          }),
-          { headers }
-        )
-      );
-    }
-
-    mockedResponses.set(
-      `https://mocked.api/blobstore/v2/layers/mocked-layer-id/keysMultipart/mocked-multipartToken`,
-      new Response(undefined, { headers })
-    );
-
-    // Setup the fetch to use mocked responses.
-    fetchMock.withMockedResponses(mockedResponses);
-
-    const wrapper = new MultiPartUploadWrapper(
-      {
-        catalogHrn,
-        layerId,
-        handle: "mocked-key",
-        blobVersion: "v2",
-        contentType
-      },
-      settings
-    );
-
-    await wrapper.upload(data);
-
-    /**
-     * Should be 18 calls:
-     *  1 - lookup
-     *  1 - start multipart
-     *  15 - upload part
-     *  1 - complete multipart
-     */
-    expect(fetchStub.callCount).to.be.equal(18);
-  });
+        /**
+         * Should be 18 calls:
+         *  1 - lookup
+         *  1 - start multipart
+         *  15 - upload part
+         *  1 - complete multipart
+         */
+        expect(fetchStub.mock.calls.length).to.be.equal(18);
+    });
 });
