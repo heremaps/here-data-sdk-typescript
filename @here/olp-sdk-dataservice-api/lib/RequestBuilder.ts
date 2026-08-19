@@ -68,7 +68,10 @@ export class UrlBuilder {
         } else if (typeof value === "boolean") {
             url += `${value}`;
         } else if (typeof value === "string") {
-            url += encodeURIComponent(value);
+            // The comma is a valid sub-delimiter of a query component and is
+            // used by the Data APIs as a list separator, the same way as for
+            // the array values below. Keep it unescaped.
+            url += encodeURIComponent(value).replace(/%2C/g, ",");
         } else if (Array.isArray(value)) {
             const encodedValues: string[] = [];
             value.forEach((val: string | number) => {
@@ -86,13 +89,17 @@ export class UrlBuilder {
      * @param url The base URL.
      * @param hasQuery Whether the base URL already contains query parameters.
      */
-    constructor(public url: string, public hasQuery: boolean = false) {}
+    constructor(
+        public url: string,
+        public hasQuery: boolean = false
+    ) {}
 
     /**
      * Appends a query parameter to the URL, either using '&key=value' or '?key=value'
      * depending on the [[hasQuery]] parameter.
      *
-     * Escapes all strings using `encodeURIComponent`.
+     * Escapes all strings using `encodeURIComponent`, except for the comma,
+     * which is kept unescaped as a list separator.
      *
      * String arrays are concatenated using commas.
      *

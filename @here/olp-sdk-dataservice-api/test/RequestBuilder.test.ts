@@ -58,6 +58,17 @@ describe("UrlBuilderTest", function () {
         expect(testUrlBuilder.hasQuery).to.be.equal(true);
     });
 
+    it("Method appendQuery should appends parameters key, value with commas to the URL.", async function () {
+        const builderWithCommas = new UrlBuilder("test-url");
+        const mockedUrl = "test-url?testKey=testValue,testValue2";
+
+        builderWithCommas.appendQuery("testKey", "testValue,testValue2");
+
+        assert.isDefined(builderWithCommas);
+        expect(builderWithCommas.url).to.be.equal(mockedUrl);
+        expect(builderWithCommas.hasQuery).to.be.equal(true);
+    });
+
     it("Method appendQuery should not appends parameters to the URL if value is undefined.", async function () {
         const testUrlBuilder2 = new UrlBuilder("test-url");
         const mockedUrl = "test-url";
