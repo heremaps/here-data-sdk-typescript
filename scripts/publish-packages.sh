@@ -20,8 +20,6 @@
 # Simple script that bundles the publishing of packages,
 # to be run from GitHub Actions
 
-echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ~/.npmrc
-
 npm ci
 
 while [[ $# -gt 0 ]]; do
