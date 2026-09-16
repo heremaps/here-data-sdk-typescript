@@ -89,8 +89,8 @@ describe("getTile", function () {
             }
         );
 
-        expect(response.status).eqls(204);
-        expect(response.statusText).eqls("No Content");
+        expect(response.response.status).eqls(204);
+        expect(response.response.statusText).eqls("No Content");
     });
 
     it("Should return the blob of the requested tile", async function () {
@@ -129,9 +129,112 @@ describe("getTile", function () {
             }
         );
 
-        expect(response).eqls(mockedBlob);
+        expect(response.response).eqls(mockedBlob);
+        expect(
+            response.parentTileKey?.equals(
+                core.TileKey.fromRowColumnLevel(818, 2021, 11)
+            )
+        ).toBe(true);
         expect(getBlobStub.mock.calls[0][1].dataHandle).eqls(
             "mocked-data-handle"
+        );
+    });
+
+    it("Should return the blob of the closest parent tile from sub quads", async function () {
+        const mockedQuadKeyTreeData = {
+            subQuads: [
+                {
+                    subQuadKey: "17",
+                    version: 309,
+                    dataHandle: "farther-parent-data-handle"
+                },
+                {
+                    subQuadKey: "70",
+                    version: 309,
+                    dataHandle: "closest-parent-data-handle"
+                }
+            ],
+            parentQuads: []
+        };
+        const mockedBlob = new Response("mocked-parent-blob");
+
+        quadTreeIndexStub.mockImplementation((): Promise<QueryApi.Index> =>
+            Promise.resolve(mockedQuadKeyTreeData)
+        );
+        const getBlobStub = vi
+            .spyOn(BlobApi, "getBlob")
+            .mockReturnValue(Promise.resolve(mockedBlob));
+
+        const response = await getTile(
+            new TileRequest()
+                .withTileKey({ row: 818, column: 2021, level: 11 })
+                .withFetchOption(FetchOptions.OnlineOnly),
+            {
+                settings: olpClientSettingsStub as any,
+                catalogHrn: core.HRN.fromString("hrn:here:data:::mocked-hrn"),
+                layerId: "mocked-layer-id",
+                layerType: "versioned",
+                catalogVersion: 123
+            }
+        );
+
+        expect(response.response).eqls(mockedBlob);
+        expect(
+            response.parentTileKey?.equals(
+                core.TileKey.fromRowColumnLevel(409, 1010, 10)
+            )
+        ).toBe(true);
+        expect(getBlobStub.mock.calls[0][1].dataHandle).eqls(
+            "closest-parent-data-handle"
+        );
+    });
+
+    it("Should return the blob of the closest parent tile from parent quads", async function () {
+        const mockedQuadKeyTreeData = {
+            subQuads: [],
+            parentQuads: [
+                {
+                    partition: "1525",
+                    version: 309,
+                    dataHandle: "farther-parent-data-handle"
+                },
+                {
+                    partition: "6103",
+                    version: 309,
+                    dataHandle: "closest-parent-data-handle"
+                }
+            ]
+        };
+        const mockedBlob = new Response("mocked-parent-blob");
+
+        quadTreeIndexStub.mockImplementation((): Promise<QueryApi.Index> =>
+            Promise.resolve(mockedQuadKeyTreeData)
+        );
+        const getBlobStub = vi
+            .spyOn(BlobApi, "getBlob")
+            .mockReturnValue(Promise.resolve(mockedBlob));
+
+        const response = await getTile(
+            new TileRequest()
+                .withTileKey({ row: 818, column: 2021, level: 11 })
+                .withFetchOption(FetchOptions.OnlineOnly),
+            {
+                settings: olpClientSettingsStub as any,
+                catalogHrn: core.HRN.fromString("hrn:here:data:::mocked-hrn"),
+                layerId: "mocked-layer-id",
+                layerType: "versioned",
+                catalogVersion: 123
+            }
+        );
+
+        expect(response.response).eqls(mockedBlob);
+        expect(
+            response.parentTileKey?.equals(
+                core.TileKey.fromRowColumnLevel(25, 63, 6)
+            )
+        ).toBe(true);
+        expect(getBlobStub.mock.calls[0][1].dataHandle).eqls(
+            "closest-parent-data-handle"
         );
     });
 
@@ -168,13 +271,7 @@ describe("getTile", function () {
                     catalogVersion: 123
                 }
             )
-        ).rejects.toThrow(
-            `Error getting blob for Tile: ${JSON.stringify({
-                row: 818,
-                column: 2021,
-                level: 11
-            })}`
-        );
+        ).rejects.toThrow("Error getting blob for Tile: 6250009");
     });
 
     it("Should throw an error if not tile key", async function () {

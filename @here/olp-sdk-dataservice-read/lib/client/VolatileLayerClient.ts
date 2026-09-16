@@ -106,7 +106,8 @@ export class VolatileLayerClient {
             settings: this.settings
         };
 
-        return getTile(request, params, abortSignal);
+        const tileResponse = await getTile(request, params, abortSignal);
+        return tileResponse.response;
     }
 
     /**
