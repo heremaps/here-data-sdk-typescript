@@ -52,7 +52,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^24.0.0",
-    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/coverage-v8": "^4.1.11",
     "eslint": "^10.8.0",
     "eslint-config-prettier": "^10.1.8",
     "fetch-mock": "^12.6.0",
@@ -65,7 +65,7 @@
     "typedoc": "^0.28.20",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.65.0",
-    "vitest": "^4.1.10",
+    "vitest": "^4.1.11",
     "webpack": "^5.109.1",
     "webpack-cli": "^7.2.1"
   },
