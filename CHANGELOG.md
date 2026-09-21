@@ -1,3 +1,12 @@
+## v3.1.0 (22/09/2026)
+
+**olp-sdk-dataservice-read**
+
+- Added the `includeTileKey` option to `getTile()` and `VersionedLayerClient::getAggregatedData()`. Pass `{ includeTileKey: true }` to receive a `TileResponse` that carries the key of the tile whose data was actually returned, instead of a plain `Response`.
+- **Behavior change:** `getTile()` now falls back to the `parentQuads` of the quad tree index when the requested tile has no data in its own sub tree. Previously such a tile resolved a `204 No Content` response; it now resolves the data of the closest ancestor. This affects both `VersionedLayerClient::getAggregatedData()` and `VolatileLayerClient::getAggregatedData()`. Callers that branch on `response.status === 204` to detect missing data should be reviewed.
+- **Behavior change:** the rejection message of `getTile()` now identifies the tile by its HERE tile key (`Error getting blob for Tile: 6250009`) instead of a serialized quad key (`Error getting blob for Tile: {"row":818,"column":2021,"level":11}`).
+- Fixed a crash in the closest-parent lookup when the quad tree index root is the global root tile (level 0).
+
 ## v3.0.0 (2026)
 
 - Discontinued support of Node.js versions less than 24.x.
