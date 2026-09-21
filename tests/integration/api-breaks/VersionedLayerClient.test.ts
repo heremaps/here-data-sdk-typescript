@@ -33,7 +33,9 @@ import {
     VersionedLayerClientParams,
     QuadKeyPartitionsRequest,
     DataRequest,
-    PartitionsRequest
+    PartitionsRequest,
+    TileRequest,
+    TileResponse
 } from "@here/olp-sdk-dataservice-read";
 import { QueryApi, MetadataApi } from "@here/olp-sdk-dataservice-api";
 import { HRN, OlpClientSettings } from "@here/olp-sdk-core";
@@ -97,6 +99,24 @@ describe("VersionedLayerClient", function () {
         > {
             return Promise.resolve({});
         }
+
+        getAggregatedData(
+            request: TileRequest,
+            abortSignal?: AbortSignal
+        ): Promise<Response>;
+        getAggregatedData(
+            request: TileRequest,
+            abortSignal: AbortSignal | undefined,
+            options: { includeTileKey: true }
+        ): Promise<TileResponse>;
+
+        async getAggregatedData(
+            request: TileRequest,
+            abortSignal?: AbortSignal,
+            options?: { includeTileKey?: boolean }
+        ): Promise<Response | TileResponse> {
+            return Promise.resolve(new Response());
+        }
     }
 
     beforeEach(function () {
@@ -118,6 +138,7 @@ describe("VersionedLayerClient", function () {
 
         assert.isFunction(layerClient.getData);
         assert.isFunction(layerClient.getPartitions);
+        assert.isFunction(layerClient.getAggregatedData);
     });
 
     it("Shoud be initialized with VersionedLayerClientParams", async function () {
@@ -134,6 +155,7 @@ describe("VersionedLayerClient", function () {
 
         assert.isFunction(layerClient.getData);
         assert.isFunction(layerClient.getPartitions);
+        assert.isFunction(layerClient.getAggregatedData);
     });
 
     it("getPartitions method with QuadKeyPartitionsRequest", async function () {
