@@ -30,6 +30,7 @@ import {
 } from "vitest";
 import { createStubInstance } from "./stub-instance";
 import { TileRequest, getTile } from "@here/olp-sdk-dataservice-read/lib";
+import { QuadTreeIndexCacheRepository } from "../../lib/cache/QuadTreeIndexCacheRepository";
 import * as core from "@here/olp-sdk-core";
 import { BlobApi, QueryApi } from "@here/olp-sdk-dataservice-api";
 import { FetchOptions } from "@here/olp-sdk-core";
@@ -401,6 +402,199 @@ describe("getTile", function () {
         ).toBe(true);
         expect(getBlobStub.mock.calls[0][1].dataHandle).eqls(
             "root-data-handle"
+        );
+    });
+
+    it("Should keep the already-found deepest parent quad", async function () {
+        const mockedQuadKeyTreeData = {
+            subQuads: [],
+            parentQuads: [
+                {
+                    partition: "6103",
+                    version: 309,
+                    dataHandle: "closest-parent-data-handle"
+                },
+                {
+                    partition: "1525",
+                    version: 309,
+                    dataHandle: "should-be-ignored-data-handle"
+                }
+            ]
+        };
+        const mockedBlob = new Response("mocked-parent-blob");
+
+        quadTreeIndexStub.mockImplementation((): Promise<QueryApi.Index> =>
+            Promise.resolve(mockedQuadKeyTreeData)
+        );
+        const getBlobStub = vi
+            .spyOn(BlobApi, "getBlob")
+            .mockReturnValue(Promise.resolve(mockedBlob));
+
+        const response = await getTile(
+            new TileRequest()
+                .withTileKey({ row: 818, column: 2021, level: 11 })
+                .withFetchOption(FetchOptions.OnlineOnly),
+            {
+                settings: olpClientSettingsStub as any,
+                catalogHrn: core.HRN.fromString("hrn:here:data:::mocked-hrn"),
+                layerId: "mocked-layer-id",
+                layerType: "versioned",
+                catalogVersion: 123
+            },
+            undefined,
+            { includeTileKey: true }
+        );
+
+        expect(response.response).eqls(mockedBlob);
+        expect(
+            response.parentTileKey?.equals(
+                core.TileKey.fromRowColumnLevel(25, 63, 6)
+            )
+        ).toBe(true);
+        expect(getBlobStub.mock.calls[0][1].dataHandle).eqls(
+            "closest-parent-data-handle"
+        );
+    });
+
+    it("Should use the cached quad tree index instead of fetching it", async function () {
+        const settings = new core.OlpClientSettings({
+            environment: "here",
+            getToken: () => Promise.resolve("mocked-token")
+        });
+        const requestedTileKey = core.TileKey.fromRowColumnLevel(818, 2021, 11);
+
+        new QuadTreeIndexCacheRepository(settings.cache).put({
+            hrn: "hrn:here:data:::mocked-hrn",
+            layerId: "mocked-layer-id",
+            depth: 4,
+            root: requestedTileKey.changedLevelBy(-4),
+            version: 123,
+            tree: {
+                subQuads: [
+                    {
+                        subQuadKey: "281",
+                        version: 309,
+                        dataHandle: "cached-data-handle"
+                    }
+                ],
+                parentQuads: []
+            }
+        });
+
+        const mockedBlob = new Response("cached-blob");
+        const getBlobStub = vi
+            .spyOn(BlobApi, "getBlob")
+            .mockReturnValue(Promise.resolve(mockedBlob));
+
+        const response = await getTile(
+            new TileRequest().withTileKey(requestedTileKey),
+            {
+                settings,
+                catalogHrn: core.HRN.fromString("hrn:here:data:::mocked-hrn"),
+                layerId: "mocked-layer-id",
+                layerType: "versioned",
+                catalogVersion: 123
+            },
+            undefined,
+            { includeTileKey: true }
+        );
+
+        expect(quadTreeIndexStub).not.toHaveBeenCalled();
+        expect(response.response).eqls(mockedBlob);
+        expect(response.parentTileKey?.equals(requestedTileKey)).toBe(true);
+        expect(getBlobStub.mock.calls[0][1].dataHandle).eqls(
+            "cached-data-handle"
+        );
+    });
+
+    it("Should treat a missing subQuads field as an empty list", async function () {
+        const mockedQuadKeyTreeData = {
+            parentQuads: [
+                {
+                    partition: "6103",
+                    version: 309,
+                    dataHandle: "closest-parent-data-handle"
+                }
+            ]
+        };
+        const mockedBlob = new Response("mocked-parent-blob");
+
+        quadTreeIndexStub.mockImplementation((): Promise<QueryApi.Index> =>
+            Promise.resolve(mockedQuadKeyTreeData)
+        );
+        const getBlobStub = vi
+            .spyOn(BlobApi, "getBlob")
+            .mockReturnValue(Promise.resolve(mockedBlob));
+
+        const response = await getTile(
+            new TileRequest()
+                .withTileKey({ row: 818, column: 2021, level: 11 })
+                .withFetchOption(FetchOptions.OnlineOnly),
+            {
+                settings: olpClientSettingsStub as any,
+                catalogHrn: core.HRN.fromString("hrn:here:data:::mocked-hrn"),
+                layerId: "mocked-layer-id",
+                layerType: "versioned",
+                catalogVersion: 123
+            },
+            undefined,
+            { includeTileKey: true }
+        );
+
+        expect(response.response).eqls(mockedBlob);
+        expect(
+            response.parentTileKey?.equals(
+                core.TileKey.fromRowColumnLevel(25, 63, 6)
+            )
+        ).toBe(true);
+        expect(getBlobStub.mock.calls[0][1].dataHandle).eqls(
+            "closest-parent-data-handle"
+        );
+    });
+
+    it("Should treat a missing parentQuads field as an empty list", async function () {
+        const requestedSubQuadKey = "281";
+        const mockedQuadKeyTreeData = {
+            subQuads: [
+                {
+                    subQuadKey: requestedSubQuadKey,
+                    version: 309,
+                    dataHandle: "mocked-data-handle"
+                }
+            ]
+        };
+        const mockedBlob = new Response("mocked-blob");
+
+        quadTreeIndexStub.mockImplementation((): Promise<QueryApi.Index> =>
+            Promise.resolve(mockedQuadKeyTreeData)
+        );
+        const getBlobStub = vi
+            .spyOn(BlobApi, "getBlob")
+            .mockReturnValue(Promise.resolve(mockedBlob));
+
+        const response = await getTile(
+            new TileRequest()
+                .withTileKey({ row: 818, column: 2021, level: 11 })
+                .withFetchOption(FetchOptions.OnlineOnly),
+            {
+                settings: olpClientSettingsStub as any,
+                catalogHrn: core.HRN.fromString("hrn:here:data:::mocked-hrn"),
+                layerId: "mocked-layer-id",
+                layerType: "versioned",
+                catalogVersion: 123
+            },
+            undefined,
+            { includeTileKey: true }
+        );
+
+        expect(response.response).eqls(mockedBlob);
+        expect(
+            response.parentTileKey?.equals(
+                core.TileKey.fromRowColumnLevel(818, 2021, 11)
+            )
+        ).toBe(true);
+        expect(getBlobStub.mock.calls[0][1].dataHandle).eqls(
+            "mocked-data-handle"
         );
     });
 
