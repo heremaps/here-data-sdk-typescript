@@ -274,6 +274,54 @@ describe("getTile", function () {
         ).rejects.toThrow("Error getting blob for Tile: 6250009");
     });
 
+    it("Should return the blob of the closest parent tile when the requested tile is at or below the quad tree index depth", async function () {
+        // The requested tile is at level 2, which is not deeper than the
+        // quad tree index depth (4). This clamps the root of the quad tree
+        // index to the global root tile (level 0), so walking up from the
+        // requested tile reaches level 0 without ever leaving the tree.
+        const mockedQuadKeyTreeData = {
+            subQuads: [],
+            parentQuads: [
+                {
+                    partition: "1",
+                    version: 309,
+                    dataHandle: "root-data-handle"
+                }
+            ]
+        };
+        const mockedBlob = new Response("mocked-parent-blob");
+
+        quadTreeIndexStub.mockImplementation((): Promise<QueryApi.Index> =>
+            Promise.resolve(mockedQuadKeyTreeData)
+        );
+        const getBlobStub = vi
+            .spyOn(BlobApi, "getBlob")
+            .mockReturnValue(Promise.resolve(mockedBlob));
+
+        const response = await getTile(
+            new TileRequest()
+                .withTileKey({ row: 1, column: 1, level: 2 })
+                .withFetchOption(FetchOptions.OnlineOnly),
+            {
+                settings: olpClientSettingsStub as any,
+                catalogHrn: core.HRN.fromString("hrn:here:data:::mocked-hrn"),
+                layerId: "mocked-layer-id",
+                layerType: "versioned",
+                catalogVersion: 123
+            }
+        );
+
+        expect(response.response).eqls(mockedBlob);
+        expect(
+            response.parentTileKey?.equals(
+                core.TileKey.fromRowColumnLevel(0, 0, 0)
+            )
+        ).toBe(true);
+        expect(getBlobStub.mock.calls[0][1].dataHandle).eqls(
+            "root-data-handle"
+        );
+    });
+
     it("Should throw an error if not tile key", async function () {
         const tile = await getTile(request, {
             settings: olpClientSettingsStub as any,

@@ -875,6 +875,90 @@ describe("VersionedLayerClient", function () {
             await versionedLayerClient.getPartitions(partitionsRequest);
         expect(partitions).equals(mockedPartitions);
     });
+
+    it("Method getAggregatedData should return a plain Response by default", async function () {
+        // The sub quad key of row 818, column 2021, level 11 within the quad
+        // tree that is rooted four levels above it.
+        const requestedSubQuadKey = "281";
+        const mockedQuadKeyTreeData: Index = {
+            subQuads: [
+                {
+                    subQuadKey: requestedSubQuadKey,
+                    version: 5,
+                    dataHandle: "mocked-aggregated-data-handle"
+                }
+            ],
+            parentQuads: []
+        };
+        const mockedBlobData = new Response("mocked-aggregated-blob");
+
+        getQuadTreeIndexStub.mockImplementation(
+            (builder: any, params: any): Promise<Index> => {
+                return Promise.resolve(mockedQuadKeyTreeData);
+            }
+        );
+        getBlobStub.mockImplementation(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockedBlobData);
+            }
+        );
+
+        const tileRequest = new dataServiceRead.TileRequest()
+            .withTileKey({ row: 818, column: 2021, level: 11 })
+            .withFetchOption(core.FetchOptions.OnlineOnly);
+
+        const response =
+            await versionedLayerClient.getAggregatedData(tileRequest);
+
+        assert.instanceOf(response, Response);
+        expect(response).eqls(mockedBlobData);
+        assert.isUndefined((response as any).parentTileKey);
+    });
+
+    it("Method getAggregatedData should return the parent tile key when includeTileKey is true", async function () {
+        // The sub quad key of row 818, column 2021, level 11 within the quad
+        // tree that is rooted four levels above it.
+        const requestedSubQuadKey = "281";
+        const mockedQuadKeyTreeData: Index = {
+            subQuads: [
+                {
+                    subQuadKey: requestedSubQuadKey,
+                    version: 5,
+                    dataHandle: "mocked-aggregated-data-handle"
+                }
+            ],
+            parentQuads: []
+        };
+        const mockedBlobData = new Response("mocked-aggregated-blob");
+
+        getQuadTreeIndexStub.mockImplementation(
+            (builder: any, params: any): Promise<Index> => {
+                return Promise.resolve(mockedQuadKeyTreeData);
+            }
+        );
+        getBlobStub.mockImplementation(
+            (builder: any, params: any): Promise<Response> => {
+                return Promise.resolve(mockedBlobData);
+            }
+        );
+
+        const requestedTileKey = core.TileKey.fromRowColumnLevel(818, 2021, 11);
+        const tileRequest = new dataServiceRead.TileRequest()
+            .withTileKey(requestedTileKey)
+            .withFetchOption(core.FetchOptions.OnlineOnly);
+
+        const response = await versionedLayerClient.getAggregatedData(
+            tileRequest,
+            undefined,
+            { includeTileKey: true }
+        );
+
+        expect(response.response).eqls(mockedBlobData);
+        expect(response.parentTileKey?.equals(requestedTileKey)).toBe(true);
+        expect(getBlobStub.mock.calls[0][1].dataHandle).eqls(
+            "mocked-aggregated-data-handle"
+        );
+    });
 });
 
 describe("VersionedLayerClient with locked version 0 in constructor", function () {
