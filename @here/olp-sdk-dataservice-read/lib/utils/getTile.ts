@@ -207,6 +207,13 @@ function findClosestParent(
             return { parentQuad: subQuad, tileKey: currentTileKey };
         }
 
+        // Stop before requesting the parent of the quad tree index root -
+        // that root can be the global root tile (level 0), whose parent()
+        // throws rather than returning another tile.
+        if (currentTileKey.level === quadTreeIndexRoot.level) {
+            break;
+        }
+
         currentTileKey = currentTileKey.parent();
     }
 
