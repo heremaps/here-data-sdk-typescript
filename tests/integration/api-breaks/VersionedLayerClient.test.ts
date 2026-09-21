@@ -109,6 +109,16 @@ describe("VersionedLayerClient", function () {
             abortSignal: AbortSignal | undefined,
             options: { includeTileKey: true }
         ): Promise<TileResponse>;
+        getAggregatedData(
+            request: TileRequest,
+            abortSignal: AbortSignal | undefined,
+            options: { includeTileKey?: false }
+        ): Promise<Response>;
+        getAggregatedData(
+            request: TileRequest,
+            abortSignal: AbortSignal | undefined,
+            options: { includeTileKey?: boolean }
+        ): Promise<Response | TileResponse>;
 
         async getAggregatedData(
             request: TileRequest,

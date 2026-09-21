@@ -109,6 +109,32 @@ export function getTile(
     options: { includeTileKey: true }
 ): Promise<TileResponse>;
 
+/**
+ * Same as the three-argument [[getTile]], for callers that pass an options
+ * object with `includeTileKey` disabled or omitted.
+ *
+ * @returns The blob of the requested tile or the blob of the closest parent Tile.
+ */
+export function getTile(
+    request: TileRequest,
+    params: TileRequestParams,
+    abortSignal: AbortSignal | undefined,
+    options: { includeTileKey?: false }
+): Promise<Response>;
+
+/**
+ * Same as the three-argument [[getTile]], for an `includeTileKey` flag whose
+ * value is only known at run time. Narrow the result before using it.
+ *
+ * @returns A [[TileResponse]] if the flag was `true`, otherwise the plain blob.
+ */
+export function getTile(
+    request: TileRequest,
+    params: TileRequestParams,
+    abortSignal: AbortSignal | undefined,
+    options: { includeTileKey?: boolean }
+): Promise<Response | TileResponse>;
+
 export async function getTile(
     request: TileRequest,
     params: TileRequestParams,

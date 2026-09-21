@@ -168,6 +168,60 @@ describe("getTile", function () {
         );
     });
 
+    it("Should return a plain Response when includeTileKey is false or a run-time flag", async function () {
+        const mockedQuadKeyTreeData = {
+            subQuads: [
+                {
+                    subQuadKey: "281",
+                    version: 309,
+                    dataHandle: "mocked-data-handle"
+                }
+            ],
+            parentQuads: []
+        };
+        const mockedBlob = new Response("mocked-blob");
+
+        quadTreeIndexStub.mockImplementation((): Promise<QueryApi.Index> =>
+            Promise.resolve(mockedQuadKeyTreeData)
+        );
+        vi.spyOn(BlobApi, "getBlob").mockReturnValue(
+            Promise.resolve(mockedBlob)
+        );
+
+        const params = {
+            settings: olpClientSettingsStub as any,
+            catalogHrn: core.HRN.fromString("hrn:here:data:::mocked-hrn"),
+            layerId: "mocked-layer-id",
+            layerType: "versioned" as const,
+            catalogVersion: 123
+        };
+        const buildRequest = () =>
+            new TileRequest()
+                .withTileKey({ row: 818, column: 2021, level: 11 })
+                .withFetchOption(FetchOptions.OnlineOnly);
+
+        const explicitlyFalse = await getTile(
+            buildRequest(),
+            params,
+            undefined,
+            {
+                includeTileKey: false
+            }
+        );
+        expect(explicitlyFalse).eqls(mockedBlob);
+
+        const omitted = await getTile(buildRequest(), params, undefined, {});
+        expect(omitted).eqls(mockedBlob);
+
+        // A flag only known at run time resolves to the union overload, so the
+        // caller has to narrow it.
+        const runtimeFlag: boolean = false;
+        const dynamic = await getTile(buildRequest(), params, undefined, {
+            includeTileKey: runtimeFlag
+        });
+        assert.instanceOf(dynamic, Response);
+    });
+
     it("Should resolve the requested tile's own key when includeTileKey is true", async function () {
         // The sub quad key of row 818, column 2021, level 11 within the quad
         // tree that is rooted four levels above it.

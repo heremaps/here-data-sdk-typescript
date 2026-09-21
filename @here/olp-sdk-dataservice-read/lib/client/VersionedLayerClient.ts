@@ -127,6 +127,35 @@ export class VersionedLayerClient {
         options: { includeTileKey: true }
     ): Promise<TileResponse>;
 
+    /**
+     * @brief Fetches data of a tile or its closest ancestor.
+     *
+     * Same as the two-argument `getAggregatedData`, for callers that pass an
+     * options object with `includeTileKey` disabled or omitted.
+     *
+     * @return Tile data (if it exists) or the nearest parent tile data
+     */
+    getAggregatedData(
+        request: TileRequest,
+        abortSignal: AbortSignal | undefined,
+        options: { includeTileKey?: false }
+    ): Promise<Response>;
+
+    /**
+     * @brief Fetches data of a tile or its closest ancestor.
+     *
+     * Same as the two-argument `getAggregatedData`, for an `includeTileKey`
+     * flag whose value is only known at run time. Narrow the result before
+     * using it.
+     *
+     * @return A `TileResponse` if the flag was `true`, otherwise the tile data
+     */
+    getAggregatedData(
+        request: TileRequest,
+        abortSignal: AbortSignal | undefined,
+        options: { includeTileKey?: boolean }
+    ): Promise<Response | TileResponse>;
+
     async getAggregatedData(
         request: TileRequest,
         abortSignal?: AbortSignal,
