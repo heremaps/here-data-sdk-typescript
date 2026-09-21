@@ -138,8 +138,8 @@ describe("getTile", () => {
         assert.isDefined(response);
         assert.isDefined(response2);
 
-        expect((await response.blob()).size).to.be.equals(100);
-        expect((await response2.blob()).size).to.be.equals(300);
+        expect((await response.response.blob()).size).to.be.equals(100);
+        expect((await response2.response.blob()).size).to.be.equals(300);
 
         /**
          * Should be 5 calls:
