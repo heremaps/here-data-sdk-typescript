@@ -507,6 +507,43 @@ describe("getTile", function () {
         );
     });
 
+    it("Should cache a quad tree index that has only parent quads", async function () {
+        const settings = new core.OlpClientSettings({
+            environment: "here",
+            getToken: () => Promise.resolve("mocked-token")
+        });
+        const mockedQuadKeyTreeData = {
+            parentQuads: [
+                {
+                    partition: "6103",
+                    version: 309,
+                    dataHandle: "closest-parent-data-handle"
+                }
+            ]
+        };
+
+        quadTreeIndexStub.mockImplementation((): Promise<QueryApi.Index> =>
+            Promise.resolve(mockedQuadKeyTreeData)
+        );
+        vi.spyOn(BlobApi, "getBlob").mockReturnValue(
+            Promise.resolve(new Response("mocked-parent-blob"))
+        );
+
+        const params = {
+            settings,
+            catalogHrn: core.HRN.fromString("hrn:here:data:::mocked-hrn"),
+            layerId: "mocked-layer-id",
+            layerType: "versioned" as const,
+            catalogVersion: 123
+        };
+        const tileKey = { row: 818, column: 2021, level: 11 };
+
+        await getTile(new TileRequest().withTileKey(tileKey), params);
+        await getTile(new TileRequest().withTileKey(tileKey), params);
+
+        expect(quadTreeIndexStub).toHaveBeenCalledTimes(1);
+    });
+
     it("Should treat a missing subQuads field as an empty list", async function () {
         const mockedQuadKeyTreeData = {
             parentQuads: [

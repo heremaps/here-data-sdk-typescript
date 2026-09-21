@@ -301,7 +301,8 @@ export async function fetchQuadTreeIndex(
 
     if (
         params.fetchOptions !== FetchOptions.OnlineOnly &&
-        quadTreeIndex.subQuads
+        (quadTreeIndex.subQuads !== undefined ||
+            quadTreeIndex.parentQuads !== undefined)
     ) {
         cache.put({
             hrn: params.catalogHrn.toString(),
