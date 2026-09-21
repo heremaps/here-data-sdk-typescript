@@ -89,8 +89,40 @@ describe("getTile", function () {
             }
         );
 
+        expect(response.status).eqls(204);
+        expect(response.statusText).eqls("No Content");
+    });
+
+    it("Should return a 204 TileResponse when includeTileKey is true", async function () {
+        const mockedQuadKeyTreeData = {
+            subQuads: [],
+            parentQuads: []
+        };
+
+        quadTreeIndexStub.mockImplementation(
+            (builder: any, params: any): Promise<QueryApi.Index> => {
+                return Promise.resolve(mockedQuadKeyTreeData);
+            }
+        );
+
+        const response = await getTile(
+            new TileRequest()
+                .withTileKey({ row: 0, column: 0, level: 0 })
+                .withFetchOption(FetchOptions.OnlineOnly),
+            {
+                settings: olpClientSettingsStub as any,
+                catalogHrn: core.HRN.fromString("hrn:here:data:::mocked-hrn"),
+                layerId: "mocked-layer-id",
+                layerType: "versioned",
+                catalogVersion: 123
+            },
+            undefined,
+            { includeTileKey: true }
+        );
+
         expect(response.response.status).eqls(204);
         expect(response.response.statusText).eqls("No Content");
+        assert.isUndefined(response.parentTileKey);
     });
 
     it("Should return the blob of the requested tile", async function () {
@@ -127,6 +159,50 @@ describe("getTile", function () {
                 layerType: "versioned",
                 catalogVersion: 123
             }
+        );
+
+        expect(response).eqls(mockedBlob);
+        expect(getBlobStub.mock.calls[0][1].dataHandle).eqls(
+            "mocked-data-handle"
+        );
+    });
+
+    it("Should resolve the requested tile's own key when includeTileKey is true", async function () {
+        // The sub quad key of row 818, column 2021, level 11 within the quad
+        // tree that is rooted four levels above it.
+        const requestedSubQuadKey = "281";
+        const mockedQuadKeyTreeData = {
+            subQuads: [
+                {
+                    subQuadKey: requestedSubQuadKey,
+                    version: 309,
+                    dataHandle: "mocked-data-handle"
+                }
+            ],
+            parentQuads: []
+        };
+        const mockedBlob = new Response("mocked-blob");
+
+        quadTreeIndexStub.mockImplementation((): Promise<QueryApi.Index> =>
+            Promise.resolve(mockedQuadKeyTreeData)
+        );
+        const getBlobStub = vi
+            .spyOn(BlobApi, "getBlob")
+            .mockReturnValue(Promise.resolve(mockedBlob));
+
+        const response = await getTile(
+            new TileRequest()
+                .withTileKey({ row: 818, column: 2021, level: 11 })
+                .withFetchOption(FetchOptions.OnlineOnly),
+            {
+                settings: olpClientSettingsStub as any,
+                catalogHrn: core.HRN.fromString("hrn:here:data:::mocked-hrn"),
+                layerId: "mocked-layer-id",
+                layerType: "versioned",
+                catalogVersion: 123
+            },
+            undefined,
+            { includeTileKey: true }
         );
 
         expect(response.response).eqls(mockedBlob);
@@ -175,7 +251,9 @@ describe("getTile", function () {
                 layerId: "mocked-layer-id",
                 layerType: "versioned",
                 catalogVersion: 123
-            }
+            },
+            undefined,
+            { includeTileKey: true }
         );
 
         expect(response.response).eqls(mockedBlob);
@@ -224,7 +302,9 @@ describe("getTile", function () {
                 layerId: "mocked-layer-id",
                 layerType: "versioned",
                 catalogVersion: 123
-            }
+            },
+            undefined,
+            { includeTileKey: true }
         );
 
         expect(response.response).eqls(mockedBlob);
@@ -308,7 +388,9 @@ describe("getTile", function () {
                 layerId: "mocked-layer-id",
                 layerType: "versioned",
                 catalogVersion: 123
-            }
+            },
+            undefined,
+            { includeTileKey: true }
         );
 
         expect(response.response).eqls(mockedBlob);

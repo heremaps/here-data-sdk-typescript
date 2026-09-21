@@ -148,7 +148,9 @@ export class VersionedLayerClient {
             catalogVersion
         };
 
-        const tileResponse = await getTile(request, params, abortSignal);
+        const tileResponse = await getTile(request, params, abortSignal, {
+            includeTileKey: true
+        });
         return options?.includeTileKey ? tileResponse : tileResponse.response;
     }
 

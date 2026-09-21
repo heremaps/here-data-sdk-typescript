@@ -98,7 +98,10 @@ export class VolatileLayerClient {
      *
      * @return Tile data (if it exists) or the nearest parent tile data
      */
-    async getAggregatedData(request: TileRequest, abortSignal?: AbortSignal) {
+    async getAggregatedData(
+        request: TileRequest,
+        abortSignal?: AbortSignal
+    ): Promise<Response> {
         const params: TileRequestParams = {
             catalogHrn: HRN.fromString(this.hrn),
             layerId: this.layerId,
@@ -106,8 +109,7 @@ export class VolatileLayerClient {
             settings: this.settings
         };
 
-        const tileResponse = await getTile(request, params, abortSignal);
-        return tileResponse.response;
+        return getTile(request, params, abortSignal);
     }
 
     /**

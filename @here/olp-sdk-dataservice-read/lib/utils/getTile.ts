@@ -86,7 +86,43 @@ export interface TileResponse {
  *
  * @returns The blob of the requested tile or the blob of the closest parent Tile.
  */
+export function getTile(
+    request: TileRequest,
+    params: TileRequestParams,
+    abortSignal?: AbortSignal
+): Promise<Response>;
+
+/**
+ * Same as the three-argument [[getTile]], but also resolves the tile key of
+ * the parent whose data was actually returned.
+ *
+ * @param options Pass `{ includeTileKey: true }` to receive a [[TileResponse]]
+ * instead of a plain `Response`.
+ *
+ * @returns The blob of the requested tile or the blob of the closest parent
+ * tile, together with that tile's key.
+ */
+export function getTile(
+    request: TileRequest,
+    params: TileRequestParams,
+    abortSignal: AbortSignal | undefined,
+    options: { includeTileKey: true }
+): Promise<TileResponse>;
+
 export async function getTile(
+    request: TileRequest,
+    params: TileRequestParams,
+    abortSignal?: AbortSignal,
+    options?: { includeTileKey?: boolean }
+): Promise<Response | TileResponse> {
+    const tileResponse = await fetchTile(request, params, abortSignal);
+    return options?.includeTileKey ? tileResponse : tileResponse.response;
+}
+
+/**
+ * @hidden
+ */
+async function fetchTile(
     request: TileRequest,
     params: TileRequestParams,
     abortSignal?: AbortSignal
