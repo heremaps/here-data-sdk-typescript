@@ -26,7 +26,10 @@ import {
     ApiName
 } from "@here/olp-sdk-core";
 import { BlobApi } from "@here/olp-sdk-dataservice-api";
-import { Index as QuadTreeIndex } from "@here/olp-sdk-dataservice-api/lib/query-api";
+import {
+    ParentQuad,
+    Index as QuadTreeIndex
+} from "@here/olp-sdk-dataservice-api/lib/query-api";
 import { QuadTreeIndexCacheRepository } from "../cache/QuadTreeIndexCacheRepository";
 import {
     QuadTreeIndexDepth,
@@ -42,6 +45,11 @@ export interface GetTileParams {
     settings: OlpClientSettings;
     layerId: string;
     layerType: "versioned" | "volatile";
+}
+
+export interface TileResponse {
+    response: Response;
+    parentTileKey: TileKey | undefined;
 }
 
 /**
@@ -78,11 +86,73 @@ export interface GetTileParams {
  *
  * @returns The blob of the requested tile or the blob of the closest parent Tile.
  */
-export async function getTile(
+export function getTile(
     request: TileRequest,
     params: TileRequestParams,
     abortSignal?: AbortSignal
-): Promise<Response> {
+): Promise<Response>;
+
+/**
+ * Same as the three-argument [[getTile]], but also resolves the tile key of
+ * the parent whose data was actually returned.
+ *
+ * @param options Pass `{ includeTileKey: true }` to receive a [[TileResponse]]
+ * instead of a plain `Response`.
+ *
+ * @returns The blob of the requested tile or the blob of the closest parent
+ * tile, together with that tile's key.
+ */
+export function getTile(
+    request: TileRequest,
+    params: TileRequestParams,
+    abortSignal: AbortSignal | undefined,
+    options: { includeTileKey: true }
+): Promise<TileResponse>;
+
+/**
+ * Same as the three-argument [[getTile]], for callers that pass an options
+ * object with `includeTileKey` disabled or omitted.
+ *
+ * @returns The blob of the requested tile or the blob of the closest parent Tile.
+ */
+export function getTile(
+    request: TileRequest,
+    params: TileRequestParams,
+    abortSignal: AbortSignal | undefined,
+    options: { includeTileKey?: false }
+): Promise<Response>;
+
+/**
+ * Same as the three-argument [[getTile]], for an `includeTileKey` flag whose
+ * value is only known at run time. Narrow the result before using it.
+ *
+ * @returns A [[TileResponse]] if the flag was `true`, otherwise the plain blob.
+ */
+export function getTile(
+    request: TileRequest,
+    params: TileRequestParams,
+    abortSignal: AbortSignal | undefined,
+    options: { includeTileKey?: boolean }
+): Promise<Response | TileResponse>;
+
+export async function getTile(
+    request: TileRequest,
+    params: TileRequestParams,
+    abortSignal?: AbortSignal,
+    options?: { includeTileKey?: boolean }
+): Promise<Response | TileResponse> {
+    const tileResponse = await fetchTile(request, params, abortSignal);
+    return options?.includeTileKey ? tileResponse : tileResponse.response;
+}
+
+/**
+ * @hidden
+ */
+async function fetchTile(
+    request: TileRequest,
+    params: TileRequestParams,
+    abortSignal?: AbortSignal
+): Promise<TileResponse> {
     let catalogVersion: number | undefined;
 
     const quadKey = request.getTileKey();
@@ -105,91 +175,119 @@ export async function getTile(
         abortSignal
     );
 
-    const delta = 4;
+    const depth = 4;
     const requestedTileKey = TileKey.fromRowColumnLevel(
         quadKey.row,
         quadKey.column,
         quadKey.level
     );
+    const quadTreeIndexRoot = requestedTileKey.changedLevelBy(-depth);
 
-    let quadTreeIndex = null;
+    let quadTreeIndex: QuadTreeIndex | undefined;
 
     if (request.getFetchOption() !== FetchOptions.OnlineOnly) {
         const cache = new QuadTreeIndexCacheRepository(params.settings.cache);
-
-        for (let i = 1; i <= delta; i++) {
-            const parentInCache = requestedTileKey.changedLevelBy(-i);
-            const cachedTree = cache.get({
-                hrn: params.catalogHrn.toString(),
-                layerId: params.layerId,
-                depth: delta,
-                root: parentInCache,
-                version: catalogVersion
-            });
-
-            if (cachedTree) {
-                quadTreeIndex = cachedTree;
-            }
-        }
+        quadTreeIndex = cache.get({
+            hrn: params.catalogHrn.toString(),
+            layerId: params.layerId,
+            depth,
+            root: quadTreeIndexRoot,
+            version: catalogVersion
+        });
     }
-
-    const parentTileKey = requestedTileKey.changedLevelBy(-delta);
 
     if (!quadTreeIndex) {
         quadTreeIndex = await fetchQuadTreeIndex({
             ...params,
             catalogVersion,
-            depth: delta,
+            depth,
             fetchOptions: request.getFetchOption(),
-            tileKey: parentTileKey,
+            tileKey: quadTreeIndexRoot,
             abortSignal,
             billingTag: request.getBillingTag()
         });
     }
 
-    if (!quadTreeIndex.subQuads || !quadTreeIndex.subQuads.length) {
-        return Promise.resolve(
-            new Response(null, {
+    const subQuads = quadTreeIndex.subQuads ?? [];
+    const parentQuads = quadTreeIndex.parentQuads ?? [];
+
+    if (!subQuads.length && !parentQuads.length) {
+        return Promise.resolve({
+            response: new Response(null, {
                 status: 204,
                 statusText: "No Content"
-            })
-        );
+            }),
+            parentTileKey: undefined
+        });
     }
 
-    // Return the data for the requested QuadKey or for the closest parent
-    const subQuads = quadTreeIndex.subQuads;
-
-    let currentTileKey = requestedTileKey;
-    let currentDelta = delta;
-    for (
-        let level = currentTileKey.level;
-        level >= parentTileKey.level;
-        --level
-    ) {
-        const metadata = subQuads.find(
-            (item) =>
-                item.subQuadKey === currentTileKey.getSubHereTile(currentDelta)
-        );
-
-        if (metadata) {
-            return BlobApi.getBlob(blobRequestBuilder, {
-                dataHandle: metadata.dataHandle,
-                layerId: params.layerId,
-                billingTag: request.getBillingTag()
-            });
-        }
-
-        try {
-            currentTileKey = currentTileKey.parent();
-            currentDelta = parentTileKey.level - currentTileKey.level;
-        } catch (error) {
-            continue;
-        }
-    }
-
-    return Promise.reject(
-        new Error(`Error getting blob for Tile: ${JSON.stringify(quadKey)}`)
+    const closestParent = findClosestParent(
+        requestedTileKey,
+        quadTreeIndex,
+        quadTreeIndexRoot
     );
+    if (!closestParent) {
+        return Promise.reject(
+            new Error(
+                `Error getting blob for Tile: ${requestedTileKey.toHereTile()}`
+            )
+        );
+    }
+
+    return {
+        response: await BlobApi.getBlob(blobRequestBuilder, {
+            dataHandle: closestParent.parentQuad.dataHandle,
+            layerId: params.layerId,
+            billingTag: request.getBillingTag()
+        }),
+        parentTileKey: closestParent.tileKey
+    };
+}
+
+/**
+ * Helper function to get the closest parent quad for a given tile key.
+ * @hidden
+ */
+function findClosestParent(
+    tileKey: TileKey,
+    quadTreeIndex: QuadTreeIndex,
+    quadTreeIndexRoot: TileKey
+) {
+    const subQuads = quadTreeIndex.subQuads ?? [];
+    const parentQuads = quadTreeIndex.parentQuads ?? [];
+
+    // First, iterate through the sub quad trees, starting from lowest level up to the quad tree index root
+    let currentTileKey = tileKey;
+    while (currentTileKey.level >= quadTreeIndexRoot.level) {
+        const currentDelta = currentTileKey.level - quadTreeIndexRoot.level;
+        const subHereTile = currentTileKey.getSubHereTile(currentDelta);
+        const subQuad = subQuads.find(
+            (item) => item.subQuadKey === subHereTile
+        );
+
+        if (subQuad) {
+            return { parentQuad: subQuad, tileKey: currentTileKey };
+        }
+
+        // Stop before requesting the parent of the quad tree index root -
+        // that root can be the global root tile (level 0), whose parent()
+        // throws rather than returning another tile.
+        if (currentTileKey.level === quadTreeIndexRoot.level) {
+            break;
+        }
+
+        currentTileKey = currentTileKey.parent();
+    }
+
+    // not found? Find the closest parent quad
+    return parentQuads.reduce<
+        { parentQuad: ParentQuad; tileKey: TileKey } | undefined
+    >((closest, parentQuad) => {
+        const tileKey = TileKey.fromHereTile(parentQuad.partition);
+        return !closest || tileKey.level > closest.tileKey.level
+            ? { parentQuad, tileKey }
+            : closest;
+    }, undefined);
 }
 
 /**
@@ -229,7 +327,8 @@ export async function fetchQuadTreeIndex(
 
     if (
         params.fetchOptions !== FetchOptions.OnlineOnly &&
-        quadTreeIndex.subQuads
+        (quadTreeIndex.subQuads !== undefined ||
+            quadTreeIndex.parentQuads !== undefined)
     ) {
         cache.put({
             hrn: params.catalogHrn.toString(),

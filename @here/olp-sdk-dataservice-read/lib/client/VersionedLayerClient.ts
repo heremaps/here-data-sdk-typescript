@@ -29,7 +29,7 @@ import {
 } from "@here/olp-sdk-core";
 import { BlobApi, MetadataApi, QueryApi } from "@here/olp-sdk-dataservice-api";
 import { MetadataCacheRepository } from "../cache/MetadataCacheRepository";
-import { getTile } from "../utils/getTile";
+import { getTile, TileResponse } from "../utils/getTile";
 import { DataRequest } from "./DataRequest";
 import { PartitionsRequest } from "./PartitionsRequest";
 import { QuadKeyPartitionsRequest } from "./QuadKeyPartitionsRequest";
@@ -102,7 +102,65 @@ export class VersionedLayerClient {
      *
      * @return Tile data (if it exists) or the nearest parent tile data
      */
-    async getAggregatedData(request: TileRequest, abortSignal?: AbortSignal) {
+    getAggregatedData(
+        request: TileRequest,
+        abortSignal?: AbortSignal
+    ): Promise<Response>;
+
+    /**
+     * @brief Fetches data of a tile or its closest ancestor.
+     * Use this API for tile-tree structures where children tile data is aggregated and stored in parent tiles.
+     *
+     * @param request The `TileRequest` instance that contains a complete set
+     * of request parameters.
+     * @param abortSignal A signal object that allows you to communicate with a request (such as the `fetch` request)
+     * and, if required, abort it using the `AbortController` object.
+     * @param options An optional object that can include the `includeTileKey` flag to indicate whether the parent tile key should be included in the response.
+     *
+     * For more information, see the [`AbortController` documentation](https://developer.mozilla.org/en-US/docs/Web/API/AbortController).
+     *
+     * @return Tile data (if it exists) or the nearest parent tile data including the parent tile key
+     */
+    getAggregatedData(
+        request: TileRequest,
+        abortSignal: AbortSignal | undefined,
+        options: { includeTileKey: true }
+    ): Promise<TileResponse>;
+
+    /**
+     * @brief Fetches data of a tile or its closest ancestor.
+     *
+     * Same as the two-argument `getAggregatedData`, for callers that pass an
+     * options object with `includeTileKey` disabled or omitted.
+     *
+     * @return Tile data (if it exists) or the nearest parent tile data
+     */
+    getAggregatedData(
+        request: TileRequest,
+        abortSignal: AbortSignal | undefined,
+        options: { includeTileKey?: false }
+    ): Promise<Response>;
+
+    /**
+     * @brief Fetches data of a tile or its closest ancestor.
+     *
+     * Same as the two-argument `getAggregatedData`, for an `includeTileKey`
+     * flag whose value is only known at run time. Narrow the result before
+     * using it.
+     *
+     * @return A `TileResponse` if the flag was `true`, otherwise the tile data
+     */
+    getAggregatedData(
+        request: TileRequest,
+        abortSignal: AbortSignal | undefined,
+        options: { includeTileKey?: boolean }
+    ): Promise<Response | TileResponse>;
+
+    async getAggregatedData(
+        request: TileRequest,
+        abortSignal?: AbortSignal,
+        options?: { includeTileKey?: boolean }
+    ): Promise<Response | TileResponse> {
         let catalogVersion = this.version;
 
         if (catalogVersion === undefined) {
@@ -119,7 +177,10 @@ export class VersionedLayerClient {
             catalogVersion
         };
 
-        return getTile(request, params, abortSignal);
+        const tileResponse = await getTile(request, params, abortSignal, {
+            includeTileKey: true
+        });
+        return options?.includeTileKey ? tileResponse : tileResponse.response;
     }
 
     /**

@@ -40,6 +40,9 @@ npm run test
 # Integration tests
 npm run integration-test
 
+# Public API surface guards (type-checks tests/ before running)
+npm run api-breaks-test
+
 # Functional tests
 npm run functional-test
 

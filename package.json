@@ -39,7 +39,7 @@
     "http-server-testing-bundles": "node scripts/static-server.js tests/integration/bundles/umd/static 8080",
     "test-published-bundles": "vitest run --config ./vitest.bundles-published.config.ts",
     "test-generated-bundles": "vitest run --config ./vitest.bundles-generated.config.ts",
-    "api-breaks-test": "vitest run --config ./vitest.api-breaks.config.ts",
+    "api-breaks-test": "tsc --noEmit -p tsconfig.json && vitest run --config ./vitest.api-breaks.config.ts",
     "integration-test": "vitest run --config ./vitest.integration.config.ts",
     "functional-test": "vitest run --config ./vitest.functional.config.ts",
     "coverage": "npm run coverage --workspaces --if-present",
@@ -52,7 +52,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^24.0.0",
-    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/coverage-v8": "^4.1.11",
     "eslint": "^10.8.0",
     "eslint-config-prettier": "^10.1.8",
     "fetch-mock": "^12.6.0",
@@ -65,7 +65,7 @@
     "typedoc": "^0.28.20",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.65.0",
-    "vitest": "^4.1.10",
+    "vitest": "^4.1.11",
     "webpack": "^5.109.1",
     "webpack-cli": "^7.2.1"
   },
