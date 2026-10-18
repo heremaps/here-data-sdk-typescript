@@ -194,6 +194,13 @@ export class LRUCache<Key, Value> {
         this.promoteEntry(entry);
         return entry.value;
     }
+ 
+    /**
+     * @returns List of all the keys stored in the cache
+     */
+    getAllKeys(): MapIterator<Key> {
+        return this.map.keys()
+    }
 
     /**
      * Clears the cache and removes all stored key-value pairs.
