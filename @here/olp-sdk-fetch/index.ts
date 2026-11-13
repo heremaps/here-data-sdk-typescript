@@ -109,7 +109,7 @@ async function fetchWithFileSupport(
             });
         });
     } else {
-        return innerFetch(url, init);
+        return innerFetch(input, init);
     }
 }
 
