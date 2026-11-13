@@ -1,3 +1,9 @@
+## v3.0.1 (13/11/2026)
+
+**olp-sdk-fetch**
+
+- Fixed an issue with the fetch implementation in Node.js environments. Pass the original request input to the underlying fetch call.
+
 ## v3.1.0 (22/09/2026)
 
 **olp-sdk-dataservice-read**
